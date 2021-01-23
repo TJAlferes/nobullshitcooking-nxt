@@ -1,18 +1,19 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Home | No Bullshit Cooking</title>
+        <link rel="icon" href="/nobsc-normal-favicon.png" />
       </Head>
-      <main className={styles.main}>
-        <h1 className={styles.title}>No Bullshit Cooking</h1>
+      <main className="main">
+        <h1 className="title">No Bullshit Cooking</h1>
         <p>No Bullshit Cooking</p>
+        <Link href="posts/first-post"><a>First Post</a></Link>
       </main>
-      <footer className={styles.footer}>Footer</footer>
+      <footer className="footer">Footer</footer>
     </div>
   );
 }
