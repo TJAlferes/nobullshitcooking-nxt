@@ -1,0 +1,76 @@
+/*
+
+simple reset
+
+*/
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+
+base styles
+
+*/
+
+body, html, #root {
+  max-width: calc(100vw - (100vw - 100%));
+  min-width: calc(100vw - (100vw - 100%));
+}
+
+html {
+  font-size: 10px;
+  height: 100%;
+}
+
+body {
+  font-family: 'Play', sans-serif;
+  height: 100%;
+  margin: 0 auto 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;  /* kind of a hack job IMHO... */
+}
+
+/*
+
+base fonts
+
+*/
+
+a, li, p, span, td, th {font-size: 1.3rem;}
+
+h1, h2, h3, h4 {
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+h1 {font-size: 2.8rem;}
+
+h2 {font-size: 2rem;}
+
+h3 {font-size: 1.6rem;}
+
+h4 {font-size: 1.4rem;}
+
+/*
+
+mobile
+
+*/
+
+@media (max-width: 899px) {
+  body, html, #root {
+    min-width: 300px;
+  }
+
+  h1 {font-size: 2rem;}
+
+  h2 {font-size: 1.7rem;}
+
+  h3 {font-size: 1.5rem;}
+
+  h4 {font-size: 1.4rem;}
+}

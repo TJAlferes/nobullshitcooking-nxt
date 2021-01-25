@@ -1,0 +1,28 @@
+.home--desktop {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin: 31px auto 0px auto;
+  max-width: 1200px;
+  min-width: 300px;
+}
+
+.home--mobile {
+  display: none;
+}
+
+@media (max-width: 1279px) {
+
+}
+
+@media (max-width: 899px) {
+  .home--desktop {
+    display: none;
+  }
+  
+  .home--mobile {
+    display: block;
+  }
+}

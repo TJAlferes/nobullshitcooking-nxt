@@ -1,0 +1,59 @@
+.user-nav {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  float: right;
+  justify-content: center;
+  list-style-type: none;
+}
+
+.mode-button {
+  line-height: 16px;
+}
+
+.mode-button:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sun-symbol {
+  color: #fffdb1;
+  font-style: normal;
+}
+
+.moon-symbol {
+  color: #183a39;
+  font-style: normal;
+}
+
+.mode-button,
+.user-nav__link,
+.user-nav__link--authenticated {
+  color: #fff;
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+  height: 24px;
+  margin: 0 9px;
+  text-decoration: none;
+}
+
+
+
+/* fix these... */
+
+.user-nav__link:hover,
+.user-nav__link:active {
+  text-decoration: underline;
+}
+
+.user-nav__link--authenticated:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.mode-button:active
+.user-nav__link--authenticated:active {
+  cursor: pointer;
+}

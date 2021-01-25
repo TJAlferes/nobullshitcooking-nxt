@@ -1,0 +1,207 @@
+.search {
+  border: 1px solid;
+  border-color: #777 #aaa #aaa #777;
+  border-radius: 1px;
+  display: flex;
+  flex-direction: row;
+  height: 32px;
+  margin-top: 7px;
+  max-height: 32px;
+  min-width: 320px;
+  padding: 0;
+  width: 100%;
+}
+
+.search__category {
+  display: block;
+  height: 30px;
+  max-width: 100%;
+  order: 1;
+  position: relative;
+  width: auto;
+}
+
+.search__facade {
+  background-image: linear-gradient(to bottom, #eee, #bbb);
+  border: 1px solid;
+  border-color: #fff #888 #888 #fff;
+  border-radius: 1px;
+  float: left;
+  height: 30px;
+  position: relative;
+}
+
+.search__facade-text {
+  color: #666;
+  font-size: 1.3rem;
+  line-height: 30px;
+  margin: 0 21px 0 8px;
+}
+
+.search__facade-arrow {
+  position: absolute;
+  right: 7px;
+  top: 12px;
+}
+
+.search__prefilters {
+  border: 0;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  height: 30px;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.search__prefilter {
+  font-family: Arial, sans-serif;
+}
+
+.search__insert {
+  flex: 1;
+  height: 30px;
+  position: relative;
+  order: 2;
+  width: 100%;
+}
+
+/*
+
+Note:
+
+Most of these "sui-" classnames are from @elastic/react-search-ui
+
+We are overriding default values / setting new values to get the look we desire.
+
+*/
+
+.sui-search-box {
+  display: flex;
+  flex-direction: row;
+}
+
+.sui-search-box__wrapper {
+  position: relative;
+  order: 1;
+  flex: 1;
+  width: 100%;
+  height: 30px;
+}
+
+.sui-search-box__text-input {
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: Arial, sans-serif;
+  height: 30px;
+  margin: 0;
+  padding: 3px 10px 3px 0;
+  text-indent: 5px;
+  width: 100%;
+}
+
+.header-light .sui-search-box__text-input {
+  background-color: #fff;
+  color: #111;
+}
+
+.header-dark .sui-search-box__text-input {
+  background-color: #333;
+  color: #bbb;
+}
+
+/*.sui-search-box__autocomplete-container {
+  
+}*/
+
+.sui-search-box__autocomplete {
+  border: 1px solid #bfbfbf;
+}
+
+.sui-search-box__results-list {
+  list-style-type: none;
+  overflow: hidden;
+}
+
+.sui-search-box__results-list li,
+.sui-search-box__results-list li span {
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 100;
+  height: 30px;
+  line-height: 26px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.sui-search-box__results-list li {
+  padding: 0 10px;
+}
+
+.header-light .sui-search-box__results-list li,
+.header-light .sui-search-box__results-list li span {
+  background-color: #fff;
+  color: #666;
+}
+
+.header-dark .sui-search-box__results-list li,
+.header-dark .sui-search-box__results-list li span {
+  background-color: #222;
+  color: #aaa;
+}
+
+.sui-search-box__results-list li,
+.sui-search-box__results-list li span {
+  color: #666;
+}
+
+.sui-search-box__results-list li em {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.header-light .sui-search-box__results-list li em {
+  color: #111;
+}
+
+.header-dark .sui-search-box__results-list li em {
+  color: #bcbcbc;
+}
+
+.header-light .sui-search-box__results-list li[aria-selected=true],
+.header-light .sui-search-box__results-list li[aria-selected=true] > * {
+  background-color: #ddd;
+}
+
+.header-dark .sui-search-box__results-list li[aria-selected=true],
+.header-dark .sui-search-box__results-list li[aria-selected=true] > * {
+  background-color: #444;
+}
+
+.sui-search-box__submit {
+  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
+  border: 1px solid;
+  border-color: #ddd #666 #666 #ddd;
+  border-radius: 1px;
+  color: #222;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1.3rem;
+  height: 30px;
+  line-height: 26px;
+  max-width: 100%;
+  order: 2;
+  padding: 0 8px;
+  width: auto;
+}
+
+.sui-search-box__submit:hover {
+  background-image: linear-gradient(to bottom, #98c6f1, #509fe4);
+}

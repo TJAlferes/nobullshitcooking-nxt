@@ -1,0 +1,175 @@
+/*.friends {
+
+}*/
+
+.friends__feedback {
+  color: #c10006;
+  font-family: Arial;
+  font-size: 14px;
+  height: 31px;
+  text-align: center;
+  width: 100%;
+}
+
+.friends__find {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.friends__find-label {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 7px 3px 10px 0;
+}
+
+.friends__find-input {
+  height: 30px;
+  margin: 0 30px 10px 0;
+}
+
+.friends__hr {
+  border: 0 none;
+  height: 1px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.friends__tabs {
+  border-bottom: 2px solid #6cabe4;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.friends__tab {
+  background-image: linear-gradient(to bottom, #eee, #bbb);
+  border: 1px solid;
+  border-color: #ddd #666 #666 #ddd;
+  border-radius: 1px;
+  color: #222;
+  cursor: pointer;
+  height: 30px;
+  font-family: 'Play', sans-serif;
+  font-size: 1.3rem;
+  line-height: 26px;
+  padding: 0 8px;
+  width: 33.33%;
+}
+
+.friends__tab--active {
+  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
+}
+
+.friends__list {
+  width: 100%;
+}
+
+.friends__find-request-button,
+.friends__find-block-button {
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  color: #000;
+  display: block;
+  font-family: 'Play', sans-serif;
+  height: 30px;
+  line-height: 26px;
+  margin: 0 30px 10px 0;
+  padding: 1px 5px;
+  text-align: center;
+  text-decoration: none;
+  width: 235px;
+}
+
+.friends__find-request-button {
+  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+}
+
+.friends__find-block-button {
+  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+}
+
+.friends__list-none {
+  font-size: 13px;
+}
+
+.friends__list-item {
+  align-items: center;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 29px;
+  line-height: 24px;
+  width: 100%;
+}
+
+.friends__list-item:first-of-type {
+  border-top: 1px solid;
+}
+
+.friends__list-item-avatar {
+  height: 25px;
+  margin-left: 1px;
+  width: 25px;
+}
+
+.friends__list-item-username {
+  padding: 0 10px;
+  width: 760px;
+}
+
+.friends__list-item-username a {
+  color: #68abe6;
+}
+
+.friends__list-item-username a:visited {
+  color: #68abe6;
+}
+
+.friends__list-item-action,
+.friends__list-item-delete {
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  color: #000;
+  cursor: pointer;
+  height: 19px;
+  line-height: 18px;
+  margin-right: 1px;
+  text-align: center;
+  width: 75px;
+}
+
+.friends__list-item-action {
+  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+}
+
+.friends__list-item-delete {
+  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+}
+
+@media (max-width: 1209px) {
+  .friends__find {
+    flex-direction: column;
+  }
+
+  .friends__find-label,
+  .friends__find-input,
+  .friends__find-request-button,
+  .friends__find-block-button {
+    display: block;
+    margin: 0 auto 10px auto;
+  }
+
+  .friends__tab {
+    padding: 0;
+  }
+
+  .friends__list-item-action,
+  .friends__list-item-delete {
+    padding: 0 2px;
+    width: 44px;
+  }
+}

@@ -1,0 +1,10 @@
+.expand-collapse {
+  margin: 8px 0;
+  max-width: fit-content;
+  padding: 5px;
+}
+
+.expand-collapse__heading {
+  cursor: pointer;
+  font-size: 1.1rem;
+}

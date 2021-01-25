@@ -1,0 +1,27 @@
+.promo {
+  display: block;
+  width: 240px;
+}
+
+.promo-link--large {
+  display: block;
+}
+
+.promo-link--small {
+  display: none;
+}
+
+@media (max-width: 1279px) {
+  .promo {
+    display: block;
+    width: 180px;
+  }
+
+  .promo-link--large {
+    display: none;
+  }
+
+  .promo-link--small {
+    display: block;
+  }
+}

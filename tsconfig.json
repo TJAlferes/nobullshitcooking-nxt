@@ -8,9 +8,11 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
+    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "typeRoots": ["./types/", "./node_modules/@types/"],
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -21,7 +23,10 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "./src/",
+    "./tests",
+    "./types/"
   ],
   "exclude": [
     "node_modules"

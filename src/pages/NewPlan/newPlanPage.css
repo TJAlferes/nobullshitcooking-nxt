@@ -1,0 +1,24 @@
+@media (min-width: 900px) {
+  .mobile {
+    display: none;
+  }
+
+  .desktop {
+    display: block;
+  }
+}
+
+@media (max-width: 899px) {
+  .new-plan-page {
+    max-width: 100%;
+    min-width: 300px;
+  }
+
+  .mobile {
+    display: block;
+  }
+  
+  .desktop {
+    display: none;
+  }
+}

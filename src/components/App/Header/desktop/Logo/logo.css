@@ -1,0 +1,30 @@
+.logo,
+.logo__home-links {
+  display: block;
+  width: 450px;
+}
+
+.home-link--large {
+  display: block;
+}
+
+.home-link--small {
+  display: none;
+}
+
+@media (max-width: 1279px) {
+  .logo,
+  .logo__home-links {
+    display: block;
+    width: 110px;
+  }
+
+  .home-link--large {
+    display: none;
+  }
+
+  .home-link--small {
+    display: block;
+    padding-top: 5px 0 0 8px;
+  }
+}

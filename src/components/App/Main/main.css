@@ -1,0 +1,57 @@
+.main {
+  max-width: calc(100vw - (100vw - 100%));
+  min-width: 300px;
+  padding-bottom: 25px;
+}
+
+.shadow--hide,
+.shadow--show {
+  background: rgba(0, 0, 0, .5);
+  bottom: 1;
+  height: 3000px;
+  left: -42px;
+  position: absolute;
+  top: 92px;
+  width: 3000px;
+  z-index: 2;
+}
+
+.shadow--hide {
+  display: none;
+}
+
+.shadow--show {
+  display: block;
+}
+
+/*
+
+light
+
+*/
+
+.main-light {
+  background-color: #eee;
+}
+
+/*
+
+dark
+
+*/
+
+.main-dark {
+  background-color: #111;
+}
+
+/*
+
+mobile
+
+*/
+
+@media (max-width: 899px) {
+  .main {
+    max-width: 100vw;  /* ? */
+  }
+}
