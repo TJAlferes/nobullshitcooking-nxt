@@ -14,7 +14,8 @@
     "coverageDirectory": "coverage",
     "globals": {
       "ts-jest": {
-        "babelConfig": true
+        "babelConfig": true,
+        "tsConfig": "<rootDir>/tsconfig.jest.json"
       }
     },
     "globalSetup": "./global-setup.js",
@@ -44,6 +45,7 @@
     "testEnvironmentOptions": {
       "enzymeAdapter": "react16"
     },
+    "testPathIgnorePatterns": ["<rootDir>/.next", "<rootDir>/node_modules/"],
     "testRegex": "/*.test.tsx?$",
     "transform": {
       "^.+\\.[t]sx?$": "ts-jest",
