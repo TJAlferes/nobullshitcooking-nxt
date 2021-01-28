@@ -1,7 +1,7 @@
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from '../store';
 import { END } from 'redux-saga';
 
 import '../../styles/global.css';
@@ -34,11 +34,11 @@ class NOBSCApp extends App<AppInitialProps>{
 
     const { pathname } = useRouter();
 
-    const dataContentTypes = useSelector(state => state.data.contentTypes);
-    const shadow = useSelector(state => state.menu.shadow);
-    const headerTheme = useSelector(state => state.theme.headerTheme);
-    const footerTheme = useSelector(state => state.theme.footerTheme);
-    const mainTheme = useSelector(state => state.theme.mainTheme);
+    const dataContentTypes = useTypedSelector(state => state.data.contentTypes);
+    const shadow = useTypedSelector(state => state.menu.shadow);
+    const headerTheme = useTypedSelector(state => state.theme.headerTheme);
+    const footerTheme = useTypedSelector(state => state.theme.footerTheme);
+    const mainTheme = useTypedSelector(state => state.theme.mainTheme);
 
     const atAuthPage =
       pathname.match(/\/login/) ||
@@ -66,6 +66,7 @@ class NOBSCApp extends App<AppInitialProps>{
   }
 }
 
+//import { SearchProvider } from '@elastic/react-search-ui';
 export default wrapper.withRedux(NOBSCApp);
 
 /*export default function App({ Component, pageProps }: AppProps) {

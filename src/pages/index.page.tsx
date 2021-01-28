@@ -1,8 +1,5 @@
-//import Layout from '../components/layout';
-import App from '../components/App/App';
+import { Home } from './Home/Home';
 
 export default function IndexPage() {
-  return (
-    <App />
-  );
+  return <Home />;
 }

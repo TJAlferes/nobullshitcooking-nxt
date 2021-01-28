@@ -1,4 +1,5 @@
 import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
+import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import createSagaMiddleware, { Task } from 'redux-saga';
@@ -12,7 +13,7 @@ import {
   saveToLocalStorage
 } from '../utils/storageHelpers';
 import { dataInit } from './data/actions';
-import { rootReducer, State } from './rootReducer';
+import { rootReducer, RootState, State } from './rootReducer';
 import { runWatchers } from '../store/watchers';
 import rootSaga from './saga';
 
@@ -44,3 +45,5 @@ export const makeStore: MakeStore<State> = (context: Context) => {
 };
 
 export const wrapper = createWrapper<State>(makeStore, {debug: true});
+
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
