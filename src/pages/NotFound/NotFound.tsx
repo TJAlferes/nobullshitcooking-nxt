@@ -13,3 +13,8 @@ export function NotFound({ oneColumnATheme }: Props): JSX.Element {
 type Props = {
   oneColumnATheme: string;
 };
+
+// /pages/404.tsx
+/*export default function Custom404() {
+  return <h1>404 - Page Not Found</h1>;
+}*/

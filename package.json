@@ -45,7 +45,10 @@
     "testEnvironmentOptions": {
       "enzymeAdapter": "react16"
     },
-    "testPathIgnorePatterns": ["<rootDir>/.next", "<rootDir>/node_modules/"],
+    "testPathIgnorePatterns": [
+      "<rootDir>/.next",
+      "<rootDir>/node_modules/"
+    ],
     "testRegex": "/*.test.tsx?$",
     "transform": {
       "^.+\\.[t]sx?$": "ts-jest",
@@ -61,6 +64,7 @@
     "focus-trap-react": "^8.4.1",
     "immutability-helper": "^3.1.1",
     "next": "10.0.5",
+    "next-redux-wrapper": "^6.0.2",
     "prop-types": "^15.7.2",
     "react": "17.0.1",
     "react-aria-modal": "^4.0.0",

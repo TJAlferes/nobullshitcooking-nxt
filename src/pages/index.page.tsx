@@ -1,5 +1,8 @@
-import Layout from '../components/layout';
+//import Layout from '../components/layout';
+import App from '../components/App/App';
 
-export default function Home() {
-  return <Layout><h1>Howdy</h1></Layout>;
+export default function IndexPage() {
+  return (
+    <App />
+  );
 }

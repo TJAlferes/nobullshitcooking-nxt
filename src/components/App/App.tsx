@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { Footer } from './Footer/Footer';
 //import MobileHeader from './Header/mobile/MobileHeader';
@@ -17,7 +17,7 @@ export function App({
   footerTheme,
   mainTheme
 }: Props): JSX.Element {
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
 
   const atAuthPage =
     pathname.match(/\/login/) ||
