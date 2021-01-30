@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-//import { connect, ConnectedProps } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
@@ -11,9 +10,10 @@ import { LoginView } from './LoginView';
 // TO DO: finite state machine!!!
 
 export function Login(): JSX.Element {
+  const { pathname } = useRouter();
+
   const dispatch = useDispatch();
   const message = useSelector(state => state.auth.message);
-  const { pathname } = useRouter();
 
   const [ email, setEmail ] = useState("");
   const [ feedback, setFeedback ] = useState("");
@@ -71,26 +71,4 @@ export function Login(): JSX.Element {
   );
 }
 
-/*interface RootState {
-  auth: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux;
-
-const mapStateToProps = (state: RootState) => ({message: state.auth.message});
-
-const mapDispatchToProps = {
-  authStaffLogin: (email: string, password: string) =>
-    authStaffLogin(email, password),
-  authUserLogin: (email: string, password: string) =>
-    authUserLogin(email, password)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);*/
-
-//export default connector(Login);
 export default Login;

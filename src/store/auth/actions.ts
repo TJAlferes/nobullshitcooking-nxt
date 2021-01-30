@@ -1,4 +1,4 @@
-import { History } from 'history';
+import { NextRouter } from 'next/router';
 
 import {
   AUTH_CHECK_STATE,
@@ -116,13 +116,13 @@ export const authUserRegister = (
   email: string,
   password: string,
   username: string,
-  history: History
+  router: NextRouter
 ) => ({
   type: AUTH_USER_REGISTER,
   email,
   password,
   username,
-  history
+  router
 });
 
 export const authUserRegisterSucceeded = (message: string) => ({
@@ -139,13 +139,13 @@ export const authUserVerify = (
   email: string,
   password: string,
   confirmationCode: string,
-  history: History
+  router: NextRouter
 ) => ({
   type: AUTH_USER_VERIFY,
   email,
   password,
   confirmationCode,
-  history
+  router
 });
 
 export const authUserVerifySucceeded = (message: string) => ({

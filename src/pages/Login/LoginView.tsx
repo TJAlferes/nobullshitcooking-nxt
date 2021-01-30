@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
 import './login.css';
@@ -19,9 +19,18 @@ export function LoginView({
 }: Props): JSX.Element {
   return (
     <div className="login" onKeyUp={e => handleLoginKeyUp(e)}>
-      <Link className="login__home-links" to="/">
-        <img className="home-link--desktop" src={`${url}logo-large-white.png`} />
-        <img className="home-link--mobile" src={`${url}logo-small-white.png`} />
+      <Link href="/">
+        <a className="login__home-links">
+          <img
+            className="home-link--desktop"
+            src={`${url}logo-large-white.png`}
+          />
+          
+          <img
+            className="home-link--mobile"
+            src={`${url}logo-small-white.png`}
+          />
+        </a>
       </Link>
 
       <form className="login__form">

@@ -1,18 +1,16 @@
-import { History } from 'history';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
+import { useTypedSelector as useSelector } from '../../store';
 import { authUserRegister, authUserVerify } from '../../store/auth/actions';
 import { RegisterView } from './RegisterView';
 
-export function Register({
-  authUserRegister,
-  authUserVerify,
-  confirmingUser,
-  message
-}: Props): JSX.Element {
-  const history = useHistory();
+export function Register({ confirmingUser }: Props): JSX.Element {
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+  const message = useSelector(state => state.auth.message);
 
   const [ confirmationCode, setConfirmationCode ] = useState("");
   const [ email, setEmail ] = useState("");
@@ -24,12 +22,10 @@ export function Register({
 
   useEffect(() => {
     let isSubscribed = true;
-
     if (isSubscribed) {
       setFeedback(message);
       setLoading(false);
     }
-
     return () => {
       isSubscribed = false;
     };
@@ -49,22 +45,17 @@ export function Register({
 
   const handleRegisterClick = () => {
     if (loading) return;
-
     if (!validateRegistrationInfo()) return;
-
     setLoading(true);
-    authUserRegister(email, password, username, history);
+    dispatch(authUserRegister(email, password, username, router));
   };
 
   const handleRegisterKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
-
     if (!validateRegistrationInfo()) return;
-
     if (e.key && (e.key !== "Enter")) return;
-
     setLoading(true);
-    authUserRegister(email, password, username, history);
+    dispatch(authUserRegister(email, password, username, router));
   };
 
   const handleUsernameChange = (e: React.SyntheticEvent<EventTarget>) =>
@@ -72,22 +63,17 @@ export function Register({
 
   const handleVerifyClick = () => {
     if (loading) return;
-
     if (!validateConfirmationCode()) return;
-
     setLoading(true);
-    authUserVerify(email, password, confirmationCode, history);
+    dispatch(authUserVerify(email, password, confirmationCode, router));
   };
 
   const handleVerifyKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
-
     if (!validateConfirmationCode()) return;
-
     if (e.key && (e.key !== "Enter")) return;
-    
     setLoading(true);
-    authUserVerify(email, password, confirmationCode, history);
+    dispatch(authUserVerify(email, password, confirmationCode, router));
   };
 
   const validateConfirmationCode = () => confirmationCode.length > 1;
@@ -124,35 +110,8 @@ export function Register({
   );
 }
 
-interface RootState {
-  auth: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   confirmingUser: boolean;
 };
 
-const mapStateToProps = (state: RootState) => ({message: state.auth.message});
-
-const mapDispatchToProps = {
-  authUserRegister: (
-    email: string,
-    pass: string,
-    username: string,
-    history: History
-  ) => authUserRegister(email, pass, username, history),
-  authUserVerify: (
-    email: string,
-    pass: string,
-    confirmationCode: string,
-    history: History
-  ) => authUserVerify(email, pass, confirmationCode, history)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Register);
+export default Register;

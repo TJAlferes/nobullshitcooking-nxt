@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
 import './register.css';
@@ -147,22 +147,33 @@ export function RegisterView({
 
   return (
     <div className="register" onKeyUp={e => handleRegisterKeyUp(e)}>
-      <Link className="register__home-links" to="/">
-        <img className="home-link--desktop" src={`${url}logo-large-white.png`} />
-        <img className="home-link--mobile" src={`${url}logo-small-white.png`} />
+      <Link href="/">
+        <a className="register__home-links">
+          <img
+            className="home-link--desktop"
+            src={`${url}logo-large-white.png`}
+          />
+
+          <img
+            className="home-link--mobile"
+            src={`${url}logo-small-white.png`}
+          />
+        </a>
       </Link>
 
       {confirmingUser === true ? verifyForm() : registerForm()}
 
       <div className="register__links">
-        <Link className="register__link" to="/page/site/terms">
-          Terms of Use
+        <Link href="/page/site/terms">
+          <a className="register__link">Terms of Use</a>
         </Link>
-        <Link className="register__link" to="/page/site/privacy">
-          Privacy Policy
+
+        <Link href="/page/site/privacy">
+          <a className="register__link">Privacy Policy</a>
         </Link>
-        <Link className="register__link" to="/page/site/help">
-          Help
+        
+        <Link href="/page/site/help">
+          <a className="register__link">Help</a>
         </Link>
       </div>
 

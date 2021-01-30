@@ -139,24 +139,18 @@ export function* authUserLogoutSaga(action: IAuthUserLogout) {
 
 export function* authUserRegisterSaga(action: IAuthUserRegister) {
   try {
-    const { history } = action;
+    const { email, password, username, router } = action;
     const res = yield call(
       [axios, axios.post],
       `${endpoint}/user/auth/register`,
-      {
-        userInfo: {
-          email: action.email,
-          password: action.password,
-          username: action.username
-        }
-      }
+      {userInfo: {email, password, username}}
     );
     const { message } = res.data;
     if (message == 'User account created.') {
       yield put(authUserRegisterSucceeded(message));
       yield delay(2000);
       yield put(authMessageClear());
-      yield call(() => history.push('/verify'));
+      yield call(() => router.push('/verify'));
     } else {
       yield put(authUserRegisterFailed(message));
       yield delay(4000);
@@ -171,25 +165,18 @@ export function* authUserRegisterSaga(action: IAuthUserRegister) {
 
 export function* authUserVerifySaga(action: IAuthUserVerify) {
   try {
-    const { history } = action;
+    const { email, password, confirmationCode, router } = action;
     const res = yield call(
       [axios, axios.post],
       `${endpoint}/user/auth/verify`,
-      {
-        userInfo: {
-          email: action.email,
-          password: action.password,
-          confirmationCode: action.confirmationCode
-        }
-      }
+      {userInfo: {email, password, confirmationCode}}
     );
     const { message } = res.data;
     if (message === "User account verified.") {
       yield put(authUserVerifySucceeded(message));
       yield delay(2000);
       yield put(authMessageClear());
-      //yield call([history, history.push], '/login');
-      yield call(() => history.push('/login'));
+      yield call(() => router.push('/login'));
     } else {
       yield put(authUserVerifyFailed(message));
       yield delay(4000);

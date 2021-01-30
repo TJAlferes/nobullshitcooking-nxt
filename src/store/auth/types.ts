@@ -1,5 +1,4 @@
-//import { MemoryHistory} from 'history';
-import { History} from 'history';
+import { NextRouter } from 'next/router';
 
 export const AUTH_CHECK_STATE = "AUTH_CHECK_STATE" as const;
 export const AUTH_MESSAGE_CLEAR = "AUTH_MESSAGE_CLEAR" as const;
@@ -172,7 +171,7 @@ export interface IAuthUserRegister {
   email: string;
   password: string;
   username: string;
-  history: History;
+  router: NextRouter;
 }
 
 export interface IAuthUserRegisterSucceeded {
@@ -190,7 +189,7 @@ export interface IAuthUserVerify {
   email: string;
   password: string;
   confirmationCode: string;
-  history: History;
+  router: NextRouter;
 }
 
 export interface IAuthUserVerifySucceeded {
