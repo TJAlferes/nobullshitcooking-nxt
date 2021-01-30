@@ -1,19 +1,19 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+//import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { useTypedSelector as useSelector } from '../../store';
 import { authStaffLogin, authUserLogin } from '../../store/auth/actions';
 import { LoginView } from './LoginView';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
 // TO DO: finite state machine!!!
 
-export function Login({
-  authStaffLogin,
-  authUserLogin,
-  message
-}: Props): JSX.Element {
-  const { pathname } = useLocation();
+export function Login(): JSX.Element {
+  const dispatch = useDispatch();
+  const message = useSelector(state => state.auth.message);
+  const { pathname } = useRouter();
 
   const [ email, setEmail ] = useState("");
   const [ feedback, setFeedback ] = useState("");
@@ -38,8 +38,8 @@ export function Login({
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
-    if (pathname === "/staff-login") authStaffLogin(email, password);
-    if (pathname === "/login") authUserLogin(email, password);
+    if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
+    if (pathname === "/login") dispatch(authUserLogin(email, password));
   }
 
   const handleLoginKeyUp = (e: React.KeyboardEvent) => {
@@ -47,8 +47,8 @@ export function Login({
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    if (pathname === "/staff-login") authStaffLogin(email, password);
-    if (pathname === "/login") authUserLogin(email, password);
+    if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
+    if (pathname === "/login") dispatch(authUserLogin(email, password));
   }
 
   const handlePasswordChange = (e: React.SyntheticEvent<EventTarget>) =>
@@ -71,7 +71,7 @@ export function Login({
   );
 }
 
-interface RootState {
+/*interface RootState {
   auth: {
     message: string;
   };
@@ -90,6 +90,7 @@ const mapDispatchToProps = {
     authUserLogin(email, password)
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);*/
 
-export default connector(Login);
+//export default connector(Login);
+export default Login;

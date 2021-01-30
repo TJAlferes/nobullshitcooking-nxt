@@ -1,24 +1,23 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
 
 import { Login } from '../../../src/pages/Login/Login';
+import { mockNextUseRouter } from '../../mockNextUseRouter';
 
 const authStaffLogin = jest.fn();
 const authUserLogin = jest.fn();
 
+jest.mock('react-redux', () => ({
+  connect: () => jest.fn(),
+  useSelector: jest.fn(fn => fn()),
+  useDispatch: (fn: typeof authStaffLogin | typeof authUserLogin) => jest.fn()
+}));
+
 let wrapper: ReactWrapper;
 
 beforeEach(() => {
-  wrapper = mount(
-    <MemoryRouter initialEntries={["/login"]}>
-      <Login
-        authStaffLogin={authStaffLogin}
-        authUserLogin={authUserLogin}
-        message="Some message."
-      />
-    </MemoryRouter>
-  );
+  mockNextUseRouter({route: "/login", pathname: "/login"});
+  wrapper = mount(<Login />);
 });
 
 afterEach(() => {

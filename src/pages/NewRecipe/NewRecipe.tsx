@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   ICuisine,
   IEquipment,
