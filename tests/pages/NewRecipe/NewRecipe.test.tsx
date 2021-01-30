@@ -1,10 +1,24 @@
-import axios from 'axios';
+//import axios from 'axios';
 import { mount } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { MemoryRouter } from 'react-router-dom';
 
 import { NewRecipe } from '../../../src/pages/NewRecipe/NewRecipe';
+import {
+  staffCreateNewRecipe,
+  staffEditRecipe,
+} from '../../../src/store/staff/recipe/actions';
+import {
+  userCreateNewPrivateRecipe,
+  userCreateNewPublicRecipe,
+  userEditPrivateRecipe,
+  userEditPublicRecipe
+} from '../../../src/store/user/recipe/actions';
+import mockFn from '../../mockFn';
+
+const mockPush = jest.fn();
+const useRouter = jest.spyOn(require("next/router"), "useRouter");
+useRouter.mockImplementation(() => ({push: mockPush, query: {}}));
 
 const data = {
   recipe: {
@@ -26,12 +40,12 @@ const data = {
   },
 };
 
-const staffCreateNewRecipe = jest.fn();
-const staffEditRecipe = jest.fn();
-const userCreateNewPrivateRecipe = jest.fn();
-const userCreateNewPublicRecipe = jest.fn();
-const userEditPrivateRecipe = jest.fn();
-const userEditPublicRecipe = jest.fn();
+const mockedStaffCreateNewRecipe = mockFn(staffCreateNewRecipe);
+const mockedStaffEditRecipe = mockFn(staffEditRecipe);
+const mockedUserCreateNewPrivateRecipe = mockFn(userCreateNewPrivateRecipe);
+const mockedUserCreateNewPublicRecipe = mockFn(userCreateNewPublicRecipe);
+const mockedUserEditPrivateRecipe = mockFn(userEditPrivateRecipe);
+const mockedUserEditPublicRecipe = mockFn(userEditPublicRecipe);
 
 const initialProps = {
   authname: "Person",
@@ -108,15 +122,9 @@ const initialProps = {
 
 window.scrollTo = jest.fn();
 
-const mockHistoryPush = jest.fn();
-jest.mock('react-router-dom', () => {
-  const originalModule = jest.requireActual('react-router-dom');
-  return {...originalModule, useHistory: () => ({push: mockHistoryPush})};
-});
-
-jest.mock('axios');
+/*jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
-mockedAxios.post.mockReturnValueOnce(Promise.resolve({data}));
+mockedAxios.post.mockReturnValueOnce(Promise.resolve({data}));*/
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -129,35 +137,21 @@ describe('NewRecipe', () => {
 
     describe('when ownership is private', () => {
       it('should not redirect to /dashboard if given no id', () => {
-        jest.mock('react-router-dom', () => {
-          const originalModule = jest.requireActual('react-router-dom');
-          return {...originalModule, useParams: () => ({})};
-        });
-
         mount(
-          <MemoryRouter>
-            <NewRecipe editing={false} ownership="private" {...initialProps} />
-          </MemoryRouter>
+          <NewRecipe editing={false} ownership="private" {...initialProps} />
         );
 
-        expect(mockHistoryPush).not.toHaveBeenCalled();
+        expect(mockPush).not.toHaveBeenCalled();
       });
     });
 
     describe('when ownership is public', () => {
       it('should not redirect to /dashboard if given no id', () => {
-        jest.mock('react-router-dom', () => {
-          const originalModule = jest.requireActual('react-router-dom');
-          return {...originalModule, useParams: () => ({})};
-        });
-
         mount(
-          <MemoryRouter>
-            <NewRecipe editing={false} ownership="public" {...initialProps} />
-          </MemoryRouter>
+          <NewRecipe editing={false} ownership="public" {...initialProps} />
         );
 
-        expect(mockHistoryPush).not.toHaveBeenCalled();
+        expect(mockPush).not.toHaveBeenCalled();
       });
     });
 
@@ -167,38 +161,24 @@ describe('NewRecipe', () => {
 
     describe('when ownership is private', () => {
       it('should redirect to /dashboard if given no id', () => {
-        jest.mock('react-router-dom', () => {
-          const originalModule = jest.requireActual('react-router-dom');
-          return {...originalModule, useParams: () => ({})};
-        });
-
         mount(
-          <MemoryRouter>
-            <NewRecipe editing={true} ownership="private" {...initialProps} />
-          </MemoryRouter>
+          <NewRecipe editing={true} ownership="private" {...initialProps} />
         );
 
-        expect(mockHistoryPush).toHaveBeenCalledWith("/dashboard");
+        expect(mockPush).toHaveBeenCalledWith("/dashboard");
       });
     });
 
     describe('when ownership is public', () => {
       it('should redirect to /dashboard if given no id', async () => {
-        jest.mock('react-router-dom', () => {
-          const originalModule = jest.requireActual('react-router-dom');
-          return {...originalModule, useParams: () => ({})};
-        });
-
         const wrapper = mount(
-          <MemoryRouter>
-            <NewRecipe editing={true} ownership="public" {...initialProps} />
-          </MemoryRouter>
+          <NewRecipe editing={true} ownership="public" {...initialProps} />
         );
 
         await act(async () => {
           Promise.resolve(() => {
             setImmediate(() => wrapper.update());
-            expect(mockHistoryPush).toHaveBeenCalledWith("/dashboard");
+            expect(mockPush).toHaveBeenCalledWith("/dashboard");
           });
         });
       });

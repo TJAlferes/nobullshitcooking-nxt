@@ -1,24 +1,14 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Crop } from 'react-image-crop';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
 import { useTypedSelector as useSelector } from '../../store';
-import {
-  ICuisine,
-  IEquipment,
-  IIngredient,
-  IIngredientType,
-  IMeasurement,
-  IMethod,
-  IRecipeType,
-  IWorkRecipe,
-} from '../../store/data/types';
 import {
   staffCreateNewRecipe,
   staffEditRecipe,
@@ -29,11 +19,7 @@ import {
   userEditPrivateRecipe,
   userEditPublicRecipe
 } from '../../store/user/recipe/actions';
-import {
-  ICreatingRecipeInfo,
-  IEditingRecipeInfo,
-  IRequiredMethod
-} from '../../store/user/recipe/types';
+import { IRequiredMethod } from '../../store/user/recipe/types';
 import {
   getCroppedImage
 } from '../../utils/imageCropPreviews/imageCropPreviews';
@@ -43,36 +29,37 @@ import { NewRecipeView } from './NewRecipeView';
 const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function NewRecipe({
-  authname,
-  dataCuisines,
-  dataEquipment,
-  dataIngredients,
-  dataIngredientTypes,
-  dataMeasurements,
-  dataMethods,
-  dataMyFavoriteRecipes,
-  dataMyPrivateEquipment,
-  dataMyPrivateIngredients,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  dataRecipes,
-  dataRecipeTypes,
   editing,
   oneColumnATheme,
-  ownership,
-  staffCreateNewRecipe,
-  staffEditRecipe,
-  staffIsAuthenticated,
-  staffMessage,
-  userCreateNewPrivateRecipe,
-  userCreateNewPublicRecipe,
-  userEditPrivateRecipe,
-  userEditPublicRecipe,
-  userMessage
+  ownership
 }: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
+  const dataCuisines = useSelector(state => state.data.cuisines);
+  const dataEquipment = useSelector(state => state.data.officialEquipment);
+  const dataIngredients = useSelector(state => state.data.officialIngredients);
+  const dataIngredientTypes = useSelector(state => state.data.ingredientTypes);
+  const dataMeasurements = useSelector(state => state.data.measurements);
+  const dataMethods = useSelector(state => state.data.methods);
+  const dataMyFavoriteRecipes =
+    useSelector(state => state.data.myFavoriteRecipes);
+  const dataMyPrivateEquipment =
+    useSelector(state => state.data.myPrivateEquipment);
+  const dataMyPrivateIngredients =
+    useSelector(state => state.data.myPrivateIngredients);
+  const dataMyPrivateRecipes =
+    useSelector(state => state.data.myPrivateRecipes);
+  const dataMyPublicRecipes = useSelector(state => state.data.myPublicRecipes);
+  const dataMySavedRecipes = useSelector(state => state.data.mySavedRecipes);
+  const dataRecipes = useSelector(state => state.data.officialRecipes);
+  const dataRecipeTypes = useSelector(state => state.data.recipeTypes);
+  const staffIsAuthenticated =
+    useSelector(state => state.auth.staffIsAuthenticated);
+  const staffMessage = useSelector(state => state.staff.message);
+  const userMessage = useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -168,26 +155,28 @@ export function NewRecipe({
   useEffect(() => {
     const getExistingRecipeToEdit = async () => {
       if (!id || (!staffIsAuthenticated && !ownership)) {
-        const redirectPath = staffIsAuthenticated
-          ? '/staff-dashboard' : '/dashboard';
-        history.push(redirectPath);
+        const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        router.push(redirectPath);
         return;
       }
 
       setLoading(true);
+
       window.scrollTo(0,0);
 
       const url = staffIsAuthenticated
         ? `${endpoint}/staff/recipe/edit`
         : `${endpoint}/user/recipe/edit/${ownership}`;
-      const res =
-        await axios.post(url, {id}, {withCredentials: true});
+      
+      const res = await axios.post(url, {id}, {withCredentials: true});
 
       const recipe: IExistingRecipeToEdit = res.data.recipe;
+
       if (!recipe) {
-        const redirectPath = staffIsAuthenticated
-          ? '/staff-dashboard' : '/dashboard';
-        history.push(redirectPath);
+        const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        router.push(redirectPath);
         return;
       }
 
@@ -250,18 +239,16 @@ export function NewRecipe({
 
     if (isSubscribed) {
       const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated
-        ? '/staff-dashboard' : '/dashboard';
+      
+      const redirectPath =
+        staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
       if (message !== "") window.scrollTo(0,0);
 
       setFeedback(message);
 
-      if (
-        message === "Recipe created." ||
-        message === "Recipe updated."
-      ) {
-        setTimeout(() => history.push(redirectPath), 3000);
+      if (message === "Recipe created." || message === "Recipe updated.") {
+        setTimeout(() => router.push(redirectPath), 3000);
       }
 
       setLoading(false);  // move?
@@ -446,10 +433,13 @@ export function NewRecipe({
       };
 
       if (staffIsAuthenticated) {
-        staffEditRecipe(recipeInfo);
+        dispatch(staffEditRecipe(recipeInfo));
       } else {
-        if (ownership === "private") userEditPrivateRecipe(recipeInfo);
-        else if (ownership === "public") userEditPublicRecipe(recipeInfo);
+        if (ownership === "private") {
+          dispatch(userEditPrivateRecipe(recipeInfo));
+        } else if (ownership === "public") {
+          dispatch(userEditPublicRecipe(recipeInfo));
+        }
       }
 
     } else {
@@ -478,10 +468,13 @@ export function NewRecipe({
       };
 
       if (staffIsAuthenticated) {
-        staffCreateNewRecipe(recipeInfo);
+        dispatch(staffCreateNewRecipe(recipeInfo));
       } else {
-        if (ownership === "private") userCreateNewPrivateRecipe(recipeInfo);
-        else if (ownership === "public") userCreateNewPublicRecipe(recipeInfo);
+        if (ownership === "private") {
+          dispatch(userCreateNewPrivateRecipe(recipeInfo));
+        } else if (ownership === "public") {
+          dispatch(userCreateNewPublicRecipe(recipeInfo));
+        }
       }
       
     }
@@ -773,35 +766,6 @@ export function NewRecipe({
   );
 };
 
-interface RootState {
-  auth: {
-    authname: string;
-    staffIsAuthenticated: boolean;
-  };
-  data: {
-    cuisines: ICuisine[];
-    equipment: IEquipment[];
-    ingredients: IIngredient[];
-    ingredientTypes: IIngredientType[];
-    measurements: IMeasurement[];
-    methods: IMethod[];
-    myFavoriteRecipes: IWorkRecipe[];
-    myPrivateEquipment: IEquipment[];
-    myPrivateIngredients: IIngredient[];
-    myPrivateRecipes: IWorkRecipe[];
-    myPublicRecipes: IWorkRecipe[];
-    mySavedRecipes: IWorkRecipe[];
-    recipes: IWorkRecipe[];
-    recipeTypes: IRecipeType[];
-  };
-  staff: {
-    message: string;
-  };
-  user: {
-    message: string;
-  };
-}
-
 export interface IExistingRecipeToEdit {
   id: number;
   recipe_type_id: number;
@@ -900,50 +864,10 @@ export interface ISubrecipeRow {
   subrecipe: string | number;
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   editing: boolean;
   oneColumnATheme: string;
   ownership: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  dataCuisines: state.data.cuisines,
-  dataEquipment: state.data.equipment,
-  dataIngredients: state.data.ingredients,
-  dataIngredientTypes: state.data.ingredientTypes,
-  dataMeasurements: state.data.measurements,
-  dataMethods: state.data.methods,
-  dataMyFavoriteRecipes: state.data.myFavoriteRecipes,
-  dataMyPrivateEquipment: state.data.myPrivateEquipment,
-  dataMyPrivateIngredients: state.data.myPrivateIngredients,
-  dataMyPrivateRecipes: state.data.myPrivateRecipes,
-  dataMyPublicRecipes: state.data.myPublicRecipes,
-  dataMySavedRecipes: state.data.mySavedRecipes,
-  dataRecipes: state.data.recipes,
-  dataRecipeTypes: state.data.recipeTypes,
-  staffIsAuthenticated: state.auth.staffIsAuthenticated,
-  staffMessage: state.staff.message,
-  userMessage: state.user.message
-});
-
-const mapDispatchToProps = {
-  staffCreateNewRecipe: (recipeInfo: ICreatingRecipeInfo) =>
-    staffCreateNewRecipe(recipeInfo),
-  staffEditRecipe: (recipeInfo: IEditingRecipeInfo) =>
-    staffEditRecipe(recipeInfo),
-  userCreateNewPrivateRecipe: (recipeInfo: ICreatingRecipeInfo) =>
-    userCreateNewPrivateRecipe(recipeInfo),
-  userCreateNewPublicRecipe: (recipeInfo: ICreatingRecipeInfo) =>
-    userCreateNewPublicRecipe(recipeInfo),
-  userEditPrivateRecipe: (recipeInfo: IEditingRecipeInfo) =>
-    userEditPrivateRecipe(recipeInfo),
-  userEditPublicRecipe: (recipeInfo: IEditingRecipeInfo) =>
-    userEditPublicRecipe(recipeInfo)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NewRecipe);
+export default NewRecipe;
