@@ -5,7 +5,7 @@ import { IEquipment } from '../../store/data/types';
 import './equipment.css';
 
 export function EquipmentView({
-  dataMyPrivateEquipment,
+  myPrivateEquipment,
   equipment,
   twoColumnBTheme
 }: Props): JSX.Element {
@@ -29,7 +29,7 @@ export function EquipmentView({
 
             <div className="equipment__image">
               {
-                dataMyPrivateEquipment.find(e => e.id === id)
+                myPrivateEquipment.find(e => e.id === id)
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-equipment/${image}`} />
                 : <img src={`https://s3.amazonaws.com/nobsc-images-01/equipment/${image}.jpg`} />
               }
@@ -61,7 +61,7 @@ export function EquipmentView({
 }
 
 type Props = {
-  dataMyPrivateEquipment: IEquipment[];
+  myPrivateEquipment: IEquipment[];
   equipment: IEquipment;
   twoColumnBTheme: string;
 }

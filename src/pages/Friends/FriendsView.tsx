@@ -1,12 +1,12 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import LeftNav from '../../components/LeftNav/LeftNav';
 import { IFriendship } from '../../store/data/types';
 import './friends.css';
 
 export function FriendsView({
-  dataMyFriendships,
+  myFriendships,
   feedback,
   handleAcceptClick,
   handleBlockClick,
@@ -101,16 +101,20 @@ export function FriendsView({
 
         <div className="friends__list">
           {
-            dataMyFriendships
+            myFriendships
             .filter(f => f.status === tab)
             .map(f => (
               <div className="friends__list-item" key={f.username}>
                 <span className="friends__list-item-avatar">
                   <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${f.avatar}-tiny`} />
                 </span>
+
                 <span className="friends__list-item-username">
-                  <Link to={`/profile/${f.username}`}>{f.username}</Link>
+                  <Link href={`/profile/${f.username}`}>
+                    <a>{f.username}</a>
+                  </Link>
                 </span>
+
                 {
                   f.status === "pending-received" &&
                   <button
@@ -123,6 +127,7 @@ export function FriendsView({
                     Accept
                   </button>
                 }
+
                 {
                   f.status === "pending-received" &&
                   <button
@@ -135,6 +140,7 @@ export function FriendsView({
                     Reject
                   </button>
                 }
+
                 {
                   f.status === "accepted" &&
                   <button
@@ -147,6 +153,7 @@ export function FriendsView({
                     Unfriend
                   </button>
                 }
+                
                 {
                   f.status === "blocked" &&
                   <button
@@ -170,7 +177,7 @@ export function FriendsView({
 }
 
 type Props = {
-  dataMyFriendships: IFriendship[];
+  myFriendships: IFriendship[];
   feedback: string;
   handleAcceptClick(e: React.SyntheticEvent<EventTarget>): void;
   handleBlockClick(): void;

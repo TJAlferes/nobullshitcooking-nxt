@@ -13,6 +13,7 @@ import { watchPlan } from './plan';
 import { watchRecipe } from './recipe';
 import { watchSave } from './save';
 
+// fork or something? or just leave as is?
 export function runWatchers(sagaMiddleware: SagaMiddleware<object>) {
   sagaMiddleware.run(watchAuth);
   sagaMiddleware.run(watchAvatar);

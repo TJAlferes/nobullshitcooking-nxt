@@ -1,6 +1,8 @@
 import { NextRouter } from 'next/router';
 
-import {
+import { actionTypes } from './types';
+
+const {
   AUTH_CHECK_STATE,
   AUTH_MESSAGE_CLEAR,
   AUTH_RESET,
@@ -31,7 +33,7 @@ import {
   //AUTH_GOOGLE_CHECK_STATE,
   //AUTH_GOOGLE_LOGIN,
   //AUTH_GOOGLE_LOGOUT
-} from './types';
+} = actionTypes;
 
 export const authCheckState = () => ({type: AUTH_CHECK_STATE});
 

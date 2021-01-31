@@ -5,8 +5,8 @@ import {
   ResultsPerPage,
   withSearch
 } from '@elastic/react-search-ui';
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { ExpandCollapse } from '../../components/ExpandCollapse/ExpandCollapse';
 import './equipments.css';
@@ -17,17 +17,21 @@ function listResults(results: any) {
   if (results && results[0] && results[0].id) {
     return results && results.map((e: any) => (
       <div className="equipments" key={e.id.raw}>
-        <Link className="equipments__link" to={`/equipment/${e.id.raw}`}>
-          <div className="equipments__text">
-            <div className="equipments__name">{e.name.raw}</div>
+        <Link href={`/equipment/${e.id.raw}`}>
+          <a className="equipments__link">
+            <div className="equipments__text">
+              <div className="equipments__name">{e.name.raw}</div>
 
-            <div className="equipments__type">{e.equipment_type_name.raw}</div>
-          </div>
+              <div className="equipments__type">
+                {e.equipment_type_name.raw}
+              </div>
+            </div>
 
-          <img
-            className="equipments__image"
-            src={`${url}/${e.image.raw}.jpg`}
-          />
+            <img
+              className="equipments__image"
+              src={`${url}/${e.image.raw}.jpg`}
+            />
+          </a>
         </Link>
       </div>
     ));

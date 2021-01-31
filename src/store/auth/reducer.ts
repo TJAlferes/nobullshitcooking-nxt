@@ -1,4 +1,6 @@
-import {
+import { actionTypes, IAuthState, AuthActions } from './types';
+
+const {
   AUTH_MESSAGE_CLEAR,
   AUTH_RESET,
   AUTH_UPDATE_LOCAL_AVATAR,
@@ -17,10 +19,8 @@ import {
   AUTH_USER_REGISTER_SUCCEEDED,
   AUTH_USER_REGISTER_FAILED,
   AUTH_USER_VERIFY_SUCCEEDED,
-  AUTH_USER_VERIFY_FAILED,
-  IAuthState,
-  AuthActions
-} from './types';
+  AUTH_USER_VERIFY_FAILED
+} = actionTypes;
 
 const initialState: IAuthState = {
   authname: '',

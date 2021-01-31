@@ -5,12 +5,13 @@ import { IIngredient } from '../../store/data/types';
 import './ingredient.css';
 
 export function IngredientView({
-  dataMyPrivateIngredients,
+  myPrivateIngredients,
   ingredient,
   twoColumnBTheme
 }: Props): JSX.Element {
-  const { id, brand, variety, name, image, ingredient_type_name, description } =
-    ingredient;
+  const {
+    id, brand, variety, name, image, ingredient_type_name, description
+  } = ingredient;
 
   return (
     <div className="ingredient">
@@ -34,7 +35,7 @@ export function IngredientView({
 
             <div className="ingredient__image">
               {
-                dataMyPrivateIngredients.find(ing => ing.id === id)
+                myPrivateIngredients.find(ing => ing.id === id)
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-ingredients/${image}`} />
                 : <img src={`https://s3.amazonaws.com/nobsc-images-01/ingredients/${image}.jpg`} />
               }
@@ -66,7 +67,7 @@ export function IngredientView({
 }
 
 type Props = {
-  dataMyPrivateIngredients: IIngredient[];
+  myPrivateIngredients: IIngredient[];
   ingredient: IIngredient;
   twoColumnBTheme: string;
 }

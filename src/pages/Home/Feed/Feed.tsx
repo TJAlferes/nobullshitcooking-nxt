@@ -1,14 +1,13 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 
-import { IWorkContent } from '../../../store/data/types';
+import { useTypedSelector as useSelector } from '../../../store';
 import './feed.css';
 
-export function Feed({
-  myContent,
-  officialContent,
-  theme
-}: Props): JSX.Element {
+export function Feed(): JSX.Element {
+  const myContent = useSelector(state => state.data.myContent);
+  const officialContent  = useSelector(state => state.data.officialContent);
+  const theme = useSelector(state => state.theme.feedTheme);
+
   return (
     <div className={`feed ${theme}`}>
       {
@@ -27,28 +26,6 @@ export function Feed({
       }
     </div>
   );
-};
-
-interface RootState {
-  data: {
-    myContent: IWorkContent[];
-    officialContent: IWorkContent[];
-  };
-  theme: {
-    feedTheme: string;
-  };
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux;
-
-const mapStateToProps = (state: RootState) => ({
-  myContent: state.data.myContent,
-  officialContent: state.data.officialContent,
-  theme: state.theme.feedTheme
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(Feed);
+export default Feed;

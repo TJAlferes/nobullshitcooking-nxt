@@ -1,7 +1,7 @@
+import Link from 'next/link';
 import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
-import { Link } from 'react-router-dom';
 
 import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
 import { IEquipmentType } from '../../store/data/types';
@@ -10,7 +10,7 @@ import './newEquipment.css';
 export function NewEquipmentView({
   cancelImage,
   crop,
-  dataEquipmentTypes,
+  equipmentTypes,
   description,
   editing,
   feedback,
@@ -45,8 +45,8 @@ export function NewEquipmentView({
     <div className="new-equipment-view">
 
       <div>
-        <span><Link to="/home">Home</Link><i>{`&gt;`}</i></span>
-        <span><Link to={path}>Dashboard</Link><i>{`&gt;`}</i></span>
+        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+        <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
         <span>{page}</span>
       </div>
 
@@ -66,7 +66,7 @@ export function NewEquipmentView({
           value={typeId}
         >
           <option value=""></option>
-          {dataEquipmentTypes.map(t => (
+          {equipmentTypes.map(t => (
             <option key={t.id} value={t.id}>{t.name}</option>
           ))}
         </select>
@@ -147,8 +147,8 @@ export function NewEquipmentView({
         </div>
 
         <div className="new-equipment__finish-area">
-          <Link className="new-equipment__cancel-button" to={path}>
-            Cancel
+          <Link href={path}>
+            <a className="new-equipment__cancel-button">Cancel</a>
           </Link>
           <LoaderButton
             className="new-equipment__submit-button"
@@ -170,7 +170,7 @@ export function NewEquipmentView({
 type Props = {
   cancelImage(): void;
   crop: Crop;
-  dataEquipmentTypes: IEquipmentType[];
+  equipmentTypes: IEquipmentType[];
   description: string;
   editing: boolean;
   feedback: string;

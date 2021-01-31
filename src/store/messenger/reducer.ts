@@ -1,5 +1,14 @@
-import { AUTH_USER_LOGOUT } from '../auth/types';
+import { actionTypes as authActionTypes } from '../auth/types';
 import {
+  actionTypes,
+  IMessengerState,
+  KMessage,
+  KWhisper,
+  MessengerActions
+} from './types';
+
+const { AUTH_USER_LOGOUT } = authActionTypes;
+const {
   MESSENGER_CONNECTED,
   MESSENGER_DISCONNECTED,
   MESSENGER_GET_ONLINE,
@@ -11,12 +20,8 @@ import {
   MESSENGER_LEFT_USER,
   MESSENGER_RECEIVED_MESSAGE,
   MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER,
-  IMessengerState,
-  KMessage,
-  KWhisper,
-  MessengerActions
-} from './types';
+  MESSENGER_FAILED_WHISPER
+} = actionTypes;
 
 // NORMALIZE STATE, USE OBJECTS/MAPS, NOT ARRAYS (maybe)
 // remember Nir Kofman's actions patterns (maybe)

@@ -5,8 +5,8 @@ import {
   ResultsPerPage,
   withSearch,
 } from '@elastic/react-search-ui';
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { ExpandCollapse } from '../../components/ExpandCollapse/ExpandCollapse';
 import './ingredients.css';
@@ -17,25 +17,27 @@ function listResults(results: any) {
   if (results && results[0] && results[0].id) {
     return results.map((i: any) => (
       <div className="ingredients" key={i.id.raw}>
-        <Link className="ingredients__link" to={`/ingredient/${i.id.raw}`}>
-          <div className="ingredients__text">
-            <div className="ingredients__fullname">
-              {i.brand.raw && i.brand.raw}
-              {' '}
-              {i.variety.raw && i.variety.raw}
-              {' '}
-              {i.name.raw}
+        <Link href={`/ingredient/${i.id.raw}`}>
+          <a className="ingredients__link">
+            <div className="ingredients__text">
+              <div className="ingredients__fullname">
+                {i.brand.raw && i.brand.raw}
+                {' '}
+                {i.variety.raw && i.variety.raw}
+                {' '}
+                {i.name.raw}
+              </div>
+
+              <div className="ingredients__type">
+                {i.ingredient_type_name.raw}
+              </div>
             </div>
 
-            <div className="ingredients__type">
-              {i.ingredient_type_name.raw}
-            </div>
-          </div>
-
-          <img
-            className="ingredients__image"
-            src={`${url}${i.image.raw}.jpg`}
-          />
+            <img
+              className="ingredients__image"
+              src={`${url}${i.image.raw}.jpg`}
+            />
+          </a>
         </Link>
       </div>
     ));

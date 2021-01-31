@@ -1,12 +1,12 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Crop } from 'react-image-crop';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import {
   getCroppedImage
 } from '../../utils/imageCropPreviews/imageCropPreviews';
-import { IIngredient, IIngredientType } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   staffCreateNewIngredient,
   staffEditIngredient
@@ -15,28 +15,25 @@ import {
   userCreateNewPrivateIngredient,
   userEditPrivateIngredient
 } from '../../store/user/ingredient/actions';
-import {
-  ICreatingIngredientInfo,
-  IEditingIngredientInfo
-} from '../../store/user/ingredient/types';
 import { NewIngredientView } from './NewIngredientView';
 
 export function NewIngredient({
-  dataIngredients,
-  dataIngredientTypes,
-  dataMyPrivateIngredients,
   editing,
-  oneColumnATheme,
-  staffCreateNewIngredient,
-  staffEditIngredient,
-  staffIsAuthenticated,
-  staffMessage,
-  userCreateNewPrivateIngredient,
-  userEditPrivateIngredient,
-  userMessage
+  oneColumnATheme
 }: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+  const staffIsAuthenticated =
+    useSelector(state => state.auth.staffIsAuthenticated);
+  const staffMessage = useSelector(state => state.staff.message);
+  const userMessage = useSelector(state => state.user.message);
+  const officialIngredients =
+    useSelector(state => state.data.officialIngredients);
+  const ingredientTypes = useSelector(state => state.data.ingredientTypes);
+  const myPrivateIngredients =
+    useSelector(state => state.data.myPrivateIngredients);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -59,9 +56,9 @@ export function NewIngredient({
   useEffect(() => {
     const getExistingIngredientToEdit = () => {
       if (!id) {
-        const redirectPath = staffIsAuthenticated
-          ? '/staff-dashboard' : '/dashboard';
-        history.push(redirectPath);
+        const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        router.push(redirectPath);
         return;
       }
 
@@ -69,8 +66,8 @@ export function NewIngredient({
       window.scrollTo(0,0);
 
       const [ prev ] = staffIsAuthenticated
-        ? dataIngredients.filter(i => i.id === Number(id))
-        : dataMyPrivateIngredients.filter(i => i.id === Number(id));
+        ? officialIngredients.filter(i => i.id === Number(id))
+        : myPrivateIngredients.filter(i => i.id === Number(id));
 
       setEditingId(prev.id);
       setTypeId(prev.ingredient_type_id);
@@ -88,8 +85,8 @@ export function NewIngredient({
 
     if (isSubscribed) {
       const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated
-        ? '/staff-dashboard' : '/dashboard';
+      const redirectPath =
+        staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
       if (message !== "") window.scrollTo(0,0);
 
@@ -99,7 +96,7 @@ export function NewIngredient({
         message === "Ingredient created." ||
         message === "Ingredient updated."
       ) {
-        setTimeout(() => history.push(redirectPath), 3000);
+        setTimeout(() => router.push(redirectPath), 3000);
       }
 
       setLoading(false);
@@ -139,8 +136,8 @@ export function NewIngredient({
         tinyImage,
         prevImage
       };
-      if (staffIsAuthenticated) staffEditIngredient(ingredientInfo);
-      else userEditPrivateIngredient(ingredientInfo);
+      if (staffIsAuthenticated) dispatch(staffEditIngredient(ingredientInfo));
+      else dispatch(userEditPrivateIngredient(ingredientInfo));
     } else {
       const ingredientInfo = {
         ingredientTypeId: typeId,
@@ -150,8 +147,11 @@ export function NewIngredient({
         fullImage,
         tinyImage,
       };
-      if (staffIsAuthenticated) staffCreateNewIngredient(ingredientInfo);
-      else userCreateNewPrivateIngredient(ingredientInfo);
+      if (staffIsAuthenticated) {
+        dispatch(staffCreateNewIngredient(ingredientInfo));
+      } else {
+        dispatch(userCreateNewPrivateIngredient(ingredientInfo));
+      }
     }
   };
 
@@ -161,14 +161,11 @@ export function NewIngredient({
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-
     const full =
       await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
     const tiny =
       await getCroppedImage(28, 18, imageRef.current, crop, "newFile.jpeg");
-
     if (!full || !tiny) return;
-
     setFullCrop(full.resizedPreview);
     setTinyCrop(tiny.resizedPreview);
     setFullImage(full.resizedFinal);
@@ -183,11 +180,8 @@ export function NewIngredient({
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
@@ -224,7 +218,7 @@ export function NewIngredient({
     <NewIngredientView
       cancelImage={cancelImage}
       crop={crop}
-      dataIngredientTypes={dataIngredientTypes}
+      ingredientTypes={ingredientTypes}
       description={description}
       editing={editing}
       feedback={feedback}
@@ -249,50 +243,9 @@ export function NewIngredient({
   );
 };
 
-interface RootState {
-  auth: {
-    staffIsAuthenticated: boolean;
-  };
-  data: {
-    ingredients: IIngredient[];
-    ingredientTypes: IIngredientType[];
-    myPrivateIngredients: IIngredient[];
-  };
-  staff: {
-    message: string;
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   editing: boolean;
   oneColumnATheme: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  staffIsAuthenticated: state.auth.staffIsAuthenticated,
-  staffMessage: state.staff.message,
-  userMessage: state.user.message,
-  dataIngredients: state.data.ingredients,
-  dataIngredientTypes: state.data.ingredientTypes,
-  dataMyPrivateIngredients: state.data.myPrivateIngredients
-});
-
-const mapDispatchToProps = {
-  staffCreateNewIngredient: (ingredientInfo: ICreatingIngredientInfo) =>
-    staffCreateNewIngredient(ingredientInfo),
-  staffEditIngredient: (ingredientInfo: IEditingIngredientInfo) =>
-    staffEditIngredient(ingredientInfo),
-  userCreateNewPrivateIngredient: (ingredientInfo: ICreatingIngredientInfo) =>
-    userCreateNewPrivateIngredient(ingredientInfo),
-  userEditPrivateIngredient: (ingredientInfo: IEditingIngredientInfo) =>
-    userEditPrivateIngredient(ingredientInfo)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NewIngredient);
+export default NewIngredient;

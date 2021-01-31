@@ -1,4 +1,11 @@
 import {
+  actionTypes,
+  IMessageBeforeClientTimestamp,
+  IWhisperBeforeClientTimestamp,
+  IUser
+} from './types';
+
+const {
   MESSENGER_CONNECT,
   MESSENGER_CONNECTED,
   MESSENGER_DISCONNECT,
@@ -15,11 +22,8 @@ import {
   MESSENGER_RECEIVED_MESSAGE,
   MESSENGER_SEND_WHISPER,
   MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER,
-  IMessageBeforeClientTimestamp,
-  IWhisperBeforeClientTimestamp,
-  IUser
-} from './types';
+  MESSENGER_FAILED_WHISPER
+} = actionTypes;
 
 export const messengerConnect = () => ({type: MESSENGER_CONNECT});
 

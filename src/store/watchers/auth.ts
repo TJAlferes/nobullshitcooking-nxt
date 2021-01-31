@@ -8,7 +8,10 @@ import {
   authStaffLoginSaga,
   authStaffLogoutSaga
 } from '../auth/sagas';
-import {
+import { actionTypes } from '../auth/types';
+import { dataGetInitialUserDataSaga } from '../data/sagas';
+
+const {
   AUTH_USER_LOGIN,
   AUTH_USER_LOGIN_SUCCEEDED,
   AUTH_USER_LOGOUT,
@@ -17,8 +20,7 @@ import {
   AUTH_STAFF_LOGIN,
   //AUTH_STAFF_LOGIN_SUCCEEDED,
   AUTH_STAFF_LOGOUT
-} from '../auth/types';
-import { dataGetInitialUserDataSaga } from '../data/sagas';
+} = actionTypes;
 
 export function* watchAuth() {
   yield all([

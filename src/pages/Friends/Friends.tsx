@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { IFriendship } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   userAcceptFriendship,
   userBlockUser,
@@ -12,18 +12,13 @@ import {
 } from '../../store/user/friendship/actions';
 import { FriendsView } from './FriendsView';
 
-export function Friends({
-  authname,
-  dataMyFriendships,
-  message,
-  twoColumnATheme,
-  userAcceptFriendship,
-  userBlockUser,
-  userDeleteFriendship,
-  userRejectFriendship,
-  userRequestFriendship,
-  userUnblockUser
-}: Props): JSX.Element {
+export function Friends({ twoColumnATheme }: Props): JSX.Element {
+  const dispatch = useDispatch();
+
+  const authname = useSelector(state => state.auth.authname);
+  const myFriendships = useSelector(state => state.data.myFriendships);
+  const message = useSelector(state => state.user.message);
+
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
   const [ tab, setTab ] = useState("accepted");
@@ -43,7 +38,7 @@ export function Friends({
 
   const handleAcceptClick = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
-    userAcceptFriendship((e.target as HTMLInputElement).value);
+    dispatch(userAcceptFriendship((e.target as HTMLInputElement).value));
   };
 
   const handleBlockClick = () => {
@@ -52,13 +47,13 @@ export function Friends({
     const friendName = userToFind.trim();
     if (friendName === authname) return;
     setLoading(true);
-    userBlockUser(friendName);
+    dispatch(userBlockUser(friendName));
     setUsertoFind("");
   };
 
   const handleDeleteClick = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
-    userDeleteFriendship((e.target as HTMLInputElement).value);
+    dispatch(userDeleteFriendship((e.target as HTMLInputElement).value));
   };
 
   const handleInputChange = (e: React.SyntheticEvent<EventTarget>) => {
@@ -67,7 +62,7 @@ export function Friends({
 
   const handleRejectClick = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
-    userRejectFriendship((e.target as HTMLInputElement).value);
+    dispatch(userRejectFriendship((e.target as HTMLInputElement).value));
   };
 
   const handleRequestClick = () => {
@@ -76,7 +71,7 @@ export function Friends({
     const friendName = userToFind.trim();
     if (friendName === authname) return;
     setLoading(true);
-    userRequestFriendship(friendName);
+    dispatch(userRequestFriendship(friendName));
     setUsertoFind("");
   };
 
@@ -84,14 +79,14 @@ export function Friends({
 
   const handleUnblockClick = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
-    userUnblockUser((e.target as HTMLInputElement).value);
+    dispatch(userUnblockUser((e.target as HTMLInputElement).value));
   };
 
   const validateUserToFind = () => (userToFind.trim()).length > 1;
 
   return (
     <FriendsView
-      dataMyFriendships={dataMyFriendships}
+      myFriendships={myFriendships}
       feedback={feedback}
       handleAcceptClick={handleAcceptClick}
       handleBlockClick={handleBlockClick}
@@ -109,39 +104,8 @@ export function Friends({
   );
 };
 
-interface RootState {
-  auth: {
-    authname: string;
-  };
-  data: {
-    myFriendships: IFriendship[];
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   twoColumnATheme: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  dataMyFriendships: state.data.myFriendships,
-  message: state.user.message
-});
-
-const mapDispatchToProps = {
-  userAcceptFriendship: (friendName: string) => userAcceptFriendship(friendName),
-  userBlockUser: (friendName: string) => userBlockUser(friendName),
-  userDeleteFriendship: (friendName: string) => userDeleteFriendship(friendName),
-  userRejectFriendship: (friendName: string) => userRejectFriendship(friendName),
-  userRequestFriendship: (friendName: string) => userRequestFriendship(friendName),
-  userUnblockUser: (friendName: string) => userUnblockUser(friendName)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Friends);
+export default Friends;

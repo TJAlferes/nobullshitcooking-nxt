@@ -1,12 +1,12 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Crop } from 'react-image-crop';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import {
   getCroppedImage
 } from '../../utils/imageCropPreviews/imageCropPreviews';
-import { IEquipment, IEquipmentType } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   staffCreateNewEquipment,
   staffEditEquipment
@@ -15,28 +15,21 @@ import {
   userCreateNewPrivateEquipment,
   userEditPrivateEquipment
 } from '../../store/user/equipment/actions';
-import {
-  ICreatingEquipmentInfo,
-  IEditingEquipmentInfo
-} from '../../store/user/equipment/types';
 import { NewEquipmentView } from './NewEquipmentView';
 
-export function NewEquipment({
-  dataEquipment,
-  dataEquipmentTypes,
-  dataMyPrivateEquipment,
-  editing,
-  oneColumnATheme,
-  staffCreateNewEquipment,
-  staffEditEquipment,
-  staffIsAuthenticated,
-  staffMessage,
-  userCreateNewPrivateEquipment,
-  userEditPrivateEquipment,
-  userMessage
-}: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+export function NewEquipment({ editing, oneColumnATheme }: Props): JSX.Element {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+  const officialEquipment = useSelector(state => state.data.officialEquipment);
+  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
+  const myPrivateEquipment =
+    useSelector(state => state.data.myPrivateEquipment);
+  const staffIsAuthenticated =
+    useSelector(state => state.auth.staffIsAuthenticated);
+  const staffMessage = useSelector(state => state.staff.message);
+  const userMessage = useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -59,9 +52,9 @@ export function NewEquipment({
   useEffect(() => {
     const getExistingEquipmentToEdit = () => {
       if (!id) {
-        const redirectPath = staffIsAuthenticated
-          ? '/staff-dashboard' : '/dashboard';
-        history.push(redirectPath);
+        const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        router.push(redirectPath);
         return;
       }
       
@@ -69,8 +62,8 @@ export function NewEquipment({
       setLoading(true);
 
       const [ prev ] = staffIsAuthenticated
-        ? dataEquipment.filter(e => e.id === Number(id))
-        : dataMyPrivateEquipment.filter(e => e.id === Number(id));
+        ? officialEquipment.filter(e => e.id === Number(id))
+        : myPrivateEquipment.filter(e => e.id === Number(id));
 
       setEditingId(prev.id);
       setTypeId(prev.equipment_type_id);
@@ -88,8 +81,8 @@ export function NewEquipment({
 
     if (isSubscribed) {
       const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated
-        ? '/staff-dashboard' : '/dashboard';
+      const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
       if (message !== "") window.scrollTo(0,0);
 
@@ -99,7 +92,7 @@ export function NewEquipment({
         message === "Equipment created." ||
         message === "Equipment updated."
       ) {
-        setTimeout(() => history.push(redirectPath), 3000);
+        setTimeout(() => router.push(redirectPath), 3000);
       }
 
       setLoading(false);
@@ -139,8 +132,8 @@ export function NewEquipment({
         tinyImage,
         prevImage
       };
-      if (staffIsAuthenticated) staffEditEquipment(equipmentInfo);
-      else userEditPrivateEquipment(equipmentInfo);
+      if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentInfo));
+      else dispatch(userEditPrivateEquipment(equipmentInfo));
     } else {
       const equipmentInfo = {
         equipmentTypeId: typeId,
@@ -150,8 +143,11 @@ export function NewEquipment({
         fullImage,
         tinyImage
       };
-      if (staffIsAuthenticated) staffCreateNewEquipment(equipmentInfo);
-      else userCreateNewPrivateEquipment(equipmentInfo);
+      if (staffIsAuthenticated) {
+        dispatch(staffCreateNewEquipment(equipmentInfo));
+      } else {
+        dispatch(userCreateNewPrivateEquipment(equipmentInfo));
+      }
     }
   };
 
@@ -161,14 +157,11 @@ export function NewEquipment({
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-
     const full =
       await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
     const tiny =
       await getCroppedImage(28, 18, imageRef.current, crop, "newFile.jpeg");
-
     if (!full || !tiny) return;
-
     setFullCrop(full.resizedPreview);
     setTinyCrop(tiny.resizedPreview);
     setFullImage(full.resizedFinal);
@@ -183,11 +176,8 @@ export function NewEquipment({
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
@@ -224,7 +214,7 @@ export function NewEquipment({
     <NewEquipmentView
       cancelImage={cancelImage}
       crop={crop}
-      dataEquipmentTypes={dataEquipmentTypes}
+      equipmentTypes={equipmentTypes}
       description={description}
       editing={editing}
       feedback={feedback}
@@ -249,50 +239,9 @@ export function NewEquipment({
   );
 };
 
-interface RootState {
-  auth: {
-    staffIsAuthenticated: boolean;
-  };
-  data: {
-    equipment: IEquipment[];
-    equipmentTypes: IEquipmentType[];
-    myPrivateEquipment: IEquipment[];
-  };
-  staff: {
-    message: string;
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   editing: boolean;
   oneColumnATheme: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  dataEquipment: state.data.equipment,
-  dataEquipmentTypes: state.data.equipmentTypes,
-  dataMyPrivateEquipment: state.data.myPrivateEquipment,
-  staffIsAuthenticated: state.auth.staffIsAuthenticated,
-  staffMessage: state.staff.message,
-  userMessage: state.user.message
-});
-
-const mapDispatchToProps = {
-  staffCreateNewEquipment: (equipmentInfo: ICreatingEquipmentInfo) =>
-    staffCreateNewEquipment(equipmentInfo),
-  staffEditEquipment: (equipmentInfo: IEditingEquipmentInfo) =>
-    staffEditEquipment(equipmentInfo),
-  userCreateNewPrivateEquipment: (equipmentInfo: ICreatingEquipmentInfo) =>
-    userCreateNewPrivateEquipment(equipmentInfo),
-  userEditPrivateEquipment: (equipmentInfo: IEditingEquipmentInfo) =>
-    userEditPrivateEquipment(equipmentInfo)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NewEquipment);
+export default NewEquipment;

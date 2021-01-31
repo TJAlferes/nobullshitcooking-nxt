@@ -1,6 +1,6 @@
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import {
   NOBSCBackendAPIEndpointOne
@@ -35,12 +35,14 @@ export default function Navigation({
       <div className={`nav-grid-a ${navGridATheme}`}>
         {links && links.map((link: any) => (
           <div className="nav-grid-a-item" key={link.path}>
-            <Link to={`${link.path}`}>
-              <span className="nav-grid-a-item-text">{link.name}</span>
-              {/*<img
-                className="nav-grid-a-item-image"
-                src={`${s3Path}/${link.category}/${link.image}`}
-              />*/}
+            <Link href={`${link.path}`}>
+              <a>
+                <span className="nav-grid-a-item-text">{link.name}</span>
+                {/*<img
+                  className="nav-grid-a-item-image"
+                  src={`${s3Path}/${link.category}/${link.image}`}
+                />*/}
+              </a>
             </Link>
           </div>
         ))}

@@ -1,10 +1,6 @@
-import {
-  CART_ADD_ITEM,
-  CART_REMOVE_ITEM,
-  CART_EMPTY_CART,
-  ICartState,
-  CartActions
-} from './types';
+import { actionTypes, ICartState, CartActions } from './types';
+
+const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
 
 const initialState: ICartState = {items: []};
 

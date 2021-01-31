@@ -1,7 +1,7 @@
+import Link from 'next/link';
 import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
-import { Link } from 'react-router-dom';
 
 import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
 import { IIngredientType } from '../../store/data/types';
@@ -10,7 +10,7 @@ import './newIngredient.css';
 export function NewIngredientView({
   cancelImage,
   crop,
-  dataIngredientTypes,
+  ingredientTypes,
   description,
   editing,
   feedback,
@@ -45,8 +45,8 @@ export function NewIngredientView({
     <div className="new-ingredient-view">
 
       <div>
-        <span><Link to="/home">Home</Link><i>{`&gt;`}</i></span>
-        <span><Link to={path}>Dashboard</Link><i>{`&gt;`}</i></span>
+        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+        <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
         <span>{page}</span>
       </div>
 
@@ -66,7 +66,7 @@ export function NewIngredientView({
           value={typeId}
         >
           <option value=""></option>
-          {dataIngredientTypes.map(t => (
+          {ingredientTypes.map(t => (
             <option key={t.id} value={t.id}>{t.name}</option>
           ))}
         </select>
@@ -147,8 +147,8 @@ export function NewIngredientView({
         </div>
 
         <div className="new-ingredient__finish-area">
-          <Link className="new-ingredient__cancel-button" to={path}>
-            Cancel
+          <Link href={path}>
+            <a className="new-ingredient__cancel-button">Cancel</a>
           </Link>
           <LoaderButton
             className="new-ingredient__submit-button"
@@ -170,7 +170,7 @@ export function NewIngredientView({
 type Props = {
   cancelImage(): void;
   crop: Crop;
-  dataIngredientTypes: IIngredientType[];
+  ingredientTypes: IIngredientType[];
   description: string;
   editing: boolean;
   feedback: string;

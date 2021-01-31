@@ -1,34 +1,35 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
 
 import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
+import { useTypedSelector as useSelector } from '../../store';
 import { IIngredient } from '../../store/data/types';
 import { IngredientView } from './IngredientView';
 
-export function Ingredient({
-  dataIngredients,
-  dataMyPrivateIngredients,
-  twoColumnBTheme
-}: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+export function Ingredient({ twoColumnBTheme }: Props): JSX.Element {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const officialIngredients =
+    useSelector(state => state.data.officialIngredients);
+  const myPrivateIngredients =
+    useSelector(state => state.data.myPrivateIngredients);
 
   const [ ingredient, setIngredient ] = useState<IIngredient | null>(null);
 
   useEffect(() => {
     if (!id) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
 
     const localIngredient = (
-      dataIngredients.find(i => i.id == Number(id)) ||
-      dataMyPrivateIngredients.find(i => i.id == Number(id))
+      officialIngredients.find(i => i.id == Number(id)) ||
+      myPrivateIngredients.find(i => i.id == Number(id))
     );
 
     if (!localIngredient) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
     
@@ -39,31 +40,15 @@ export function Ingredient({
   ? <LoaderSpinner />
   : (
     <IngredientView
-      dataMyPrivateIngredients={dataMyPrivateIngredients}
+      myPrivateIngredients={myPrivateIngredients}
       ingredient={ingredient}
       twoColumnBTheme={twoColumnBTheme}
     />
   );
 }
 
-interface RootState {
-  data: {
-    myPrivateIngredients: IIngredient[];
-    officialIngredients: IIngredient[];
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   twoColumnBTheme: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  dataIngredients: state.data.officialIngredients,
-  dataMyPrivateIngredients: state.data.myPrivateIngredients
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(Ingredient);
+export default Ingredient;

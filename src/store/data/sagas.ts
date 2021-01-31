@@ -204,8 +204,7 @@ export function* dataGetProductsSaga() {
 
 export function* dataGetProductCategoriesSaga() {
   try {
-    const res =
-      yield call([axios, axios.get], `${endpoint}/product-category`);
+    const res = yield call([axios, axios.get], `${endpoint}/product-category`);
     yield put(dataGetProductCategories(res.data));
     yield put(dataGetProductCategoriesSucceeded());
   } catch (err) {

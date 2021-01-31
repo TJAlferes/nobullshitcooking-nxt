@@ -1,9 +1,6 @@
-import {
-  CART_ADD_ITEM,
-  CART_REMOVE_ITEM,
-  CART_EMPTY_CART,
-  ICartItem
-} from './types';
+import { actionTypes, ICartItem } from './types';
+
+const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
 
 export const cartAddItem = (item: ICartItem) => ({
   type: CART_ADD_ITEM,
