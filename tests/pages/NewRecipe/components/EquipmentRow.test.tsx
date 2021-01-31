@@ -7,8 +7,8 @@ import { EquipmentRow } from '../../../../src/pages/NewRecipe/components/Equipme
 const rowKey = "XYZ";
 const amount = 1;
 const type = 2;
-const equipment = "Cutting Board";
-const dataEquipment = [
+const id = 1;
+const equipment = [
   {
     id: 1,
     name: "Cutting Board",
@@ -42,9 +42,9 @@ describe('EquipmentRow', () => {
         rowKey={rowKey}
         amount={amount}
         type={type}
+        id={id}
         equipment={equipment}
-        dataEquipment={dataEquipment}
-        dataMyPrivateEquipment={dataMyPrivateEquipment}
+        myPrivateEquipment={dataMyPrivateEquipment}
         handleEquipmentRowChange={handleEquipmentRowChange}
         removeEquipmentRow={removeEquipmentRow}
       />
@@ -71,6 +71,6 @@ describe('EquipmentRow', () => {
 
   it('displays a button element with text Remove', () => {
     expect(wrapper.find('[data-test="equipment-row-remove-row"]').text())
-    .toEqual("Remove");
+      .toEqual("Remove");
   });
 });

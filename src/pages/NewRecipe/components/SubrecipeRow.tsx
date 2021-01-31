@@ -10,45 +10,45 @@ import {
 export function SubrecipeRow({
   amount,
   cuisine,
-  dataCuisines,
-  dataMeasurements,
-  dataMyFavoriteRecipes,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  dataRecipes,
-  dataRecipeTypes,
+  cuisines,
+  measurements,
+  myFavoriteRecipes,
+  myPrivateRecipes,
+  myPublicRecipes,
+  mySavedRecipes,
+  recipes,
+  recipeTypes,
   editing,
   handleSubrecipeRowChange,
   removeSubrecipeRow,
   rowKey,
   selfId,
-  subrecipe,
+  id,
   type,
   unit
 }: Props): JSX.Element {
   const availableRecipes = [
-    ...(dataMyFavoriteRecipes.length ? dataMyFavoriteRecipes : []),
+    ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),
     ...(
-      dataMyPrivateRecipes.length
-      ? (
-        editing && selfId !== 0
-        ? dataMyPrivateRecipes.filter(r => r.id != selfId)
-        : dataMyPrivateRecipes
-      )
-      : []
+      myPrivateRecipes.length
+        ? (
+          editing && selfId !== 0
+            ? myPrivateRecipes.filter(r => r.id != selfId)
+            : myPrivateRecipes
+        )
+        : []
     ),
     ...(
-      dataMyPublicRecipes.length
-      ? (
-        editing && selfId !== 0
-        ? dataMyPublicRecipes.filter(r => r.id != selfId)
-        : dataMyPublicRecipes
-      )
-      : []
+      myPublicRecipes.length
+        ? (
+          editing && selfId !== 0
+            ? myPublicRecipes.filter(r => r.id != selfId)
+            : myPublicRecipes
+        )
+        : []
     ),
-    ...(dataMySavedRecipes.length ? dataMySavedRecipes : []),
-    ...dataRecipes,
+    ...(mySavedRecipes.length ? mySavedRecipes : []),
+    ...recipes,
   ];
 
   return (
@@ -76,7 +76,7 @@ export function SubrecipeRow({
         value={unit}
       >
         <option value=""></option>
-        {dataMeasurements.map((m, index) => (
+        {measurements.map((m, index) => (
           <option key={index} value={m.id}>{m.name}</option>
         ))}
       </select>
@@ -90,7 +90,7 @@ export function SubrecipeRow({
         value={type}
       >
         <option value=""></option>
-        {dataRecipeTypes.map((r, index) => (
+        {recipeTypes.map((r, index) => (
           <option key={index} value={r.id}>{r.name}</option>
         ))}
       </select>
@@ -104,7 +104,7 @@ export function SubrecipeRow({
         value={cuisine}
       >
         <option value=""></option>
-        {dataCuisines.map((c, index) => (
+        {cuisines.map((c, index) => (
           <option key={index} value={c.id}>{c.name}</option>
         ))}
       </select>
@@ -114,18 +114,16 @@ export function SubrecipeRow({
         className="subrecipe-row-select-subrecipe"
         name="subrecipe"
         required
-        value={subrecipe}
+        value={id}
         onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
       >
         <option value=""></option>
-        {
-          availableRecipes
+        {availableRecipes
           .filter(r => r.recipe_type_id == type)
           .filter(r => r.cuisine_id == cuisine)
           .map((r, index) => (
             <option key={index} value={r.id}>{r.title}</option>
-          ))
-        }
+          ))}
       </select>
 
       <button
@@ -143,14 +141,14 @@ export function SubrecipeRow({
 type Props = {
   amount: string | number;
   cuisine: string | number;
-  dataCuisines: ICuisine[];
-  dataMeasurements: IMeasurement[];
-  dataMyFavoriteRecipes: IWorkRecipe[];
-  dataMyPrivateRecipes: IWorkRecipe[];
-  dataMyPublicRecipes: IWorkRecipe[];
-  dataMySavedRecipes: IWorkRecipe[];
-  dataRecipes: IWorkRecipe[];
-  dataRecipeTypes: IRecipeType[];
+  cuisines: ICuisine[];
+  measurements: IMeasurement[];
+  myFavoriteRecipes: IWorkRecipe[];
+  myPrivateRecipes: IWorkRecipe[];
+  myPublicRecipes: IWorkRecipe[];
+  mySavedRecipes: IWorkRecipe[];
+  recipes: IWorkRecipe[];
+  recipeTypes: IRecipeType[];
   editing: boolean;
   handleSubrecipeRowChange(
     e: React.SyntheticEvent<EventTarget>,
@@ -159,7 +157,7 @@ type Props = {
   removeSubrecipeRow(rowKey: string): void;
   rowKey: string;
   selfId: number;
-  subrecipe: string | number;
+  id: string | number;
   type: string | number;
   unit: string | number;
 };

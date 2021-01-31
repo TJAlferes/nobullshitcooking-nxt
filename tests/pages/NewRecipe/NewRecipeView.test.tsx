@@ -60,11 +60,11 @@ const beginProps = {
   cookingImage: null,
   cookingPrevImage: "nobsc-recipe-cooking-default",
   cuisineId: 1,
-  dataCuisines: [
+  cuisines: [
     {id: 1, name: "American", nation: "America"},
     {id: 2, name: "Japanese", nation: "Japan"}
   ],
-  dataEquipment: [
+  equipment: [
     {
       id: 1,
       name: "Cutting Board",
@@ -84,7 +84,7 @@ const beginProps = {
       image: "nobsc-metal-spatula"
     }
   ],
-  dataIngredients: [
+  ingredients: [
     {
       id: 1,
       brand: null,
@@ -108,17 +108,17 @@ const beginProps = {
       image: "nobsc-spinach"
     }
   ],
-  dataIngredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
-  dataMeasurements: [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
-  dataMethods: [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
-  dataMyFavoriteRecipes: [],
-  dataMyPrivateEquipment: [],
-  dataMyPrivateIngredients: [],
-  dataMyPrivateRecipes: [],
-  dataMyPublicRecipes: [],
-  dataMySavedRecipes: [],
-  dataRecipes: [],
-  dataRecipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
+  ingredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
+  measurements: [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
+  methods: [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
+  myFavoriteRecipes: [],
+  myPrivateEquipment: [],
+  myPrivateIngredients: [],
+  myPrivateRecipes: [],
+  myPublicRecipes: [],
+  mySavedRecipes: [],
+  recipes: [],
+  recipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
   description: "",
   directions: "",
   editing: false,
@@ -127,21 +127,21 @@ const beginProps = {
   equipmentImage: null,
   equipmentPrevImage: "nobsc-recipe-equipment-default",
   equipmentRows: [
-    {key: "XYZ1", amount: "", type: "", equipment: ""},
-    {key: "XYZ2", amount: "", type: "", equipment: ""}
+    {key: "XYZ1", amount: "", type: "", id: ""},
+    {key: "XYZ2", amount: "", type: "", id: ""}
   ],
   feedback: "Some message.",
   id: 0,
   ingredientRows: [
-    {key: "XYZ3", amount: 1, unit: "", type: "", ingredient: ""},
-    {key: "XYZ4", amount: 1, unit: "", type: "", ingredient: ""}
+    {key: "XYZ3", amount: 1, unit: "", type: "", id: ""},
+    {key: "XYZ4", amount: 1, unit: "", type: "", id: ""}
   ],
   ingredientsCrop: {aspect: 280 / 172},
   ingredientsFullCrop: "",
   ingredientsImage: null,
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
   loading: false,
-  methods: {
+  usedMethods: {
      1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
      7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
     13: false, 14: false, 15: false, 16: false, 17: false, 18: false,

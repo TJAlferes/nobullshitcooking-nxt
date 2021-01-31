@@ -8,16 +8,16 @@ const rowKey = "XYZ";
 const amount = 1;
 const unit = 1;
 const type = 11;
-const ingredient = "Spinach";
-const dataMeasurements = [
+const id = 2;
+const measurements = [
   {id: 1, name: "teaspoon"},
   {id: 2, name: "Tablespoon"}
 ];
-const dataIngredientTypes = [
+const ingredientTypes = [
   {id: 11, name: "Vegetable"},
   {id: 12, name: "Fruit"}
 ];
-const dataIngredients = [
+const ingredients = [
   {
     id: 1,
     brand: null,
@@ -41,7 +41,7 @@ const dataIngredients = [
     image: "nobsc-spinach"
   }
 ];
-const dataMyPrivateIngredients: IIngredient[] = [];
+const myPrivateIngredients: IIngredient[] = [];
 const handleIngredientRowChange = jest.fn();
 const removeIngredientRow = jest.fn();
 
@@ -55,11 +55,11 @@ describe('IngredientRow', () => {
         amount={amount}
         unit={unit}
         type={type}
-        ingredient={ingredient}
-        dataMeasurements={dataMeasurements}
-        dataIngredientTypes={dataIngredientTypes}
-        dataIngredients={dataIngredients}
-        dataMyPrivateIngredients={dataMyPrivateIngredients}
+        id={id}
+        measurements={measurements}
+        ingredientTypes={ingredientTypes}
+        ingredients={ingredients}
+        myPrivateIngredients={myPrivateIngredients}
         handleIngredientRowChange={handleIngredientRowChange}
         removeIngredientRow={removeIngredientRow}
       />
@@ -90,6 +90,6 @@ describe('IngredientRow', () => {
 
   it('displays a button element with text Remove', () => {
     expect(wrapper.find('[data-test="ingredient-row-remove-row"]').text())
-    .toEqual("Remove");
+      .toEqual("Remove");
   });
 });

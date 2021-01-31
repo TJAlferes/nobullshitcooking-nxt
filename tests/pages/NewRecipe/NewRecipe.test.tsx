@@ -109,14 +109,8 @@ const initialProps = {
   dataRecipes: [],
   dataRecipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
   oneColumnATheme: "one-column-a-light",
-  staffCreateNewRecipe,
-  staffEditRecipe,
   staffIsAuthenticated: false,  // test for this
   staffMessage: "",
-  userCreateNewPrivateRecipe,
-  userCreateNewPublicRecipe,
-  userEditPrivateRecipe,
-  userEditPublicRecipe,
   userMessage: "Some message."
 };
 

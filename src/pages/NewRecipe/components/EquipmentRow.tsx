@@ -4,17 +4,17 @@ import { IEquipment } from '../../../store/data/types';
 
 export function EquipmentRow({
   amount,
-  dataEquipment,
-  dataMyPrivateEquipment,
   equipment,
+  myPrivateEquipment,
+  id,
   handleEquipmentRowChange,
   removeEquipmentRow,
   rowKey,
   type
 }: Props): JSX.Element {
   const availableEquipment = [
-    ...dataEquipment,
-    ...(dataMyPrivateEquipment.length ? dataMyPrivateEquipment : [])
+    ...equipment,
+    ...(myPrivateEquipment.length ? myPrivateEquipment : [])
   ];
   return (
     <div className="equipment-row">
@@ -54,14 +54,14 @@ export function EquipmentRow({
         name="equipment"
         onChange={(e) => handleEquipmentRowChange(e, rowKey)}
         required
-        value={equipment}
+        value={id}
       >
         <option value=""></option>
-        {
-          availableEquipment
+        {availableEquipment
           .filter(e => e.equipment_type_id == type)
-          .map((e, index) => <option key={index} value={e.id}>{e.name}</option>)
-        }
+          .map((e, index) => (
+            <option key={index} value={e.id}>{e.name}</option>
+          ))}
       </select>
 
       <button
@@ -77,9 +77,9 @@ export function EquipmentRow({
 
 type Props = {
   amount: string | number;
-  dataEquipment: IEquipment[];
-  dataMyPrivateEquipment: IEquipment[];
-  equipment: string | number;
+  equipment: IEquipment[];
+  myPrivateEquipment: IEquipment[];
+  id: string | number;
   handleEquipmentRowChange(
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string

@@ -9,24 +9,24 @@ const amount = 1;
 const unit = 1;
 const type = 2;
 const cuisine = 2;
-const subrecipe = 2;
-const dataMeasurements = [
+const id = 2;
+const measurements = [
   {id: 1, name: "teaspoon"},
   {id: 2, name: "Tablespoon"}
 ];
-const dataRecipeTypes = [
+const recipeTypes = [
   {id: 1, name: "Drink"},
   {id: 2, name: "Appetizer"},
   {id: 3, name: "Main"},
   {id: 4, name: "Side"}
 ];
-const dataCuisines = [
+const cuisines = [
   {id: 1, name: "American", nation: "America"},
   {id: 2, name: "Japanese", nation: "Japan"},
   {id: 3, name: "Mexican", nation: "Mexico"},
   {id: 4, name: "Italian", nation: "Italy"}
 ];
-const dataRecipes = [
+const recipes = [
   {
     id: 1,
     title: "Mixed Drink",
@@ -60,10 +60,10 @@ const dataRecipes = [
     recipe_image: "nobsc-green-beans"
   }
 ];
-const dataMyPrivateRecipes: IWorkRecipe[] = [];
-const dataMyPublicRecipes: IWorkRecipe[] = [];
-const dataMyFavoriteRecipes: IWorkRecipe[] = [];
-const dataMySavedRecipes: IWorkRecipe[] = [];
+const myPrivateRecipes: IWorkRecipe[] = [];
+const myPublicRecipes: IWorkRecipe[] = [];
+const myFavoriteRecipes: IWorkRecipe[] = [];
+const mySavedRecipes: IWorkRecipe[] = [];
 const editing = true;
 const selfId = 1;
 const handleSubrecipeRowChange = jest.fn();
@@ -80,15 +80,15 @@ describe('SubrecipeRow', () => {
         unit={unit}
         type={type}
         cuisine={cuisine}
-        subrecipe={subrecipe}
-        dataMeasurements={dataMeasurements}
-        dataRecipeTypes={dataRecipeTypes}
-        dataCuisines={dataCuisines}
-        dataRecipes={dataRecipes}
-        dataMyPrivateRecipes={dataMyPrivateRecipes}
-        dataMyPublicRecipes={dataMyPublicRecipes}
-        dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-        dataMySavedRecipes={dataMySavedRecipes}
+        id={id}
+        measurements={measurements}
+        recipeTypes={recipeTypes}
+        cuisines={cuisines}
+        recipes={recipes}
+        myPrivateRecipes={myPrivateRecipes}
+        myPublicRecipes={myPublicRecipes}
+        myFavoriteRecipes={myFavoriteRecipes}
+        mySavedRecipes={mySavedRecipes}
         editing={editing}
         selfId={selfId}
         handleSubrecipeRowChange={handleSubrecipeRowChange}
@@ -138,6 +138,6 @@ describe('SubrecipeRow', () => {
 
   it('displays a button element with text Remove', () => {
     expect(wrapper.find('[data-test="subrecipe-row-remove-row"]').text())
-    .toEqual("Remove");
+      .toEqual("Remove");
   });
 });

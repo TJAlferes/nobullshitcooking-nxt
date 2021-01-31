@@ -11,7 +11,7 @@ export function validRecipeInfo({
   directions,
   equipmentRows,
   ingredientRows,
-  methods,
+  usedMethods,
   ownership,
   recipeTypeId,
   setFeedback,
@@ -66,7 +66,7 @@ export function validRecipeInfo({
     return false;
   }
 
-  const validMethods = Object.values(methods).filter(m => m === true);
+  const validMethods = Object.values(usedMethods).filter(m => m === true);
   if (!validMethods) {  //validMethods.length < 1
     window.scrollTo(0,0);
     setFeedback("You forgot to select the method(s)...");
@@ -137,7 +137,7 @@ type RecipeInfo = {
   directions: string;
   equipmentRows: IEquipmentRow[];
   ingredientRows: IIngredientRow[];
-  methods: IMethods;
+  usedMethods: IMethods;
   ownership: string;
   recipeTypeId: number;
   setFeedback(feedback: string): void;

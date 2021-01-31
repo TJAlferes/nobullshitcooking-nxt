@@ -37,27 +37,26 @@ export function NewRecipe({
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const authname = useSelector(state => state.auth.authname);
-  const dataCuisines = useSelector(state => state.data.cuisines);
-  const dataEquipment = useSelector(state => state.data.officialEquipment);
-  const dataIngredients = useSelector(state => state.data.officialIngredients);
-  const dataIngredientTypes = useSelector(state => state.data.ingredientTypes);
-  const dataMeasurements = useSelector(state => state.data.measurements);
-  const dataMethods = useSelector(state => state.data.methods);
-  const dataMyFavoriteRecipes =
-    useSelector(state => state.data.myFavoriteRecipes);
-  const dataMyPrivateEquipment =
-    useSelector(state => state.data.myPrivateEquipment);
-  const dataMyPrivateIngredients =
-    useSelector(state => state.data.myPrivateIngredients);
-  const dataMyPrivateRecipes =
-    useSelector(state => state.data.myPrivateRecipes);
-  const dataMyPublicRecipes = useSelector(state => state.data.myPublicRecipes);
-  const dataMySavedRecipes = useSelector(state => state.data.mySavedRecipes);
-  const dataRecipes = useSelector(state => state.data.officialRecipes);
-  const dataRecipeTypes = useSelector(state => state.data.recipeTypes);
-  const staffIsAuthenticated =
-    useSelector(state => state.auth.staffIsAuthenticated);
+  const {
+    authname,
+    staffIsAuthenticated
+  } = useSelector(state => state.auth);
+  const {
+    cuisines,
+    officialEquipment,
+    officialIngredients,
+    ingredientTypes,
+    measurements,
+    methods,
+    myFavoriteRecipes,
+    myPrivateEquipment,
+    myPrivateIngredients,
+    myPrivateRecipes,
+    myPublicRecipes,
+    mySavedRecipes,
+    officialRecipes,
+    recipeTypes
+  } = useSelector(state => state.data);
   const staffMessage = useSelector(state => state.staff.message);
   const userMessage = useSelector(state => state.user.message);
 
@@ -76,7 +75,7 @@ export function NewRecipe({
   const [ title, setTitle ] = useState("");
   const [ description, setDescription ] = useState("");
   const [ directions, setDirections ] = useState("");
-  const [ methods, setMethods ] = useState<IMethods>({
+  const [ usedMethods, setUsedMethods ] = useState<IMethods>({
      1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
      7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
     13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
@@ -84,43 +83,39 @@ export function NewRecipe({
   });
 
   const [ equipmentRows, setEquipmentRows ] = useState<IEquipmentRow[]>([
-    {key: uuid(), amount: "", type: "", equipment: ""},
-    {key: uuid(), amount: "", type: "", equipment: ""},
-    {key: uuid(), amount: "", type: "", equipment: ""},
+    {key: uuid(), amount: "", type: "", id: ""},
+    {key: uuid(), amount: "", type: "", id: ""},
+    {key: uuid(), amount: "", type: "", id: ""},
   ]);
   const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: 1, unit: "", type: "", ingredient: ""},
-    {key: uuid(), amount: 1, unit: "", type: "", ingredient: ""},
-    {key: uuid(), amount: 1, unit: "", type: "", ingredient: ""},
+    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
+    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
+    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
   ]);
   const [ subrecipeRows, setSubrecipeRows ] = useState<ISubrecipeRow[]>([]);
 
   const [ recipePrevImage, setRecipePrevImage ] =
     useState("nobsc-recipe-default");
-  const [ recipeImage, setRecipeImage ] =
-    useState<string | ArrayBuffer | null>(null);
+  const [ recipeImage, setRecipeImage ] = useState<IImage>(null);
   const [ recipeFullImage, setRecipeFullImage ] = useState<File | null>(null);
   const [ recipeThumbImage, setRecipeThumbImage ] = useState<File | null>(null);
   const [ recipeTinyImage, setRecipeTinyImage ] = useState<File | null>(null);
 
   const [ equipmentPrevImage, setEquipmentPrevImage ] =
     useState("nobsc-recipe-equipment-default");
-  const [ equipmentImage, setEquipmentImage ] =
-    useState<string | ArrayBuffer | null>(null);
+  const [ equipmentImage, setEquipmentImage ] = useState<IImage>(null);
   const [ equipmentFullImage, setEquipmentFullImage ] =
     useState<File | null>(null);
 
   const [ ingredientsPrevImage, setIngredientsPrevImage ] =
     useState("nobsc-recipe-ingredients-default");
-  const [ ingredientsImage, setIngredientsImage ] =
-    useState<string | ArrayBuffer | null>(null);
+  const [ ingredientsImage, setIngredientsImage ] = useState<IImage>(null);
   const [ ingredientsFullImage, setIngredientsFullImage ] =
     useState<File | null>(null);
 
   const [ cookingPrevImage, setCookingPrevImage ] =
     useState("nobsc-recipe-cooking-default");
-  const [ cookingImage, setCookingImage ] =
-    useState<string | ArrayBuffer | null>(null);
+  const [ cookingImage, setCookingImage ] = useState<IImage>(null);
   const [ cookingFullImage, setCookingFullImage ] = useState<File | null>(null);
 
   /*
@@ -209,13 +204,11 @@ export function NewRecipe({
       required_methods.length &&
       required_methods.map(m => methodsToSet.push(m.method_id));
       
-      setMethods(prevState => {
+      setUsedMethods(prevState => {
         const nextState = {...prevState};
-
         methodsToSet.map(method => {
           nextState[method] = true;
         });
-
         return nextState;
       });
 
@@ -261,19 +254,19 @@ export function NewRecipe({
 
   const addEquipmentRow = () => {
     const newEquipmentRows = equipmentRows
-      .concat({key: uuid(), amount: "", type: "", equipment: ""});
+      .concat({key: uuid(), amount: "", type: "", id: ""});
     setEquipmentRows(newEquipmentRows);
   };
 
   const addIngredientRow = () => {
     const newIngredientRows = ingredientRows
-      .concat({key: uuid(), amount: "", unit: "", type: "", ingredient: ""});
+      .concat({key: uuid(), amount: "", unit: "", type: "", id: ""});
     setIngredientRows(newIngredientRows);
   };
 
   const addSubrecipeRow = () => {
     const newSubrecipeRows = subrecipeRows.concat({
-      key: uuid(), amount: "", unit: "", type: "", cuisine: "", subrecipe: ""
+      key: uuid(), amount: "", unit: "", type: "", cuisine: "", id: ""
     });
     setSubrecipeRows(newSubrecipeRows);
   };
@@ -325,7 +318,7 @@ export function NewRecipe({
 
   const getCheckedMethods = () => {
     let checkedMethods: IRequiredMethod[] = [];
-    Object.entries(methods).forEach(([key, value]) => {
+    Object.entries(usedMethods).forEach(([key, value]) => {
       if (value === true) checkedMethods.push({methodId: Number(key)});
     });
     return checkedMethods;
@@ -375,7 +368,7 @@ export function NewRecipe({
 
   const handleMethodsChange = (e: React.SyntheticEvent<EventTarget>) => {
     const id = (e.target as HTMLInputElement).id;
-    setMethods(prevState => ({...prevState, [id]: !prevState[id]}));
+    setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
   };
 
   const handleRecipeTypeChange = (e: React.SyntheticEvent<EventTarget>) =>
@@ -389,7 +382,7 @@ export function NewRecipe({
         directions,
         equipmentRows,
         ingredientRows,
-        methods,
+        usedMethods,
         ownership,
         recipeTypeId,
         setFeedback,
@@ -498,12 +491,10 @@ export function NewRecipe({
   const makeCookingCrops = async (crop: Crop) => {
     if (!cookingImageRef || !cookingImageRef.current) return;
     if (!crop.width) return;
-
     const full = await getCroppedImage(
       280, 172, cookingImageRef.current, crop, "newFile.jpeg"
     );
     if (!full) return;
-
     setCookingFullCrop(full.resizedPreview);
     setCookingFullImage(full.resizedFinal);
   };
@@ -511,12 +502,10 @@ export function NewRecipe({
   const makeEquipmentCrops = async (crop: Crop) => {
     if (!equipmentImageRef || !equipmentImageRef.current) return;
     if (!crop.width) return;
-    
     const full = await getCroppedImage(
       280, 172, equipmentImageRef.current, crop, "newFile.jpeg"
     );
     if (!full) return;
-
     setEquipmentFullCrop(full.resizedPreview);
     setEquipmentFullImage(full.resizedFinal);
   };
@@ -524,12 +513,10 @@ export function NewRecipe({
   const makeIngredientsCrops = async (crop: Crop) => {
     if (!ingredientsImageRef || !ingredientsImageRef.current) return;
     if (!crop.width) return;
-
     const full = await getCroppedImage(
       280, 172, ingredientsImageRef.current, crop, "newFile.jpeg"
     );
     if (!full) return;
-
     setIngredientsFullCrop(full.resizedPreview);
     setIngredientsFullImage(full.resizedFinal);
   };
@@ -537,7 +524,6 @@ export function NewRecipe({
   const makeRecipeCrops = async (crop: Crop) => {
     if (!recipeImageRef || !recipeImageRef.current) return;
     if (!crop.width) return;
-
     const full = await getCroppedImage(
       280, 172, recipeImageRef.current, crop, "newFile.jpeg"
     );
@@ -548,7 +534,6 @@ export function NewRecipe({
       28, 18, recipeImageRef.current, crop, "newFile.jpeg"
     );
     if (!full || !thumb || !tiny) return;
-
     setRecipeFullCrop(full.resizedPreview);
     setRecipeThumbCrop(thumb.resizedPreview);
     setRecipeTinyCrop(tiny.resizedPreview);
@@ -588,9 +573,7 @@ export function NewRecipe({
   const onSelectCookingFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setCookingImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
@@ -598,31 +581,23 @@ export function NewRecipe({
   const onSelectEquipmentFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
-    reader
-      .addEventListener("load", () => setEquipmentImage(reader.result));
+    reader.addEventListener("load", () => setEquipmentImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
 
   const onSelectIngredientsFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
-    reader
-      .addEventListener("load", () => setIngredientsImage(reader.result));
+    reader.addEventListener("load", () => setIngredientsImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
 
   const onSelectRecipeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setRecipeImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
@@ -647,7 +622,7 @@ export function NewRecipe({
       key: uuid(),
       amount: r.amount,
       type: r.equipment_type_id,
-      equipment: r.equipment_id
+      id: r.equipment_id
     }));
     setEquipmentRows(rows);
   };
@@ -658,7 +633,7 @@ export function NewRecipe({
       amount: r.amount,
       unit: r.measurement_id,
       type: r.ingredient_type_id,
-      ingredient: r.ingredient_id
+      id: r.ingredient_id
     }));
     setIngredientRows(rows);
   };
@@ -670,101 +645,103 @@ export function NewRecipe({
       unit: r.measurement_id,
       type: r.recipe_type_id,
       cuisine: r.cuisine_id,
-      subrecipe: r.subrecipe_id
+      id: r.subrecipe_id
     }));
     setSubrecipeRows(rows);
   };
 
   return (
     <NewRecipeView
-    addEquipmentRow={addEquipmentRow}
-    addIngredientRow={addIngredientRow}
-    addSubrecipeRow={addSubrecipeRow}
-    authname={authname}
-    cancelCookingImage={cancelCookingImage}
-    cancelEquipmentImage={cancelEquipmentImage}
-    cancelIngredientsImage={cancelIngredientsImage}
-    cancelRecipeImage={cancelRecipeImage}
-    cookingCrop={cookingCrop}
-    cookingFullCrop={cookingFullCrop}
-    cookingImage={cookingImage}
-    cookingPrevImage={cookingPrevImage}
-    cuisineId={cuisineId}
-    dataCuisines={dataCuisines}
-    dataEquipment={dataEquipment}
-    dataIngredients={dataIngredients}
-    dataIngredientTypes={dataIngredientTypes}
-    dataMeasurements={dataMeasurements}
-    dataMethods={dataMethods}
-    dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-    dataMyPrivateEquipment={dataMyPrivateEquipment}
-    dataMyPrivateIngredients={dataMyPrivateIngredients}
-    dataMyPrivateRecipes={dataMyPrivateRecipes}
-    dataMyPublicRecipes={dataMyPublicRecipes}
-    dataMySavedRecipes={dataMySavedRecipes}
-    dataRecipes={dataRecipes}
-    dataRecipeTypes={dataRecipeTypes}
-    description={description}
-    directions={directions}
-    editing={editing}
-    equipmentCrop={equipmentCrop}
-    equipmentFullCrop={equipmentFullCrop}
-    equipmentImage={equipmentImage}
-    equipmentPrevImage={equipmentPrevImage}
-    equipmentRows={equipmentRows}
-    feedback={feedback}
-    handleCuisineChange={handleCuisineChange}
-    handleDescriptionChange={handleDescriptionChange}
-    handleDirectionsChange={handleDirectionsChange}
-    handleEquipmentRowChange={handleEquipmentRowChange}
-    handleIngredientRowChange={handleIngredientRowChange}
-    handleMethodsChange={handleMethodsChange}
-    handleRecipeTypeChange={handleRecipeTypeChange}
-    handleSubmit={handleSubmit}
-    handleSubrecipeRowChange={handleSubrecipeRowChange}
-    handleTitleChange={handleTitleChange}
-    id={id}
-    ingredientsCrop={ingredientsCrop}
-    ingredientsFullCrop={ingredientsFullCrop}
-    ingredientsImage={ingredientsImage}
-    ingredientsPrevImage={ingredientsPrevImage}
-    ingredientRows={ingredientRows}
-    loading={loading}
-    methods={methods}
-    onCookingCropChange={onCookingCropChange}
-    onCookingCropComplete={onCookingCropComplete}
-    onCookingImageLoaded={onCookingImageLoaded}
-    oneColumnATheme={oneColumnATheme}
-    onEquipmentCropChange={onEquipmentCropChange}
-    onEquipmentCropComplete={onEquipmentCropComplete}
-    onEquipmentImageLoaded={onEquipmentImageLoaded}
-    onIngredientsCropChange={onIngredientsCropChange}
-    onIngredientsCropComplete={onIngredientsCropComplete}
-    onIngredientsImageLoaded={onIngredientsImageLoaded}
-    onRecipeCropChange={onRecipeCropChange}
-    onRecipeCropComplete={onRecipeCropComplete}
-    onRecipeImageLoaded={onRecipeImageLoaded}
-    onSelectCookingFile={onSelectCookingFile}
-    onSelectEquipmentFile={onSelectEquipmentFile}
-    onSelectIngredientsFile={onSelectIngredientsFile}
-    onSelectRecipeFile={onSelectRecipeFile}
-    ownership={ownership}
-    recipeCrop={recipeCrop}
-    recipeFullCrop={recipeFullCrop}
-    recipeImage={recipeImage}
-    recipePrevImage={recipePrevImage}
-    recipeThumbCrop={recipeThumbCrop}
-    recipeTinyCrop={recipeTinyCrop}
-    recipeTypeId={recipeTypeId}
-    removeEquipmentRow={removeEquipmentRow}
-    removeIngredientRow={removeIngredientRow}
-    removeSubrecipeRow={removeSubrecipeRow}
-    staffIsAuthenticated={staffIsAuthenticated}
-    subrecipeRows={subrecipeRows}
-    title={title}
+      addEquipmentRow={addEquipmentRow}
+      addIngredientRow={addIngredientRow}
+      addSubrecipeRow={addSubrecipeRow}
+      authname={authname}
+      cancelCookingImage={cancelCookingImage}
+      cancelEquipmentImage={cancelEquipmentImage}
+      cancelIngredientsImage={cancelIngredientsImage}
+      cancelRecipeImage={cancelRecipeImage}
+      cookingCrop={cookingCrop}
+      cookingFullCrop={cookingFullCrop}
+      cookingImage={cookingImage}
+      cookingPrevImage={cookingPrevImage}
+      cuisineId={cuisineId}
+      cuisines={cuisines}
+      equipment={officialEquipment}
+      ingredients={officialIngredients}
+      ingredientTypes={ingredientTypes}
+      measurements={measurements}
+      methods={methods}
+      myFavoriteRecipes={myFavoriteRecipes}
+      myPrivateEquipment={myPrivateEquipment}
+      myPrivateIngredients={myPrivateIngredients}
+      myPrivateRecipes={myPrivateRecipes}
+      myPublicRecipes={myPublicRecipes}
+      mySavedRecipes={mySavedRecipes}
+      recipes={officialRecipes}
+      recipeTypes={recipeTypes}
+      description={description}
+      directions={directions}
+      editing={editing}
+      equipmentCrop={equipmentCrop}
+      equipmentFullCrop={equipmentFullCrop}
+      equipmentImage={equipmentImage}
+      equipmentPrevImage={equipmentPrevImage}
+      equipmentRows={equipmentRows}
+      feedback={feedback}
+      handleCuisineChange={handleCuisineChange}
+      handleDescriptionChange={handleDescriptionChange}
+      handleDirectionsChange={handleDirectionsChange}
+      handleEquipmentRowChange={handleEquipmentRowChange}
+      handleIngredientRowChange={handleIngredientRowChange}
+      handleMethodsChange={handleMethodsChange}
+      handleRecipeTypeChange={handleRecipeTypeChange}
+      handleSubmit={handleSubmit}
+      handleSubrecipeRowChange={handleSubrecipeRowChange}
+      handleTitleChange={handleTitleChange}
+      id={id}
+      ingredientsCrop={ingredientsCrop}
+      ingredientsFullCrop={ingredientsFullCrop}
+      ingredientsImage={ingredientsImage}
+      ingredientsPrevImage={ingredientsPrevImage}
+      ingredientRows={ingredientRows}
+      loading={loading}
+      usedMethods={usedMethods}
+      onCookingCropChange={onCookingCropChange}
+      onCookingCropComplete={onCookingCropComplete}
+      onCookingImageLoaded={onCookingImageLoaded}
+      oneColumnATheme={oneColumnATheme}
+      onEquipmentCropChange={onEquipmentCropChange}
+      onEquipmentCropComplete={onEquipmentCropComplete}
+      onEquipmentImageLoaded={onEquipmentImageLoaded}
+      onIngredientsCropChange={onIngredientsCropChange}
+      onIngredientsCropComplete={onIngredientsCropComplete}
+      onIngredientsImageLoaded={onIngredientsImageLoaded}
+      onRecipeCropChange={onRecipeCropChange}
+      onRecipeCropComplete={onRecipeCropComplete}
+      onRecipeImageLoaded={onRecipeImageLoaded}
+      onSelectCookingFile={onSelectCookingFile}
+      onSelectEquipmentFile={onSelectEquipmentFile}
+      onSelectIngredientsFile={onSelectIngredientsFile}
+      onSelectRecipeFile={onSelectRecipeFile}
+      ownership={ownership}
+      recipeCrop={recipeCrop}
+      recipeFullCrop={recipeFullCrop}
+      recipeImage={recipeImage}
+      recipePrevImage={recipePrevImage}
+      recipeThumbCrop={recipeThumbCrop}
+      recipeTinyCrop={recipeTinyCrop}
+      recipeTypeId={recipeTypeId}
+      removeEquipmentRow={removeEquipmentRow}
+      removeIngredientRow={removeIngredientRow}
+      removeSubrecipeRow={removeSubrecipeRow}
+      staffIsAuthenticated={staffIsAuthenticated}
+      subrecipeRows={subrecipeRows}
+      title={title}
     />
   );
 };
+
+type IImage = string | ArrayBuffer | null;
 
 export interface IExistingRecipeToEdit {
   id: number;
@@ -842,7 +819,7 @@ export interface IEquipmentRow {
   key: string;
   amount: string | number;
   type: string | number;
-  equipment: string | number;
+  id: string | number;
 }
 
 export interface IIngredientRow {
@@ -851,7 +828,7 @@ export interface IIngredientRow {
   amount: string | number;
   unit: string | number;
   type: string | number;
-  ingredient: string | number;
+  id: string | number;
 }
 
 export interface ISubrecipeRow {
@@ -861,7 +838,7 @@ export interface ISubrecipeRow {
   unit: string | number;
   type: string | number;
   cuisine: string | number;
-  subrecipe: string | number;
+  id: string | number;
 }
 
 type Props = {

@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import React from 'react';
 import { Crop } from 'react-image-crop';
-import { Link } from 'react-router-dom';
 
 import { ExpandCollapse } from '../../components/ExpandCollapse/ExpandCollapse';
 import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
@@ -40,20 +40,20 @@ export function NewRecipeView({
   cookingImage,
   cookingPrevImage,
   cuisineId,
-  dataCuisines,
-  dataEquipment,
-  dataIngredients,
-  dataIngredientTypes,
-  dataMeasurements,
-  dataMethods,
-  dataMyFavoriteRecipes,
-  dataMyPrivateEquipment,
-  dataMyPrivateIngredients,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  dataRecipes,
-  dataRecipeTypes,
+  cuisines,
+  equipment,
+  ingredients,
+  ingredientTypes,
+  measurements,
+  methods,
+  myFavoriteRecipes,
+  myPrivateEquipment,
+  myPrivateIngredients,
+  myPrivateRecipes,
+  myPublicRecipes,
+  mySavedRecipes,
+  recipes,
+  recipeTypes,
   description,
   directions,
   editing,
@@ -80,7 +80,7 @@ export function NewRecipeView({
   ingredientsPrevImage,
   ingredientRows,
   loading,
-  methods,
+  usedMethods,
   onCookingCropChange,
   onCookingCropComplete,
   onCookingImageLoaded,
@@ -128,8 +128,8 @@ export function NewRecipeView({
     <div className="new-recipe-view">
 
       <div>
-        <span><Link to="/home">Home</Link><i>{`&gt;`}</i></span>
-        <span><Link to={path}>Dashboard</Link><i>{`&gt;`}</i></span>
+        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+        <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
         <span>{page}</span>
       </div>
 
@@ -201,7 +201,7 @@ export function NewRecipeView({
           value={recipeTypeId}
         >
           <option value=""></option>
-          {dataRecipeTypes.map(r => (
+          {recipeTypes.map(r => (
             <option key={r.id} data-test={r.name} value={r.id}>
               {r.name}
             </option>
@@ -219,7 +219,7 @@ export function NewRecipeView({
           value={cuisineId}
         >
           <option value=""></option>
-          {dataCuisines.map(c => (
+          {cuisines.map(c => (
             <option key={c.id} value={c.id} data-test={c.name}>
               {c.name}
             </option>
@@ -254,10 +254,10 @@ export function NewRecipeView({
           Methods
         </h2>
         <div className="new-recipe__methods">
-          {dataMethods.map(m => (
+          {methods.map(m => (
             <span className="new-recipe__method" key={m.id}>
               <input
-                checked={methods[m.id] === true ? true : false}
+                checked={usedMethods[m.id] === true ? true : false}
                 className="new-recipe__method-input"
                 data-test={`${m.id}-${m.name}`}
                 id={`${m.id}`}
@@ -279,11 +279,11 @@ export function NewRecipeView({
             {equipmentRows.map(e => (
               <EquipmentRow
                 amount={e.amount}
-                dataEquipment={dataEquipment}
-                dataMyPrivateEquipment={
-                  ownership === "private" ? dataMyPrivateEquipment : []
+                equipment={equipment}
+                myPrivateEquipment={
+                  ownership === "private" ? myPrivateEquipment : []
                 }
-                equipment={e.equipment}
+                id={e.id}
                 handleEquipmentRowChange={handleEquipmentRowChange}
                 key={e.key}
                 removeEquipmentRow={removeEquipmentRow}
@@ -309,14 +309,14 @@ export function NewRecipeView({
             {ingredientRows.map(i => (
               <IngredientRow
                 amount={i.amount}
-                dataIngredients={dataIngredients}
-                dataIngredientTypes={dataIngredientTypes}
-                dataMeasurements={dataMeasurements}
-                dataMyPrivateIngredients={
-                  ownership === "private" ? dataMyPrivateIngredients : []
+                ingredients={ingredients}
+                ingredientTypes={ingredientTypes}
+                measurements={measurements}
+                myPrivateIngredients={
+                  ownership === "private" ? myPrivateIngredients : []
                 }
                 handleIngredientRowChange={handleIngredientRowChange}
-                ingredient={i.ingredient}
+                id={i.id}
                 key={i.key}
                 removeIngredientRow={removeIngredientRow}
                 rowKey={i.key}
@@ -343,23 +343,23 @@ export function NewRecipeView({
               <SubrecipeRow
                 amount={s.amount}
                 cuisine={s.cuisine}
-                dataCuisines={dataCuisines}
-                dataMeasurements={dataMeasurements}
-                dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-                dataMyPrivateRecipes={
-                  ownership === "private" ? dataMyPrivateRecipes : []
+                cuisines={cuisines}
+                measurements={measurements}
+                myFavoriteRecipes={myFavoriteRecipes}
+                myPrivateRecipes={
+                  ownership === "private" ? myPrivateRecipes : []
                 }
-                dataMyPublicRecipes={dataMyPublicRecipes}
-                dataMySavedRecipes={dataMySavedRecipes}
-                dataRecipes={dataRecipes}
-                dataRecipeTypes={dataRecipeTypes}
+                myPublicRecipes={myPublicRecipes}
+                mySavedRecipes={mySavedRecipes}
+                recipes={recipes}
+                recipeTypes={recipeTypes}
                 editing={editing}
                 handleSubrecipeRowChange={handleSubrecipeRowChange}
                 key={s.key}
                 removeSubrecipeRow={removeSubrecipeRow}
                 rowKey={s.key}
                 selfId={id}
-                subrecipe={s.subrecipe}
+                id={s.id}
                 type={s.type}
                 unit={s.unit}
               />
@@ -429,12 +429,13 @@ export function NewRecipeView({
         />
 
         <div className="new-recipe__finish-area">
-          <Link
-            className="new-recipe__cancel-button"
-            data-test="cancel-link"
-            to={path}
-          >
-            Cancel
+          <Link href={path}>
+            <a
+              className="new-recipe__cancel-button"
+              data-test="cancel-link"
+            >
+              Cancel
+            </a>
           </Link>
           <LoaderButton
             className="new-recipe__submit-button"
@@ -467,20 +468,20 @@ type Props = {
   cookingImage: string | ArrayBuffer | null;
   cookingPrevImage: string;
   cuisineId: number;
-  dataCuisines: ICuisine[];
-  dataEquipment: IEquipment[];
-  dataIngredients: IIngredient[];
-  dataIngredientTypes: IIngredientType[];
-  dataMeasurements: IMeasurement[];
-  dataMethods: IMethod[];
-  dataMyFavoriteRecipes: IWorkRecipe[];
-  dataMyPrivateEquipment: IEquipment[];
-  dataMyPrivateIngredients: IIngredient[];
-  dataMyPrivateRecipes: IWorkRecipe[];
-  dataMyPublicRecipes: IWorkRecipe[];
-  dataMySavedRecipes: IWorkRecipe[];
-  dataRecipes: IWorkRecipe[];
-  dataRecipeTypes: IRecipeType[];
+  cuisines: ICuisine[];
+  equipment: IEquipment[];
+  ingredients: IIngredient[];
+  ingredientTypes: IIngredientType[];
+  measurements: IMeasurement[];
+  methods: IMethod[];
+  myFavoriteRecipes: IWorkRecipe[];
+  myPrivateEquipment: IEquipment[];
+  myPrivateIngredients: IIngredient[];
+  myPrivateRecipes: IWorkRecipe[];
+  myPublicRecipes: IWorkRecipe[];
+  mySavedRecipes: IWorkRecipe[];
+  recipes: IWorkRecipe[];
+  recipeTypes: IRecipeType[];
   description: string;
   directions: string;
   editing: boolean;
@@ -516,7 +517,7 @@ type Props = {
   ingredientsPrevImage: string;
   ingredientRows: IIngredientRow[];
   loading: boolean;
-  methods: IMethods;
+  usedMethods: IMethods;
   onCookingCropChange(crop: Crop): void;
   onCookingCropComplete(crop: Crop): void;
   onCookingImageLoaded(image: HTMLImageElement): void;
