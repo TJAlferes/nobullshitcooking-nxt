@@ -1,4 +1,3 @@
-//import axios from 'axios';
 import { mount } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
@@ -18,7 +17,29 @@ import mockFn from '../../mockFn';
 
 const mockPush = jest.fn();
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
+// place inside beforeEach?
 useRouter.mockImplementation(() => ({push: mockPush, query: {}}));
+
+const mockedStaffCreateNewRecipe = mockFn(staffCreateNewRecipe);
+const mockedStaffEditRecipe = mockFn(staffEditRecipe);
+const mockedUserCreateNewPrivateRecipe = mockFn(userCreateNewPrivateRecipe);
+const mockedUserCreateNewPublicRecipe = mockFn(userCreateNewPublicRecipe);
+const mockedUserEditPrivateRecipe = mockFn(userEditPrivateRecipe);
+const mockedUserEditPublicRecipe = mockFn(userEditPublicRecipe);
+
+type Actions =
+  typeof mockedStaffCreateNewRecipe |
+  typeof mockedStaffEditRecipe |
+  typeof mockedUserCreateNewPrivateRecipe |
+  typeof mockedUserCreateNewPublicRecipe |
+  typeof mockedUserEditPrivateRecipe |
+  typeof mockedUserEditPublicRecipe;
+
+jest.mock('react-redux', () => ({
+  connect: () => jest.fn(),
+  useSelector: jest.fn(fn => fn()),
+  useDispatch: (fn: Actions) => jest.fn()
+}));
 
 const data = {
   recipe: {
@@ -39,13 +60,6 @@ const data = {
     cooking_image: "nobsc-mixed-drink-cooking",
   },
 };
-
-const mockedStaffCreateNewRecipe = mockFn(staffCreateNewRecipe);
-const mockedStaffEditRecipe = mockFn(staffEditRecipe);
-const mockedUserCreateNewPrivateRecipe = mockFn(userCreateNewPrivateRecipe);
-const mockedUserCreateNewPublicRecipe = mockFn(userCreateNewPublicRecipe);
-const mockedUserEditPrivateRecipe = mockFn(userEditPrivateRecipe);
-const mockedUserEditPublicRecipe = mockFn(userEditPublicRecipe);
 
 const initialProps = {
   authname: "Person",
@@ -115,10 +129,6 @@ const initialProps = {
 };
 
 window.scrollTo = jest.fn();
-
-/*jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-mockedAxios.post.mockReturnValueOnce(Promise.resolve({data}));*/
 
 afterEach(() => {
   jest.clearAllMocks();

@@ -1,4 +1,26 @@
 import {
+  actionTypes,
+  IInitialData,
+  IInitialUserData,
+  IWorkContent,
+  IContentType,
+  ICuisine,
+  IMeasurement,
+  IMethod,
+  IEquipment,
+  IEquipmentType,
+  IFriendship,
+  IIngredient,
+  IIngredientType,
+  IPlan,
+  IProductCategory,
+  IProductType,
+  IWorkProduct,
+  IWorkRecipe,
+  IRecipeType
+} from './types';
+
+const {
   DATA_INIT,
 
   DATA_GET_INITIAL_DATA,
@@ -76,27 +98,8 @@ import {
   DATA_GET_MY_PUBLIC_RECIPES_FAILED,
   DATA_GET_MY_SAVED_RECIPES,
   DATA_GET_MY_SAVED_RECIPES_SUCCEEDED,
-  DATA_GET_MY_SAVED_RECIPES_FAILED,
-
-  IInitialData,
-  IInitialUserData,
-  IWorkContent,
-  IContentType,
-  ICuisine,
-  IMeasurement,
-  IMethod,
-  IEquipment,
-  IEquipmentType,
-  IFriendship,
-  IIngredient,
-  IIngredientType,
-  IPlan,
-  IProductCategory,
-  IProductType,
-  IWorkProduct,
-  IWorkRecipe,
-  IRecipeType
-} from './types';
+  DATA_GET_MY_SAVED_RECIPES_FAILED
+} = actionTypes;
 
 export const dataInit = () => ({type: DATA_INIT});
 
