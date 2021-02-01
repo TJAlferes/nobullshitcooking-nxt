@@ -5,12 +5,14 @@ import {
   userFavoriteRecipeSaga,
   userUnfavoriteRecipeSaga
 } from '../user/favorite/sagas';
-import {
+import { actionTypes } from '../user/favorite/types';
+
+const {
   USER_FAVORITE_RECIPE,
   USER_FAVORITE_RECIPE_SUCCEEDED,
   USER_UNFAVORITE_RECIPE,
   USER_UNFAVORITE_RECIPE_SUCCEEDED
-} from '../user/favorite/types';
+} = actionTypes;
 
 export function* watchFavorite() {
   yield all([

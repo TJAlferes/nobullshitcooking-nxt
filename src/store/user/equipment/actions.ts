@@ -1,4 +1,10 @@
 import {
+  actionTypes,
+  ICreatingEquipmentInfo,
+  IEditingEquipmentInfo
+} from './types';
+
+const {
   USER_CREATE_NEW_PRIVATE_EQUIPMENT,
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_FAILED,
@@ -7,10 +13,8 @@ import {
   USER_EDIT_PRIVATE_EQUIPMENT_FAILED,
   USER_DELETE_PRIVATE_EQUIPMENT,
   USER_DELETE_PRIVATE_EQUIPMENT_SUCCEEDED,
-  USER_DELETE_PRIVATE_EQUIPMENT_FAILED,
-  ICreatingEquipmentInfo,
-  IEditingEquipmentInfo
-} from './types';
+  USER_DELETE_PRIVATE_EQUIPMENT_FAILED
+} = actionTypes;
 
 export const userCreateNewPrivateEquipment = (
   equipmentInfo: ICreatingEquipmentInfo

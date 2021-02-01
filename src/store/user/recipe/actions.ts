@@ -1,4 +1,6 @@
-import {
+import { actionTypes, ICreatingRecipeInfo, IEditingRecipeInfo } from './types';
+
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE,
   USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_RECIPE_FAILED,
@@ -17,11 +19,8 @@ import {
   USER_EDIT_PUBLIC_RECIPE_FAILED,
   USER_DISOWN_PUBLIC_RECIPE,
   USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED,
-  USER_DISOWN_PUBLIC_RECIPE_FAILED,
-  
-  ICreatingRecipeInfo,
-  IEditingRecipeInfo
-} from './types';
+  USER_DISOWN_PUBLIC_RECIPE_FAILED
+} = actionTypes;
 
 export const userCreateNewPrivateRecipe = (
   recipeInfo: ICreatingRecipeInfo

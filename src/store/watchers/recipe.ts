@@ -10,21 +10,24 @@ import {
   staffEditRecipeSaga,
   staffDeleteRecipeSaga
 } from '../staff/recipe/sagas';
-import {
-  STAFF_CREATE_NEW_RECIPE,
-  STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
-  STAFF_EDIT_RECIPE,
-  STAFF_EDIT_RECIPE_SUCCEEDED,
-  STAFF_DELETE_RECIPE,
-  STAFF_DELETE_RECIPE_SUCCEEDED
-} from '../staff/recipe/types';
+import { actionTypes as staffRecipeActionTypes } from '../staff/recipe/types';
 import {
   userCreateNewRecipeSaga,
   userDeletePrivateRecipeSaga,
   userDisownPublicRecipeSaga,
   userEditRecipeSaga
 } from '../user/recipe/sagas';
-import {
+import { actionTypes as userRecipeActionTypes } from '../user/recipe/types';
+
+const {
+  STAFF_CREATE_NEW_RECIPE,
+  STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
+  STAFF_EDIT_RECIPE,
+  STAFF_EDIT_RECIPE_SUCCEEDED,
+  STAFF_DELETE_RECIPE,
+  STAFF_DELETE_RECIPE_SUCCEEDED
+} = staffRecipeActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE,
   USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED,
   USER_EDIT_PRIVATE_RECIPE,
@@ -38,7 +41,7 @@ import {
   USER_EDIT_PUBLIC_RECIPE_SUCCEEDED,
   USER_DISOWN_PUBLIC_RECIPE,
   USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED
-} from '../user/recipe/types';
+} = userRecipeActionTypes;
 
 export function* watchRecipe() {
   yield all([

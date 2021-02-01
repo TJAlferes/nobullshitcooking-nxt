@@ -6,14 +6,16 @@ import {
   userEditPlanSaga,
   userDeletePlanSaga
 } from '../user/plan/sagas';
-import {
+import { actionTypes } from '../user/plan/types';
+
+const {
   USER_CREATE_NEW_PLAN,
   USER_CREATE_NEW_PLAN_SUCCEEDED,
   USER_EDIT_PLAN,
   USER_EDIT_PLAN_SUCCEEDED,
   USER_DELETE_PLAN,
   USER_DELETE_PLAN_SUCCEEDED
-} from '../user/plan/types';
+} = actionTypes;
 
 export function* watchPlan() {
   yield all([

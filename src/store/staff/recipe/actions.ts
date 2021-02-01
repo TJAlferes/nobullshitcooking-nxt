@@ -1,4 +1,6 @@
-import {
+import { actionTypes, ICreatingRecipeInfo, IEditingRecipeInfo } from './types';
+
+const {
   STAFF_CREATE_NEW_RECIPE,
   STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
   STAFF_CREATE_NEW_RECIPE_FAILED,
@@ -7,10 +9,8 @@ import {
   STAFF_EDIT_RECIPE_FAILED,
   STAFF_DELETE_RECIPE,
   STAFF_DELETE_RECIPE_SUCCEEDED,
-  STAFF_DELETE_RECIPE_FAILED,
-  ICreatingRecipeInfo,
-  IEditingRecipeInfo
-} from './types';
+  STAFF_DELETE_RECIPE_FAILED
+} = actionTypes;
 
 export const staffCreateNewRecipe = (recipeInfo: ICreatingRecipeInfo) => ({
   type: STAFF_CREATE_NEW_RECIPE,

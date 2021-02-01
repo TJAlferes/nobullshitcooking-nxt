@@ -1,11 +1,13 @@
-import {
+import { actionTypes } from './types';
+
+const {
   USER_SAVE_RECIPE,
   USER_SAVE_RECIPE_SUCCEEDED,
   USER_SAVE_RECIPE_FAILED,
   USER_UNSAVE_RECIPE,
   USER_UNSAVE_RECIPE_SUCCEEDED,
   USER_UNSAVE_RECIPE_FAILED
-} from './types';
+} = actionTypes;
 
 export const userSaveRecipe = (recipeId: number) => ({
   type: USER_SAVE_RECIPE,

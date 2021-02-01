@@ -1,8 +1,10 @@
-import {
+import { actionTypes } from './types';
+
+const {
   USER_SUBMIT_AVATAR,
   USER_SUBMIT_AVATAR_SUCCEEDED,
   USER_SUBMIT_AVATAR_FAILED
-} from './types';
+} = actionTypes;
 
 export const userSubmitAvatar = (
   fullAvatar: File | null,

@@ -1,14 +1,13 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
+import { useTypedSelector as useSelector } from '../../store';
 import './leftNav.css';
 
-export function LeftNav({
-  authname,
-  theme,
-  userIsAuthenticated
-}: Props): JSX.Element {
+export default function LeftNav(): JSX.Element {
+  const { authname, userIsAuthenticated } = useSelector(state => state.auth);
+  const theme = useSelector(state => state.theme.leftNavTheme);
+
   const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
 
   function LeftNavLink({ dataTest, text, to }: LeftNavLinkProps): JSX.Element {
@@ -85,32 +84,8 @@ export function LeftNav({
   );
 }
 
-interface RootState {
-  auth: {
-    authname: string;
-    userIsAuthenticated: boolean;
-  };
-  theme: {
-    leftNavTheme: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux;
-
 type LeftNavLinkProps = {
   dataTest: string;
   to: string;
   text: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  theme: state.theme.leftNavTheme,
-  userIsAuthenticated: state.auth.userIsAuthenticated
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(LeftNav);

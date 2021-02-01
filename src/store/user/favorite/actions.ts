@@ -1,11 +1,13 @@
-import {
+import { actionTypes } from './types';
+
+const {
   USER_FAVORITE_RECIPE,
   USER_FAVORITE_RECIPE_SUCCEEDED,
   USER_FAVORITE_RECIPE_FAILED,
   USER_UNFAVORITE_RECIPE,
   USER_UNFAVORITE_RECIPE_SUCCEEDED,
   USER_UNFAVORITE_RECIPE_FAILED
-} from './types';
+} = actionTypes;
 
 export const userFavoriteRecipe = (recipeId: number) => ({
   type: USER_FAVORITE_RECIPE,

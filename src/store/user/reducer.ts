@@ -1,30 +1,41 @@
-import {
+import { actionTypes as avatarActionTypes } from './avatar/types';
+import { actionTypes as contentActionTypes } from './content/types';
+import { actionTypes as equipmentActionTypes } from './equipment/types';
+import { actionTypes as favoriteActionTypes } from './favorite/types';
+import { actionTypes as friendshipActionTypes } from './friendship/types';
+import { actionTypes as ingredientActionTypes } from './ingredient/types';
+import { actionTypes as planActionTypes } from './plan/types';
+import { actionTypes as recipeActionTypes } from './recipe/types';
+import { actionTypes as saveActionTypes } from './save/types';
+import { USER_MESSAGE_CLEAR, IUserState, UserActions } from './types';
+
+const {
   USER_SUBMIT_AVATAR_SUCCEEDED,
   USER_SUBMIT_AVATAR_FAILED
-} from './avatar/types';
-import {
+} = avatarActionTypes;
+const {
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
   USER_CREATE_NEW_CONTENT_FAILED,
   USER_EDIT_CONTENT_SUCCEEDED,
   USER_EDIT_CONTENT_FAILED,
   USER_DELETE_CONTENT_SUCCEEDED,
   USER_DELETE_CONTENT_FAILED,
-} from './content/types';
-import {
+} = contentActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_FAILED,
   USER_EDIT_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_EDIT_PRIVATE_EQUIPMENT_FAILED,
   USER_DELETE_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_DELETE_PRIVATE_EQUIPMENT_FAILED,
-} from './equipment/types';
-import {
+} = equipmentActionTypes;
+const {
   USER_FAVORITE_RECIPE_SUCCEEDED,
   USER_FAVORITE_RECIPE_FAILED,
   USER_UNFAVORITE_RECIPE_SUCCEEDED,
   USER_UNFAVORITE_RECIPE_FAILED,
-} from './favorite/types';
-import {
+} = favoriteActionTypes;
+const {
   USER_REQUEST_FRIENDSHIP_SUCCEEDED,
   USER_REQUEST_FRIENDSHIP_FAILED,
   USER_ACCEPT_FRIENDSHIP_SUCCEEDED,
@@ -37,24 +48,24 @@ import {
   USER_BLOCK_USER_FAILED,
   USER_UNBLOCK_USER_SUCCEEDED,
   USER_UNBLOCK_USER_FAILED,
-} from './friendship/types';
-import {
+} = friendshipActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_INGREDIENT_FAILED,
   USER_EDIT_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_EDIT_PRIVATE_INGREDIENT_FAILED,
   USER_DELETE_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_DELETE_PRIVATE_INGREDIENT_FAILED,
-} from './ingredient/types';
-import {
+} = ingredientActionTypes;
+const {
   USER_CREATE_NEW_PLAN_SUCCEEDED,
   USER_CREATE_NEW_PLAN_FAILED,
   USER_EDIT_PLAN_SUCCEEDED,
   USER_EDIT_PLAN_FAILED,
   USER_DELETE_PLAN_SUCCEEDED,
   USER_DELETE_PLAN_FAILED,
-} from './plan/types';
-import {
+} = planActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_RECIPE_FAILED,
   USER_EDIT_PRIVATE_RECIPE_SUCCEEDED,
@@ -68,21 +79,20 @@ import {
   USER_EDIT_PUBLIC_RECIPE_FAILED,
   USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED,
   USER_DISOWN_PUBLIC_RECIPE_FAILED,
-} from './recipe/types';
-import {
+} = recipeActionTypes;
+const {
   USER_SAVE_RECIPE_SUCCEEDED,
   USER_SAVE_RECIPE_FAILED,
   USER_UNSAVE_RECIPE_SUCCEEDED,
   USER_UNSAVE_RECIPE_FAILED,
-} from './save/types';
-import { USER_MESSAGE_CLEAR, IUserState, UserActions } from './types';
+} = saveActionTypes;
 
 const initialState: IUserState = {message: ''};
 
-export const userReducer = (
+export function userReducer(
   state = initialState,
   action: UserActions
-): IUserState => {
+): IUserState {
   switch (action.type) {
     case USER_SUBMIT_AVATAR_SUCCEEDED:
     case USER_SUBMIT_AVATAR_FAILED:
@@ -151,7 +161,7 @@ export const userReducer = (
     case USER_SAVE_RECIPE_FAILED:
     case USER_UNSAVE_RECIPE_SUCCEEDED:
     case USER_UNSAVE_RECIPE_FAILED:
-      return { ...state, ...{message: action.message}};
+      return {...state, ...{message: action.message}};
 
     case USER_MESSAGE_CLEAR:
       return {...state, ...{message: ''}};

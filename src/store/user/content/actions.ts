@@ -1,4 +1,10 @@
 import {
+  actionTypes,
+  ICreatingContentInfo,
+  IEditingContentInfo
+} from './types';
+
+const {
   USER_CREATE_NEW_CONTENT,
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
   USER_CREATE_NEW_CONTENT_FAILED,
@@ -7,10 +13,8 @@ import {
   USER_EDIT_CONTENT_FAILED,
   USER_DELETE_CONTENT,
   USER_DELETE_CONTENT_SUCCEEDED,
-  USER_DELETE_CONTENT_FAILED,
-  ICreatingContentInfo,
-  IEditingContentInfo
-} from './types';
+  USER_DELETE_CONTENT_FAILED
+} = actionTypes;
 
 export const userCreateNewContent = (contentInfo: ICreatingContentInfo) => ({
   type: USER_CREATE_NEW_CONTENT,

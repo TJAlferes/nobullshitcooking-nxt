@@ -1,4 +1,6 @@
-import {
+import { actionTypes, ICreatingPlanInfo, IEditingPlanInfo } from './types';
+
+const {
   USER_CREATE_NEW_PLAN,
   USER_CREATE_NEW_PLAN_SUCCEEDED,
   USER_CREATE_NEW_PLAN_FAILED,
@@ -7,10 +9,8 @@ import {
   USER_EDIT_PLAN_FAILED,
   USER_DELETE_PLAN,
   USER_DELETE_PLAN_SUCCEEDED,
-  USER_DELETE_PLAN_FAILED,
-  ICreatingPlanInfo,
-  IEditingPlanInfo
-} from './types';
+  USER_DELETE_PLAN_FAILED
+} = actionTypes;
 
 export const userCreateNewPlan = (planInfo: ICreatingPlanInfo) => ({
   type: USER_CREATE_NEW_PLAN,

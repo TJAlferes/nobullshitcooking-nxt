@@ -10,12 +10,7 @@ import {
   staffDeleteIngredientSaga
 } from '../staff/ingredient/sagas';
 import {
-  STAFF_CREATE_NEW_INGREDIENT,
-  STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
-  STAFF_EDIT_INGREDIENT,
-  STAFF_EDIT_INGREDIENT_SUCCEEDED,
-  STAFF_DELETE_INGREDIENT,
-  STAFF_DELETE_INGREDIENT_SUCCEEDED
+  actionTypes as staffIngredientActionTypes
 } from '../staff/ingredient/types';
 import {
   userCreateNewPrivateIngredientSaga,
@@ -23,13 +18,25 @@ import {
   userDeletePrivateIngredientSaga
 } from '../user/ingredient/sagas';
 import {
+  actionTypes as userIngredientActionTypes
+} from '../user/ingredient/types';
+
+const {
+  STAFF_CREATE_NEW_INGREDIENT,
+  STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
+  STAFF_EDIT_INGREDIENT,
+  STAFF_EDIT_INGREDIENT_SUCCEEDED,
+  STAFF_DELETE_INGREDIENT,
+  STAFF_DELETE_INGREDIENT_SUCCEEDED
+} = staffIngredientActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_INGREDIENT,
   USER_CREATE_NEW_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_EDIT_PRIVATE_INGREDIENT,
   USER_EDIT_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_DELETE_PRIVATE_INGREDIENT,
   USER_DELETE_PRIVATE_INGREDIENT_SUCCEEDED
-} from '../user/ingredient/types';
+} = userIngredientActionTypes;
 
 export function* watchIngredient() {
   yield all([

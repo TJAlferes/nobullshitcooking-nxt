@@ -1,4 +1,6 @@
-import {
+import { actionTypes } from './types';
+
+const {
   USER_REQUEST_FRIENDSHIP,
   USER_REQUEST_FRIENDSHIP_SUCCEEDED,
   USER_REQUEST_FRIENDSHIP_FAILED,
@@ -17,7 +19,7 @@ import {
   USER_UNBLOCK_USER,
   USER_UNBLOCK_USER_SUCCEEDED,
   USER_UNBLOCK_USER_FAILED
-} from './types';
+} = actionTypes;
 
 export const userRequestFriendship = (friendName: string) => ({
   type: USER_REQUEST_FRIENDSHIP,

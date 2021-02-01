@@ -9,7 +9,10 @@ import {
   userBlockUserSaga,
   userUnblockUserSaga
 } from '../user/friendship/sagas';
-import {
+import { actionTypes } from '../user/friendship/types';
+import { messengerUpdateOnlineSaga } from '../messenger/sagas';
+
+const {
   USER_REQUEST_FRIENDSHIP,
   USER_ACCEPT_FRIENDSHIP,
   USER_ACCEPT_FRIENDSHIP_SUCCEEDED,
@@ -21,8 +24,7 @@ import {
   USER_BLOCK_USER_SUCCEEDED,
   USER_UNBLOCK_USER,
   USER_UNBLOCK_USER_SUCCEEDED
-} from '../user/friendship/types';
-import { messengerUpdateOnlineSaga } from '../messenger/sagas';
+} = actionTypes;
 
 export function* watchFriendship() {
   yield all([

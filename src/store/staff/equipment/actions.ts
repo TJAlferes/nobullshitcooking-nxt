@@ -1,4 +1,10 @@
 import {
+  actionTypes,
+  ICreatingEquipmentInfo,
+  IEditingEquipmentInfo
+} from './types';
+
+const {
   STAFF_CREATE_NEW_EQUIPMENT,
   STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
   STAFF_CREATE_NEW_EQUIPMENT_FAILED,
@@ -7,10 +13,8 @@ import {
   STAFF_EDIT_EQUIPMENT_FAILED,
   STAFF_DELETE_EQUIPMENT,
   STAFF_DELETE_EQUIPMENT_SUCCEEDED,
-  STAFF_DELETE_EQUIPMENT_FAILED,
-  ICreatingEquipmentInfo,
-  IEditingEquipmentInfo
-} from './types';
+  STAFF_DELETE_EQUIPMENT_FAILED
+} = actionTypes;
 
 export const staffCreateNewEquipment = (
   equipmentInfo: ICreatingEquipmentInfo

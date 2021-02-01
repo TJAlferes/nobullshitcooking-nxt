@@ -1,4 +1,10 @@
 import {
+  actionTypes,
+  ICreatingIngredientInfo,
+  IEditingIngredientInfo
+} from './types';
+
+const {
   STAFF_CREATE_NEW_INGREDIENT,
   STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
   STAFF_CREATE_NEW_INGREDIENT_FAILED,
@@ -7,10 +13,8 @@ import {
   STAFF_EDIT_INGREDIENT_FAILED,
   STAFF_DELETE_INGREDIENT,
   STAFF_DELETE_INGREDIENT_SUCCEEDED,
-  STAFF_DELETE_INGREDIENT_FAILED,
-  ICreatingIngredientInfo,
-  IEditingIngredientInfo
-} from './types';
+  STAFF_DELETE_INGREDIENT_FAILED
+} = actionTypes;
 
 export const staffCreateNewIngredient = (
   ingredientInfo: ICreatingIngredientInfo

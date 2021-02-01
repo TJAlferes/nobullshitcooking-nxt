@@ -2,12 +2,14 @@ import { all, takeEvery } from 'redux-saga/effects';
 
 import { dataGetMySavedRecipesSaga } from '../data/sagas';
 import { userSaveRecipeSaga, userUnsaveRecipeSaga } from '../user/save/sagas';
-import {
+import { actionTypes } from '../user/save/types';
+
+const {
   USER_SAVE_RECIPE,
   USER_SAVE_RECIPE_SUCCEEDED,
   USER_UNSAVE_RECIPE,
   USER_UNSAVE_RECIPE_SUCCEEDED
-} from '../user/save/types';
+} = actionTypes;
 
 export function* watchSave() {
   yield all([

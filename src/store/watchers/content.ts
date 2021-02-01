@@ -19,14 +19,16 @@ import {
   userEditContentSaga,
   userDeleteContentSaga
 } from '../user/content/sagas';
-import {
+import { actionTypes } from '../user/content/types';
+
+const {
   USER_CREATE_NEW_CONTENT,
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
   USER_EDIT_CONTENT,
   USER_EDIT_CONTENT_SUCCEEDED,
   USER_DELETE_CONTENT,
   USER_DELETE_CONTENT_SUCCEEDED
-} from '../user/content/types';
+} = actionTypes;
 
 export function* watchContent() {
   yield all([
