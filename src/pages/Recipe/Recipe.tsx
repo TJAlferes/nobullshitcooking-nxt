@@ -1,33 +1,34 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { IWorkRecipe } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import { userFavoriteRecipe } from '../../store/user/favorite/actions';
 import { userSaveRecipe } from '../../store/user/save/actions';
 import { RecipeView } from './RecipeView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export function Recipe({
-  dataMyFavoriteRecipes,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  message,
-  twoColumnBTheme,
-  userFavoriteRecipe,
-  userIsAuthenticated,
-  userSaveRecipe
-}: Props): JSX.Element {
-  const history = useHistory();
-  const location = useLocation();
-  const { id } = useParams();
+export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
+  const router = useRouter();
+  const { pathname } = router;
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+  const {
+    myFavoriteRecipes,
+    myPrivateRecipes,
+    myPublicRecipes,
+    mySavedRecipes
+  } = useSelector(state => state.data);
+  const message = useSelector(state => state.user.message);
+  const userIsAuthenticated =
+    useSelector(state => state.auth.userIsAuthenticated);
 
   const [ favoriteClicked, setFavoriteClicked ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
@@ -51,7 +52,7 @@ export function Recipe({
 
   useEffect(() => {
     if (!id) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
 
@@ -72,7 +73,7 @@ export function Recipe({
     };
 
     const isPrivateUserRecipe =
-      location.pathname.match(/^(\/user-recipe\/([1-9][0-9]*))$/);
+      pathname.match(/^(\/user-recipe\/([1-9][0-9]*))$/);
     
     if (isPrivateUserRecipe) getPrivateRecipe(Number(id));
     else getPublicRecipe(Number(id));
@@ -83,7 +84,7 @@ export function Recipe({
     if (favoriteClicked) return;
     setFavoriteClicked(true);
     setLoading(true);
-    userFavoriteRecipe(Number(id));
+    dispatch(userFavoriteRecipe(Number(id)));
   };
 
   const handleSaveClick = () => {
@@ -91,17 +92,17 @@ export function Recipe({
     if (saveClicked) return;
     setSaveClicked(true);
     setLoading(true);
-    userSaveRecipe(Number(id));
+    dispatch(userSaveRecipe(Number(id)));
   };
 
   return !recipe
   ? <LoaderSpinner />
   : (
     <RecipeView
-      dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-      dataMyPrivateRecipes={dataMyPrivateRecipes}
-      dataMyPublicRecipes={dataMyPublicRecipes}
-      dataMySavedRecipes={dataMySavedRecipes}
+      myFavoriteRecipes={myFavoriteRecipes}
+      myPrivateRecipes={myPrivateRecipes}
+      myPublicRecipes={myPublicRecipes}
+      mySavedRecipes={mySavedRecipes}
       favoriteClicked={favoriteClicked}
       feedback={feedback}
       handleFavoriteClick={handleFavoriteClick}
@@ -113,7 +114,7 @@ export function Recipe({
       userIsAuthenticated={userIsAuthenticated}
     />
   );
-};
+}
 
 export interface IRecipe {
   id: number;
@@ -161,44 +162,6 @@ interface IRequiredSubrecipe {
   subrecipe_title: string;
 }
 
-interface RootState {
-  auth: {
-    userIsAuthenticated: boolean;
-  };
-  data: {
-    myFavoriteRecipes: IWorkRecipe[];
-    myPrivateRecipes: IWorkRecipe[];
-    myPublicRecipes: IWorkRecipe[];
-    mySavedRecipes: IWorkRecipe[];
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-/*type Props = RouteComponentProps & PropsFromRedux & {
-  twoColumnBTheme: string;
-};*/
-type Props = PropsFromRedux & {
+type Props = {
   twoColumnBTheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  dataMyFavoriteRecipes: state.data.myFavoriteRecipes,
-  dataMyPrivateRecipes: state.data.myPrivateRecipes,
-  dataMyPublicRecipes: state.data.myPublicRecipes,
-  dataMySavedRecipes: state.data.mySavedRecipes,
-  message: state.user.message,
-  userIsAuthenticated: state.auth.userIsAuthenticated
-});
-
-const mapDispatchToProps = {
-  userFavoriteRecipe: (id: number) => userFavoriteRecipe(id),
-  userSaveRecipe: (id: number) => userSaveRecipe(id)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Recipe);

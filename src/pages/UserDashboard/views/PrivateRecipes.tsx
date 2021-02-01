@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import React from 'react';
 import AriaModal from 'react-aria-modal';
-import { Link } from 'react-router-dom';
 
 import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from './Subtabs';
@@ -19,8 +19,8 @@ export function PrivateRecipes({
   return (
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading">Private Recipes</h2>
-      <Link className="new-entity" to="/user-recipes/private/submit">
-        Create New Private Recipe
+      <Link href="/user-recipes/private/submit">
+        <a className="new-entity">Create New Private Recipe</a>
       </Link>
       {
         modalActive
@@ -71,11 +71,11 @@ export function PrivateRecipes({
             </span>
 
             <span className="dashboard-content__item-name">
-              <Link to={`/user-recipe/${r.id}`}>{r.title}</Link>
+              <Link href={`/user-recipe/${r.id}`}><a>{r.title}</a></Link>
             </span>
 
             <span className="dashboard-content__item-action">
-              <Link to={`/user-recipe/private/edit/${r.id}`}>Edit</Link>
+              <Link href={`/user-recipe/private/edit/${r.id}`}><a>Edit</a></Link>
             </span>
 
             <span

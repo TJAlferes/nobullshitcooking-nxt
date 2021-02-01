@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IPlannerViewRecipe } from '../../../store/plannerView/types';
 
@@ -11,13 +11,13 @@ export function Recipe({ recipe }: Props): JSX.Element {
       </div>
       <div className="plan__recipe-text">
         <Link
-          to={
+          href={
             Number(recipe.owner_id) === 1
             ? `/recipes/${recipe.id}`
             : `/user-recipes/${recipe.id}`
           }
         >
-          {recipe.title}
+          <a>{recipe.title}</a>
         </Link>
       </div>
     </div>

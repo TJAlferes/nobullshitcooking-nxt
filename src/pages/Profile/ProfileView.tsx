@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IFriendship, IWorkRecipe } from '../../store/data/types';
 import './profile.css';
@@ -7,7 +7,7 @@ import './profile.css';
 export function ProfileView({
   authname,
   clicked,
-  dataMyFriendships,
+  myFriendships,
   feedback,
   handleFriendRequestClick,
   handleTabChange,
@@ -24,7 +24,7 @@ export function ProfileView({
     <div className="profile-view">
 
       <div>
-        <span><Link to="/home">Home</Link><i>{`&gt;`}</i></span>
+        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
         <span>{username}</span>
       </div>
 
@@ -42,7 +42,7 @@ export function ProfileView({
           {
             isAuthenticated && username !== authname
             ? (
-              dataMyFriendships.find(f => f.username === username)
+              myFriendships.find(f => f.username === username)
               ? <span>Friends</span>
               : (
                 !clicked ? (
@@ -93,7 +93,7 @@ export function ProfileView({
                       }
                     </span>
                     <span className="profile__item-name">
-                      <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+                      <Link href={`/recipes/${r.id}`}><a>{r.title}</a></Link>
                     </span>
                   </div>
                 ))
@@ -119,7 +119,7 @@ export function ProfileView({
                       }
                     </span>
                     <span className="profile__item-name">
-                      <Link to={`/recipes/${r.id}`}>{r.title}</Link>
+                      <Link href={`/recipes/${r.id}`}><a>{r.title}</a></Link>
                     </span>
                   </div>
                 ))
@@ -141,7 +141,7 @@ export function ProfileView({
 type Props = {
   authname: string;
   clicked: boolean;
-  dataMyFriendships: IFriendship[];
+  myFriendships: IFriendship[];
   feedback: string;
   handleFriendRequestClick(): void;
   handleTabChange(value: string): void;

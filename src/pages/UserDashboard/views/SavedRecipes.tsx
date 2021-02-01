@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from './Subtabs';
@@ -29,7 +29,7 @@ export function SavedRecipes({
             </span>
 
             <span className="dashboard-content__item-name">
-              <Link to={`/recipe/${r.id}`}>{r.title}</Link>
+              <Link href={`/recipe/${r.id}`}><a>{r.title}</a></Link>
             </span>
 
             <span

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { Message, IUser } from '../../store/messenger/types';
+import { useTypedSelector as useSelector } from '../../store';
+import { IUser } from '../../store/messenger/types';
 import {
   messengerChangeChannel,
   messengerConnect,
@@ -14,23 +15,20 @@ import { MessengerView } from './views/MessengerView';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 
-export function Messenger({
-  authname,
-  channel,
-  message,
-  messages,
-  messengerChangeChannel,
-  messengerConnect,
-  messengerDisconnect,
-  messengerSendMessage,
-  messengerSendWhisper,
+export default function Messenger({
   //messengerView,
-  onlineFriends,
-  status,
-  twoColumnATheme,
-  users,
-  windowFocused
+  twoColumnATheme
 }: Props): JSX.Element {
+  const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
+  const channel = useSelector(state => state.messenger.channel);
+  const message = useSelector(state => state.user.message);
+  const messages = useSelector(state => state.messenger.messages);
+  const onlineFriends = useSelector(state => state.messenger.onlineFriends);
+  const status = useSelector(state => state.messenger.status);
+  const users = useSelector(state => state.messenger.users);
+  const windowFocused = useSelector(state => state.nobscapp.windowFocused);
+
   const [ debounced, setDebounced ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
   const [ focusedFriend, setFocusedFriend ] = useState<IUser | null>(null);
@@ -115,7 +113,7 @@ export function Messenger({
     setLoading(true);
 
     //setCurrentFriend("");
-    messengerChangeChannel(trimmedRoom);
+    dispatch(messengerChangeChannel(trimmedRoom));
     setRoomToEnter("");
     preventSpam();
     setLoading(false);
@@ -123,13 +121,13 @@ export function Messenger({
 
   const handleConnect = () => {
     setLoading(true);
-    messengerConnect();
+    dispatch(messengerConnect());
     setLoading(false);
   };
 
   const handleDisconnect = () => {
     setLoading(true);
-    messengerDisconnect();
+    dispatch(messengerDisconnect());
     setLoading(false);
   };
 
@@ -175,9 +173,9 @@ export function Messenger({
 
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
 
-      messengerSendWhisper(trimmedWhisper, trimmedUserToWhisper);
+      dispatch(messengerSendWhisper(trimmedWhisper, trimmedUserToWhisper));
     } else {
-      messengerSendMessage(trimmedMessage);
+      dispatch(messengerSendMessage(trimmedMessage));
     }
     /*else if (currentFriend !== "") {
       const trimmedFriend = currentFriend.trim();
@@ -226,13 +224,13 @@ export function Messenger({
 
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
 
-      messengerSendWhisper(trimmedWhisper, trimmedUserToWhisper);
+      dispatch(messengerSendWhisper(trimmedWhisper, trimmedUserToWhisper));
     } else {
-      messengerSendMessage(trimmedMessage);
+      dispatch(messengerSendMessage(trimmedMessage));
     }
     //else if (currentFriend !== "") {
     //  const trimmedFriend = currentFriend.trim();
-    //  messengerSendWhisper(trimmedMessage, trimmedFriend);
+    //  dispatch(messengerSendWhisper(trimmedMessage, trimmedFriend));
     //}
 
     setMessageToSend("");
@@ -326,52 +324,7 @@ export function Messenger({
   );
 }
 
-interface RootState {
-  auth: {
-    authname: string;
-  };
-  messenger: {
-    channel: string;
-    messages: Message[];
-    onlineFriends: IUser[];
-    status: string;
-    users: IUser[];
-  };
-  nobscapp: {
-    windowFocused: boolean;
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   //messengerView: string;
   twoColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  channel: state.messenger.channel,
-  message: state.user.message,
-  messages: state.messenger.messages,
-  onlineFriends: state.messenger.onlineFriends,
-  status: state.messenger.status,
-  users: state.messenger.users,
-  windowFocused: state.nobscapp.windowFocused
-});
-
-const mapDispatchToProps = {
-  messengerChangeChannel: (channel: string) => messengerChangeChannel(channel),
-  messengerConnect: () => messengerConnect(),
-  messengerDisconnect: () => messengerDisconnect(),
-  messengerSendMessage: (message: string) => messengerSendMessage(message),
-  messengerSendWhisper: (whisper: string, to: string) =>
-    messengerSendWhisper(whisper, to)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Messenger);

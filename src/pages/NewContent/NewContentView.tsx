@@ -23,7 +23,7 @@ export function NewContentView({
   cancelImage,
   contentTypeId,
   crop,
-  dataContentTypes,
+  contentTypes,
   editor,
   feedback,
   handleContentTypeChange,
@@ -70,7 +70,7 @@ export function NewContentView({
             value={contentTypeId}
           >
             <option value=""></option>
-            {dataContentTypes.map(c => (
+            {contentTypes.map(c => (
               <option data-test={c.name} key={c.id} value={c.id}>
                 {c.name}
               </option>
@@ -135,7 +135,7 @@ type Props = {
   cancelImage(): void;
   contentTypeId: number;
   crop: Crop;
-  dataContentTypes: IContentType[];
+  contentTypes: IContentType[];
   editor: any;  // finish
   feedback: string;
   handleContentTypeChange(e: React.SyntheticEvent<EventTarget>): void;

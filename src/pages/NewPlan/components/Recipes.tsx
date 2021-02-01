@@ -1,11 +1,6 @@
 import React from 'react';
 import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
-import { connect, ConnectedProps } from 'react-redux';
 
-import {
-  plannerAddRecipeToDay,
-  plannerRemoveRecipeFromDay
-} from '../../../store/planner/actions';
 import { IPlannerRecipe } from '../../../store/planner/types';
 import Recipe from './Recipe';
 
@@ -13,8 +8,7 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 const plannerRecipesTarget = {
   drop(props: Props) {
-    const { day } = props;
-    return {listId: day};
+    return {listId: props.day};
   }
 };
 
@@ -48,28 +42,15 @@ const Recipes = ({
   </div>
 );
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   day: number;
   expanded: boolean;
   expandedDay: number | null;
   recipes: IPlannerRecipe[];
 };
 
-const mapDispatchToProps = {
-  plannerAddRecipeToDay: (day: number, recipe: IPlannerRecipe) =>
-    plannerAddRecipeToDay(day, recipe),
-  plannerRemoveRecipeFromDay: (day: number, index: number) =>
-    plannerRemoveRecipeFromDay(day, index)
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(
-  DropTarget(
-    Types.PLANNER_RECIPE,
-    plannerRecipesTarget,
-    collect
-  )(Recipes)
-);
+export default DropTarget(
+  Types.PLANNER_RECIPE,
+  plannerRecipesTarget,
+  collect
+)(Recipes);

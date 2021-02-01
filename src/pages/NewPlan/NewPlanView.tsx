@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import React, { useMemo } from 'react';
 import AriaModal from 'react-aria-modal';
-import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -19,11 +19,11 @@ export function NewPlanView({
   activateModal,
   deactivateModal,
   discardChanges,
-  dataMyFavoriteRecipes,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  dataRecipes,
+  myFavoriteRecipes,
+  myPrivateRecipes,
+  myPublicRecipes,
+  mySavedRecipes,
+  officialRecipes,
   editing,
   expanded,
   expandedDay,
@@ -83,11 +83,11 @@ export function NewPlanView({
 
   const memoizedRecipes = useMemo(() => {
     const tabToList: ITabToList = {
-      "official": dataRecipes,
-      "private": dataMyPrivateRecipes,
-      "public": dataMyPublicRecipes,
-      "favorite": dataMyFavoriteRecipes,
-      "saved": dataMySavedRecipes
+      "official": officialRecipes,
+      "private": myPrivateRecipes,
+      "public": myPublicRecipes,
+      "favorite": myFavoriteRecipes,
+      "saved": mySavedRecipes
     };
     const recipes: IWorkRecipe[] = tabToList[tab];
 
@@ -130,8 +130,10 @@ export function NewPlanView({
     <div className="new-plan-view">
 
       <div>
-        <span><Link to="/home">Home</Link><i>{`&gt;`}</i></span>
-        <span><Link to="/dashboard">Dashboard</Link><i>{`&gt;`}</i></span>
+        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+        <span>
+          <Link href="/dashboard"><a>Dashboard</a></Link><i>{`&gt;`}</i>
+        </span>
         <span>{editing ? 'Edit Plan' : 'Create New Plan'}</span>
       </div>
 
@@ -264,11 +266,11 @@ type Props = {
   activateModal(): void;
   deactivateModal(): void;
   discardChanges(): void;
-  dataMyFavoriteRecipes: IWorkRecipe[];
-  dataMyPrivateRecipes: IWorkRecipe[];
-  dataMyPublicRecipes: IWorkRecipe[];
-  dataMySavedRecipes: IWorkRecipe[];
-  dataRecipes: IWorkRecipe[];
+  myFavoriteRecipes: IWorkRecipe[];
+  myPrivateRecipes: IWorkRecipe[];
+  myPublicRecipes: IWorkRecipe[];
+  mySavedRecipes: IWorkRecipe[];
+  officialRecipes: IWorkRecipe[];
   editing: boolean;
   expanded: boolean;
   expandedDay: number | null;

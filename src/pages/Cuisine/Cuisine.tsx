@@ -1,24 +1,22 @@
+import { useRouter } from 'next/router'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
 
 import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { ICuisine } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import { CuisineView } from './CuisineView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
 
-export function Cuisine({
-  dataCuisines,
-  oneColumnATheme
-}: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+export default function Cuisine({ oneColumnATheme }: Props): JSX.Element {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dataCuisines = useSelector(state => state.data.cuisines);
 
   const [ address, setAddress ] = useState("");
   const [ cuisine, setCuisine ] = useState<ICuisineDetail>();
@@ -29,14 +27,14 @@ export function Cuisine({
 
   useEffect(() => {
     if (!id) {
-      history.push('/page/guide/food/cuisines');
+      router.push('/page/guide/food/cuisines');
       return;
     }
 
     const isCuisine = dataCuisines.find(c => c.id === Number(id));
 
     if (!isCuisine) {
-      history.push('/page/guide/food/cuisines');
+      router.push('/page/guide/food/cuisines');
       return;
     }
 
@@ -128,22 +126,6 @@ interface ICuisineSupplier {
   name: string;
 }
 
-interface RootState {
-  data: {
-    cuisines: ICuisine[];
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   oneColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  dataCuisines: state.data.cuisines
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(Cuisine);

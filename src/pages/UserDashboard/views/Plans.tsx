@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import React from 'react';
 import AriaModal from 'react-aria-modal';
-import { Link } from 'react-router-dom';
 
 import { IPlan } from '../../../store/data/types';
 
@@ -20,20 +20,20 @@ export function Plans({
       <h2 className="dashboard-content__heading">Plans</h2>
       {
         (!creatingPlan && !editingId) &&
-        <Link className="new-entity" to="/user-plan/submit">
-          Create New Plan
+        <Link href="/user-plan/submit">
+          <a className="new-entity">Create New Plan</a>
         </Link>
       }
       {
         (creatingPlan && !editingId) &&
-        <Link className="new-entity" to="/user-plan/submit">
-          Finish Creating Plan
+        <Link href="/user-plan/submit">
+          <a className="new-entity">Finish Creating Plan</a>
         </Link>
       }
       {
         (!creatingPlan && editingId) &&
-        <Link className="new-entity" to={`/user-plan/edit/${editingId}`}>
-          Finish Updating Plan
+        <Link href={`/user-plan/edit/${editingId}`}>
+          <a className="new-entity">Finish Updating Plan</a>
         </Link>
       }
       {
@@ -74,12 +74,12 @@ export function Plans({
         ? myPlans.map(p => (
           <div className="dashboard-content__item" key={p.id}>
             <span className="dashboard-content__item-name">
-              <Link to={`/user-plan/${p.id}`}>{p.name}</Link>
+              <Link href={`/user-plan/${p.id}`}><a>{p.name}</a></Link>
             </span>
             {
               (!creatingPlan && !editingId) &&
               <span className="dashboard-content__item-action">
-                <Link to={`/user-plan/edit/${p.id}`}>Edit</Link>
+                <Link href={`/user-plan/edit/${p.id}`}><a>Edit</a></Link>
               </span>
             }
             {

@@ -1,14 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Crop } from 'react-image-crop';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { useTypedSelector as useSelector } from '../../store';
 import { authUpdateLocalAvatar } from '../../store/auth/actions';
-import {
-  IEquipment,
-  IIngredient,
-  IPlan,
-  IWorkRecipe
-} from '../../store/data/types';
 import { userSubmitAvatar } from '../../store/user/avatar/actions';
 import { userUnfavoriteRecipe } from '../../store/user/favorite/actions';
 import { userDeletePrivateEquipment } from '../../store/user/equipment/actions';
@@ -26,30 +21,23 @@ import {
 } from '../../utils/imageCropPreviews/imageCropPreviews';
 import { DashboardView } from './DashboardView';
 
-export function Dashboard({
-  authname,
-  authUpdateLocalAvatar,
-  creatingPlan,
-  currentAvatar,
-  editingId,
-  message,
-  myPlans,
-  myFavoriteRecipes,
-  myPublicRecipes,
-  myPrivateEquipment,
-  myPrivateIngredients,
-  myPrivateRecipes,
-  mySavedRecipes,
-  twoColumnATheme,
-  userDeletePlan,
-  userDeletePrivateEquipment,
-  userDeletePrivateIngredient,
-  userDeletePrivateRecipe,
-  userDisownPublicRecipe,
-  userSubmitAvatar,
-  userUnfavoriteRecipe,
-  userUnsaveRecipe
-}: Props): JSX.Element {
+export default function Dashboard({ twoColumnATheme }: Props): JSX.Element {
+  const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
+  const creatingPlan = useSelector(state => state.planner.creating);
+  const currentAvatar = useSelector(state => state.auth.avatar);
+  const editingId = useSelector(state => state.planner.editingId);
+  const message = useSelector(state => state.user.message);
+  const {
+    myFavoriteRecipes,
+    myPlans,
+    myPrivateEquipment,
+    myPrivateIngredients,
+    myPrivateRecipes,
+    myPublicRecipes,
+    mySavedRecipes
+  } = useSelector(state => state.data);
+
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
 
@@ -112,29 +100,29 @@ export function Dashboard({
   const handleDeletePlan = () => {
     if (!deleteId) return;
     setLoading(true);
-    userDeletePlan(deleteId);
+    dispatch(userDeletePlan(deleteId));
   };
 
   const handleDeletePrivateEquipment = (id: number) => {
     setLoading(true);
-    userDeletePrivateEquipment(id);
+    dispatch(userDeletePrivateEquipment(id));
   };
 
   const handleDeletePrivateIngredient = (id: number) => {
     setLoading(true);
-    userDeletePrivateIngredient(id);
+    dispatch(userDeletePrivateIngredient(id));
   };
 
   const handleDeletePrivateRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
-    userDeletePrivateRecipe(deleteId);
+    dispatch(userDeletePrivateRecipe(deleteId));
   };
 
   const handleDisownPublicRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
-    userDisownPublicRecipe(deleteId);
+    dispatch(userDisownPublicRecipe(deleteId));
   };
 
   const handleSubTabClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -147,25 +135,22 @@ export function Dashboard({
 
   const handleUnfavoriteRecipe = (id: number) => {
     setLoading(true);
-    userUnfavoriteRecipe(id);
+    dispatch(userUnfavoriteRecipe(id));
   };
 
   const handleUnsaveRecipe = (id: number) => {
     setLoading(true);
-    userUnsaveRecipe(id);
+    dispatch(userUnsaveRecipe(id));
   };
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-
     const full =
       await getCroppedImage(250, 250, imageRef.current, crop, "newFile.jpeg");
     const tiny =
       await getCroppedImage(25, 25, imageRef.current, crop, "newFile.jpeg");
-
     if (!full || !tiny) return;
-
     setFullCrop(full.resizedPreview);
     setTinyCrop(tiny.resizedPreview);
     setFullAvatar(full.resizedFinal);
@@ -180,19 +165,16 @@ export function Dashboard({
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setAvatar(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
 
   const submitAvatar = () => {
     setLoading(true);
-    userSubmitAvatar(fullAvatar, tinyAvatar);
-    authUpdateLocalAvatar(authname);
+    dispatch(userSubmitAvatar(fullAvatar, tinyAvatar));
+    dispatch(authUpdateLocalAvatar(authname));
   };
 
   return (
@@ -239,65 +221,8 @@ export function Dashboard({
       twoColumnATheme={twoColumnATheme}
     />
   );
-};
-
-interface RootState {
-  auth: {
-    authname: string;
-    avatar: string;
-  };
-  user: {
-    message: string;
-  };
-  data: {
-    myFavoriteRecipes: IWorkRecipe[];
-    myPlans: IPlan[];
-    myPublicRecipes: IWorkRecipe[];
-    myPrivateEquipment: IEquipment[];
-    myPrivateIngredients: IIngredient[];
-    myPrivateRecipes: IWorkRecipe[];
-    mySavedRecipes: IWorkRecipe[];
-  };
-  planner: {
-    creating: boolean;
-    editingId: number|null;
-  };
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   twoColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  creatingPlan: state.planner.creating,
-  currentAvatar: state.auth.avatar,
-  editingId: state.planner.editingId,
-  message: state.user.message,
-  myFavoriteRecipes: state.data.myFavoriteRecipes,
-  myPlans: state.data.myPlans,
-  myPrivateEquipment: state.data.myPrivateEquipment,
-  myPrivateIngredients: state.data.myPrivateIngredients,
-  myPrivateRecipes: state.data.myPrivateRecipes,
-  myPublicRecipes: state.data.myPublicRecipes,
-  mySavedRecipes: state.data.mySavedRecipes
-});
-
-const mapDispatchToProps = {
-  authUpdateLocalAvatar: (name: string) => authUpdateLocalAvatar(name),
-  userDeletePlan: (id: number) => userDeletePlan(id),
-  userDeletePrivateEquipment: (id: number) => userDeletePrivateEquipment(id),
-  userDeletePrivateIngredient: (id: number) => userDeletePrivateIngredient(id),
-  userDeletePrivateRecipe: (id: number) => userDeletePrivateRecipe(id),
-  userDisownPublicRecipe: (id: number) => userDisownPublicRecipe(id),
-  userSubmitAvatar: (fullAvatar: File | null, tinyAvatar: File | null) =>
-    userSubmitAvatar(fullAvatar, tinyAvatar),
-  userUnfavoriteRecipe: (id: number) => userUnfavoriteRecipe(id),
-  userUnsaveRecipe: (id: number) => userUnsaveRecipe(id),
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Dashboard);

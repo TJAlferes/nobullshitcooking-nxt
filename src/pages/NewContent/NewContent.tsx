@@ -1,5 +1,6 @@
 import axios from 'axios';
 import isHotKey from 'is-hotkey';
+import { useRouter } from 'next/router';
 import React, {
   useCallback,
   useEffect,
@@ -8,8 +9,7 @@ import React, {
   useState
 } from 'react';
 import { Crop } from 'react-image-crop';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { createEditor, Node } from 'slate';
 import { withHistory } from 'slate-history';
 import { withReact } from 'slate-react';
@@ -17,7 +17,7 @@ import { withReact } from 'slate-react';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { IContentType } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   editorClearWork,
   editorSetCreating,
@@ -32,10 +32,6 @@ import {
   userCreateNewContent,
   userEditContent
 } from '../../store/user/content/actions';
-import {
-  ICreatingContentInfo,
-  IEditingContentInfo
-} from '../../store/user/content/types';
 import {
   getCroppedImage
 } from '../../utils/imageCropPreviews/imageCropPreviews';
@@ -53,27 +49,22 @@ const HOTKEYS: {
   'mod+i': 'italic'
 };
 
-export function NewContent({
-  creating,
-  dataContentTypes,
+export default function NewContent({
   editing,
-  editingId,
-  editorClearWork,
-  editorSetCreating,
-  editorSetEditingId,
-  editorSetValue,
-  oneColumnATheme,
-  staffCreateNewContent,
-  staffEditContent,
-  staffIsAuthenticated,
-  staffMessage,
-  userCreateNewContent,
-  userEditContent,
-  userMessage,
-  value
+  oneColumnATheme
 }: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+  const creating = useSelector(state => state.editor.creating);
+  const contentTypes = useSelector(state => state.data.contentTypes);
+  const editingId = useSelector(state => state.editor.editingId);
+  const staffIsAuthenticated =
+    useSelector(state => state.auth.staffIsAuthenticated);
+  const staffMessage = useSelector(state => state.staff.message);
+  const userMessage = useSelector(state => state.user.message);
+  const value = useSelector(state => state.editor.value);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -96,9 +87,9 @@ export function NewContent({
   useEffect(() => {
     const getExistingContentToEdit = async () => {
       if (!id) {
-        const redirectPath = staffIsAuthenticated
-          ? '/staff-dashboard' : '/dashboard';
-        history.push(redirectPath);
+        const redirectPath =
+          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        router.push(redirectPath);
         return;
       }
 
@@ -111,8 +102,8 @@ export function NewContent({
       const { data } = await axios.post(url, {}, {withCredentials: true});
 
       if (data) {
-        editorSetEditingId(Number(data.content_id));
-        editorSetValue(data.content_items);
+        dispatch(editorSetEditingId(Number(data.content_id)));
+        dispatch(editorSetValue(data.content_items));
         setPrevImage(data.content_image)
       }
 
@@ -120,11 +111,11 @@ export function NewContent({
     };
 
     if (editing) {
-      editorClearWork();
+      dispatch(editorClearWork());
       getExistingContentToEdit();
     } else {
-      editorClearWork();
-      editorSetCreating();
+      dispatch(editorClearWork());
+      dispatch(editorSetCreating());
     }
   }, []);
 
@@ -133,15 +124,15 @@ export function NewContent({
 
     if (isSubscribed) {
       const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated
-        ? '/staff-dashboard' : '/dashboard';
+      const redirectPath =
+        staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
       if (message !== "") window.scrollTo(0,0);
 
       setFeedback(message);
 
       if (message === "Content created." || message === "Content updated.") {
-        setTimeout(() => history.push(redirectPath), 3000);
+        setTimeout(() => router.push(redirectPath), 3000);
       }
 
       setLoading(false);  // move?
@@ -163,7 +154,7 @@ export function NewContent({
     setThumbImage(null);
   };
 
-  const handleEditorChange = (value: Node[]) => editorSetValue(value);
+  const handleEditorChange = (value: Node[]) => dispatch(editorSetValue(value));
 
   const handleContentTypeChange = (e: React.SyntheticEvent<EventTarget>) =>
     setContentTypeId(Number((e.target as HTMLInputElement).value));
@@ -178,9 +169,7 @@ export function NewContent({
 
   const handleSubmit = () => {
     // TO DO: validate
-
     if (editing && editingId) {
-
       const editingContentInfo = {
         id: editingId,
         contentTypeId,
@@ -192,12 +181,9 @@ export function NewContent({
         fullImage,
         thumbImage
       };
-
-      if (staffIsAuthenticated) staffEditContent(editingContentInfo);
-      else userEditContent(editingContentInfo);
-
+      if (staffIsAuthenticated) dispatch(staffEditContent(editingContentInfo));
+      else dispatch(userEditContent(editingContentInfo));
     } else {
-
       const creatingContentInfo = {
         contentTypeId,
         published: saveType,
@@ -207,10 +193,11 @@ export function NewContent({
         fullImage,
         thumbImage
       };
-
-      if (staffIsAuthenticated) staffCreateNewContent(creatingContentInfo);
-      else userCreateNewContent(creatingContentInfo);
-
+      if (staffIsAuthenticated) {
+        dispatch(staffCreateNewContent(creatingContentInfo));
+      } else {
+        dispatch(userCreateNewContent(creatingContentInfo));
+      }
     }
   };
 
@@ -220,15 +207,11 @@ export function NewContent({
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-
     const full =
       await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
-
     const thumb =
       await getCroppedImage(100, 62, imageRef.current, crop, "newFile.jpeg");
-
     if (!full || !thumb) return;
-
     setFullCrop(full.resizedPreview);
     setThumbCrop(thumb.resizedPreview);
     setFullImage(full.resizedFinal);
@@ -243,11 +226,8 @@ export function NewContent({
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
-
     if (!(target.files && target.files.length > 0)) return;
-
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setImage(reader.result));
     reader.readAsDataURL(target.files[0]);
   };
@@ -261,7 +241,7 @@ export function NewContent({
       cancelImage={cancelImage}
       contentTypeId={contentTypeId}
       crop={crop}
-      dataContentTypes={dataContentTypes}
+      contentTypes={contentTypes}
       editor={editor}
       feedback={feedback}
       handleContentTypeChange={handleContentTypeChange}
@@ -285,58 +265,7 @@ export function NewContent({
   );
 }
 
-interface RootState {
-  auth: {
-    staffIsAuthenticated: boolean;
-  };
-  data: {
-    contentTypes: IContentType[];
-  };
-  editor: {
-    creating: boolean;
-    editingId: number | null;
-    value: Node[];
-  };
-  staff: {
-    message: string;
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   editing: boolean;
   oneColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  creating: state.editor.creating,
-  dataContentTypes: state.data.contentTypes,
-  editingId: state.editor.editingId,
-  staffIsAuthenticated: state.auth.staffIsAuthenticated,
-  staffMessage: state.staff.message,
-  userMessage: state.user.message,
-  value: state.editor.value,
-});
-
-const mapDispatchToProps = {
-  editorClearWork: () => editorClearWork(),
-  editorSetCreating: () => editorSetCreating(),
-  editorSetEditingId: (id: number) => editorSetEditingId(id),
-  editorSetValue: (value: Node[]) => editorSetValue(value),
-  staffCreateNewContent: (contentInfo: ICreatingContentInfo) =>
-    staffCreateNewContent(contentInfo),
-  staffEditContent: (contentInfo: IEditingContentInfo) =>
-    staffEditContent(contentInfo),
-  userCreateNewContent: (contentInfo: ICreatingContentInfo) =>
-    userCreateNewContent(contentInfo),
-  userEditContent: (contentInfo: IEditingContentInfo) =>
-    userEditContent(contentInfo)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NewContent);

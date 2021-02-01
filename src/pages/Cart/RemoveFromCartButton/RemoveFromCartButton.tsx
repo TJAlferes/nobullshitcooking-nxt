@@ -1,15 +1,14 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { cartRemoveItem } from '../../../store/cart/actions';
 import { ICartItem } from '../../../store/cart/types';
 import './removeFromCartButton.css';
 
-export function RemoveFromCartButton({
-  cartRemoveItem,
-  item
-}: Props): JSX.Element {
-  const handleClick = () => cartRemoveItem(item);
+export default function RemoveFromCartButton({ item }: Props): JSX.Element {
+  const dispatch = useDispatch();
+
+  const handleClick = () => dispatch(cartRemoveItem(item));
 
   return (
     <button className="remove-from-cart-button" onClick={handleClick}>
@@ -18,16 +17,6 @@ export function RemoveFromCartButton({
   );
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   item: ICartItem;
 };
-
-const mapDispatchToProps = {
-  cartRemoveItem: (item: ICartItem) => cartRemoveItem(item)
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(RemoveFromCartButton);

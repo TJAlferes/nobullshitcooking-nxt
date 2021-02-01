@@ -1,28 +1,27 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { IFriendship } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import { userRequestFriendship } from '../../store/user/friendship/actions';
 import { ProfileView } from './ProfileView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export function Profile({
-  authname,
-  dataMyFriendships,
-  isAuthenticated,
-  message,
-  oneColumnATheme,
-  userRequestFriendship
-}: Props): JSX.Element {
-  const history = useHistory();
-  const { username } = useParams();
+export default function Profile({ oneColumnATheme }: Props): JSX.Element {
+  const router = useRouter();
+  const { username } = router.query;
+
+  const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
+  const myFriendships = useSelector(state => state.data.myFriendships);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const message = useSelector(state => state.user.message);
 
   const [ clicked, setClicked ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
@@ -47,12 +46,12 @@ export function Profile({
 
   useEffect(() => {
     if (!username) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
 
     if ((username.length < 6) || (username.length > 20)) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
 
@@ -74,7 +73,7 @@ export function Profile({
     if (!username) return;
     setClicked(true);
     setLoading(true);
-    userRequestFriendship(username);
+    dispatch(userRequestFriendship(username));
   };
 
   const handleTabChange = (value: string) => setTab(value);
@@ -85,7 +84,7 @@ export function Profile({
     <ProfileView
       authname={authname}
       clicked={clicked}
-      dataMyFriendships={dataMyFriendships}
+      myFriendships={myFriendships}
       feedback={feedback}
       handleFriendRequestClick={handleFriendRequestClick}
       handleTabChange={handleTabChange}
@@ -99,39 +98,8 @@ export function Profile({
       userFavoriteRecipes={userFavoriteRecipes}
     />
   );
-};
-
-interface RootState {
-  auth: {
-    authname: string;
-    isAuthenticated: boolean;
-  };
-  data: {
-    myFriendships: IFriendship[];
-  };
-  user: {
-    message: string;
-  };
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   oneColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  dataMyFriendships: state.data.myFriendships,
-  isAuthenticated: state.auth.isAuthenticated,
-  message: state.user.message
-});
-
-const mapDispatchToProps = {
-  userRequestFriendship: (friendName: string) =>
-    userRequestFriendship(friendName)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(Profile);

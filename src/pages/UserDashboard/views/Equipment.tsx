@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IEquipment } from '../../../store/data/types';
 
@@ -11,8 +11,8 @@ export function Equipment({
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading">Private Equipment</h2>
 
-      <Link className="new-entity" to="/user-equipment/submit">
-        Create New Equipment
+      <Link href="/user-equipment/submit">
+        <a className="new-entity">Create New Equipment</a>
       </Link>
 
       {
@@ -28,11 +28,11 @@ export function Equipment({
             </span>
 
             <span className="dashboard-content__item-name">
-              <Link to={`/user-equipment/${e.id}`}>{e.name}</Link>
+              <Link href={`/user-equipment/${e.id}`}><a>{e.name}</a></Link>
             </span>
 
             <span className="dashboard-content__item-action">
-              <Link to={`/user-equipment/edit/${e.id}`}>Edit</Link>
+              <Link href={`/user-equipment/edit/${e.id}`}><a>Edit</a></Link>
             </span>
 
             <span

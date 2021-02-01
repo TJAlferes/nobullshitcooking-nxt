@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import {
   menuShadowHide,
@@ -13,10 +13,9 @@ import supplyMenuData from './data/supplyMenuData';
 import Menu from './Menu/Menu';
 import './siteNav.css';
 
-export function SiteNav({
-  menuShadowHide,
-  menuShadowShow
-}: Props): JSX.Element {
+export default function SiteNav(): JSX.Element {
+  const dispatch = useDispatch();
+
   const [ expanded, setExpanded ] = useState(false);
   const [ expandedDropdown, setExpandedDropdown ] = useState("none");
 
@@ -24,13 +23,13 @@ export function SiteNav({
     if (dropdown === expandedDropdown) return;
     setExpanded(true);
     setExpandedDropdown(dropdown)
-    menuShadowShow();
+    dispatch(menuShadowShow());
   };
 
   const handleMouseLeave = () => {
     setExpanded(false);
     setExpandedDropdown("none");
-    menuShadowHide();
+    dispatch(menuShadowHide());
   };
 
   return (
@@ -42,7 +41,9 @@ export function SiteNav({
         onMouseEnter={() => handleMouseEnter('Food')}
         onMouseLeave={handleMouseLeave}
       >
-        <Link className="site-nav__link" to="/page/guide/food">Food</Link>
+        <Link href="/page/guide/food">
+          <a className="site-nav__link">Food</a>
+        </Link>
         {
           (expanded && expandedDropdown === 'Food')
           ? <Menu menuItems={foodMenuData} /> : false
@@ -55,7 +56,9 @@ export function SiteNav({
         onMouseEnter={() => handleMouseEnter('Fitness')}
         onMouseLeave={handleMouseLeave}
       >
-        <Link className="site-nav__link" to="/page/guide/fitness">Fitness</Link>
+        <Link href="/page/guide/fitness">
+          <a className="site-nav__link">Fitness</a>
+        </Link>
         {
           (expanded && expandedDropdown === 'Fitness')
           ? <Menu menuItems={fitnessMenuData} /> : false
@@ -68,7 +71,9 @@ export function SiteNav({
         onMouseEnter={() => handleMouseEnter('Supply')}
         onMouseLeave={handleMouseLeave}
       >
-        <Link className="site-nav__link" to="/store/storefront">Supply</Link>
+        <Link href="/store/storefront">
+          <a className="site-nav__link">Supply</a>
+        </Link>
         {
           (expanded && expandedDropdown === 'Supply')
           ? <Menu menuItems={supplyMenuData} /> : false
@@ -78,16 +83,3 @@ export function SiteNav({
     </div>
   );
 }
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux;
-
-const mapDispatchToProps = {
-  menuShadowHide: () => menuShadowHide(),
-  menuShadowShow: () => menuShadowShow()
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(SiteNav);

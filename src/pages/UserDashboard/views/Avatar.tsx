@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 export function Avatar({
   authname,
@@ -8,11 +8,8 @@ export function Avatar({
 }: Props): JSX.Element {
   return (
     <div className="dashboard__avatar">
-      <Link
-        className="dashboard__avatar-profile-link"
-        to={`/user/profile/${authname}`}
-      >
-        View Profile
+      <Link href={`/user/profile/${authname}`}>
+        <a className="dashboard__avatar-profile-link">View Profile</a>
       </Link>
 
       <h2>Profile Picture</h2>

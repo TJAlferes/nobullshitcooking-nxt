@@ -6,7 +6,7 @@ import {
   useDrag,
   useDrop
 } from 'react-dnd';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   plannerRemoveRecipeFromDay,
@@ -24,10 +24,10 @@ const Recipe: FC<Props> = ({
   index,
   key,
   listId,
-  plannerRemoveRecipeFromDay,
-  plannerReorderRecipeInDay,
   recipe
 }: Props) => {
+  const dispatch = useDispatch();
+
   const ref = useRef<HTMLDivElement>(null);
 
   const [ , drag ] = useDrag({
@@ -36,7 +36,7 @@ const Recipe: FC<Props> = ({
       const item = monitor.getItem();
       if (item.day === 0) return;
       if (dropResult && (dropResult.listId !== item.day)) {
-        plannerRemoveRecipeFromDay(item.day, item.index);
+        dispatch(plannerRemoveRecipeFromDay(item.day, item.index));
       }
     },
     item: {
@@ -77,7 +77,7 @@ const Recipe: FC<Props> = ({
       if ((dragIndex < hoverIndex) && (hoverClientY < hoverMiddleY)) return;
       if ((dragIndex > hoverIndex) && (hoverClientY > hoverMiddleY)) return;
 
-      plannerReorderRecipeInDay(dragIndex, hoverIndex);
+      dispatch(plannerReorderRecipeInDay(dragIndex, hoverIndex));
       item.index = hoverIndex;
     }
   });
@@ -100,9 +100,7 @@ interface IDragItem {
   type: string;
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   day: number;
   expanded: boolean;
   expandedDay: number | null;
@@ -113,13 +111,4 @@ type Props = PropsFromRedux & {
   recipe: IPlannerRecipe;
 };
 
-const mapDispatchToProps = {
-  plannerRemoveRecipeFromDay: (day: number, index: number) =>
-    plannerRemoveRecipeFromDay(day, index),
-  plannerReorderRecipeInDay: (dragIndex: number, hoverIndex: number) =>
-    plannerReorderRecipeInDay(dragIndex, hoverIndex)
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(Recipe);
+export default Recipe;

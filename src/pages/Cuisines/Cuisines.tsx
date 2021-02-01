@@ -1,15 +1,13 @@
+import Link from 'next/link';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
 
-import { ICuisine } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import './cuisines.css';
 
-export function Cuisines({
-  dataCuisines,
-  oneColumnATheme
-}: Props): JSX.Element {
-  const alphabetizedCuisines = dataCuisines
+export default function Cuisines({ oneColumnATheme }: Props): JSX.Element {
+  const cuisines = useSelector(state => state.data.cuisines);
+
+  const alphabetizedCuisines = cuisines
   .reduce((acc: AlphabetizedCuisines, cuisine) => {
     const firstLetter = cuisine['nation'][0].toLocaleUpperCase();
 
@@ -35,11 +33,8 @@ export function Cuisines({
             i++;
             return (
               <div className="cuisine-nav-nation" key={nation}>
-                <Link
-                  className="cuisine-nav-nation-link"
-                  to={`/food/cuisines/${dataCuisines[i - 1].id}`}
-                >
-                  {nation}
+                <Link href={`/food/cuisines/${cuisines[i - 1].id}`}>
+                  <a className="cuisine-nav-nation-link">{nation}</a>
                 </Link>
               </div>
             );
@@ -50,26 +45,10 @@ export function Cuisines({
   );
 }
 
-interface RootState {
-  data: {
-    cuisines: ICuisine[];
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   oneColumnATheme: string;
 };
 
 type AlphabetizedCuisines = {
   [index: string]: any;
 };
-
-const mapStateToProps = (state: RootState) => ({
-  dataCuisines: state.data.cuisines
-});
-
-const connector = connect(mapStateToProps);
-
-export default connector(Cuisines);

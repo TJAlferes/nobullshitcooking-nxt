@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IIngredient } from '../../../store/data/types';
 
@@ -11,8 +11,8 @@ export function Ingredients({
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading">Private Ingredients</h2>
 
-      <Link className="new-entity" to="/user-ingredients/submit">
-        Create New Ingredient
+      <Link href="/user-ingredients/submit">
+        <a className="new-entity">Create New Ingredient</a>
       </Link>
 
       {
@@ -28,11 +28,11 @@ export function Ingredients({
             </span>
 
             <span className="dashboard-content__item-name">
-              <Link to={`/user-ingredient/${i.id}`}>{i.name}</Link>
+              <Link href={`/user-ingredient/${i.id}`}><a>{i.name}</a></Link>
             </span>
 
             <span className="dashboard-content__item-action">
-              <Link to={`/user-ingredient/edit/${i.id}`}>Edit</Link>
+              <Link href={`/user-ingredient/edit/${i.id}`}><a>Edit</a></Link>
             </span>
 
             <span

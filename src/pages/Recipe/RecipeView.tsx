@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { RecipeBreadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { IWorkRecipe } from '../../store/data/types';
@@ -7,10 +7,10 @@ import { IRecipe } from './Recipe';
 import './recipe.css';
 
 export function RecipeView({
-  dataMyFavoriteRecipes,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
+  myFavoriteRecipes,
+  myPrivateRecipes,
+  myPublicRecipes,
+  mySavedRecipes,
   favoriteClicked,
   feedback,
   handleFavoriteClick,
@@ -42,7 +42,9 @@ export function RecipeView({
   const recipeBy = () => {
     if (author === "Unknown") return "Unknown";
     return (
-      <Link className="recipe__author" to={`/profile/${author}`}>{author}</Link>
+      <Link href={`/profile/${author}`}>
+        <a className="recipe__author">{author}</a>
+      </Link>
     );
   };
 
@@ -64,12 +66,12 @@ export function RecipeView({
             <div className="recipe__favorite-save-outer">
               {(
                 userIsAuthenticated &&
-                !dataMyPrivateRecipes.find(r => r.id == id) &&
-                !dataMyPublicRecipes.find(r => r.id == id)
+                !myPrivateRecipes.find(r => r.id == id) &&
+                !myPublicRecipes.find(r => r.id == id)
               ) ? (
                 <>
                   {
-                    dataMyFavoriteRecipes.find(r => r.id == id) ? (
+                    myFavoriteRecipes.find(r => r.id == id) ? (
                       <span className="recipe__favorited-saved">
                         Favorited
                       </span>
@@ -94,7 +96,7 @@ export function RecipeView({
                     )
                   }
                   {
-                    dataMySavedRecipes.find(r => r.id == id)
+                    mySavedRecipes.find(r => r.id == id)
                     ? <span className="recipe__favorited-saved">Saved</span>
                     : (
                       !saveClicked ? (
@@ -276,10 +278,10 @@ export function RecipeView({
 }
 
 type Props = {
-  dataMyFavoriteRecipes: IWorkRecipe[];
-  dataMyPrivateRecipes: IWorkRecipe[];
-  dataMyPublicRecipes: IWorkRecipe[];
-  dataMySavedRecipes: IWorkRecipe[];
+  myFavoriteRecipes: IWorkRecipe[];
+  myPrivateRecipes: IWorkRecipe[];
+  myPublicRecipes: IWorkRecipe[];
+  mySavedRecipes: IWorkRecipe[];
   favoriteClicked: boolean;
   feedback: string;
   handleFavoriteClick(): void;

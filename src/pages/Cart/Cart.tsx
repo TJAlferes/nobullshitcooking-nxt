@@ -1,13 +1,14 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 
-import { ICartItem } from '../../store/cart/types';
+import { useTypedSelector as useSelector } from '../../store';
 import RemoveFromCartButton from './RemoveFromCartButton/RemoveFromCartButton';
 import './cart.css';
 
 const endpoint = '';
 
-export function Cart({ cartItems, oneColumnATheme }: Props) {
+export default function Cart({ oneColumnATheme }: Props) {
+  const cartItems = useSelector(state => state.cart.items);
+  
   return (
     <div className={`cart one-column-a ${oneColumnATheme}`}>
       {!cartItems ? 'Your cart is empty.' : cartItems.map(i => (
@@ -21,20 +22,6 @@ export function Cart({ cartItems, oneColumnATheme }: Props) {
   );
 }
 
-interface RootState {
-  cart: {
-    items: ICartItem[];  // IWorkProduct?
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   oneColumnATheme: string;
 };
-
-const mapStateToProps = (state: RootState) => ({cartItems: state.cart.items});
-
-const connector = connect(mapStateToProps);
-
-export default connector(Cart);

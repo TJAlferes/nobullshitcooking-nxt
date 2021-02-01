@@ -1,18 +1,19 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { plannerViewClickDay } from '../../../store/plannerView/actions';
 import { IPlannerViewRecipe } from '../../../store/plannerView/types';
 import { Recipe } from './Recipe';
 
-export function Day({
+export default function Day({
   day,
   expanded,
   expandedDay,
-  recipes,
-  plannerViewClickDay
+  recipes
 }: Props): JSX.Element|null {
-  const handleClickDay = () => plannerViewClickDay(day);
+  const dispatch = useDispatch();
+
+  const handleClickDay = () => dispatch(plannerViewClickDay(day));
 
   return (!expanded || (day !== expandedDay))
   ? (
@@ -22,21 +23,11 @@ export function Day({
     </div>
   )
   : null;
-};
+}
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   day: number;
   expanded: boolean;
   expandedDay: number | null;
   recipes: IPlannerViewRecipe[];
 };
-
-const mapDispatchToProps = {
-  plannerViewClickDay: (day: number) => plannerViewClickDay(day)
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(Day);

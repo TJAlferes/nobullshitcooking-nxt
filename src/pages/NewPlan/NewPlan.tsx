@@ -1,9 +1,8 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import { IPlan, IWorkRecipe } from '../../store/data/types';
-import { IPlannerData } from '../../store/planner/types';
+import { useTypedSelector as useSelector } from '../../store';
 import {
   plannerClearWork,
   plannerSetCreating,
@@ -12,39 +11,34 @@ import {
   plannerSetPlanData
 } from '../../store/planner/actions';
 import { userCreateNewPlan, userEditPlan } from '../../store/user/plan/actions';
-import {
-  ICreatingPlanInfo,
-  IEditingPlanInfo
-} from '../../store/user/plan/types';
 //import { MobileNewPlanView } from './views/MobileNewPlanView';
 import { NewPlanView } from './NewPlanView';
 
 export function NewPlan({
-  dataMyFavoriteRecipes,
-  dataMyPlans,
-  dataMyPrivateRecipes,
-  dataMyPublicRecipes,
-  dataMySavedRecipes,
-  dataRecipes,
   editing,
-  editingId,
-  expanded,
-  expandedDay,
-  message,
-  planName,
-  plannerClearWork,
-  plannerSetCreating,
-  plannerSetEditingId,
-  plannerSetPlanData,
-  plannerSetPlanName,
   //planView,
-  recipeListsInsideDays,
-  twoColumnATheme,
-  userCreateNewPlan,
-  userEditPlan
+  twoColumnATheme
 }: Props): JSX.Element {
-  const history = useHistory();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const dispatch = useDispatch();
+
+  const {
+    myFavoriteRecipes,
+    myPlans,
+    myPrivateRecipes,
+    myPublicRecipes,
+    mySavedRecipes,
+    officialRecipes
+  } = useSelector(state => state.data);
+  const expanded = useSelector(state => state.planner.expanded);
+  const expandedDay = useSelector(state => state.planner.expandedDay);
+  const editingId = useSelector(state => state.planner.editingId);
+  const message = useSelector(state => state.user.message);
+  const planName = useSelector(state => state.planner.planName);
+  const recipeListsInsideDays =
+    useSelector(state => state.planner.recipeListsInsideDays);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -56,20 +50,21 @@ export function NewPlan({
       window.scrollTo(0,0);
       setLoading(true);
 
-      const [ prev ] = dataMyPlans.filter(p => p.id === Number(id));
+      const [ prev ] = myPlans.filter(p => p.id === Number(id));
 
-      plannerSetEditingId(Number(prev.id));
-      plannerSetPlanName(prev.name);
-      plannerSetPlanData(prev.data);
+      // batch these three?
+      dispatch(plannerSetEditingId(Number(prev.id)));
+      dispatch(plannerSetPlanName(prev.name));
+      dispatch(plannerSetPlanData(prev.data));
       setLoading(false);
     };
 
     if (editing) {
-      plannerClearWork();
+      dispatch(plannerClearWork());
       getExistingPlanToEdit();
     } else {
-      plannerClearWork();
-      plannerSetCreating();
+      dispatch(plannerClearWork());
+      dispatch(plannerSetCreating());
     }
   }, []);
 
@@ -83,8 +78,8 @@ export function NewPlan({
 
       if (message === "Plan created." || message === "Plan updated.") {
         setTimeout(() => {
-          plannerClearWork();
-          history.push('/dashboard');
+          dispatch(plannerClearWork());
+          router.push('/dashboard');
         }, 3000);
       }
 
@@ -102,8 +97,8 @@ export function NewPlan({
 
   const discardChanges = () => {
     setModalActive(false);
-    plannerClearWork();
-    history.push('/dashboard');
+    dispatch(plannerClearWork());
+    router.push('/dashboard');
   };
 
   const getApplicationNode = (): Element | Node => {
@@ -121,7 +116,7 @@ export function NewPlan({
       setTimeout(() => setFeedback(""), 3000);
       return;
     }
-    plannerSetPlanName(nextName);
+    dispatch(plannerSetPlanName(nextName));
   };
 
   const handleTabClick = (e: React.SyntheticEvent<EventTarget>) => {
@@ -155,11 +150,12 @@ export function NewPlan({
     setLoading(true);
 
     if (editing) {
-      const planInfo = {id: editingId, name: planName, data: getPlanData()};
-      userEditPlan(planInfo);
+      const planInfo =
+        {id: editingId as number, name: planName, data: getPlanData()};
+      dispatch(userEditPlan(planInfo));
     } else {
       const planInfo = {name: planName, data: getPlanData()};
-      userCreateNewPlan(planInfo);
+      dispatch(userCreateNewPlan(planInfo));
     }
   }
 
@@ -195,11 +191,11 @@ export function NewPlan({
       activateModal={activateModal}
       deactivateModal={deactivateModal}
       discardChanges={discardChanges}
-      dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-      dataMyPrivateRecipes={dataMyPrivateRecipes}
-      dataMyPublicRecipes={dataMyPublicRecipes}
-      dataMySavedRecipes={dataMySavedRecipes}
-      dataRecipes={dataRecipes}
+      myFavoriteRecipes={myFavoriteRecipes}
+      myPrivateRecipes={myPrivateRecipes}
+      myPublicRecipes={myPublicRecipes}
+      mySavedRecipes={mySavedRecipes}
+      officialRecipes={officialRecipes}
       editing={editing}
       expanded={expanded}
       expandedDay={expandedDay}
@@ -218,61 +214,10 @@ export function NewPlan({
   );
 }
 
-interface RootState {
-  data: {
-    myFavoriteRecipes: IWorkRecipe[];
-    myPlans: IPlan[];
-    myPrivateRecipes: IWorkRecipe[];
-    myPublicRecipes: IWorkRecipe[];
-    mySavedRecipes: IWorkRecipe[];
-    officialRecipes: IWorkRecipe[];
-  };
-  planner: {
-    editingId: number;
-    expanded: boolean;
-    expandedDay: number | null;
-    planName: string;
-    recipeListsInsideDays: IPlannerData;
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   editing: boolean;
   planView: string;
   twoColumnATheme: string;
 };
 
-const mapStateToProps = (state: RootState) => ({
-  dataMyFavoriteRecipes: state.data.myFavoriteRecipes,
-  dataMyPlans: state.data.myPlans,
-  dataMyPrivateRecipes: state.data.myPrivateRecipes,
-  dataMyPublicRecipes: state.data.myPublicRecipes,
-  dataMySavedRecipes: state.data.mySavedRecipes,
-  dataRecipes: state.data.officialRecipes,
-  expanded: state.planner.expanded,
-  expandedDay: state.planner.expandedDay,
-  editingId: state.planner.editingId,
-  message: state.user.message,
-  planName: state.planner.planName,
-  recipeListsInsideDays: state.planner.recipeListsInsideDays
-});
-
-const mapDispatchToProps = {
-  plannerClearWork: () => plannerClearWork(),
-  plannerSetCreating: () => plannerSetCreating(),
-  plannerSetEditingId: (id: number) => plannerSetEditingId(id),
-  plannerSetPlanData: (data: IPlannerData) => plannerSetPlanData(data),
-  plannerSetPlanName: (name: string) => plannerSetPlanName(name),
-  userCreateNewPlan: (planInfo: ICreatingPlanInfo) =>
-    userCreateNewPlan(planInfo),
-  userEditPlan: (planInfo: IEditingPlanInfo) => userEditPlan(planInfo)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(NewPlan);
+export default NewPlan;

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 
+import { useTypedSelector as useSelector } from '../../../../../../store';
 import { MenuView } from './MenuView';
 
 /*
@@ -118,19 +118,17 @@ function getActivateDelay() {
   return 0;
 }
 
-export function Menu({ menuItems, theme }: Props): JSX.Element {
+export default function Menu({ menuItems }: Props): JSX.Element {
+  const theme = useSelector(state => state.theme.dropDownMenuTheme);
+
   const [ activeMenuRow, setActiveMenuRow ] = useState<undefined | number>();
 
   useLayoutEffect(() => {  // useRef? forwardRef?
     document.addEventListener('mousemove', handleMouseMoveDocument, false);
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMoveDocument);
-
       mouseLocs = [];
-
       if (menuTimer) clearTimeout(menuTimer);
-
       menuTimer = null;
     };
   });
@@ -151,14 +149,12 @@ export function Menu({ menuItems, theme }: Props): JSX.Element {
 
   const possiblyActivate = (row: number) => {
     const delay = getActivateDelay();
-
     if (delay) {
       menuTimer = setTimeout(() => {
         possiblyActivate(row);
       }, delay);
       return;
     }
-
     setActiveMenuRow(row);
   };
 
@@ -171,12 +167,6 @@ export function Menu({ menuItems, theme }: Props): JSX.Element {
       theme={theme}
     />
   );
-}
-
-interface RootState {
-  theme: {
-    dropDownMenuTheme: string;
-  };
 }
 
 export interface IMenuItem {
@@ -192,16 +182,6 @@ interface IMouseLocation {
   y: number;
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   menuItems: IMenuItem[];
 };
-
-const mapStateToProps = (state: RootState) => ({
-  theme: state.theme.dropDownMenuTheme
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(Menu);

@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import './footer.css';
 
@@ -7,20 +7,20 @@ export function Footer({ theme }: Props): JSX.Element {
   return (
     <footer className={`footer ${theme}`}>
       <div className="footer__links">
-        <Link className="footer__link" to="/page/site/sitemap">
-          Sitemap
+        <Link href="/page/site/sitemap">
+          <a className="footer__link">Sitemap</a>
         </Link>
-        <Link className="footer__link" to="/page/site/disclaimer">
-          Disclaimer
+        <Link href="/page/site/disclaimer">
+          <a className="footer__link">Disclaimer</a>
         </Link>
-        <Link className="footer__link" to="/page/site/terms">
-          Terms of Use
+        <Link href="/page/site/terms">
+          <a className="footer__link">Terms of Use</a>
         </Link>
-        <Link className="footer__link" to="/page/site/privacy">
-          Privacy Policy
+        <Link href="/page/site/privacy">
+          <a className="footer__link">Privacy Policy</a>
         </Link>
-        <Link className="footer__link" to="/page/site/help">
-          Help
+        <Link href="/page/site/help">
+          <a className="footer__link">Help</a>
         </Link>
       </div>
 

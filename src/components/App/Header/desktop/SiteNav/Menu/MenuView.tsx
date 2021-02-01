@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { IMenuItem } from './Menu';
 import './menu.css';
@@ -62,8 +62,8 @@ export function MenuView({
               key={index}
               onMouseEnter={() => handleMouseEnterRow(index)}
             >
-              <Link className={`menu__item-link ${theme}`} to={menu.link}>
-                {menu.name}
+              <Link href={menu.link}>
+                <a className={`menu__item-link ${theme}`}>{menu.name}</a>
               </Link>
             </li>
           ))}
@@ -74,22 +74,18 @@ export function MenuView({
         <div className={`submenu ${theme}`}>
 
           <h3 className="submenu__heading">
-            <Link
-              className={`submenu__heading-link ${theme}`}
-              to={menuItems[activeMenuRow].link}
-            >
-              {menuItems[activeMenuRow].name}
+            <Link href={menuItems[activeMenuRow].link}>
+              <a className={`submenu__heading-link ${theme}`}>
+                {menuItems[activeMenuRow].name}
+              </a>
             </Link>
           </h3>
 
           <ul className="submenu__items">
             {menuItems[activeMenuRow].subMenu.map((subMenu, index) => 
               <li className="submenu__item" key={index}>
-                <Link
-                  className={`submenu__item-link ${theme}`}
-                  to={menuItems[activeMenuRow].subMenuLinks[index]}
-                >
-                  {subMenu}
+                <Link href={menuItems[activeMenuRow].subMenuLinks[index]}>
+                  <a className={`submenu__item-link ${theme}`}>{subMenu}</a>
                 </Link>
               </li>
             )}

@@ -1,21 +1,23 @@
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import DownArrowGray from '../../../../../assets/images/header/down-arrow-gray.png';
+import { useTypedSelector as useSelector } from '../../../../../store';
 import { searchSetIndex } from '../../../../../store/search/actions';
 import { AutocompleteView } from './views/AutocompleteView';
 import './search.css';
 
 export function Search({
-  currentIndex,
-  searchSetIndex,
   searchTerm,
   setSearchTerm,
   theme
 }: Props): JSX.Element {
-  const history = useHistory();
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+  const currentIndex = useSelector(state => state.search.currentIndex);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
     // use responsive design instead of adaptive design?
@@ -24,14 +26,14 @@ export function Search({
       .getElementsByClassName("sui-search-box__wrapper")[0]
       .firstChild as HTMLElement;
 
-    searchSetIndex(e.target.value);
+    dispatch(searchSetIndex(e.target.value));
 
     sInsert.focus();
   }
 
   const handleSelectAutocomplete = (selection: any) => {
     setSearchTerm(selection[field as string].raw);
-    history.push(`/${currentIndex}`);
+    router.push(`/${currentIndex}`);
   };
 
   const handleSubmit = () => {
@@ -40,7 +42,7 @@ export function Search({
   };
 
   const redirectToSearchPage = () => {
-    history.push(`/${currentIndex}`);
+    router.push(`/${currentIndex}`);
   };
 
   const facadeText =
@@ -106,15 +108,7 @@ interface RootContext {
   setSearchTerm: any;
 }
 
-interface RootState {
-  search: {
-    currentIndex: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
+type Props = {
   searchTerm: string;
   setSearchTerm: any;
   theme: string;
@@ -125,14 +119,4 @@ const mapContextToProps = ({ searchTerm, setSearchTerm }: RootContext) => ({
   setSearchTerm
 });
 
-const mapStateToProps = (state: RootState) => ({
-  currentIndex: state.search.currentIndex
-});
-
-const mapDispatchToProps = {
-  searchSetIndex: (index: string) => searchSetIndex(index)
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default withSearch(mapContextToProps)(connector(Search));
+export default withSearch(mapContextToProps)(Search);

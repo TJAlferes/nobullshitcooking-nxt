@@ -1,5 +1,5 @@
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
-import { useLocation } from 'react-router';
 
 import { Breadcrumbs } from '../../Breadcrumbs/Breadcrumbs';
 import './main.css';
@@ -9,7 +9,7 @@ export const Main: FC<Props> = ({
   shadow,
   theme
 }): JSX.Element => {
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
 
   // so that breadcrumbs aren't displayed at all on the home page:
   const isHome = pathname.match(/^\/$/);

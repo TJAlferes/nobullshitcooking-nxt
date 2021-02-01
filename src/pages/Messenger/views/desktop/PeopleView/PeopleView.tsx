@@ -26,6 +26,7 @@ export function PeopleView({
         >
           Room
         </button>
+
         <button
           className={
             (peopleTab === "Friends") ? "people__tab--current" : "people__tab"
@@ -45,7 +46,9 @@ export function PeopleView({
               onClick={() => handleUserClick(u)}
             >
               <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${u.avatar}-tiny`} />
+              
               <span>{u.username}</span>
+
               {
                 focusedUser && focusedUser.username === u.username &&
                 <div className="messenger__person-tooltip">
@@ -71,7 +74,9 @@ export function PeopleView({
               onClick={() => handleFriendClick(f)}
             >
               <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${f.avatar}-tiny`} />
+              
               <span>{f.username}</span>
+              
               {
                 focusedFriend && focusedFriend.username === f.username &&
                 <div className="messenger__person-tooltip">
