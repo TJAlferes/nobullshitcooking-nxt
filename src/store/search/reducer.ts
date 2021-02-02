@@ -1,4 +1,6 @@
-import { SEARCH_SET_INDEX, ISearchState, ISearchActions } from './types';
+import { actionTypes, ISearchState, ISearchActions } from './types';
+
+const { SEARCH_SET_INDEX } = actionTypes;
 
 const initialState: ISearchState = {currentIndex: "recipes"};
 

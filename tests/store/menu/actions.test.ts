@@ -1,5 +1,10 @@
-import { menuShadowShow, menuShadowHide } from '../../../src/store/menu/actions';
-import { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } from '../../../src/store/menu/types';
+import {
+  menuShadowShow,
+  menuShadowHide
+} from '../../../src/store/menu/actions';
+import { actionTypes } from '../../../src/store/menu/types';
+
+const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
 
 describe('menuShadowShow action creator', () => {
   it('returns the correct action type', () => {

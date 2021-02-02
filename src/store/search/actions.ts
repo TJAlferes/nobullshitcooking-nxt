@@ -1,4 +1,6 @@
-import { SEARCH_SET_INDEX } from './types';
+import { actionTypes } from './types';
+
+const { SEARCH_SET_INDEX } = actionTypes;
 
 export const searchSetIndex = (index: string) => ({
   type: SEARCH_SET_INDEX,

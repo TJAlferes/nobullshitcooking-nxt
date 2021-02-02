@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createMemoryHistory } from 'history';
+import { useRouter } from 'next/router';
 import { call, delay, put } from 'redux-saga/effects';
 
 import {
@@ -31,18 +31,18 @@ import {
   authUserRegisterSaga,
   authUserVerifySaga
 } from '../../../src/store/auth/sagas';
-import {
+import { actionTypes } from '../../../src/store/auth/types';
+
+const endpoint = NOBSCBackendAPIEndpointOne;
+const router = useRouter();
+const {
   AUTH_STAFF_LOGIN,
   AUTH_STAFF_LOGOUT,
   AUTH_USER_LOGIN,
   AUTH_USER_LOGOUT,
   AUTH_USER_REGISTER,
   AUTH_USER_VERIFY
-} from '../../../src/store/auth/types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
-//const history = useHistory();
-const history = createMemoryHistory();
+} = actionTypes;
 
 describe('authStaffLoginSaga', () => {
   const action = {
@@ -272,12 +272,12 @@ describe('authUserRegisterSaga', () => {
     email: 'person@place.com',
     password: 'secret',
     username: 'Person',
-    history
+    router
   };
 
   it('should dispatch succeeded, then push history', () => {
     const iterator = authUserRegisterSaga(action);
-    const { history } = action;
+    const { router } = action;
     const res = {data: {message: 'User account created.'}};
 
     expect(iterator.next().value).toEqual(call(
@@ -296,7 +296,7 @@ describe('authUserRegisterSaga', () => {
     expect(iterator.next().value).toEqual(delay(2000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(JSON.stringify(iterator.next().value))
-      .toEqual(JSON.stringify(call(() => history.push('/verify'))));
+      .toEqual(JSON.stringify(call(() => router.push('/verify'))));
     expect(iterator.next()).toEqual({done: true, value: undefined});
   });
 
@@ -333,12 +333,12 @@ describe('authUserVerifySaga', () => {
     email: 'person@place.com',
     password: 'secret',
     confirmationCode: '0123456789',
-    history
+    router
   };
 
   it('should dispatch succeeded, then push history', () => {
     const iterator = authUserVerifySaga(action);
-    const { history } = action;
+    const { router } = action;
     const res = {data: {message: 'User account verified.'}};
 
     expect(iterator.next().value).toEqual(call(
@@ -357,7 +357,7 @@ describe('authUserVerifySaga', () => {
     expect(iterator.next().value).toEqual(delay(2000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(JSON.stringify(iterator.next().value))
-      .toEqual(JSON.stringify(call(() => history.push('/login'))));
+      .toEqual(JSON.stringify(call(() => router.push('/login'))));
     expect(iterator.next()).toEqual({done: true, value: undefined});
   });
 

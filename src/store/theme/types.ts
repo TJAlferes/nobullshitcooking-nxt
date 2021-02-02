@@ -1,5 +1,7 @@
-export const THEME_DARK_TRIGGER = 'THEME_DARK_TRIGGER' as const;
-export const THEME_LIGHT_TRIGGER = 'THEME_LIGHT_TRIGGER' as const;
+export const actionTypes = {
+  THEME_DARK_TRIGGER: 'THEME_DARK_TRIGGER',
+  THEME_LIGHT_TRIGGER: 'THEME_LIGHT_TRIGGER'
+} as const;
 
 /*
 
@@ -32,9 +34,9 @@ Actions
 export type ThemeActions = IThemeDarkTrigger|IThemeLightTrigger;
 
 interface IThemeDarkTrigger {
-  type: typeof THEME_DARK_TRIGGER
+  type: typeof actionTypes.THEME_DARK_TRIGGER
 }
 
 interface IThemeLightTrigger {
-  type: typeof THEME_LIGHT_TRIGGER
+  type: typeof actionTypes.THEME_LIGHT_TRIGGER
 }

@@ -1,6 +1,16 @@
 import update from 'immutability-helper';  // is this really needed?
 
 import {
+  actionTypes,
+  IPlannerState,
+  PlannerActions,
+  IPlannerClickDay,
+  IPlannerAddRecipeToDay,
+  IPlannerRemoveRecipeFromDay,
+  IPlannerReorderRecipeInDay
+} from './types';
+
+const {
   PLANNER_CLICK_DAY,
   PLANNER_ADD_RECIPE_TO_DAY,
   PLANNER_REMOVE_RECIPE_FROM_DAY,
@@ -12,13 +22,7 @@ import {
   PLANNER_SET_PLAN_NAME,
   PLANNER_SET_EDITING_ID,
   PLANNER_SET_PLAN_DATA,
-  IPlannerState,
-  PlannerActions,
-  IPlannerClickDay,
-  IPlannerAddRecipeToDay,
-  IPlannerRemoveRecipeFromDay,
-  IPlannerReorderRecipeInDay
-} from './types';
+} = actionTypes;
 
 const initialState: IPlannerState = {
   isLoading: false,

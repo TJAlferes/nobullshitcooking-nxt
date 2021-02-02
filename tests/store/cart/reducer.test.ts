@@ -1,5 +1,7 @@
 import { cartReducer } from '../../../src/store/cart/reducer';
-import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } from '../../../src/store/cart/types';
+import { actionTypes} from '../../../src/store/cart/types';
+
+const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
 
 const initialState = {items: []};
 

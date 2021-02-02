@@ -1,8 +1,16 @@
-import { AUTH_USER_LOGOUT } from '../../../src/store/auth/types';
+import { actionTypes as authActionTypes } from '../../../src/store/auth/types';
 import { messengerReducer } from '../../../src/store/messenger/reducer';
 import {
+  actionTypes as messengerActionTypes,
+  KMessage,
+  KWhisper
+} from '../../../src/store/messenger/types';
+
+const { AUTH_USER_LOGOUT } = authActionTypes;
+const {
   MESSENGER_CONNECTED,
   MESSENGER_DISCONNECTED,
+  MESSENGER_GET_ONLINE,
   MESSENGER_SHOW_ONLINE,
   MESSENGER_SHOW_OFFLINE,
   MESSENGER_CHANGED_CHANNEL,
@@ -11,11 +19,8 @@ import {
   MESSENGER_LEFT_USER,
   MESSENGER_RECEIVED_MESSAGE,
   MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER,
-  MESSENGER_GET_ONLINE,
-  KMessage,
-  KWhisper
-} from '../../../src/store/messenger/types';
+  MESSENGER_FAILED_WHISPER
+} = messengerActionTypes;
 
 const jane = {id: 888, username: "Jane888", avatar: "Jane888"};
 const joe = {id: 555, username: "Joe555", avatar: "Joe555"};

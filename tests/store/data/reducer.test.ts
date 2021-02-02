@@ -1,5 +1,7 @@
 import { dataReducer } from '../../../src/store/data/reducer';
-import {
+import { actionTypes, IDataState } from '../../../src/store/data/types';
+
+const {
   DATA_GET_INITIAL_DATA,
   DATA_GET_CONTENT,  // official
   DATA_GET_CONTENT_TYPES,
@@ -22,10 +24,8 @@ import {
   DATA_GET_MY_PRIVATE_INGREDIENTS,
   DATA_GET_MY_PRIVATE_RECIPES,
   DATA_GET_MY_PUBLIC_RECIPES,
-  DATA_GET_MY_SAVED_RECIPES,
-
-  IDataState
-} from '../../../src/store/data/types';
+  DATA_GET_MY_SAVED_RECIPES
+} = actionTypes;
 
 const initialState: IDataState = {
   officialContent: [],

@@ -4,12 +4,14 @@ import {
   geoAddress,
   geoNearbyStoresClicked
 } from '../../../src/store/geolocation/actions';
-import {
+import { actionTypes } from '../../../src/store/geolocation/types';
+
+const {
   GEO_LATITUDE,
   GEO_LONGITUDE,
   GEO_ADDRESS,
   GEO_NEARBY_STORES_CLICKED
-} from '../../../src/store/geolocation/types';
+} = actionTypes;
 
 const latitude = "48.51";
 const longitude = "115.43";

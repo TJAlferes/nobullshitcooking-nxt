@@ -1,9 +1,11 @@
-import {
+import { actionTypes } from './types';
+
+const {
   GEO_LATITUDE,
   GEO_LONGITUDE,
   GEO_ADDRESS,
   GEO_NEARBY_STORES_CLICKED
-} from './types';
+} = actionTypes;
 
 export const geoLatitude = (latitude: string) => ({
   type: GEO_LATITUDE,

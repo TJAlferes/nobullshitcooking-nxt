@@ -1,5 +1,7 @@
 import { nobscappWindowFocused } from '../../../src/store/nobscapp/actions';
-import { NOBSCAPP_WINDOW_FOCUSED } from '../../../src/store/nobscapp/types';
+import { actionTypes } from '../../../src/store/nobscapp/types';
+
+const { NOBSCAPP_WINDOW_FOCUSED } = actionTypes;
 
 describe('nobscappWindowFocused action creator', () => {
   it('returns the correct action type', () => {

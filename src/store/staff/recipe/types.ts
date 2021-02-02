@@ -8,7 +8,7 @@ export const actionTypes = {
   STAFF_DELETE_RECIPE: 'STAFF_DELETE_RECIPE',
   STAFF_DELETE_RECIPE_SUCCEEDED: 'STAFF_DELETE_RECIPE_SUCCEEDED',
   STAFF_DELETE_RECIPE_FAILED: 'STAFF_DELETE_RECIPE_FAILED'
-};
+} as const;
 
 export interface IStaffCreateNewRecipe {
   type: typeof actionTypes.STAFF_CREATE_NEW_RECIPE;

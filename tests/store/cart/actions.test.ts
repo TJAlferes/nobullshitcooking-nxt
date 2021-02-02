@@ -1,5 +1,11 @@
-import { cartAddItem, cartRemoveItem, cartEmpty } from '../../../src/store/cart/actions';
-import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } from '../../../src/store/cart/types';
+import {
+  cartAddItem,
+  cartRemoveItem,
+  cartEmpty
+} from '../../../src/store/cart/actions';
+import { actionTypes} from '../../../src/store/cart/types';
+
+const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
 
 const item = {id: 18, itemTypeId: 1, name: "Name", quantity: 1};
 

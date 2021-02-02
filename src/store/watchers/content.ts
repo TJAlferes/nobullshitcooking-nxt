@@ -6,21 +6,22 @@ import {
   staffEditContentSaga,
   staffDeleteContentSaga
 } from '../staff/content/sagas';
+import { actionTypes as staffContentActionTypes } from '../staff/content/types';
 import {
+  userCreateNewContentSaga,
+  userEditContentSaga,
+  userDeleteContentSaga
+} from '../user/content/sagas';
+import { actionTypes as userContentActionTypes } from '../user/content/types';
+
+const {
   STAFF_CREATE_NEW_CONTENT,
   STAFF_CREATE_NEW_CONTENT_SUCCEEDED,
   STAFF_EDIT_CONTENT,
   STAFF_EDIT_CONTENT_SUCCEEDED,
   STAFF_DELETE_CONTENT,
   STAFF_DELETE_CONTENT_SUCCEEDED
-} from '../staff/content/types';
-import {
-  userCreateNewContentSaga,
-  userEditContentSaga,
-  userDeleteContentSaga
-} from '../user/content/sagas';
-import { actionTypes } from '../user/content/types';
-
+} = staffContentActionTypes;
 const {
   USER_CREATE_NEW_CONTENT,
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
@@ -28,7 +29,7 @@ const {
   USER_EDIT_CONTENT_SUCCEEDED,
   USER_DELETE_CONTENT,
   USER_DELETE_CONTENT_SUCCEEDED
-} = actionTypes;
+} = userContentActionTypes;
 
 export function* watchContent() {
   yield all([

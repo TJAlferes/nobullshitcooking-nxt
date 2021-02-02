@@ -1,10 +1,11 @@
 import {
-  PLANNER_VIEW_CLICK_DAY,
-  PLANNER_VIEW_LOAD,
+  actionTypes,
   IPlannerViewState,
   PlannerViewActions,
   IPlannerViewClickDay
 } from './types';
+
+const { PLANNER_VIEW_CLICK_DAY, PLANNER_VIEW_LOAD } = actionTypes;
 
 const initialState: IPlannerViewState = {
   isLoading: false,

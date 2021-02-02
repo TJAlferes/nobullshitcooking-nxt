@@ -18,6 +18,12 @@ import {
   messengerFailedWhisper
 } from '../../../src/store/messenger/actions';
 import {
+  actionTypes,
+  KMessage,
+  KWhisper
+} from '../../../src/store/messenger/types';
+
+const {
   MESSENGER_CONNECT,
   MESSENGER_CONNECTED,
   MESSENGER_DISCONNECT,
@@ -34,10 +40,8 @@ import {
   MESSENGER_RECEIVED_MESSAGE,
   MESSENGER_SEND_WHISPER,
   MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER,
-  KMessage,
-  KWhisper
-} from '../../../src/store/messenger/types';
+  MESSENGER_FAILED_WHISPER
+} = actionTypes;
 
 const aaron = {id: '4', username: 'Aaron', avatar: 'Aaron'};
 const alex = {id: '5', username: 'Alex', avatar: 'Alex'};

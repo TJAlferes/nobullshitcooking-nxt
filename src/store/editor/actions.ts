@@ -1,11 +1,13 @@
 import { Node } from 'slate';
 
-import {
+import { actionTypes } from './types';
+
+const {
   EDITOR_CLEAR_WORK,
   EDITOR_SET_CREATING,
   EDITOR_SET_EDITING_ID,
   EDITOR_SET_VALUE
-} from './types';
+} = actionTypes;
 
 export const editorClearWork = () => ({type: EDITOR_CLEAR_WORK});
 

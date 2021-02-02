@@ -4,12 +4,14 @@ import {
   editorSetEditingId,
   editorSetValue
 } from '../../../src/store/editor/actions';
-import {
+import { actionTypes } from '../../../src/store/editor/types';
+
+const {
   EDITOR_CLEAR_WORK,
   EDITOR_SET_CREATING,
   EDITOR_SET_EDITING_ID,
   EDITOR_SET_VALUE
-} from '../../../src/store/editor/types';
+} = actionTypes;
 
 describe('editorClearWork action creator', () => {
   it('returns the correct action type', () => {

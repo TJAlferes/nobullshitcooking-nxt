@@ -1,11 +1,11 @@
-import {
+import { actionTypes, IEditorState, EditorActions } from './types';
+
+const {
   EDITOR_CLEAR_WORK,
   EDITOR_SET_CREATING,
   EDITOR_SET_EDITING_ID,
-  EDITOR_SET_VALUE,
-  IEditorState,
-  EditorActions
-} from './types';
+  EDITOR_SET_VALUE
+} = actionTypes;
 
 const initialState: IEditorState = {
   creating: false,

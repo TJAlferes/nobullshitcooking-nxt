@@ -1,9 +1,6 @@
-import {
-  THEME_DARK_TRIGGER,
-  THEME_LIGHT_TRIGGER,
-  IThemeState,
-  ThemeActions
-} from './types';
+import { actionTypes, IThemeState, ThemeActions } from './types';
+
+const { THEME_DARK_TRIGGER, THEME_LIGHT_TRIGGER } = actionTypes;
 
 const initialState: IThemeState = {
   headerTheme: "header-light",
@@ -45,7 +42,9 @@ export const themeReducer = (
           feedTheme: "feed-dark"
         }
       };
+    
     case THEME_LIGHT_TRIGGER: return {...state, ...initialState};
+    
     default: return state;
   }
 };

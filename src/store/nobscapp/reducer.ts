@@ -1,8 +1,6 @@
-import {
-  NOBSCAPP_WINDOW_FOCUSED,
-  INOBSCAppState,
-  NOBSCAppActions
-} from './types';
+import { actionTypes, INOBSCAppState, NOBSCAppActions } from './types';
+
+const { NOBSCAPP_WINDOW_FOCUSED } = actionTypes;
 
 // TO DO: make false first, have them click on something (Connect button?)
 const initialState: INOBSCAppState = {windowFocused: true};

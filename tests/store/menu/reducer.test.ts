@@ -1,5 +1,7 @@
 import { menuReducer } from '../../../src/store/menu/reducer';
-import { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } from '../../../src/store/menu/types';
+import { actionTypes } from '../../../src/store/menu/types';
+
+const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
 
 const initialState = {shadow: false};
 

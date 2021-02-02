@@ -1,4 +1,7 @@
-import {
+import { authReducer } from '../../../src/store/auth/reducer';
+import { actionTypes } from '../../../src/store/auth/types';
+
+const {
   AUTH_MESSAGE_CLEAR,
   AUTH_RESET,
   AUTH_UPDATE_LOCAL_AVATAR,
@@ -18,8 +21,7 @@ import {
   AUTH_USER_REGISTER_FAILED,
   //AUTH_USER_VERIFY_SUCCEEDED,
   //AUTH_USER_VERIFY_FAILED
-} from '../../../src/store/auth/types';
-import { authReducer } from '../../../src/store/auth/reducer';
+} = actionTypes;
 
 const initialState = {
   authname: '',

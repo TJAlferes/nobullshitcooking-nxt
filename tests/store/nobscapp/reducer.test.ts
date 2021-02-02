@@ -1,5 +1,7 @@
 import { nobscappReducer } from '../../../src/store/nobscapp/reducer';
-import { NOBSCAPP_WINDOW_FOCUSED } from '../../../src/store/nobscapp/types';
+import { actionTypes } from '../../../src/store/nobscapp/types';
+
+const { NOBSCAPP_WINDOW_FOCUSED } = actionTypes;
 
 describe('nobscapp reducer', () => {
   it('returns initial state', () => {

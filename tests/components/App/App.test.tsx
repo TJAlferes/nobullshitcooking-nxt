@@ -2,12 +2,11 @@ import { SearchProvider } from '@elastic/react-search-ui';
 import { mount } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import { createStore, Store } from 'redux';
 
 //import { searchConfig } from '../../../src/config/searchConfig';
 import { rootReducer } from '../../../src/store/rootReducer';
-import { App } from '../../../src/components/App/App';
+import App from '../../../src/components/App/App';
 
 const storeFactory = (initialState = undefined): Store =>
   createStore(rootReducer, initialState);
@@ -15,7 +14,7 @@ const storeFactory = (initialState = undefined): Store =>
 const store = storeFactory();
 
 const initialProps = {
-  dataContentTypes: [],
+  contentTypes: [],
   footerTheme: 'footer-light',
   headerTheme: 'header-light',
   mainTheme: 'main-light',
@@ -33,13 +32,12 @@ afterEach(() => {
 
 describe('App', () => {
   describe('when pathname is /login', () => {
+    //<MemoryRouter initialEntries={["/login"]}>
     const wrapper = mount(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/login"]}>
-          <SearchProvider config={{}}>
-            <App {...initialProps} />
-          </SearchProvider>
-        </MemoryRouter>
+        <SearchProvider config={{}}>
+          <App {...initialProps} />
+        </SearchProvider>
       </Provider>
     );
 
@@ -57,13 +55,12 @@ describe('App', () => {
   });
 
   describe('when pathname is /register', () => {
+    //<MemoryRouter initialEntries={["/register"]}>
     const wrapper = mount(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/register"]}>
-          <SearchProvider config={{}}>
-            <App {...initialProps} />
-          </SearchProvider>
-        </MemoryRouter>
+        <SearchProvider config={{}}>
+          <App {...initialProps} />
+        </SearchProvider>
       </Provider>
     );
 
@@ -81,13 +78,12 @@ describe('App', () => {
   });
 
   describe('when pathname is /verify', () => {
+    //<MemoryRouter initialEntries={["/verify"]}>
     const wrapper = mount(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/verify"]}>
-          <SearchProvider config={{}}>
-            <App {...initialProps} />
-          </SearchProvider>
-        </MemoryRouter>
+        <SearchProvider config={{}}>
+          <App {...initialProps} />
+        </SearchProvider>
       </Provider>
     );
 
@@ -105,13 +101,12 @@ describe('App', () => {
   });
 
   describe('when not at auth page', () => {
+    //<MemoryRouter initialEntries={["/"]}>
     const wrapper = mount(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/"]}>
-          <SearchProvider config={{}}>
-            <App {...initialProps} />
-          </SearchProvider>
-        </MemoryRouter>
+        <SearchProvider config={{}}>
+          <App {...initialProps} />
+        </SearchProvider>
       </Provider>
     );
 

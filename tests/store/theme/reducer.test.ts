@@ -1,5 +1,7 @@
 import { themeReducer } from '../../../src/store/theme/reducer';
-import { THEME_DARK_TRIGGER, THEME_LIGHT_TRIGGER } from '../../../src/store/theme/types';
+import { actionTypes } from '../../../src/store/theme/types';
+
+const { THEME_DARK_TRIGGER, THEME_LIGHT_TRIGGER } = actionTypes;
 
 const dark = {
   headerTheme: "header-dark",

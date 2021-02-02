@@ -1,4 +1,4 @@
-import { createMemoryHistory } from 'history';
+import { useRouter } from 'next/router';
 
 import {
   authUpdateLocalAvatar,
@@ -9,7 +9,10 @@ import {
   authUserRegister,
   authUserVerify
 } from '../../../src/store/auth/actions';
-import {
+import { actionTypes } from '../../../src/store/auth/types';
+
+const router = useRouter();
+const {
   AUTH_UPDATE_LOCAL_AVATAR,
   AUTH_STAFF_DISPLAY,
   AUTH_STAFF_LOGIN,
@@ -17,9 +20,7 @@ import {
   AUTH_USER_LOGIN,
   AUTH_USER_REGISTER,
   AUTH_USER_VERIFY
-} from '../../../src/store/auth/types';
-
-const history = createMemoryHistory();
+} = actionTypes;
 
 describe('authUpdateLocalAvatar action creator', () => {
   it('returns the correct action type', () => {
@@ -102,7 +103,7 @@ describe('authUserRegister action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'CoolPerson',
-      history
+      router
     ).type).toEqual(AUTH_USER_REGISTER);
   });
 
@@ -111,7 +112,7 @@ describe('authUserRegister action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'CoolPerson',
-      history
+      router
     ).email).toEqual('coolperson@coolplace.com');
   });
 
@@ -120,7 +121,7 @@ describe('authUserRegister action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'CoolPerson',
-      history
+      router
     ).password).toEqual('supersecret');
   });
 
@@ -129,7 +130,7 @@ describe('authUserRegister action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'CoolPerson',
-      history
+      router
     ).username).toEqual('CoolPerson');
   });
 });
@@ -140,7 +141,7 @@ describe('authUserVerify action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'SOMERANDOMCODE',
-      history
+      router
     ).type).toEqual(AUTH_USER_VERIFY);
   });
 
@@ -149,7 +150,7 @@ describe('authUserVerify action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'SOMERANDOMCODE',
-      history
+      router
     ).email).toEqual('coolperson@coolplace.com');
   });
 
@@ -158,7 +159,7 @@ describe('authUserVerify action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'SOMERANDOMCODE',
-      history
+      router
     ).password).toEqual('supersecret');
   });
 
@@ -167,7 +168,7 @@ describe('authUserVerify action creator', () => {
       'coolperson@coolplace.com',
       'supersecret',
       'SOMERANDOMCODE',
-      history
+      router
     ).confirmationCode).toEqual('SOMERANDOMCODE');
   });
 });

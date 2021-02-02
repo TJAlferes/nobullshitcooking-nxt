@@ -1,6 +1,8 @@
 //import '../../utils/publicPlanner/convertPlannerToUrl';
 
-import {
+import { actionTypes, IPlannerData, IPlannerRecipe } from './types';
+
+const {
   PLANNER_CLICK_DAY,
   PLANNER_ADD_RECIPE_TO_DAY,
   PLANNER_REMOVE_RECIPE_FROM_DAY,
@@ -12,9 +14,7 @@ import {
   PLANNER_SET_EDITING_ID,
   PLANNER_SET_PLAN_NAME,
   PLANNER_SET_PLAN_DATA,
-  IPlannerData,
-  IPlannerRecipe
-} from './types';
+} = actionTypes;
 
 export const plannerClickDay = (day: number) => ({
   type: PLANNER_CLICK_DAY,

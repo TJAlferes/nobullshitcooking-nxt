@@ -1,9 +1,11 @@
 import { Node } from 'slate';
 
-export const EDITOR_CLEAR_WORK = 'EDITOR_CLEAR_WORK' as const;
-export const EDITOR_SET_CREATING = 'EDITOR_SET_CREATING' as const;
-export const EDITOR_SET_EDITING_ID = 'EDITOR_SET_EDITING_ID' as const;
-export const EDITOR_SET_VALUE = 'EDITOR_SET_VALUE' as const;
+export const actionTypes = {
+  EDITOR_CLEAR_WORK: 'EDITOR_CLEAR_WORK',
+  EDITOR_SET_CREATING: 'EDITOR_SET_CREATING',
+  EDITOR_SET_EDITING_ID: 'EDITOR_SET_EDITING_ID',
+  EDITOR_SET_VALUE: 'EDITOR_SET_VALUE'
+} as const;
 
 /*
 
@@ -31,19 +33,19 @@ IEditorSetEditingId |
 IEditorSetValue;
 
 export interface IEditorClearWork {
-  type: typeof EDITOR_CLEAR_WORK;
+  type: typeof actionTypes.EDITOR_CLEAR_WORK;
 }
 
 export interface IEditorSetCreating {
-  type: typeof EDITOR_SET_CREATING;
+  type: typeof actionTypes.EDITOR_SET_CREATING;
 }
 
 export interface IEditorSetEditingId {
-  type: typeof EDITOR_SET_EDITING_ID;
+  type: typeof actionTypes.EDITOR_SET_EDITING_ID;
   id: number | null;
 }
 
 export interface IEditorSetValue {
-  type: typeof EDITOR_SET_VALUE;
+  type: typeof actionTypes.EDITOR_SET_VALUE;
   value: Node[];
 }

@@ -1,5 +1,7 @@
 import { plannerViewReducer } from '../../../src/store/plannerView/reducer';
-import { PLANNER_VIEW_CLICK_DAY, PLANNER_VIEW_LOAD } from '../../../src/store/plannerView/types';
+import { actionTypes} from '../../../src/store/plannerView/types';
+
+const { PLANNER_VIEW_CLICK_DAY, PLANNER_VIEW_LOAD } = actionTypes;
 
 const recipeOne = {
   key: "ABC",

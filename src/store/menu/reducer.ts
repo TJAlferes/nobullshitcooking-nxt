@@ -1,9 +1,6 @@
-import {
-  MENU_SHADOW_SHOW,
-  MENU_SHADOW_HIDE,
-  IMenuState,
-  MenuActions
-} from './types';
+import { actionTypes, IMenuState, MenuActions } from './types';
+
+const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
 
 const initialState: IMenuState = {shadow: false};
 

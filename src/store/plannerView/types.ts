@@ -1,5 +1,7 @@
-export const PLANNER_VIEW_CLICK_DAY = 'PLANNER_VIEW_CLICK_DAY' as const;
-export const PLANNER_VIEW_LOAD = 'PLANNER_VIEW_LOAD' as const;
+export const actionTypes = {
+  PLANNER_VIEW_CLICK_DAY: 'PLANNER_VIEW_CLICK_DAY',
+  PLANNER_VIEW_LOAD: 'PLANNER_VIEW_LOAD'
+} as const;
 
 /*
 
@@ -65,12 +67,12 @@ Actions
 export type PlannerViewActions = IPlannerViewClickDay | IPlannerViewLoad;
 
 export interface IPlannerViewClickDay {
-  type: typeof PLANNER_VIEW_CLICK_DAY;
+  type: typeof actionTypes.PLANNER_VIEW_CLICK_DAY;
   day: number;
 }
 
 interface IPlannerViewLoad {
-  type: typeof PLANNER_VIEW_LOAD;
+  type: typeof actionTypes.PLANNER_VIEW_LOAD;
   planName: string;
   planData: IPlannerViewData;
 }
