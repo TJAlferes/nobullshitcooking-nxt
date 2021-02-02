@@ -11,7 +11,7 @@ import mockFn from '../../mockFn';
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 const mockedAuthUserRegister = mockFn(authUserRegister);
-const mockedAuthUserVerify = mockFn(authUserVerify);
+const mockedAuthUserVerify = mockFn(authUserVerify);  // TO DO
 
 type Actions = typeof mockedAuthUserRegister | typeof mockedAuthUserVerify;
 
@@ -86,7 +86,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(1);
+    expect(mockedAuthUserRegister).toBeCalledTimes(1);
   });
 
   it('should not submit when no username is given', () => {
@@ -101,7 +101,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when no email is given', () => {
@@ -116,7 +116,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when no password is given', () => {
@@ -128,7 +128,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when given passwords are different', () => {
@@ -146,7 +146,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when username is less than 2 characters', () => {
@@ -164,7 +164,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when email is less than 5 characters', () => {
@@ -182,7 +182,7 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 
   it('should not submit when password is less than 6 characters', () => {
@@ -200,6 +200,6 @@ describe('Register', () => {
 
     wrapper.find('#create_account_button').at(1).simulate('click');
 
-    expect(authUserRegister).toBeCalledTimes(0);
+    expect(mockedAuthUserRegister).toBeCalledTimes(0);
   });
 });

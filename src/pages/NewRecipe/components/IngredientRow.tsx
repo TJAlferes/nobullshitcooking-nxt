@@ -19,7 +19,7 @@ export function IngredientRow({
   removeIngredientRow,
   rowKey,
   type,
-  unit
+  measurementId
 }: Props): JSX.Element {
   const availableIngredients = [
     ...ingredients,
@@ -47,7 +47,7 @@ export function IngredientRow({
         name="unit"
         onChange={(e) => handleIngredientRowChange(e, rowKey)}
         required
-        value={unit}
+        value={measurementId}
       >
         <option value=""></option>
         {measurements.map((m, index) => (
@@ -111,5 +111,5 @@ type Props = {
   removeIngredientRow(rowKey: string): void;
   rowKey: string;
   type: string | number;
-  unit: string | number;
+  measurementId: string | number;
 };

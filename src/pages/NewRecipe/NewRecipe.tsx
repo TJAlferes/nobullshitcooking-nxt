@@ -28,7 +28,7 @@ import { NewRecipeView } from './NewRecipeView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export function NewRecipe({
+export default function NewRecipe({
   editing,
   oneColumnATheme,
   ownership
@@ -88,9 +88,9 @@ export function NewRecipe({
     {key: uuid(), amount: "", type: "", id: ""},
   ]);
   const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
-    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
-    {key: uuid(), amount: 1, unit: "", type: "", id: ""},
+    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
+    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
+    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
   ]);
   const [ subrecipeRows, setSubrecipeRows ] = useState<ISubrecipeRow[]>([]);
 
@@ -260,13 +260,13 @@ export function NewRecipe({
 
   const addIngredientRow = () => {
     const newIngredientRows = ingredientRows
-      .concat({key: uuid(), amount: "", unit: "", type: "", id: ""});
+      .concat({key: uuid(), amount: "", measurementId: "", type: "", id: ""});
     setIngredientRows(newIngredientRows);
   };
 
   const addSubrecipeRow = () => {
     const newSubrecipeRows = subrecipeRows.concat({
-      key: uuid(), amount: "", unit: "", type: "", cuisine: "", id: ""
+      key: uuid(), amount: "", measurementId: "", type: "", cuisine: "", id: ""
     });
     setSubrecipeRows(newSubrecipeRows);
   };
@@ -319,7 +319,7 @@ export function NewRecipe({
   const getCheckedMethods = () => {
     let checkedMethods: IRequiredMethod[] = [];
     Object.entries(usedMethods).forEach(([key, value]) => {
-      if (value === true) checkedMethods.push({methodId: Number(key)});
+      if (value === true) checkedMethods.push({id: Number(key)});
     });
     return checkedMethods;
   };
@@ -631,7 +631,7 @@ export function NewRecipe({
     const rows = required.map(r => ({
       key: uuid(),
       amount: r.amount,
-      unit: r.measurement_id,
+      measurementId: r.measurement_id,
       type: r.ingredient_type_id,
       id: r.ingredient_id
     }));
@@ -642,7 +642,7 @@ export function NewRecipe({
     const rows = required.map(r => ({
       key: uuid(),
       amount: r.amount,
-      unit: r.measurement_id,
+      measurementId: r.measurement_id,
       type: r.recipe_type_id,
       cuisine: r.cuisine_id,
       id: r.subrecipe_id
@@ -826,7 +826,7 @@ export interface IIngredientRow {
   [index: string]: any;
   key: string;
   amount: string | number;
-  unit: string | number;
+  measurementId: string | number;
   type: string | number;
   id: string | number;
 }
@@ -835,7 +835,7 @@ export interface ISubrecipeRow {
   [index: string]: any;
   key: string;
   amount: string | number;
-  unit: string | number;
+  measurementId: string | number;
   type: string | number;
   cuisine: string | number;
   id: string | number;
@@ -846,5 +846,3 @@ type Props = {
   oneColumnATheme: string;
   ownership: string;
 };
-
-export default NewRecipe;

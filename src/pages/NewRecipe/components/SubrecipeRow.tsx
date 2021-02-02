@@ -25,7 +25,7 @@ export function SubrecipeRow({
   selfId,
   id,
   type,
-  unit
+  measurementId
 }: Props): JSX.Element {
   const availableRecipes = [
     ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),
@@ -73,7 +73,7 @@ export function SubrecipeRow({
         name="unit"
         onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
         required
-        value={unit}
+        value={measurementId}
       >
         <option value=""></option>
         {measurements.map((m, index) => (
@@ -159,5 +159,5 @@ type Props = {
   selfId: number;
   id: string | number;
   type: string | number;
-  unit: string | number;
+  measurementId: string | number;
 };

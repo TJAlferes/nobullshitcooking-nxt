@@ -1,42 +1,54 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
 
 import { Friends } from '../../../src/pages/Friends/Friends';
-
-const dataMyFriendships = [
-  {user_id: 1, username: "Jack", avatar: "Jack", status: "accepted"},
-  {user_id: 2, username: "Jill", avatar: "Jill", status: "accepted"}
-];
-
-const userAcceptFriendship = jest.fn();
-const userBlockUser = jest.fn();
-const userDeleteFriendship = jest.fn();
-const userRejectFriendship = jest.fn();
-const userRequestFriendship = jest.fn();
-const userUnblockUser = jest.fn();
-
-const initialProps = {
-  authname: "Person",
-  dataMyFriendships,
-  message: "Some message.",
-  twoColumnATheme: "light",
+import {
   userAcceptFriendship,
   userBlockUser,
   userDeleteFriendship,
   userRejectFriendship,
   userRequestFriendship,
   userUnblockUser
-};
+} from '../../../src/store/user/friendship/actions';
 
-window.scrollTo = jest.fn();
+const initialProps = {twoColumnATheme: "light"};
+
+const mockedStoreData = {
+  auth: {
+    authname: "Person"
+  },
+  data: {
+    myFriendships: [
+      {user_id: 1, username: "Jack", avatar: "Jack", status: "accepted"},
+      {user_id: 2, username: "Jill", avatar: "Jill", status: "accepted"}
+    ]
+  },
+  user: {
+    message: "Some message."
+  }
+};
+const mockedSelector = jest.fn(cb => cb(mockedStoreData));
+jest
+  .spyOn(require("react-redux"), "useSelector")
+  .mockImplementation(mockedSelector);
+
+const mockedDispatch = jest.fn();
+jest
+  .spyOn(require("react-redux"), "useDispatch")
+  .mockReturnValue(mockedDispatch);
+
+jest
+  .spyOn(require("next/router"), "useRouter")
+  .mockImplementation(() => ({route: "/friends", pathname: "/friends"}));
 
 jest.mock('../../../src/components/LeftNav/LeftNav');
+
+window.scrollTo = jest.fn();
 
 let wrapper: ReactWrapper;
 
 beforeEach(() => {
-  wrapper = mount(<MemoryRouter><Friends {...initialProps} /></MemoryRouter>);
+  wrapper = mount(<Friends {...initialProps} />);
 });
 
 afterEach(() => {
@@ -51,7 +63,7 @@ describe('Friends', () => {
     );
 
     expect(wrapper.find('input[name="friends-find-input"]').props().value)
-    .toEqual("Person2");
+      .toEqual("Person2");
   });
 
   it('should submit user to request', () => {
@@ -62,7 +74,7 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-request"]').simulate('click');
 
-    expect(userRequestFriendship).toBeCalledTimes(1);
+    expect(mockedDispatch).toHaveBeenCalledWith(userRequestFriendship);
   });
 
   it ('should not send request when no user is given', () => {
@@ -71,7 +83,7 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-request"]').simulate('click');
 
-    expect(userRequestFriendship).toBeCalledTimes(0);
+    expect(mockedDispatch).not.toHaveBeenCalledWith(userRequestFriendship);
   });
 
   it ('should not send request when user given is self', () => {
@@ -82,7 +94,7 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-request"]').simulate('click');
 
-    expect(userRequestFriendship).toBeCalledTimes(0);
+    expect(mockedDispatch).not.toHaveBeenCalledWith(userRequestFriendship);
   });
 
   it('should submit user to block', () => {
@@ -93,7 +105,7 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-block"]').simulate('click');
 
-    expect(userBlockUser).toBeCalledTimes(1);
+    expect(mockedDispatch).toHaveBeenCalledWith(userBlockUser);
   });
 
   it ('should not block when no user is given', () => {
@@ -102,7 +114,7 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-block"]').simulate('click');
 
-    expect(userBlockUser).toBeCalledTimes(0);
+    expect(mockedDispatch).not.toHaveBeenCalledWith(userBlockUser);
   });
 
   it ('should not block when user given is self', () => {
@@ -113,6 +125,6 @@ describe('Friends', () => {
 
     wrapper.find('button[name="friends-find-block"]').simulate('click');
 
-    expect(userBlockUser).toBeCalledTimes(0);
+    expect(mockedDispatch).not.toHaveBeenCalledWith(userBlockUser);
   });
 });

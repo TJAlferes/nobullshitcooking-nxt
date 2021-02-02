@@ -7,7 +7,7 @@ import mockFn from '../../mockFn';
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
-const mockedAuthStaffLogin = mockFn(authStaffLogin);
+const mockedAuthStaffLogin = mockFn(authStaffLogin);  // TO DO
 const mockedAuthUserLogin = mockFn(authUserLogin);
 
 type Actions = typeof mockedAuthStaffLogin | typeof mockedAuthUserLogin;
@@ -57,7 +57,7 @@ describe('Login', () => {
     //wrapper.update();  // not needed I guess
     wrapper.find('#login-button').at(1).simulate('click');
 
-    expect(authUserLogin).toBeCalledTimes(1);
+    expect(mockedAuthUserLogin).toBeCalledTimes(1);
   });
 
   it('should not submit when no email is given', () => {
@@ -66,7 +66,7 @@ describe('Login', () => {
 
     wrapper.find('#login-button').at(1).simulate('click');
 
-    expect(authUserLogin).toBeCalledTimes(0);
+    expect(mockedAuthUserLogin).toBeCalledTimes(0);
   });
 
   it('should not submit when no password is given', () => {
@@ -75,7 +75,7 @@ describe('Login', () => {
 
     wrapper.find('#login-button').at(1).simulate('click');
 
-    expect(authUserLogin).toBeCalledTimes(0);
+    expect(mockedAuthUserLogin).toBeCalledTimes(0);
   });
 
   it('should not submit when email is less than 5 characters', () => {
@@ -87,7 +87,7 @@ describe('Login', () => {
 
     wrapper.find('#login-button').at(1).simulate('click');
 
-    expect(authUserLogin).toBeCalledTimes(0);
+    expect(mockedAuthUserLogin).toBeCalledTimes(0);
   });
 
   it('should not submit when password is less than 6 characters', () => {
@@ -99,6 +99,6 @@ describe('Login', () => {
 
     wrapper.find('#login-button').at(1).simulate('click');
 
-    expect(authUserLogin).toBeCalledTimes(0);
+    expect(mockedAuthUserLogin).toBeCalledTimes(0);
   });
 });

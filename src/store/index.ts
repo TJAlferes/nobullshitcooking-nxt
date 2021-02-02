@@ -13,9 +13,9 @@ import {
   saveToLocalStorage
 } from '../utils/storageHelpers';
 import { dataInit } from './data/actions';
-import { rootReducer, RootState, State } from './rootReducer';
+import { rootReducer, RootState } from './rootReducer';
 import { runWatchers } from '../store/watchers';
-import rootSaga from './saga';
+//import rootSaga from './saga';
 
 const persistedState = loadFromLocalStorage();
 const sagaMiddleware = createSagaMiddleware();
@@ -37,13 +37,13 @@ export interface SagaStore extends Store {
   sagaTask?: Task;
 }
 
-export const makeStore: MakeStore<State> = (context: Context) => {
+export const makeStore: MakeStore<RootState> = (context: Context) => {
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
-  (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
+  //(store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
   return store;
 };
 
-export const wrapper = createWrapper<State>(makeStore, {debug: true});
+export const wrapper = createWrapper<RootState>(makeStore, {debug: true});
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;

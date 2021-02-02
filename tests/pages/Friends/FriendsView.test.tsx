@@ -20,7 +20,7 @@ const handleTabChange = jest.fn();
 const handleUnblockClick = jest.fn();
 
 const initialProps = {
-  dataMyFriendships: myFriendships,
+  myFriendships: myFriendships,
   feedback: "Some message.",
   handleAcceptClick,
   handleBlockClick,
