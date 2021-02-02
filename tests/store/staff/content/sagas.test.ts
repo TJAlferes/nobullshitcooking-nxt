@@ -18,11 +18,13 @@ import {
   staffEditContentSaga,
   staffDeleteContentSaga
 } from '../../../../src/store/staff/content/sagas';
-import {
+import { actionTypes } from '../../../../src/store/staff/content/types';
+
+const {
   STAFF_CREATE_NEW_CONTENT,
   STAFF_EDIT_CONTENT,
   STAFF_DELETE_CONTENT
-} from '../../../../src/store/staff/content/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

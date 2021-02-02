@@ -1,37 +1,50 @@
 import { 
+  actionTypes as staffContentActionTypes
+} from '../../../src/store/staff/content/types';
+import {
+  actionTypes as staffEquipmentActionTypes
+} from '../../../src/store/staff/equipment/types';
+import {
+  actionTypes as staffIngredientActionTypes
+} from '../../../src/store/staff/ingredient/types';
+import {
+  actionTypes as staffRecipeActionTypes
+} from '../../../src/store/staff/recipe/types';
+import { staffReducer } from '../../../src/store/staff/reducer';
+import { STAFF_MESSAGE_CLEAR } from '../../../src/store/staff/types';
+
+const {
   STAFF_CREATE_NEW_CONTENT_SUCCEEDED,
   STAFF_CREATE_NEW_CONTENT_FAILED,
   STAFF_EDIT_CONTENT_SUCCEEDED,
   STAFF_EDIT_CONTENT_FAILED,
   STAFF_DELETE_CONTENT_SUCCEEDED,
   STAFF_DELETE_CONTENT_FAILED
-} from '../../../src/store/staff/content/types';
-import {
+} = staffContentActionTypes;
+const {
   STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
   STAFF_CREATE_NEW_EQUIPMENT_FAILED,
   STAFF_EDIT_EQUIPMENT_SUCCEEDED,
   STAFF_EDIT_EQUIPMENT_FAILED,
   STAFF_DELETE_EQUIPMENT_SUCCEEDED,
   STAFF_DELETE_EQUIPMENT_FAILED
-} from '../../../src/store/staff/equipment/types';
-import {
+} = staffEquipmentActionTypes;
+const {
   STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
   STAFF_CREATE_NEW_INGREDIENT_FAILED,
   STAFF_EDIT_INGREDIENT_SUCCEEDED,
   STAFF_EDIT_INGREDIENT_FAILED,
   STAFF_DELETE_INGREDIENT_SUCCEEDED,
-  STAFF_DELETE_INGREDIENT_FAILED,
-} from '../../../src/store/staff/ingredient/types';
-import {
+  STAFF_DELETE_INGREDIENT_FAILED
+} = staffIngredientActionTypes;
+const {
   STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
   STAFF_CREATE_NEW_RECIPE_FAILED,
   STAFF_EDIT_RECIPE_SUCCEEDED,
   STAFF_EDIT_RECIPE_FAILED,
   STAFF_DELETE_RECIPE_SUCCEEDED,
-  STAFF_DELETE_RECIPE_FAILED,
-} from '../../../src/store/staff/recipe/types';
-import { staffReducer } from '../../../src/store/staff/reducer';
-import { STAFF_MESSAGE_CLEAR } from '../../../src/store/staff/types';
+  STAFF_DELETE_RECIPE_FAILED
+} = staffRecipeActionTypes;
 
 const message = 'Message.';
 

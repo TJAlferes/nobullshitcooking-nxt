@@ -9,7 +9,9 @@ import {
   userDeleteContentSucceeded,
   userDeleteContentFailed
 } from '../../../../src/store/user/content/actions';
-import {
+import { actionTypes } from '../../../../src/store/user/content/types';
+
+const {
   USER_CREATE_NEW_CONTENT,
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
   USER_CREATE_NEW_CONTENT_FAILED,
@@ -19,7 +21,7 @@ import {
   USER_DELETE_CONTENT,
   USER_DELETE_CONTENT_SUCCEEDED,
   USER_DELETE_CONTENT_FAILED
-} from '../../../../src/store/user/content/types';
+} = actionTypes;
 
 const creatingContentInfo = {
   contentTypeId: 13,

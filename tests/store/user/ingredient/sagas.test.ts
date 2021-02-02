@@ -18,11 +18,13 @@ import {
   userEditPrivateIngredientSaga,
   userDeletePrivateIngredientSaga,
 } from '../../../../src/store/user/ingredient/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/ingredient/types';
+
+const {
   USER_CREATE_NEW_PRIVATE_INGREDIENT,
   USER_EDIT_PRIVATE_INGREDIENT,
   USER_DELETE_PRIVATE_INGREDIENT
-} from '../../../../src/store/user/ingredient/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

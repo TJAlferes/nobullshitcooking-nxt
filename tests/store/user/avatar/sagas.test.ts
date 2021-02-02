@@ -7,7 +7,9 @@ import {
 import { userMessageClear } from '../../../../src/store/user/actions';
 import { userSubmitAvatarSucceeded, userSubmitAvatarFailed } from '../../../../src/store/user/avatar/actions';
 import { userSubmitAvatarSaga } from '../../../../src/store/user/avatar/sagas';
-import { USER_SUBMIT_AVATAR } from '../../../../src/store/user/avatar/types';
+import { actionTypes} from '../../../../src/store/user/avatar/types';
+
+const { USER_SUBMIT_AVATAR } = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 const fullAvatar = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});

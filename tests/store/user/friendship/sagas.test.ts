@@ -27,14 +27,16 @@ import {
   userBlockUserSaga,
   userUnblockUserSaga
 } from '../../../../src/store/user/friendship/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/friendship/types';
+
+const {
   USER_REQUEST_FRIENDSHIP,
   USER_ACCEPT_FRIENDSHIP,
   USER_REJECT_FRIENDSHIP,
   USER_DELETE_FRIENDSHIP,
   USER_BLOCK_USER,
   USER_UNBLOCK_USER
-} from '../../../../src/store/user/friendship/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

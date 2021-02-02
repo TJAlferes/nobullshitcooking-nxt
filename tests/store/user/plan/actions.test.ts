@@ -9,7 +9,9 @@ import {
   userDeletePlanSucceeded,
   userDeletePlanFailed
 } from '../../../../src/store/user/plan/actions';
-import {
+import { actionTypes } from '../../../../src/store/user/plan/types';
+
+const {
   USER_CREATE_NEW_PLAN,
   USER_CREATE_NEW_PLAN_SUCCEEDED,
   USER_CREATE_NEW_PLAN_FAILED,
@@ -19,7 +21,7 @@ import {
   USER_DELETE_PLAN,
   USER_DELETE_PLAN_SUCCEEDED,
   USER_DELETE_PLAN_FAILED
-} from '../../../../src/store/user/plan/types';
+} = actionTypes;
 
 const creatingPlanInfo = {name: "Plan B", data: ""};
 const editingPlanInfo = {id: 2, name: "Plan B", data: ""};

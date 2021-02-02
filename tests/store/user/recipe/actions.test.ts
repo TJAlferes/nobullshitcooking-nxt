@@ -19,7 +19,9 @@ import {
   userDisownPublicRecipeSucceeded,
   userDisownPublicRecipeFailed
 } from '../../../../src/store/user/recipe/actions';
-import {
+import { actionTypes } from '../../../../src/store/user/recipe/types';
+
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE,
   USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_RECIPE_FAILED,
@@ -38,8 +40,8 @@ import {
   USER_EDIT_PUBLIC_RECIPE_FAILED,
   USER_DISOWN_PUBLIC_RECIPE,
   USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED,
-  USER_DISOWN_PUBLIC_RECIPE_FAILED,
-} from '../../../../src/store/user/recipe/types';
+  USER_DISOWN_PUBLIC_RECIPE_FAILED
+} = actionTypes;
 
 const creatingRecipeInfo = {
   ownership: "private",

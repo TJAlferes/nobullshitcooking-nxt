@@ -9,7 +9,9 @@ import {
   userDeletePrivateIngredientSucceeded,
   userDeletePrivateIngredientFailed
 } from '../../../../src/store/user/ingredient/actions';
-import {
+import { actionTypes } from '../../../../src/store/user/ingredient/types';
+
+const {
   USER_CREATE_NEW_PRIVATE_INGREDIENT,
   USER_CREATE_NEW_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_INGREDIENT_FAILED,
@@ -19,7 +21,7 @@ import {
   USER_DELETE_PRIVATE_INGREDIENT,
   USER_DELETE_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_DELETE_PRIVATE_INGREDIENT_FAILED
-} from '../../../../src/store/user/ingredient/types';
+} = actionTypes;
 
 const creatingIngredientInfo = {
   ingredientTypeId: 3,

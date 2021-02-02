@@ -1,15 +1,4 @@
 import {
-  USER_CREATE_NEW_PRIVATE_EQUIPMENT,
-  USER_CREATE_NEW_PRIVATE_EQUIPMENT_SUCCEEDED,
-  USER_CREATE_NEW_PRIVATE_EQUIPMENT_FAILED,
-  USER_EDIT_PRIVATE_EQUIPMENT,
-  USER_EDIT_PRIVATE_EQUIPMENT_SUCCEEDED,
-  USER_EDIT_PRIVATE_EQUIPMENT_FAILED,
-  USER_DELETE_PRIVATE_EQUIPMENT,
-  USER_DELETE_PRIVATE_EQUIPMENT_SUCCEEDED,
-  USER_DELETE_PRIVATE_EQUIPMENT_FAILED
-} from '../../../../src/store/user/equipment/types';
-import {
   userCreateNewPrivateEquipment,
   userCreateNewPrivateEquipmentSucceeded,
   userCreateNewPrivateEquipmentFailed,
@@ -20,6 +9,19 @@ import {
   userDeletePrivateEquipmentSucceeded,
   userDeletePrivateEquipmentFailed
 } from '../../../../src/store/user/equipment/actions';
+import { actionTypes } from '../../../../src/store/user/equipment/types';
+
+const {
+  USER_CREATE_NEW_PRIVATE_EQUIPMENT,
+  USER_CREATE_NEW_PRIVATE_EQUIPMENT_SUCCEEDED,
+  USER_CREATE_NEW_PRIVATE_EQUIPMENT_FAILED,
+  USER_EDIT_PRIVATE_EQUIPMENT,
+  USER_EDIT_PRIVATE_EQUIPMENT_SUCCEEDED,
+  USER_EDIT_PRIVATE_EQUIPMENT_FAILED,
+  USER_DELETE_PRIVATE_EQUIPMENT,
+  USER_DELETE_PRIVATE_EQUIPMENT_SUCCEEDED,
+  USER_DELETE_PRIVATE_EQUIPMENT_FAILED
+} = actionTypes;
 
 const creatingEquipmentInfo = {
   equipmentTypeId: 3,

@@ -18,11 +18,13 @@ import {
   userEditPlanSaga,
   userDeletePlanSaga
 } from '../../../../src/store/user/plan/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/plan/types';
+
+const {
   USER_CREATE_NEW_PLAN,
   USER_EDIT_PLAN,
   USER_DELETE_PLAN
-} from '../../../../src/store/user/plan/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

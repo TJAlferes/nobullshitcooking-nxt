@@ -4,16 +4,20 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { userMessageClear,} from '../../../../src/store/user/actions';
+import { userMessageClear } from '../../../../src/store/user/actions';
 import {
   userFavoriteRecipeSucceeded,
   userFavoriteRecipeFailed,
   userUnfavoriteRecipeSucceeded,
   userUnfavoriteRecipeFailed
 } from '../../../../src/store/user/favorite/actions';
-import { userFavoriteRecipeSaga, userUnfavoriteRecipeSaga } from '../../../../src/store/user/favorite/sagas';
-import { USER_FAVORITE_RECIPE, USER_UNFAVORITE_RECIPE } from '../../../../src/store/user/favorite/types';
+import {
+  userFavoriteRecipeSaga,
+  userUnfavoriteRecipeSaga
+} from '../../../../src/store/user/favorite/sagas';
+import { actionTypes} from '../../../../src/store/user/favorite/types';
 
+const { USER_FAVORITE_RECIPE, USER_UNFAVORITE_RECIPE } = actionTypes;
 const endpoint = NOBSCBackendAPIEndpointOne;
 
 describe('userFavoriteRecipeSaga', () => {

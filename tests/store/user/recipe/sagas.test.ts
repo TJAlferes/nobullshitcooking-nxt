@@ -25,12 +25,14 @@ import {
   userDisownPublicRecipeSaga,
   userEditRecipeSaga
 } from '../../../../src/store/user/recipe/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/recipe/types';
+
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE,
   USER_DELETE_PRIVATE_RECIPE,
   USER_DISOWN_PUBLIC_RECIPE,
   USER_EDIT_PRIVATE_RECIPE
-} from '../../../../src/store/user/recipe/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

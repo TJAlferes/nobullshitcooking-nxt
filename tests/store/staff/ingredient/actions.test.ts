@@ -9,7 +9,9 @@ import {
   staffDeleteIngredientSucceeded,
   staffDeleteIngredientFailed
 } from '../../../../src/store/staff/ingredient/actions';
-import {
+import { actionTypes } from '../../../../src/store/staff/ingredient/types';
+
+const {
   STAFF_CREATE_NEW_INGREDIENT,
   STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
   STAFF_CREATE_NEW_INGREDIENT_FAILED,
@@ -19,7 +21,7 @@ import {
   STAFF_DELETE_INGREDIENT,
   STAFF_DELETE_INGREDIENT_SUCCEEDED,
   STAFF_DELETE_INGREDIENT_FAILED
-} from '../../../../src/store/staff/ingredient/types';
+} = actionTypes;
 
 const creatingIngredientInfo = {
   ingredientTypeId: 3,

@@ -18,11 +18,13 @@ import {
   staffEditEquipmentSaga,
   staffDeleteEquipmentSaga
 } from '../../../../src/store/staff/equipment/sagas';
-import {
+import { actionTypes } from '../../../../src/store/staff/equipment/types';
+
+const {
   STAFF_CREATE_NEW_EQUIPMENT,
   STAFF_EDIT_EQUIPMENT,
   STAFF_DELETE_EQUIPMENT
-} from '../../../../src/store/staff/equipment/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

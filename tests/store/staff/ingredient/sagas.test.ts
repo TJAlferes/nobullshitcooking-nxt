@@ -18,11 +18,13 @@ import {
   staffEditIngredientSaga,
   staffDeleteIngredientSaga,
 } from '../../../../src/store/staff/ingredient/sagas';
-import {
+import { actionTypes } from '../../../../src/store/staff/ingredient/types';
+
+const {
   STAFF_CREATE_NEW_INGREDIENT,
   STAFF_EDIT_INGREDIENT,
   STAFF_DELETE_INGREDIENT
-} from '../../../../src/store/staff/ingredient/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

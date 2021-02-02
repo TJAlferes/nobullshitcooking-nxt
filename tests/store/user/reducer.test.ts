@@ -1,30 +1,60 @@
 import {
-  USER_SUBMIT_AVATAR_SUCCEEDED,
-  USER_SUBMIT_AVATAR_FAILED
+  actionTypes as userAvatarActionTypes
 } from '../../../src/store/user/avatar/types';
 import {
+  actionTypes as userContentActionTypes
+} from '../../../src/store/user/content/types';
+import {
+  actionTypes as userEquipmentActionTypes
+} from '../../../src/store/user/equipment/types';
+import {
+  actionTypes as userFavoriteActionTypes
+} from '../../../src/store/user/favorite/types';
+import {
+  actionTypes as userFriendshipActionTypes
+} from '../../../src/store/user/friendship/types';
+import {
+  actionTypes as userIngredientActionTypes
+} from '../../../src/store/user/ingredient/types';
+import {
+  actionTypes as userPlanActionTypes
+} from '../../../src/store/user/plan/types';
+import {
+  actionTypes as userRecipeActionTypes
+} from '../../../src/store/user/recipe/types';
+import {
+  actionTypes as userSaveActionTypes
+} from '../../../src/store/user/save/types';
+import { userReducer } from '../../../src/store/user/reducer';
+import { USER_MESSAGE_CLEAR } from '../../../src/store/user/types';
+
+const {
+  USER_SUBMIT_AVATAR_SUCCEEDED,
+  USER_SUBMIT_AVATAR_FAILED
+} = userAvatarActionTypes;
+const {
   USER_CREATE_NEW_CONTENT_SUCCEEDED,
   USER_CREATE_NEW_CONTENT_FAILED,
   USER_EDIT_CONTENT_SUCCEEDED,
   USER_EDIT_CONTENT_FAILED,
   USER_DELETE_CONTENT_SUCCEEDED,
   USER_DELETE_CONTENT_FAILED,
-} from '../../../src/store/user/content/types';
-import {
+} = userContentActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_EQUIPMENT_FAILED,
   USER_EDIT_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_EDIT_PRIVATE_EQUIPMENT_FAILED,
   USER_DELETE_PRIVATE_EQUIPMENT_SUCCEEDED,
   USER_DELETE_PRIVATE_EQUIPMENT_FAILED
-} from '../../../src/store/user/equipment/types';
-import {
+} = userEquipmentActionTypes;
+const {
   USER_FAVORITE_RECIPE_SUCCEEDED,
   USER_FAVORITE_RECIPE_FAILED,
   USER_UNFAVORITE_RECIPE_SUCCEEDED,
   USER_UNFAVORITE_RECIPE_FAILED
-} from '../../../src/store/user/favorite/types';
-import {
+} = userFavoriteActionTypes;
+const {
   USER_REQUEST_FRIENDSHIP_SUCCEEDED,
   USER_REQUEST_FRIENDSHIP_FAILED,
   USER_ACCEPT_FRIENDSHIP_SUCCEEDED,
@@ -37,24 +67,24 @@ import {
   USER_BLOCK_USER_FAILED,
   USER_UNBLOCK_USER_SUCCEEDED,
   USER_UNBLOCK_USER_FAILED
-} from '../../../src/store/user/friendship/types';
-import {
+} = userFriendshipActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_INGREDIENT_FAILED,
   USER_EDIT_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_EDIT_PRIVATE_INGREDIENT_FAILED,
   USER_DELETE_PRIVATE_INGREDIENT_SUCCEEDED,
   USER_DELETE_PRIVATE_INGREDIENT_FAILED
-} from '../../../src/store/user/ingredient/types';
-import {
+} = userIngredientActionTypes;
+const {
   USER_CREATE_NEW_PLAN_SUCCEEDED,
   USER_CREATE_NEW_PLAN_FAILED,
   USER_EDIT_PLAN_SUCCEEDED,
   USER_EDIT_PLAN_FAILED,
   USER_DELETE_PLAN_SUCCEEDED,
   USER_DELETE_PLAN_FAILED
-} from '../../../src/store/user/plan/types';
-import {
+} = userPlanActionTypes;
+const {
   USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED,
   USER_CREATE_NEW_PRIVATE_RECIPE_FAILED,
   USER_EDIT_PRIVATE_RECIPE_SUCCEEDED,
@@ -68,15 +98,13 @@ import {
   USER_EDIT_PUBLIC_RECIPE_FAILED,
   USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED,
   USER_DISOWN_PUBLIC_RECIPE_FAILED
-} from '../../../src/store/user/recipe/types';
-import {
+} = userRecipeActionTypes;
+const {
   USER_SAVE_RECIPE_SUCCEEDED,
   USER_SAVE_RECIPE_FAILED,
   USER_UNSAVE_RECIPE_SUCCEEDED,
   USER_UNSAVE_RECIPE_FAILED
-} from '../../../src/store/user/save/types';
-import { userReducer } from '../../../src/store/user/reducer';
-import { USER_MESSAGE_CLEAR } from '../../../src/store/user/types';
+} = userSaveActionTypes;
 
 const message = 'Message.';
 

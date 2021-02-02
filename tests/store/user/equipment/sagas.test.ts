@@ -18,11 +18,13 @@ import {
   userEditPrivateEquipmentSaga,
   userDeletePrivateEquipmentSaga
 } from '../../../../src/store/user/equipment/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/equipment/types';
+
+const {
   USER_CREATE_NEW_PRIVATE_EQUIPMENT,
   USER_EDIT_PRIVATE_EQUIPMENT,
   USER_DELETE_PRIVATE_EQUIPMENT
-} from '../../../../src/store/user/equipment/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

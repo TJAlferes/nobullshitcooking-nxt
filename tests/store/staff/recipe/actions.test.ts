@@ -9,7 +9,9 @@ import {
   staffDeleteRecipeSucceeded,
   staffDeleteRecipeFailed
 } from '../../../../src/store/staff/recipe/actions';
-import {
+import { actionTypes } from '../../../../src/store/staff/recipe/types';
+
+const {
   STAFF_CREATE_NEW_RECIPE,
   STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
   STAFF_CREATE_NEW_RECIPE_FAILED,
@@ -19,7 +21,7 @@ import {
   STAFF_DELETE_RECIPE,
   STAFF_DELETE_RECIPE_SUCCEEDED,
   STAFF_DELETE_RECIPE_FAILED
-} from '../../../../src/store/staff/recipe/types';
+} = actionTypes;
 
 const creatingRecipeInfo = {
   ownership: "private",
@@ -28,9 +30,9 @@ const creatingRecipeInfo = {
   title: "My Secret Recipe",
   description: "Don't worry about it.",
   directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, unit: 1, ingredient: 1}],
+  requiredMethods: [{id: 1}, {id: 3}],
+  requiredEquipment: [{amount: 1, id: 1}],
+  requiredIngredients: [{amount: 1, measurementId: 1, id: 1}],
   requiredSubrecipes: [],
   recipeImage: null,
   recipeFullImage: null,
@@ -55,9 +57,9 @@ const editingRecipeInfo = {
   title: "My Secret Recipe",
   description: "Don't worry about it.",
   directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, unit: 1, ingredient: 1}],
+  requiredMethods: [{id: 1}, {id: 3}],
+  requiredEquipment: [{amount: 1, id: 1}],
+  requiredIngredients: [{amount: 1, measurementId: 1, id: 1}],
   requiredSubrecipes: [],
   recipeImage: null,
   recipeFullImage: null,

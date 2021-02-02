@@ -4,16 +4,20 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import {
-  userMessageClear } from '../../../../src/store/user/actions';
+import { userMessageClear } from '../../../../src/store/user/actions';
 import {
   userSaveRecipeSucceeded,
   userSaveRecipeFailed,
   userUnsaveRecipeSucceeded,
   userUnsaveRecipeFailed
 } from '../../../../src/store/user/save/actions';
-import { userSaveRecipeSaga, userUnsaveRecipeSaga } from '../../../../src/store/user/save/sagas';
-import { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } from '../../../../src/store/user/save/types';
+import {
+  userSaveRecipeSaga,
+  userUnsaveRecipeSaga
+} from '../../../../src/store/user/save/sagas';
+import { actionTypes } from '../../../../src/store/user/save/types';
+
+const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

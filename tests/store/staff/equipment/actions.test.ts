@@ -9,7 +9,9 @@ import {
   staffDeleteEquipmentSucceeded,
   staffDeleteEquipmentFailed
 } from '../../../../src/store/staff/equipment/actions';
-import {
+import { actionTypes } from '../../../../src/store/staff/equipment/types';
+
+const {
   STAFF_CREATE_NEW_EQUIPMENT,
   STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
   STAFF_CREATE_NEW_EQUIPMENT_FAILED,
@@ -19,7 +21,7 @@ import {
   STAFF_DELETE_EQUIPMENT,
   STAFF_DELETE_EQUIPMENT_SUCCEEDED,
   STAFF_DELETE_EQUIPMENT_FAILED
-} from '../../../../src/store/staff/equipment/types';
+} = actionTypes;
 
 const creatingEquipmentInfo = {
   equipmentTypeId: 3,

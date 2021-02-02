@@ -18,11 +18,13 @@ import {
   userEditContentSaga,
   userDeleteContentSaga
 } from '../../../../src/store/user/content/sagas';
-import {
+import { actionTypes } from '../../../../src/store/user/content/types';
+
+const {
   USER_CREATE_NEW_CONTENT,
   USER_EDIT_CONTENT,
   USER_DELETE_CONTENT
-} from '../../../../src/store/user/content/types';
+} = actionTypes;
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 

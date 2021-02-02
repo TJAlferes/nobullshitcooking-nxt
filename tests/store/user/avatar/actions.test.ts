@@ -3,11 +3,13 @@ import {
   userSubmitAvatarSucceeded,
   userSubmitAvatarFailed
 } from '../../../../src/store/user/avatar/actions';
-import {
+import { actionTypes } from '../../../../src/store/user/avatar/types';
+
+const {
   USER_SUBMIT_AVATAR,
   USER_SUBMIT_AVATAR_SUCCEEDED,
   USER_SUBMIT_AVATAR_FAILED
-} from '../../../../src/store/user/avatar/types';
+} = actionTypes;
 
 const fullAvatar = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
 const tinyAvatar = new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
