@@ -16,8 +16,21 @@ import { dataInit } from './data/actions';
 import { rootReducer, RootState } from './rootReducer';
 import { rootSaga } from './rootSaga';
 
-export const makeStore: MakeStore<RootState> = (context: Context) => {
-  const persistedState = loadFromLocalStorage();
+/*
+const persistedState = loadFromLocalStorage();
+const sagaMiddleware = createSagaMiddleware();
+
+WONT WORK BECAUSE YOU HAVE TO CREATE A BRAND NEW STORE EVERY TIME IN SSR?
+... or can it?
+export const store = createStore(
+  rootReducer,
+  persistedState,
+  composeWithDevTools(applyMiddleware(sagaMiddleware))
+);
+*/
+
+export const makeStore = (context: Context) => {
+  const persistedState = loadFromLocalStorage();  // preloadedState?
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     rootReducer,
@@ -36,7 +49,7 @@ export const makeStore: MakeStore<RootState> = (context: Context) => {
   return store;
 };
 
-export const wrapper = createWrapper<RootState>(makeStore, {debug: true});
+export const wrapper = createWrapper(makeStore, {debug: true});
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 

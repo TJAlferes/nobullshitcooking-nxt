@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { useStore } from 'react-redux';
 
-import { store } from '../index';
+//import { store } from '../store/index';  // pass?
 import { buildAutocompleteState } from '../utils/search/buildAutocompleteState';
 import { buildSearchRequest } from '../utils/search/buildSearchRequest';
 import { applyDisjunctiveFaceting } from '../utils/search/applyDisjunctiveFaceting';
@@ -8,6 +9,7 @@ import { buildSearchState } from '../utils/search/buildSearchState';
 import { NOBSCBackendAPIEndpointOne } from './NOBSCBackendAPIEndpointOne';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
+const store = useStore();  // IDK
 
 // put currentIndex on window?
 

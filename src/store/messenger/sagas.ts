@@ -1,9 +1,10 @@
+import { useStore } from 'react-redux';
 import io from 'socket.io-client';
 
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { store } from '../../index';
+//import { store } from '../index';  // pass?
 import {
   messengerConnected,
   messengerDisconnected,
@@ -32,6 +33,7 @@ const socket = io.connect(`${endpoint}`, {
   autoConnect: false,
   reconnection: true
 });
+const store = window.__NEXT_REDUX_STORE__.getState();  // IDK
 
 // TO DO: make better event names (server side too)
 

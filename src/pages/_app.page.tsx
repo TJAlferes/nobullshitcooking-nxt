@@ -1,7 +1,7 @@
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useTypedSelector as useSelector } from '../store';
+//import { useStore } from 'react-redux';
 import { END } from 'redux-saga';
 
 import '../../styles/global.css';
@@ -9,7 +9,7 @@ import { Footer } from '../components/App/Footer/Footer';
 //import MobileHeader from '../components/App/Header/mobile/MobileHeader';
 import { Header } from '../components/App/Header/desktop/Header';
 import { Main } from '../components/App/Main/Main';
-import { SagaStore, wrapper } from '../store';
+import { SagaStore, useTypedSelector as useSelector, wrapper } from '../store';
 
 class NOBSCApp extends App<AppInitialProps>{
   public static getInitialProps = async ({ Component, ctx }: AppContext) => {
@@ -33,6 +33,8 @@ class NOBSCApp extends App<AppInitialProps>{
     const { Component, pageProps } = this.props;
 
     const { pathname } = useRouter();
+    // Not required? The store is passed as a prop?
+    //const store = useStore();
 
     const dataContentTypes = useSelector(state => state.data.contentTypes);
     const shadow = useSelector(state => state.menu.shadow);
