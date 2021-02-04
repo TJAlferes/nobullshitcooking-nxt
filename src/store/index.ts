@@ -1,4 +1,4 @@
-import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
+import { Context, createWrapper } from 'next-redux-wrapper';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
@@ -16,22 +16,13 @@ import { dataInit } from './data/actions';
 import { rootReducer, RootState } from './rootReducer';
 import { rootSaga } from './rootSaga';
 
-/*
-const persistedState = loadFromLocalStorage();
-const sagaMiddleware = createSagaMiddleware();
-
-WONT WORK BECAUSE YOU HAVE TO CREATE A BRAND NEW STORE EVERY TIME IN SSR?
-... or can it?
-export const store = createStore(
-  rootReducer,
-  persistedState,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
-);
-*/
-
 export const makeStore = (context: Context) => {
+  // Don't do this here? Do this in _app.page.tsx getInitialProps instead?
+  // Because it requires browser/client so won't work on server?
   const persistedState = loadFromLocalStorage();  // preloadedState?
+
   const sagaMiddleware = createSagaMiddleware();
+
   const store = createStore(
     rootReducer,
     persistedState,
@@ -41,6 +32,9 @@ export const makeStore = (context: Context) => {
   (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 
   store.dispatch(dataInit());  // do through Next.js now
+
+  // Don't do these here? Do these in _app.page.tsx getInitialProps instead?
+  // Because they require browser/client so won't work on server?
   store.subscribe(() => saveToLocalStorage(store.getState()));
 
   initWindowBlurHandler(store);

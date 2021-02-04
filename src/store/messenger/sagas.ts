@@ -1,4 +1,3 @@
-import { useStore } from 'react-redux';
 import io from 'socket.io-client';
 
 import {
@@ -33,7 +32,6 @@ const socket = io.connect(`${endpoint}`, {
   autoConnect: false,
   reconnection: true
 });
-const store = window.__NEXT_REDUX_STORE__.getState();  // IDK
 
 // TO DO: make better event names (server side too)
 
