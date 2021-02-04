@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
-import { useStore } from 'react-redux';
+//import { useStore } from 'react-redux';
 import { END } from 'redux-saga';
 
 import '../../styles/global.css';
@@ -14,16 +14,12 @@ import { Header } from '../components/App/Header/desktop/Header';
 import { Main } from '../components/App/Main/Main';
 import { searchConfig } from '../config/searchConfig';
 import { SagaStore, useTypedSelector as useSelector, wrapper } from '../store';
+import { initializeSocketIOEventHandlers } from '../store/messenger/sagas';
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  const store = useStore();  // Not required? The store is passed as a prop?
-
-  // pass store to searchConfig
-  //const searchConfig = searchConfigInit(store);
-  // pass store to messenger sagas
-  //???
-
+  //const store = useStore();  // Not required? The store is passed as a prop?
+  
   // ???
   const contentTypes = useSelector(state => state.data.contentTypes);
   // Just useContext for menu shadow?
@@ -66,16 +62,22 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
 
 const getInitialProps = async ({ Component, ctx }: AppContext) => {
   // wait for all page actions to dispatch
-  const pageProps = {...(
-    Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {}
-  )};
+  const pageProps = {
+    ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
+  };
 
   // stop saga if on server
   if (ctx.req) {
     ctx.store.dispatch(END);
     await (ctx.store as SagaStore).sagaTask?.toPromise();
+  } else {
+    // pass store to searchConfig
+    //const searchConfig = searchConfigInit(store);
+
+    // pass store to messenger sagas
+    initializeSocketIOEventHandlers(ctx.store);
+    //
+
   }
 
   return {pageProps};

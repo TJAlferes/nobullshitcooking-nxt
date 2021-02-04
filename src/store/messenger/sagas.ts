@@ -1,3 +1,4 @@
+import { Store } from 'redux';
 import io from 'socket.io-client';
 
 import {
@@ -33,94 +34,96 @@ const socket = io.connect(`${endpoint}`, {
   reconnection: true
 });
 
-// TO DO: make better event names (server side too)
+export function initializeSocketIOEventHandlers(store: Store) {
+  // TO DO: make better event names (server side too)
 
-/*
+  /*
 
-Users
+  Users
 
-*/
+  */
 
-socket.on('GetOnline', (online: []) => {
-  if (!online) return;
-  store.dispatch(messengerGetOnline(online));
-});
+  socket.on('GetOnline', (online: []) => {
+    if (!online) return;
+    store.dispatch(messengerGetOnline(online));
+  });
 
-socket.on('ShowOnline', (user: IUser) => {
-  if (!user) return;
-  store.dispatch(messengerShowOnline(user));
-});
+  socket.on('ShowOnline', (user: IUser) => {
+    if (!user) return;
+    store.dispatch(messengerShowOnline(user));
+  });
 
-socket.on('ShowOffline', (user: IUser) => {
-  if (!user) return;
-  store.dispatch(messengerShowOffline(user));
-});
+  socket.on('ShowOffline', (user: IUser) => {
+    if (!user) return;
+    store.dispatch(messengerShowOffline(user));
+  });
 
-/*
+  /*
 
-Messages
+  Messages
 
-*/
+  */
 
-socket.on('AddMessage', (message: IMessage) => {
-  if (!message) return;
-  store.dispatch(messengerReceivedMessage(message));
-});
+  socket.on('AddMessage', (message: IMessage) => {
+    if (!message) return;
+    store.dispatch(messengerReceivedMessage(message));
+  });
 
-socket.on('AddWhisper', (whisper: IWhisper) => {
-  if (!whisper) return;
-  store.dispatch(messengerReceivedWhisper(whisper));
-});
+  socket.on('AddWhisper', (whisper: IWhisper) => {
+    if (!whisper) return;
+    store.dispatch(messengerReceivedWhisper(whisper));
+  });
 
-socket.on('FailedWhisper', (feedback: string) => {
-  if (!feedback) return;
-  store.dispatch(messengerFailedWhisper(feedback));
-});
+  socket.on('FailedWhisper', (feedback: string) => {
+    if (!feedback) return;
+    store.dispatch(messengerFailedWhisper(feedback));
+  });
 
-/*
+  /*
 
-Rooms
+  Rooms
 
-*/
+  */
 
-socket.on('GetUser', (users: [], roomToAdd: string) => {
-  if (!users || !roomToAdd) return;
-  store.dispatch(messengerChangedChannel(users, roomToAdd));
-});
+  socket.on('GetUser', (users: [], roomToAdd: string) => {
+    if (!users || !roomToAdd) return;
+    store.dispatch(messengerChangedChannel(users, roomToAdd));
+  });
 
-socket.on('RegetUser', (users: [], roomToRejoin: string) => {
-  if (!users || !roomToRejoin) return;
-  store.dispatch(messengerRejoinedChannel(users, roomToRejoin));
-});
+  socket.on('RegetUser', (users: [], roomToRejoin: string) => {
+    if (!users || !roomToRejoin) return;
+    store.dispatch(messengerRejoinedChannel(users, roomToRejoin));
+  });
 
-socket.on('AddUser', (user: IUser) => {
-  if (!user) return;
-  store.dispatch(messengerJoinedUser(user));
-});
+  socket.on('AddUser', (user: IUser) => {
+    if (!user) return;
+    store.dispatch(messengerJoinedUser(user));
+  });
 
-socket.on('RemoveUser', (user: IUser) => {
-  if (!user) return;
-  store.dispatch(messengerLeftUser(user));
-});
+  socket.on('RemoveUser', (user: IUser) => {
+    if (!user) return;
+    store.dispatch(messengerLeftUser(user));
+  });
 
-/*
+  /*
 
-SocketIO Events
+  SocketIO Events
 
-*/
+  */
 
-socket.on('connect', () => {
-  store.dispatch(messengerConnected());
-  socket.emit('GetOnline');
-});
+  socket.on('connect', () => {
+    store.dispatch(messengerConnected());
+    socket.emit('GetOnline');
+  });
 
-socket.on('disconnect', () => {
-  store.dispatch(messengerDisconnected());
-});
+  socket.on('disconnect', () => {
+    store.dispatch(messengerDisconnected());
+  });
 
-socket.on('reconnect', () => {
-  messengerRejoinRoomSaga();
-});
+  socket.on('reconnect', () => {
+    messengerRejoinRoomSaga();
+  });
+}
 
 /*
 
