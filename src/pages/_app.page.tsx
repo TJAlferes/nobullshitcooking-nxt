@@ -14,7 +14,7 @@ import { Header } from '../components/App/Header/desktop/Header';
 import { Main } from '../components/App/Main/Main';
 import { makeSearchConfig } from '../config/search';
 import { SagaStore, wrapper } from '../store';
-import { initializeSocketIOEventHandlers } from '../store/messenger/sagas';
+import { initializeMessenger } from '../store/messenger/sagas';
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -27,6 +27,8 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
     pathname.match(/\/verify/);
   
   const searchConfig = makeSearchConfig(store);
+  //initializeMessenger(store);
+
   // move these back to App.tsx? and make _app.page.tsx like old index.tsx?
   return (
     <SearchProvider config={searchConfig}>
@@ -49,7 +51,9 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
 }
 
 // Will disable ASO
-const getInitialProps = async ({ Component, ctx }: AppContext) => {
+NOBSCApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
+  //import App from 'next/app';
+  //App.getInitialProps() ???
   // wait for all page actions to dispatch
   const pageProps = {
     ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
@@ -60,13 +64,9 @@ const getInitialProps = async ({ Component, ctx }: AppContext) => {
     ctx.store.dispatch(END);
     await (ctx.store as SagaStore).sagaTask?.toPromise();
   } else {
-    // pass store to searchConfig
-    //const searchConfig = searchConfigInit(store);
-
-    // pass store to messenger sagas
-    initializeSocketIOEventHandlers(ctx.store);
-    //
-
+    //const searchConfig = makeSearchConfig(ctx.store);
+    //initializeMessenger(ctx.store);
+    //pageProps.
   }
 
   return {pageProps};

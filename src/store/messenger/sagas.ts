@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-//import { store } from '../index';  // pass?
 import {
   messengerConnected,
   messengerDisconnected,
@@ -29,12 +28,15 @@ import {
 } from './types';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
-const socket = io.connect(`${endpoint}`, {
-  autoConnect: false,
-  reconnection: true
-});
 
-export function initializeSocketIOEventHandlers(store: Store) {
+export function initializeMessenger(store: Store) {
+  if (typeof window === 'undefined') return;
+
+  const socket = io.connect(`${endpoint}`, {
+    autoConnect: false,
+    reconnection: true
+  });
+
   // TO DO: make better event names (server side too)
 
   /*
@@ -155,6 +157,7 @@ export function* messengerSendWhisperSaga(action: IMessengerSendWhisper) {
   socket.emit('AddWhisper', action.text, action.to);
 }
 
+// pass store in from actions?
 export function* messengerUpdateOnlineSaga() {
   const { messenger } = store.getState();
   if (messenger.status === "Connected") socket.emit('GetOnline');

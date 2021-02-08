@@ -32,7 +32,7 @@ export function Footer(): JSX.Element {
       </div>
 
       <p className="footer__copyright">
-        Copyright 2015-2021 NoBullshitCooking. All rights reserved.
+        &copy; {` 2015 - ${(new Date().getFullYear())}, NoBullshitCooking. All rights reserved.`}
       </p>
     </footer>
   );

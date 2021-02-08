@@ -1,285 +1,53 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
-import { Link } from 'react-router-dom';
 
+import { useTypedSelector as useSelector } from '../../store';
 import './breadcrumbs.css';
 
-interface RootState {
-  theme: {
-    breadCrumbsTheme: string;
-  };
-}
+// useRouter hook to get page and use that to dinamically set breadcrumb
+// or: https://github.com/NiklasMencke/nextjs-breadcrumbs
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
+export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
+  const theme = useSelector(state => state.theme.breadCrumbsTheme);
 
-type CuisineBreadcrumbsProps = PropsFromRedux & {
-  id: number;
-  name: string; 
-};
-
-type EquipmentBreadcrumbsProps = PropsFromRedux & {
-  id: number;
-  name: string; 
-};
-
-type IngredientBreadcrumbsProps = PropsFromRedux & {
-  id: number;
-  name: string;  // fullname?
-};
-
-type ProductBreadcrumbsProps = PropsFromRedux & {
-  id: number;
-  name: string;  // fullname?
-};
-
-type RecipeBreadcrumbsProps = PropsFromRedux & {
-  id: number;
-  title: string; 
-};
-
-const mapStateToProps = (state: RootState) => ({
-  breadCrumbsTheme: state.theme.breadCrumbsTheme
-});
-
-const connector = connect(mapStateToProps, {});
-
-function BreadcrumbsComponent({
-  breadCrumbsTheme
-}: PropsFromRedux): JSX.Element {
-  const BreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => (
-      <>
-        {breadcrumbs.map((
-          { breadcrumb, match }: any,
-          index: number
-        ) => (
-          <span className="crumb" key={match.url}>
-            <Link className="crumb-link" to={match.url}>{breadcrumb}</Link>
-            {
-              (index < breadcrumbs.length - 1) &&
-              <i className="crumb-pointer">&gt;</i>
-            }
-          </span>
-        ))}
-      </>
-    )
-  );
-
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <BreadcrumbsDisplay />
-    </div>
-  );
-}
-
-function CuisineBreadcrumbsComponent({
-  breadCrumbsTheme,
-  id,
-  name
-}: CuisineBreadcrumbsProps): JSX.Element {
-  const CuisineBreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => (
-      <>
-        {breadcrumbs.pop().map(
-          ({ breadcrumb, match }: any, index: number) => (
+  const Breadcrumbs = withBreadcrumbs()(({ breadcrumbs }: any): JSX.Element => {
+      if (page) breadcrumbs.pop();
+      return (
+        <>
+          {breadcrumbs.map(({ breadcrumb, match }: any, index: number) => (
             <span className="crumb" key={match.url}>
-              <Link className="crumb-link" to={match.url}>
-                {breadcrumb}
+              <Link href={match.url}>
+                <a className="crumb-link">{breadcrumb}</a>
               </Link>
-              {
-                (index < breadcrumbs.length) &&
-                <i className="crumb-pointer">{`&gt;`}</i>
-              }
+
+              {(index < breadcrumbs.length) &&
+                <i className="crumb-pointer">{`&gt;`}</i>}
             </span>
-          )
-        )}
-        <Link
-          className="crumb-link"
-          to={`/page/guide/food/cuisine/${id}`}
-        >
-          {name}
-        </Link>
-      </>
-    )
-  );
+          ))}
 
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <CuisineBreadcrumbsDisplay />
-    </div>
-  );
-}
-
-function EquipmentBreadcrumbsComponent({
-  breadCrumbsTheme,
-  id,
-  name
-}: EquipmentBreadcrumbsProps) {
-  const EquipmentBreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => {
-      breadcrumbs.pop();
-      return (
-        <>
-          {breadcrumbs.map(
-            ({ breadcrumb, match }: any, index: number) => (
-              <span className="crumb" key={match.url}>
-                <Link className="crumb-link" to={match.url}>
-                  {breadcrumb}
-                </Link>
-                {
-                  (index < breadcrumbs.length) &&
-                  <i className="crumb-pointer">{`&gt;`}</i>
-                }
-              </span>
-            )
+          {page && (
+            <Link href={`${page}${id}`}>
+              <a className="crumb-link">{name}</a>
+            </Link>
           )}
-          <Link
-            className="crumb-link"
-            to={`/equipment/${id}`}
-          >
-            {name}
-          </Link>
         </>
       );
     }
   );
 
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <EquipmentBreadcrumbsDisplay />
-    </div>
-  );
+  return <div className={`crumbs ${theme}`}><Breadcrumbs /></div>;
 }
 
-// fullname?
-function IngredientBreadcrumbsComponent({
-  breadCrumbsTheme,
-  id,
-  name
-}: IngredientBreadcrumbsProps) {
-  const IngredientBreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => {
-      breadcrumbs.pop();
-      return (
-        <>
-          {breadcrumbs.map(
-            ({ breadcrumb, match }: any, index: number) => (
-              <span className="crumb" key={match.url}>
-                <Link className="crumb-link" to={match.url}>
-                  {breadcrumb}
-                </Link>
-                {
-                  (index < breadcrumbs.length) &&
-                  <i className="crumb-pointer">{`&gt;`}</i>
-                }
-              </span>
-            )
-          )}
-          <Link
-            className="crumb-link"
-            to={`/ingredient/${id}`}
-          >
-            {name}
-          </Link>
-        </>
-      );
-    }
-  );
+// /page/guide/food/cuisine/
+// /equipment/
+// /ingredient/
+// /product/
+// /recipe/
 
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <IngredientBreadcrumbsDisplay />
-    </div>
-  );
-}
-
-// fullname?
-function ProductBreadcrumbsComponent({
-  breadCrumbsTheme,
-  id,
-  name
-}: ProductBreadcrumbsProps) {
-  const ProductBreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => {
-      breadcrumbs.pop();
-      return (
-        <>
-          {breadcrumbs.map(
-            ({ breadcrumb, match }: any, index: number) => (
-              <span className="crumb" key={match.url}>
-                <Link className="crumb-link" to={match.url}>
-                  {breadcrumb}
-                </Link>
-                {
-                  (index < breadcrumbs.length) &&
-                  <i className="crumb-pointer">{`&gt;`}</i>
-                }
-              </span>
-            )
-          )}
-          <Link
-            className="crumb-link"
-            to={`/product/${id}`}
-          >
-            {name}
-          </Link>
-        </>
-      );
-    }
-  );
-
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <ProductBreadcrumbsDisplay />
-    </div>
-  );
-}
-
-function RecipeBreadcrumbsComponent({
-  breadCrumbsTheme,
-  id,
-  title
-}: RecipeBreadcrumbsProps) {
-  const RecipeBreadcrumbsDisplay = withBreadcrumbs()(
-    ({ breadcrumbs }: any): JSX.Element => {
-      breadcrumbs.pop();
-      return (
-        <div className={`crumbs ${breadCrumbsTheme}`}>
-          {breadcrumbs.map(
-            ({ breadcrumb, match }: any, index: number) => (
-              <span className="crumb" key={match.url}>
-                <Link className="crumb-link" to={match.url}>
-                  {breadcrumb}
-                </Link>
-                {
-                  (index < breadcrumbs.length) &&
-                  <i className="crumb-pointer">{`&gt;`}</i>
-                }
-              </span>
-            )
-          )}
-          <Link
-            className="crumb-link"
-            to={`/recipe/${id}`}
-          >
-            {title}
-          </Link>
-        </div>
-      );
-    }
-  );
-
-  return (
-    <div className={`crumbs ${breadCrumbsTheme}`}>
-      <RecipeBreadcrumbsDisplay />
-    </div>
-  );
-}
-
-export const Breadcrumbs = connector(BreadcrumbsComponent);
-export const CuisineBreadcrumbs = connector(CuisineBreadcrumbsComponent);
-export const EquipmentBreadcrumbs = connector(EquipmentBreadcrumbsComponent);
-export const IngredientBreadcrumbs = connector(IngredientBreadcrumbsComponent);
-export const ProductBreadcrumbs = connector(ProductBreadcrumbsComponent);
-export const RecipeBreadcrumbs = connector(RecipeBreadcrumbsComponent);
+type Props = {
+  id: number;
+  name: string;
+  page?: string | null;
+};
