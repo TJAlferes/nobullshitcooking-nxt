@@ -49,9 +49,7 @@ export function Equipments({
 }: Props) {
   return (
     <div className={`search-results two-column-b ${twoColumnBTheme}`}>
-
       <div className="left-column">
-
         <h1>Equipment</h1>
 
         <ExpandCollapse
@@ -61,6 +59,7 @@ export function Equipments({
             <span className="search-results__filter-title">
               Filter equipment by:
             </span>
+
             <Facet
               facets={{
                 equipment_type_name: [
@@ -86,19 +85,20 @@ export function Equipments({
         </ExpandCollapse>
 
         {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
+
         {wasSearched && <PagingInfo />}
+
         <Paging />
 
         <div className="search-results__list">{listResults(results)}</div>
 
         {wasSearched && <PagingInfo />}
-        <Paging />
 
+        <Paging />
       </div>
 
       <div className="right-column">
       </div>
-      
     </div>
   );
 }

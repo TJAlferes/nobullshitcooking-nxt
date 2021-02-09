@@ -17,7 +17,7 @@ import {
 } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './NewEquipmentView';
 
-export function NewEquipment({ editing, oneColumnATheme }: Props): JSX.Element {
+export function NewEquipment({ editing }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -26,6 +26,7 @@ export function NewEquipment({ editing, oneColumnATheme }: Props): JSX.Element {
   const equipmentTypes = useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =
     useSelector(state => state.data.myPrivateEquipment);
+  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
   const staffIsAuthenticated =
     useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage = useSelector(state => state.staff.message);
@@ -241,7 +242,6 @@ export function NewEquipment({ editing, oneColumnATheme }: Props): JSX.Element {
 
 type Props = {
   editing: boolean;
-  oneColumnATheme: string;
 };
 
 export default NewEquipment;

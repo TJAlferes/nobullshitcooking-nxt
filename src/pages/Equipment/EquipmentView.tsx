@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EquipmentBreadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { IEquipment } from '../../store/data/types';
 import './equipment.css';
 
@@ -13,23 +13,18 @@ export function EquipmentView({
 
   return (
     <div className="equipment">
-
-      <EquipmentBreadcrumbs id={id} name={name} />
+      <Breadcrumbs id={id} name={name} page="/equipment/" />
 
       <div
         className={`equipment-view two-column-b ${twoColumnBTheme}`}
         data-test="equipment-view"
       >
-
         <div className="left-column">
-
           <div className="equipment-details">
-
             <h1 className="equipment__name">{name}</h1>
 
             <div className="equipment__image">
-              {
-                myPrivateEquipment.find(e => e.id === id)
+              {myPrivateEquipment.find(e => e.id === id)
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-equipment/${image}`} />
                 : <img src={`https://s3.amazonaws.com/nobsc-images-01/equipment/${image}.jpg`} />
               }
@@ -46,16 +41,12 @@ export function EquipmentView({
               {' '}
               <div className="equipment__description">{description}</div>
             </div>
-
           </div>
-
         </div>
 
         <div className="right-column">
         </div>
-
       </div>
-
     </div>
   );
 }

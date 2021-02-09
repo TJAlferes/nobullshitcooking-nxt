@@ -18,26 +18,26 @@ export function Plans({
   return (
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading">Plans</h2>
-      {
-        (!creatingPlan && !editingId) &&
+
+      {(!creatingPlan && !editingId) &&
         <Link href="/user-plan/submit">
           <a className="new-entity">Create New Plan</a>
         </Link>
       }
-      {
-        (creatingPlan && !editingId) &&
+
+      {(creatingPlan && !editingId) &&
         <Link href="/user-plan/submit">
           <a className="new-entity">Finish Creating Plan</a>
         </Link>
       }
-      {
-        (!creatingPlan && editingId) &&
+
+      {(!creatingPlan && editingId) &&
         <Link href={`/user-plan/edit/${editingId}`}>
           <a className="new-entity">Finish Updating Plan</a>
         </Link>
       }
-      {
-        modalActive
+
+      {modalActive
         ? (
           <AriaModal
             dialogClass="dashboard-content__modal"
@@ -69,21 +69,21 @@ export function Plans({
         )
         : false
       }
-      {
-        myPlans.length
+
+      {myPlans.length
         ? myPlans.map(p => (
           <div className="dashboard-content__item" key={p.id}>
             <span className="dashboard-content__item-name">
               <Link href={`/user-plan/${p.id}`}><a>{p.name}</a></Link>
             </span>
-            {
-              (!creatingPlan && !editingId) &&
+
+            {(!creatingPlan && !editingId) &&
               <span className="dashboard-content__item-action">
                 <Link href={`/user-plan/edit/${p.id}`}><a>Edit</a></Link>
               </span>
             }
-            {
-              (!creatingPlan && !editingId) &&
+
+            {(!creatingPlan && !editingId) &&
               <span
                 className="dashboard-content__item-delete"
                 onClick={() => activateModal(p.id, p.name)}

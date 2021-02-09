@@ -23,11 +23,9 @@ export function FriendsView({
 }: Props): JSX.Element {
   return (
     <div className={`friends two-column-a ${twoColumnATheme}`}>
-
       <LeftNav />
 
       <section>
-
         <h1>Friends</h1>
 
         <p className="friends__feedback">{feedback}</p>
@@ -100,8 +98,7 @@ export function FriendsView({
         </div>
 
         <div className="friends__list">
-          {
-            myFriendships
+          {myFriendships
             .filter(f => f.status === tab)
             .map(f => (
               <div className="friends__list-item" key={f.username}>
@@ -115,8 +112,7 @@ export function FriendsView({
                   </Link>
                 </span>
 
-                {
-                  f.status === "pending-received" &&
+                {f.status === "pending-received" &&
                   <button
                     className="friends__list-item-action"
                     disabled={loading}
@@ -128,8 +124,7 @@ export function FriendsView({
                   </button>
                 }
 
-                {
-                  f.status === "pending-received" &&
+                {f.status === "pending-received" &&
                   <button
                     className="friends__list-item-delete"
                     disabled={loading}
@@ -141,8 +136,7 @@ export function FriendsView({
                   </button>
                 }
 
-                {
-                  f.status === "accepted" &&
+                {f.status === "accepted" &&
                   <button
                     className="friends__list-item-delete"
                     disabled={loading}
@@ -154,8 +148,7 @@ export function FriendsView({
                   </button>
                 }
                 
-                {
-                  f.status === "blocked" &&
+                {f.status === "blocked" &&
                   <button
                     className="friends__list-item-delete"
                     disabled={loading}
@@ -171,7 +164,6 @@ export function FriendsView({
           }
         </div>
       </section>
-
     </div>
   );
 }

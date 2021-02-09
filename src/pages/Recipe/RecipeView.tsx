@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { RecipeBreadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { IWorkRecipe } from '../../store/data/types';
 import { IRecipe } from './Recipe';
 import './recipe.css';
@@ -50,15 +50,11 @@ export function RecipeView({
 
   return (
     <div className="recipe">
-
-      <RecipeBreadcrumbs id={id} title={title} />
+      <Breadcrumbs id={id} name={title} page="/recipe/" />
 
       <div className={`recipe-view two-column-b ${twoColumnBTheme}`}>
-
         <div className="left-column">
-
           <div className="recipe-details">
-
             <h1 className="recipe__title">{title}</h1>
 
             <p className="recipe__feedback">{feedback}</p>
@@ -68,63 +64,70 @@ export function RecipeView({
                 userIsAuthenticated &&
                 !myPrivateRecipes.find(r => r.id == id) &&
                 !myPublicRecipes.find(r => r.id == id)
-              ) ? (
-                <>
-                  {
-                    myFavoriteRecipes.find(r => r.id == id) ? (
-                      <span className="recipe__favorited-saved">
-                        Favorited
-                      </span>
-                    ) : (
-                      !favoriteClicked ? (
-                        <button
-                          className="recipe__favorite-save"
-                          disabled={loading}
-                          name="favorite-button"
-                          onClick={handleFavoriteClick}
-                        >
-                          Favorite
-                        </button>
-                      ) : (
-                        <span
-                          className="recipe__favorited-saved"
-                          data-test="favorited-span"
-                        >
+              )
+                ? (
+                  <>
+                    {myFavoriteRecipes.find(r => r.id == id)
+                      ? (
+                        <span className="recipe__favorited-saved">
                           Favorited
                         </span>
                       )
-                    )
-                  }
-                  {
-                    mySavedRecipes.find(r => r.id == id)
-                    ? <span className="recipe__favorited-saved">Saved</span>
-                    : (
-                      !saveClicked ? (
-                        <button
-                          className="recipe__favorite-save"
-                          disabled={loading}
-                          name="save-button"
-                          onClick={handleSaveClick}
-                        >
-                          Save
-                        </button>
-                      ) : (
-                        <span
-                          className="recipe__favorited-saved"
-                          data-test="saved-span"
-                        >
-                          Saved
-                        </span>
+                      : (
+                        !favoriteClicked
+                        ? (
+                          <button
+                            className="recipe__favorite-save"
+                            disabled={loading}
+                            name="favorite-button"
+                            onClick={handleFavoriteClick}
+                          >
+                            Favorite
+                          </button>
+                        )
+                        : (
+                          <span
+                            className="recipe__favorited-saved"
+                            data-test="favorited-span"
+                          >
+                            Favorited
+                          </span>
+                        )
                       )
-                    )
-                  }
-                </>
-              ) : false}
+                    }
+
+                    {mySavedRecipes.find(r => r.id == id)
+                      ? <span className="recipe__favorited-saved">Saved</span>
+                      : (
+                        !saveClicked
+                        ? (
+                          <button
+                            className="recipe__favorite-save"
+                            disabled={loading}
+                            name="save-button"
+                            onClick={handleSaveClick}
+                          >
+                            Save
+                          </button>
+                        )
+                        : (
+                          <span
+                            className="recipe__favorited-saved"
+                            data-test="saved-span"
+                          >
+                            Saved
+                          </span>
+                        )
+                      )
+                    }
+                  </>
+                )
+                : false
+              }
             </div>
 
             <div className="recipe__image">
-              {
-                recipe_image !== "nobsc-recipe-default"
+              {recipe_image !== "nobsc-recipe-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe_image}`} />
                 : (
                   <div
@@ -172,8 +175,7 @@ export function RecipeView({
               Required Equipment
             </h2>
             <div className="recipe__equipment-image">
-              {
-                equipment_image !== "nobsc-recipe-equipment-default"
+              {equipment_image !== "nobsc-recipe-equipment-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe-equipment/${equipment_image}`} />
                 : (
                   <div
@@ -201,8 +203,7 @@ export function RecipeView({
               Required Ingredients
             </h2>
             <div className="recipe__ingredients-image">
-              {
-                ingredients_image !== "nobsc-recipe-ingredients-default"
+              {ingredients_image !== "nobsc-recipe-ingredients-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe-ingredients/${ingredients_image}`} />
                 : (
                   <div
@@ -230,8 +231,7 @@ export function RecipeView({
               Required Subrecipes
             </h2>
             <div className="recipe__required-subrecipes">
-              {
-                required_subrecipes
+              {required_subrecipes
                 ? required_subrecipes.map(s => (
                   <div
                     className="recipe__required-subrecipe"
@@ -248,8 +248,7 @@ export function RecipeView({
               Directions
             </h2>
             <div className="recipe__cooking-image">
-              {
-                cooking_image !== "nobsc-recipe-cooking-default"
+              {cooking_image !== "nobsc-recipe-cooking-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe-cooking/${cooking_image}`} />
                 : (
                   <div
@@ -263,16 +262,12 @@ export function RecipeView({
             <div className="recipe__directions">
               {directions}
             </div>
-            
           </div>
-
         </div>
 
         <div className="right-column">
         </div>
-
       </div>
-
     </div>
   );
 }

@@ -128,21 +128,20 @@ export function NewPlanView({
 
   return (
     <div className="new-plan-view">
-
       <div>
         <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+
         <span>
           <Link href="/dashboard"><a>Dashboard</a></Link><i>{`&gt;`}</i>
         </span>
+
         <span>{editing ? 'Edit Plan' : 'Create New Plan'}</span>
       </div>
 
       <div className={`new-plan two-column-a ${twoColumnATheme}`}> 
-
         <LeftNav />
 
         <section>
-
           <div className="new-plan__heading">
             <h1>{editing ? 'Edit Plan' : 'Create New Plan'}</h1>
 
@@ -163,7 +162,6 @@ export function NewPlanView({
           <hr className="new-plan__hr" />
 
           <div className="new-plan__calendar-container">
-
             {memoizedMonthlyPlan}
 
             <div className="planner__recipes-tabs">
@@ -175,7 +173,6 @@ export function NewPlanView({
             </div>
 
             {memoizedRecipes}
-
           </div>
 
           <div>
@@ -201,8 +198,8 @@ export function NewPlanView({
             <button className="planner__cancel-button" onClick={activateModal}>
               Cancel
             </button>
-            {
-              modalActive
+
+            {modalActive
               ? (
                 <AriaModal
                   dialogClass="planner__cancel-modal"
@@ -234,6 +231,7 @@ export function NewPlanView({
               )
               : false
             }
+
             <LoaderButton
               className="planner__submit-button"
               id="planner-submit-button"
@@ -244,11 +242,8 @@ export function NewPlanView({
               text="Save Plan"
             />
           </div>
-
         </section>
-
       </div>
-
     </div>
   );
 }

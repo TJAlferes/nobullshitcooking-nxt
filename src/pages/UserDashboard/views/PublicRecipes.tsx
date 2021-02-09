@@ -19,11 +19,12 @@ export function PublicRecipes({
   return (
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading">Public Recipes</h2>
+
       <Link href="/user-recipes/public/submit">
         <a className="new-entity">Create New Public Recipe</a>
       </Link>
-      {
-        modalActive
+
+      {modalActive
         ? (
           <AriaModal
             dialogClass="dashboard-content__modal"
@@ -58,13 +59,11 @@ export function PublicRecipes({
 
       <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
 
-      {
-        myPublicRecipes.length
+      {myPublicRecipes.length
         ? myPublicRecipes.map(r => (
           <div className="dashboard-content__item" key={r.id}>
             <span className="dashboard-content__item-tiny">
-              {
-                r.recipe_image !== "nobsc-recipe-default"
+              {r.recipe_image !== "nobsc-recipe-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe${r.recipe_image}-tiny`} />
                 : <div className="image-default-28-18"></div>
               }

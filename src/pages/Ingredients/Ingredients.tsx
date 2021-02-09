@@ -55,9 +55,7 @@ export function Ingredients({
 }: Props) {
   return (
     <div className={`search-results two-column-b ${twoColumnBTheme}`}>
-
       <div className="left-column">
-
         <h1>Ingredients</h1>
 
         <ExpandCollapse
@@ -67,6 +65,7 @@ export function Ingredients({
             <span className="search-results__filter-title">
               Filter ingredients by:
             </span>
+
             <Facet
               facets={{
                 ingredient_type_name: [
@@ -105,19 +104,20 @@ export function Ingredients({
         </ExpandCollapse>
 
         {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
+
         {wasSearched && <PagingInfo />}
+
         <Paging />
 
         <div className="search-results__list">{listResults(results)}</div>
 
         {wasSearched && <PagingInfo />}
-        <Paging />
 
+        <Paging />
       </div>
 
       <div className="right-column">
       </div>
-      
     </div>
   );
 }

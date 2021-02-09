@@ -34,24 +34,26 @@ export function NewEquipmentView({
 }: Props): JSX.Element {
   // move up into parent container NewEquipment component?
   const dir = staffIsAuthenticated
-  ? 'https://s3.amazonaws.com/nobsc-images-01/equipment'
-  : 'https://s3.amazonaws.com/nobsc-user-equipment';
+    ? 'https://s3.amazonaws.com/nobsc-images-01/equipment'
+    : 'https://s3.amazonaws.com/nobsc-user-equipment';
+
   const page = staffIsAuthenticated
     ? editing ? 'Edit Equipment' : 'Create New Equipment'
     : editing ? 'Edit Private Equipment' : 'Create New Private Equipment';
+
   const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
   return (
     <div className="new-equipment-view">
-
       <div>
         <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+
         <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+
         <span>{page}</span>
       </div>
 
       <div className={`new-equipment one-column-a ${oneColumnATheme}`}>
-        
         <h1>{page}</h1>
 
         <p className="new-equipment__feedback">{feedback}</p>
@@ -59,6 +61,7 @@ export function NewEquipmentView({
         <h2 className="new-equipment__h2" data-test="equipment-type-heading">
           Type of Equipment
         </h2>
+
         <select
           name="equipmentType"
           onChange={handleTypeChange}
@@ -71,9 +74,8 @@ export function NewEquipmentView({
           ))}
         </select>
 
-        <h2 className="new-equipment__h2" data-test="name-heading">
-          Name
-        </h2>
+        <h2 className="new-equipment__h2" data-test="name-heading">Name</h2>
+
         <input
           className="new-equipment__name"
           onChange={handleNameChange}
@@ -84,6 +86,7 @@ export function NewEquipmentView({
         <h2 className="new-equipment__h2" data-test="description-heading">
           Description
         </h2>
+
         <textarea
           className="new-equipment__description"
           onChange={handleDescriptionChange}
@@ -94,14 +97,16 @@ export function NewEquipmentView({
           <h2 className="new-equipment__h2" data-test="image-heading">
             Image of Equipment
           </h2>
+
           {!image && (
             <div>
-              {
-                !editing
+              {!editing
                 ? <img src={`${dir}/nobsc-equipment-default`} />
                 : prevImage && <img src={`${dir}/${prevImage}`} />
               }
+
               <h4 className="new-equipment__h4">Change</h4>
+
               <input
                 className="new-equipment__image-input"
                 type="file"
@@ -110,6 +115,7 @@ export function NewEquipmentView({
               />
             </div>
           )}
+
           {image && (
             <div>
               <ReactCrop
@@ -122,19 +128,25 @@ export function NewEquipmentView({
                 src={image as string}
                 style={{minHeight: "300px"}}
               />
+
               <span className="new-equipment__crop-tool-tip">
                 Move the crop to your desired position. These two images will be saved for you:
               </span>
+
               <div className="new-equipment__crops">
                 <div className="new-equipment__crop-full-outer">
                   <span>Full Size: </span>
+
                   <img className="new-equipment__crop-full" src={fullCrop} />
                 </div>
+
                 <div className="new-equipment__crop-tiny-outer">
                   <span>Tiny Size: </span>
+
                   <img className="new-equipment__crop-tiny" src={tinyCrop} />
                 </div>
               </div>
+
               <button
                 className="new-equipment__image-cancel-button"
                 disabled={loading}
@@ -150,6 +162,7 @@ export function NewEquipmentView({
           <Link href={path}>
             <a className="new-equipment__cancel-button">Cancel</a>
           </Link>
+
           <LoaderButton
             className="new-equipment__submit-button"
             id="create_new_private_user_equipment_button"
@@ -160,9 +173,7 @@ export function NewEquipmentView({
             text="Create"
           />
         </div>
-
       </div>
-
     </div>
   );
 }

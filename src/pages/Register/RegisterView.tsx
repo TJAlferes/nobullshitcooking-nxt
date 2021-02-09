@@ -180,7 +180,6 @@ export function RegisterView({
       <p className="register__copyright">
         Copyright 2015-2020 NoBullshitCooking. All Rights Reserved.
       </p>
-
     </div>
   );
 }

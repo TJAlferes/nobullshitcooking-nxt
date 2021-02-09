@@ -53,7 +53,7 @@ const Recipe: FC<Props> = ({
   const [ , drop ] = useDrop({
     accept: Types.PLANNER_RECIPE,
     hover: (item: IDragItem, monitor: DropTargetMonitor) => {
-      if(!item) return;  // ?
+      if (!item) return;  // ?
 
       if (!ref.current) return;
 

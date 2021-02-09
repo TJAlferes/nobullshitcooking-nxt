@@ -49,10 +49,7 @@ const HOTKEYS: {
   'mod+i': 'italic'
 };
 
-export default function NewContent({
-  editing,
-  oneColumnATheme
-}: Props): JSX.Element {
+export default function NewContent({ editing }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -60,6 +57,7 @@ export default function NewContent({
   const creating = useSelector(state => state.editor.creating);
   const contentTypes = useSelector(state => state.data.contentTypes);
   const editingId = useSelector(state => state.editor.editingId);
+  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
   const staffIsAuthenticated =
     useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage = useSelector(state => state.staff.message);
@@ -267,5 +265,4 @@ export default function NewContent({
 
 type Props = {
   editing: boolean;
-  oneColumnATheme: string;
 };

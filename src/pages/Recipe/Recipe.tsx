@@ -96,24 +96,24 @@ export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
   };
 
   return !recipe
-  ? <LoaderSpinner />
-  : (
-    <RecipeView
-      myFavoriteRecipes={myFavoriteRecipes}
-      myPrivateRecipes={myPrivateRecipes}
-      myPublicRecipes={myPublicRecipes}
-      mySavedRecipes={mySavedRecipes}
-      favoriteClicked={favoriteClicked}
-      feedback={feedback}
-      handleFavoriteClick={handleFavoriteClick}
-      handleSaveClick={handleSaveClick}
-      loading={loading}
-      recipe={recipe}
-      saveClicked={saveClicked}
-      twoColumnBTheme={twoColumnBTheme}
-      userIsAuthenticated={userIsAuthenticated}
-    />
-  );
+    ? <LoaderSpinner />
+    : (
+      <RecipeView
+        myFavoriteRecipes={myFavoriteRecipes}
+        myPrivateRecipes={myPrivateRecipes}
+        myPublicRecipes={myPublicRecipes}
+        mySavedRecipes={mySavedRecipes}
+        favoriteClicked={favoriteClicked}
+        feedback={feedback}
+        handleFavoriteClick={handleFavoriteClick}
+        handleSaveClick={handleSaveClick}
+        loading={loading}
+        recipe={recipe}
+        saveClicked={saveClicked}
+        twoColumnBTheme={twoColumnBTheme}
+        userIsAuthenticated={userIsAuthenticated}
+      />
+    );
 }
 
 export interface IRecipe {

@@ -22,9 +22,9 @@ export function ProfileView({
 }: Props): JSX.Element {
   return (
     <div className="profile-view">
-
       <div>
         <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+
         <span>{username}</span>
       </div>
 
@@ -33,8 +33,7 @@ export function ProfileView({
 
         <p className="profile__feedback">{feedback}</p>
 
-        {
-          userAvatar !== "nobsc-user-default" &&
+        {userAvatar !== "nobsc-user-default" &&
           <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${userAvatar}`} />
         }
         

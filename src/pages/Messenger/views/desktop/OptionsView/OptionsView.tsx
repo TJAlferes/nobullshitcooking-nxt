@@ -14,7 +14,6 @@ export function OptionsView({
 }: Props): JSX.Element {
   return (
     <div className="messenger__options">
-
       <div className="options__connection">
         <div className="connection-button-frame">
           <button
@@ -58,7 +57,6 @@ export function OptionsView({
           </button>
         </div>
       </div>
-      
     </div>
   );
 }

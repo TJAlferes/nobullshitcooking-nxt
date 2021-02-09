@@ -6,7 +6,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { IIngredient } from '../../store/data/types';
 import { IngredientView } from './IngredientView';
 
-export function Ingredient({ twoColumnBTheme }: Props): JSX.Element {
+export default function Ingredient(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -14,6 +14,7 @@ export function Ingredient({ twoColumnBTheme }: Props): JSX.Element {
     useSelector(state => state.data.officialIngredients);
   const myPrivateIngredients =
     useSelector(state => state.data.myPrivateIngredients);
+  const twoColumnBTheme = useSelector(state => state.theme.twoColumnBTheme);
 
   const [ ingredient, setIngredient ] = useState<IIngredient | null>(null);
 
@@ -37,18 +38,12 @@ export function Ingredient({ twoColumnBTheme }: Props): JSX.Element {
   }, []);
 
   return !ingredient
-  ? <LoaderSpinner />
-  : (
-    <IngredientView
-      myPrivateIngredients={myPrivateIngredients}
-      ingredient={ingredient}
-      twoColumnBTheme={twoColumnBTheme}
-    />
-  );
+    ? <LoaderSpinner />
+    : (
+      <IngredientView
+        myPrivateIngredients={myPrivateIngredients}
+        ingredient={ingredient}
+        twoColumnBTheme={twoColumnBTheme}
+      />
+    );
 }
-
-type Props = {
-  twoColumnBTheme: string;
-};
-
-export default Ingredient;

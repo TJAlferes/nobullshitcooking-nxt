@@ -1,7 +1,7 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-import { ProductBreadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton/AddToCartButton';
 import { IProduct } from './Product';
@@ -19,13 +19,10 @@ export function ProductView({
 
   return (
     <div className="product">
-
-      <ProductBreadcrumbs id={id} name={fullname} />
+      <Breadcrumbs id={id} name={fullname} page="/product/" />
 
       <div className={`product-view one-column-a ${oneColumnATheme}`}>
-
         <div className="product__top">
-
           <div className="product__top-left">
             <div></div>
             <div>
@@ -36,11 +33,8 @@ export function ProductView({
           <div className="product__top-right">
             {/*<AddToCartButton item={product} />*/}
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }

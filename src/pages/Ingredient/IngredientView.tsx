@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IngredientBreadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { IIngredient } from '../../store/data/types';
 import './ingredient.css';
 
@@ -15,18 +15,14 @@ export function IngredientView({
 
   return (
     <div className="ingredient">
-
-      <IngredientBreadcrumbs id={id} name={name} />
+      <Breadcrumbs id={id} name={name} page="/ingredient/" />
 
       <div
         className={`ingredient-view two-column-b ${twoColumnBTheme}`}
         data-test="ingredient-view"
       >
-
         <div className="left-column">
-
           <div className="ingredient-details">
-
             <h1 className="ingredient__name">
               {brand && (brand + ' ')}
               {variety && (variety + ' ')}
@@ -34,8 +30,7 @@ export function IngredientView({
             </h1>
 
             <div className="ingredient__image">
-              {
-                myPrivateIngredients.find(ing => ing.id === id)
+              {myPrivateIngredients.find(ing => ing.id === id)
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-ingredients/${image}`} />
                 : <img src={`https://s3.amazonaws.com/nobsc-images-01/ingredients/${image}.jpg`} />
               }
@@ -52,16 +47,12 @@ export function IngredientView({
               {' '}
               <div className="ingredient__description">{description}</div>
             </div>
-
           </div>
-
         </div>
 
         <div className="right-column">
         </div>
-
       </div>
-
     </div>
   );
 }

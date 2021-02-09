@@ -1,26 +1,26 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';
-import { IWorkProduct } from '../../store/data/types';
+import { useTypedSelector as useSelector } from '../../store';
 import { ProductView } from './ProductView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export function Product({
-  dataProducts,
-  message,
-  oneColumnATheme,
-  userIsAuthenticated
-}: Props): JSX.Element {
+export default function Product(): JSX.Element {
   const history = useHistory();
   const location = useLocation();
   const { id } = useParams();
+
+  const products = useSelector(state => state.data.products);
+  const message = useSelector(state => state.user.message);
+  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
+  const userIsAuthenticated =
+    useSelector(state => state.auth.userIsAuthenticated);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -55,17 +55,17 @@ export function Product({
   }, []);
 
   return !product
-  ? <LoaderSpinner />
-  : (
-    <ProductView
-      dataProducts={dataProducts}
-      feedback={feedback}
-      loading={loading}
-      product={product}
-      oneColumnATheme={oneColumnATheme}
-      userIsAuthenticated={userIsAuthenticated}
-    />
-  );
+    ? <LoaderSpinner />
+    : (
+      <ProductView
+        products={products}
+        feedback={feedback}
+        loading={loading}
+        product={product}
+        oneColumnATheme={oneColumnATheme}
+        userIsAuthenticated={userIsAuthenticated}
+      />
+    );
 }
 
 export interface IProduct {
@@ -74,31 +74,3 @@ export interface IProduct {
   supplier_id: number;
   fullname: string;
 };
-
-interface RootState {
-  auth: {
-    userIsAuthenticated: boolean;
-  };
-  data: {
-    products: IWorkProduct[];
-  };
-  user: {
-    message: string;
-  };
-}
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
-  oneColumnATheme: string;
-};
-
-const mapStateToProps = (state: RootState) => ({
-  dataProducts: state.data.products,
-  message: state.user.message,
-  userIsAuthenticated: state.auth.userIsAuthenticated
-});
-
-const connector = connect(mapStateToProps, {});
-
-export default connector(Product);

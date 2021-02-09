@@ -13,14 +13,15 @@ import { ProfileView } from './ProfileView';
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export default function Profile({ oneColumnATheme }: Props): JSX.Element {
+export default function Profile(): JSX.Element {
   const router = useRouter();
   const { username } = router.query;
 
   const dispatch = useDispatch();
   const authname = useSelector(state => state.auth.authname);
   const myFriendships = useSelector(state => state.data.myFriendships);
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
+  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message = useSelector(state => state.user.message);
 
   const [ clicked, setClicked ] = useState(false);
@@ -79,27 +80,23 @@ export default function Profile({ oneColumnATheme }: Props): JSX.Element {
   const handleTabChange = (value: string) => setTab(value);
 
   return !username
-  ? <LoaderSpinner />
-  : (
-    <ProfileView
-      authname={authname}
-      clicked={clicked}
-      myFriendships={myFriendships}
-      feedback={feedback}
-      handleFriendRequestClick={handleFriendRequestClick}
-      handleTabChange={handleTabChange}
-      isAuthenticated={isAuthenticated}
-      loading={loading}
-      oneColumnATheme={oneColumnATheme}
-      tab={tab}
-      userAvatar={userAvatar}
-      username={username}
-      userPublicRecipes={userPublicRecipes}
-      userFavoriteRecipes={userFavoriteRecipes}
-    />
-  );
+    ? <LoaderSpinner />
+    : (
+      <ProfileView
+        authname={authname}
+        clicked={clicked}
+        myFriendships={myFriendships}
+        feedback={feedback}
+        handleFriendRequestClick={handleFriendRequestClick}
+        handleTabChange={handleTabChange}
+        userIsAuthenticated={userIsAuthenticated}
+        loading={loading}
+        oneColumnATheme={oneColumnATheme}
+        tab={tab}
+        userAvatar={userAvatar}
+        username={username}
+        userPublicRecipes={userPublicRecipes}
+        userFavoriteRecipes={userFavoriteRecipes}
+      />
+    );
 }
-
-type Props = {
-  oneColumnATheme: string;
-};

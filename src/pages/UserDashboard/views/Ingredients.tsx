@@ -15,13 +15,11 @@ export function Ingredients({
         <a className="new-entity">Create New Ingredient</a>
       </Link>
 
-      {
-        myPrivateIngredients.length
+      {myPrivateIngredients.length
         ? myPrivateIngredients.map(i => (
           <div className="dashboard-content__item" key={i.id}>
             <span className="dashboard-content__item-tiny">
-              {
-                i.image !== "nobsc-ingredient-default"
+              {i.image !== "nobsc-ingredient-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-ingredients/${i.image}-tiny`} />
                 : <div className="image-default-28-18"></div>
               }

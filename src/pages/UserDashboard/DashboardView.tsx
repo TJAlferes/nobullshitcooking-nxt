@@ -64,11 +64,9 @@ export function DashboardView({
 }: Props): JSX.Element {
   return (
     <div className={`dashboard two-column-a ${twoColumnATheme}`}>
-
       <LeftNav />
 
       <section>
-
         <h1>{authname}</h1>
 
         <p className="dashboard__feedback">{feedback}</p>
@@ -84,6 +82,7 @@ export function DashboardView({
                 onSelectFile={onSelectFile}
               />
             )}
+
             {avatar && (
               <AvatarEdit
                 avatar={avatar}
@@ -175,9 +174,7 @@ export function DashboardView({
             myPrivateEquipment={myPrivateEquipment}
           />
         )}
-
       </section>
-
     </div>
   );
 }

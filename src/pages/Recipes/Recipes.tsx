@@ -45,8 +45,7 @@ function listResults(results: any) {
               </div>
             </div>
             
-            {
-              (r.recipe_image.raw !== "nobsc-recipe-default")
+            {r.recipe_image.raw !== "nobsc-recipe-default"
               ? (
                 <img
                   className="recipes-image"
@@ -73,9 +72,7 @@ export function Recipes({
 }: Props) {
   return (
     <div className={`search-results two-column-b ${twoColumnBTheme}`}>
-
       <div className="left-column">
-
         <h1>Recipes</h1>
 
         {/* Note to self: the `facets` props below are set incorrectly, fix them */}
@@ -88,6 +85,7 @@ export function Recipes({
             <span className="search-results__filter-title">
               Filter recipes by:
             </span>
+
             <Facet
               facets={{
                 recipe_type_name: [
@@ -116,6 +114,7 @@ export function Recipes({
               label="Recipe Types"
               show={12}
             />
+
             <Facet
               facets={{
                 cuisine_name: [
@@ -156,6 +155,7 @@ export function Recipes({
               label="Cuisines"
               show={24}
             />
+
             <Facet
               facets={{
                 method_names: [
@@ -200,19 +200,20 @@ export function Recipes({
         </ExpandCollapse>
 
         {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
+
         {wasSearched && <PagingInfo />}
+
         <Paging />
 
         <div className="search-results__list">{listResults(results)}</div>
 
         {wasSearched && <PagingInfo />}
-        <Paging />
 
+        <Paging />
       </div>
 
       <div className="right-column">
       </div>
-      
     </div>
   );
 }

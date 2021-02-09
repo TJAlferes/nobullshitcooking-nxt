@@ -21,7 +21,7 @@ import {
 } from '../../utils/imageCropPreviews/imageCropPreviews';
 import { DashboardView } from './DashboardView';
 
-export default function Dashboard({ twoColumnATheme }: Props): JSX.Element {
+export default function Dashboard(): JSX.Element {
   const dispatch = useDispatch();
   const authname = useSelector(state => state.auth.authname);
   const creatingPlan = useSelector(state => state.planner.creating);
@@ -37,6 +37,7 @@ export default function Dashboard({ twoColumnATheme }: Props): JSX.Element {
     myPublicRecipes,
     mySavedRecipes
   } = useSelector(state => state.data);
+  const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -222,7 +223,3 @@ export default function Dashboard({ twoColumnATheme }: Props): JSX.Element {
     />
   );
 }
-
-type Props = {
-  twoColumnATheme: string;
-};

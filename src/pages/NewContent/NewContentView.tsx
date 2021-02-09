@@ -48,7 +48,6 @@ export function NewContentView({
   ? <LoaderSpinner />
   : (
     <div className={`new-content ${oneColumnATheme}`}>
-
       <h1 className="new-content__heading">New Content</h1>
 
       <p className="new-content__feedback">{feedback}</p>
@@ -62,6 +61,7 @@ export function NewContentView({
           <h2 className="new-content__h2" data-test="content-type-heading">
             Type of Content
           </h2>
+
           <select
             id="content_type_id"
             name="contentType"
@@ -82,6 +82,7 @@ export function NewContentView({
       <h2 className="new-content__h2" data-test="save-type-heading">
         Save Type
       </h2>
+
       <div className="save-type-spans">
         <span className="save-type-span">
           <input
@@ -93,8 +94,10 @@ export function NewContentView({
             type="radio"
             value="draft"
           />
+
           <label className="save-type-span-label">Draft</label>
         </span>
+
         <span className="save-type-span">
           <input
             checked={published === null}
@@ -105,6 +108,7 @@ export function NewContentView({
             type="radio"
             value="publish"
           />
+
           <label className="save-type-span-label">Publish</label>
         </span>
       </div>
@@ -118,6 +122,7 @@ export function NewContentView({
           <LinkButton />
           <InsertImageButton />
         </Toolbar>
+        
         <Editable
           autoFocus
           onKeyDown={handleKeyDown}

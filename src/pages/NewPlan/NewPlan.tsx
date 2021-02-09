@@ -11,19 +11,13 @@ import {
   plannerSetPlanData
 } from '../../store/planner/actions';
 import { userCreateNewPlan, userEditPlan } from '../../store/user/plan/actions';
-//import { MobileNewPlanView } from './views/MobileNewPlanView';
 import { NewPlanView } from './NewPlanView';
 
-export function NewPlan({
-  editing,
-  //planView,
-  twoColumnATheme
-}: Props): JSX.Element {
+export function NewPlan({ editing }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
-
   const {
     myFavoriteRecipes,
     myPlans,
@@ -39,6 +33,7 @@ export function NewPlan({
   const planName = useSelector(state => state.planner.planName);
   const recipeListsInsideDays =
     useSelector(state => state.planner.recipeListsInsideDays);
+  const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -159,33 +154,6 @@ export function NewPlan({
     }
   }
 
-  /*return (planView === "mobile")
-  ? (
-    <MobileNewPlanView
-      feedback={feedback}
-      loading={loading}
-      editing={editing}
-      planName={planName}
-      handlePlanNameChange={handlePlanNameChange}
-      recipeListsInsideDays={recipeListsInsideDays}
-      expandedDay={expandedDay}
-      expanded={expanded}
-      dataRecipes={dataRecipes}
-      dataMyPrivateRecipes={dataMyPrivateRecipes}
-      dataMyPublicRecipes={dataMyPublicRecipes}
-      dataMyFavoriteRecipes={dataMyFavoriteRecipes}
-      dataMySavedRecipes={dataMySavedRecipes}
-      tab={tab}
-      handleTabClick={handleTabClick}
-      modalActive={modalActive}
-      activateModal={activateModal}
-      deactivateModal={deactivateModal}
-      getApplicationNode={getApplicationNode}
-      discardChanges={discardChanges}
-      handleSubmit={handleSubmit}
-    />
-  )
-  :*/
   return (
     <NewPlanView
       activateModal={activateModal}
@@ -216,8 +184,6 @@ export function NewPlan({
 
 type Props = {
   editing: boolean;
-  planView: string;
-  twoColumnATheme: string;
 };
 
 export default NewPlan;

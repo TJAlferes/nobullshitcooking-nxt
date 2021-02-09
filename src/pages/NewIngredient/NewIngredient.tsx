@@ -17,10 +17,7 @@ import {
 } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './NewIngredientView';
 
-export function NewIngredient({
-  editing,
-  oneColumnATheme
-}: Props): JSX.Element {
+export function NewIngredient({ editing }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -31,6 +28,7 @@ export function NewIngredient({
   const userMessage = useSelector(state => state.user.message);
   const officialIngredients =
     useSelector(state => state.data.officialIngredients);
+  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
   const ingredientTypes = useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients =
     useSelector(state => state.data.myPrivateIngredients);
@@ -245,7 +243,6 @@ export function NewIngredient({
 
 type Props = {
   editing: boolean;
-  oneColumnATheme: string;
 };
 
 export default NewIngredient;

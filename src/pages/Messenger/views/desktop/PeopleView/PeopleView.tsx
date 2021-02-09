@@ -16,7 +16,6 @@ export function PeopleView({
 }: Props): JSX.Element {
   return (
     <div className="messenger__people">
-      
       <div className="people__tabs">
         <button
           className={
@@ -49,8 +48,7 @@ export function PeopleView({
               
               <span>{u.username}</span>
 
-              {
-                focusedUser && focusedUser.username === u.username &&
+              {focusedUser && focusedUser.username === u.username &&
                 <div className="messenger__person-tooltip">
                   <button
                     className="person-tooltip__start-whisper"
@@ -77,8 +75,7 @@ export function PeopleView({
               
               <span>{f.username}</span>
               
-              {
-                focusedFriend && focusedFriend.username === f.username &&
+              {focusedFriend && focusedFriend.username === f.username &&
                 <div className="messenger__person-tooltip">
                   <button
                     className="person-tooltip__start-whisper"
@@ -92,7 +89,6 @@ export function PeopleView({
           ))}
         </ul>
       )}
-
     </div>
   );
 }

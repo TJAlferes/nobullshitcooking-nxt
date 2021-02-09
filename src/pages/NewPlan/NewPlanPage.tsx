@@ -11,23 +11,13 @@ export default function NewPlanPage({
 }: Props): JSX.Element {
   return (
     <div className="new-plan-page">
-      {/*<div className="mobile">
-        <LazyBoundary fallback={<div>Loading...</div>} >
-          <MobileNewPlanToggle
-            editing={editing}
-            twoColumnATheme={twoColumnATheme}
-          />
-        </LazyBoundary>
-      </div>*/}
-      <div className="desktop">
-        <LazyBoundary fallback={<div>Loading...</div>} >
-          <NewPlan
-            editing={editing}
-            planView="desktop"
-            twoColumnATheme={twoColumnATheme}
-          />
-        </LazyBoundary>
-      </div>
+      <LazyBoundary fallback={<div>Loading...</div>} >
+        <NewPlan
+          editing={editing}
+          planView="desktop"
+          twoColumnATheme={twoColumnATheme}
+        />
+      </LazyBoundary>
     </div>
   );
 }

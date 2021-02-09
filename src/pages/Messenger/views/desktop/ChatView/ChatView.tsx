@@ -67,11 +67,11 @@ export function ChatView({
 
   return (
     <div className="messenger__chat">
-
       <ul className="chat__messages" ref={messagesRef}>
         <li className="chat__message">
           <span className="message__admin">COOK EAT WIN REPEAT</span>
         </li>
+
         {messages && messages.map(message => (
           <li className="chat__message" key={message.id}>
             <span className="message__ts">{message.ts}{' '}</span>
@@ -91,7 +91,6 @@ export function ChatView({
           value={messageToSend}
         />
       </div>
-
     </div>
   );
 }

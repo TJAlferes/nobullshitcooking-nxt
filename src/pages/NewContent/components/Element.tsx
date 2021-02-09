@@ -21,6 +21,7 @@ const ImageElement: FunctionComponent<Props> = ({
           }}
         />
       </div>
+      
       {children}
     </div>
   );

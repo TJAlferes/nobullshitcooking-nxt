@@ -34,24 +34,26 @@ export function NewIngredientView({
 }: Props): JSX.Element {
   // move up into parent container NewIngredient component?
   const dir = staffIsAuthenticated
-  ? 'https://s3.amazonaws.com/nobsc-images-01/ingredients'
-  : 'https://s3.amazonaws.com/nobsc-user-ingredients';
+    ? 'https://s3.amazonaws.com/nobsc-images-01/ingredients'
+    : 'https://s3.amazonaws.com/nobsc-user-ingredients';
+
   const page = staffIsAuthenticated
     ? editing ? 'Edit Ingredient' : 'Create New Ingredient'
     : editing ? 'Edit Private Ingredient' : 'Create New Private Ingredient';
+
   const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
   return (
     <div className="new-ingredient-view">
-
       <div>
         <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+
         <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+
         <span>{page}</span>
       </div>
 
       <div className={`new-ingredient one-column-a ${oneColumnATheme}`}>
-
         <h1>{page}</h1>
 
         <p className="new-ingredient__feedback">{feedback}</p>
@@ -59,6 +61,7 @@ export function NewIngredientView({
         <h2 className="new-ingredient__h2" data-test="ingredient-type-heading">
           Type of Ingredient
         </h2>
+
         <select
           name="ingredientType"
           onChange={handleTypeChange}
@@ -71,9 +74,8 @@ export function NewIngredientView({
           ))}
         </select>
 
-        <h2 className="new-ingredient__h2" data-test="name-heading">
-          Name
-        </h2>
+        <h2 className="new-ingredient__h2" data-test="name-heading">Name</h2>
+
         <input
           className="new-ingredient__name"
           onChange={handleNameChange}
@@ -84,6 +86,7 @@ export function NewIngredientView({
         <h2 className="new-ingredient__h2" data-test="description-heading">
           Description
         </h2>
+
         <textarea
           className="new-ingredient__description"
           onChange={handleDescriptionChange}
@@ -94,14 +97,16 @@ export function NewIngredientView({
           <h2 className="new-ingredient__h2" data-test="image-heading">
             Image of Ingredient
           </h2>
+
           {!image && (
             <div>
-              {
-                !editing
+              {!editing
                 ? <img src={`${dir}/nobsc-ingredient-default`} />
                 : prevImage && <img src={`${dir}/${prevImage}`} />
               }
+
               <h4 className="new-ingredient__h4">Change</h4>
+
               <input
                 className="new-ingredient__image-input"
                 type="file"
@@ -110,6 +115,7 @@ export function NewIngredientView({
               />
             </div>
           )}
+
           {image && (
             <div>
               <ReactCrop
@@ -122,19 +128,25 @@ export function NewIngredientView({
                 src={image as string}
                 style={{minHeight: "300px"}}
               />
+
               <span className="new-ingredient__crop-tool-tip">
                 Move the crop to your desired position. These two images will be saved for you:
               </span>
+
               <div className="new-ingredient__crops">
                 <div className="new-ingredient__crop-full-outer">
                   <span>Full Size: </span>
+
                   <img className="new-ingredient__crop-full" src={fullCrop} />
                 </div>
+
                 <div className="new-ingredient__crop-tiny-outer">
                   <span>Tiny Size: </span>
+
                   <img className="new-ingredient__crop-tiny" src={tinyCrop} />
                 </div>
               </div>
+
               <button
                 className="new-ingredient-image-cancel-button"
                 disabled={loading}
@@ -150,6 +162,7 @@ export function NewIngredientView({
           <Link href={path}>
             <a className="new-ingredient__cancel-button">Cancel</a>
           </Link>
+
           <LoaderButton
             className="new-ingredient__submit-button"
             id="create_new_private_user_ingredient_button"
@@ -160,9 +173,7 @@ export function NewIngredientView({
             text="Create"
           />
         </div>
-
       </div>
-
     </div>
   );
 }

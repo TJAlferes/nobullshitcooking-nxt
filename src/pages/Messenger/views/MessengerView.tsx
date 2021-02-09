@@ -36,11 +36,9 @@ export function MessengerView({
 }: Props): JSX.Element {
   return (
     <div className={`messenger two-column-a ${twoColumnATheme}`}>
-
       <LeftNav />
 
       <section>
-
         <h1>Messenger</h1>
 
         <p className="messenger__feedback">{feedback}</p>
@@ -57,7 +55,6 @@ export function MessengerView({
         />
 
         <div className="messenger__main">
-
           <ChatView
             authname={authname}
             handleMessageInputChange={handleMessageInputChange}
@@ -79,11 +76,8 @@ export function MessengerView({
             startWhisper={startWhisper}
             users={users}
           />
-
         </div>
-
       </section>
-
     </div>
   );
 }

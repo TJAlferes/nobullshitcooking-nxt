@@ -16,13 +16,11 @@ export function FavoriteRecipes({
 
       <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
 
-      {
-        myFavoriteRecipes.length
+      {myFavoriteRecipes.length
         ? myFavoriteRecipes.map(r => (
           <div className="dashboard-content__item" key={r.id}>
             <span className="dashboard-content__item-tiny">
-              {
-                r.recipe_image !== "nobsc-recipe-default"
+              {r.recipe_image !== "nobsc-recipe-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe${r.recipe_image}-tiny`} />
                 : <div className="image-default-28-18"></div>
               }
