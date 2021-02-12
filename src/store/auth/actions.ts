@@ -9,23 +9,17 @@ const {
   AUTH_UPDATE_LOCAL_AVATAR,
   AUTH_STAFF_DISPLAY,
   AUTH_STAFF_LOGIN,
-  AUTH_STAFF_LOGIN_SUCCEEDED,
   AUTH_STAFF_LOGIN_FAILED,
   AUTH_STAFF_LOGOUT,
-  AUTH_STAFF_LOGOUT_SUCCEEDED,
   AUTH_STAFF_LOGOUT_FAILED,
   AUTH_USER_DISPLAY,
   AUTH_USER_LOGIN,
-  AUTH_USER_LOGIN_SUCCEEDED,
   AUTH_USER_LOGIN_FAILED,
   AUTH_USER_LOGOUT,
-  AUTH_USER_LOGOUT_SUCCEEDED,
   AUTH_USER_LOGOUT_FAILED,
   AUTH_USER_REGISTER,
-  AUTH_USER_REGISTER_SUCCEEDED,
   AUTH_USER_REGISTER_FAILED,
   AUTH_USER_VERIFY,
-  AUTH_USER_VERIFY_SUCCEEDED,
   AUTH_USER_VERIFY_FAILED,
   //AUTH_FACEBOOK_CHECK_STATE,
   //AUTH_FACEBOOK_LOGIN,
@@ -58,22 +52,12 @@ export const authStaffLogin = (email: string, password: string) => ({
   password
 });
 
-export const authStaffLoginSucceeded = (message: string) => ({
-  type: AUTH_STAFF_LOGIN_SUCCEEDED,
-  message
-});
-
 export const authStaffLoginFailed = (message: string) => ({
   type: AUTH_STAFF_LOGIN_FAILED,
   message
 });
 
 export const authStaffLogout = () => ({type: AUTH_STAFF_LOGOUT});
-
-export const authStaffLogoutSucceeded = (message: string) => ({
-  type: AUTH_STAFF_LOGOUT_SUCCEEDED,
-  message
-});
 
 export const authStaffLogoutFailed = (message: string) => ({
   type: AUTH_STAFF_LOGOUT_FAILED,
@@ -92,22 +76,12 @@ export const authUserLogin = (email: string, password: string) => ({
   password
 });
 
-export const authUserLoginSucceeded = (message: string) => ({
-  type: AUTH_USER_LOGIN_SUCCEEDED,
-  message
-});
-
 export const authUserLoginFailed = (message: string) => ({
   type: AUTH_USER_LOGIN_FAILED,
   message
 });
 
 export const authUserLogout = () => ({type: AUTH_USER_LOGOUT});
-
-export const authUserLogoutSucceeded = (message: string) => ({
-  type: AUTH_USER_LOGOUT_SUCCEEDED,
-  message
-});
 
 export const authUserLogoutFailed = (message: string) => ({
   type: AUTH_USER_LOGOUT_FAILED,
@@ -127,11 +101,6 @@ export const authUserRegister = (
   router
 });
 
-export const authUserRegisterSucceeded = (message: string) => ({
-  type: AUTH_USER_REGISTER_SUCCEEDED,
-  message
-});
-
 export const authUserRegisterFailed = (message: string) => ({
   type: AUTH_USER_REGISTER_FAILED,
   message
@@ -148,11 +117,6 @@ export const authUserVerify = (
   password,
   confirmationCode,
   router
-});
-
-export const authUserVerifySucceeded = (message: string) => ({
-  type: AUTH_USER_VERIFY_SUCCEEDED,
-  message
 });
 
 export const authUserVerifyFailed = (message: string) => ({

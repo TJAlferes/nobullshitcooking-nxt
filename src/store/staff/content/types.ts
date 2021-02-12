@@ -2,24 +2,16 @@ import { Node } from 'slate';
 
 export const actionTypes = {
   STAFF_CREATE_NEW_CONTENT: 'STAFF_CREATE_NEW_CONTENT',
-  STAFF_CREATE_NEW_CONTENT_SUCCEEDED: 'STAFF_CREATE_NEW_CONTENT_SUCCEEDED',
   STAFF_CREATE_NEW_CONTENT_FAILED: 'STAFF_CREATE_NEW_CONTENT_FAILED',
   STAFF_EDIT_CONTENT: 'STAFF_EDIT_CONTENT',
-  STAFF_EDIT_CONTENT_SUCCEEDED: 'STAFF_EDIT_CONTENT_SUCCEEDED',
   STAFF_EDIT_CONTENT_FAILED: 'STAFF_EDIT_CONTENT_FAILED',
   STAFF_DELETE_CONTENT: 'STAFF_DELETE_CONTENT',
-  STAFF_DELETE_CONTENT_SUCCEEDED: 'STAFF_DELETE_CONTENT_SUCCEEDED',
   STAFF_DELETE_CONTENT_FAILED: 'STAFF_DELETE_CONTENT_FAILED'
 } as const;
 
 export interface IStaffCreateNewContent {
   type: typeof actionTypes.STAFF_CREATE_NEW_CONTENT;
   contentInfo: ICreatingContentInfo;
-}
-
-export interface IStaffCreateNewContentSucceeded {
-  type: typeof actionTypes.STAFF_CREATE_NEW_CONTENT_SUCCEEDED;
-  message: string;
 }
 
 export interface IStaffCreateNewContentFailed {
@@ -32,11 +24,6 @@ export interface IStaffEditContent {
   contentInfo: IEditingContentInfo;
 }
 
-export interface IStaffEditContentSucceeded {
-  type: typeof actionTypes.STAFF_EDIT_CONTENT_SUCCEEDED;
-  message: string;
-}
-
 export interface IStaffEditContentFailed {
   type: typeof actionTypes.STAFF_EDIT_CONTENT_FAILED;
   message: string;
@@ -45,11 +32,6 @@ export interface IStaffEditContentFailed {
 export interface IStaffDeleteContent {
   type: typeof actionTypes.STAFF_DELETE_CONTENT;
   id: number;
-}
-
-export interface IStaffDeleteContentSucceeded {
-  type: typeof actionTypes.STAFF_DELETE_CONTENT_SUCCEEDED;
-  message: string;
 }
 
 export interface IStaffDeleteContentFailed {

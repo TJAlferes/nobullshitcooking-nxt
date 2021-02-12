@@ -1,8 +1,16 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { dataGetInitialDataSaga } from '../data/sagas';
+import {
+  dataGetInitialDataSaga,
+  dataGetInitialUserDataSaga
+} from '../data/sagas';
 import { actionTypes } from '../data/types';
 
+const { DATA_INIT, DATA_GET_INITIAL_USER_DATA } = actionTypes;
+
 export function* watchData() {
-  yield all([takeEvery(actionTypes.DATA_INIT, dataGetInitialDataSaga)]);
+  yield all([
+    takeEvery(DATA_INIT, dataGetInitialDataSaga),
+    takeEvery(DATA_GET_INITIAL_USER_DATA, dataGetInitialUserDataSaga)
+  ]);
 }

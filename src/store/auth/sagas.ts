@@ -8,18 +8,12 @@ import { removeStorageItem } from '../../utils/storageHelpers';
 import {
   authMessageClear,
   authStaffDisplay,
-  authStaffLoginSucceeded,
   authStaffLoginFailed,
-  authStaffLogoutSucceeded,
   authStaffLogoutFailed,
   authUserDisplay,
-  authUserLoginSucceeded,
   authUserLoginFailed,
-  authUserLogoutSucceeded,
   authUserLogoutFailed,
-  authUserRegisterSucceeded,
   authUserRegisterFailed,
-  authUserVerifySucceeded,
   authUserVerifyFailed,
   //authFacebookCheckState,
   //authFacebookLogin,
@@ -48,9 +42,9 @@ export function* authStaffLoginSaga(action: IAuthStaffLogin) {
       {withCredentials: true}
     );
     const { avatar, message, staffname } = res.data;
+
     if (message == 'Signed in.') {
       yield put(authStaffDisplay(staffname, avatar));
-      yield put(authStaffLoginSucceeded(message));
     } else {
       yield put(authStaffLoginFailed(message));
     }
@@ -72,9 +66,9 @@ export function* authStaffLogoutSaga(action: IAuthStaffLogout) {
       {withCredentials: true}
     );
     const { message } = res.data;
+
     if (message == 'Signed out.') {
       yield call(removeStorageItem, 'appState');
-      yield put(authStaffLogoutSucceeded(message));
     } else {
       yield call(removeStorageItem, 'appState');  // clear their browser anyway
       yield put(authStaffLogoutFailed(message));
@@ -97,9 +91,9 @@ export function* authUserLoginSaga(action: IAuthUserLogin) {
       {withCredentials: true}
     );
     const { avatar, message, username } = res.data;
+
     if (message == 'Signed in.') {
       yield put(authUserDisplay(username, avatar));
-      yield put(authUserLoginSucceeded(message));
     } else {
       yield put(authUserLoginFailed(message));
     }
@@ -121,9 +115,9 @@ export function* authUserLogoutSaga(action: IAuthUserLogout) {
       {withCredentials: true}
     );
     const { message } = res.data;
+
     if (message == 'Signed out.') {
       yield call(removeStorageItem, 'appState');
-      yield put(authUserLogoutSucceeded(message));
     } else {
       yield call(removeStorageItem, 'appState');  // clear their browser anyway
       yield put(authUserLogoutFailed(message));
@@ -146,8 +140,8 @@ export function* authUserRegisterSaga(action: IAuthUserRegister) {
       {userInfo: {email, password, username}}
     );
     const { message } = res.data;
+
     if (message == 'User account created.') {
-      yield put(authUserRegisterSucceeded(message));
       yield delay(2000);
       yield put(authMessageClear());
       yield call(() => router.push('/verify'));
@@ -172,8 +166,8 @@ export function* authUserVerifySaga(action: IAuthUserVerify) {
       {userInfo: {email, password, confirmationCode}}
     );
     const { message } = res.data;
+    
     if (message === "User account verified.") {
-      yield put(authUserVerifySucceeded(message));
       yield delay(2000);
       yield put(authMessageClear());
       yield call(() => router.push('/login'));

@@ -6,13 +6,10 @@ import {
 
 const {
   STAFF_CREATE_NEW_EQUIPMENT,
-  STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
   STAFF_CREATE_NEW_EQUIPMENT_FAILED,
   STAFF_EDIT_EQUIPMENT,
-  STAFF_EDIT_EQUIPMENT_SUCCEEDED,
   STAFF_EDIT_EQUIPMENT_FAILED,
   STAFF_DELETE_EQUIPMENT,
-  STAFF_DELETE_EQUIPMENT_SUCCEEDED,
   STAFF_DELETE_EQUIPMENT_FAILED
 } = actionTypes;
 
@@ -21,11 +18,6 @@ export const staffCreateNewEquipment = (
 ) => ({
   type: STAFF_CREATE_NEW_EQUIPMENT,
   equipmentInfo
-});
-
-export const staffCreateNewEquipmentSucceeded = (message: string) => ({
-  type: STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
-  message
 });
 
 export const staffCreateNewEquipmentFailed = (message: string) => ({
@@ -38,11 +30,6 @@ export const staffEditEquipment = (equipmentInfo: IEditingEquipmentInfo) => ({
   equipmentInfo
 });
 
-export const staffEditEquipmentSucceeded = (message: string) => ({
-  type: STAFF_EDIT_EQUIPMENT_SUCCEEDED,
-  message
-});
-
 export const staffEditEquipmentFailed = (message: string) => ({
   type: STAFF_EDIT_EQUIPMENT_FAILED,
   message
@@ -51,11 +38,6 @@ export const staffEditEquipmentFailed = (message: string) => ({
 export const staffDeleteEquipment = (id: number) => ({
   type: STAFF_DELETE_EQUIPMENT,
   id
-});
-
-export const staffDeleteEquipmentSucceeded = (message: string) => ({
-  type: STAFF_DELETE_EQUIPMENT_SUCCEEDED,
-  message
 });
 
 export const staffDeleteEquipmentFailed = (message: string) => ({

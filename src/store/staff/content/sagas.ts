@@ -6,11 +6,8 @@ import {
 } from '../../../config/NOBSCBackendAPIEndpointOne';
 import { staffMessageClear } from '../actions';
 import {
-  staffCreateNewContentSucceeded,
   staffCreateNewContentFailed,
-  staffEditContentSucceeded,
   staffEditContentFailed,
-  staffDeleteContentSucceeded,
   staffDeleteContentFailed
 } from './actions';
 import {
@@ -74,7 +71,8 @@ export function* staffCreateNewContentSaga(action: IStaffCreateNewContent) {
     const { message } = res.data;
 
     if (message == 'Content created.') {
-      yield put(staffCreateNewContentSucceeded(message));
+      //yield put(staffCreateNewContentSucceeded(message));
+      //yield put(staffMessage(message));
     } else {
       yield put(staffCreateNewContentFailed(message));
     }
@@ -146,7 +144,8 @@ export function* staffEditContentSaga(action: IStaffEditContent) {
     const { message } = res.data;
 
     if (message == 'Content updated.') {
-      yield put(staffEditContentSucceeded(message));
+      //yield put(staffEditContentSucceeded(message));
+      //yield put(staffMessage(message));
     } else {
       yield put(staffEditContentFailed(message));
     }
@@ -168,7 +167,8 @@ export function* staffDeleteContentSaga(action: IStaffDeleteContent) {
     );
     const { message } = res.data;
     if (message == 'Content deleted.') {
-      yield put(staffDeleteContentSucceeded(message));
+      //yield put(staffDeleteContentSucceeded(message));
+      //yield put(staffMessage(message));
     } else {
       yield put(staffDeleteContentFailed(message));
     }

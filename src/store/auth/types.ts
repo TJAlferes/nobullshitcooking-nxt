@@ -7,23 +7,17 @@ export const actionTypes = {
   AUTH_UPDATE_LOCAL_AVATAR: 'AUTH_UPDATE_LOCAL_AVATAR',
   AUTH_STAFF_DISPLAY: 'AUTH_STAFF_DISPLAY',
   AUTH_STAFF_LOGIN: 'AUTH_STAFF_LOGIN',
-  AUTH_STAFF_LOGIN_SUCCEEDED: 'AUTH_STAFF_LOGIN_SUCCEEDED',
   AUTH_STAFF_LOGIN_FAILED: 'AUTH_STAFF_LOGIN_FAILED',
   AUTH_STAFF_LOGOUT: 'AUTH_STAFF_LOGOUT',
-  AUTH_STAFF_LOGOUT_SUCCEEDED: 'AUTH_STAFF_LOGOUT_SUCCEEDED',
   AUTH_STAFF_LOGOUT_FAILED: 'AUTH_STAFF_LOGOUT_FAILED',
   AUTH_USER_DISPLAY: 'AUTH_USER_DISPLAY',
   AUTH_USER_LOGIN: 'AUTH_USER_LOGIN',
-  AUTH_USER_LOGIN_SUCCEEDED: 'AUTH_USER_LOGIN_SUCCEEDED',
   AUTH_USER_LOGIN_FAILED: 'AUTH_USER_LOGIN_FAILED',
   AUTH_USER_LOGOUT: 'AUTH_USER_LOGOUT',
-  AUTH_USER_LOGOUT_SUCCEEDED: 'AUTH_USER_LOGOUT_SUCCEEDED',
   AUTH_USER_LOGOUT_FAILED: 'AUTH_USER_LOGOUT_FAILED',
   AUTH_USER_REGISTER: 'AUTH_USER_REGISTER',
-  AUTH_USER_REGISTER_SUCCEEDED: 'AUTH_USER_REGISTER_SUCCEEDED',
   AUTH_USER_REGISTER_FAILED: 'AUTH_USER_REGISTER_FAILED',
   AUTH_USER_VERIFY: 'AUTH_USER_VERIFY',
-  AUTH_USER_VERIFY_SUCCEEDED: 'AUTH_USER_VERIFY_SUCCEEDED',
   AUTH_USER_VERIFY_FAILED: 'AUTH_USER_VERIFY_FAILED',
   //AUTH_FACEBOOK_CHECK_STATE: 'AUTH_FACEBOOK_CHECK_STATE',
   //AUTH_FACEBOOK_LOGIN: 'AUTH_FACEBOOK_LOGIN',
@@ -60,23 +54,17 @@ IAuthReset |
 IAuthUpdateLocalAvatar |
 IAuthStaffDisplay |
 IAuthStaffLogin |
-IAuthStaffLoginSucceeded |
 IAuthStaffLoginFailed |
 IAuthStaffLogout |
-IAuthStaffLogoutSucceeded |
 IAuthStaffLogoutFailed |
 IAuthUserDisplay | 
 IAuthUserRegister |
-IAuthUserRegisterSucceeded |
 IAuthUserRegisterFailed |
 IAuthUserVerify |
-IAuthUserVerifySucceeded |
 IAuthUserVerifyFailed |
 IAuthUserLogin |
-IAuthUserLoginSucceeded |
 IAuthUserLoginFailed |
 IAuthUserLogout |
-IAuthUserLogoutSucceeded |
 IAuthUserLogoutFailed;
 
 export interface IAuthCheckState {
@@ -108,11 +96,6 @@ export interface IAuthStaffLogin {
   password: string;
 }
 
-export interface IAuthStaffLoginSucceeded {
-  type: typeof actionTypes.AUTH_STAFF_LOGIN_SUCCEEDED;
-  message: string;
-}
-
 export interface IAuthStaffLoginFailed {
   type: typeof actionTypes.AUTH_STAFF_LOGIN_FAILED;
   message: string;
@@ -120,11 +103,6 @@ export interface IAuthStaffLoginFailed {
 
 export interface IAuthStaffLogout {
   type: typeof actionTypes.AUTH_STAFF_LOGOUT;
-}
-
-export interface IAuthStaffLogoutSucceeded {
-  type: typeof actionTypes.AUTH_STAFF_LOGOUT_SUCCEEDED;
-  message: string;
 }
 
 export interface IAuthStaffLogoutFailed {
@@ -144,11 +122,6 @@ export interface IAuthUserLogin {
   password: string;
 }
 
-export interface IAuthUserLoginSucceeded {
-  type: typeof actionTypes.AUTH_USER_LOGIN_SUCCEEDED;
-  message: string;
-}
-
 export interface IAuthUserLoginFailed {
   type: typeof actionTypes.AUTH_USER_LOGIN_FAILED;
   message: string;
@@ -156,11 +129,6 @@ export interface IAuthUserLoginFailed {
 
 export interface IAuthUserLogout {
   type: typeof actionTypes.AUTH_USER_LOGOUT;
-}
-
-export interface IAuthUserLogoutSucceeded {
-  type: typeof actionTypes.AUTH_USER_LOGOUT_SUCCEEDED;
-  message: string;
 }
 
 export interface IAuthUserLogoutFailed {
@@ -176,11 +144,6 @@ export interface IAuthUserRegister {
   router: NextRouter;
 }
 
-export interface IAuthUserRegisterSucceeded {
-  type: typeof actionTypes.AUTH_USER_REGISTER_SUCCEEDED;
-  message: string;
-}
-
 export interface IAuthUserRegisterFailed {
   type: typeof actionTypes.AUTH_USER_REGISTER_FAILED;
   message: string;
@@ -192,11 +155,6 @@ export interface IAuthUserVerify {
   password: string;
   confirmationCode: string;
   router: NextRouter;
-}
-
-export interface IAuthUserVerifySucceeded {
-  type: typeof actionTypes.AUTH_USER_VERIFY_SUCCEEDED;
-  message: string;
 }
 
 export interface IAuthUserVerifyFailed {
