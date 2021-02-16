@@ -1,37 +1,7 @@
-import {
-  IStaffCreateNewContentSucceeded,
-  IStaffCreateNewContentFailed,
-  IStaffEditContentSucceeded,
-  IStaffEditContentFailed,
-  IStaffDeleteContentSucceeded,
-  IStaffDeleteContentFailed
-} from './content/types';
-import {
-  IStaffCreateNewEquipmentSucceeded,
-  IStaffCreateNewEquipmentFailed,
-  IStaffEditEquipmentSucceeded,
-  IStaffEditEquipmentFailed,
-  IStaffDeleteEquipmentSucceeded,
-  IStaffDeleteEquipmentFailed
-} from './equipment/types';
-import {
-  IStaffCreateNewIngredientSucceeded,
-  IStaffCreateNewIngredientFailed,
-  IStaffEditIngredientSucceeded,
-  IStaffEditIngredientFailed,
-  IStaffDeleteIngredientSucceeded,
-  IStaffDeleteIngredientFailed
-} from './ingredient/types';
-import {
-  IStaffCreateNewRecipeSucceeded,
-  IStaffCreateNewRecipeFailed,
-  IStaffEditRecipeSucceeded,
-  IStaffEditRecipeFailed,
-  IStaffDeleteRecipeSucceeded,
-  IStaffDeleteRecipeFailed
-} from './recipe/types';
-
-export const STAFF_MESSAGE_CLEAR = 'STAFF_MESSAGE_CLEAR' as const;
+export const actionTypes = {
+  STAFF_MESSAGE: 'STAFF_MESSAGE',
+  STAFF_MESSAGE_CLEAR: 'STAFF_MESSAGE_CLEAR'
+} as const;
 
 /*
 
@@ -49,33 +19,13 @@ Actions
 
 */
 
-export type StaffActions =
-IStaffMessageClear |
-IStaffCreateNewContentSucceeded |
-IStaffCreateNewContentFailed |
-IStaffEditContentSucceeded |
-IStaffEditContentFailed |
-IStaffDeleteContentSucceeded |
-IStaffDeleteContentFailed |
-IStaffCreateNewEquipmentSucceeded |
-IStaffCreateNewEquipmentFailed |
-IStaffEditEquipmentSucceeded |
-IStaffEditEquipmentFailed |
-IStaffDeleteEquipmentSucceeded |
-IStaffDeleteEquipmentFailed |
-IStaffCreateNewIngredientSucceeded |
-IStaffCreateNewIngredientFailed |
-IStaffEditIngredientSucceeded |
-IStaffEditIngredientFailed |
-IStaffDeleteIngredientSucceeded |
-IStaffDeleteIngredientFailed |
-IStaffCreateNewRecipeSucceeded |
-IStaffCreateNewRecipeFailed |
-IStaffEditRecipeSucceeded |
-IStaffEditRecipeFailed |
-IStaffDeleteRecipeSucceeded |
-IStaffDeleteRecipeFailed;
+export type StaffActions = IStaffMessage | IStaffMessageClear;
+
+export interface IStaffMessage {
+  type: typeof actionTypes.STAFF_MESSAGE;
+  message: string;
+}
 
 export interface IStaffMessageClear {
-  type: typeof STAFF_MESSAGE_CLEAR;
+  type: typeof actionTypes.STAFF_MESSAGE_CLEAR;
 }

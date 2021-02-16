@@ -1,10 +1,7 @@
 export const actionTypes = {
   STAFF_CREATE_NEW_EQUIPMENT: 'STAFF_CREATE_NEW_EQUIPMENT',
-  STAFF_CREATE_NEW_EQUIPMENT_FAILED: 'STAFF_CREATE_NEW_EQUIPMENT_FAILED',
   STAFF_EDIT_EQUIPMENT: 'STAFF_EDIT_EQUIPMENT',
-  STAFF_EDIT_EQUIPMENT_FAILED: 'STAFF_EDIT_EQUIPMENT_FAILED',
-  STAFF_DELETE_EQUIPMENT: 'STAFF_DELETE_EQUIPMENT',
-  STAFF_DELETE_EQUIPMENT_FAILED: 'STAFF_DELETE_EQUIPMENT_FAILED'
+  STAFF_DELETE_EQUIPMENT: 'STAFF_DELETE_EQUIPMENT'
 } as const;
 
 export interface IStaffCreateNewEquipment {
@@ -12,29 +9,14 @@ export interface IStaffCreateNewEquipment {
   equipmentInfo: ICreatingEquipmentInfo;
 }
 
-export interface IStaffCreateNewEquipmentFailed {
-  type: typeof actionTypes.STAFF_CREATE_NEW_EQUIPMENT_FAILED;
-  message: string;
-}
-
 export interface IStaffEditEquipment {
   type: typeof actionTypes.STAFF_EDIT_EQUIPMENT;
   equipmentInfo: IEditingEquipmentInfo;
 }
 
-export interface IStaffEditEquipmentFailed {
-  type: typeof actionTypes.STAFF_EDIT_EQUIPMENT_FAILED;
-  message: string;
-}
-
 export interface IStaffDeleteEquipment {
   type: typeof actionTypes.STAFF_DELETE_EQUIPMENT;
   id: number;
-}
-
-export interface IStaffDeleteEquipmentFailed {
-  type: typeof actionTypes.STAFF_DELETE_EQUIPMENT_FAILED;
-  message: string;
 }
 
 export interface ICreatingEquipmentInfo {

@@ -4,12 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../config/NOBSCBackendAPIEndpointOne';
-import { staffMessageClear } from '../actions';
-import {
-  staffCreateNewContentFailed,
-  staffEditContentFailed,
-  staffDeleteContentFailed
-} from './actions';
+import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewContent,
   IStaffEditContent,
@@ -28,32 +23,41 @@ export function* staffCreateNewContentSaga(action: IStaffCreateNewContent) {
     fullImage,
     thumbImage
   } = action.contentInfo;
+
   try {
+
     if (fullImage && thumbImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/content`,
         {fileType: fullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.thumbSignature,
         thumbImage,
         {headers: {'Content-Type': thumbImage.type}}
       );
+
       image = res1.data.fullName;
+
     } else {
+
       image = 'nobsc-content-default';
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/staff/content/create`,
       {
@@ -68,23 +72,16 @@ export function* staffCreateNewContentSaga(action: IStaffCreateNewContent) {
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Content created.') {
-      //yield put(staffCreateNewContentSucceeded(message));
-      //yield put(staffMessage(message));
-    } else {
-      yield put(staffCreateNewContentFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffCreateNewContentFailed(
-      'An error occurred. Please try again.'
-    ));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffEditContentSaga(action: IStaffEditContent) {
@@ -99,32 +96,41 @@ export function* staffEditContentSaga(action: IStaffEditContent) {
     thumbImage,
     prevImage
   } = action.contentInfo;
+
   try {
+
     if (fullImage && thumbImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/content`,
         {fileType: fullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.thumbSignature,
         thumbImage,
         {headers: {'Content-Type': thumbImage.type}}
       );
+
       image = res1.data.fullName;
+
     } else {
+
       image = prevImage;
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.put],
       `${endpoint}/staff/content/update`,
       {
@@ -141,42 +147,35 @@ export function* staffEditContentSaga(action: IStaffEditContent) {
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Content updated.') {
-      //yield put(staffEditContentSucceeded(message));
-      //yield put(staffMessage(message));
-    } else {
-      yield put(staffEditContentFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffEditContentFailed('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffDeleteContentSaga(action: IStaffDeleteContent) {
   try {
-    const res = yield call(
+
+    const { data: { message } } = yield call(
       [axios, axios.delete],
       `${endpoint}/staff/content/delete`,
       {withCredentials: true, data: {id: action.id}}
     );
-    const { message } = res.data;
-    if (message == 'Content deleted.') {
-      //yield put(staffDeleteContentSucceeded(message));
-      //yield put(staffMessage(message));
-    } else {
-      yield put(staffDeleteContentFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage(message));
+
   } catch(err) {
-    yield put(staffDeleteContentFailed('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+    
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }

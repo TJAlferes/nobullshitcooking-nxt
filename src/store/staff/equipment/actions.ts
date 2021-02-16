@@ -6,11 +6,8 @@ import {
 
 const {
   STAFF_CREATE_NEW_EQUIPMENT,
-  STAFF_CREATE_NEW_EQUIPMENT_FAILED,
   STAFF_EDIT_EQUIPMENT,
-  STAFF_EDIT_EQUIPMENT_FAILED,
-  STAFF_DELETE_EQUIPMENT,
-  STAFF_DELETE_EQUIPMENT_FAILED
+  STAFF_DELETE_EQUIPMENT
 } = actionTypes;
 
 export const staffCreateNewEquipment = (
@@ -20,27 +17,12 @@ export const staffCreateNewEquipment = (
   equipmentInfo
 });
 
-export const staffCreateNewEquipmentFailed = (message: string) => ({
-  type: STAFF_CREATE_NEW_EQUIPMENT_FAILED,
-  message
-});
-
 export const staffEditEquipment = (equipmentInfo: IEditingEquipmentInfo) => ({
   type: STAFF_EDIT_EQUIPMENT,
   equipmentInfo
 });
 
-export const staffEditEquipmentFailed = (message: string) => ({
-  type: STAFF_EDIT_EQUIPMENT_FAILED,
-  message
-});
-
 export const staffDeleteEquipment = (id: number) => ({
   type: STAFF_DELETE_EQUIPMENT,
   id
-});
-
-export const staffDeleteEquipmentFailed = (message: string) => ({
-  type: STAFF_DELETE_EQUIPMENT_FAILED,
-  message
 });

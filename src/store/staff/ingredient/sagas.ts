@@ -4,15 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../config/NOBSCBackendAPIEndpointOne';
-import { staffMessageClear } from '../actions';
-import {
-  staffCreateNewIngredientSucceeded,
-  staffCreateNewIngredientFailed,
-  staffEditIngredientSucceeded,
-  staffEditIngredientFailed,
-  staffDeleteIngredientSucceeded,
-  staffDeleteIngredientFailed
-} from './actions';
+import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewIngredient,
   IStaffEditIngredient,
@@ -21,9 +13,7 @@ import {
 
 const endpoint = NOBSCBackendAPIEndpointOne;
 
-export function* staffCreateNewIngredientSaga(
-  action: IStaffCreateNewIngredient
-) {
+export function* staffCreateNewIngredientSaga(action: IStaffCreateNewIngredient) {
   let {
     ingredientTypeId,
     name,
@@ -32,32 +22,41 @@ export function* staffCreateNewIngredientSaga(
     fullImage,
     tinyImage
   } = action.ingredientInfo;
+
   try {
+
     if (fullImage && tinyImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/ingredient`,
         {fileType: fullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
+
       image = res1.data.fullName;
+
     } else {
+
       image = 'nobsc-ingredient-default';
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/staff/ingredient/create`,
       {
@@ -71,22 +70,16 @@ export function* staffCreateNewIngredientSaga(
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Ingredient created.') {
-      yield put(staffCreateNewIngredientSucceeded(message));
-    } else {
-      yield put(staffCreateNewIngredientFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffCreateNewIngredientFailed(
-      'An error occurred. Please try again.'
-    ));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+    
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffEditIngredientSaga(action: IStaffEditIngredient) {
@@ -100,32 +93,41 @@ export function* staffEditIngredientSaga(action: IStaffEditIngredient) {
     fullImage,
     tinyImage
   } = action.ingredientInfo;
+
   try {
+
     if (fullImage && tinyImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/ingredient`,
         {fileType: fullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
+
       image = res1.data.fullName;
+
     } else {
+
       image = prevImage;
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.put],
       `${endpoint}/staff/ingredient/update`,
       {
@@ -141,44 +143,35 @@ export function* staffEditIngredientSaga(action: IStaffEditIngredient) {
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Ingredient updated.') {
-      yield put(staffEditIngredientSucceeded(message));
-    } else {
-      yield put(staffEditIngredientFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffEditIngredientFailed(
-      'An error occurred. Please try again.'
-    ));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffDeleteIngredientSaga(action: IStaffDeleteIngredient) {
   try {
-    const res = yield call(
+
+    const { data: { message } } = yield call(
       [axios, axios.delete],
       `${endpoint}/staff/ingredient/delete`,
       {withCredentials: true, data: {id: action.id}}
     );
-    const { message } = res.data;
-    if (message == 'Ingredient deleted.') {
-      yield put(staffDeleteIngredientSucceeded(message));
-    } else {
-      yield put(staffDeleteIngredientFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage(message));
+
   } catch(err) {
-    yield put(staffDeleteIngredientFailed(
-      'An error occurred. Please try again.'
-    ));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }

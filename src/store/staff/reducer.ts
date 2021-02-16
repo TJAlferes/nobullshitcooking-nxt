@@ -1,41 +1,6 @@
-import { actionTypes as contentActionTypes } from './content/types';
-import { actionTypes as equipmentActionTypes } from './equipment/types';
-import { actionTypes as ingredientActionTypes } from './ingredient/types';
-import { actionTypes as recipeActionTypes } from './recipe/types';
-import { STAFF_MESSAGE_CLEAR, IStaffState, StaffActions } from './types';
+import { actionTypes, IStaffState, StaffActions } from './types';
 
-const { 
-  STAFF_CREATE_NEW_CONTENT_SUCCEEDED,
-  STAFF_CREATE_NEW_CONTENT_FAILED,
-  STAFF_EDIT_CONTENT_SUCCEEDED,
-  STAFF_EDIT_CONTENT_FAILED,
-  STAFF_DELETE_CONTENT_SUCCEEDED,
-  STAFF_DELETE_CONTENT_FAILED
-} = contentActionTypes;
-const { 
-  STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED,
-  STAFF_CREATE_NEW_EQUIPMENT_FAILED,
-  STAFF_EDIT_EQUIPMENT_SUCCEEDED,
-  STAFF_EDIT_EQUIPMENT_FAILED,
-  STAFF_DELETE_EQUIPMENT_SUCCEEDED,
-  STAFF_DELETE_EQUIPMENT_FAILED
-} = equipmentActionTypes;
-const { 
-  STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED,
-  STAFF_CREATE_NEW_INGREDIENT_FAILED,
-  STAFF_EDIT_INGREDIENT_SUCCEEDED,
-  STAFF_EDIT_INGREDIENT_FAILED,
-  STAFF_DELETE_INGREDIENT_SUCCEEDED,
-  STAFF_DELETE_INGREDIENT_FAILED
-} = ingredientActionTypes;
-const { 
-  STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
-  STAFF_CREATE_NEW_RECIPE_FAILED,
-  STAFF_EDIT_RECIPE_SUCCEEDED,
-  STAFF_EDIT_RECIPE_FAILED,
-  STAFF_DELETE_RECIPE_SUCCEEDED,
-  STAFF_DELETE_RECIPE_FAILED
-} = recipeActionTypes;
+const { STAFF_MESSAGE, STAFF_MESSAGE_CLEAR } = actionTypes;
 
 const initialState: IStaffState = {message: ''};
 
@@ -44,38 +9,8 @@ export function staffReducer(
   action: StaffActions
 ): IStaffState {
   switch (action.type) {
-    case STAFF_CREATE_NEW_CONTENT_SUCCEEDED:
-    case STAFF_CREATE_NEW_CONTENT_FAILED:
-    case STAFF_EDIT_CONTENT_SUCCEEDED:
-    case STAFF_EDIT_CONTENT_FAILED:
-    case STAFF_DELETE_CONTENT_SUCCEEDED:
-    case STAFF_DELETE_CONTENT_FAILED:
-
-    case STAFF_CREATE_NEW_EQUIPMENT_SUCCEEDED:
-    case STAFF_CREATE_NEW_EQUIPMENT_FAILED:
-    case STAFF_EDIT_EQUIPMENT_SUCCEEDED:
-    case STAFF_EDIT_EQUIPMENT_FAILED:
-    case STAFF_DELETE_EQUIPMENT_SUCCEEDED:
-    case STAFF_DELETE_EQUIPMENT_FAILED:
-
-    case STAFF_CREATE_NEW_INGREDIENT_SUCCEEDED:
-    case STAFF_CREATE_NEW_INGREDIENT_FAILED:
-    case STAFF_EDIT_INGREDIENT_SUCCEEDED:
-    case STAFF_EDIT_INGREDIENT_FAILED:
-    case STAFF_DELETE_INGREDIENT_SUCCEEDED:
-    case STAFF_DELETE_INGREDIENT_FAILED:
-    
-    case STAFF_CREATE_NEW_RECIPE_SUCCEEDED:
-    case STAFF_CREATE_NEW_RECIPE_FAILED:
-    case STAFF_EDIT_RECIPE_SUCCEEDED:
-    case STAFF_EDIT_RECIPE_FAILED:
-    case STAFF_DELETE_RECIPE_SUCCEEDED:
-    case STAFF_DELETE_RECIPE_FAILED:
-      return {...state, ...{message: action.message}};
-
-    case STAFF_MESSAGE_CLEAR:
-        return {...state, ...{message: ''}};
-    
+    case STAFF_MESSAGE: return {...state, ...{message: action.message}};
+    case STAFF_MESSAGE_CLEAR: return {...state, ...{message: ''}};
     default: return state;
   }
 }

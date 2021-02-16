@@ -4,15 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../config/NOBSCBackendAPIEndpointOne';
-import { staffMessageClear } from '../actions';
-import {
-  staffCreateNewRecipeSucceeded,
-  staffCreateNewRecipeFailed,
-  staffEditRecipeSucceeded,
-  staffEditRecipeFailed,
-  staffDeleteRecipeSucceeded,
-  staffDeleteRecipeFailed
-} from './actions';
+import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewRecipe,
   IStaffEditRecipe,
@@ -44,96 +36,124 @@ export function* staffCreateNewRecipeSaga(action: IStaffCreateNewRecipe) {
     cookingImage,
     cookingFullImage
   } = action.recipeInfo;
+
   try {
+
     // 1
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe`,
         {fileType: recipeFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         recipeFullImage,
         {headers: {'Content-Type': recipeFullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.thumbSignature,
         recipeThumbImage,
         {headers: {'Content-Type': recipeThumbImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.tinySignature,
         recipeTinyImage,
         {headers: {'Content-Type': recipeTinyImage.type}}
       );
+
       recipeImage = res1.data.fullName;
+
     } else {
+
       recipeImage = "nobsc-recipe-default";
+
     }
 
     // 2
     if (equipmentFullImage) {
+
       const res2 = yield call(
         [axios, axios.put],
         `${endpoint}/staff/get-signed-url/recipe-equipment`,
         {fileType: equipmentFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res2.data.fullSignature,
         equipmentFullImage,
         {headers: {'Content-Type': equipmentFullImage.type}}
       );
+
       equipmentImage = res2.data.fullName;
+
     } else {
+
       equipmentImage = "nobsc-recipe-equipment-default";
+
     }
 
     // 3
     if (ingredientsFullImage) {
+
       const res3 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe-ingredients`,
         {fileType: ingredientsFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res3.data.fullSignature,
         ingredientsFullImage,
         {headers: {'Content-Type': ingredientsFullImage.type}}
       );
+
       ingredientsImage = res3.data.fullName;
+
     } else {
+
       ingredientsImage = "nobsc-recipe-ingredients-default";
+
     }
 
     // 4
     if (cookingFullImage) {
+
       const res4 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe-cooking`,
         {fileType: cookingFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res4.data.fullSignature,
         cookingFullImage,
         {headers: {'Content-Type': cookingFullImage.type}}
       );
+
       cookingImage = res4.data.fullName;
+
     } else {
+
       cookingImage = "nobsc-recipe-cooking-default";
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/staff/recipe/create`,
       {
@@ -157,20 +177,16 @@ export function* staffCreateNewRecipeSaga(action: IStaffCreateNewRecipe) {
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Recipe created.') {
-      yield put(staffCreateNewRecipeSucceeded(message));
-    } else {
-      yield put(staffCreateNewRecipeFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffCreateNewRecipeFailed('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
@@ -201,96 +217,124 @@ export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
     cookingFullImage,
     cookingPrevImage
   } = action.recipeInfo;
+
   try {
+
     // 1
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
+
       const res1 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe`,
         {fileType: recipeFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.fullSignature,
         recipeFullImage,
         {headers: {'Content-Type': recipeFullImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.thumbSignature,
         recipeThumbImage,
         {headers: {'Content-Type': recipeThumbImage.type}}
       );
+
       yield call(
         [axios, axios.put],
         res1.data.tinySignature,
         recipeTinyImage,
         {headers: {'Content-Type': recipeTinyImage.type}}
       );
+
       recipeImage = res1.data.fullName;
+
     } else {
+
       recipeImage = recipePrevImage;
+
     }
 
     // 2
     if (equipmentFullImage) {
+
       const res2 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe-equipment`,
         {fileType: equipmentFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res2.data.fullSignature,
         equipmentFullImage,
         {headers: {'Content-Type': equipmentFullImage.type}}
       );
+
       equipmentImage = res2.data.fullName;
+
     } else {
+
       equipmentImage = equipmentPrevImage;
+
     }
 
     // 3
     if (ingredientsFullImage) {
+
       const res3 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe-ingredients`,
         {fileType: ingredientsFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res3.data.fullSignature,
         ingredientsFullImage,
         {headers: {'Content-Type': ingredientsFullImage.type}}
       );
+
       ingredientsImage = res3.data.fullName;
+
     } else {
+
       ingredientsImage = ingredientsPrevImage;
+
     }
 
     // 4
     if (cookingFullImage) {
+
       const res4 = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/recipe-cooking`,
         {fileType: cookingFullImage.type},
         {withCredentials: true}
       );
+
       yield call(
         [axios, axios.put],
         res4.data.fullSignature,
         cookingFullImage,
         {headers: {'Content-Type': cookingFullImage.type}}
       );
+
       cookingImage = res4.data.fullName;
+
     } else {
+
       cookingImage = cookingPrevImage;
+
     }
 
-    const res = yield call(
+    const { data: { message } } = yield call(
       [axios, axios.put],
       `${endpoint}/staff/recipe/update`,
       {
@@ -319,40 +363,35 @@ export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
       {withCredentials: true}
     );
 
-    const { message } = res.data;
+    yield put(staffMessage(message));
 
-    if (message == 'Recipe updated.') {
-      yield put(staffEditRecipeSucceeded(message));
-    } else {
-      yield put(staffEditRecipeFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
   } catch(err) {
-    yield put(staffEditRecipeFailed('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }
 
 export function* staffDeleteRecipeSaga(action: IStaffDeleteRecipe) {
   try {
-    const res = yield call(
+
+    const { data: { message } } = yield call(
       [axios, axios.delete],
       `${endpoint}/staff/recipe/delete`,
       {withCredentials: true, data: {id: action.id}}
     );
-    const { message } = res.data;
-    if (message == 'Recipe deleted.') {
-      yield put(staffDeleteRecipeSucceeded(message));
-    } else {
-      yield put(staffDeleteRecipeFailed(message));
-    }
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage(message));
+
   } catch(err) {
-    yield put(staffDeleteRecipeFailed('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(staffMessageClear());
+
+    yield put(staffMessage('An error occurred. Please try again.'));
+
   }
+
+  yield delay(4000);
+  yield put(staffMessageClear());
 }

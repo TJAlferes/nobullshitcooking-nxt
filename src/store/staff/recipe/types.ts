@@ -1,13 +1,7 @@
 export const actionTypes = {
   STAFF_CREATE_NEW_RECIPE: 'STAFF_CREATE_NEW_RECIPE',
-  STAFF_CREATE_NEW_RECIPE_SUCCEEDED: 'STAFF_CREATE_NEW_RECIPE_SUCCEEDED',
-  STAFF_CREATE_NEW_RECIPE_FAILED: 'STAFF_CREATE_NEW_RECIPE_FAILED',
   STAFF_EDIT_RECIPE: 'STAFF_EDIT_RECIPE',
-  STAFF_EDIT_RECIPE_SUCCEEDED: 'STAFF_EDIT_RECIPE_SUCCEEDED',
-  STAFF_EDIT_RECIPE_FAILED: 'STAFF_EDIT_RECIPE_FAILED',
-  STAFF_DELETE_RECIPE: 'STAFF_DELETE_RECIPE',
-  STAFF_DELETE_RECIPE_SUCCEEDED: 'STAFF_DELETE_RECIPE_SUCCEEDED',
-  STAFF_DELETE_RECIPE_FAILED: 'STAFF_DELETE_RECIPE_FAILED'
+  STAFF_DELETE_RECIPE: 'STAFF_DELETE_RECIPE'
 } as const;
 
 export interface IStaffCreateNewRecipe {
@@ -15,44 +9,14 @@ export interface IStaffCreateNewRecipe {
   recipeInfo: ICreatingRecipeInfo;
 }
 
-export interface IStaffCreateNewRecipeSucceeded {
-  type: typeof actionTypes.STAFF_CREATE_NEW_RECIPE_SUCCEEDED;
-  message: string;
-}
-
-export interface IStaffCreateNewRecipeFailed {
-  type: typeof actionTypes.STAFF_CREATE_NEW_RECIPE_FAILED;
-  message: string;
-}
-
 export interface IStaffEditRecipe {
   type: typeof actionTypes.STAFF_EDIT_RECIPE;
   recipeInfo: IEditingRecipeInfo;
 }
 
-export interface IStaffEditRecipeSucceeded {
-  type: typeof actionTypes.STAFF_EDIT_RECIPE_SUCCEEDED;
-  message: string;
-}
-
-export interface IStaffEditRecipeFailed {
-  type: typeof actionTypes.STAFF_EDIT_RECIPE_FAILED;
-  message: string;
-}
-
 export interface IStaffDeleteRecipe {
   type: typeof actionTypes.STAFF_DELETE_RECIPE;
   id: number;
-}
-
-export interface IStaffDeleteRecipeSucceeded {
-  type: typeof actionTypes.STAFF_DELETE_RECIPE_SUCCEEDED;
-  message: string;
-}
-
-export interface IStaffDeleteRecipeFailed {
-  type: typeof actionTypes.STAFF_DELETE_RECIPE_FAILED;
-  message: string;
 }
 
 export interface ICreatingRecipeInfo {

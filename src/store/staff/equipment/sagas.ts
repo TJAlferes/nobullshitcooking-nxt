@@ -4,12 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../config/NOBSCBackendAPIEndpointOne';
-import { staffMessageClear } from '../actions';
-import {
-  staffCreateNewEquipmentFailed,
-  staffEditEquipmentFailed,
-  staffDeleteEquipmentFailed
-} from './actions';
+import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewEquipment,
   IStaffEditEquipment,
@@ -76,12 +71,11 @@ export function* staffCreateNewEquipmentSaga(action: IStaffCreateNewEquipment) {
       {withCredentials: true}
     );
 
-    if (message == 'Equipment created.') yield put(staffMessage(message));
-    else yield put(staffCreateNewEquipmentFailed(message));
+    yield put(staffMessage(message));
 
   } catch(err) {
 
-    yield put(staffCreateNewEquipmentFailed('An error occurred. Please try again.'));
+    yield put(staffMessage('An error occurred. Please try again.'));
 
   }
 
@@ -150,12 +144,11 @@ export function* staffEditEquipmentSaga(action: IStaffEditEquipment) {
       {withCredentials: true}
     );
 
-    if (message === 'Equipment updated.') yield put(staffMessage(message));
-    else yield put(staffEditEquipmentFailed(message));
+    yield put(staffMessage(message));
 
   } catch(err) {
 
-    yield put(staffEditEquipmentFailed('An error occurred. Please try again.'));
+    yield put(staffMessage('An error occurred. Please try again.'));
 
   }
 
@@ -172,12 +165,11 @@ export function* staffDeleteEquipmentSaga(action: IStaffDeleteEquipment) {
       {withCredentials: true, data: {id: action.id}}
     );
 
-    if (message === 'Equipment deleted.')  yield put(staffMessage(message));
-    else yield put(staffDeleteEquipmentFailed(message));
+    yield put(staffMessage(message));
 
   } catch(err) {
 
-    yield put(staffDeleteEquipmentFailed('An error occurred. Please try again.'));
+    yield put(staffMessage('An error occurred. Please try again.'));
 
   }
 

@@ -2,11 +2,8 @@ import { Node } from 'slate';
 
 export const actionTypes = {
   STAFF_CREATE_NEW_CONTENT: 'STAFF_CREATE_NEW_CONTENT',
-  STAFF_CREATE_NEW_CONTENT_FAILED: 'STAFF_CREATE_NEW_CONTENT_FAILED',
   STAFF_EDIT_CONTENT: 'STAFF_EDIT_CONTENT',
-  STAFF_EDIT_CONTENT_FAILED: 'STAFF_EDIT_CONTENT_FAILED',
-  STAFF_DELETE_CONTENT: 'STAFF_DELETE_CONTENT',
-  STAFF_DELETE_CONTENT_FAILED: 'STAFF_DELETE_CONTENT_FAILED'
+  STAFF_DELETE_CONTENT: 'STAFF_DELETE_CONTENT'
 } as const;
 
 export interface IStaffCreateNewContent {
@@ -14,29 +11,14 @@ export interface IStaffCreateNewContent {
   contentInfo: ICreatingContentInfo;
 }
 
-export interface IStaffCreateNewContentFailed {
-  type: typeof actionTypes.STAFF_CREATE_NEW_CONTENT_FAILED;
-  message: string;
-}
-
 export interface IStaffEditContent {
   type: typeof actionTypes.STAFF_EDIT_CONTENT;
   contentInfo: IEditingContentInfo;
 }
 
-export interface IStaffEditContentFailed {
-  type: typeof actionTypes.STAFF_EDIT_CONTENT_FAILED;
-  message: string;
-}
-
 export interface IStaffDeleteContent {
   type: typeof actionTypes.STAFF_DELETE_CONTENT;
   id: number;
-}
-
-export interface IStaffDeleteContentFailed {
-  type: typeof actionTypes.STAFF_DELETE_CONTENT_FAILED;
-  message: string;
 }
 
 // For now, one image per page/post
