@@ -1,6 +1,5 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { dataGetContentSaga, dataGetMyContentSaga } from '../data/sagas';
 import {
   staffCreateNewContentSaga,
   staffEditContentSaga,

@@ -4,6 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../../config/NOBSCBackendAPIEndpointOne';
+import { dataGetContentSaga, dataGetMyContentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewContent,
@@ -71,7 +72,8 @@ export function* userCreateNewContentSaga(action: IUserCreateNewContent) {
       },
       {withCredentials: true}
     );
-
+    
+    dataGetMyContentSaga();
     yield put(userMessage(message));
 
   } catch(err) {
@@ -148,6 +150,7 @@ export function* userEditContentSaga(action: IUserEditContent) {
     );
 
     yield put(userMessage(message));
+    dataGetMyContentSaga();  // ?
 
   } catch(err) {
 
@@ -169,6 +172,7 @@ export function* userDeleteContentSaga(action: IUserDeleteContent) {
     );
 
     yield put(userMessage(message));
+    dataGetMyContentSaga();  // ?
 
   } catch(err) {
 

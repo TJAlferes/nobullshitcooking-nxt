@@ -4,12 +4,7 @@ import { dataGetMySavedRecipesSaga } from '../data/sagas';
 import { userSaveRecipeSaga, userUnsaveRecipeSaga } from '../user/save/sagas';
 import { actionTypes } from '../user/save/types';
 
-const {
-  USER_SAVE_RECIPE,
-  USER_SAVE_RECIPE_SUCCEEDED,
-  USER_UNSAVE_RECIPE,
-  USER_UNSAVE_RECIPE_SUCCEEDED
-} = actionTypes;
+const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
 
 export function* watchSave() {
   yield all([

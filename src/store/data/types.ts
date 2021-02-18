@@ -2,58 +2,10 @@ import { IPlannerData } from '../planner/types';
 
 export const actionTypes = {
   DATA_INIT: 'DATA_INIT',
-
   DATA_GET_INITIAL_DATA: 'DATA_GET_INITIAL_DATA',
-  DATA_GET_INITIAL_DATA_FAILED: 'DATA_GET_INITIAL_DATA_FAILED',
-  DATA_GET_CONTENT: 'DATA_GET_CONTENT',
-  DATA_GET_CONTENT_FAILED: 'DATA_GET_CONTENT_FAILED',
-  DATA_GET_CONTENT_TYPES: 'DATA_GET_CONTENT_TYPES',
-  DATA_GET_CONTENT_TYPES_FAILED: 'DATA_GET_CONTENT_TYPES_FAILED',
-  DATA_GET_CUISINES: 'DATA_GET_CUISINES',
-  DATA_GET_CUISINES_FAILED: 'DATA_GET_CUISINES_FAILED',
-  DATA_GET_EQUIPMENTS: 'DATA_GET_EQUIPMENTS',
-  DATA_GET_EQUIPMENTS_FAILED: 'DATA_GET_EQUIPMENTS_FAILED',
-  DATA_GET_EQUIPMENT_TYPES: 'DATA_GET_EQUIPMENT_TYPES',
-  DATA_GET_EQUIPMENT_TYPES_FAILED: 'DATA_GET_EQUIPMENT_TYPES_FAILED',
-  DATA_GET_INGREDIENTS: 'DATA_GET_INGREDIENTS',
-  DATA_GET_INGREDIENTS_FAILED: 'DATA_GET_INGREDIENTS_FAILED',
-  DATA_GET_INGREDIENT_TYPES: 'DATA_GET_INGREDIENT_TYPES',
-  DATA_GET_INGREDIENT_TYPES_FAILED: 'DATA_GET_INGREDIENT_TYPES_FAILED',
-  DATA_GET_MEASUREMENTS: 'DATA_GET_MEASUREMENTS',
-  DATA_GET_MEASUREMENTS_FAILED: 'DATA_GET_MEASUREMENTS_FAILED',
-  DATA_GET_METHODS: 'DATA_GET_METHODS',
-  DATA_GET_METHODS_FAILED: 'DATA_GET_METHODS_FAILED',
-  DATA_GET_PRODUCTS: 'DATA_GET_PRODUCTS',
-  DATA_GET_PRODUCTS_FAILED: 'DATA_GET_PRODUCTS_FAILED',
-  DATA_GET_PRODUCT_CATEGORIES: 'DATA_GET_PRODUCT_CATEGORIES',
-  DATA_GET_PRODUCT_CATEGORIES_FAILED: 'DATA_GET_PRODUCT_CATEGORIES_FAILED',
-  DATA_GET_PRODUCT_TYPES: 'DATA_GET_PRODUCT_TYPES',
-  DATA_GET_PRODUCT_TYPES_FAILED: 'DATA_GET_PRODUCT_TYPES_FAILED',
-  DATA_GET_RECIPES: 'DATA_GET_RECIPES',
-  DATA_GET_RECIPES_FAILED: 'DATA_GET_RECIPES_FAILED',
-  DATA_GET_RECIPE_TYPES: 'DATA_GET_RECIPE_TYPES',
-  DATA_GET_RECIPE_TYPES_FAILED: 'DATA_GET_RECIPE_TYPES_FAILED',
-
+  DATA_GET_DATA: 'DATA_GET_DATA',
   DATA_GET_INITIAL_USER_DATA: 'DATA_GET_INITIAL_USER_DATA',
-  DATA_GET_INITIAL_USER_DATA_FAILED: 'DATA_GET_INITIAL_USER_DATA_FAILED',
-  DATA_GET_MY_CONTENT: 'DATA_GET_MY_CONTENT',
-  DATA_GET_MY_CONTENT_FAILED: 'DATA_GET_MY_CONTENT_FAILED',
-  DATA_GET_MY_FAVORITE_RECIPES: 'DATA_GET_MY_FAVORITE_RECIPES',
-  DATA_GET_MY_FAVORITE_RECIPES_FAILED: 'DATA_GET_MY_FAVORITE_RECIPES_FAILED',
-  DATA_GET_MY_FRIENDSHIPS: 'DATA_GET_MY_FRIENDSHIPS',
-  DATA_GET_MY_FRIENDSHIPS_FAILED: 'DATA_GET_MY_FRIENDSHIPS_FAILED',
-  DATA_GET_MY_PLANS: 'DATA_GET_MY_PLANS',
-  DATA_GET_MY_PLANS_FAILED: 'DATA_GET_MY_PLANS_FAILED',
-  DATA_GET_MY_PRIVATE_EQUIPMENTS: 'DATA_GET_MY_PRIVATE_EQUIPMENTS',
-  DATA_GET_MY_PRIVATE_EQUIPMENTS_FAILED: 'DATA_GET_MY_PRIVATE_EQUIPMENTS_FAILED',
-  DATA_GET_MY_PRIVATE_INGREDIENTS: 'DATA_GET_MY_PRIVATE_INGREDIENTS',
-  DATA_GET_MY_PRIVATE_INGREDIENTS_FAILED: 'DATA_GET_MY_PRIVATE_INGREDIENTS_FAILED',
-  DATA_GET_MY_PRIVATE_RECIPES: 'DATA_GET_MY_PRIVATE_RECIPES',
-  DATA_GET_MY_PRIVATE_RECIPES_FAILED: 'DATA_GET_MY_PRIVATE_RECIPES_FAILED',
-  DATA_GET_MY_PUBLIC_RECIPES: 'DATA_GET_MY_PUBLIC_RECIPES',
-  DATA_GET_MY_PUBLIC_RECIPES_FAILED: 'DATA_GET_MY_PUBLIC_RECIPES_FAILED',
-  DATA_GET_MY_SAVED_RECIPES: 'DATA_GET_MY_SAVED_RECIPES',
-  DATA_GET_MY_SAVED_RECIPES_FAILED: 'DATA_GET_MY_SAVED_RECIPES_FAILED'
+  DATA_GET_USER_DATA: 'DATA_GET_USER_DATA'
 } as const;
 
 /*
@@ -212,160 +164,36 @@ Actions
 export type DataActions =
   IDataInit |
   IDataGetInitialData |
-  IDataGetContent |
-  IDataGetContentTypes |
-  IDataGetCuisines |
-  IDataGetEquipments |
-  IDataGetEquipmentTypes |
-  IDataGetIngredients |
-  IDataGetIngredientTypes |
-  IDataGetMeasurements |
-  IDataGetMethods |
-  IDataGetRecipes |
-  IDataGetRecipeTypes |
-  IDataGetProducts |
-  IDataGetProductCategories |
-  IDataGetProductTypes |
+  IDataGetData |
   IDataGetInitialUserData |
-  IDataGetMyContent |
-  IDataGetMyFavoriteRecipes |
-  IDataGetMyFriendships |
-  IDataGetMyPlans |
-  IDataGetMyPrivateEquipments |
-  IDataGetMyPrivateIngredients |
-  IDataGetMyPrivateRecipes |
-  IDataGetMyPublicRecipes |
-  IDataGetMySavedRecipes;
+  IDataGetUserData;
 
 export interface IDataInit {
   type: typeof actionTypes.DATA_INIT;
 }
-
-
 
 export interface IDataGetInitialData {         
   type: typeof actionTypes.DATA_GET_INITIAL_DATA;
   initialData: IInitialData;
 }
 
-export interface IDataGetContent {
-  type: typeof actionTypes.DATA_GET_CONTENT;
-  officialContent: IWorkContent[];
+export interface IDataGetData {
+  type: typeof actionTypes.DATA_GET_DATA;
+  data: {
+    key: keyof IInitialData;
+    value: Partial<IInitialData>;
+  };
 }
-
-export interface IDataGetContentTypes {
-  type: typeof actionTypes.DATA_GET_CONTENT_TYPES;
-  contentTypes: IContentType[];
-}
-
-export interface IDataGetCuisines {
-  type: typeof actionTypes.DATA_GET_CUISINES;
-  cuisines: ICuisine[];
-}
-
-export interface IDataGetEquipments {
-  type: typeof actionTypes.DATA_GET_EQUIPMENTS;
-  officialEquipment: IEquipment[];
-}
-
-export interface IDataGetEquipmentTypes {
-  type: typeof actionTypes.DATA_GET_EQUIPMENT_TYPES;
-  equipmentTypes: IEquipmentType[];
-}
-
-export interface IDataGetIngredients {
-  type: typeof actionTypes.DATA_GET_INGREDIENTS;
-  officialIngredients: IIngredient[];
-}
-
-export interface IDataGetIngredientTypes {
-  type: typeof actionTypes.DATA_GET_INGREDIENT_TYPES;
-  ingredientTypes: IIngredientType[];
-}
-
-export interface IDataGetMeasurements {
-  type: typeof actionTypes.DATA_GET_MEASUREMENTS;
-  measurements: IMeasurement[];
-}
-
-export interface IDataGetMethods {
-  type: typeof actionTypes.DATA_GET_METHODS;
-  methods: IMethod[];
-}
-
-export interface IDataGetRecipes {
-  type: typeof actionTypes.DATA_GET_RECIPES;
-  officialRecipes: IWorkRecipe[];
-}
-
-export interface IDataGetRecipeTypes {
-  type: typeof actionTypes.DATA_GET_RECIPE_TYPES;
-  recipeTypes: IRecipeType[];
-}
-
-export interface IDataGetProducts {
-  type: typeof actionTypes.DATA_GET_PRODUCTS;
-  products: IWorkProduct[];
-}
-
-export interface IDataGetProductCategories {
-  type: typeof actionTypes.DATA_GET_PRODUCT_CATEGORIES;
-  productCategories: IProductCategory[];
-}
-
-export interface IDataGetProductTypes {
-  type: typeof actionTypes.DATA_GET_PRODUCT_TYPES;
-  productTypes: IProductType[];
-}
-
-
 
 export interface IDataGetInitialUserData {
   type: typeof actionTypes.DATA_GET_INITIAL_USER_DATA;
   initialUserData: IInitialUserData;
 }
 
-export interface IDataGetMyContent {
-  type: typeof actionTypes.DATA_GET_MY_CONTENT;
-  myContent: IWorkContent[];
-}
-
-export interface IDataGetMyFavoriteRecipes {
-  type: typeof actionTypes.DATA_GET_MY_FAVORITE_RECIPES;
-  myFavoriteRecipes: IWorkRecipe[];
-}
-
-export interface IDataGetMyFriendships {
-  type: typeof actionTypes.DATA_GET_MY_FRIENDSHIPS;
-  myFriendships: IFriendship[];
-}
-
-export interface IDataGetMyPlans {
-  type: typeof actionTypes.DATA_GET_MY_PLANS;
-  myPlans: IPlan[];
-}
-
-export interface IDataGetMyPrivateEquipments {
-  type: typeof actionTypes.DATA_GET_MY_PRIVATE_EQUIPMENTS;
-  myPrivateEquipment: IEquipment[];
-}
-
-export interface IDataGetMyPrivateIngredients {
-  type: typeof actionTypes.DATA_GET_MY_PRIVATE_INGREDIENTS;
-  myPrivateIngredients: IIngredient[];
-}
-
-export interface IDataGetMyPrivateRecipes {
-  type: typeof actionTypes.DATA_GET_MY_PRIVATE_RECIPES;
-  myPrivateRecipes: IWorkRecipe[];
-}
-
-export interface IDataGetMyPublicRecipes {
-  type: typeof actionTypes.DATA_GET_MY_PUBLIC_RECIPES;
-  myPublicRecipes: IWorkRecipe[];
-}
-
-export interface IDataGetMySavedRecipes {
-  type: typeof actionTypes.DATA_GET_MY_SAVED_RECIPES;
-  mySavedRecipes: IWorkRecipe[];
+export interface IDataGetUserData {
+  type: typeof actionTypes.DATA_GET_USER_DATA;
+  userData: {
+    key: keyof IInitialUserData;
+    value: Partial<IInitialUserData>;
+  };
 }

@@ -24,7 +24,7 @@ export function* watchMessenger() {
     takeEvery(MESSENGER_CONNECT, messengerConnectSaga),
 
     takeEvery(MESSENGER_DISCONNECT, messengerDisconnectSaga),
-    takeEvery(AUTH_USER_LOGOUT, messengerDisconnectSaga),
+    takeEvery(AUTH_USER_LOGOUT, messengerDisconnectSaga),  // move to auth watcher?
 
     takeEvery(MESSENGER_CHANGE_CHANNEL, messengerChangeChannelSaga),
 

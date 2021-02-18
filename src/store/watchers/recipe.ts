@@ -47,28 +47,22 @@ export function* watchRecipe() {
   yield all([
     takeEvery(STAFF_CREATE_NEW_RECIPE, staffCreateNewRecipeSaga),
     takeEvery(STAFF_CREATE_NEW_RECIPE_SUCCEEDED, dataGetRecipesSaga),
-
     takeEvery(STAFF_EDIT_RECIPE, staffEditRecipeSaga),
     takeEvery(STAFF_EDIT_RECIPE_SUCCEEDED, dataGetRecipesSaga),
-
     takeEvery(STAFF_DELETE_RECIPE, staffDeleteRecipeSaga),
     takeEvery(STAFF_DELETE_RECIPE_SUCCEEDED, dataGetRecipesSaga),
 
     takeEvery(USER_CREATE_NEW_PRIVATE_RECIPE, userCreateNewRecipeSaga),
     takeEvery(USER_CREATE_NEW_PRIVATE_RECIPE_SUCCEEDED, dataGetMyPrivateRecipesSaga),
-
     takeEvery(USER_EDIT_PRIVATE_RECIPE, userEditRecipeSaga),
     takeEvery(USER_EDIT_PRIVATE_RECIPE_SUCCEEDED, dataGetMyPrivateRecipesSaga),
-
     takeEvery(USER_DELETE_PRIVATE_RECIPE, userDeletePrivateRecipeSaga),
     takeEvery(USER_DELETE_PRIVATE_RECIPE_SUCCEEDED, dataGetMyPrivateRecipesSaga),
     
     takeEvery(USER_CREATE_NEW_PUBLIC_RECIPE, userCreateNewRecipeSaga),
     takeEvery(USER_CREATE_NEW_PUBLIC_RECIPE_SUCCEEDED, dataGetMyPublicRecipesSaga),
-
     takeEvery(USER_EDIT_PUBLIC_RECIPE, userEditRecipeSaga),
     takeEvery(USER_EDIT_PUBLIC_RECIPE_SUCCEEDED, dataGetMyPublicRecipesSaga),
-    
     takeEvery(USER_DISOWN_PUBLIC_RECIPE, userDisownPublicRecipeSaga),
     takeEvery(USER_DISOWN_PUBLIC_RECIPE_SUCCEEDED, dataGetMyPublicRecipesSaga)
   ]);
