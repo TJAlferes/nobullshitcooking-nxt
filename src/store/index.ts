@@ -21,7 +21,7 @@ let currentStore: Store | undefined;
 
 
 
-export function initializeStore(preloadedState: any) {  // preloadedState: typeof initialState ???
+export function storeInit(preloadedState: any) {  // preloadedState: typeof initialState ???
   let newStore;
 
   // 1.
@@ -49,7 +49,7 @@ export function initializeStore(preloadedState: any) {  // preloadedState: typeo
 }
 
 export function useStore(initialState: any) {
-  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  const store = useMemo(() => storeInit(initialState), [initialState]);
   return store;
 }
 

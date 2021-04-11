@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 
 import { authReducer } from './auth/reducer';
 import { cartReducer } from './cart/reducer';
+import { chatReducer } from './chat/reducer';
 import { dataReducer } from './data/reducer';
 import { editorReducer } from './editor/reducer';
 import { geolocationReducer } from './geolocation/reducer';
 import { menuReducer } from './menu/reducer';
-import { messengerReducer } from './messenger/reducer';
 import { nobscappReducer } from './nobscapp/reducer';
 import { plannerReducer } from './planner/reducer';
 import { plannerViewReducer } from './plannerView/reducer';
@@ -18,11 +18,11 @@ import { userReducer } from './user/reducer';
 export const rootReducer = combineReducers({
   auth: authReducer,
   cart: cartReducer,
+  chat: chatReducer,
   data: dataReducer,
   editor: editorReducer,
   geolocation: geolocationReducer,
   menu: menuReducer,
-  messenger: messengerReducer,
   nobscapp: nobscappReducer,
   planner: plannerReducer,
   plannerView: plannerViewReducer,

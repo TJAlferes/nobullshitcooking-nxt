@@ -3,13 +3,13 @@ import { fork } from 'redux-saga/effects';
 import {
   watchAuth,
   watchAvatar,
+  watchChat,
   watchContent,
   watchData,
   watchEquipment,
   watchFavorite,
   watchFriendship,
   watchIngredient,
-  watchMessenger,
   watchPlan,
   watchRecipe,
   watchSave
@@ -19,12 +19,12 @@ export function* rootSaga() {
   yield fork(watchAuth);
   yield fork(watchAvatar);
   yield fork(watchContent);
+  yield fork(watchChat);
   yield fork(watchData);
   yield fork(watchEquipment);
   yield fork(watchFavorite);
   yield fork(watchFriendship);
   yield fork(watchIngredient);
-  yield fork(watchMessenger);
   yield fork(watchPlan);
   yield fork(watchRecipe);
   yield fork(watchSave);

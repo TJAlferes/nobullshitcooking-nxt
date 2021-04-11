@@ -16,8 +16,6 @@ import {
 //const Cart = lazy(() => import('../pages/Cart/Cart'));
 //const Checkout = lazy(() => import('../pages/Checkout/Checkout'));
 const Content = lazy(() => import('../pages/Content/Content'));
-import Cuisine from '../pages/Cuisine/Cuisine';  // lazy?
-import Cuisines from '../pages/Cuisines/Cuisines';  // lazy?
 const Equipment = lazy(() => import('../pages/Equipment/Equipment'));
 const Equipments = lazy(() => import('../pages/Equipments/Equipments'));
 const Friends = lazy(() => import('../pages/Friends/Friends'));
@@ -117,8 +115,6 @@ export function RoutesList({ contentTypes }: Props) {
         {appRoute("/products", Products)}
         {appRoute("/recipe/:id", Recipe)}
         {appRoute("/recipes", Recipes)}
-        {appRoute("/page/guide/food/cuisine/:id", Cuisine)}
-        {appRoute("/page/guide/food/cuisines", Cuisines)}
         {routesFromContentTypes && routesFromContentTypes.map(route => 
           appRoute(route.path, Navigation, route.childProps)
         )}

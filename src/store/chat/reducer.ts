@@ -1,33 +1,33 @@
 import { actionTypes as authActionTypes } from '../auth/types';
 import {
   actionTypes,
-  IMessengerState,
-  KMessage,
-  KWhisper,
-  MessengerActions
+  IChatState,
+  PUBLIC,
+  PRIVATE,
+  ChatActions
 } from './types';
 
 const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
-  MESSENGER_CONNECTED,
-  MESSENGER_DISCONNECTED,
-  MESSENGER_GET_ONLINE,
-  MESSENGER_SHOW_ONLINE,
-  MESSENGER_SHOW_OFFLINE,
-  MESSENGER_CHANGED_CHANNEL,
-  MESSENGER_REJOINED_CHANNEL,
-  MESSENGER_JOINED_USER,
-  MESSENGER_LEFT_USER,
-  MESSENGER_RECEIVED_MESSAGE,
-  MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER
+  CHAT_CONNECTED,
+  CHAT_DISCONNECTED,
+  CHAT_GET_ONLINE,
+  CHAT_SHOW_ONLINE,
+  CHAT_SHOW_OFFLINE,
+  CHAT_CHANGED_ROOM,
+  CHAT_REJOINED_ROOM,
+  CHAT_JOINED_USER,
+  CHAT_LEFT_USER,
+  CHAT_RECEIVED_PUBLIC_MESSAGE,
+  CHAT_RECEIVED_PRIVATE_MESSAGE,
+  CHAT_FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
 // NORMALIZE STATE, USE OBJECTS/MAPS, NOT ARRAYS (maybe)
 // remember Nir Kofman's actions patterns (maybe)
 
-const initialState: IMessengerState = {
-  channel: "",
+const initialState: IChatState = {
+  room: "",
   messages: [],
   users: [],
   onlineFriends: [],
@@ -36,12 +36,12 @@ const initialState: IMessengerState = {
   disconnectButtonDisabled: true,
 };
 
-export const messengerReducer = (
+export const chatReducer = (
   state = initialState,
-  action: MessengerActions
-): IMessengerState => {
+  action: ChatActions
+): IChatState => {
   switch (action.type) {
-    case MESSENGER_CONNECTED:
+    case CHAT_CONNECTED:
       return {
         ...state,
         ...{
@@ -51,7 +51,7 @@ export const messengerReducer = (
         }
       };
     
-    case MESSENGER_DISCONNECTED:
+    case CHAT_DISCONNECTED:
     case AUTH_USER_LOGOUT:
       return {
         ...state,
@@ -62,113 +62,98 @@ export const messengerReducer = (
         }
       };
     
-    case MESSENGER_GET_ONLINE:
+    case CHAT_GET_ONLINE:
       return {
         ...state,
         ...{onlineFriends: action.online}
       };
     
-    case MESSENGER_SHOW_ONLINE:
+    case CHAT_SHOW_ONLINE:
       return {
         ...state,
         ...{onlineFriends: state.onlineFriends.concat(action.user)}
       };
     
-    case MESSENGER_SHOW_OFFLINE:
+    case CHAT_SHOW_OFFLINE:
       return {
         ...state,
-        ...{
-          onlineFriends: state.onlineFriends.filter(
-            f => f.id !== action.user.id
-          )
-        }
+        ...{onlineFriends: state.onlineFriends.filter(f => f !== action.user)}
       };
     
-    case MESSENGER_CHANGED_CHANNEL:
+    case CHAT_CHANGED_ROOM:
       return {
         ...state,
         ...{
-          channel: action.channel,
+          room: action.room,
           messages: [],
           users: action.users
         }
       };
     
-    case MESSENGER_REJOINED_CHANNEL:
+    case CHAT_REJOINED_ROOM:
       return {
         ...state,
         ...{
-          channel: action.channel,
+          room: action.room,
           users: action.users
         }
       };
     
-    case MESSENGER_JOINED_USER:
+    case CHAT_JOINED_USER:
       return {
         ...state,
         ...{
           messages: state.messages.concat({
-            kind: KMessage,
+            kind: PUBLIC,
             id: 'admin' + action.ts,
-            text: `${action.user.username} has joined the room.`,
-            room: state.channel,
-            user: {
-              id: 'messengerstatus',
-              username: "messengerstatus",
-              avatar: 'messengerstatus'
-            },
+            to: state.room,
+            from: "messengerstatus",
+            text: `${action.user} has joined the room.`,
             ts: action.ts,
           }),
           users: state.users.concat(action.user)
         }
       };
     
-    case MESSENGER_LEFT_USER:
+    case CHAT_LEFT_USER:
       return {
         ...state,
         ...{
           messages: state.messages.concat({
-            kind: KMessage,
+            kind: PUBLIC,
             id: 'admin' + action.ts,
-            text: `${action.user.username} has left the room.`,
-            room: state.channel,
-            user: {
-              id: 'messengerstatus',
-              username: "messengerstatus",
-              avatar: 'messengerstatus'
-            },
+            to: state.room,
+            from: "messengerstatus",
+            text: `${action.user} has left the room.`,
             ts: action.ts,
           }),
-          users: state.users.filter(u => u.id !== action.user.id)
+          users: state.users.filter(u => u !== action.user)
         }
       };
     
-    case MESSENGER_RECEIVED_MESSAGE:
+    case CHAT_RECEIVED_PUBLIC_MESSAGE:
       return {
         ...state,
-        ...{messages: state.messages.concat(action.message)}
+        ...{messages: state.messages.concat(action.publicMessage)}
       };
     
-    case MESSENGER_RECEIVED_WHISPER:
+    case CHAT_RECEIVED_PRIVATE_MESSAGE:
       return {
         ...state,
-        ...{messages: state.messages.concat(action.whisper)}
+        ...{messages: state.messages.concat(action.privateMessage)}
       };
     
-    case MESSENGER_FAILED_WHISPER:
+    // ???
+    case CHAT_FAILED_PRIVATE_MESSAGE:
       return {
         ...state,
         ...{
           messages: state.messages.concat({
-            kind: KWhisper,
+            kind: PRIVATE,
             id: 'admin' + action.ts,
-            text: action.feedback,
             to: '',
-            user: {
-              id: 'messengerstatus',
-              username: "messengerstatus",
-              avatar: 'messengerstatus'
-            },
+            from: "messengerstatus",
+            text: action.feedback,
             ts: action.ts,
           })
         }
