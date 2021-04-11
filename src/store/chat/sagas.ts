@@ -30,13 +30,26 @@ const endpoint = NOBSCBackendAPIEndpointOne;
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
 
-  const socket = io.connect(`${endpoint}`, {
+  const socket = io(`${endpoint}`, {
     autoConnect: false,
-    reconnection: true
+    reconnection: true,
+    //withCredentials: true
   });
-  //const socket = io(`${endpoint}`, {withCredentials: true});
+
+  const sessionId = localStorage.getItem("chatSessionId");
+
+  if (sessionId) {
+    socket.auth = {sessionId};
+    socket.connect();
+  }
 
   // TO DO: make better event names (server side too)
+
+  socket.on('session', ({ sessionId, username }) => {
+    socket.auth = {sessionId};                         // attach the sessionId to the next reconnection attempts
+    localStorage.setItem("chatSessionId", sessionId);  // store the sessionId in localStorage
+    socket.username = username;                        // save their username
+  });
 
   /*
 
