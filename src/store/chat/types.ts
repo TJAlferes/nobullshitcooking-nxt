@@ -35,8 +35,8 @@ State
 export interface IChatState {
   room: string;
   messages: IMessageWithClientTimestamp[];
-  users: string[];
-  onlineFriends: string[];
+  users: IUser[];
+  onlineFriends: IUser[];
   status: string;
   connectButtonDisabled: boolean;
   disconnectButtonDisabled: boolean;
@@ -49,12 +49,17 @@ export interface IMessage {
   kind: typeof PRIVATE | typeof PUBLIC;
   id: string;
   to: string;
-  from: string;
+  from: IUser;
   text: string;
 }
 
 export interface IMessageWithClientTimestamp extends IMessage {
   ts: string;
+}
+
+export interface IUser {
+  userId: string;
+  username: string;
 }
 
 /*
@@ -101,17 +106,17 @@ interface IChatDisconnected {
 
 interface IChatGetOnline {
   type: typeof actionTypes.CHAT_GET_ONLINE;
-  online: string[];
+  online: IUser[];
 }
 
 interface IChatShowOnline {
   type: typeof actionTypes.CHAT_SHOW_ONLINE;
-  user: string;
+  user: IUser;
 }
 
 interface IChatShowOffline {
   type: typeof actionTypes.CHAT_SHOW_OFFLINE;
-  user: string;
+  user: IUser;
 }
 
 export interface IChatChangeRoom {
@@ -121,25 +126,25 @@ export interface IChatChangeRoom {
 
 interface IChatChangedRoom {
   type: typeof actionTypes.CHAT_CHANGED_ROOM;
-  users: string[];
+  users: IUser[];
   room: string;
 }
 
 interface IChatRejoinedRoom {
   type: typeof actionTypes.CHAT_REJOINED_ROOM;
-  users: string[];
+  users: IUser[];
   room: string;
 }
 
 interface IChatJoinedUser {
   type: typeof actionTypes.CHAT_JOINED_USER;
-  user: string;
+  user: IUser;
   ts: string;
 }
 
 interface IChatLeftUser {
   type: typeof actionTypes.CHAT_LEFT_USER;
-  user: string;
+  user: IUser;
   ts: string;
 }
 

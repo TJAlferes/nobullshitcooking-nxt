@@ -1,8 +1,8 @@
-/*.messenger {
+/*.chat {
 
 }*/
 
-.messenger__feedback {
+.chat__feedback {
   color: #c10006;
   font-family: Arial;
   font-size: 14px;
@@ -11,7 +11,7 @@
   width: 100%;
 }
 
-.messenger__main {
+.chat__main {
   border: none;
   border-radius: 0;
   display: flex;

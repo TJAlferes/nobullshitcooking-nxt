@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import LeftNav from '../../components/LeftNav/LeftNav';
+import { LeftNav } from '../../components';
 import { IFriendship } from '../../store/data/types';
 import './friends.css';
 

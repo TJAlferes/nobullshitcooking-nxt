@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LeftNav from '../../components/LeftNav/LeftNav';
+import { LeftNav } from '../../components';
 import Feed from './Feed/Feed';
 import Suggestions from './Suggestions/Suggestions';
 

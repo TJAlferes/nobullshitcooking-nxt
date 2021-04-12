@@ -3,14 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import {
-  messengerChangeChannel,
-  messengerConnect,
-  messengerDisconnect,
-  messengerSendMessage,
-  messengerSendWhisper
-} from '../../store/messenger/actions';
-import { IUser } from '../../store/messenger/types';
-import { MessengerView } from './views/MessengerView';
+  chatChangeRoom,
+  chatConnect,
+  chatDisconnect,
+  chatSendPrivateMessage,
+  chatSendPublicMessage
+} from '../../store/chat/actions';
+import { ChatView } from './ChatView';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 
@@ -18,19 +17,19 @@ export default function Messenger(): JSX.Element {
   const dispatch = useDispatch();
   // would it make sense to move some of this down in the component tree?
   const authname = useSelector(state => state.auth.authname);
-  const channel = useSelector(state => state.messenger.channel);
+  const room = useSelector(state => state.chat.room);
   const message = useSelector(state => state.user.message);
-  const messages = useSelector(state => state.messenger.messages);
-  const onlineFriends = useSelector(state => state.messenger.onlineFriends);
-  const status = useSelector(state => state.messenger.status);
+  const messages = useSelector(state => state.chat.messages);
+  const onlineFriends = useSelector(state => state.chat.onlineFriends);
+  const status = useSelector(state => state.chat.status);
   const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);
-  const users = useSelector(state => state.messenger.users);
+  const users = useSelector(state => state.chat.users);
   const windowFocused = useSelector(state => state.nobscapp.windowFocused);
 
   const [ debounced, setDebounced ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
-  const [ focusedFriend, setFocusedFriend ] = useState<IUser | null>(null);
-  const [ focusedUser, setFocusedUser ] = useState<IUser | null>(null);
+  const [ focusedFriend, setFocusedFriend ] = useState<string | null>(null);
+  const [ focusedUser, setFocusedUser ] = useState<string | null>(null);
   const [ loading, setLoading ] = useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
   const [ peopleTab, setPeopleTab ] = useState("Room");
@@ -88,7 +87,7 @@ export default function Messenger(): JSX.Element {
     autoScroll();
   }, [messages]);
 
-  const handleChannelChange = () => {
+  const handleRoomChange = () => {
     if (loading) return;
     if (debounced) {
       setFeedback("Slow down there partner...");
@@ -107,7 +106,7 @@ export default function Messenger(): JSX.Element {
     setLoading(true);
 
     //setCurrentFriend("");
-    dispatch(messengerChangeChannel(trimmedRoom));
+    dispatch(chatChangeRoom(trimmedRoom));
     setRoomToEnter("");
     preventSpam();
     setLoading(false);
@@ -115,23 +114,24 @@ export default function Messenger(): JSX.Element {
 
   const handleConnect = () => {
     setLoading(true);
-    dispatch(messengerConnect());
+    dispatch(chatConnect());
     setLoading(false);
   };
 
   const handleDisconnect = () => {
     setLoading(true);
-    dispatch(messengerDisconnect());
+    dispatch(chatDisconnect());
     setLoading(false);
   };
 
-  const handleFriendClick = (friend: IUser) => setFocusedFriend(friend);
+  const handleFriendClick = (friend: string) => setFocusedFriend(friend);
 
   const handleMessageInputChange = (e: React.SyntheticEvent<EventTarget>) =>
     setMessageToSend((e.target as HTMLInputElement).value.trim());
 
   // TO DO: improve this
   const handleMessageSend = (e: React.KeyboardEvent) => {
+    // TO DO: move into 
     if (e.key && (e.key !== "Enter")) return;
     if (loading) return;
     if (debounced) {
@@ -160,9 +160,9 @@ export default function Messenger(): JSX.Element {
 
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
 
-      dispatch(messengerSendWhisper(trimmedWhisper, trimmedUserToWhisper));
+      dispatch(chatSendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
     } else {
-      dispatch(messengerSendMessage(trimmedMessage));
+      dispatch(chatSendPublicMessage(trimmedMessage));
     }
     /*else if (currentFriend !== "") {
       const trimmedFriend = currentFriend.trim();
@@ -179,8 +179,8 @@ export default function Messenger(): JSX.Element {
   const handleRoomInputChange = (e: React.SyntheticEvent<EventTarget>) =>
     setRoomToEnter((e.target as HTMLInputElement).value.trim());
 
-  const handleUserClick = (user: IUser) =>
-    user.username !== authname && setFocusedUser(user);
+  const handleUserClick = (user: string) =>
+    user !== authname && setFocusedUser(user);
   
   const preventSpam = () => {
     setSpamCount(prev => prev + 1);
@@ -191,20 +191,20 @@ export default function Messenger(): JSX.Element {
     }
   };
 
-  const startWhisper = (username: string) => {
+  const startPrivateMessage = (username: string) => {
     setFocusedFriend(null);
     setFocusedUser(null);
     setMessageToSend(`/w ${username}`);
   };
 
   return (
-    <MessengerView
+    <ChatView
       authname={authname}
-      channel={channel}
+      room={room}
       feedback={feedback}
       focusedFriend={focusedFriend}
       focusedUser={focusedUser}
-      handleChannelChange={handleChannelChange}
+      handleRoomChange={handleRoomChange}
       handleConnect={handleConnect}
       handleDisconnect={handleDisconnect}
       handleFriendClick={handleFriendClick}
@@ -220,7 +220,7 @@ export default function Messenger(): JSX.Element {
       onlineFriends={onlineFriends}
       peopleTab={peopleTab}
       roomToEnter={roomToEnter}
-      startWhisper={startWhisper}
+      startPrivateMessage={startPrivateMessage}
       status={status}
       twoColumnATheme={twoColumnATheme}
       users={users}

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
+import { LoaderButton } from '../../components';
 import './login.css';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

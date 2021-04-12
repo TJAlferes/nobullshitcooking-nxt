@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
+import { LoaderSpinner } from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
 import { IIngredient } from '../../store/data/types';
 import { IngredientView } from './IngredientView';

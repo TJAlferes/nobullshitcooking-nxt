@@ -107,8 +107,11 @@ export const chatReducer = (
             kind: PUBLIC,
             id: 'admin' + action.ts,
             to: state.room,
-            from: "messengerstatus",
-            text: `${action.user} has joined the room.`,
+            from: {
+              userId: "messengerstatus",
+              username: "messengerstatus"
+            },
+            text: `${action.user.username} has joined the room.`,
             ts: action.ts,
           }),
           users: state.users.concat(action.user)
@@ -123,7 +126,10 @@ export const chatReducer = (
             kind: PUBLIC,
             id: 'admin' + action.ts,
             to: state.room,
-            from: "messengerstatus",
+            from: {
+              userId: "messengerstatus",
+              username: "messengerstatus"
+            },
             text: `${action.user} has left the room.`,
             ts: action.ts,
           }),
@@ -152,7 +158,10 @@ export const chatReducer = (
             kind: PRIVATE,
             id: 'admin' + action.ts,
             to: '',
-            from: "messengerstatus",
+            from: {
+              userId: "messengerstatus",
+              username: "messengerstatus"
+            },
             text: action.feedback,
             ts: action.ts,
           })

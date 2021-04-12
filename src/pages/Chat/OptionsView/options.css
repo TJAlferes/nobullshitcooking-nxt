@@ -1,4 +1,4 @@
-.messenger__options {
+.chat__options {
   border-left: 10px solid;
   border-right: 9px solid;
   border-top: 10px solid;
@@ -113,7 +113,7 @@
 }
 
 @media (max-width: 799px) {
-  .messenger__options {
+  .chat__options {
     flex-direction: column;
     height: 118px;
   }

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import './optionsView.css';
+import './options.css';
 
 export function OptionsView({
-  channel,
-  handleChannelChange,
+  room,
+  handleRoomChange,
   handleConnect,
   handleDisconnect,
   handleRoomInputChange,
@@ -13,7 +13,7 @@ export function OptionsView({
   status
 }: Props): JSX.Element {
   return (
-    <div className="messenger__options">
+    <div className="chat__options">
       <div className="options__connection">
         <div className="connection-button-frame">
           <button
@@ -32,7 +32,7 @@ export function OptionsView({
 
       <div className="options__current-room">
         <span className="current-room-label">Current Room:</span>
-        <span className="current-room">{channel}</span>
+        <span className="current-room">{room}</span>
       </div>
 
       <div className="options__change-room">
@@ -51,7 +51,7 @@ export function OptionsView({
           <button
             className="change-room-button"
             disabled={(status !== "Connected") || loading}
-            onClick={handleChannelChange}
+            onClick={handleRoomChange}
           >
             Enter
           </button>
@@ -62,8 +62,8 @@ export function OptionsView({
 }
 
 type Props = {
-  channel: string;
-  handleChannelChange(): void;
+  room: string;
+  handleRoomChange(): void;
   handleConnect(): void;
   handleDisconnect(): void;
   handleRoomInputChange(e: React.SyntheticEvent<EventTarget>): void;

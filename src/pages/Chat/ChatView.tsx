@@ -1,19 +1,19 @@
 import React from 'react';
 
-import LeftNav from '../../../components/LeftNav/LeftNav';
-import { Message, IUser } from '../../../store/messenger/types';
-import { ChatView } from './desktop/ChatView/ChatView';
-import { OptionsView } from './desktop/OptionsView/OptionsView';
-import { PeopleView } from './desktop/PeopleView/PeopleView';
-import './messenger.css';
+import { LeftNav } from '../../components';
+import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
+import { MessagesView } from './MessagesView/MessagesView';
+import { OptionsView } from './OptionsView/OptionsView';
+import { PeopleView } from './PeopleView/PeopleView';
+import './chat.css';
 
-export function MessengerView({
+export function ChatView({
   authname,
-  channel,
+  room,
   feedback,
   focusedFriend,
   focusedUser,
-  handleChannelChange,
+  handleRoomChange,
   handleConnect,
   handleDisconnect,
   handleFriendClick,
@@ -29,23 +29,23 @@ export function MessengerView({
   onlineFriends,
   peopleTab,
   roomToEnter,
-  startWhisper,
+  startPrivateMessage,
   status,
   twoColumnATheme,
   users
 }: Props): JSX.Element {
   return (
-    <div className={`messenger two-column-a ${twoColumnATheme}`}>
+    <div className={`chat two-column-a ${twoColumnATheme}`}>
       <LeftNav />
 
       <section>
-        <h1>Messenger</h1>
+        <h1>Chat</h1>
 
-        <p className="messenger__feedback">{feedback}</p>
+        <p className="chat__feedback">{feedback}</p>
 
         <OptionsView
-          channel={channel}
-          handleChannelChange={handleChannelChange}
+          room={room}
+          handleRoomChange={handleRoomChange}
           handleConnect={handleConnect}
           handleDisconnect={handleDisconnect}
           handleRoomInputChange={handleRoomInputChange}
@@ -54,8 +54,8 @@ export function MessengerView({
           status={status}
         />
 
-        <div className="messenger__main">
-          <ChatView
+        <div className="chat__main">
+          <MessagesView
             authname={authname}
             handleMessageInputChange={handleMessageInputChange}
             handleMessageSend={handleMessageSend}
@@ -73,7 +73,7 @@ export function MessengerView({
             handleUserClick={handleUserClick}
             onlineFriends={onlineFriends}
             peopleTab={peopleTab}
-            startWhisper={startWhisper}
+            startPrivateMessage={startPrivateMessage}
             users={users}
           />
         </div>
@@ -84,27 +84,27 @@ export function MessengerView({
 
 type Props = {
   authname: string;
-  channel: string;
+  room: string;
   feedback: string;
-  focusedFriend: IUser | null;
-  focusedUser: IUser | null;
-  handleChannelChange(): void;
+  focusedFriend: string | null;
+  focusedUser: string | null;
+  handleRoomChange(): void;
   handleConnect(): void;
   handleDisconnect(): void;
-  handleFriendClick(friend: IUser): void;
+  handleFriendClick(friend: string): void;
   handleMessageInputChange(e: React.SyntheticEvent<EventTarget>): void;
   handleMessageSend(e: React.KeyboardEvent): void;
   handlePeopleTabChange(value: string): void;
   handleRoomInputChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleUserClick(user: IUser): void;
+  handleUserClick(user: string): void;
   loading: boolean;
-  messages: Message[];
+  messages: IMessageWithClientTimestamp[];
   messagesRef: React.RefObject<HTMLUListElement>;
   messageToSend: string;
   onlineFriends: IUser[];
   peopleTab: string;
   roomToEnter: string;
-  startWhisper(username: string): void;
+  startPrivateMessage(username: string): void;
   status: string;
   twoColumnATheme: string;
   users: IUser[];

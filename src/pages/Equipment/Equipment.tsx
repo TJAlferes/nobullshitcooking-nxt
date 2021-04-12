@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
+import { LoaderSpinner } from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
 import { IEquipment } from '../../store/data/types';
 import { EquipmentView } from './EquipmentView';

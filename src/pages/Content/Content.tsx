@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Node } from 'slate';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
+import { LoaderSpinner } from '../../components';
 import {
   NOBSCBackendAPIEndpointOne
 } from '../../config/NOBSCBackendAPIEndpointOne';

@@ -17,3 +17,5 @@ const app = (
 );
 
 //render(app, document.getElementById('root'));
+
+export * as Cart from './Cart/Cart';
