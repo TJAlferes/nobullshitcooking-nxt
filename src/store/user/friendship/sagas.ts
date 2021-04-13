@@ -2,6 +2,8 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { chatUpdateOnlineSaga } from '../../chat/sagas';
+import { dataGetMyFriendshipsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserRequestFriendship,
@@ -46,6 +48,9 @@ export function* userAcceptFriendshipSaga(action: IUserAcceptFriendship) {
     
     yield put(userMessage(message));
 
+    yield call(dataGetMyFriendshipsSaga);
+    yield call(chatUpdateOnlineSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -68,6 +73,8 @@ export function* userRejectFriendshipSaga(action: IUserRejectFriendship) {
     
     yield put(userMessage(message));
 
+    yield call(dataGetMyFriendshipsSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -88,6 +95,9 @@ export function* userDeleteFriendshipSaga(action: IUserDeleteFriendship) {
     );
     
     yield put(userMessage(message));
+
+    yield call(dataGetMyFriendshipsSaga);
+    yield call(chatUpdateOnlineSaga);
 
   } catch(err) {
 
@@ -111,6 +121,9 @@ export function* userBlockUserSaga(action: IUserBlockUser) {
     
     yield put(userMessage(message));
 
+    yield call(dataGetMyFriendshipsSaga);
+    yield call(chatUpdateOnlineSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -131,6 +144,9 @@ export function* userUnblockUserSaga(action: IUserUnblockUser) {
     );
     
     yield put(userMessage(message));
+
+    yield call(dataGetMyFriendshipsSaga);
+    yield call(chatUpdateOnlineSaga);  // needed in this one?
 
   } catch(err) {
 

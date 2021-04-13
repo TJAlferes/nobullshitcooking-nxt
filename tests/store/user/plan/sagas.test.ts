@@ -1,18 +1,11 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { userMessageClear } from '../../../../src/store/user/actions';
-import {
-  userCreateNewPlanSucceeded,
-  userCreateNewPlanFailed,
-  userEditPlanSucceeded,
-  userEditPlanFailed,
-  userDeletePlanSucceeded,
-  userDeletePlanFailed
-} from '../../../../src/store/user/plan/actions';
+  userMessage,
+  userMessageClear
+} from '../../../../src/store/user/actions';
 import {
   userCreateNewPlanSaga,
   userEditPlanSaga,
@@ -20,13 +13,7 @@ import {
 } from '../../../../src/store/user/plan/sagas';
 import { actionTypes } from '../../../../src/store/user/plan/types';
 
-const {
-  USER_CREATE_NEW_PLAN,
-  USER_EDIT_PLAN,
-  USER_DELETE_PLAN
-} = actionTypes;
-
-const endpoint = NOBSCBackendAPIEndpointOne;
+const { USER_CREATE_NEW_PLAN, USER_EDIT_PLAN, USER_DELETE_PLAN } = actionTypes;
 
 describe('userCreateNewPlanSaga', () => {
   const action = {
@@ -47,8 +34,7 @@ describe('userCreateNewPlanSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userCreateNewPlanSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -61,8 +47,7 @@ describe('userCreateNewPlanSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userCreateNewPlanFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -74,10 +59,7 @@ describe('userCreateNewPlanSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userCreateNewPlanFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -105,8 +87,7 @@ describe('userEditPlanSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userEditPlanSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -119,8 +100,7 @@ describe('userEditPlanSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userEditPlanFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -132,10 +112,7 @@ describe('userEditPlanSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userEditPlanFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -159,8 +136,7 @@ describe('userDeletePlanSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeletePlanSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -173,8 +149,7 @@ describe('userDeletePlanSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeletePlanFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -186,10 +161,7 @@ describe('userDeletePlanSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userDeletePlanFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});

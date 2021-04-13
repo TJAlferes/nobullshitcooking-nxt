@@ -4,23 +4,18 @@ import { actionTypes } from './types';
 
 const {
   AUTH_CHECK_STATE,
+  AUTH_MESSAGE,
   AUTH_MESSAGE_CLEAR,
   AUTH_RESET,
   AUTH_UPDATE_LOCAL_AVATAR,
   AUTH_STAFF_DISPLAY,
   AUTH_STAFF_LOGIN,
-  AUTH_STAFF_LOGIN_FAILED,
   AUTH_STAFF_LOGOUT,
-  AUTH_STAFF_LOGOUT_FAILED,
   AUTH_USER_DISPLAY,
   AUTH_USER_LOGIN,
-  AUTH_USER_LOGIN_FAILED,
   AUTH_USER_LOGOUT,
-  AUTH_USER_LOGOUT_FAILED,
   AUTH_USER_REGISTER,
-  AUTH_USER_REGISTER_FAILED,
   AUTH_USER_VERIFY,
-  AUTH_USER_VERIFY_FAILED,
   //AUTH_FACEBOOK_CHECK_STATE,
   //AUTH_FACEBOOK_LOGIN,
   //AUTH_FACEBOOK_LOGOUT,
@@ -31,6 +26,11 @@ const {
 
 export const authCheckState = () => ({type: AUTH_CHECK_STATE});
 
+export const authMessage = (message: string) => ({
+  type: AUTH_MESSAGE,
+  message
+});
+
 export const authMessageClear = () => ({type: AUTH_MESSAGE_CLEAR});
 
 export const authReset = () => ({type: AUTH_RESET});
@@ -40,10 +40,9 @@ export const authUpdateLocalAvatar = (avatar: string) => ({
   avatar
 });
 
-export const authStaffDisplay = (authname: string, avatar: string) => ({
+export const authStaffDisplay = (authname: string) => ({
   type: AUTH_STAFF_DISPLAY,
-  authname,
-  avatar
+  authname
 });
 
 export const authStaffLogin = (email: string, password: string) => ({
@@ -52,22 +51,11 @@ export const authStaffLogin = (email: string, password: string) => ({
   password
 });
 
-export const authStaffLoginFailed = (message: string) => ({
-  type: AUTH_STAFF_LOGIN_FAILED,
-  message
-});
-
 export const authStaffLogout = () => ({type: AUTH_STAFF_LOGOUT});
 
-export const authStaffLogoutFailed = (message: string) => ({
-  type: AUTH_STAFF_LOGOUT_FAILED,
-  message
-});
-
-export const authUserDisplay = (authname: string, avatar: string) => ({
+export const authUserDisplay = (authname: string) => ({
   type: AUTH_USER_DISPLAY,
-  authname,
-  avatar
+  authname
 });
 
 export const authUserLogin = (email: string, password: string) => ({
@@ -76,17 +64,7 @@ export const authUserLogin = (email: string, password: string) => ({
   password
 });
 
-export const authUserLoginFailed = (message: string) => ({
-  type: AUTH_USER_LOGIN_FAILED,
-  message
-});
-
 export const authUserLogout = () => ({type: AUTH_USER_LOGOUT});
-
-export const authUserLogoutFailed = (message: string) => ({
-  type: AUTH_USER_LOGOUT_FAILED,
-  message
-});
 
 export const authUserRegister = (
   email: string,
@@ -101,11 +79,6 @@ export const authUserRegister = (
   router
 });
 
-export const authUserRegisterFailed = (message: string) => ({
-  type: AUTH_USER_REGISTER_FAILED,
-  message
-});
-
 export const authUserVerify = (
   email: string,
   password: string,
@@ -117,11 +90,6 @@ export const authUserVerify = (
   password,
   confirmationCode,
   router
-});
-
-export const authUserVerifyFailed = (message: string) => ({
-  type: AUTH_USER_VERIFY_FAILED,
-  message
 });
 
 //export const authFacebookCheckState = () => ({type: AUTH_FACEBOOK_CHECK_STATE});

@@ -4,15 +4,10 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { removeStorageItem } from '../../utils/storageHelpers';
 import {
+  authMessage,
   authMessageClear,
   authStaffDisplay,
-  authStaffLoginFailed,
-  authStaffLogoutFailed,
   authUserDisplay,
-  authUserLoginFailed,
-  authUserLogoutFailed,
-  authUserRegisterFailed,
-  authUserVerifyFailed,
   //authFacebookCheckState,
   //authFacebookLogin,
   //authFacebookLogout,
@@ -40,14 +35,11 @@ export function* authStaffLoginSaga(action: IAuthStaffLogin) {
     );
 
     if (message == 'Signed in.') yield put(authStaffDisplay(staffname));
-    else yield put(authStaffLoginFailed(message));
-
-    yield delay(4000);
-    yield put(authMessageClear());
+    else yield put(authMessage(message));
 
   } catch(err) {
 
-    yield put(authStaffLoginFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
 
   }
 
@@ -69,12 +61,12 @@ export function* authStaffLogoutSaga(action: IAuthStaffLogout) {
       yield call(removeStorageItem, 'appState');
     } else {
       yield call(removeStorageItem, 'appState');  // clear their browser anyway
-      yield put(authStaffLogoutFailed(message));
+      yield put(authMessage(message));
     }
 
   } catch(err) {
     
-    yield put(authStaffLogoutFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
 
   }
 
@@ -93,11 +85,11 @@ export function* authUserLoginSaga(action: IAuthUserLogin) {
     );
 
     if (message == 'Signed in.') yield put(authUserDisplay(username));
-    else yield put(authUserLoginFailed(message));
+    else yield put(authMessage(message));
 
   } catch(err) {
 
-    yield put(authUserLoginFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
 
   }
 
@@ -119,12 +111,12 @@ export function* authUserLogoutSaga(action: IAuthUserLogout) {
       yield call(removeStorageItem, 'appState');
     } else {
       yield call(removeStorageItem, 'appState');  // clear their browser anyway
-      yield put(authUserLogoutFailed(message));
+      yield put(authMessage(message));
     }
 
   } catch(err) {
 
-    yield put(authUserLogoutFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
 
   }
 
@@ -147,14 +139,14 @@ export function* authUserRegisterSaga(action: IAuthUserRegister) {
       yield put(authMessageClear());
       yield call(() => router.push('/verify'));
     } else {
-      yield put(authUserRegisterFailed(message));
+      yield put(authMessage(message));
       yield delay(4000);
       yield put(authMessageClear());
     }
 
   } catch(err) {
 
-    yield put(authUserRegisterFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
     yield delay(4000);
     yield put(authMessageClear());
 
@@ -176,14 +168,14 @@ export function* authUserVerifySaga(action: IAuthUserVerify) {
       yield put(authMessageClear());
       yield call(() => router.push('/login'));
     } else {
-      yield put(authUserVerifyFailed(message));
+      yield put(authMessage(message));
       yield delay(4000);
       yield put(authMessageClear());
     }
 
   } catch(err) {
 
-    yield put(authUserVerifyFailed('An error occurred. Please try again.'));
+    yield put(authMessage('An error occurred. Please try again.'));
     yield delay(4000);
     yield put(authMessageClear());
 

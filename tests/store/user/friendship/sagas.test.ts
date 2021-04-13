@@ -1,24 +1,11 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { userMessageClear } from '../../../../src/store/user/actions';
-import {
-  userRequestFriendshipSucceeded,
-  userRequestFriendshipFailed,
-  userAcceptFriendshipSucceeded,
-  userAcceptFriendshipFailed,
-  userRejectFriendshipSucceeded,
-  userRejectFriendshipFailed,
-  userDeleteFriendshipSucceeded,
-  userDeleteFriendshipFailed,
-  userBlockUserSucceeded,
-  userBlockUserFailed,
-  userUnblockUserSucceeded,
-  userUnblockUserFailed
-} from '../../../../src/store/user/friendship/actions';
+  userMessage,
+  userMessageClear
+} from '../../../../src/store/user/actions';
 import {
   userRequestFriendshipSaga,
   userAcceptFriendshipSaga,
@@ -38,8 +25,6 @@ const {
   USER_UNBLOCK_USER
 } = actionTypes;
 
-const endpoint = NOBSCBackendAPIEndpointOne;
-
 describe('userRequestFriendshipSaga', () => {
   const action = {type: USER_REQUEST_FRIENDSHIP, friendName: "Allison"};
 
@@ -56,8 +41,7 @@ describe('userRequestFriendshipSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userRequestFriendshipSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -70,8 +54,7 @@ describe('userRequestFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userRequestFriendshipFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -83,10 +66,7 @@ describe('userRequestFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userRequestFriendshipFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -111,8 +91,7 @@ describe('userAcceptFriendshipSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userAcceptFriendshipSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -125,8 +104,7 @@ describe('userAcceptFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userAcceptFriendshipFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -138,10 +116,7 @@ describe('userAcceptFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userAcceptFriendshipFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -166,8 +141,7 @@ describe('userRejectFriendshipSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userRejectFriendshipSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -180,8 +154,7 @@ describe('userRejectFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userRejectFriendshipFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -193,10 +166,7 @@ describe('userRejectFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userRejectFriendshipFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -220,8 +190,7 @@ describe('userDeleteFriendshipSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeleteFriendshipSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -234,8 +203,7 @@ describe('userDeleteFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeleteFriendshipFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -247,10 +215,7 @@ describe('userDeleteFriendshipSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userDeleteFriendshipFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -275,8 +240,7 @@ describe('userBlockUserSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userBlockUserSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -289,8 +253,7 @@ describe('userBlockUserSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userBlockUserFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -302,10 +265,7 @@ describe('userBlockUserSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userBlockUserFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -329,8 +289,7 @@ describe('userUnblockUserSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userUnblockUserSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(3000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -343,8 +302,7 @@ describe('userUnblockUserSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userUnblockUserFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -356,10 +314,7 @@ describe('userUnblockUserSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userUnblockUserFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});

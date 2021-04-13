@@ -1,17 +1,16 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { userMessageClear } from '../../../../src/store/user/actions';
-import { userSubmitAvatarSucceeded, userSubmitAvatarFailed } from '../../../../src/store/user/avatar/actions';
+  userMessage,
+  userMessageClear
+} from '../../../../src/store/user/actions';
 import { userSubmitAvatarSaga } from '../../../../src/store/user/avatar/sagas';
 import { actionTypes} from '../../../../src/store/user/avatar/types';
 
 const { USER_SUBMIT_AVATAR } = actionTypes;
 
-const endpoint = NOBSCBackendAPIEndpointOne;
 const fullAvatar = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
 const tinyAvatar = new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
 
@@ -63,12 +62,11 @@ describe('userSubmitAvatarSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userSubmitAvatarSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(2000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(JSON.stringify(iterator.next(res).value))
-    .toEqual(JSON.stringify(call(() => location.reload())));
+      .toEqual(JSON.stringify(call(() => location.reload())));
     expect(iterator.next()).toEqual({done: true, value: undefined});
   });
 
@@ -83,8 +81,7 @@ describe('userSubmitAvatarSaga', () => {
     iterator.next(avatarUrl);  //iterator.next(res);
 
     expect(iterator.next(res).value)
-    .toEqual(put(userSubmitAvatarFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -96,10 +93,7 @@ describe('userSubmitAvatarSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(
-      put(userSubmitAvatarFailed('An error occurred. Please try again.'))
-    );
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});

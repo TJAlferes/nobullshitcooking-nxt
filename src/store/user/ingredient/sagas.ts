@@ -2,6 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { dataGetMyPrivateIngredientsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewPrivateIngredient,
@@ -69,6 +70,8 @@ export function* userCreateNewPrivateIngredientSaga(
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyPrivateIngredientsSaga);
 
   } catch(err) {
 
@@ -145,6 +148,8 @@ export function* userEditPrivateIngredientSaga(
 
     yield put(userMessage(message));
 
+    yield call(dataGetMyPrivateIngredientsSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -167,6 +172,8 @@ export function* userDeletePrivateIngredientSaga(
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyPrivateIngredientsSaga);
 
   } catch(err) {
 

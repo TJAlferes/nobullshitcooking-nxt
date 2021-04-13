@@ -1,21 +1,10 @@
 import {
   userSaveRecipe,
-  userSaveRecipeSucceeded,
-  userSaveRecipeFailed,
-  userUnsaveRecipe,
-  userUnsaveRecipeSucceeded,
-  userUnsaveRecipeFailed
+  userUnsaveRecipe
 } from '../../../../src/store/user/save/actions';
 import { actionTypes } from '../../../../src/store/user/save/types';
 
-const {
-  USER_SAVE_RECIPE,
-  USER_SAVE_RECIPE_SUCCEEDED,
-  USER_SAVE_RECIPE_FAILED,
-  USER_UNSAVE_RECIPE,
-  USER_UNSAVE_RECIPE_SUCCEEDED,
-  USER_UNSAVE_RECIPE_FAILED
-} = actionTypes;
+const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
 
 describe('userSaveRecipe action creator', () => {
   it('returns the correct action type', () => {
@@ -27,28 +16,6 @@ describe('userSaveRecipe action creator', () => {
   });
 });
 
-describe('userSaveRecipeSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(userSaveRecipeSucceeded('OK.').type)
-      .toEqual(USER_SAVE_RECIPE_SUCCEEDED);
-  });
-
-  it('returns the correct message', () => {
-    expect(userSaveRecipeSucceeded('OK.').message).toEqual('OK.');
-  });
-});
-
-describe('userSaveRecipeFailed action creator', () => {
-  it('returns the correct action type', () => {
-    expect(userSaveRecipeFailed('Try again.').type)
-      .toEqual(USER_SAVE_RECIPE_FAILED);
-  });
-
-  it('returns the correct message', () => {
-    expect(userSaveRecipeFailed('Try again.').message).toEqual('Try again.');
-  });
-});
-
 describe('userUnsaveRecipe action creator', () => {
   it('returns the correct action type', () => {
     expect(userUnsaveRecipe(4).type).toEqual(USER_UNSAVE_RECIPE);
@@ -56,27 +23,5 @@ describe('userUnsaveRecipe action creator', () => {
 
   it('returns the correct recipeId', () => {
     expect(userUnsaveRecipe(4).recipeId).toEqual(4);
-  });
-});
-
-describe('userUnsaveRecipeSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(userUnsaveRecipeSucceeded('OK.').type)
-      .toEqual(USER_UNSAVE_RECIPE_SUCCEEDED);
-  });
-
-  it('returns the correct message', () => {
-    expect(userUnsaveRecipeSucceeded('OK.').message).toEqual('OK.');
-  });
-});
-
-describe('userUnsaveRecipeFailed action creator', () => {
-  it('returns the correct action type', () => {
-    expect(userUnsaveRecipeFailed('Try again.').type)
-      .toEqual(USER_UNSAVE_RECIPE_FAILED);
-  });
-
-  it('returns the correct message', () => {
-    expect(userUnsaveRecipeFailed('Try again.').message).toEqual('Try again.');
   });
 });

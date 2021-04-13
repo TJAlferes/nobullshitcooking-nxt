@@ -1,24 +1,11 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { userMessageClear } from '../../../../src/store/user/actions';
-import {
-  userCreateNewPrivateRecipeSucceeded,
-  userCreateNewPrivateRecipeFailed,
-  userEditPrivateRecipeSucceeded,
-  userEditPrivateRecipeFailed,
-  userDeletePrivateRecipeSucceeded,
-  userDeletePrivateRecipeFailed,
-  //userCreateNewPublicRecipeSucceeded,  // TO DO: write tests
-  //userCreateNewPublicRecipeFailed,  // TO DO: write tests
-  //userEditPublicRecipeSucceeded,  // TO DO: write tests
-  //userEditPublicRecipeFailed,  // TO DO: write tests
-  userDisownPublicRecipeSucceeded,
-  userDisownPublicRecipeFailed
-} from '../../../../src/store/user/recipe/actions';
+  userMessage,
+  userMessageClear
+} from '../../../../src/store/user/actions';
 import {
   userCreateNewRecipeSaga,
   userDeletePrivateRecipeSaga,
@@ -33,8 +20,6 @@ const {
   USER_DISOWN_PUBLIC_RECIPE,
   USER_EDIT_PRIVATE_RECIPE
 } = actionTypes;
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 const recipeFullImage =
   new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
@@ -262,8 +247,7 @@ describe('userCreateNewRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userCreateNewPrivateRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -290,8 +274,7 @@ describe('userCreateNewRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userCreateNewPrivateRecipeFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -303,10 +286,7 @@ describe('userCreateNewRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(userCreateNewPrivateRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -329,8 +309,7 @@ describe('userDeletePrivateRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeletePrivateRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -343,8 +322,7 @@ describe('userDeletePrivateRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDeletePrivateRecipeFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -356,10 +334,7 @@ describe('userDeletePrivateRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(userDeletePrivateRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -382,8 +357,7 @@ describe('userDisownPublicRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDisownPublicRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -396,8 +370,7 @@ describe('userDisownPublicRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userDisownPublicRecipeFailed(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -409,10 +382,7 @@ describe('userDisownPublicRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(userDisownPublicRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -588,8 +558,7 @@ describe('userEditRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(userEditPrivateRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -616,8 +585,7 @@ describe('userEditRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(userEditPrivateRecipeFailed(res.data.message)));
-    
+      .toEqual(put(userMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -629,10 +597,7 @@ describe('userEditRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(userEditPrivateRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-    
+      .toEqual(put(userMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(userMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});

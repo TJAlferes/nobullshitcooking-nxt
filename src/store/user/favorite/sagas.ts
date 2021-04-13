@@ -2,6 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { dataGetMyFavoriteRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserFavoriteRecipe, IUserUnfavoriteRecipe } from './types';
 
@@ -16,6 +17,8 @@ export function* userFavoriteRecipeSaga(action: IUserFavoriteRecipe) {
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyFavoriteRecipesSaga);
 
   } catch(err) {
 
@@ -37,6 +40,8 @@ export function* userUnfavoriteRecipeSaga(action: IUserUnfavoriteRecipe) {
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyFavoriteRecipesSaga);
 
   } catch(err) {
 

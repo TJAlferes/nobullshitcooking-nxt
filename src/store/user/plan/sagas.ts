@@ -2,6 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { dataGetMyPlansSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserCreatePlan, IUserEditPlan, IUserDeletePlan } from './types';
 
@@ -16,6 +17,8 @@ export function* userCreateNewPlanSaga(action: IUserCreatePlan) {
     );
 
     yield put(userMessage(message));
+      // if it refreshes too quickly, put a delay here?
+    yield call(dataGetMyPlansSaga);
 
   } catch(err) {
 
@@ -37,6 +40,8 @@ export function* userEditPlanSaga(action: IUserEditPlan) {
 
     yield put(userMessage(message));
 
+    yield call(dataGetMyPlansSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -55,6 +60,8 @@ export function* userDeletePlanSaga(action: IUserDeletePlan) {
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyPlansSaga);
 
   } catch(err) {
 

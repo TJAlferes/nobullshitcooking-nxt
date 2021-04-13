@@ -2,7 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { dataGetContentSaga, dataGetMyContentSaga } from '../../data/sagas';
+import { dataGetMyContentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewContent,
@@ -69,8 +69,9 @@ export function* userCreateNewContentSaga(action: IUserCreateNewContent) {
       {withCredentials: true}
     );
     
-    dataGetMyContentSaga();
     yield put(userMessage(message));
+
+    yield call(dataGetMyContentSaga);
 
   } catch(err) {
 
@@ -146,7 +147,8 @@ export function* userEditContentSaga(action: IUserEditContent) {
     );
 
     yield put(userMessage(message));
-    dataGetMyContentSaga();  // ?
+
+    yield call(dataGetMyContentSaga);
 
   } catch(err) {
 
@@ -168,7 +170,8 @@ export function* userDeleteContentSaga(action: IUserDeleteContent) {
     );
 
     yield put(userMessage(message));
-    dataGetMyContentSaga();  // ?
+
+    yield call(dataGetMyContentSaga);
 
   } catch(err) {
 

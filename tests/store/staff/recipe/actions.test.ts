@@ -1,26 +1,14 @@
 import {
   staffCreateNewRecipe,
-  staffCreateNewRecipeSucceeded,
-  staffCreateNewRecipeFailed,
   staffEditRecipe,
-  staffEditRecipeSucceeded,
-  staffEditRecipeFailed,
-  staffDeleteRecipe,
-  staffDeleteRecipeSucceeded,
-  staffDeleteRecipeFailed
+  staffDeleteRecipe
 } from '../../../../src/store/staff/recipe/actions';
 import { actionTypes } from '../../../../src/store/staff/recipe/types';
 
 const {
   STAFF_CREATE_NEW_RECIPE,
-  STAFF_CREATE_NEW_RECIPE_SUCCEEDED,
-  STAFF_CREATE_NEW_RECIPE_FAILED,
   STAFF_EDIT_RECIPE,
-  STAFF_EDIT_RECIPE_SUCCEEDED,
-  STAFF_EDIT_RECIPE_FAILED,
-  STAFF_DELETE_RECIPE,
-  STAFF_DELETE_RECIPE_SUCCEEDED,
-  STAFF_DELETE_RECIPE_FAILED
+  STAFF_DELETE_RECIPE
 } = actionTypes;
 
 const creatingRecipeInfo = {
@@ -85,29 +73,6 @@ describe('staffCreateNewRecipe action creator', () => {
   });
 });
 
-describe('staffCreateNewRecipeSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffCreateNewRecipeSucceeded('OK.').type)
-      .toEqual(STAFF_CREATE_NEW_RECIPE_SUCCEEDED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffCreateNewRecipeSucceeded('OK.').message).toEqual('OK.');
-  });
-});
-
-describe('staffCreateNewRecipeFailed action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffCreateNewRecipeFailed('Try again.').type)
-      .toEqual(STAFF_CREATE_NEW_RECIPE_FAILED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffCreateNewRecipeFailed('Try again.').message)
-      .toEqual('Try again.');
-  });
-});
-
 describe('staffEditRecipe action creator', () => {
   it('returns the correct action type', () => {
     expect(staffEditRecipe(editingRecipeInfo).type).toEqual(STAFF_EDIT_RECIPE);
@@ -119,28 +84,6 @@ describe('staffEditRecipe action creator', () => {
   });
 });
 
-describe('staffEditRecipeSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffEditRecipeSucceeded('OK.').type)
-      .toEqual(STAFF_EDIT_RECIPE_SUCCEEDED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffEditRecipeSucceeded('OK.').message).toEqual('OK.');
-  });
-});
-
-describe('staffEditRecipeFailed action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffEditRecipeFailed('Try again.').type)
-      .toEqual(STAFF_EDIT_RECIPE_FAILED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffEditRecipeFailed('Try again.').message).toEqual('Try again.');
-  });
-});
-
 describe('staffDeleteRecipe action creator', () => {
   it('returns the correct action type', () => {
     expect(staffDeleteRecipe(7).type).toEqual(STAFF_DELETE_RECIPE);
@@ -148,27 +91,5 @@ describe('staffDeleteRecipe action creator', () => {
 
   it('returns the correct id', () => {
     expect(staffDeleteRecipe(7).id).toEqual(7);
-  });
-});
-
-describe('staffDeleteRecipeSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffDeleteRecipeSucceeded('OK.').type)
-      .toEqual(STAFF_DELETE_RECIPE_SUCCEEDED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffDeleteRecipeSucceeded('OK.').message).toEqual('OK.');
-  });
-});
-
-describe('staffDeleteRecipeFailed action creator', () => {
-  it('returns the correct action type', () => {
-    expect(staffDeleteRecipeFailed('Try again.').type)
-      .toEqual(STAFF_DELETE_RECIPE_FAILED);
-  });
-
-  it('returns the correct message', () => {
-    expect(staffDeleteRecipeFailed('Try again.').message).toEqual('Try again.');
   });
 });

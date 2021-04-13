@@ -35,16 +35,12 @@ describe('authUpdateLocalAvatar action creator', () => {
 
 describe('authStaffDisplay action creator', () => {
   it('returns the correct action type', () => {
-    expect(authStaffDisplay('Allison', 'Allison').type)
+    expect(authStaffDisplay('Allison').type)
       .toEqual(AUTH_STAFF_DISPLAY);
   });
 
   it('returns the correct authname', () => {
-    expect(authStaffDisplay('Allison', 'Allison').authname).toEqual('Allison');
-  });
-
-  it('returns the correct avatar', () => {
-    expect(authStaffDisplay('Allison', 'Allison').avatar).toEqual('Allison');
+    expect(authStaffDisplay('Allison').authname).toEqual('Allison');
   });
 });
 
@@ -67,16 +63,12 @@ describe('authStaffLogin action creator', () => {
 
 describe('authUserDisplay action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUserDisplay('Allison', 'Allison').type)
+    expect(authUserDisplay('Allison').type)
       .toEqual(AUTH_USER_DISPLAY);
   });
 
   it('returns the correct authname', () => {
-    expect(authUserDisplay('Allison', 'Allison').authname).toEqual('Allison');
-  });
-
-  it('returns the correct avatar', () => {
-    expect(authUserDisplay('Allison', 'Allison').avatar).toEqual('Allison');
+    expect(authUserDisplay('Allison').authname).toEqual('Allison');
   });
 });
 

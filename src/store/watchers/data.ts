@@ -11,6 +11,7 @@ const {
   DATA_GET_INITIAL_USER_DATA,
 } = actionTypes;
 
+// TO DO: finish / let Next.js handle now
 export function* watchData() {
   yield all([
     takeEvery(DATA_INIT, dataGetInitialDataSaga),

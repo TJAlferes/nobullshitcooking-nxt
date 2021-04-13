@@ -2,6 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { dataGetMySavedRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserSaveRecipe, IUserUnsaveRecipe } from './types';
 
@@ -15,7 +16,8 @@ export function* userSaveRecipeSaga(action: IUserSaveRecipe) {
     );
 
     yield put(userMessage(message));
-    // refetch here?
+    
+    yield call(dataGetMySavedRecipesSaga);
 
   } catch(err) {
 
@@ -35,6 +37,8 @@ export function* userUnsaveRecipeSaga(action: IUserUnsaveRecipe) {
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMySavedRecipesSaga);
 
   } catch(err) {
 

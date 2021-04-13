@@ -2,6 +2,10 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import {
+  dataGetMyPrivateRecipesSaga,
+  dataGetMyPublicRecipesSaga
+} from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewPrivateRecipe,
@@ -182,6 +186,9 @@ export function* userCreateNewRecipeSaga(
 
     yield put(userMessage(message));
 
+    yield call(dataGetMyPrivateRecipesSaga);
+    yield call(dataGetMyPublicRecipesSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -203,6 +210,8 @@ export function* userDeletePrivateRecipeSaga(action: IUserDeletePrivateRecipe) {
 
     yield put(userMessage(message));
 
+    yield call(dataGetMyPrivateRecipesSaga);
+
   } catch(err) {
 
     yield put(userMessage('An error occurred. Please try again.'));
@@ -223,6 +232,8 @@ export function* userDisownPublicRecipeSaga(action: IUserDisownPublicRecipe) {
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyPublicRecipesSaga);
 
   } catch(err) {
 
@@ -413,6 +424,9 @@ export function* userEditRecipeSaga(
     );
 
     yield put(userMessage(message));
+
+    yield call(dataGetMyPrivateRecipesSaga);
+    yield call(dataGetMyPublicRecipesSaga);
 
   } catch(err) {
 

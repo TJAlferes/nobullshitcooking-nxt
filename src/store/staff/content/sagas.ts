@@ -2,6 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { dataGetContentSaga } from '../../data/sagas';
 import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewContent,
@@ -69,6 +70,8 @@ export function* staffCreateNewContentSaga(action: IStaffCreateNewContent) {
     );
 
     yield put(staffMessage(message));
+
+    yield call(dataGetContentSaga);
 
   } catch(err) {
 
@@ -145,6 +148,8 @@ export function* staffEditContentSaga(action: IStaffEditContent) {
 
     yield put(staffMessage(message));
 
+    yield call(dataGetContentSaga);
+
   } catch(err) {
 
     yield put(staffMessage('An error occurred. Please try again.'));
@@ -165,6 +170,8 @@ export function* staffDeleteContentSaga(action: IStaffDeleteContent) {
     );
 
     yield put(staffMessage(message));
+
+    yield call(dataGetContentSaga);
 
   } catch(err) {
 

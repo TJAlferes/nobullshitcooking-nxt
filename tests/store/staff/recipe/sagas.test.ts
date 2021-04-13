@@ -1,18 +1,11 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../../src/config/NOBSCBackendAPIEndpointOne';
-import { staffMessageClear } from '../../../../src/store/staff/actions';
-import {
-  staffCreateNewRecipeSucceeded,
-  staffCreateNewRecipeFailed,
-  staffDeleteRecipeSucceeded,
-  staffDeleteRecipeFailed,
-  staffEditRecipeSucceeded,
-  staffEditRecipeFailed
-} from '../../../../src/store/staff/recipe/actions';
+  staffMessage,
+  staffMessageClear
+} from '../../../../src/store/staff/actions';
 import {
   staffCreateNewRecipeSaga,
   staffDeleteRecipeSaga,
@@ -25,8 +18,6 @@ const {
   STAFF_DELETE_RECIPE,
   STAFF_EDIT_RECIPE
 } = actionTypes;
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 const recipeFullImage =
   new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
@@ -254,8 +245,7 @@ describe('staffCreateNewRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffCreateNewRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -282,8 +272,7 @@ describe('staffCreateNewRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffCreateNewRecipeFailed(res.data.message)));
-
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -295,10 +284,7 @@ describe('staffCreateNewRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(staffCreateNewRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-
+      .toEqual(put(staffMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -319,8 +305,7 @@ describe('staffDeleteRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffDeleteRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -333,8 +318,7 @@ describe('staffDeleteRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffDeleteRecipeFailed(res.data.message)));
-
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -346,10 +330,7 @@ describe('staffDeleteRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(staffDeleteRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-
+      .toEqual(put(staffMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -523,8 +504,7 @@ describe('the staffEditRecipeSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffEditRecipeSucceeded(res.data.message)));
-
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -551,8 +531,7 @@ describe('the staffEditRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.next(res).value)
-    .toEqual(put(staffEditRecipeFailed(res.data.message)));
-    
+      .toEqual(put(staffMessage(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -564,10 +543,7 @@ describe('the staffEditRecipeSaga', () => {
     iterator.next();
 
     expect(iterator.throw('error').value)
-    .toEqual(put(staffEditRecipeFailed(
-      'An error occurred. Please try again.'
-    )));
-    
+      .toEqual(put(staffMessage('An error occurred. Please try again.')));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(staffMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});

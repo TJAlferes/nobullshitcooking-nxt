@@ -6,20 +6,13 @@ const {
   AUTH_RESET,
   AUTH_UPDATE_LOCAL_AVATAR,
   AUTH_STAFF_DISPLAY,
-  AUTH_STAFF_LOGIN_FAILED,
   AUTH_STAFF_LOGOUT,
-  AUTH_STAFF_LOGOUT_FAILED,
   AUTH_USER_DISPLAY,
-  AUTH_USER_LOGIN_FAILED,
-  AUTH_USER_LOGOUT,
-  AUTH_USER_LOGOUT_FAILED,
-  AUTH_USER_REGISTER_FAILED,
-  //AUTH_USER_VERIFY_FAILED
+  AUTH_USER_LOGOUT
 } = actionTypes;
 
 const initialState = {
   authname: '',
-  avatar: '',
   message: '',
   staffIsAuthenticated: false,
   userIsAuthenticated: false
@@ -28,7 +21,6 @@ const initialState = {
 // move
 const beforeState = {
   authname: 'Spongebob',
-  avatar: 'Spongebob',
   message: '',
   staffIsAuthenticated: false,
   userIsAuthenticated: true
@@ -36,14 +28,10 @@ const beforeState = {
 
 describe('auth reducer', () => {
   it('returns initial state', () => {
-    expect(authReducer(undefined, {
-      type: AUTH_USER_REGISTER_FAILED,
-      message: 'Registration failed.'
-    }))
+    expect(authReducer(undefined, {type: AUTH_MESSAGE_CLEAR}))
       .toEqual({
         authname: '',
-        avatar: '',
-        message: 'Registration failed.',
+        message: '',
         staffIsAuthenticated: false,
         userIsAuthenticated: false
       });
@@ -52,14 +40,12 @@ describe('auth reducer', () => {
   it('handles actions of type AUTH_MESSAGE_CLEAR', () => {
     expect(authReducer({
       authname: '',
-      avatar: '',
       message: 'Incorrect email or password.',
       staffIsAuthenticated: false,
       userIsAuthenticated: false
     }, {type: AUTH_MESSAGE_CLEAR}))
       .toEqual({
         authname: '',
-        avatar: '',
         message: '',
         staffIsAuthenticated: false,
         userIsAuthenticated: false
@@ -70,14 +56,14 @@ describe('auth reducer', () => {
     expect(authReducer(beforeState, {type: AUTH_RESET})).toEqual(initialState);
   });
 
+  // change or delete?
   it('handles actions of type AUTH_UPDATE_LOCAL_AVATAR', () => {
     expect(authReducer(beforeState, {
       type: AUTH_UPDATE_LOCAL_AVATAR,
-      avatar: 'Squidward-456456456'
+      avatar: 'Spongebob'
     }))
       .toEqual({
         authname: 'Spongebob',
-        avatar: 'Squidward-456456456',
         message: '',
         staffIsAuthenticated: false,
         userIsAuthenticated: true
@@ -86,98 +72,26 @@ describe('auth reducer', () => {
 
   // STAFF_DISPLAY
 
-  it('handles actions of type AUTH_STAFF_LOGIN_FAILED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_STAFF_LOGIN_FAILED,
-      message: 'Login failed.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Login failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_STAFF_LOGOUT', () => {
     expect(authReducer(beforeState, {type: AUTH_STAFF_LOGOUT}))
       .toEqual(initialState);
   });
 
-  it('handles actions of type AUTH_STAFF_LOGOUT_FAILED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_STAFF_LOGOUT_FAILED,
-      message: 'Logout failed.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Logout failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_USER_DISPLAY', () => {
     expect(authReducer(initialState, {
       type: AUTH_USER_DISPLAY,
-      authname: 'Squidward',
-      avatar: 'Squidward-123123123'
+      authname: 'Squidward'
     }))
       .toEqual({
         authname: 'Squidward',
-        avatar: 'Squidward-123123123',
         message: '',
         staffIsAuthenticated: false,
         userIsAuthenticated: true
       });
   });
 
-  it('handles actions of type AUTH_USER_LOGIN_FAILED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_LOGIN_FAILED,
-      message: 'Login failed.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Login failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_USER_LOGOUT', () => {
     expect(authReducer(beforeState, {type: AUTH_USER_LOGOUT}))
       .toEqual(initialState);
-  });
-
-  it('handles actions of type AUTH_USER_LOGOUT_FAILED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_LOGOUT_FAILED,
-      message: 'Logout failed.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Logout failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
-  it('handles actions of type AUTH_USER_REGISTER_FAILED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_REGISTER_FAILED,
-      message: 'Registration failed.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Registration failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
   });
 });
