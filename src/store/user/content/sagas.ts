@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { dataGetContentSaga, dataGetMyContentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
@@ -11,8 +9,6 @@ import {
   IUserEditContent,
   IUserDeleteContent
 } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* userCreateNewContentSaga(action: IUserCreateNewContent) {
   let {
@@ -29,7 +25,7 @@ export function* userCreateNewContentSaga(action: IUserCreateNewContent) {
 
     if (fullImage && thumbImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, thumbSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/get-signed-url/content`,
         {fileType: fullImage.type},
@@ -38,19 +34,19 @@ export function* userCreateNewContentSaga(action: IUserCreateNewContent) {
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.thumbSignature,
+        thumbSignature,
         thumbImage,
         {headers: {'Content-Type': thumbImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 
@@ -103,7 +99,7 @@ export function* userEditContentSaga(action: IUserEditContent) {
 
     if (fullImage && thumbImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, thumbSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/get-signed-url/content`,
         {fileType: fullImage.type},
@@ -112,19 +108,19 @@ export function* userEditContentSaga(action: IUserEditContent) {
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.thumbSignature,
+        thumbSignature,
         thumbImage,
         {headers: {'Content-Type': thumbImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 

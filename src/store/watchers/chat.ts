@@ -22,14 +22,10 @@ const {
 export function* watchChat() {
   yield all([
     takeEvery(CHAT_CONNECT, chatConnectSaga),
-
     takeEvery(CHAT_DISCONNECT, chatDisconnectSaga),
     takeEvery(AUTH_USER_LOGOUT, chatDisconnectSaga),  // move to auth watcher?
-
     takeEvery(CHAT_CHANGE_ROOM, chatChangeRoomSaga),
-
     takeEvery(CHAT_SEND_PUBLIC_MESSAGE, chatSendPublicMessageSaga),
-
     takeEvery(CHAT_SEND_PRIVATE_MESSAGE, chatSendPrivateMessageSaga)
   ]);
 }

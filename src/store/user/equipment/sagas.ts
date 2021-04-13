@@ -1,17 +1,13 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewPrivateEquipment,
   IUserEditPrivateEquipment,
   IUserDeletePrivateEquipment
 } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* userCreateNewPrivateEquipmentSaga(
   action: IUserCreateNewPrivateEquipment
@@ -29,7 +25,7 @@ export function* userCreateNewPrivateEquipmentSaga(
 
     if (fullImage && tinyImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/get-signed-url/equipment`,
         {fileType: fullImage.type},
@@ -38,19 +34,19 @@ export function* userCreateNewPrivateEquipmentSaga(
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.tinySignature,
+        tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 
@@ -102,7 +98,7 @@ export function* userEditPrivateEquipmentSaga(
 
     if (fullImage && tinyImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/get-signed-url/equipment`,
         {fileType: fullImage.type},
@@ -111,19 +107,19 @@ export function* userEditPrivateEquipmentSaga(
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.tinySignature,
+        tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 

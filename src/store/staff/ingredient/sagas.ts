@@ -1,17 +1,13 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { staffMessage, staffMessageClear } from '../actions';
 import {
   IStaffCreateNewIngredient,
   IStaffEditIngredient,
   IStaffDeleteIngredient
 } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* staffCreateNewIngredientSaga(action: IStaffCreateNewIngredient) {
   let {
@@ -27,7 +23,7 @@ export function* staffCreateNewIngredientSaga(action: IStaffCreateNewIngredient)
 
     if (fullImage && tinyImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/ingredient`,
         {fileType: fullImage.type},
@@ -36,19 +32,19 @@ export function* staffCreateNewIngredientSaga(action: IStaffCreateNewIngredient)
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.tinySignature,
+        tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 
@@ -98,7 +94,7 @@ export function* staffEditIngredientSaga(action: IStaffEditIngredient) {
 
     if (fullImage && tinyImage) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/staff/get-signed-url/ingredient`,
         {fileType: fullImage.type},
@@ -107,19 +103,19 @@ export function* staffEditIngredientSaga(action: IStaffEditIngredient) {
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         fullImage,
         {headers: {'Content-Type': fullImage.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.tinySignature,
+        tinySignature,
         tinyImage,
         {headers: {'Content-Type': tinyImage.type}}
       );
 
-      image = res1.data.fullName;
+      image = fullName;
 
     } else {
 

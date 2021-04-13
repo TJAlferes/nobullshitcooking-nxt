@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserSubmitAvatar } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* userSubmitAvatarSaga(action: IUserSubmitAvatar) {
   try {
@@ -16,7 +12,7 @@ export function* userSubmitAvatarSaga(action: IUserSubmitAvatar) {
 
     if (action.fullAvatar && action.tinyAvatar) {
 
-      const res1 = yield call(
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/get-signed-url/avatar`,
         {fileType: action.fullAvatar.type},
@@ -25,19 +21,19 @@ export function* userSubmitAvatarSaga(action: IUserSubmitAvatar) {
 
       yield call(
         [axios, axios.put],
-        res1.data.fullSignature,
+        fullSignature,
         action.fullAvatar,
         {headers: {'Content-Type': action.fullAvatar.type}}
       );
 
       yield call(
         [axios, axios.put],
-        res1.data.tinySignature,
+        tinySignature,
         action.tinyAvatar,
         {headers: {'Content-Type': action.tinyAvatar.type}}
       );
 
-      avatarUrl = res1.data.fullName;
+      avatarUrl = fullName;
 
     } else {
 

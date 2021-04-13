@@ -1,5 +1,6 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
+import { chatUpdateOnlineSaga } from '../chat/sagas';
 import { dataGetMyFriendshipsSaga } from '../data/sagas';
 import {
   userRequestFriendshipSaga,
@@ -10,7 +11,6 @@ import {
   userUnblockUserSaga
 } from '../user/friendship/sagas';
 import { actionTypes } from '../user/friendship/types';
-import { messengerUpdateOnlineSaga } from '../messenger/sagas';
 
 const {
   USER_REQUEST_FRIENDSHIP,
@@ -32,18 +32,18 @@ export function* watchFriendship() {
 
     takeEvery(USER_ACCEPT_FRIENDSHIP, userAcceptFriendshipSaga),
     takeEvery(USER_ACCEPT_FRIENDSHIP_SUCCEEDED, dataGetMyFriendshipsSaga),
-    takeEvery(USER_ACCEPT_FRIENDSHIP_SUCCEEDED, messengerUpdateOnlineSaga),
+    takeEvery(USER_ACCEPT_FRIENDSHIP_SUCCEEDED, chatUpdateOnlineSaga),
 
     takeEvery(USER_REJECT_FRIENDSHIP, userRejectFriendshipSaga),
     takeEvery(USER_REJECT_FRIENDSHIP_SUCCEEDED, dataGetMyFriendshipsSaga),
 
     takeEvery(USER_DELETE_FRIENDSHIP, userDeleteFriendshipSaga),
     takeEvery(USER_DELETE_FRIENDSHIP_SUCCEEDED, dataGetMyFriendshipsSaga),
-    takeEvery(USER_DELETE_FRIENDSHIP_SUCCEEDED, messengerUpdateOnlineSaga),
+    takeEvery(USER_DELETE_FRIENDSHIP_SUCCEEDED, chatUpdateOnlineSaga),
 
     takeEvery(USER_BLOCK_USER, userBlockUserSaga),
     takeEvery(USER_BLOCK_USER_SUCCEEDED, dataGetMyFriendshipsSaga),
-    takeEvery(USER_BLOCK_USER_SUCCEEDED, messengerUpdateOnlineSaga),
+    takeEvery(USER_BLOCK_USER_SUCCEEDED, chatUpdateOnlineSaga),
 
     takeEvery(USER_UNBLOCK_USER, userUnblockUserSaga),
     takeEvery(USER_UNBLOCK_USER_SUCCEEDED, dataGetMyFriendshipsSaga)

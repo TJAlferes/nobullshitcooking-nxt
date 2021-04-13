@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserFavoriteRecipe, IUserUnfavoriteRecipe } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* userFavoriteRecipeSaga(action: IUserFavoriteRecipe) {
   try {

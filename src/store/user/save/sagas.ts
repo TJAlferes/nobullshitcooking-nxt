@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserSaveRecipe, IUserUnsaveRecipe } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function* userSaveRecipeSaga(action: IUserSaveRecipe) {
   try {
@@ -19,6 +15,7 @@ export function* userSaveRecipeSaga(action: IUserSaveRecipe) {
     );
 
     yield put(userMessage(message));
+    // refetch here?
 
   } catch(err) {
 

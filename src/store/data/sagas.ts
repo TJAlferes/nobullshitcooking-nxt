@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { call, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
   dataGetInitialData,
   dataGetData,
@@ -12,14 +10,12 @@ import {
 } from './actions';
 import { IInitialData, IInitialUserData } from './types';
 
-const endpoint = NOBSCBackendAPIEndpointOne;
-
 // TO DO: do on ssr server now
 
 export function* dataGetInitialDataSaga() {
   try {
-    const res = yield call([axios, axios.get], `${endpoint}/data-init`);
-    yield put(dataGetInitialData(res.data));
+    const { data } = yield call([axios, axios.get], `${endpoint}/data-init`);
+    yield put(dataGetInitialData(data));
   } catch (err) {
     //yield put(dataGetInitialDataFailed());
   }
@@ -42,13 +38,13 @@ export const dataGetRecipeTypesSaga = makeDataSaga("/recipe-type", "recipeTypes"
 
 export function* dataGetInitialUserDataSaga() {
   try {
-    const res = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/data-init`,
       {},
       {withCredentials: true}
     );
-    yield put(dataGetInitialUserData(res.data));
+    yield put(dataGetInitialUserData(data));
   } catch (err) {
     //yield put(dataGetInitialUserDataFailed());
   }

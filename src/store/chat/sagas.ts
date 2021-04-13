@@ -1,9 +1,7 @@
 import { Store } from 'redux';
 import io from 'socket.io-client';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
   chatConnected,
   chatDisconnected,
@@ -24,8 +22,6 @@ import {
   IChatSendPublicMessage,
   IChatSendPrivateMessage
 } from './types';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
