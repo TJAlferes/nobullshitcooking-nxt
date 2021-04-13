@@ -5,8 +5,8 @@ import {
   ResultsPerPage,
   withSearch,
 } from '@elastic/react-search-ui';
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import './products.css';
 
@@ -16,22 +16,25 @@ function listResults(results: any) {
   if (results && results[0] && results[0].id) {
     return results.map((p: any) => (
       <div className="products" key={p.id.raw}>
-        <Link className="products__link" to={`/recipe/${p.id.raw}`}>
-          <div className="products__text">
-            <div className="products__fullname">{p.fullname.raw}</div>
+        <Link href={`/product/${p.id.raw}`}>
+          <a className="products__link">
+            <div className="products__text">
+              <div className="products__fullname">{p.fullname.raw}</div>
 
-            <div className="products__type">{p.product_type_name.raw}</div>
-          </div>
-          {
-            (p.image.raw !== "nobsc-product-default")
-            ? (
-              <img
-                className="products__image"
-                src={`${url}${p.image.raw}-thumb`}
-              />
-            )
-            : <div className="image-default-100-62"></div>
-          }
+              <div className="products__type">{p.product_type_name.raw}</div>
+            </div>
+            
+            {
+              (p.image.raw !== "nobsc-product-default")
+              ? (
+                <img
+                  className="products__image"
+                  src={`${url}${p.image.raw}-thumb`}
+                />
+              )
+              : <div className="image-default-100-62"></div>
+            }
+          </a>
         </Link>
       </div>
     ));

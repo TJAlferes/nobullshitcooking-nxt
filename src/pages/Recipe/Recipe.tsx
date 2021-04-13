@@ -3,16 +3,12 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { LoaderSpinner } from '../../components';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { userFavoriteRecipe } from '../../store/user/favorite/actions';
 import { userSaveRecipe } from '../../store/user/save/actions';
 import { RecipeView } from './RecipeView';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
   const router = useRouter();

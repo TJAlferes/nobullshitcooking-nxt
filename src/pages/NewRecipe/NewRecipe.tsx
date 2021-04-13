@@ -5,9 +5,7 @@ import { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import {
   staffCreateNewRecipe,
@@ -20,13 +18,9 @@ import {
   userEditPublicRecipe
 } from '../../store/user/recipe/actions';
 import { IRequiredMethod } from '../../store/user/recipe/types';
-import {
-  getCroppedImage
-} from '../../utils/imageCropPreviews/imageCropPreviews';
+import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './NewRecipeView';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export default function NewRecipe({
   editing,

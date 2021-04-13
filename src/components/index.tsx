@@ -1,6 +1,7 @@
+import App from './App/App';
 import LeftNav from './LeftNav/LeftNav';
 
-export * as App from './App/App';
+export { App };
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 export { ExpandCollapse } from './ExpandCollapse/ExpandCollapse';
 export { LeftNav };

@@ -3,9 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
-import {
-  getCroppedImage
-} from '../../utils/imageCropPreviews/imageCropPreviews';
+import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
 import {
   staffCreateNewIngredient,

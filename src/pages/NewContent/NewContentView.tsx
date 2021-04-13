@@ -9,7 +9,7 @@ import {
   Slate
 } from 'slate-react';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
+import { LoaderSpinner } from '../../components';
 import { IContentType } from '../../store/data/types';
 import {
   BlockButton,
@@ -17,7 +17,7 @@ import {
   LinkButton,
   MarkButton,
   Toolbar
-} from './components/index';
+} from './components';
 
 export function NewContentView({
   cancelImage,

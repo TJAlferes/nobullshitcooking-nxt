@@ -3,15 +3,15 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../../../../store';
+import { useTypedSelector as useSelector } from '../../../../store';
 import {
   authStaffLogout,
   authUserLogout
-} from '../../../../../store/auth/actions';
+} from '../../../../store/auth/actions';
 import {
   themeDarkTrigger,
   themeLightTrigger
-} from '../../../../../store/theme/actions';
+} from '../../../../store/theme/actions';
 import './userNav.css';
 
 export default function UserNav({ theme }: Props): JSX.Element {

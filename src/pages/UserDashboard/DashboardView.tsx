@@ -1,23 +1,25 @@
 import React from 'react';
 import { Crop } from 'react-image-crop';
 
-import LeftNav from '../../components/LeftNav/LeftNav';
+import { LeftNav } from '../../components';
 import {
   IEquipment,
   IIngredient,
   IPlan,
   IWorkRecipe
 } from '../../store/data/types';
-import { Avatar } from './views/Avatar';
-import { AvatarEdit } from './views/AvatarEdit';
-import { Equipment } from './views/Equipment';
-import { FavoriteRecipes } from './views/FavoriteRecipes';
-import { Ingredients } from './views/Ingredients';
-import { Plans } from './views/Plans';
-import { PrivateRecipes } from './views/PrivateRecipes';
-import { PublicRecipes } from './views/PublicRecipes';
-import { SavedRecipes } from './views/SavedRecipes';
-import { Tabs } from './views/Tabs';
+import {
+  Avatar,
+  AvatarEdit,
+  Equipment,
+  FavoriteRecipes,
+  Ingredients,
+  Plans,
+  PrivateRecipes,
+  PublicRecipes,
+  SavedRecipes,
+  Tabs
+} from './views';
 import './dashboard.css';
 
 export function DashboardView({

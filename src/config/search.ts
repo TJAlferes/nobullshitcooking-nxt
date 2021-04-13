@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { Store } from 'redux';
 
-import { buildAutocompleteState } from '../utils/search/buildAutocompleteState';
-import { buildSearchRequest } from '../utils/search/buildSearchRequest';
 import {
-  applyDisjunctiveFaceting
-} from '../utils/search/applyDisjunctiveFaceting';
-import { buildSearchState } from '../utils/search/buildSearchState';
-import { NOBSCBackendAPIEndpointOne } from './NOBSCBackendAPIEndpointOne';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
+  applyDisjunctiveFaceting,
+  buildAutocompleteState,
+  buildSearchRequest,
+  buildSearchState
+} from '../utils/search';
+import { NOBSCAPI as endpoint } from './NOBSCAPI';
 
 // put currentIndex on window?
 

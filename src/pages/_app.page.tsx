@@ -9,12 +9,13 @@ import { END } from 'redux-saga';
 
 import '../../styles/global.css';
 import { Footer } from '../components/App/Footer/Footer';
-//import MobileHeader from '../components/App/Header/mobile/MobileHeader';
-import { Header } from '../components/App/Header/desktop/Header';
+import { Header } from '../components/App/Header/Header';
 import { Main } from '../components/App/Main/Main';
 import { makeSearchConfig } from '../config/search';
 import { SagaStore, wrapper } from '../store';
-import { initializeMessenger } from '../store/messenger/sagas';
+import { chatInit } from '../store/chat/sagas';
+
+/* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
@@ -37,10 +38,7 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
           ? <Component {...pageProps} />
           : (
             <div id="app">
-              <>
-                {/*<div className="mobile_display"><MobileHeader /></div>*/}
-                <div className="desktop_display"><Header /></div>
-              </>
+              <Header />
               <Main><Component {...pageProps} /></Main>
               <Footer />
             </div>

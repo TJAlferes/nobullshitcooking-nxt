@@ -4,12 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { Node } from 'slate';
 
 import { LoaderSpinner } from '../../components';
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { ContentView } from './ContentView';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export default function Content({ oneColumnATheme }: Props): JSX.Element {
   const router = useRouter();

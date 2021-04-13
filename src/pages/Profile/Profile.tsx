@@ -3,15 +3,11 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { LoaderSpinner } from '../../components';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { userRequestFriendship } from '../../store/user/friendship/actions';
 import { ProfileView } from './ProfileView';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export default function Profile(): JSX.Element {
   const router = useRouter();

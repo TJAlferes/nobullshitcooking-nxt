@@ -14,9 +14,7 @@ import { createEditor, Node } from 'slate';
 import { withHistory } from 'slate-history';
 import { withReact } from 'slate-react';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import {
   editorClearWork,
@@ -32,14 +30,11 @@ import {
   userCreateNewContent,
   userEditContent
 } from '../../store/user/content/actions';
-import {
-  getCroppedImage
-} from '../../utils/imageCropPreviews/imageCropPreviews';
-import { Element, Leaf } from './components/index';
+import { getCroppedImage } from '../../utils/getCroppedImage';
+import { Element, Leaf } from './components';
 import { toggleMark, withLinks } from './helpers';
 import { NewContentView } from './NewContentView';
 
-const endpoint = NOBSCBackendAPIEndpointOne;
 const HOTKEYS: {
   [index: string]: any;
   'mod+b': string;

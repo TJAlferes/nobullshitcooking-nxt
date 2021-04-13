@@ -2,12 +2,9 @@ import axios from 'axios';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import './navigation.css';
 
-const endpoint = NOBSCBackendAPIEndpointOne;
 const s3Path = 'https://s3.amazonaws.com/nobsc-images-01/content';
 
 export default function Navigation({

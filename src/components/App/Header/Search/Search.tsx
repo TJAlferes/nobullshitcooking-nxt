@@ -4,8 +4,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import DownArrowGray from '../../../../../assets/images/header/down-arrow-gray.png';
-import { useTypedSelector as useSelector } from '../../../../../store';
-import { searchSetIndex } from '../../../../../store/search/actions';
+import { useTypedSelector as useSelector } from '../../../../store';
+import { searchSetIndex } from '../../../../store/search/actions';
 import { AutocompleteView } from './views/AutocompleteView';
 import './search.css';
 

@@ -2,8 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Crop } from 'react-image-crop';
 
-import { ExpandCollapse } from '../../components/ExpandCollapse/ExpandCollapse';
-import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
+import { ExpandCollapse, LoaderButton } from '../../components';
 import {
   ICuisine,
   IEquipment,
@@ -311,6 +310,7 @@ export function NewRecipeView({
                 amount={i.amount}
                 ingredients={ingredients}
                 ingredientTypes={ingredientTypes}
+                measurementId={i.unit}
                 measurements={measurements}
                 myPrivateIngredients={
                   ownership === "private" ? myPrivateIngredients : []
@@ -321,7 +321,6 @@ export function NewRecipeView({
                 removeIngredientRow={removeIngredientRow}
                 rowKey={i.key}
                 type={i.type}
-                unit={i.unit}
               />
             ))}
           </div>
@@ -344,6 +343,7 @@ export function NewRecipeView({
                 amount={s.amount}
                 cuisine={s.cuisine}
                 cuisines={cuisines}
+                measurementId={s.unit}
                 measurements={measurements}
                 myFavoriteRecipes={myFavoriteRecipes}
                 myPrivateRecipes={
@@ -361,7 +361,6 @@ export function NewRecipeView({
                 selfId={id}
                 id={s.id}
                 type={s.type}
-                unit={s.unit}
               />
             ))}
           </div>

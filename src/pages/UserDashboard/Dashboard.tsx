@@ -16,9 +16,7 @@ import {
   userDisownPublicRecipe
 } from '../../store/user/recipe/actions';
 import { userUnsaveRecipe } from '../../store/user/save/actions';
-import {
-  getCroppedImage
-} from '../../utils/imageCropPreviews/imageCropPreviews';
+import { getCroppedImage } from '../../utils/getCroppedImage';
 import { DashboardView } from './DashboardView';
 
 export default function Dashboard(): JSX.Element {

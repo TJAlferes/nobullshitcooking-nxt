@@ -3,11 +3,10 @@ import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
-import { searchConfig } from '../config/searchConfig';
-import App from '../components/App/App';
+import { makeSearchConfig } from '../config/search';
+import { App } from '../components';
 
-/* -------------------------- COOK EAT WIN REPEAT -------------------------- */
-
+const searchConfig = makeSearchConfig();
 const app = (
   <SearchProvider config={searchConfig}>
     <DndProvider options={HTML5toTouch}>
@@ -17,5 +16,7 @@ const app = (
 );
 
 //render(app, document.getElementById('root'));
+
+// remove all the above?
 
 export * as Cart from './Cart/Cart';

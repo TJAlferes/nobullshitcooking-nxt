@@ -23,7 +23,7 @@ import { Home } from '../pages/Home/Home';
 const Ingredient = lazy(() => import('../pages/Ingredient/Ingredient'));
 const Ingredients = lazy(() => import('../pages/Ingredients/Ingredients'));
 const Login = lazy(() => import('../pages/Login/Login'));
-const Messenger = lazy(() => import('../pages/Messenger/MessengerPage'));
+const Chat = lazy(() => import('../pages/Chat/ChatPage'));
 const Navigation = lazy(() => import('../pages/Navigation/Navigation'));
 const NewContent = lazy(() => import('../pages/NewContent/NewContent'));
 const NewEquipment = lazy(() => import('../pages/NewEquipment/NewEquipment'));
@@ -80,7 +80,7 @@ export function RoutesList({ contentTypes }: Props) {
         {unauthUserRoute("/login", Login)}
         {authUserRoute("/dashboard", UserDashboard)}
         {authUserRoute("/friends", Friends)}
-        {authUserRoute("/messenger", Messenger)}
+        {authUserRoute("/chat", Chat)}
         {authUserRoute("/user-equipment/submit", NewEquipment)}
         {authUserRoute("/user-equipment/edit/:id", NewEquipment, {editing: true})}
         {authUserRoute("/user-equipment/:id", Equipment)}

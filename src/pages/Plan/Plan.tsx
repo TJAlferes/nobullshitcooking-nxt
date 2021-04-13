@@ -4,13 +4,9 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { plannerViewLoad } from '../../store/plannerView/actions';
-//import MobilePlanView from './views/MobilePlanView';
 import { PlanView } from './PlanView';
 
-export default function Plan({
-  planView,
-  twoColumnATheme
-}: Props): JSX.Element {
+export default function Plan({ twoColumnATheme }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
@@ -33,9 +29,6 @@ export default function Plan({
     else router.push('/home');
   }, []);
 
-  //if (planView === "mobile") MobilePlanView;
-  //if (planView === "desktop") PlanView;
-
   return (
     <PlanView
       expanded={expanded}
@@ -48,6 +41,5 @@ export default function Plan({
 }
 
 type Props = {
-  planView: string;
   twoColumnATheme: string;
 };

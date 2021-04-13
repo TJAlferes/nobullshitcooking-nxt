@@ -20,13 +20,7 @@ function listResults(results: any) {
         <Link href={`/ingredient/${i.id.raw}`}>
           <a className="ingredients__link">
             <div className="ingredients__text">
-              <div className="ingredients__fullname">
-                {i.brand.raw && i.brand.raw}
-                {' '}
-                {i.variety.raw && i.variety.raw}
-                {' '}
-                {i.name.raw}
-              </div>
+              <div className="ingredients__fullname">{i.fullname.raw}</div>
 
               <div className="ingredients__type">
                 {i.ingredient_type_name.raw}

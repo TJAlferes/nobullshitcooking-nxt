@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../../../../store';
+import { useTypedSelector as useSelector } from '../../../../../store';
 import { MenuView } from './MenuView';
 
 /*

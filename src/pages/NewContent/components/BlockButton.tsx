@@ -2,8 +2,7 @@ import React from 'react';
 import { useSlate } from 'slate-react';
 
 import { isBlockActive, toggleBlock } from '../helpers';
-import { Button } from './Button';
-import { Icon } from './Icon';
+import { Button, Icon } from '.';
 
 export function BlockButton({ format, icon }: Props) {
   const editor = useSlate();

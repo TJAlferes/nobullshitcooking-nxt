@@ -2,14 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { LoaderSpinner } from '../../components/LoaderSpinner/LoaderSpinner';
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { LoaderSpinner } from '../../components';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { ProductView } from './ProductView';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 export default function Product(): JSX.Element {
   const history = useHistory();

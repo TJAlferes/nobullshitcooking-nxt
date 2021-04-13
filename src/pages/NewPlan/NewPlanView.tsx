@@ -3,11 +3,7 @@ import React, { useMemo } from 'react';
 import AriaModal from 'react-aria-modal';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  ExpandCollapse
-} from '../../components/ExpandCollapse/ExpandCollapse';
-import LeftNav from '../../components/LeftNav/LeftNav';
-import { LoaderButton } from '../../components/LoaderButton/LoaderButton';
+import { ExpandCollapse, LeftNav, LoaderButton } from '../../components';
 import { IWorkRecipe } from '../../store/data/types';
 import { IPlannerData } from '../../store/planner/types';
 import Day from './components/Day';

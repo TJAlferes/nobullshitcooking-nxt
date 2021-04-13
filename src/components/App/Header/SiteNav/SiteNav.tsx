@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import {
   menuShadowHide,
   menuShadowShow
-} from '../../../../../store/menu/actions';
+} from '../../../../store/menu/actions';
 // TO DO: this menu data needs to also come dynamically from content types
 import fitnessMenuData from './data/fitnessMenuData';
 import foodMenuData from './data/foodMenuData';

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import { IWorkRecipe } from '../../../store/data/types';
-import { Subtabs } from './Subtabs';
+import { Subtabs } from '.';
 
 export function FavoriteRecipes({
   handleSubTabClick,

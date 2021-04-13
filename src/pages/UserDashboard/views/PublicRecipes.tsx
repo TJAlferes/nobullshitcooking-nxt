@@ -3,7 +3,7 @@ import React from 'react';
 import AriaModal from 'react-aria-modal';
 
 import { IWorkRecipe } from '../../../store/data/types';
-import { Subtabs } from './Subtabs';
+import { Subtabs } from '.';
 
 export function PublicRecipes({
   activateModal,

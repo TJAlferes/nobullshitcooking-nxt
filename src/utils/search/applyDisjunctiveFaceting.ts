@@ -1,11 +1,7 @@
 import axios from 'axios';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { buildSearchRequest } from './buildSearchRequest';
-
-const endpoint = NOBSCBackendAPIEndpointOne;
 
 function combineAggregationsFromResponses(responses: any) {
   return responses.reduce((acc: any, response: any) => ({

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../../components';
 import { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton/AddToCartButton';
 import { IProduct } from './Product';
