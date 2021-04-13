@@ -1,7 +1,7 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 
-import { Friends } from '../../../src/pages/Friends/Friends';
+import { Friends } from '../../../src/pages';
 import {
   userAcceptFriendship,
   userBlockUser,
@@ -19,8 +19,8 @@ const mockedStoreData = {
   },
   data: {
     myFriendships: [
-      {user_id: 1, username: "Jack", avatar: "Jack", status: "accepted"},
-      {user_id: 2, username: "Jill", avatar: "Jill", status: "accepted"}
+      {user_id: 1, username: "Jack", status: "accepted"},
+      {user_id: 2, username: "Jill", status: "accepted"}
     ]
   },
   user: {

@@ -1,13 +1,12 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { ExpandCollapse } from '../../../src/components/ExpandCollapse/ExpandCollapse';
-import { LoaderButton } from '../../../src/components/LoaderButton/LoaderButton';
+import { ExpandCollapse, LoaderButton } from '../../../src/components';
 import { EquipmentRow } from '../../../src/pages/NewRecipe/components/EquipmentRow';
 import { IngredientRow } from '../../../src/pages/NewRecipe/components/IngredientRow';
 //import { SubrecipeRow } from '../../../src/pages/NewRecipe/components/SubrecipeRow';
 import { ImageUploads } from '../../../src/pages/NewRecipe/components/ImageUploads';
-import { NewRecipeView } from '../../../src/pages/NewRecipe/NewRecipeView';
+import { NewRecipeView } from '../../../src/pages';
 
 const addEquipmentRow = jest.fn();
 const addIngredientRow = jest.fn();

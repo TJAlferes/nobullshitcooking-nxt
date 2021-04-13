@@ -3,8 +3,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Ingredient } from '../../../src/pages/Ingredient/Ingredient';
-import { IngredientView } from '../../../src/pages/Ingredient/IngredientView';
+import { Ingredient, IngredientView } from '../../../src/pages';
 
 const initialProps = {
   dataIngredients: [

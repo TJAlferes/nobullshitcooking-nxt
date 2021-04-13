@@ -4,7 +4,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Recipe } from '../../../src/pages/Recipe/Recipe';
+import { Recipe } from '../../../src/pages';
 import { RecipeView } from '../../../src/pages/Recipe/RecipeView';
 
 // don't use, this is an anti-pattern

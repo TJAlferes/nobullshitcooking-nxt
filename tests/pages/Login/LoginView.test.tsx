@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { LoaderButton } from '../../../src/components/LoaderButton/LoaderButton';
-import { LoginView } from '../../../src/pages/Login/LoginView';
+import { LoaderButton } from '../../../src/components';
+import { LoginView } from '../../../src/pages';
 
 const handleEmailChange = jest.fn();
 const handleLoginClick = jest.fn();

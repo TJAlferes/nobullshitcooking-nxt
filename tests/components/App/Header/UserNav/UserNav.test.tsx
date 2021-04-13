@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { UserNav } from '../../../../../../src/components/App/Header/desktop/UserNav/UserNav';
+import { UserNav } from '../../../../../src/components/App/Header/UserNav/UserNav';
 
 const authStaffLogout = jest.fn();
 const authUserLogout = jest.fn();

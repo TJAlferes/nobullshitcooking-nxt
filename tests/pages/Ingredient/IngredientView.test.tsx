@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { IngredientView } from '../../../src/pages/Ingredient/IngredientView';
+import { IngredientView } from '../../../src/pages';
 
 const ingredient = {
   id: 1,

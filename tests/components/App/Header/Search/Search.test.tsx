@@ -1,6 +1,6 @@
 import {  } from 'enzyme';
 
-import { Search } from '../../../../../../src/components/App/Header/desktop/Search/Search';
+import { Search } from '../../../../../src/components/App/Header/Search/Search';
 
 const searchSetIndex = jest.fn();
 const setSearchTerm = jest.fn();

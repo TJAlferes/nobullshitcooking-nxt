@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { MemoryRouter } from 'react-router';
 
-import { LeftNav } from '../../../src/components/LeftNav/LeftNav';
+import { LeftNav } from '../../../src/components';
 
 const initialProps = {authname: "Person", theme: "light"};
 

@@ -1,7 +1,9 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { ExpandCollapseView } from '../../../src/components/ExpandCollapse/ExpandCollapseView';
+import {
+  ExpandCollapseView
+} from '../../../src/components/ExpandCollapse/ExpandCollapseView';
 
 const toggle = jest.fn();
 

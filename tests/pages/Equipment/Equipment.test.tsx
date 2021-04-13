@@ -3,8 +3,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Equipment } from '../../../src/pages/Equipment/Equipment';
-import { EquipmentView } from '../../../src/pages/Equipment/EquipmentView';
+import { Equipment, EquipmentView } from '../../../src/pages';
 
 const initialProps = {
   dataEquipment: [

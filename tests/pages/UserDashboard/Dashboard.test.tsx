@@ -2,8 +2,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Dashboard } from '../../../src/pages/UserDashboard/Dashboard';
-import { DashboardView } from '../../../src/pages/UserDashboard/DashboardView';
+import { Dashboard, DashboardView } from '../../../src/pages';
 
 const authUpdateLocalAvatar = jest.fn();
 const userDeletePlan = jest.fn();

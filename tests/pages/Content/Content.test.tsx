@@ -4,8 +4,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import Content from '../../../src/pages/Content/Content';
-import { ContentView } from '../../../src/pages/Content/ContentView';
+import { Content, ContentView } from '../../../src/pages';
 
 const contents = [{type: 'paragraph', children: [{text: 'Some text.'}]}];
 

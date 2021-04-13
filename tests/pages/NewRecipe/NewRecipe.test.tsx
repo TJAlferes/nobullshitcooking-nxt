@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 
-import { NewRecipe } from '../../../src/pages/NewRecipe/NewRecipe';
+import { NewRecipe } from '../../../src/pages';
 import {
   staffCreateNewRecipe,
   staffEditRecipe,

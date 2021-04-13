@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { LoaderButton } from '../../../src/components/LoaderButton/LoaderButton';
-import { NewEquipmentView } from '../../../src/pages/NewEquipment/NewEquipmentView';
+import { LoaderButton } from '../../../src/components';
+import { NewEquipmentView } from '../../../src/pages';
 
 const cancelImage = jest.fn();
 const handleDescriptionChange = jest.fn();

@@ -1,13 +1,13 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { FriendsView } from '../../../src/pages/Friends/FriendsView';
+import { FriendsView } from '../../../src/pages';
 
 const myFriendships = [
-  {user_id: 2, username: "Jack", avatar: "Jack", status: "accepted"},
-  {user_id: 3, username: "Jill", avatar: "Jill", status: "accepted"},
-  {user_id: 4, username: "John", avatar: "John", status: "pending-received"},
-  {user_id: 5, username: "Jane", avatar: "Jane", status: "blocked"}
+  {user_id: 2, username: "Jack", status: "accepted"},
+  {user_id: 3, username: "Jill", status: "accepted"},
+  {user_id: 4, username: "John", status: "pending-received"},
+  {user_id: 5, username: "Jane", status: "blocked"}
 ];
 
 const handleAcceptClick = jest.fn();

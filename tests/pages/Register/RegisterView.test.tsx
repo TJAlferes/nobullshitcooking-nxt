@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { LoaderButton } from '../../../src/components/LoaderButton/LoaderButton';
-import { RegisterView } from '../../../src/pages/Register/RegisterView';
+import { LoaderButton } from '../../../src/components';
+import { RegisterView } from '../../../src/pages';
 
 const handleConfirmationCodeChange = jest.fn();
 const handleEmailChange = jest.fn();

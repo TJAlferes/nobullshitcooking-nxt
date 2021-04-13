@@ -1,38 +1,36 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { ChatView } from '../../../src/pages/Messenger/views/desktop/ChatView/ChatView';
-import { PeopleView } from '../../../src/pages/Messenger/views/desktop/PeopleView/PeopleView';
-import { Messenger } from '../../../src/pages/Messenger/Messenger';
+import { PeopleView } from '../../../src/pages/Chat/PeopleView/PeopleView';
+import { Chat, ChatView } from '../../../src/pages';
 
 window.scrollTo = jest.fn();
 
 jest.mock('../../../src/components/LeftNav/LeftNav');
 
-const messengerChangeChannel = jest.fn();
-const messengerConnect = jest.fn();
-const messengerDisconnect = jest.fn();
-const messengerSendMessage = jest.fn();
-const messengerSendWhisper = jest.fn();
+const chatChangeRoom = jest.fn();
+const chatConnect = jest.fn();
+const chatDisconnect = jest.fn();
+const chatSendPublicMessage = jest.fn();
+const chatSendPrivateMessage = jest.fn();
 
 const initialProps = {
   authname: "Person",
-  channel: "5067",
+  room: "5067",
   message: "Some message.",
   messages: [],
-  messengerChangeChannel,
-  messengerConnect,
-  messengerDisconnect,
-  messengerSendMessage,
-  messengerSendWhisper,
-  //messengerView,
-  onlineFriends: [{id: "151", username: "Person2", avatar: "Person2"}],
+  chatChangeRoom,
+  chatConnect,
+  chatDisconnect,
+  chatSendPublicMessage,
+  chatSendPrivateMessage,
+  onlineFriends: [{userId: "151", username: "Person2"}],
   status: "Connected",
   twoColumnATheme: "light",
   users: [
-    {id: "150", username: "Person", avatar: "Person"},
-    {id: "151", username: "Person2", avatar: "Person2"},
-    {id: "152", username: "Person3", avatar: "Person3"}
+    {userId: "150", username: "Person"},
+    {userId: "151", username: "Person2"},
+    {userId: "152", username: "Person3"}
   ],
   windowFocused: true,
 };
@@ -41,8 +39,9 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Messenger', () => {
-  const wrapper = mount(<Messenger {...initialProps} />);
+// TO DO: redux store provider
+describe('Chat', () => {
+  const wrapper = mount(<Chat {...initialProps} />);
 
   it('should record and display changes to roomToEnter', () => {
     wrapper.find('input[name="change-room-input"]')
@@ -58,8 +57,8 @@ describe('Messenger', () => {
 
     wrapper.find('button.change-room-button').simulate('click');
 
-    expect(messengerChangeChannel).toHaveBeenCalledTimes(1);
-    expect(messengerChangeChannel).toHaveBeenCalledWith("5068");
+    expect(chatChangeRoom).toHaveBeenCalledTimes(1);
+    expect(chatChangeRoom).toHaveBeenCalledWith("5068");
   });
 
   it('should not submit roomToEnter when no room provided', () => {
@@ -68,7 +67,7 @@ describe('Messenger', () => {
 
     wrapper.find('button.change-room-button').simulate('click');
 
-    expect(messengerChangeChannel).not.toHaveBeenCalled();
+    expect(chatChangeRoom).not.toHaveBeenCalled();
   });
 
   it('should record and display changes to messageToSend', () => {
@@ -85,8 +84,8 @@ describe('Messenger', () => {
 
     wrapper.find('input[name="chat-input"]').simulate('keyUp', {key: 'Enter'});
 
-    expect(messengerSendMessage).toHaveBeenCalledTimes(1);
-    expect(messengerSendMessage).toHaveBeenCalledWith("BBQ tonight!");
+    expect(chatSendPublicMessage).toHaveBeenCalledTimes(1);
+    expect(chatSendPublicMessage).toHaveBeenCalledWith("BBQ tonight!");
   });
 
   it('should submit messageToSend when whispering', () => {
@@ -98,8 +97,8 @@ describe('Messenger', () => {
 
     wrapper.find('input[name="chat-input"]').simulate('keyUp', {key: 'Enter'});
 
-    expect(messengerSendWhisper).toHaveBeenCalledTimes(1);
-    expect(messengerSendWhisper)
+    expect(chatSendPrivateMessage).toHaveBeenCalledTimes(1);
+    expect(chatSendPrivateMessage)
     .toHaveBeenCalledWith("BBQ tonight?", "Person2");
   });
 
@@ -109,7 +108,7 @@ describe('Messenger', () => {
 
     wrapper.find('input[name="chat-input"]').simulate('keyUp', {key: 'Enter'});
 
-    expect(messengerSendMessage).not.toHaveBeenCalled();
+    expect(chatSendPublicMessage).not.toHaveBeenCalled();
   });
 
   it('should change peopleTab when clicked', () => {
@@ -125,13 +124,13 @@ describe('Messenger', () => {
   });
 
   it('should not focus user in room if self', () => {
-    wrapper.find('li.messenger__person').at(0).simulate('click');
+    wrapper.find('li.chat__person').at(0).simulate('click');
 
     expect(wrapper.find(PeopleView).prop("focusedUser")).toEqual(null);
   });
 
   it('should focus user in room', () => {
-    wrapper.find('li.messenger__person').at(1).simulate('click');
+    wrapper.find('li.chat__person').at(1).simulate('click');
 
     expect(wrapper.find(PeopleView).prop("focusedUser"))
     .toEqual({id: "151", username: "Person2", avatar: "Person2"});
@@ -140,7 +139,7 @@ describe('Messenger', () => {
   it('should focus online friend', () => {
     wrapper.find('button.people__tab').simulate('click');
     
-    wrapper.find('li.messenger__person').simulate('click');
+    wrapper.find('li.chat__person').simulate('click');
 
     expect(wrapper.find(PeopleView).prop("focusedFriend"))
     .toEqual({id: "151", username: "Person2", avatar: "Person2"});

@@ -6,7 +6,7 @@ import { SubrecipeRow } from '../../../../src/pages/NewRecipe/components/Subreci
 
 const rowKey = "XYZ";
 const amount = 1;
-const unit = 1;
+const measurementId = 1;
 const type = 2;
 const cuisine = 2;
 const id = 2;
@@ -77,7 +77,7 @@ describe('SubrecipeRow', () => {
       <SubrecipeRow
         rowKey={rowKey}
         amount={amount}
-        unit={unit}
+        measurementId={measurementId}
         type={type}
         cuisine={cuisine}
         id={id}

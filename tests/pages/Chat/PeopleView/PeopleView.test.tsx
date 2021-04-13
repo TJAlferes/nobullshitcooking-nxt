@@ -1,23 +1,23 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { PeopleView } from '../../../../../../src/pages/Messenger/views/desktop/PeopleView/PeopleView';
+import { PeopleView } from '../../../../src/pages/Chat/PeopleView/PeopleView';
 
 const handleFriendClick = jest.fn();
 const handlePeopleTabChange = jest.fn();
 const handleUserClick = jest.fn();
-const startWhisper = jest.fn();
+const startPrivateMessage = jest.fn();
 
 const initialProps = {
   handleFriendClick,
   handlePeopleTabChange,
   handleUserClick,
-  onlineFriends: [{id: "151", username: "Person2", avatar: "Person2"}],
-  startWhisper,
+  onlineFriends: [{userId: "151", username: "Person2"}],
+  startPrivateMessage,
   users: [
-    {id: "150", username: "Person", avatar: "Person"},
-    {id: "151", username: "Person2", avatar: "Person2"},
-    {id: "152", username: "Person3", avatar: "Person3"}
+    {userId: "150", username: "Person"},
+    {userId: "151", username: "Person2"},
+    {userId: "152", username: "Person3"}
   ]
 };
 
@@ -43,7 +43,7 @@ describe('PeopleView', () => {
       with text 'Room'
     `, () => {
       expect(wrapper.find('button.people__tab--current').text())
-      .toEqual('Room');
+        .toEqual('Room');
     });
 
     it(`
@@ -59,7 +59,7 @@ describe('PeopleView', () => {
       with key 'Person'
     `, () => {
       expect(wrapper.find('li.messenger__person').at(0).key())
-      .toEqual('Person');
+        .toEqual('Person');
     });
 
     it(`
@@ -68,7 +68,7 @@ describe('PeopleView', () => {
       with key 'Person2'
     `, () => {
       expect(wrapper.find('li.messenger__person').at(1).key())
-      .toEqual('Person2');
+        .toEqual('Person2');
     });
 
     it(`
@@ -77,14 +77,14 @@ describe('PeopleView', () => {
       with key 'Person3'
     `, () => {
       expect(wrapper.find('li.messenger__person').at(2).key())
-      .toEqual('Person3');
+        .toEqual('Person3');
     });
 
     describe('when user in room is focused', () => {
       const wrapper = shallow(
         <PeopleView
           focusedFriend={null}
-          focusedUser={{id: "151", username: "Person2", avatar: "Person2"}}
+          focusedUser="Person2"
           peopleTab="Room"
           {...initialProps}
         />
@@ -96,7 +96,7 @@ describe('PeopleView', () => {
         with text 'Whisper'
       `, () => {
         expect(wrapper.find('button.person-tooltip__start-whisper').text())
-        .toEqual('Whisper');
+          .toEqual('Whisper');
       });
     });
 
@@ -117,7 +117,8 @@ describe('PeopleView', () => {
       with className people__tab--current and
       with text 'Friends'
     `, () => {
-      expect(wrapper.find('button.people__tab--current').text()).toEqual('Friends');
+      expect(wrapper.find('button.people__tab--current').text())
+        .toEqual('Friends');
     });
 
     it(`
@@ -138,9 +139,7 @@ describe('PeopleView', () => {
     describe('when online friend is focused', () => {
       const wrapper = shallow(
         <PeopleView
-          focusedFriend={
-            {id: "151", username: "Person2", avatar: "Person2"}
-          }
+          focusedFriend="Person2"
           focusedUser={null}
           peopleTab="Friends"
           {...initialProps}
@@ -153,7 +152,7 @@ describe('PeopleView', () => {
         with text 'Whisper'
       `, () => {
         expect(wrapper.find('button.person-tooltip__start-whisper').text())
-        .toEqual('Whisper');
+          .toEqual('Whisper');
       });
     });
 

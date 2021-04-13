@@ -1,4 +1,4 @@
-import { Plan } from '../../../src/pages/Plan/Plan';
+import { Plan } from '../../../src/pages';
 
 describe('Plan', () => {
   it('needs testing', () => {

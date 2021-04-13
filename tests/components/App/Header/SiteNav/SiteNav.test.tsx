@@ -4,11 +4,11 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createStore, Store } from 'redux';
 
-import fitnessMenuData from '../../../../../../src/components/App/Header/desktop/SiteNav/data/fitnessMenuData';
-import foodMenuData from '../../../../../../src/components/App/Header/desktop/SiteNav/data/foodMenuData';
-import { Menu } from '../../../../../../src/components/App/Header/desktop/SiteNav/Menu/Menu';
-import { SiteNav } from '../../../../../../src/components/App/Header/desktop/SiteNav/SiteNav';
-import { rootReducer } from '../../../../../../src/store/rootReducer';
+import fitnessMenuData from '../../../../../src/components/App/Header/SiteNav/data/fitnessMenuData';
+import foodMenuData from '../../../../../src/components/App/Header/SiteNav/data/foodMenuData';
+import { Menu } from '../../../../../src/components/App/Header/SiteNav/Menu/Menu';
+import { SiteNav } from '../../../../../src/components/App/Header/SiteNav/SiteNav';
+import { rootReducer } from '../../../../../src/store/rootReducer';
 
 const storeFactory = (initialState = undefined): Store =>
   createStore(rootReducer, initialState);

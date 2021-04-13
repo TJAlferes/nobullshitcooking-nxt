@@ -1,4 +1,4 @@
-import { NewPlanView } from '../../../src/pages/NewPlan/NewPlanView';
+import { NewPlanView } from '../../../src/pages';
 
 describe('NewPlanView', () => {
   it('needs testing', () => {

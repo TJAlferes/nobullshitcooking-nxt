@@ -13,7 +13,7 @@ import { ChatView } from './ChatView';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 
-export default function Messenger(): JSX.Element {
+export default function Chat(): JSX.Element {
   const dispatch = useDispatch();
   // would it make sense to move some of this down in the component tree?
   const authname = useSelector(state => state.auth.authname);

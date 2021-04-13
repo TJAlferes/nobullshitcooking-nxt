@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { ContentView } from '../../../src/pages/Content/ContentView';
+import { ContentView } from '../../../src/pages';
 
 const initialProps = {
   contents: [{type: 'paragraph', children: [{text: 'Some text.'}]}],

@@ -1,7 +1,7 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 
-import { Register } from '../../../src/pages/Register/Register';
+import { Register } from '../../../src/pages';
 import {
   authUserRegister,
   authUserVerify

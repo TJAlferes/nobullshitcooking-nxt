@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme';
 import React, { useRef } from 'react';
 
-import { ChatView } from '../../../../src/pages/Messenger/views/desktop/ChatView/ChatView';
-import { OptionsView } from '../../../../src/pages/Messenger/views/desktop/OptionsView/OptionsView';
-import { PeopleView } from '../../../../src/pages/Messenger/views/desktop/PeopleView/PeopleView';
-import { MessengerView } from '../../../../src/pages/Messenger/views/MessengerView';
+import { MessagesView } from '../../../src/pages/Chat/MessagesView/MessagesView';
+import { OptionsView } from '../../../src/pages/Chat/OptionsView/OptionsView';
+import { PeopleView } from '../../../src/pages/Chat/PeopleView/PeopleView';
+import { ChatView } from '../../../src/pages';
 
 jest.mock('react', () => {
   const originalModule = jest.requireActual('react');
@@ -15,22 +15,22 @@ jest.mock('react', () => {
 const handleConnect = jest.fn();
 const handleDisconnect = jest.fn();
 const handleRoomInputChange = jest.fn();
-const handleChannelChange = jest.fn();
+const handleRoomChange = jest.fn();
 const handleMessageInputChange = jest.fn();
 const handleMessageSend = jest.fn();
 const handlePeopleTabChange = jest.fn();
 const handleFriendClick = jest.fn();
 const handleUserClick = jest.fn();
 const messagesRef = useRef<HTMLUListElement>(null);
-const startWhisper = jest.fn();
+const startPrivateMessage = jest.fn();
 
 const initialProps = {
   authname: "Person",
-  channel: "5067",
+  room: "5067",
   feedback: "Some message.",
   focusedFriend: null,
   focusedUser: null,
-  handleChannelChange,
+  handleRoomChange,
   handleConnect,
   handleDisconnect,
   handleFriendClick,
@@ -46,7 +46,7 @@ const initialProps = {
   onlineFriends: [],
   peopleTab: "Room",
   roomToEnter: "",
-  startWhisper,
+  startPrivateMessage,
   status: "Disconnected",
   twoColumnATheme: "light",
   users: []
@@ -56,11 +56,11 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('MessengerView', () => {
-  const wrapper = shallow(<MessengerView {...initialProps} />);
+describe('ChatView', () => {
+  const wrapper = shallow(<ChatView {...initialProps} />);
 
   it('displays feedback', () => {
-    expect(wrapper.find('p.messenger__feedback').text())
+    expect(wrapper.find('p.chat__feedback').text())
       .toEqual("Some message.");
   });
 
@@ -68,8 +68,8 @@ describe('MessengerView', () => {
     expect(wrapper.find(OptionsView)).toHaveLength(1);
   });
 
-  it('displays ChatView component', () => {
-    expect(wrapper.find(ChatView)).toHaveLength(1);
+  it('displays MessagesView component', () => {
+    expect(wrapper.find(MessagesView)).toHaveLength(1);
   });
 
   it('displays PeopleView component', () => {

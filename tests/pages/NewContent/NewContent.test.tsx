@@ -4,7 +4,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import { NewContent } from '../../../src/pages/NewContent/NewContent';
+import { NewContent } from '../../../src/pages';
 
 const data = {
 

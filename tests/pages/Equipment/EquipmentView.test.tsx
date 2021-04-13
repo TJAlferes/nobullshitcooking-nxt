@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { EquipmentView } from '../../../src/pages/Equipment/EquipmentView';
+import { EquipmentView } from '../../../src/pages';
 
 const initialProps = {
   dataMyPrivateEquipment: [

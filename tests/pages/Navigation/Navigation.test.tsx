@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Navigation from '../../../src/pages/Navigation/Navigation';
+import { Navigation } from '../../../src/pages';
 
 describe ('Navigation', () => {
   it ('needs tests', () => {

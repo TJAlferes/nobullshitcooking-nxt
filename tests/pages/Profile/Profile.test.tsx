@@ -4,7 +4,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Profile } from '../../../src/pages/Profile/Profile';
+import { Profile } from '../../../src/pages';
 //import { ProfileView } from '../../../src/pages/Profile/ProfileView';
 
 const data = {

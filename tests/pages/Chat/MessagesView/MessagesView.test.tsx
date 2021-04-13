@@ -1,8 +1,10 @@
 import { shallow } from 'enzyme';
 import React, { useRef } from 'react';
 
-import { KMessage, KWhisper } from '../../../../../../src/store/messenger/types';
-import { ChatView } from '../../../../../../src/pages/Messenger/views/desktop/ChatView/ChatView';
+import {
+  MessagesView
+} from '../../../../src/pages/Chat/MessagesView/MessagesView';
+import { PRIVATE, PUBLIC } from '../../../../src/store/chat/types';
 
 jest.mock('react', () => {
   const originalModule = jest.requireActual('react');
@@ -20,43 +22,43 @@ const initialProps = {
   handleMessageSend,
   messages: [
     {
-      kind: KMessage,
+      kind: PUBLIC,
       id: "1",
+      to: "5067",
+      from: {userId: "1", username: "messengerstatus"},
       text: "Some status.",
-      room: "5067",
-      user: {id: "1", username: "messengerstatus", avatar: "messengerstatus"},
       ts: "sometime"
     },
     {
-      kind: KMessage,
+      kind: PUBLIC,
       id: "2",
+      to: "5067",
+      from: {userId: "150", username: "Person"},
       text: "Hey all!",
-      room: "5067",
-      user: {id: "150", username: "Person", avatar: "Person"},
       ts: "sometime"
     },
     {
-      kind: KMessage,
+      kind: PUBLIC,
       id: "3",
+      to: "5067",
+      from: {userId: "149", username: "Person2"},
       text: "Hey there!",
-      room: "5067",
-      user: {id: "149", username: "Person2", avatar: "Person2"},
       ts: "sometime"
     },
     {
-      kind: KWhisper,
+      kind: PRIVATE,
       id: "4",
-      text: "You good?",
       to: "Person2",
-      user: {id: "150", username: "Person", avatar: "Person"},
+      from: {userId: "150", username: "Person"},
+      text: "You good?",
       ts: "sometime"
     },
     {
-      kind: KWhisper,
+      kind: PRIVATE,
       id: "5",
-      text: "Yes",
       to: "Person",
-      user: {id: "149", username: "Person2", avatar: "Person2"},
+      from: {userId: "149", username: "Person2"},
+      text: "Yes",
       ts: "sometime"
     }
   ],
@@ -69,15 +71,16 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('MessengerView', () => {
-  const wrapper = shallow(<ChatView {...initialProps} />);
+describe('MessagesView', () => {
+  const wrapper = shallow(<MessagesView {...initialProps} />);
 
   it(`
     displays a ul element
     with className chat__messages and
     with messagesRef as ref
   `, () => {
-    expect(wrapper.find('ul.chat__messages').prop('ref')).toEqual(messagesRef);
+    expect(wrapper.find('ul.chat__message-list').prop('ref'))
+      .toEqual(messagesRef);
   });
 
   it (`
@@ -100,7 +103,7 @@ describe('MessengerView', () => {
     });
   });
 
-  describe('when messages contain a sent message', () => {
+  describe('when messages contain a sent public message', () => {
     it(`
       displays a span element
       with className message__self and
@@ -120,7 +123,7 @@ describe('MessengerView', () => {
     });
   });
 
-  describe('when messages contain a received message', () => {
+  describe('when messages contain a received public message', () => {
     it(`
       displays a span element
       with className message__other and
@@ -140,7 +143,7 @@ describe('MessengerView', () => {
     });
   });
 
-  describe('when messages contain a sent whisper', () => {
+  describe('when messages contain a sent private message', () => {
     it(`
       displays a span element
       with className message__self
@@ -152,15 +155,15 @@ describe('MessengerView', () => {
 
     it(`
       displays a span
-      with className message__whisper
+      with className message__private
       and text You good?
     `, () => {
-      expect(wrapper.find('span.message__whisper').at(0).text())
+      expect(wrapper.find('span.message__private').at(0).text())
       .toEqual('You good?');
     });
   });
 
-  describe('when messages contain a received whisper', () => {
+  describe('when messages contain a received private message', () => {
     it(`
       displays a span element
       with className message__other
@@ -170,8 +173,8 @@ describe('MessengerView', () => {
       .toEqual('Person2 whispers to you: ');
     });
 
-    it('displays a span with className message__whisper and text Yes', () => {
-      expect(wrapper.find('span.message__whisper').at(1).text()).toEqual('Yes');
+    it('displays a span with className message__private and text Yes', () => {
+      expect(wrapper.find('span.message__private').at(1).text()).toEqual('Yes');
     });
   });
 

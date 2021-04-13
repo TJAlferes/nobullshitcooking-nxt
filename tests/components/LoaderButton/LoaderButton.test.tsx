@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { LoaderButton } from '../../../src/components/LoaderButton/LoaderButton';
+import { LoaderButton } from '../../../src/components';
 
 const onClick = jest.fn();
 const onKeyUp = jest.fn();

@@ -1,7 +1,7 @@
 import { mount, ReactWrapper } from 'enzyme';
 import React from 'react';
 
-import { Login } from '../../../src/pages/Login/Login';
+import { Login } from '../../../src/pages';
 import { authStaffLogin, authUserLogin } from '../../../src/store/auth/actions';
 import mockFn from '../../mockFn';
 
