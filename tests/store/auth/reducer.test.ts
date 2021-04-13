@@ -6,20 +6,14 @@ const {
   AUTH_RESET,
   AUTH_UPDATE_LOCAL_AVATAR,
   AUTH_STAFF_DISPLAY,
-  AUTH_STAFF_LOGIN_SUCCEEDED,
   AUTH_STAFF_LOGIN_FAILED,
   AUTH_STAFF_LOGOUT,
-  AUTH_STAFF_LOGOUT_SUCCEEDED,
   AUTH_STAFF_LOGOUT_FAILED,
   AUTH_USER_DISPLAY,
-  AUTH_USER_LOGIN_SUCCEEDED,
   AUTH_USER_LOGIN_FAILED,
   AUTH_USER_LOGOUT,
-  AUTH_USER_LOGOUT_SUCCEEDED,
   AUTH_USER_LOGOUT_FAILED,
-  AUTH_USER_REGISTER_SUCCEEDED,
   AUTH_USER_REGISTER_FAILED,
-  //AUTH_USER_VERIFY_SUCCEEDED,
   //AUTH_USER_VERIFY_FAILED
 } = actionTypes;
 
@@ -43,13 +37,13 @@ const beforeState = {
 describe('auth reducer', () => {
   it('returns initial state', () => {
     expect(authReducer(undefined, {
-      type: AUTH_USER_REGISTER_SUCCEEDED,
-      message: 'Registration successful.'
+      type: AUTH_USER_REGISTER_FAILED,
+      message: 'Registration failed.'
     }))
       .toEqual({
         authname: '',
         avatar: '',
-        message: 'Registration successful.',
+        message: 'Registration failed.',
         staffIsAuthenticated: false,
         userIsAuthenticated: false
       });
@@ -92,20 +86,6 @@ describe('auth reducer', () => {
 
   // STAFF_DISPLAY
 
-  it('handles actions of type AUTH_STAFF_LOGIN_SUCCEEDED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_STAFF_LOGIN_SUCCEEDED,
-      message: 'Login successful.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Login successful.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_STAFF_LOGIN_FAILED', () => {
     expect(authReducer(initialState, {
       type: AUTH_STAFF_LOGIN_FAILED,
@@ -123,20 +103,6 @@ describe('auth reducer', () => {
   it('handles actions of type AUTH_STAFF_LOGOUT', () => {
     expect(authReducer(beforeState, {type: AUTH_STAFF_LOGOUT}))
       .toEqual(initialState);
-  });
-  
-  it('handles actions of type AUTH_STAFF_LOGOUT_SUCCEEDED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_STAFF_LOGOUT_SUCCEEDED,
-      message: 'Logout successful.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Logout successful.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
   });
 
   it('handles actions of type AUTH_STAFF_LOGOUT_FAILED', () => {
@@ -168,20 +134,6 @@ describe('auth reducer', () => {
       });
   });
 
-  it('handles actions of type AUTH_USER_LOGIN_SUCCEEDED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_LOGIN_SUCCEEDED,
-      message: 'Login successful.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Login successful.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_USER_LOGIN_FAILED', () => {
     expect(authReducer(initialState, {
       type: AUTH_USER_LOGIN_FAILED,
@@ -201,20 +153,6 @@ describe('auth reducer', () => {
       .toEqual(initialState);
   });
 
-  it('handles actions of type AUTH_USER_LOGOUT_SUCCEEDED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_LOGOUT_SUCCEEDED,
-      message: 'Logout successful.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Logout successful.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
   it('handles actions of type AUTH_USER_LOGOUT_FAILED', () => {
     expect(authReducer(initialState, {
       type: AUTH_USER_LOGOUT_FAILED,
@@ -224,20 +162,6 @@ describe('auth reducer', () => {
         authname: '',
         avatar: '',
         message: 'Logout failed.',
-        staffIsAuthenticated: false,
-        userIsAuthenticated: false
-      });
-  });
-
-  it('handles actions of type AUTH_USER_REGISTER_SUCCEEDED', () => {
-    expect(authReducer(initialState, {
-      type: AUTH_USER_REGISTER_SUCCEEDED,
-      message: 'Registration successful.'
-    }))
-      .toEqual({
-        authname: '',
-        avatar: '',
-        message: 'Registration successful.',
         staffIsAuthenticated: false,
         userIsAuthenticated: false
       });

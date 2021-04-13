@@ -75,13 +75,6 @@ describe ('dataGetInitialData action creator', () => {
   });
 });
 
-describe('dataGetInitialDataSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetInitialDataSucceeded().type)
-      .toEqual(DATA_GET_INITIAL_DATA_SUCCEEDED);
-  });
-});
-
 describe('dataGetInitialDataFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetInitialDataFailed().type)
@@ -109,12 +102,6 @@ describe('dataGetContent action creator', () => {
   });
 });
 
-describe('dataGetContentSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetContentSucceeded().type).toEqual(DATA_GET_CONTENT_SUCCEEDED);
-  });
-});
-
 describe('dataGetContentFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetContentFailed().type).toEqual(DATA_GET_CONTENT_FAILED);
@@ -138,13 +125,6 @@ describe ('dataGetContentTypes action creator', () => {
   });
 });
 
-describe('dataGetContentTypesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetContentTypesSucceeded().type)
-      .toEqual(DATA_GET_CONTENT_TYPES_SUCCEEDED);
-  });
-});
-
 describe('dataGetContentTypesFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetContentTypesFailed().type)
@@ -164,13 +144,6 @@ describe('dataGetCuisines action creator', () => {
 
   it('returns the correct cuisines', () => {
     expect(dataGetCuisines(cuisines).cuisines).toEqual(cuisines);
-  });
-});
-
-describe('dataGetCuisinesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetCuisinesSucceeded().type)
-      .toEqual(DATA_GET_CUISINES_SUCCEEDED);
   });
 });
 
@@ -202,13 +175,6 @@ describe('dataGetEquipments action creator', () => {
   });
 });
 
-describe('dataGetEquipmentsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetEquipmentsSucceeded().type)
-      .toEqual(DATA_GET_EQUIPMENTS_SUCCEEDED);
-  });
-});
-
 describe('dataGetEquipmentsFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetEquipmentsFailed().type).toEqual(DATA_GET_EQUIPMENTS_FAILED);
@@ -229,13 +195,6 @@ describe('dataGetEquipmentTypes action creator', () => {
   it('returns the correct equipmentTypes', () => {
     expect(dataGetEquipmentTypes(equipmentTypes).equipmentTypes)
       .toEqual(equipmentTypes);
-  });
-});
-
-describe('dataGetEquipmentTypesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetEquipmentTypesSucceeded().type)
-      .toEqual(DATA_GET_EQUIPMENT_TYPES_SUCCEEDED);
   });
 });
 
@@ -270,13 +229,6 @@ describe('dataGetIngredients action creator', () => {
   });
 });
 
-describe('dataGetIngredientsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetIngredientsSucceeded().type)
-      .toEqual(DATA_GET_INGREDIENTS_SUCCEEDED);
-  });
-});
-
 describe('dataGetIngredientsFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetIngredientsFailed().type)
@@ -298,13 +250,6 @@ describe('dataGetIngredientTypes action creator', () => {
   it('returns the correct ingredientTypes', () => {
     expect(dataGetIngredientTypes(ingredientTypes).ingredientTypes)
       .toEqual(ingredientTypes);
-  });
-});
-
-describe('dataGetIngredientTypesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetIngredientTypesSucceeded().type)
-      .toEqual(DATA_GET_INGREDIENT_TYPES_SUCCEEDED);
   });
 });
 
@@ -332,13 +277,6 @@ describe('dataGetMeasurements action creator', () => {
   });
 });
 
-describe('dataGetMeasurementsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMeasurementsSucceeded().type)
-      .toEqual(DATA_GET_MEASUREMENTS_SUCCEEDED);
-  });
-});
-
 describe('dataGetMeasurementsFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetMeasurementsFailed().type)
@@ -358,12 +296,6 @@ describe('dataGetMethods action creator', () => {
 
   it('returns the correct methods', () => {
     expect(dataGetMethods(methods).methods).toEqual(methods);
-  });
-});
-
-describe('dataGetMethodsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMethodsSucceeded().type).toEqual(DATA_GET_METHODS_SUCCEEDED);
   });
 });
 
@@ -398,13 +330,6 @@ describe('dataGetProducts action creator', () => {
   });
 });
 
-describe('dataGetProductsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetProductsSucceeded().type)
-      .toEqual(DATA_GET_PRODUCTS_SUCCEEDED);
-  });
-});
-
 describe('dataGetProductsFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetProductsFailed().type).toEqual(DATA_GET_PRODUCTS_FAILED);
@@ -425,13 +350,6 @@ describe('dataGetProductCategories action creator', () => {
   it('returns the correct productCategories', () => {
     expect(dataGetProductCategories(productCategories).productCategories)
       .toEqual(productCategories);
-  });
-});
-
-describe('dataGetProductCategoriesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetProductCategoriesSucceeded().type)
-      .toEqual(DATA_GET_PRODUCT_CATEGORIES_SUCCEEDED);
   });
 });
 
@@ -456,13 +374,6 @@ describe('dataGetProductTypes action creator', () => {
   it('returns the correct productTypes', () => {
     expect(dataGetProductTypes(productTypes).productTypes)
       .toEqual(productTypes);
-  });
-});
-
-describe('dataGetProductTypesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetProductTypesSucceeded().type)
-      .toEqual(DATA_GET_PRODUCT_TYPES_SUCCEEDED);
   });
 });
 
@@ -494,12 +405,6 @@ describe('dataGetRecipes action creator', () => {
   });
 });
 
-describe('dataGetRecipesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetRecipesSucceeded().type).toEqual(DATA_GET_RECIPES_SUCCEEDED);
-  });
-});
-
 describe('dataGetRecipesFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetRecipesFailed().type).toEqual(DATA_GET_RECIPES_FAILED);
@@ -518,13 +423,6 @@ describe('dataGetRecipeTypes action creator', () => {
 
   it('returns the correct recipeTypes', () => {
     expect(dataGetRecipeTypes(recipeTypes).recipeTypes).toEqual(recipeTypes);
-  });
-});
-
-describe('dataGetRecipeTypesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetRecipeTypesSucceeded().type)
-      .toEqual(DATA_GET_RECIPE_TYPES_SUCCEEDED);
   });
 });
 
@@ -549,13 +447,6 @@ describe('dataGetMyContent action creator', () => {
 
   it('returns the correct equipment', () => {
     expect(dataGetMyContent(myContent).myContent).toEqual(myContent);
-  });
-});
-
-describe('dataGetMyContentSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyContentSucceeded().type)
-      .toEqual(DATA_GET_MY_CONTENT_SUCCEEDED);
   });
 });
 
@@ -588,13 +479,6 @@ describe('dataGetMyFavoriteRecipes action creator', () => {
   });
 });
 
-describe('dataGetMyFavoriteRecipesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyFavoriteRecipesSucceeded().type)
-      .toEqual(DATA_GET_MY_FAVORITE_RECIPES_SUCCEEDED);
-  });
-});
-
 describe('dataGetMyFavoriteRecipesFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetMyFavoriteRecipesFailed().type)
@@ -620,13 +504,6 @@ describe('dataGetMyFriendships action creator', () => {
   it('returns the correct ', () => {
     expect(dataGetMyFriendships(myFriendships).myFriendships)
       .toEqual(myFriendships);
-  });
-});
-
-describe('dataGetMyFriendshipsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyFriendshipsSucceeded().type)
-      .toEqual(DATA_GET_MY_FRIENDSHIPS_SUCCEEDED);
   });
 });
 
@@ -660,12 +537,6 @@ describe('dataGetMyPlans action creator', () => {
   });
 });
 
-describe('dataGetMyPlansSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyPlansSucceeded().type).toEqual(DATA_GET_MY_PLANS_SUCCEEDED);
-  });
-});
-
 describe('dataGetMyPlansFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetMyPlansFailed().type).toEqual(DATA_GET_MY_PLANS_FAILED);
@@ -694,13 +565,6 @@ describe('dataGetMyPrivateEquipments action creator', () => {
     expect(
       dataGetMyPrivateEquipments(myPrivateEquipment).myPrivateEquipment
     ).toEqual(myPrivateEquipment);
-  });
-});
-
-describe('dataGetMyPrivateEquipmentsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyPrivateEquipmentsSucceeded().type)
-      .toEqual(DATA_GET_MY_PRIVATE_EQUIPMENTS_SUCCEEDED);
   });
 });
 
@@ -738,13 +602,6 @@ describe('dataGetMyPrivateIngredients action creator', () => {
   });
 });
 
-describe('dataGetMyPrivateIngredientsSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyPrivateIngredientsSucceeded().type)
-      .toEqual(DATA_GET_MY_PRIVATE_INGREDIENTS_SUCCEEDED);
-  });
-});
-
 describe('dataGetMyPrivateIngredientsFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetMyPrivateIngredientsFailed().type)
@@ -772,13 +629,6 @@ describe('dataGetMyPrivateRecipes action creator', () => {
   it('returns the correct myPrivateRecipes', () => {
     expect(dataGetMyPrivateRecipes(myPrivateRecipes).myPrivateRecipes)
       .toEqual(myPrivateRecipes);
-  });
-});
-
-describe('dataGetMyPrivateRecipesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyPrivateRecipesSucceeded().type)
-      .toEqual(DATA_GET_MY_PRIVATE_RECIPES_SUCCEEDED);
   });
 });
 
@@ -812,13 +662,6 @@ describe('dataGetMyPublicRecipes action creator', () => {
   });
 });
 
-describe('dataGetMyPublicRecipesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMyPublicRecipesSucceeded().type)
-      .toEqual(DATA_GET_MY_PUBLIC_RECIPES_SUCCEEDED);
-  });
-});
-
 describe('dataGetMyPublicRecipesFailed action creator', () => {
   it('returns the correct action type', () => {
     expect(dataGetMyPublicRecipesFailed().type)
@@ -846,13 +689,6 @@ describe('dataGetMySavedRecipes action creator', () => {
   it('returns the correct mySavedRecipes', () => {
     expect(dataGetMySavedRecipes(mySavedRecipes).mySavedRecipes)
       .toEqual(mySavedRecipes);
-  });
-});
-
-describe('dataGetMySavedRecipesSucceeded action creator', () => {
-  it('returns the correct action type', () => {
-    expect(dataGetMySavedRecipesSucceeded().type)
-      .toEqual(DATA_GET_MY_SAVED_RECIPES_SUCCEEDED);
   });
 });
 

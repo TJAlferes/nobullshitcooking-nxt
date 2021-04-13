@@ -1,58 +1,58 @@
 import { actionTypes as authActionTypes } from '../../../src/store/auth/types';
-import { messengerReducer } from '../../../src/store/messenger/reducer';
+import { chatReducer } from '../../../src/store/chat/reducer';
 import {
-  actionTypes as messengerActionTypes,
-  KMessage,
-  KWhisper
-} from '../../../src/store/messenger/types';
+  actionTypes as chatActionTypes,
+  PRIVATE,
+  PUBLIC
+} from '../../../src/store/chat/types';
 
 const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
-  MESSENGER_CONNECTED,
-  MESSENGER_DISCONNECTED,
-  MESSENGER_GET_ONLINE,
-  MESSENGER_SHOW_ONLINE,
-  MESSENGER_SHOW_OFFLINE,
-  MESSENGER_CHANGED_CHANNEL,
-  MESSENGER_REJOINED_CHANNEL,
-  MESSENGER_JOINED_USER,
-  MESSENGER_LEFT_USER,
-  MESSENGER_RECEIVED_MESSAGE,
-  MESSENGER_RECEIVED_WHISPER,
-  MESSENGER_FAILED_WHISPER
-} = messengerActionTypes;
+  CHAT_CONNECTED,
+  CHAT_DISCONNECTED,
+  CHAT_GET_ONLINE,
+  CHAT_SHOW_ONLINE,
+  CHAT_SHOW_OFFLINE,
+  CHAT_CHANGED_ROOM,
+  CHAT_REJOINED_ROOM,
+  CHAT_JOINED_USER,
+  CHAT_LEFT_USER,
+  CHAT_RECEIVED_PUBLIC_MESSAGE,
+  CHAT_RECEIVED_PRIVATE_MESSAGE,
+  CHAT_FAILED_PRIVATE_MESSAGE
+} = chatActionTypes;
 
-const jane = {id: 888, username: "Jane888", avatar: "Jane888"};
-const joe = {id: 555, username: "Joe555", avatar: "Joe555"};
+const jane = {userId: 888, username: "Jane888"};
+const joe = {userId: 555, username: "Joe555"};
 const clientTimeStr = (new Date).toLocaleTimeString();
 const message1 = {
-  kind: KMessage,
+  kind: PUBLIC,
   id: 555 + clientTimeStr,
+  to: "GrillNChill",
+  from: joe,
   text: "Hey! How are you?",
-  room: "GrillNChill",
-  user: joe,
   ts: `${clientTimeStr}`
 };
 const message2 = {
-  kind: KMessage,
+  kind: PUBLIC,
   id: 888 + clientTimeStr,
+  to: "GrillNChill",
+  from: jane,
   text: "I'm good, thanks! You?",
-  room: "GrillNChill",
-  user: jane,
   ts: `${clientTimeStr}`
 };
 //const whisper1 = 
 const whisper2 = {
-  kind: KWhisper,
+  kind: PRIVATE,
   id: 888 + clientTimeStr,
-  text: "Are you still moving next year?",
   to: "Joe555",
-  user: jane,
+  from: jane,
+  text: "Are you still moving next year?",
   ts: `${clientTimeStr}`
 };
 
 const initialState = {
-  channel: "",
+  room: "",
   messages: [],
   users: [],
   onlineFriends: [],
@@ -63,9 +63,9 @@ const initialState = {
 
 describe('messenger reducer', () => {
   it('returns initial state', () => {
-    expect(messengerReducer(undefined, {type: MESSENGER_CONNECTED}))
+    expect(chatReducer(undefined, {type: CHAT_CONNECTED}))
       .toEqual({
-        channel: "",
+        room: "",
         messages: [],
         users: [],
         onlineFriends: [],
@@ -75,10 +75,10 @@ describe('messenger reducer', () => {
       });
   });
 
-  it('handles actions of type MESSENGER_CONNECTED', () => {
-    expect(messengerReducer(initialState, {type: MESSENGER_CONNECTED}))
+  it('handles actions of type CHAT_CONNECTED', () => {
+    expect(chatReducer(initialState, {type: CHAT_CONNECTED}))
       .toEqual({
-        channel: "",
+        room: "",
         messages: [],
         users: [],
         onlineFriends: [],
@@ -88,9 +88,9 @@ describe('messenger reducer', () => {
       });
   });
 
-  it('handles actions of type MESSENGER_DISCONNECTED', () => {
+  it('handles actions of type CHAT_DISCONNECTED', () => {
     const beforeState = {
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [],
@@ -99,9 +99,9 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {type: MESSENGER_DISCONNECTED}))
+    expect(chatReducer(beforeState, {type: CHAT_DISCONNECTED}))
       .toEqual({
-        channel: "",
+        room: "",
         messages: [],
         users: [],
         onlineFriends: [],
@@ -113,7 +113,7 @@ describe('messenger reducer', () => {
 
   it('handles actions of type AUTH_USER_LOGOUT', () => {
     const beforeState = {
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [],
@@ -122,9 +122,9 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {type: AUTH_USER_LOGOUT}))
+    expect(chatReducer(beforeState, {type: AUTH_USER_LOGOUT}))
       .toEqual({
-        channel: "",
+        room: "",
         messages: [],
         users: [],
         onlineFriends: [],
@@ -134,15 +134,15 @@ describe('messenger reducer', () => {
       });
   });
 
-  it('handles actions of type MESSENGER_GET_ONLINE', () => {
+  it('handles actions of type CHAT_GET_ONLINE', () => {
     const online = [
-      {id: 43, username: "MrClean", avatar: "MrClean"},
-      {id: 52, username: "Shabsquash", avatar: "Shabsquash"}
+      {userId: 43, username: "MrClean"},
+      {userId: 52, username: "Shabsquash"}
     ];
 
-    expect(messengerReducer(initialState, {type: MESSENGER_GET_ONLINE, online}))
+    expect(chatReducer(initialState, {type: CHAT_GET_ONLINE, online}))
       .toEqual({
-        channel: "",
+        room: "",
         messages: [],
         users: [],
         onlineFriends: online,
@@ -152,9 +152,9 @@ describe('messenger reducer', () => {
       });
   });
 
-  it('handles actions of type MESSENGER_SHOW_ONLINE', () => {
+  it('handles actions of type CHAT_SHOW_ONLINE', () => {
     const beforeState = {
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [],
@@ -164,9 +164,9 @@ describe('messenger reducer', () => {
     };
 
     expect(
-      messengerReducer(beforeState, {type: MESSENGER_SHOW_ONLINE, user: joe})
+      chatReducer(beforeState, {type: CHAT_SHOW_ONLINE, user: joe})
     ).toEqual({
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [joe],
@@ -176,9 +176,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_SHOW_OFFLINE', () => {
+  it('handles actions of type CHAT_SHOW_OFFLINE', () => {
     const beforeState = {
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [joe],
@@ -188,9 +188,9 @@ describe('messenger reducer', () => {
     };
 
     expect(
-      messengerReducer(beforeState, {type: MESSENGER_SHOW_OFFLINE, user: joe})
+      chatReducer(beforeState, {type: CHAT_SHOW_OFFLINE, user: joe})
     ).toEqual({
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [],
@@ -200,9 +200,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_CHANGED_CHANNEL', () => {
+  it('handles actions of type CHAT_CHANGED_ROOM', () => {
     const beforeState = {
-      channel: "",
+      room: "",
       messages: [],
       users: [],
       onlineFriends: [],
@@ -211,14 +211,14 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_CHANGED_CHANNEL,
-      channel: "autos101",
-      users: [{id: 93, username: "CarEnthusiast", avatar: "CarEnthusiast"}]
+    expect(chatReducer(beforeState, {
+      type: CHAT_CHANGED_ROOM,
+      room: "autos101",
+      users: [{userId: 93, username: "CarEnthusiast"}]
     })).toEqual({
-      channel: "autos101",
+      room: "autos101",
       messages: [],
-      users: [{id: 93, username: "CarEnthusiast", avatar: "CarEnthusiast"}],
+      users: [{userId: 93, username: "CarEnthusiast"}],
       onlineFriends: [],
       status: "Connected",
       connectButtonDisabled: true,
@@ -226,9 +226,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_REJOINED_CHANNEL', () => {
+  it('handles actions of type CHAT_REJOINED_ROOM', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [message1, message2],
       users: [joe, jane],
       onlineFriends: [],
@@ -237,16 +237,16 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
     
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_REJOINED_CHANNEL,
-      channel: "GrillNChill",
+    expect(chatReducer(beforeState, {
+      type: CHAT_REJOINED_ROOM,
+      room: "GrillNChill",
       users: [joe, jane]
     })).toEqual(beforeState);
   });
 
-  it('handles actions of type MESSENGER_JOINED_USER', () => {
+  it('handles actions of type CHAT_JOINED_USER', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [message1, message2],
       users: [joe, jane],
       onlineFriends: [],
@@ -255,32 +255,28 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_JOINED_USER,
-      user: {id: 23, username: "Bubbles", avatar: "Bubbles"},
+    expect(chatReducer(beforeState, {
+      type: CHAT_JOINED_USER,
+      user: {userId: 23, username: "Bubbles"},
       ts: `${clientTimeStr}`
     })).toEqual({
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [
         message1,
         message2,
         {
-          kind: KMessage,
+          kind: PUBLIC,
           id: 'admin' + clientTimeStr,
+          to: "GrillNChill",
+          from: {userId: 'messengerstatus', username: "messengerstatus"},
           text: "Bubbles has joined the room.",
-          room: "GrillNChill",
-          user: {
-            id: 'messengerstatus',
-            username: "messengerstatus",
-            avatar: 'messengerstatus'
-          },
           ts: `${clientTimeStr}`,
         }
       ],
       users: [
         joe,
         jane,
-        {id: 23, username: "Bubbles", avatar: "Bubbles"}
+        {userId: 23, username: "Bubbles"}
       ],
       onlineFriends: [],
       status: "Connected",
@@ -289,9 +285,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_LEFT_USER', () => {
+  it('handles actions of type CHAT_LEFT_USER', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [message1, message2],
       users: [joe, jane],
       onlineFriends: [],
@@ -300,25 +296,21 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_LEFT_USER,
+    expect(chatReducer(beforeState, {
+      type: CHAT_LEFT_USER,
       user: jane,
       ts: `${clientTimeStr}`
     })).toEqual({
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [
         message1,
         message2,
         {
-          kind: KMessage,
+          kind: PUBLIC,
           id: 'admin' + clientTimeStr,
+          to: "GrillNChill",
+          from: {userId: 'messengerstatus', username: "messengerstatus"},
           text: `Jane888 has left the room.`,
-          room: "GrillNChill",
-          user: {
-            id: 'messengerstatus',
-            username: "messengerstatus",
-            avatar: 'messengerstatus'
-          },
           ts: `${clientTimeStr}`,
         }
       ],
@@ -330,9 +322,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_RECEIVED_MESSAGE', () => {
+  it('handles actions of type CHAT_RECEIVED_PUBLIC_MESSAGE', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [message1],
       users: [joe, jane],
       onlineFriends: [],
@@ -341,11 +333,11 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_RECEIVED_MESSAGE,
+    expect(chatReducer(beforeState, {
+      type: CHAT_RECEIVED_PUBLIC_MESSAGE,
       message: message2
     })).toEqual({
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [message1, message2],
       users: [joe, jane],
       onlineFriends: [],
@@ -355,9 +347,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_RECEIVED_WHISPER', () => {
+  it('handles actions of type CHAT_RECEIVED_PRIVATE_MESSAGE', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [],
       users: [joe],
       onlineFriends: [],
@@ -366,11 +358,11 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_RECEIVED_WHISPER,
+    expect(chatReducer(beforeState, {
+      type: CHAT_RECEIVED_PRIVATE_MESSAGE,
       whisper: whisper2
     })).toEqual({
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [whisper2],
       users: [joe],
       onlineFriends: [],
@@ -380,9 +372,9 @@ describe('messenger reducer', () => {
     });
   });
 
-  it('handles actions of type MESSENGER_FAILED_WHISPER', () => {
+  it('handles actions of type CHAT_FAILED_PRIVATE_MESSAGE', () => {
     const beforeState = {
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [],
       users: [joe],
       onlineFriends: [],
@@ -391,23 +383,19 @@ describe('messenger reducer', () => {
       disconnectButtonDisabled: false
     };
 
-    expect(messengerReducer(beforeState, {
-      type: MESSENGER_FAILED_WHISPER,
+    expect(chatReducer(beforeState, {
+      type: CHAT_FAILED_PRIVATE_MESSAGE,
       feedback: 'User not found.',
       ts: `${clientTimeStr}`
     })).toEqual({
-      channel: "GrillNChill",
+      room: "GrillNChill",
       messages: [
         {
-          kind: KWhisper,
+          kind: PRIVATE,
           id: 'admin' + clientTimeStr,
-          text: 'User not found.',
           to: '',
-          user: {
-            id: 'messengerstatus',
-            username: "messengerstatus",
-            avatar: 'messengerstatus'
-          },
+          from: {userId: 'messengerstatus', username: "messengerstatus"},
+          text: 'User not found.',
           ts: `${clientTimeStr}`,
         }
       ],

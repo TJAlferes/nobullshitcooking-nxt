@@ -2,25 +2,17 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { call, delay, put } from 'redux-saga/effects';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../src/config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../../src/config/NOBSCAPI';
 import { removeStorageItem } from '../../../src/utils/storageHelpers';
 import {
   authMessageClear,
   authStaffDisplay,
-  authStaffLoginSucceeded,
   authStaffLoginFailed,
-  authStaffLogoutSucceeded,
   authStaffLogoutFailed,
   authUserDisplay,
-  authUserLoginSucceeded,
   authUserLoginFailed,
-  authUserLogoutSucceeded,
   authUserLogoutFailed,
-  authUserRegisterSucceeded,
   authUserRegisterFailed,
-  authUserVerifySucceeded,
   authUserVerifyFailed
 } from '../../../src/store/auth/actions';
 import {
@@ -33,7 +25,6 @@ import {
 } from '../../../src/store/auth/sagas';
 import { actionTypes } from '../../../src/store/auth/types';
 
-const endpoint = NOBSCBackendAPIEndpointOne;
 const router = useRouter();
 const {
   AUTH_STAFF_LOGIN,
@@ -51,13 +42,12 @@ describe('authStaffLoginSaga', () => {
     password: 'secret'
   };
 
-  it('should dispatch display and succeeded', () => {
+  it('should dispatch display', () => {
     const iterator = authStaffLoginSaga(action);
     const res = {
       data: {
         message: 'Signed in.',
-        staffname: 'Person',
-        avatar: 'Person'
+        staffname: 'Person'
       }
     };
 
@@ -69,9 +59,7 @@ describe('authStaffLoginSaga', () => {
     ));
 
     expect(iterator.next(res).value)
-      .toEqual(put(authStaffDisplay(res.data.staffname, res.data.avatar)));
-    expect(iterator.next(res).value)
-      .toEqual(put(authStaffLoginSucceeded(res.data.message)));
+      .toEqual(put(authStaffDisplay(res.data.staffname)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -120,8 +108,6 @@ describe('authStaffLogoutSaga', () => {
 
     expect(iterator.next(res).value)
       .toEqual(call(removeStorageItem, 'appState'));
-    expect(iterator.next(res).value)
-      .toEqual(put(authStaffLogoutSucceeded(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -163,13 +149,12 @@ describe('authUserLoginSaga', () => {
     password: 'secret'
   };
 
-  it('should dispatch display and succeeded', () => {
+  it('should dispatch display', () => {
     const iterator = authUserLoginSaga(action);
     const res = {
       data: {
         message: 'Signed in.',
-        username: 'Person',
-        avatar: 'Person'
+        username: 'Person'
       }
     };
 
@@ -180,9 +165,7 @@ describe('authUserLoginSaga', () => {
       {withCredentials: true}
     ));
     expect(iterator.next(res).value)
-      .toEqual(put(authUserDisplay(res.data.username, res.data.avatar)));
-    expect(iterator.next(res).value)
-      .toEqual(put(authUserLoginSucceeded(res.data.message)));
+      .toEqual(put(authUserDisplay(res.data.username)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -230,8 +213,6 @@ describe('authUserLogoutSaga', () => {
     ));
     expect(iterator.next(res).value)
       .toEqual(call(removeStorageItem, 'appState'));
-    expect(iterator.next(res).value)
-      .toEqual(put(authUserLogoutSucceeded(res.data.message)));
     expect(iterator.next().value).toEqual(delay(4000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(iterator.next()).toEqual({done: true, value: undefined});
@@ -291,8 +272,6 @@ describe('authUserRegisterSaga', () => {
         }
       }
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(authUserRegisterSucceeded(res.data.message)));
     expect(iterator.next().value).toEqual(delay(2000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(JSON.stringify(iterator.next().value))
@@ -352,8 +331,6 @@ describe('authUserVerifySaga', () => {
         }
       }
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(authUserVerifySucceeded(res.data.message)));
     expect(iterator.next().value).toEqual(delay(2000));
     expect(iterator.next().value).toEqual(put(authMessageClear()));
     expect(JSON.stringify(iterator.next().value))
