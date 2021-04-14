@@ -11,13 +11,16 @@ import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-const plannerExpandedDayTarget = {
-  drop(props: Props, monitor: DropTargetMonitor) {
-    const { day, expandedDay } = props;
+const expandedDayTarget = {
+  // TO DO: improve "any, any"
+  drop(
+    { day, expandedDay, plannerAddRecipeToDay }: Props,
+    monitor: DropTargetMonitor<any, any>
+  ) {
     const draggedRecipe = monitor.getItem();
 
     if (expandedDay !== draggedRecipe.day) {
-      props.plannerAddRecipeToDay(day, draggedRecipe.recipe);
+      plannerAddRecipeToDay(day, draggedRecipe.recipe);
     }
 
     return {listId: day};  // WTF is this?
@@ -92,7 +95,7 @@ const connector = connect(null, mapDispatchToProps);
 export default connector(
   DropTarget(
     Types.PLANNER_RECIPE,
-    plannerExpandedDayTarget,
+    expandedDayTarget,
     collect
   )(ExpandedDay)
 );

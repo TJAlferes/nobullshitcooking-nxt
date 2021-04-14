@@ -34,8 +34,8 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
 
-  const [ editingId, setEditingId ] = useState<number>(0);
-  const [ typeId, setTypeId ] = useState<number>(0);
+  const [ editingId, setEditingId ] = useState(0);
+  const [ typeId, setTypeId ] = useState(0);
   const [ name, setName ] = useState("");
   const [ description, setDescription ] = useState("");
   const [ prevImage, setPrevImage ] = useState("nobsc-ingredient-default");

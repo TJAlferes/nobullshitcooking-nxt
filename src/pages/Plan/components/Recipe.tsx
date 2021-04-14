@@ -9,6 +9,7 @@ export function Recipe({ recipe }: Props): JSX.Element {
       <div className="plan__recipe-image">
         <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe.recipe_image}-tiny`} />
       </div>
+      
       <div className="plan__recipe-text">
         <Link
           href={

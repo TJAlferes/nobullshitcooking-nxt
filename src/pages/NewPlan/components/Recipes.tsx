@@ -6,9 +6,9 @@ import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-const plannerRecipesTarget = {
-  drop(props: Props) {
-    return {listId: props.day};
+const recipesTarget = {
+  drop({ day }: Props) {
+    return {listId: day};
   }
 };
 
@@ -27,6 +27,7 @@ const Recipes = ({
   recipes
 }: Props): JSX.Element => (
   <div className="planner__recipes" /*ref={connectDropTarget}*/>
+    {/* id={recipe.id} */}
     {recipes.map((recipe, i) => (
       <Recipe
         day={day}
@@ -51,6 +52,6 @@ type Props = {
 
 export default DropTarget(
   Types.PLANNER_RECIPE,
-  plannerRecipesTarget,
+  recipesTarget,
   collect
 )(Recipes);

@@ -19,6 +19,7 @@ export default function Day({
   ? (
     <div className="plan__day" onClick={handleClickDay}>
       <span className="plan__date">{day}</span>
+      
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
   )
