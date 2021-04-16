@@ -19,15 +19,12 @@ export default function App(): JSX.Element {
     pathname.match(/\/verify/);
 
   return atAuthPage
-  ? (
-    <div>
-      <RoutesList contentTypes={contentTypes} />
-    </div>
-  ) : (
-    <div id="app">
-      <Header />
-      <Main><RoutesList contentTypes={contentTypes}  /></Main>
-      <Footer />
-    </div>
-  );
+    ? <div><RoutesList contentTypes={contentTypes} /></div>
+    : (
+      <div id="app">
+        <Header />
+        <Main><RoutesList contentTypes={contentTypes}  /></Main>
+        <Footer />
+      </div>
+    );
 }

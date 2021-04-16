@@ -21,7 +21,8 @@ let currentStore: Store | undefined;
 
 
 
-export function storeInit(preloadedState: any) {  // preloadedState: typeof initialState ???
+// preloadedState: typeof initialState ???
+export function storeInit(preloadedState: any) {
   let newStore;
 
   // 1.
@@ -49,6 +50,7 @@ export function storeInit(preloadedState: any) {  // preloadedState: typeof init
 }
 
 export function useStore(initialState: any) {
+  // NOTE: NO NEED TO MEMOIZE?
   const store = useMemo(() => storeInit(initialState), [initialState]);
   return store;
 }

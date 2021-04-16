@@ -28,7 +28,7 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
     pathname.match(/\/verify/);
   
   const searchConfig = makeSearchConfig(store);
-  //initializeMessenger(store);
+  //chatInit(store);
 
   // move these back to App.tsx? and make _app.page.tsx like old index.tsx?
   return (
@@ -63,7 +63,7 @@ NOBSCApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
     await (ctx.store as SagaStore).sagaTask?.toPromise();
   } else {
     //const searchConfig = makeSearchConfig(ctx.store);
-    //initializeMessenger(ctx.store);
+    //chatInit(ctx.store);
     //pageProps.
   }
 
