@@ -1,15 +1,66 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
-import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
+import React, { useEffect, useState } from 'react';
 
 import { useTypedSelector as useSelector } from '../../store';
-import './breadcrumbs.css';
 
-// useRouter hook to get page and use that to dinamically set breadcrumb
-// or: https://github.com/NiklasMencke/nextjs-breadcrumbs
+// CREDIT: Adapted from: https://github.com/NiklasMencke/nextjs-breadcrumbs
 
-export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
+export function Breadcrumbs() {
+  const router = useRouter();
+
+  const theme = useSelector(state => state.theme.breadCrumbsTheme);
+
+  const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
+
+  useEffect(() => {
+    if (router) {
+      const linkPath = router.asPath.split('/');
+
+      linkPath.shift();
+
+      const pathArray = linkPath.map((path, i) => ({
+        breadcrumb: path, href: '/' + linkPath.slice(0, i + 1).join('/')
+      }));
+
+      setBreadcrumbs(pathArray);
+    }
+  }, [router]);
+
+  if (!breadcrumbs) return null;
+
+  return (
+    <nav aria-label="breadcrumbs">
+      <ol className="breadcrumb">
+        <li><a href="/">Home</a></li>
+
+        {breadcrumbs.map(({ breadcrumb, href }) => (
+          <li key={href}>
+            <Link href={href}>
+              <a>{convertBreadcrumb(breadcrumb)}</a>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+};
+
+function convertBreadcrumb(string: string) {
+  return string
+    .replace(/-/g, ' ')
+    .replace(/oe/g, 'ö')
+    .replace(/ae/g, 'ä')
+    .replace(/ue/g, 'ü')
+    .toUpperCase();
+};
+
+type Breadcrumb = {
+  breadcrumb: string;
+  href: string;
+};
+
+/*export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
   const theme = useSelector(state => state.theme.breadCrumbsTheme);
 
   const Breadcrumbs = withBreadcrumbs()(({ breadcrumbs }: any): JSX.Element => {
@@ -40,14 +91,8 @@ export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
   return <div className={`crumbs ${theme}`}><Breadcrumbs /></div>;
 }
 
-// /page/guide/food/cuisine/
-// /equipment/
-// /ingredient/
-// /product/
-// /recipe/
-
 type Props = {
   id: number;
   name: string;
   page?: string | null;
-};
+};*/

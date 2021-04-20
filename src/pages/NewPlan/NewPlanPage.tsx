@@ -1,28 +1,16 @@
+import dynamic from 'next/dynamic';
 import React from 'react';
-import { lazy, LazyBoundary } from 'react-imported-component';
 
-//const MobileNewPlanToggle = lazy(() => import('./MobileNewPlanToggle'));
-const NewPlan = lazy(() => import('./NewPlan'));
-import './newPlanPage.css'
+//import { LoaderSpinner } from '../../components';
+const NewPlan = dynamic(() => import('./NewPlan'), {
+  loading: () => <div>Loading...</div>,
+  ssr: false
+});
 
-export default function NewPlanPage({
-  editing,
-  twoColumnATheme
-}: Props): JSX.Element {
-  return (
-    <div className="new-plan-page">
-      <LazyBoundary fallback={<div>Loading...</div>} >
-        <NewPlan
-          editing={editing}
-          planView="desktop"
-          twoColumnATheme={twoColumnATheme}
-        />
-      </LazyBoundary>
-    </div>
-  );
+export default function NewPlanPage({ editing }: Props): JSX.Element {
+  return <div className="new-plan-page"><NewPlan editing={editing} /></div>;
 }
 
 type Props = {
   editing: boolean;
-  twoColumnATheme: string;
 };

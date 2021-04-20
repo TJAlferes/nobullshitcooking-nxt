@@ -6,6 +6,8 @@ import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import { useStore } from 'react-redux';
 import { END } from 'redux-saga';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Hydrate } from 'react-query/hydration';
 
 import '../../styles/global.css';
 import { Footer } from '../components/App/Footer/Footer';
@@ -18,6 +20,10 @@ import { chatInit } from '../store/chat/sagas';
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
+  const queryClientRef = React.useRef<QueryClient>();
+
+  if (!queryClientRef.current) queryClientRef.current = new QueryClient();
+
   const { pathname } = useRouter();
   // Not needed with getInitialProps? store is passed as a prop?
   const store = useStore();
@@ -32,19 +38,23 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
 
   // move these back to App.tsx? and make _app.page.tsx like old index.tsx?
   return (
-    <SearchProvider config={searchConfig}>
-      <DndProvider options={HTML5toTouch}>
-        {atAuthPage
-          ? <Component {...pageProps} />
-          : (
-            <div id="app">
-              <Header />
-              <Main><Component {...pageProps} /></Main>
-              <Footer />
-            </div>
-          )}
-      </DndProvider>
-    </SearchProvider>
+    <QueryClientProvider client={queryClientRef.current}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <SearchProvider config={searchConfig}>
+          <DndProvider options={HTML5toTouch}>
+            {atAuthPage
+              ? <Component {...pageProps} />
+              : (
+                <div id="app">
+                  <Header />
+                  <Main><Component {...pageProps} /></Main>
+                  <Footer />
+                </div>
+              )}
+          </DndProvider>
+        </SearchProvider>
+      </Hydrate>
+    </QueryClientProvider>
   );
 }
 

@@ -6,7 +6,6 @@ import { Header } from './Header/Header';
 import { Main } from './Main/Main';
 import { RoutesList } from '../../routing/Routes';
 import { useTypedSelector as useSelector } from '../../store';
-import './app.css';
 
 export default function App(): JSX.Element {
   const { pathname } = useRouter();

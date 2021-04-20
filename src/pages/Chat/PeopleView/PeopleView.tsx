@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { IUser } from '../../../store/chat/types';
-import './people.css';
 
 export function PeopleView({
   focusedFriend,

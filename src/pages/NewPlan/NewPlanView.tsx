@@ -9,7 +9,6 @@ import { IPlannerData } from '../../store/planner/types';
 import Day from './components/Day';
 import ExpandedDay from './components/ExpandedDay';
 import Recipes from './components/Recipes';
-import './newPlan.css';
 
 export function NewPlanView({
   activateModal,

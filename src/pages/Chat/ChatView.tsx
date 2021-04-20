@@ -5,7 +5,6 @@ import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
 import { MessagesView } from './MessagesView/MessagesView';
 import { OptionsView } from './OptionsView/OptionsView';
 import { PeopleView } from './PeopleView/PeopleView';
-import './chat.css';
 
 export function ChatView({
   authname,

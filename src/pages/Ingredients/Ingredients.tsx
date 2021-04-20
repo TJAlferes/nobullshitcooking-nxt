@@ -9,7 +9,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import { ExpandCollapse } from '../../components';
-import './ingredients.css';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 

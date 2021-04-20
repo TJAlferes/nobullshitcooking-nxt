@@ -6,7 +6,6 @@ import { Promo } from './Promo/Promo';
 import Search from './Search/Search';
 import SiteNav from './SiteNav/SiteNav';
 import UserNav from './UserNav/UserNav';
-import './header.css';
 
 export function Header(): JSX.Element {
   const theme = useSelector(state => state.theme.headerTheme);  // useContext?

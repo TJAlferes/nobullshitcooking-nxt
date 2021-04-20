@@ -5,7 +5,6 @@ import "react-image-crop/lib/ReactCrop.scss";
 
 import { LoaderButton } from '../../components';
 import { IEquipmentType } from '../../store/data/types';
-import './newEquipment.css';
 
 export function NewEquipmentView({
   cancelImage,

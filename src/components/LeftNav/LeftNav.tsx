@@ -1,8 +1,7 @@
+import Link from 'next/link';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
 import { useTypedSelector as useSelector } from '../../store';
-import './leftNav.css';
 
 export default function LeftNav(): JSX.Element {
   const { authname, userIsAuthenticated } = useSelector(state => state.auth);
@@ -12,14 +11,15 @@ export default function LeftNav(): JSX.Element {
 
   function LeftNavLink({ dataTest, text, to }: LeftNavLinkProps): JSX.Element {
     return (
-      <NavLink
-        activeStyle={{backgroundColor}}
-        className="left-nav-link"
-        data-test={dataTest}
-        to={to}
-      >
-        {`${text}`}
-      </NavLink>
+      <Link href={to}>
+        <a
+          style={{backgroundColor}}
+          className="left-nav-link"
+          data-test={dataTest}
+        >
+          {`${text}`}
+        </a>
+      </Link>
     );
   }
 

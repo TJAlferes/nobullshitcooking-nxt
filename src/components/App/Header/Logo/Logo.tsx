@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import React from 'react';
 
-import LogoLargeLight from '../../../../../assets/images/header/logo-slim-red.png';
-import LogoLargeDark from '../../../../../assets/images/header/logo-slim-dark-red.png';
-import LogoSmallLight from '../../../../../assets/images/header/logo-mobile-red.png';
-import LogoSmallDark from '../../../../../assets/images/header/logo-mobile-dark-red.png';
-import './logo.css';
+import LogoLargeLight from '../../../../../public/images/header/logo-slim-red.png';
+import LogoLargeDark from '../../../../../public/images/header/logo-slim-dark-red.png';
+import LogoSmallLight from '../../../../../public/images/header/logo-mobile-red.png';
+import LogoSmallDark from '../../../../../public/images/header/logo-mobile-dark-red.png';
 
 export function Logo({ theme }: Props): JSX.Element {
   return (

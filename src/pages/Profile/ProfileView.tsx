@@ -2,7 +2,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import { IFriendship, IWorkRecipe } from '../../store/data/types';
-import './profile.css';
 
 export function ProfileView({
   authname,
@@ -11,7 +10,7 @@ export function ProfileView({
   feedback,
   handleFriendRequestClick,
   handleTabChange,
-  isAuthenticated,
+  userIsAuthenticated,
   loading,
   oneColumnATheme,
   tab,
@@ -39,7 +38,7 @@ export function ProfileView({
         
         <div className="friend-request-outer">
           {
-            isAuthenticated && username !== authname
+            userIsAuthenticated && username !== authname
             ? (
               myFriendships.find(f => f.username === username)
               ? <span>Friends</span>
@@ -144,7 +143,7 @@ type Props = {
   feedback: string;
   handleFriendRequestClick(): void;
   handleTabChange(value: string): void;
-  isAuthenticated: boolean;
+  userIsAuthenticated: boolean;
   loading: boolean;
   oneColumnATheme: string;
   tab: string;

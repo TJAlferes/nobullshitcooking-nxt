@@ -4,7 +4,6 @@ import React from 'react';
 import { Breadcrumbs } from '../../components';
 import { IWorkRecipe } from '../../store/data/types';
 import { IRecipe } from './Recipe';
-import './recipe.css';
 
 export function RecipeView({
   myFavoriteRecipes,
@@ -50,7 +49,8 @@ export function RecipeView({
 
   return (
     <div className="recipe">
-      <Breadcrumbs id={id} name={title} page="/recipe/" />
+      {/*<Breadcrumbs id={id} name={title} page="/recipe/" />*/}
+      <Breadcrumbs />
 
       <div className={`recipe-view two-column-b ${twoColumnBTheme}`}>
         <div className="left-column">

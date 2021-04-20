@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './options.css';
-
 export function OptionsView({
   room,
   handleRoomChange,

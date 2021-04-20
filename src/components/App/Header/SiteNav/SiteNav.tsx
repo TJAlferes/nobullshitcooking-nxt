@@ -11,7 +11,6 @@ import fitnessMenuData from './data/fitnessMenuData';
 import foodMenuData from './data/foodMenuData';
 import supplyMenuData from './data/supplyMenuData';
 import Menu from './Menu/Menu';
-import './siteNav.css';
 
 export default function SiteNav(): JSX.Element {
   const dispatch = useDispatch();

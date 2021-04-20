@@ -2,7 +2,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import './footer.css';
 
 export function Footer(): JSX.Element {
   const theme = useSelector(state => state.theme.footerTheme);  // useContext?

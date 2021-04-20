@@ -5,7 +5,6 @@ import "react-image-crop/lib/ReactCrop.scss";
 
 import { LoaderButton } from '../../components';
 import { IIngredientType } from '../../store/data/types';
-import './newIngredient.css';
 
 export function NewIngredientView({
   cancelImage,

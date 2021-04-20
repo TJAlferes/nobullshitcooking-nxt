@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import { cartAddItem } from '../../../store/cart/actions';
 import { ICartItem } from '../../../store/cart/types';
-import './addToCartButton.css';
 
 export default function AddToCartButton({ item }: Props): JSX.Element {
   const dispatch = useDispatch();

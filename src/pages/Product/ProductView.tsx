@@ -5,7 +5,6 @@ import { Breadcrumbs } from '../../components';
 import { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton/AddToCartButton';
 import { IProduct } from './Product';
-import './product.css';
 
 export function ProductView({
   dataProducts,
@@ -19,7 +18,8 @@ export function ProductView({
 
   return (
     <div className="product">
-      <Breadcrumbs id={id} name={fullname} page="/product/" />
+      {/*<Breadcrumbs id={id} name={fullname} page="/product/" />*/}
+      <Breadcrumbs />
 
       <div className={`product-view one-column-a ${oneColumnATheme}`}>
         <div className="product__top">

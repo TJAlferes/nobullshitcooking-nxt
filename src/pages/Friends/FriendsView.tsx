@@ -3,7 +3,6 @@ import React from 'react';
 
 import { LeftNav } from '../../components';
 import { IFriendship } from '../../store/data/types';
-import './friends.css';
 
 export function FriendsView({
   myFriendships,

@@ -3,11 +3,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import DownArrowGray from '../../../../../assets/images/header/down-arrow-gray.png';
+import DownArrowGray from '../../../../../public/images/header/down-arrow-gray.png';
 import { useTypedSelector as useSelector } from '../../../../store';
 import { searchSetIndex } from '../../../../store/search/actions';
 import { AutocompleteView } from './views/AutocompleteView';
-import './search.css';
 
 export function Search({
   searchTerm,

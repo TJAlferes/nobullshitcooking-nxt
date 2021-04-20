@@ -11,7 +11,6 @@ import { Equipment } from './tabs/Equipment';
 import { Ingredients } from './tabs/Ingredients';
 import { Recipes } from './tabs/Recipes';
 import { Tabs } from './tabs/Tabs';
-import './dashboard.css';
 
 export function DashboardView({
   activateModal,

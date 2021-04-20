@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 
-import './promo.css';
-
 const url = "https://s3.amazonaws.com/nobsc-images-01/header/announcements/";
 
 export function Promo(): JSX.Element {

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './notFound.css';
-
 export function NotFound({ oneColumnATheme }: Props): JSX.Element {
   return (
     <div className={`not-found one-column-a ${oneColumnATheme}`}>

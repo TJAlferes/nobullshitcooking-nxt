@@ -3,7 +3,6 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import './navigation.css';
 
 const s3Path = 'https://s3.amazonaws.com/nobsc-images-01/content';
 
@@ -46,12 +45,14 @@ export default function Navigation({
 
         {contentLinks && contentLinks.map((link: any) => (
           <div className="nav-grid-a-item" key={link.path}>
-            <Link to={`${link.path}`}>
-              <span className="nav-grid-a-item-text">{link.name}</span>
-              {/*<img
-                className="nav-grid-a-item-image"
-                src={`${s3Path}/${link.category}/${link.image}`}
-              />*/}
+            <Link href={`${link.path}`}>
+              <a>
+                <span className="nav-grid-a-item-text">{link.name}</span>
+                {/*<img
+                  className="nav-grid-a-item-image"
+                  src={`${s3Path}/${link.category}/${link.image}`}
+                />*/}
+              </a>
             </Link>
           </div>
         ))}

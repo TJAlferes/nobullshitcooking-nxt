@@ -8,8 +8,6 @@ import {
 import Link from 'next/link';
 import React from 'react';
 
-import './products.css';
-
 const url = "https://s3.amazonaws.com/images-01/products/";
 
 function listResults(results: any) {

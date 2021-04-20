@@ -12,7 +12,6 @@ import {
   themeDarkTrigger,
   themeLightTrigger
 } from '../../../../store/theme/actions';
-import './userNav.css';
 
 export default function UserNav({ theme }: Props): JSX.Element {
   const router = useRouter();

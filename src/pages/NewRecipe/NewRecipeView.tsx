@@ -13,17 +13,18 @@ import {
   IRecipeType,
   IWorkRecipe
 } from '../../store/data/types';
-import { EquipmentRow } from './components/EquipmentRow';
-import { IngredientRow } from './components/IngredientRow';
-import { SubrecipeRow } from './components/SubrecipeRow';
-import { ImageUploads } from './components/ImageUploads';
+import {
+  EquipmentRow,
+  IngredientRow,
+  SubrecipeRow,
+  ImageUploads
+} from './components';
 import {
   IMethods,
   IEquipmentRow,
   IIngredientRow,
   ISubrecipeRow
 } from './NewRecipe';
-import './newRecipe.css';
 
 export function NewRecipeView({
   addEquipmentRow,

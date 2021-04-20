@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Breadcrumbs } from '../../components';
 import { IEquipment } from '../../store/data/types';
-import './equipment.css';
 
 export function EquipmentView({
   myPrivateEquipment,
@@ -13,7 +12,8 @@ export function EquipmentView({
 
   return (
     <div className="equipment">
-      <Breadcrumbs id={id} name={name} page="/equipment/" />
+      {/*<Breadcrumbs id={id} name={name} page="/equipment/" />*/}
+      <Breadcrumbs />
 
       <div
         className={`equipment-view two-column-b ${twoColumnBTheme}`}

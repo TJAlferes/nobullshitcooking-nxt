@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Breadcrumbs } from '../../components';
 import { IIngredient } from '../../store/data/types';
-import './ingredient.css';
 
 export function IngredientView({
   myPrivateIngredients,
@@ -15,7 +14,8 @@ export function IngredientView({
 
   return (
     <div className="ingredient">
-      <Breadcrumbs id={id} name={name} page="/ingredient/" />
+      {/*<Breadcrumbs id={id} name={name} page="/ingredient/" />*/}
+      <Breadcrumbs />
 
       <div
         className={`ingredient-view two-column-b ${twoColumnBTheme}`}

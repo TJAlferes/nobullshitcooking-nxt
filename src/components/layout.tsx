@@ -12,7 +12,11 @@ export default function Layout({ children, home }: Props) {
       <header className="header">
         <Link href="/">
           <a>
-            <img src="/images/logo-slim-red.png" width="448" height="62" />
+            <img
+              src="/images/header/logo-slim-red.png"
+              width="448"
+              height="62"
+            />
           </a>
         </Link>
       </header>

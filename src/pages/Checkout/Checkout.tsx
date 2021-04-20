@@ -11,7 +11,8 @@ import {
 const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 export default function Checkout(): JSX.Element {
-  const elements = useElements();
+  return <div></div>;  // placeholder for now
+  /*const elements = useElements();
   const stripe = useStripe();
 
   const handleSubmit = async () => {
@@ -28,5 +29,5 @@ export default function Checkout(): JSX.Element {
         <button type="submit" disabled={!stripe}>Pay</button>
       </div>
     </Elements>
-  );
+  );*/
 }

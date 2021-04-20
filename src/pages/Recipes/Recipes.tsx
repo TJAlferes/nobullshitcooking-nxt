@@ -9,7 +9,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import { ExpandCollapse } from '../../components';
-import './recipes.css';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 

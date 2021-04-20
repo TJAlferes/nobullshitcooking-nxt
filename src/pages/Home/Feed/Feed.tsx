@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import './feed.css';
 
 export function Feed(): JSX.Element {
   const myContent = useSelector(state => state.data.myContent);

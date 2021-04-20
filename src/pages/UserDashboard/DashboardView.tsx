@@ -20,7 +20,6 @@ import {
   SavedRecipes,
   Tabs
 } from './views';
-import './dashboard.css';
 
 export function DashboardView({
   activateModal,
