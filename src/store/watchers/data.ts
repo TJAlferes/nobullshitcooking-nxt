@@ -12,7 +12,7 @@ const {
 } = actionTypes;
 
 // TO DO: finish / let Next.js handle now
-export function* watchData() {
+/*export function* watchData() {
   yield all([
     takeEvery(DATA_INIT, dataGetInitialDataSaga),
     takeEvery(DATA_GET_INITIAL_USER_DATA, dataGetInitialUserDataSaga),
@@ -20,4 +20,4 @@ export function* watchData() {
     takeEvery(DATA_GET__SAGA, dataGetSaga),
     takeEvery(DATA_GET__SAGA, dataGetSaga)
   ]);
-}
+}*/

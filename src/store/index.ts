@@ -72,7 +72,7 @@ export const makeStore = (context: Context) => {
 
   (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 
-  store.dispatch(dataInit());  // do through Next.js now
+  //store.dispatch(dataInit());  // do through Next.js now
 
   // Don't do these here? Do these in _app.page.tsx getInitialProps instead?
   // Because they require browser/client so won't work on server?

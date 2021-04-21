@@ -9,14 +9,13 @@ import { END } from 'redux-saga';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 
-import '../../styles/global.css';
-//import 'react-image-crop/dist/ReactCrop.module.css';
+//import '../../styles/globals.css';
 import { Footer } from '../components/App/Footer/Footer';
 import { Header } from '../components/App/Header/Header';
 import { Main } from '../components/App/Main/Main';
 import { makeSearchConfig } from '../config/search';
 import { SagaStore, wrapper } from '../store';
-import { chatInit } from '../store/chat/sagas';
+//import { chatInit } from '../store/chat/sagas';
 
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
@@ -37,10 +36,11 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
   const searchConfig = makeSearchConfig(store);
   //chatInit(store);
 
+  console.log("hi");
   // move these back to App.tsx? and make _app.page.tsx like old index.tsx?
   return (
     <QueryClientProvider client={queryClientRef.current}>
-      <Hydrate state={pageProps.dehydratedState}>
+      <Hydrate state={pageProps ? pageProps.dehydratedState: {}}>
         <SearchProvider config={searchConfig}>
           <DndProvider options={HTML5toTouch}>
             {atAuthPage
@@ -48,7 +48,9 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
               : (
                 <div id="app">
                   <Header />
-                  <Main><Component {...pageProps} /></Main>
+                  <Main>
+                    <Component {...pageProps} />
+                  </Main>
                   <Footer />
                 </div>
               )}
@@ -60,21 +62,29 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
 }
 
 // Will disable ASO
-NOBSCApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  //import App from 'next/app';
-  //App.getInitialProps() ???
+NOBSCApp.getInitialProps = async (appContext: AppContext) => {
+  const { Component, AppTree, ctx, router } = appContext;
+
+  if (!Component) return {};
+  if (!ctx) return {};
+
   // wait for all page actions to dispatch
-  const pageProps = {
-    ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
-  };
+  const pageProps = {...(
+    Component.getInitialProps
+      ? await Component.getInitialProps(ctx)
+      : {}
+  )};
 
   // stop saga if on server
   if (ctx.req) {
     ctx.store.dispatch(END);
+
     await (ctx.store as SagaStore).sagaTask?.toPromise();
   } else {
     //const searchConfig = makeSearchConfig(ctx.store);
+
     //chatInit(ctx.store);
+
     //pageProps.
   }
 

@@ -27,4 +27,4 @@ export function Feed(): JSX.Element {
   );
 }
 
-export default Feed;
+//export default Feed;

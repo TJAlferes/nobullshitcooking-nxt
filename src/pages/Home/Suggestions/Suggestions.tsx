@@ -58,6 +58,6 @@ export function Suggestions(): JSX.Element {
       theme={theme}
     />
   );
-};
+}
 
-export default Suggestions;
+//export default Suggestions;

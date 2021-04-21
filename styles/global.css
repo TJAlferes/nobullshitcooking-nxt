@@ -84,7 +84,69 @@ import the rest
 /*@import 'react-image-crop/lib/ReactCrop.scss';*/
 /*@import 'react-image-crop/lib/ReactCrop.module.scss';*/
 /*@import 'react-image-crop/dist/ReactCrop.module.css';*/
+
+@import './globals.css';
+@import './components/addToCartButton.css';
+@import './components/app.css';
+@import './components/breadcrumbs.css';
+@import './components/expandCollapse.css';
+@import './components/feed.css';
+@import './components/footer.css';
+@import './components/header.css';
+@import './components/leftNav.css';
+@import './components/loaderSpinner.css';
+@import './components/logo.css';
+@import './components/main.css';
+@import './components/menu.css';
+@import './components/messages.css';
+@import './components/options.css';
+@import './components/people.css';
+@import './components/promo.css';
+@import './components/removeFromCartButton.css';
+@import './components/search.css';
+@import './components/siteNav.css';
+@import './components/starRating.css';
+@import './components/suggestions.css';
+@import './components/userNav.css';
+
+@import './pages/cart.css';
+@import './pages/chat.css';
+@import './pages/chatPage.css';
+@import './pages/checkout.css';
+@import './pages/content.css';
+@import './pages/dashboard.css';
+@import './pages/equipment.css';
+@import './pages/equipments.css';
+@import './pages/friends.css';
+@import './pages/home.css';
+@import './pages/ingredient.css';
+@import './pages/ingredients.css';
+@import './pages/login.css';
+@import './pages/navigation.css';
+/*@import './NewContent/components/';*/
+@import './pages/newEquipment.css';
+@import './pages/newIngredient.css';
+@import './pages/newPlan.css';
+@import './pages/newPlanPage.css';
+@import './pages/newRecipe.css';
+@import './pages/notFound.css';
+@import './pages/plan.css';
+@import './pages/planPage.css';
+@import './pages/product.css';
+@import './pages/products.css';
+@import './pages/profile.css';
+@import './pages/recipe.css';
+@import './pages/recipes.css';
+@import './pages/register.css';
+@import './pages/supply.css';
+
 @import './themes/navGridA.css';
+@import './themes/oneColumnA.css';
+@import './themes/tableA.css';
+@import './themes/twoColumnA.css';
+@import './themes/twoColumnB.css';
+
+/*@import './themes/navGridA.css';
 @import './themes/oneColumnA.css';
 @import './themes/tableA.css';
 @import './themes/twoColumnA.css';
@@ -108,9 +170,11 @@ import the rest
 @import '../src/pages/Ingredient/ingredient.css';
 @import '../src/pages/Ingredients/ingredients.css';
 @import '../src/pages/Login/login.css';
-@import '../src/pages/Navigation/navigation.css';
+@import '../src/pages/Navigation/navigation.css';*/
+
 /*@import '../src/pages/NewContent/components/';*/
-@import '../src/pages/NewEquipment/newEquipment.css';
+
+/*@import '../src/pages/NewEquipment/newEquipment.css';
 @import '../src/pages/NewIngredient/newIngredient.css';
 @import '../src/pages/NewPlan/newPlan.css';
 @import '../src/pages/NewPlan/newPlanPage.css';
@@ -125,4 +189,4 @@ import the rest
 @import '../src/pages/Recipe/recipe.css';
 @import '../src/pages/Recipes/recipes.css';
 @import '../src/pages/Register/register.css';
-@import '../src/pages/UserDashboard/dashboard.css';
+@import '../src/pages/UserDashboard/dashboard.css';*/
