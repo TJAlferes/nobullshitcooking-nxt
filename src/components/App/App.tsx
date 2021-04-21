@@ -1,7 +1,7 @@
+//import { useRouter } from 'next/router';
 import React from 'react';
-import { useRouter } from 'next/router';
 
-import { Footer } from './Footer/Footer';
+/*import { Footer } from './Footer/Footer';
 import { Header } from './Header/Header';
 import { Main } from './Main/Main';
 import { RoutesList } from '../../routing/Routes';
@@ -26,4 +26,8 @@ export default function App(): JSX.Element {
         <Footer />
       </div>
     );
+}*/
+
+export default function App(): JSX.Element {
+  return <div></div>;
 }

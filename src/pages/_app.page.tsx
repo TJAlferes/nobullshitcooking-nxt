@@ -3,13 +3,14 @@ import { AppContext, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { useStore } from 'react-redux';
 import { END } from 'redux-saga';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 
 import '../../styles/global.css';
+//import 'react-image-crop/dist/ReactCrop.module.css';
 import { Footer } from '../components/App/Footer/Footer';
 import { Header } from '../components/App/Header/Header';
 import { Main } from '../components/App/Main/Main';

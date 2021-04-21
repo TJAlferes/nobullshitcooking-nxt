@@ -81,6 +81,9 @@ import the rest
 
 */
 
+/*@import 'react-image-crop/lib/ReactCrop.scss';*/
+/*@import 'react-image-crop/lib/ReactCrop.module.scss';*/
+/*@import 'react-image-crop/dist/ReactCrop.module.css';*/
 @import './themes/navGridA.css';
 @import './themes/oneColumnA.css';
 @import './themes/tableA.css';

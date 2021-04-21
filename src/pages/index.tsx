@@ -1,3 +1,7 @@
+import NOBSCApp from './_app.page';
+
+export default NOBSCApp;
+
 export { default as Cart } from './Cart/Cart';
 export { default as Chat} from './Chat/Chat';
 export { default as ChatPage } from './Chat/ChatPage';

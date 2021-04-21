@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
-import "react-image-crop/lib/ReactCrop.scss";
 import { Node } from 'slate';
 import {
   Editable,

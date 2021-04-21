@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 
 import { ExpandCollapseView } from './ExpandCollapseView';
-import './expandCollapse.css';
 
 export const ExpandCollapse: FC<Props> = ({
   children,

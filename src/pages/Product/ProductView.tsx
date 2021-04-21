@@ -7,7 +7,7 @@ import AddToCartButton from './AddToCartButton/AddToCartButton';
 import { IProduct } from './Product';
 
 export function ProductView({
-  dataProducts,
+  products,
   feedback,
   loading,
   product,
@@ -40,7 +40,7 @@ export function ProductView({
 }
 
 type Props = {
-  dataProducts: IWorkProduct[];
+  products: IWorkProduct[];
   feedback: string;
   loading: boolean;
   product: IProduct;

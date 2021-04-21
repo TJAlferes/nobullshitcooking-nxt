@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
-import "react-image-crop/lib/ReactCrop.scss";
 
 import { LoaderButton } from '../../components';
 import { IIngredientType } from '../../store/data/types';

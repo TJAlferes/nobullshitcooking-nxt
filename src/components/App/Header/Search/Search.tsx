@@ -1,9 +1,9 @@
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
+import Image from 'next/image'
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import DownArrowGray from '../../../../../public/images/header/down-arrow-gray.png';
 import { useTypedSelector as useSelector } from '../../../../store';
 import { searchSetIndex } from '../../../../store/search/actions';
 import { AutocompleteView } from './views/AutocompleteView';
@@ -60,7 +60,12 @@ export function Search({
       <div className="search__category">
         <div className="search__facade">
           <span className="search__facade-text">{facadeText}</span>
-          <img className="search__facade-arrow" src={DownArrowGray} />
+          <Image
+            //className="search__facade-arrow"
+            src="/images/header/down-arrow-gray.png"
+            width="8"
+            height="6"
+          />
         </div>
 
         <select className="search__prefilters" onChange={changeSearchIndex}>

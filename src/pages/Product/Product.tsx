@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { LoaderSpinner } from '../../components';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
@@ -8,9 +8,8 @@ import { useTypedSelector as useSelector } from '../../store';
 import { ProductView } from './ProductView';
 
 export default function Product(): JSX.Element {
-  const history = useHistory();
-  const location = useLocation();
-  const { id } = useParams();
+  const router = useRouter();
+  const { id } = router.query;
 
   const products = useSelector(state => state.data.products);
   const message = useSelector(state => state.user.message);
@@ -38,7 +37,7 @@ export default function Product(): JSX.Element {
 
   useEffect(() => {
     if (!id) {
-      history.push('/home');
+      router.push('/home');
       return;
     }
 
