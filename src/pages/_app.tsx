@@ -1,9 +1,10 @@
 import { SearchProvider } from '@elastic/react-search-ui';
-import { AppContext, AppProps } from 'next/app';
+import App, { AppContext, AppInitialProps } from 'next/app';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
+import { Store, Action, AnyAction } from 'redux';
 import { useStore } from 'react-redux';
 import { END } from 'redux-saga';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -15,12 +16,55 @@ import { Header } from '../components/App/Header/Header';
 import { Main } from '../components/App/Main/Main';
 import { makeSearchConfig } from '../config/search';
 import { SagaStore, wrapper } from '../store';
+import { RootState } from '../store/rootReducer';
 //import { chatInit } from '../store/chat/sagas';
 
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
-function NOBSCApp({ Component, pageProps }: AppProps) {
-  const queryClientRef = React.useRef<QueryClient>();
+class NOBSCApp extends App<AppInitialProps> {
+  /*public static getInitialProps = wrapper
+    .getInitialAppProps(store => async ({ Component, ctx }: AppContext) => {
+      store.dispatch({type: 'TOE', payload: 'was set in _app'});
+
+      return {
+        pageProps: {
+          ...(
+            Component.getInitialProps
+              ? await Component.getInitialProps({...ctx, store})
+              : {}
+          ),
+          pathname: ctx.pathname,
+        }
+      };
+    });*/
+
+  // Will disable ASO
+  public static getInitialProps = wrapper.getInitialAppProps(store => async ({
+    Component,
+    AppTree,
+    ctx,
+    router
+  }: AppContext) => {
+    // wait for all page actions to dispatch (why?)
+    const pageProps = {
+      ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
+    };
+  
+    // if server-side, stop saga (WHY?)
+    if (ctx.req) {
+      ctx.store?.dispatch(END);
+      await (ctx.store as SagaStore)?.sagaTask?.toPromise();
+    }
+  
+    return {pageProps};
+  });
+
+  public render() {
+    const { Component, pageProps } = this.props;
+    return <Component {...pageProps} />;
+  }
+  
+  /*const queryClientRef = React.useRef<QueryClient>();
 
   if (!queryClientRef.current) queryClientRef.current = new QueryClient();
 
@@ -36,7 +80,6 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
   const searchConfig = makeSearchConfig(store);
   //chatInit(store);
 
-  console.log("hi");
   // move these back to App.tsx? and make _app.page.tsx like old index.tsx?
   return (
     <QueryClientProvider client={queryClientRef.current}>
@@ -58,37 +101,7 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
         </SearchProvider>
       </Hydrate>
     </QueryClientProvider>
-  );
+  );*/
 }
-
-// Will disable ASO
-NOBSCApp.getInitialProps = async (appContext: AppContext) => {
-  const { Component, AppTree, ctx, router } = appContext;
-
-  if (!Component) return {};
-  if (!ctx) return {};
-
-  // wait for all page actions to dispatch
-  const pageProps = {...(
-    Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {}
-  )};
-
-  // stop saga if on server
-  if (ctx.req) {
-    ctx.store.dispatch(END);
-
-    await (ctx.store as SagaStore).sagaTask?.toPromise();
-  } else {
-    //const searchConfig = makeSearchConfig(ctx.store);
-
-    //chatInit(ctx.store);
-
-    //pageProps.
-  }
-
-  return {pageProps};
-};
 
 export default wrapper.withRedux(NOBSCApp);

@@ -1,5 +1,5 @@
 import { Context, createWrapper } from 'next-redux-wrapper';
-import { useMemo } from 'react';
+//import { useMemo } from 'react';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
@@ -13,16 +13,13 @@ import {
   loadFromLocalStorage,
   saveToLocalStorage
 } from '../utils/storageHelpers';
-import { dataInit } from './data/actions';
+//import { dataInit } from './data/actions';
 import { rootReducer, RootState } from './rootReducer';
 import { rootSaga } from './rootSaga';
 
-let currentStore: Store | undefined;
+//let currentStore: Store | undefined;
 
-
-
-// preloadedState: typeof initialState ???
-export function storeInit(preloadedState: any) {
+/*export function storeInit(preloadedState: any) {  // typeof initialState ???
   let newStore;
 
   // 1.
@@ -47,15 +44,13 @@ export function storeInit(preloadedState: any) {
   if (typeof window === 'undefined') return newStore;
   if (!currentStore) currentStore = newStore;
   return newStore;
-}
+}*/
 
-export function useStore(initialState: any) {
+/*export function useStore(initialState: any) {
   // NOTE: NO NEED TO MEMOIZE?
   const store = useMemo(() => storeInit(initialState), [initialState]);
   return store;
-}
-
-
+}*/
 
 export const makeStore = (context: Context) => {
   // Don't do this here? Do this in _app.page.tsx getInitialProps instead?
@@ -69,6 +64,7 @@ export const makeStore = (context: Context) => {
     persistedState,
     composeWithDevTools(applyMiddleware(sagaMiddleware))
   );
+  //const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
   (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 
@@ -78,13 +74,14 @@ export const makeStore = (context: Context) => {
   // Because they require browser/client so won't work on server?
   store.subscribe(() => saveToLocalStorage(store.getState()));
 
-  initWindowBlurHandler(store);
-  initWindowFocusHandler(store);
+  //initWindowBlurHandler(store);
+  //initWindowFocusHandler(store);
 
   return store;
 };
 
-export const wrapper = createWrapper(makeStore, {debug: true});
+export const wrapper =
+  createWrapper<Store<RootState>>(makeStore, {debug: true});
 
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
