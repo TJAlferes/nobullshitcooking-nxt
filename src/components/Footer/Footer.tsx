@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { useTypedSelector as useSelector } from '../../../store';
+import { useTypedSelector as useSelector } from '../../store';
 
 export function Footer(): JSX.Element {
   const theme = useSelector(state => state.theme.footerTheme);  // useContext?
@@ -31,7 +31,11 @@ export function Footer(): JSX.Element {
       </div>
 
       <p className="footer__copyright">
-        &copy; {` 2015 - ${(new Date().getFullYear())}, NoBullshitCooking. All rights reserved.`}
+        &copy; 
+        {` 
+          2015 - ${(new Date().getFullYear())},
+          NoBullshitCooking. All rights reserved.
+        `}
       </p>
     </footer>
   );

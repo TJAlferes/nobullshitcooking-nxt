@@ -2,10 +2,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import {
-  menuShadowHide,
-  menuShadowShow
-} from '../../../../store/menu/actions';
+import { menuShadowHide, menuShadowShow } from '../../../store/menu/actions';
 // TO DO: this menu data needs to also come dynamically from content types
 import fitnessMenuData from './data/fitnessMenuData';
 import foodMenuData from './data/foodMenuData';

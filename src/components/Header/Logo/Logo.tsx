@@ -1,4 +1,4 @@
-import Image from 'next/image';
+//import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -10,7 +10,7 @@ export function Logo({ theme }: Props): JSX.Element {
     <div className={`logo ${theme}`}>
       <Link href="/">
         <a className="logo__home-links">
-          <Image
+          <img
             //className="home-link--large"
             src={theme === 'header-light'
               ? "/images/header/logo-slim-red.png"

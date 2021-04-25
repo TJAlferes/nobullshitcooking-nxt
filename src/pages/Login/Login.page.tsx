@@ -9,7 +9,7 @@ import { LoginView } from './LoginView';
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
 // TO DO: finite state machine!!!
 
-export function Login(): JSX.Element {
+export default function Login(): JSX.Element {
   const { pathname } = useRouter();
 
   const dispatch = useDispatch();
@@ -70,5 +70,3 @@ export function Login(): JSX.Element {
     />
   );
 }
-
-export default Login;

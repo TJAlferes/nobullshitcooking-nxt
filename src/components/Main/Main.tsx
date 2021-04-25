@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
-import { Breadcrumbs } from '../../Breadcrumbs/Breadcrumbs';
-import { useTypedSelector as useSelector } from '../../../store';
+import { Breadcrumbs } from '..';
+import { useTypedSelector as useSelector } from '../../store';
 
 export const Main: FC = ({ children }): JSX.Element => {
   const { pathname } = useRouter();

@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../../../store';
-import { searchSetIndex } from '../../../../store/search/actions';
-import { AutocompleteView } from './views/AutocompleteView';
+import { useTypedSelector as useSelector } from '../../../store';
+import { searchSetIndex } from '../../../store/search/actions';
+import { AutocompleteView } from './AutocompleteView';
 
 export function Search({
   searchTerm,

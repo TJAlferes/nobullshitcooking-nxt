@@ -6,7 +6,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { authUserRegister, authUserVerify } from '../../store/auth/actions';
 import { RegisterView } from './RegisterView';
 
-export function Register({ confirmingUser }: Props): JSX.Element {
+export default function Register({ confirmingUser }: Props): JSX.Element {
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -113,5 +113,3 @@ export function Register({ confirmingUser }: Props): JSX.Element {
 type Props = {
   confirmingUser: boolean;
 };
-
-export default Register;
