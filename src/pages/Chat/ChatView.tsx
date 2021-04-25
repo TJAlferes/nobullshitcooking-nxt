@@ -2,9 +2,9 @@ import React from 'react';
 
 import { LeftNav } from '../../components';
 import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
-import { MessagesView } from './MessagesView/MessagesView';
-import { OptionsView } from './OptionsView/OptionsView';
-import { PeopleView } from './PeopleView/PeopleView';
+import { MessagesView } from './MessagesView';
+import { OptionsView } from './OptionsView';
+import { PeopleView } from './PeopleView';
 
 export function ChatView({
   authname,

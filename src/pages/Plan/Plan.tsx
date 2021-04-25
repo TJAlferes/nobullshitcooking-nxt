@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { plannerViewLoad } from '../../store/plannerView/actions';
-import { PlanView } from './PlanView';
+import { PlanView } from './view';
 
 export default function Plan({ twoColumnATheme }: Props): JSX.Element {
   const router = useRouter();

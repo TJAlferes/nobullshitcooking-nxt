@@ -34,7 +34,7 @@ export default function LeftNav(): JSX.Element {
       <LeftNavLink dataTest="home" text="News" to="/home" />
       {
         userIsAuthenticated &&
-        <LeftNavLink dataTest="messenger" text="Messenger" to="/messenger" />
+        <LeftNavLink dataTest="chat" text="Chat" to="/chat" />
       }
       {
         userIsAuthenticated &&

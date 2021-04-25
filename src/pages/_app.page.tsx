@@ -16,6 +16,7 @@ import { chatInit } from '../store/chat/sagas';
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
+  // TO DO: try moving this logic to _document.page.tsx
   const { pathname } = pageProps.router;
   const atAuthPage =
     pathname.match(/\/login/) ||
