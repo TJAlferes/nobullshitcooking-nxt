@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useTypedSelector as useSelector } from '../../store';
 import RemoveFromCartButton from './RemoveFromCartButton';
 

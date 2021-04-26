@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { LeftNav } from '../../components';
 import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
 import { MessagesView } from './MessagesView';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Node } from 'slate';
 
 export function ContentView({

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IMessageWithClientTimestamp } from '../../store/chat/types';
 
 export function MessagesView({

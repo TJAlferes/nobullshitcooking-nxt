@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function NotFound404({ oneColumnATheme }: Props): JSX.Element {
   return (
     <div className={`not-found one-column-a ${oneColumnATheme}`}>

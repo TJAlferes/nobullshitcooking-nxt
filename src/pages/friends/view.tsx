@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 import { LeftNav } from '../../components';
 import { IFriendship } from '../../store/data/types';

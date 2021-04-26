@@ -6,7 +6,6 @@ import {
   withSearch,
 } from '@elastic/react-search-ui';
 import Link from 'next/link';
-import React from 'react';
 
 import { ExpandCollapse } from '../../components';
 

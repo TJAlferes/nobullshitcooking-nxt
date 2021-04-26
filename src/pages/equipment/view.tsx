@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Breadcrumbs } from '../../components';
 import { IEquipment } from '../../store/data/types';
 

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 
 import { LoaderButton } from '../../components';

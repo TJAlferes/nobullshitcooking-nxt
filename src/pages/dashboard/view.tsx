@@ -1,4 +1,3 @@
-import React from 'react';
 import { Crop } from 'react-image-crop';
 
 import { LeftNav } from '../../components';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function Subtabs({ handleSubTabClick, subTab }: Props): JSX.Element {
   const SubtabButton = ({ displayText, subTabName }: SubtabButtonProps) => (
     <button

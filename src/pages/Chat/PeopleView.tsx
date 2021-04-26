@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IUser } from '../../store/chat/types';
 
 export function PeopleView({

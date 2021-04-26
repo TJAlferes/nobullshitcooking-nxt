@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function Tabs({ handleTabClick, tab }: Props): JSX.Element {
   const TabButton = ({ displayText, tabName }: TabButtonProps) => (
     <button

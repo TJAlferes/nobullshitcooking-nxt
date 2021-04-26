@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 import AriaModal from 'react-aria-modal';
 
 import { IWorkRecipe } from '../../../store/data/types';
