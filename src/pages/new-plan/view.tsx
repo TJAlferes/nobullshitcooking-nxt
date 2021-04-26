@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import AriaModal from 'react-aria-modal';
 import { v4 as uuidv4 } from 'uuid';
 

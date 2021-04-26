@@ -1,4 +1,3 @@
-import React from 'react';
 import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
 import { connect, ConnectedProps } from 'react-redux';
 

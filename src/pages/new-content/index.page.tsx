@@ -1,7 +1,7 @@
 import axios from 'axios';
 import isHotKey from 'is-hotkey';
 import { useRouter } from 'next/router';
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,

@@ -1,4 +1,4 @@
-import React, { forwardRef, FunctionComponent, Ref } from 'react';
+import { forwardRef, FunctionComponent, Ref } from 'react';
 
 export const Icon: FunctionComponent<Props> = forwardRef(
   (

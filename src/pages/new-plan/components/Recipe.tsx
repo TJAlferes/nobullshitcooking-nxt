@@ -1,5 +1,5 @@
 import { XYCoord } from 'dnd-core';
-import React, { FC, useRef } from 'react';
+import { FC, useRef } from 'react';
 import {
   DragSourceMonitor,
   DropTargetMonitor,

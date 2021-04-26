@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IEquipment } from '../../../store/data/types';
 
 export function EquipmentRow({

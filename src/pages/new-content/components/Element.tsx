@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 
 const ImageElement: FunctionComponent<Props> = ({

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 import { Crop } from 'react-image-crop';
 
 import { ExpandCollapse, LoaderButton } from '../../components';

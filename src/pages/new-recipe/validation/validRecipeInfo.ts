@@ -3,7 +3,7 @@ import {
   IIngredientRow,
   IMethods,
   ISubrecipeRow
-} from '../NewRecipe';
+} from '../index.page';
 
 export function validRecipeInfo({
   cuisineId,
@@ -18,117 +18,69 @@ export function validRecipeInfo({
   subrecipeRows,
   title
 }: RecipeInfo): boolean {
-  const validOwnership = ownership === "private" || ownership === "public";
-  if (!validOwnership) {
+  function feedback(message: string) {
     window.scrollTo(0,0);
-    setFeedback("You forgot to select the ownership...");
+    setFeedback(message);
     setTimeout(() => setFeedback(""), 3000);
     return false;
   }
+
+  const validOwnership = ownership === "private" || ownership === "public";
+  if (!validOwnership) return feedback("Select ownership.");
 
   const validRecipeTypeId = recipeTypeId !== 0;
-  if (!validRecipeTypeId) {
-    window.scrollTo(0,0);
-    setFeedback("You forgot to select the recipe type...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  if (!validRecipeTypeId) return feedback("Select recipe type.");
 
   const validCuisineId = cuisineId !== 0;
-  if (!validCuisineId) {
-    window.scrollTo(0,0);
-    setFeedback("You forgot to select the cuisine...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  if (!validCuisineId) return feedback("Select cuisine.");
 
   const validTitle = title.trim() !== "";
-  if (!validTitle) {
-    window.scrollTo(0,0);
-    setFeedback("Umm, double check your title...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  if (!validTitle) return feedback("Enter title.");
 
   const validDescription = description.trim() !== "";
-  if (!validDescription) {
-    window.scrollTo(0,0);
-    setFeedback("Umm, double check your description...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  if (!validDescription) return feedback("Enter description.");
 
   const validDirections = directions.trim() !== "";
-  if (!validDirections) {
-    window.scrollTo(0,0);
-    setFeedback("Umm, double check your directions...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  if (!validDirections) return feedback("Enter directions.");
 
   const validMethods = Object.values(usedMethods).filter(m => m === true);
-  if (!validMethods) {  //validMethods.length < 1
-    window.scrollTo(0,0);
-    setFeedback("You forgot to select the method(s)...");
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
+  //validMethods.length < 1
+  if (!validMethods) return feedback("Select method(s).");
 
   let validEquipmentRows = true;
   if (equipmentRows.length) {
     equipmentRows.map(r => {
       if (r.amount === "" || r.equipment === "") validEquipmentRows = false;
     });
-    if (!validEquipmentRows) {
-      window.scrollTo(0,0);
-      setFeedback("Umm, double check your equipment...");
-      setTimeout(() => setFeedback(""), 3000);
-    }
+
+    if (!validEquipmentRows) return feedback("Review equipment.");
   }
-  if (!validEquipmentRows) return false;
 
   let validIngredientRows = true;
   if (ingredientRows.length) {
     ingredientRows.map(r => {
+      // TO DO: change to measurementId or measurementName?
       if (r.amount === "" || r.unit === "" || r.ingredient === "") {
         validIngredientRows = false;
       }
     });
-    if (!validIngredientRows) {
-      window.scrollTo(0,0);
-      setFeedback("Umm, double check your ingredients...");
-      setTimeout(() => setFeedback(""), 3000);
-    }
+
+    if (!validIngredientRows) return feedback("Review ingredients.");
   }
-  if (!validIngredientRows) return false;
 
   let validSubrecipeRows = true;
   if (subrecipeRows.length) {
     subrecipeRows.map(r => {
+      // TO DO: change to measurementId or measurementName?
       if (r.amount === "" || r.unit === "" || r.subrecipe === "") {
         validSubrecipeRows = false;
       }
     });
-    if (!validSubrecipeRows) {
-      window.scrollTo(0,0);
-      setFeedback("Umm, double check your subrecipes...");
-      setTimeout(() => setFeedback(""), 3000);
-    }
-  }
-  if (!validSubrecipeRows) return false;
 
-  return (
-    validOwnership &&
-    validRecipeTypeId &&
-    validCuisineId &&
-    validTitle &&
-    validDescription &&
-    validDirections &&
-    validMethods &&
-    validEquipmentRows &&
-    validIngredientRows &&
-    validSubrecipeRows
-  );
+    if (!validSubrecipeRows) return feedback("Review subrecipes.");
+  }
+
+  return true;
 }
 
 type RecipeInfo = {

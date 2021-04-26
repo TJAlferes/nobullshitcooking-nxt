@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 import { IPlannerViewRecipe } from '../../../store/plannerView/types';
 

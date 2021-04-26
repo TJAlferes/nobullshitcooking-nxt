@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSlate } from 'slate-react';
 
 import { isLinkActive, wrapLink } from '../helpers';

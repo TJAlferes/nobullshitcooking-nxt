@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
 
 export function ImageUploads({

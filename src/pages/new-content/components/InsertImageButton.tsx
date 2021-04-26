@@ -1,4 +1,3 @@
-import React from 'react';
 import { Transforms } from 'slate';
 import { useEditor } from 'slate-react';
 
