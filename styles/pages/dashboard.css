@@ -2,15 +2,6 @@
 
 }*/
 
-.dashboard__feedback {
-  color: #c10006;
-  font-family: Arial;
-  font-size: 14px;
-  height: 31px;
-  text-align: center;
-  width: 100%;
-}
-
 .dashboard__avatar-profile-link,
 .dashboard__avatar-profile-link:visited {
   color: #68abe6;

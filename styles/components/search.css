@@ -57,9 +57,7 @@
   width: 100%;
 }
 
-.search__prefilter {
-  font-family: Arial, sans-serif;
-}
+.search__prefilter {font-family: Arial, sans-serif;}
 
 .search__insert {
   flex: 1;
@@ -119,9 +117,7 @@ We are overriding default values / setting new values to get the look we desire.
   
 }*/
 
-.sui-search-box__autocomplete {
-  border: 1px solid #bfbfbf;
-}
+.sui-search-box__autocomplete {border: 1px solid #bfbfbf;}
 
 .sui-search-box__results-list {
   list-style-type: none;
@@ -141,9 +137,7 @@ We are overriding default values / setting new values to get the look we desire.
   width: 100%;
 }
 
-.sui-search-box__results-list li {
-  padding: 0 10px;
-}
+.sui-search-box__results-list li {padding: 0 10px;}
 
 .header-light .sui-search-box__results-list li,
 .header-light .sui-search-box__results-list li span {
@@ -158,22 +152,16 @@ We are overriding default values / setting new values to get the look we desire.
 }
 
 .sui-search-box__results-list li,
-.sui-search-box__results-list li span {
-  color: #666;
-}
+.sui-search-box__results-list li span {color: #666;}
 
 .sui-search-box__results-list li em {
   font-style: normal;
   font-weight: 700;
 }
 
-.header-light .sui-search-box__results-list li em {
-  color: #111;
-}
+.header-light .sui-search-box__results-list li em {color: #111;}
 
-.header-dark .sui-search-box__results-list li em {
-  color: #bcbcbc;
-}
+.header-dark .sui-search-box__results-list li em {color: #bcbcbc;}
 
 .header-light .sui-search-box__results-list li[aria-selected=true],
 .header-light .sui-search-box__results-list li[aria-selected=true] > * {

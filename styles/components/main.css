@@ -16,39 +16,13 @@
   z-index: 2;
 }
 
-.shadow--hide {
-  display: none;
-}
+.shadow--hide {display: none;}
 
-.shadow--show {
-  display: block;
-}
+.shadow--show {display: block;}
 
-/*
+.main-light {background-color: #eee;}
 
-light
-
-*/
-
-.main-light {
-  background-color: #eee;
-}
-
-/*
-
-dark
-
-*/
-
-.main-dark {
-  background-color: #111;
-}
-
-/*
-
-mobile
-
-*/
+.main-dark {background-color: #111;}
 
 @media (max-width: 899px) {
   .main {

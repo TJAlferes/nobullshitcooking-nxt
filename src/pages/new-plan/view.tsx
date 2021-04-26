@@ -36,7 +36,7 @@ export function NewPlanView({
 }: Props): JSX.Element {
   const memoizedMonthlyPlan = useMemo(() => {
     return (
-      <div className="new-plan__monthly-plan">
+      <div className="plan__monthly-plan">
         <div className="monthly-plan">
           <div className="monthly-plan__header">
             <span className="monthly-plan__header-day">Sunday</span>
@@ -142,7 +142,7 @@ export function NewPlanView({
 
             <p className="new-plan__feedback">{feedback}</p>
 
-            <div className="new-plan__name">
+            <div className="plan__name">
               <label className="new-plan__name-label">Plan Name:</label>
 
               <input
@@ -154,7 +154,7 @@ export function NewPlanView({
             </div>
           </div>
 
-          <hr className="new-plan__hr" />
+          <hr className="plan__hr" />
 
           <div className="new-plan__calendar-container">
             {memoizedMonthlyPlan}

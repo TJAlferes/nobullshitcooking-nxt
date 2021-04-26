@@ -4,13 +4,9 @@
   width: 450px;
 }
 
-.home-link--large {
-  display: block;
-}
+.home-link--large {display: block;}
 
-.home-link--small {
-  display: none;
-}
+.home-link--small {display: none;}
 
 @media (max-width: 1279px) {
   .logo,
@@ -19,9 +15,7 @@
     width: 110px;
   }
 
-  .home-link--large {
-    display: none;
-  }
+  .home-link--large {display: none;}
 
   .home-link--small {
     display: block;

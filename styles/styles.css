@@ -1,20 +1,8 @@
-/*
-
-simple reset
-
-*/
-
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
-
-/*
-
-base styles
-
-*/
 
 body, html, #root {
   max-width: calc(100vw - (100vw - 100%));
@@ -27,18 +15,12 @@ html {
 }
 
 body {
-  font-family: 'Play', sans-serif;
+  font-family: Helvetica, sans-serif;
   height: 100%;
   margin: 0 auto 0 auto;
   min-height: 100vh;
   overflow-x: hidden;  /* kind of a hack job IMHO... */
 }
-
-/*
-
-base fonts
-
-*/
 
 a, li, p, span, td, th {font-size: 1.3rem;}
 
@@ -55,16 +37,17 @@ h3 {font-size: 1.6rem;}
 
 h4 {font-size: 1.4rem;}
 
-/*
-
-mobile
-
-*/
+.feedback {
+  color: #c10006;
+  display: block;
+  font-size: 14px;
+  height: 31px;
+  text-align: center;
+  width: 100%;
+}
 
 @media (max-width: 899px) {
-  body, html, #root {
-    min-width: 300px;
-  }
+  body, html, #root {min-width: 300px;}
 
   h1 {font-size: 2rem;}
 
@@ -75,17 +58,10 @@ mobile
   h4 {font-size: 1.4rem;}
 }
 
-/*
-
-import the rest
-
-*/
-
 /*@import 'react-image-crop/lib/ReactCrop.scss';*/
 /*@import 'react-image-crop/lib/ReactCrop.module.scss';*/
 /*@import 'react-image-crop/dist/ReactCrop.module.css';*/
 
-@import './globals.css';
 @import './components/addToCartButton.css';
 @import './components/app.css';
 @import './components/breadcrumbs.css';
@@ -111,7 +87,6 @@ import the rest
 
 @import './pages/cart.css';
 @import './pages/chat.css';
-@import './pages/chatPage.css';
 @import './pages/checkout.css';
 @import './pages/content.css';
 @import './pages/dashboard.css';
@@ -127,11 +102,9 @@ import the rest
 @import './pages/newEquipment.css';
 @import './pages/newIngredient.css';
 @import './pages/newPlan.css';
-@import './pages/newPlanPage.css';
 @import './pages/newRecipe.css';
 @import './pages/notFound.css';
 @import './pages/plan.css';
-@import './pages/planPage.css';
 @import './pages/product.css';
 @import './pages/products.css';
 @import './pages/profile.css';
@@ -145,48 +118,3 @@ import the rest
 @import './themes/tableA.css';
 @import './themes/twoColumnA.css';
 @import './themes/twoColumnB.css';
-
-/*@import './themes/navGridA.css';
-@import './themes/oneColumnA.css';
-@import './themes/tableA.css';
-@import './themes/twoColumnA.css';
-@import './themes/twoColumnB.css';
-@import '../src/pages/Home/home.css';
-@import '../src/pages/Cart/cart.css';
-@import '../src/pages/Cart/RemoveFromCartButton/removeFromCartButton.css';
-@import '../src/pages/Chat/chat.css';
-@import '../src/pages/Chat/chatPage.css';
-@import '../src/pages/Chat/MessagesView/messages.css';
-@import '../src/pages/Chat/OptionsView/options.css';
-@import '../src/pages/Chat/PeopleView/people.css';
-@import '../src/pages/Checkout/checkout.css';
-@import '../src/pages/Content/content.css';
-@import '../src/pages/Equipment/equipment.css';
-@import '../src/pages/Equipments/equipments.css';
-@import '../src/pages/Friends/friends.css';
-@import '../src/pages/Home/home.css';
-@import '../src/pages/Home/Feed/feed.css';
-@import '../src/pages/Home/Suggestions/suggestions.css';
-@import '../src/pages/Ingredient/ingredient.css';
-@import '../src/pages/Ingredients/ingredients.css';
-@import '../src/pages/Login/login.css';
-@import '../src/pages/Navigation/navigation.css';*/
-
-/*@import '../src/pages/NewContent/components/';*/
-
-/*@import '../src/pages/NewEquipment/newEquipment.css';
-@import '../src/pages/NewIngredient/newIngredient.css';
-@import '../src/pages/NewPlan/newPlan.css';
-@import '../src/pages/NewPlan/newPlanPage.css';
-@import '../src/pages/NewRecipe/newRecipe.css';
-@import '../src/pages/NotFound/notFound.css';
-@import '../src/pages/Plan/plan.css';
-@import '../src/pages/Plan/planPage.css';
-@import '../src/pages/Product/product.css';
-@import '../src/pages/Product/AddToCartButton/addToCartButton.css';
-@import '../src/pages/Products/products.css';
-@import '../src/pages/Profile/profile.css';
-@import '../src/pages/Recipe/recipe.css';
-@import '../src/pages/Recipes/recipes.css';
-@import '../src/pages/Register/register.css';
-@import '../src/pages/UserDashboard/dashboard.css';*/

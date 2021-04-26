@@ -26,15 +26,7 @@
   cursor: pointer;
 }
 
-/*
-
-light
-
-*/
-
-.suggestions-light {
-  background-color: #fff;
-}
+.suggestions-light {background-color: #fff;}
 
 .suggestions-light .suggestions__header {
   display: block;
@@ -49,15 +41,7 @@ light
   margin-bottom: 5px;
 }
 
-/*
-
-dark
-
-*/
-
-.suggestions-dark {
-  background-color: #222;
-}
+.suggestions-dark {background-color: #222;}
 
 .suggestions-dark .suggestions__header {
   color: #aaa;

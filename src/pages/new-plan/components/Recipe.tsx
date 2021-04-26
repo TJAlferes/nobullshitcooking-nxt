@@ -98,11 +98,11 @@ const Recipe: FC<Props> = ({
   drag(drop(ref));
 
   return (
-    <div className="planner__recipe" key={key} ref={ref}>
-      <div className="planner__recipe-image">
+    <div className="plan__recipe" key={key} ref={ref}>
+      <div className="plan__recipe-image">
         <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe.recipe_image}-tiny`} />
       </div>
-      <div className="planner__recipe-text">{recipe.title}</div>
+      <div className="plan__recipe-text">{recipe.title}</div>
     </div>
   );
 };

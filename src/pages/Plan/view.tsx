@@ -14,17 +14,16 @@ export function PlanView({
 }: Props): JSX.Element {
   return (
     <div className="plan-view">
-
       <div className={`plan two-column-a ${twoColumnATheme}`}>
-
         <LeftNav />
 
         <section>
-
           <div className="plan__header">
             <h1>Plan</h1>
+
             <div className="plan__name">
               <label className="plan__name-label">Plan Name:</label>
+              
               <span className="plan__name-value">{planName}</span>
             </div>
           </div>

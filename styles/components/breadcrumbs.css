@@ -10,42 +10,16 @@
   width: max-content;
 }
 
-.crumbs a {
-  color: #68abe6;
-}
+.crumbs a {color: #68abe6;}
 
-.crumbs a:visited {
-  color: #68abe6;
-}
+.crumbs a:visited {color: #68abe6;}
 
-.crumb-pointer {
-  padding: 0 12px;
-}
+.crumb-pointer {padding: 0 12px;}
 
-/*
+.bread-crumbs-light a:hover {color: #c10006;}
 
-light
+.bread-crumbs-light .crumb-pointer {color: #000;}
 
-*/
+.bread-crumbs-dark a:hover {color: #690004;}
 
-.bread-crumbs-light a:hover {
-  color: #c10006;
-}
-
-.bread-crumbs-light .crumb-pointer {
-  color: #000;
-}
-
-/*
-
-dark
-
-*/
-
-.bread-crumbs-dark a:hover {
-  color: #690004;
-}
-
-.bread-crumbs-dark .crumb-pointer {
-  color: #aaa;
-}
+.bread-crumbs-dark .crumb-pointer {color: #aaa;}

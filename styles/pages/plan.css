@@ -30,9 +30,7 @@
   order: 1;
 }
 
-.plan__name-value {
-  order: 2;
-}
+.plan__name-value {order: 2;}
 
 .plan__calendar-container {
   height: 328px;
@@ -62,9 +60,7 @@
   width: 100%;
 }
 
-.monthly-plan__header {
-  height: 20px;
-}
+.monthly-plan__header {height: 20px;}
 
 .monthly-plan__header-day {
   height: 20px;
@@ -170,9 +166,7 @@
   width: 90%;
 }
 
-/*.plan__recipe-image {
-
-}*/
+.plan__recipe-image {margin: 1px 0 0 1px;}
 
 .plan__recipe-text {
   font-family: Arial, sans-serif;

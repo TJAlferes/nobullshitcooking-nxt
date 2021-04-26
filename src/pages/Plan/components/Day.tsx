@@ -15,15 +15,13 @@ export default function Day({
 
   const handleClickDay = () => dispatch(plannerViewClickDay(day));
 
-  return (!expanded || (day !== expandedDay))
-  ? (
+  return (expanded || (day === expandedDay)) ? null: (
     <div className="plan__day" onClick={handleClickDay}>
       <span className="plan__date">{day}</span>
       
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
-  )
-  : null;
+  );
 }
 
 type Props = {

@@ -8,5 +8,5 @@ const Chat = dynamic(() => import('./Chat'), {
 });
 
 export default function ChatPage(): JSX.Element {
-  return <div id="chat-page"><Chat /></div>;
+  return <Chat />;
 }

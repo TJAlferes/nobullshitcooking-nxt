@@ -8,7 +8,7 @@ const NewPlan = dynamic(() => import('./NewPlan'), {
 });
 
 export default function NewPlanPage({ editing }: Props): JSX.Element {
-  return <div className="new-plan-page"><NewPlan editing={editing} /></div>;
+  return <NewPlan editing={editing} />;
 }
 
 type Props = {

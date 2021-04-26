@@ -48,14 +48,10 @@ const ExpandedDay = ({
 
   const handleClickDay = () => plannerClickDay(day);
 
-  return expanded
-  ? (
-    <div
-      className={`planner__expanded-day${color}`}
-      onClick={handleClickDay}
-      //ref={connectDropTarget}
-    >
-      <span className="planner__date">{day}</span>
+  return !expanded ? null : (
+    <div className={`plan__expanded-day${color}`} onClick={handleClickDay}>
+      <span className="plan__date">{day}</span>
+
       {recipes.map((recipe, i) => (
         <Recipe
           day={day}
@@ -69,8 +65,7 @@ const ExpandedDay = ({
         />
       ))}
     </div>
-  )
-  : null;
+  );
 };
 
 type PropsFromRedux = ConnectedProps<typeof connector>;

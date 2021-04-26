@@ -8,11 +8,7 @@ const Plan = dynamic(() => import('./Plan'), {
 });
 
 export default function PlanPage({ twoColumnATheme }: Props): JSX.Element {
-  return (
-    <div className="plan-page">
-      <Plan twoColumnATheme={twoColumnATheme} />
-    </div>
-  );
+  return <Plan twoColumnATheme={twoColumnATheme} />;
 }
 
 type Props = {

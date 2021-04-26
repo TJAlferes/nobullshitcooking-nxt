@@ -8,9 +8,7 @@
   list-style-type: none;
 }
 
-.mode-button {
-  line-height: 16px;
-}
+.mode-button {line-height: 16px;}
 
 .mode-button:hover {
   cursor: pointer;
@@ -39,14 +37,10 @@
   text-decoration: none;
 }
 
-
-
 /* fix these... */
 
 .user-nav__link:hover,
-.user-nav__link:active {
-  text-decoration: underline;
-}
+.user-nav__link:active {text-decoration: underline;}
 
 .user-nav__link--authenticated:hover {
   cursor: pointer;
@@ -54,6 +48,4 @@
 }
 
 .mode-button:active
-.user-nav__link--authenticated:active {
-  cursor: pointer;
-}
+.user-nav__link--authenticated:active {cursor: pointer;}

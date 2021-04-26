@@ -7,13 +7,9 @@
   min-height: 100vh;
 }
 
-.mobile {
-  display: none;
-}
+.mobile {display: none;}
 
-.desktop {
-  display: block;
-}
+.desktop {display: block;}
 
 .image-default-280-172 {
   min-height: 172px;
@@ -30,22 +26,10 @@
   min-width: 28px;
 }
 
-/*
-
-mobile
-
-*/
-
 @media (max-width: 899px) {
-  #app {
-    grid-template-rows: 92px auto 237px;
-  }
+  #app {grid-template-rows: 92px auto 237px;}
 
-  .mobile {
-    display: block;
-  }
+  .mobile {display: block;}
 
-  .desktop {
-    display: none;
-  }
+  .desktop {display: none;}
 }

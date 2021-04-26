@@ -69,11 +69,7 @@
   background-color: #444;
 }
 
-
-
 /* mobile */ /* 599px */
 @media (max-width: 899px) {
-  .left-nav {
-    display: none;
-  }
+  .left-nav {display: none;}
 }

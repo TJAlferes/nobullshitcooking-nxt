@@ -39,17 +39,11 @@
   font-style: italic;
 }
 
-.message__self {
-  color: #009fff;
-}
+.message__self {color: #009fff;}
 
-.message__other {
-  color: #326fff;
-}
+.message__other {color: #326fff;}
 
-.message__private {
-  color: #a100ff;
-}
+.message__private {color: #a100ff;}
 
 @media (max-width: 1279px) {
   .chat__messages {

@@ -1,6 +1,5 @@
 .register {
   display: block;
-  font-family: 'Play', sans-serif;  /* move */
   font-size: 13px;  /* move */
   max-width: 100%;
   min-width: 300px;
@@ -134,7 +133,5 @@
     margin: 0 auto;
   }
 
-  .register__form {
-    width: 280px;
-  }
+  .register__form {width: 280px;}
 }
