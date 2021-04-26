@@ -1,19 +1,23 @@
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/router';
 
 import { useTypedSelector as useSelector } from '../../store';
 
 export default function LeftNav(): JSX.Element {
+  const { pathname } = useRouter();
+
   const { authname, userIsAuthenticated } = useSelector(state => state.auth);
   const theme = useSelector(state => state.theme.leftNavTheme);
 
   const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
 
-  function LeftNavLink({ dataTest, text, to }: LeftNavLinkProps): JSX.Element {
+  function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
+    const style = (to === pathname) ? {backgroundColor} : {};
+
     return (
       <Link href={to}>
         <a
-          style={{backgroundColor}}
+          style={style}
           className="left-nav-link"
           data-test={dataTest}
         >
@@ -27,64 +31,64 @@ export default function LeftNav(): JSX.Element {
     <nav className={`left-nav ${theme}`}>
       {
         userIsAuthenticated &&
-        <LeftNavLink dataTest="dashboard" text={authname} to="/dashboard" />
+        <NavLink dataTest="dashboard" text={authname} to="/dashboard" />
       }
       {userIsAuthenticated && <hr />}
 
-      <LeftNavLink dataTest="home" text="News" to="/home" />
+      <NavLink dataTest="home" text="News" to="/" />
       {
         userIsAuthenticated &&
-        <LeftNavLink dataTest="chat" text="Chat" to="/chat" />
+        <NavLink dataTest="chat" text="Chat" to="/chat" />
       }
       {
         userIsAuthenticated &&
-        <LeftNavLink dataTest="friends" text="Friends" to="/friends" />
+        <NavLink dataTest="friends" text="Friends" to="/friends" />
       }
       <hr />
 
-      <LeftNavLink
+      <NavLink
         dataTest="supplements"
         text="Supplements"
         to="/page/guide/food/nutrition/supplements"
       />
-      <LeftNavLink
+      <NavLink
         dataTest="equipment"
         text="Equipment"
         to="/supply/kitchen-equipment"
       />
       <hr />
 
-      <LeftNavLink
+      <NavLink
         dataTest="filtration"
         text="Water Filtration"
         to="/page/promo/water-filtration"
       />
-      <LeftNavLink dataTest="tea" text="Tea" to="/page/promo/tea" />
-      <LeftNavLink dataTest="coffee" text="Coffee" to="/page/promo/coffee" />
+      <NavLink dataTest="tea" text="Tea" to="/page/promo/tea" />
+      <NavLink dataTest="coffee" text="Coffee" to="/page/promo/coffee" />
       <hr />
 
-      <LeftNavLink
+      <NavLink
         dataTest="outdoors"
         text="Outdoors"
         to="/page/promo/outdoors"
       />
-      <LeftNavLink dataTest="garden" text="Garden" to="/page/promo/garden" />
-      <LeftNavLink dataTest="tools" text="Tools" to="/page/promo/tools" />
+      <NavLink dataTest="garden" text="Garden" to="/page/promo/garden" />
+      <NavLink dataTest="tools" text="Tools" to="/page/promo/tools" />
       <hr />
 
-      <LeftNavLink
+      <NavLink
         dataTest="seasonal"
         text="Seasonal"
         to="/page/promo/seasonal"
       />
       <hr />
 
-      <LeftNavLink dataTest="charity" text="Charity" to="/page/site/charity" />
+      <NavLink dataTest="charity" text="Charity" to="/page/site/charity" />
     </nav>
   );
 }
 
-type LeftNavLinkProps = {
+type NavLinkProps = {
   dataTest: string;
   to: string;
   text: string;

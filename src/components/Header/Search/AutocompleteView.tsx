@@ -1,5 +1,3 @@
-import React from 'react';
-
 function getRaw(result: IResult, value: string) {
   if (!result[value] || !result[value].raw) return "";
   return result[value].raw;

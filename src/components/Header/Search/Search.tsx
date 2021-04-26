@@ -1,7 +1,6 @@
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
 import Image from 'next/image'
 import { useRouter } from 'next/router';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';

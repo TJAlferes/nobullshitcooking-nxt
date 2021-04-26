@@ -1,6 +1,5 @@
 //import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 // /images/header/logo-mobile-red.png
 // /images/header/logo-mobile-dark-red.png

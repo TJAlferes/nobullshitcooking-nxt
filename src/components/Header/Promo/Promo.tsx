@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/header/announcements/";
 

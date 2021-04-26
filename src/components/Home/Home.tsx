@@ -1,8 +1,8 @@
-import React from 'react';
-
-import { LeftNav } from '../../components';
+import { LeftNav } from '..';
 import { Feed } from './Feed/Feed';
 import { Suggestions } from './Suggestions/Suggestions';
+
+// TO DO: make NOBSC's LeftNav like Youtube's.
 
 export default function Home(): JSX.Element {
   return (

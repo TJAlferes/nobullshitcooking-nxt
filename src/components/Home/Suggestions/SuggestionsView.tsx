@@ -1,5 +1,3 @@
-import React from 'react';
-
 const googleMapsAPIKeyOne = 'AIzaSyCULKDLxoF9O413jjvF5Ot2xXXMdgz0Eag';
 
 export function SuggestionsView({

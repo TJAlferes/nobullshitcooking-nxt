@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 import { useTypedSelector as useSelector } from '../../store';
 
