@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector } from '../../../store';
 
+// TO DO: MAKE THE HAMBURGER ICON LIKE YOUTUBE
 export default function LeftNav(): JSX.Element {
   const { pathname } = useRouter();
 

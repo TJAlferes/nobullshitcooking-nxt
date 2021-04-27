@@ -1,5 +1,4 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import { IIngredient } from '../../../store/data/types';
 

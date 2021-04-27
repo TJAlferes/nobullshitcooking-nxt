@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IContentType } from '../../../store/data/types';
 
 export function ContentTypes({ contentTypes }: Props): JSX.Element {

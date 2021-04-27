@@ -29,7 +29,7 @@ export function RegisterView({
     <form className="register__form">
       <h1 className="register__heading">Create Account</h1>
 
-      <p className="register__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       <label className="register__label">Username</label>
 
@@ -110,7 +110,7 @@ export function RegisterView({
     <form className="register-confirm-form">
       <h1 className="register__heading">Verify</h1>
 
-      <p className="register__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       <label className="register__label">Code</label>
       <input

@@ -1,8 +1,9 @@
 .footer {
-  /*font-family: 'Arial', sans-serif;*/
+  grid-column: 1 / 1;
+  grid-row: 3 / 4;
   height: 92px;
-  max-width: calc(100vw - (100vw - 100%));;
-  min-width: 300px;
+  /*max-width: calc(100vw - (100vw - 100%));
+  min-width: 300px;*/
 }
 
 .footer__links {

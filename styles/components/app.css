@@ -1,15 +1,12 @@
 #app {
   display: grid;
-  grid-template-areas: none;
+  grid-template: auto 1fr auto / 1fr;
+  /*grid-template-areas: none;
   grid-template-rows: 92px auto 92px;
   max-width: calc(100vw - (100vw - 100%));
   min-width: calc(100vw - (100vw - 100%));
-  min-height: 100vh;
+  min-height: 100vh;*/
 }
-
-.mobile {display: none;}
-
-.desktop {display: block;}
 
 .image-default-280-172 {
   min-height: 172px;
@@ -28,8 +25,4 @@
 
 @media (max-width: 899px) {
   #app {grid-template-rows: 92px auto 237px;}
-
-  .mobile {display: block;}
-
-  .desktop {display: none;}
 }

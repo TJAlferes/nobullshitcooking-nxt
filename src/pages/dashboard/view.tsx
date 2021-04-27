@@ -1,6 +1,5 @@
 import { Crop } from 'react-image-crop';
 
-import { LeftNav } from '../../components';
 import {
   IEquipment,
   IIngredient,
@@ -64,117 +63,113 @@ export function DashboardView({
 }: Props): JSX.Element {
   return (
     <div className={`dashboard two-column-a ${twoColumnATheme}`}>
-      <LeftNav />
+      <h1>{authname}</h1>
 
-      <section>
-        <h1>{authname}</h1>
+      <p className="dashboard__feedback">{feedback}</p>
 
-        <p className="dashboard__feedback">{feedback}</p>
+      {!avatar && <Tabs tab={tab} handleTabClick={handleTabClick} />}
 
-        {!avatar && <Tabs tab={tab} handleTabClick={handleTabClick} />}
+      {(tab === "avatar") && (
+        <>
+          {!avatar && (
+            <Avatar
+              authname={authname}
+              currentAvatar={currentAvatar}
+              onSelectFile={onSelectFile}
+            />
+          )}
 
-        {(tab === "avatar") && (
-          <>
-            {!avatar && (
-              <Avatar
-                authname={authname}
-                currentAvatar={currentAvatar}
-                onSelectFile={onSelectFile}
-              />
-            )}
+          {avatar && (
+            <AvatarEdit
+              avatar={avatar}
+              cancelAvatar={cancelAvatar}
+              crop={crop}
+              fullCrop={fullCrop}
+              loading={loading}
+              onImageLoaded={onImageLoaded}
+              onCropChange={onCropChange}
+              onCropComplete={onCropComplete}
+              submitAvatar={submitAvatar}
+              tinyCrop={tinyCrop}
+            />
+          )}
+        </>
+      )}
 
-            {avatar && (
-              <AvatarEdit
-                avatar={avatar}
-                cancelAvatar={cancelAvatar}
-                crop={crop}
-                fullCrop={fullCrop}
-                loading={loading}
-                onImageLoaded={onImageLoaded}
-                onCropChange={onCropChange}
-                onCropComplete={onCropComplete}
-                submitAvatar={submitAvatar}
-                tinyCrop={tinyCrop}
-              />
-            )}
-          </>
-        )}
+      {(!avatar && tab == "plans") && (
+        <Plans
+          activateModal={activateModal}
+          creatingPlan={creatingPlan}
+          deactivateModal={deactivateModal}
+          deleteName={deleteName}
+          editingId={editingId}
+          getApplicationNode={getApplicationNode}
+          handleDeletePlan={handleDeletePlan}
+          modalActive={modalActive}
+          myPlans={myPlans}
+        />
+      )}
 
-        {(!avatar && tab == "plans") && (
-          <Plans
-            activateModal={activateModal}
-            creatingPlan={creatingPlan}
-            deactivateModal={deactivateModal}
-            deleteName={deleteName}
-            editingId={editingId}
-            getApplicationNode={getApplicationNode}
-            handleDeletePlan={handleDeletePlan}
-            modalActive={modalActive}
-            myPlans={myPlans}
-          />
-        )}
+      {(!avatar && tab == "recipes" && subTab == "private") && (
+        <PrivateRecipes
+          activateModal={activateModal}
+          deactivateModal={deactivateModal}
+          deleteName={deleteName}
+          getApplicationNode={getApplicationNode}
+          handleDeletePrivateRecipe={handleDeletePrivateRecipe}
+          handleSubTabClick={handleSubTabClick}
+          modalActive={modalActive}
+          myPrivateRecipes={myPrivateRecipes}
+          subTab={subTab}
+        />
+      )}
 
-        {(!avatar && tab == "recipes" && subTab == "private") && (
-          <PrivateRecipes
-            activateModal={activateModal}
-            deactivateModal={deactivateModal}
-            deleteName={deleteName}
-            getApplicationNode={getApplicationNode}
-            handleDeletePrivateRecipe={handleDeletePrivateRecipe}
-            handleSubTabClick={handleSubTabClick}
-            modalActive={modalActive}
-            myPrivateRecipes={myPrivateRecipes}
-            subTab={subTab}
-          />
-        )}
+      {(!avatar && tab == "recipes" && subTab == "public") && (
+        <PublicRecipes
+          activateModal={activateModal}
+          deactivateModal={deactivateModal}
+          deleteName={deleteName}
+          getApplicationNode={getApplicationNode}
+          handleDisownPublicRecipe={handleDisownPublicRecipe}
+          handleSubTabClick={handleSubTabClick}
+          modalActive={modalActive}
+          myPublicRecipes={myPublicRecipes}
+          subTab={subTab}
+        />
+      )}
 
-        {(!avatar && tab == "recipes" && subTab == "public") && (
-          <PublicRecipes
-            activateModal={activateModal}
-            deactivateModal={deactivateModal}
-            deleteName={deleteName}
-            getApplicationNode={getApplicationNode}
-            handleDisownPublicRecipe={handleDisownPublicRecipe}
-            handleSubTabClick={handleSubTabClick}
-            modalActive={modalActive}
-            myPublicRecipes={myPublicRecipes}
-            subTab={subTab}
-          />
-        )}
+      {(!avatar && tab == "recipes" && subTab == "favorite") && (
+        <FavoriteRecipes
+          handleSubTabClick={handleSubTabClick}
+          handleUnfavoriteRecipe={handleUnfavoriteRecipe}
+          myFavoriteRecipes={myFavoriteRecipes}
+          subTab={subTab}
+          
+        />
+      )}
 
-        {(!avatar && tab == "recipes" && subTab == "favorite") && (
-          <FavoriteRecipes
-            handleSubTabClick={handleSubTabClick}
-            handleUnfavoriteRecipe={handleUnfavoriteRecipe}
-            myFavoriteRecipes={myFavoriteRecipes}
-            subTab={subTab}
-            
-          />
-        )}
+      {(!avatar && tab == "recipes" && subTab == "saved") && (
+        <SavedRecipes
+          handleSubTabClick={handleSubTabClick}
+          handleUnsaveRecipe={handleUnsaveRecipe}
+          mySavedRecipes={mySavedRecipes}
+          subTab={subTab}
+        />
+      )}
 
-        {(!avatar && tab == "recipes" && subTab == "saved") && (
-          <SavedRecipes
-            handleSubTabClick={handleSubTabClick}
-            handleUnsaveRecipe={handleUnsaveRecipe}
-            mySavedRecipes={mySavedRecipes}
-            subTab={subTab}
-          />
-        )}
+      {!avatar && tab == "ingredients" && (
+        <Ingredients
+          handleDeletePrivateIngredient={handleDeletePrivateIngredient}
+          myPrivateIngredients={myPrivateIngredients}
+        />
+      )}
 
-        {!avatar && tab == "ingredients" && (
-          <Ingredients
-            handleDeletePrivateIngredient={handleDeletePrivateIngredient}
-            myPrivateIngredients={myPrivateIngredients}
-          />
-        )}
-
-        {!avatar && tab == "equipment" && (
-          <Equipment
-            handleDeletePrivateEquipment={handleDeletePrivateEquipment}
-            myPrivateEquipment={myPrivateEquipment}
-          />
-        )}
-      </section>
+      {!avatar && tab == "equipment" && (
+        <Equipment
+          handleDeletePrivateEquipment={handleDeletePrivateEquipment}
+          myPrivateEquipment={myPrivateEquipment}
+        />
+      )}
     </div>
   );
 }

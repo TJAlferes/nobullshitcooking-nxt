@@ -1,6 +1,5 @@
-import React from 'react';
+import Link from 'next/link';
 import AriaModal from 'react-aria-modal';
-import { Link } from 'react-router-dom';
 
 import { IWorkContent } from '../../../store/data/types';
 

@@ -34,7 +34,7 @@ export function LoginView({
       <form className="login__form">
         <h1 className="login__heading">Sign In</h1>
 
-        <p className="login__feedback">{feedback}</p>
+        <p className="feedback">{feedback}</p>
 
         <label className="login__label">Email</label>
 

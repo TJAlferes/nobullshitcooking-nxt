@@ -38,15 +38,6 @@
   margin-bottom: 14px;
 }
 
-.register__feedback {
-  color: #c10006;
-  font-family: Arial;
-  font-size: 14px;
-  height: 31px;
-  text-align: center;
-  width: 100%;
-}
-
 .register__label {
   display: block;
   margin: 14px auto 4px auto;

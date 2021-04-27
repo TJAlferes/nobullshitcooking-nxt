@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 import { Breadcrumbs } from '../../components';
 import { IWorkProduct } from '../../store/data/types';

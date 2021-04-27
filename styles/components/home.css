@@ -1,0 +1,10 @@
+.home {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin: 31px auto 0px auto;
+  max-width: 1200px;
+  min-width: 300px;
+}

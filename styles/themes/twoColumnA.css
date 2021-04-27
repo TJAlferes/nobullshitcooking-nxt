@@ -1,36 +1,13 @@
 .two-column-a {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  margin: 0 auto;
-  max-width: 1200px;
-  min-width: 300px;
-  padding: 10px 0 10px 0;
-}
-
-.two-column-a section {
   background-color: #fff;
-  margin: 10px 0 10px 10px;
-  max-width: 960px;
+  display: block;
+  margin: 0 auto;
+  /*margin: 10px 0 10px 10px;*/
+  max-width: 100%;
   min-width: 300px;
-  order: 2;
-  overflow: auto;
-  padding: 10px 10px;
-}
-
-@media (max-width: 1209px) {
-  .two-column-a,
-  .two-column-a section {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 899px) {
-  .two-column-a section {
-    margin-left: 0;
-  }
+  /*overflow: auto;*/
+  padding: 10px 0 10px 0;
+  /*padding: 10px 10px;*/
 }
 
 /*
@@ -39,7 +16,7 @@ light
 
 */
 
-.two-column-a-light section {
+.two-column-a-light {
   background-color: #fff;
   color: #000;
 }
@@ -179,7 +156,7 @@ dark
 
 */
 
-.two-column-a-dark section {
+.two-column-a-dark {
   background-color: #222;
   color: #aaa;
 }

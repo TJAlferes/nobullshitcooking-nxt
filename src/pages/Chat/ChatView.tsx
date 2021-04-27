@@ -1,4 +1,3 @@
-import { LeftNav } from '../../components';
 import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
 import { MessagesView } from './MessagesView';
 import { OptionsView } from './OptionsView';
@@ -33,48 +32,44 @@ export function ChatView({
 }: Props): JSX.Element {
   return (
     <div className={`chat two-column-a ${twoColumnATheme}`}>
-      <LeftNav />
+      <h1>Chat</h1>
 
-      <section>
-        <h1>Chat</h1>
+      <p className="feedback">{feedback}</p>
 
-        <p className="chat__feedback">{feedback}</p>
+      <OptionsView
+        room={room}
+        handleRoomChange={handleRoomChange}
+        handleConnect={handleConnect}
+        handleDisconnect={handleDisconnect}
+        handleRoomInputChange={handleRoomInputChange}
+        loading={loading}
+        roomToEnter={roomToEnter}
+        status={status}
+      />
 
-        <OptionsView
-          room={room}
-          handleRoomChange={handleRoomChange}
-          handleConnect={handleConnect}
-          handleDisconnect={handleDisconnect}
-          handleRoomInputChange={handleRoomInputChange}
-          loading={loading}
-          roomToEnter={roomToEnter}
+      <div className="chat__main">
+        <MessagesView
+          authname={authname}
+          handleMessageInputChange={handleMessageInputChange}
+          handleMessageSend={handleMessageSend}
+          messages={messages}
+          messagesRef={messagesRef}
+          messageToSend={messageToSend}
           status={status}
         />
 
-        <div className="chat__main">
-          <MessagesView
-            authname={authname}
-            handleMessageInputChange={handleMessageInputChange}
-            handleMessageSend={handleMessageSend}
-            messages={messages}
-            messagesRef={messagesRef}
-            messageToSend={messageToSend}
-            status={status}
-          />
-
-          <PeopleView
-            focusedFriend={focusedFriend}
-            focusedUser={focusedUser}
-            handleFriendClick={handleFriendClick}
-            handlePeopleTabChange={handlePeopleTabChange}
-            handleUserClick={handleUserClick}
-            onlineFriends={onlineFriends}
-            peopleTab={peopleTab}
-            startPrivateMessage={startPrivateMessage}
-            users={users}
-          />
-        </div>
-      </section>
+        <PeopleView
+          focusedFriend={focusedFriend}
+          focusedUser={focusedUser}
+          handleFriendClick={handleFriendClick}
+          handlePeopleTabChange={handlePeopleTabChange}
+          handleUserClick={handleUserClick}
+          onlineFriends={onlineFriends}
+          peopleTab={peopleTab}
+          startPrivateMessage={startPrivateMessage}
+          users={users}
+        />
+      </div>
     </div>
   );
 }

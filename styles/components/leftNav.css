@@ -1,45 +1,30 @@
 .left-nav {
-  display: block;
+  /*display: block;
+  grid-column: 1 / 2;*/
   margin: 10px 0;
   max-width: 200px;
   min-width: 200px;
-  order: 1;
+  /*order: 1;*/
   overflow: auto;
   padding: 10px 10px;
   width: 200px;
 }
 
-.left-nav-light {
-  background-color: #fff;
-}
+.left-nav-light {background-color: #fff;}
 
-.left-nav-light .left-nav-link {
-  color: #000;
-}
+.left-nav-light .left-nav-link {color: #000;}
 
-.left-nav-light .left-nav-link {
-  background-color: inherit;
-}
+.left-nav-light .left-nav-link {background-color: inherit;}
 
-.left-nav-light hr {
-  background-color: #bfbfbf;
-}
+.left-nav-light hr {background-color: #bfbfbf;}
 
-.left-nav-dark {
-  background-color: #222;
-}
+.left-nav-dark {background-color: #222;}
 
-.left-nav-dark .left-nav-link {
-  color: #aaa;
-}
+.left-nav-dark .left-nav-link {color: #aaa;}
 
-.left-nav-dark .left-nav-link {
-  background-color: inherit;
-}
+.left-nav-dark .left-nav-link {background-color: inherit;}
 
-.left-nav-dark hr {
-  background-color: #444;
-}
+.left-nav-dark hr {background-color: #444;}
 
 .left-nav-link {
   display: block;
@@ -52,22 +37,16 @@
   margin-bottom: 5px;
 }
 
-.left-nav .left-nav-link {
-  text-decoration: none;
-}
+.left-nav .left-nav-link {text-decoration: none;}
 
 .left-nav .left-nav-link:hover {
   cursor: pointer;
   cursor: hand;
 }
 
-.left-nav.left-nav-light .left-nav-link:hover {
-  background-color: #ddd;
-}
+.left-nav.left-nav-light .left-nav-link:hover {background-color: #ddd;}
 
-.left-nav.left-nav-dark .left-nav-link:hover {
-  background-color: #444;
-}
+.left-nav.left-nav-dark .left-nav-link:hover {background-color: #444;}
 
 /* mobile */ /* 599px */
 @media (max-width: 899px) {

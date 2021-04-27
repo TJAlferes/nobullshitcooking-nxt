@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import React from 'react';
 
 import { Breadcrumbs } from '../../components';
 import { IWorkRecipe } from '../../store/data/types';

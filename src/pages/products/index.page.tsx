@@ -6,7 +6,6 @@ import {
   withSearch,
 } from '@elastic/react-search-ui';
 import Link from 'next/link';
-import React from 'react';
 
 const url = "https://s3.amazonaws.com/images-01/products/";
 

@@ -1,5 +1,4 @@
 .login {
-  font-family: 'Play', sans-serif;
   font-size: 13px;
 }
 
@@ -34,15 +33,6 @@
   font-weight: 400;
   line-height: 1.2;
   margin-bottom: 14px;
-}
-
-.login__feedback {
-  color: #c10006;
-  font-family: Arial;
-  font-size: 14px;
-  height: 31px;
-  text-align: center;
-  width: 100%;
 }
 
 .login__label {
