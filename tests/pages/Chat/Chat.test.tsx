@@ -1,12 +1,11 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { PeopleView } from '../../../src/pages/Chat/PeopleView/PeopleView';
-import { Chat, ChatView } from '../../../src/pages';
+import Chat from '../../../src/pages/chat/Chat';
+import { ChatView } from '../../../src/pages/chat/view';
+import { PeopleView } from '../../../src/pages/chat/PeopleView';
 
 window.scrollTo = jest.fn();
-
-jest.mock('../../../src/components/LeftNav/LeftNav');
 
 const chatChangeRoom = jest.fn();
 const chatConnect = jest.fn();

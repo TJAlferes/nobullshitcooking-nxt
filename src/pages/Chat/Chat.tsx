@@ -9,7 +9,7 @@ import {
   chatSendPrivateMessage,
   chatSendPublicMessage
 } from '../../store/chat/actions';
-import { ChatView } from './ChatView';
+import { ChatView } from './view';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 
