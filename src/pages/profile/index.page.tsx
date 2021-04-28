@@ -66,14 +66,14 @@ export default function Profile(): JSX.Element {
     getUserProfile(username);
   }, []);
 
-  const handleFriendRequestClick = () => {
+  const requestFriendship = () => {
     if (!username) return;
     setClicked(true);
     setLoading(true);
     dispatch(userRequestFriendship(username));
   };
 
-  const handleTabChange = (value: string) => setTab(value);
+  const changeTab = (value: string) => setTab(value);
 
   return !username
     ? <LoaderSpinner />
@@ -83,8 +83,8 @@ export default function Profile(): JSX.Element {
         clicked={clicked}
         myFriendships={myFriendships}
         feedback={feedback}
-        handleFriendRequestClick={handleFriendRequestClick}
-        handleTabChange={handleTabChange}
+        requestFriendship={requestFriendship}
+        changeTab={changeTab}
         userIsAuthenticated={userIsAuthenticated}
         loading={loading}
         oneColumnATheme={oneColumnATheme}

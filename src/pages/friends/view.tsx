@@ -5,14 +5,14 @@ import { IFriendship } from '../../store/data/types';
 export function FriendsView({
   myFriendships,
   feedback,
-  handleAcceptClick,
-  handleBlockClick,
-  handleDeleteClick,
-  handleInputChange,
-  handleRejectClick,
-  handleRequestClick,
-  handleTabChange,
-  handleUnblockClick,
+  acceptFriendship,
+  blockUser,
+  deleteFriendship,
+  inputChange,
+  rejectFriendship,
+  requestFriendship,
+  tabChange,
+  unblockUser,
   loading,
   tab,
   twoColumnATheme,
@@ -32,7 +32,7 @@ export function FriendsView({
         <input
           className="friends__find-input"
           name="friends-find-input"
-          onChange={handleInputChange}
+          onChange={inputChange}
           value={userToFind}
         />
 
@@ -40,7 +40,7 @@ export function FriendsView({
           className="friends__find-request-button"
           disabled={loading}
           name="friends-find-request"
-          onClick={handleRequestClick}
+          onClick={requestFriendship}
         >
           Send Friend Request
         </button>
@@ -49,7 +49,7 @@ export function FriendsView({
           className="friends__find-block-button"
           disabled={loading}
           name="friends-find-block"
-          onClick={handleBlockClick}
+          onClick={blockUser}
         >
           Block User
         </button>
@@ -63,7 +63,7 @@ export function FriendsView({
             tab === "accepted" ? "friends__tab--active" : "friends__tab"
           }
           name="current"
-          onClick={() => handleTabChange("accepted")}
+          onClick={() => tabChange("accepted")}
         >
           Current
         </button>
@@ -75,7 +75,7 @@ export function FriendsView({
             : "friends__tab"
           }
           name="pending"
-          onClick={() => handleTabChange("pending-received")}
+          onClick={() => tabChange("pending-received")}
         >
           Pending
         </button>
@@ -85,7 +85,7 @@ export function FriendsView({
             tab === "blocked" ? "friends__tab--active" : "friends__tab"
           }
           name="blocked"
-          onClick={() => handleTabChange("blocked")}
+          onClick={() => tabChange("blocked")}
         >
           Blocked
         </button>
@@ -111,7 +111,7 @@ export function FriendsView({
                   className="friends__list-item-action"
                   disabled={loading}
                   name="accept"
-                  onClick={handleAcceptClick}
+                  onClick={acceptFriendship}
                   value={f.username}
                 >
                   Accept
@@ -123,7 +123,7 @@ export function FriendsView({
                   className="friends__list-item-delete"
                   disabled={loading}
                   name="reject"
-                  onClick={handleRejectClick}
+                  onClick={rejectFriendship}
                   value={f.username}
                 >
                   Reject
@@ -135,7 +135,7 @@ export function FriendsView({
                   className="friends__list-item-delete"
                   disabled={loading}
                   name="unfriend"
-                  onClick={handleDeleteClick}
+                  onClick={deleteFriendship}
                   value={f.username}
                 >
                   Unfriend
@@ -147,7 +147,7 @@ export function FriendsView({
                   className="friends__list-item-delete"
                   disabled={loading}
                   name="unblock"
-                  onClick={handleUnblockClick}
+                  onClick={unblockUser}
                   value={f.username}
                 >
                   Unblock
@@ -164,14 +164,14 @@ export function FriendsView({
 type Props = {
   myFriendships: IFriendship[];
   feedback: string;
-  handleAcceptClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleBlockClick(): void;
-  handleDeleteClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleInputChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleRejectClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleRequestClick(): void;
-  handleTabChange(value: string): void;
-  handleUnblockClick(e: React.SyntheticEvent<EventTarget>): void;
+  acceptFriendship(e: React.SyntheticEvent<EventTarget>): void;
+  blockUser(): void;
+  deleteFriendship(e: React.SyntheticEvent<EventTarget>): void;
+  inputChange(e: React.SyntheticEvent<EventTarget>): void;
+  rejectFriendship(e: React.SyntheticEvent<EventTarget>): void;
+  requestFriendship(): void;
+  tabChange(value: string): void;
+  unblockUser(e: React.SyntheticEvent<EventTarget>): void;
   loading: boolean;
   tab: string;
   twoColumnATheme: string;

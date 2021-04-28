@@ -7,8 +7,8 @@ export function ProfileView({
   clicked,
   myFriendships,
   feedback,
-  handleFriendRequestClick,
-  handleTabChange,
+  requestFriendship,
+  changeTab,
   userIsAuthenticated,
   loading,
   oneColumnATheme,
@@ -43,7 +43,7 @@ export function ProfileView({
               ? <span>Friends</span>
               : (
                 !clicked ? (
-                  <button disabled={loading} onClick={handleFriendRequestClick}>
+                  <button disabled={loading} onClick={requestFriendship}>
                     Send Friend Request
                   </button>
                 )
@@ -61,7 +61,7 @@ export function ProfileView({
             className={
               (tab === "public") ? "profile__tab--active" : "profile__tab"
             }
-            onClick={() => handleTabChange("public")}
+            onClick={() => changeTab("public")}
           >
             Public
           </button>
@@ -69,7 +69,7 @@ export function ProfileView({
             className={
               (tab === "public") ? "profile__tab--active" : "profile__tab"
             }
-            onClick={() => handleTabChange("favorite")}
+            onClick={() => changeTab("favorite")}
           >
             Favorite
           </button>
@@ -140,8 +140,8 @@ type Props = {
   clicked: boolean;
   myFriendships: IFriendship[];
   feedback: string;
-  handleFriendRequestClick(): void;
-  handleTabChange(value: string): void;
+  requestFriendship(): void;
+  changeTab(value: string): void;
   userIsAuthenticated: boolean;
   loading: boolean;
   oneColumnATheme: string;

@@ -10,15 +10,15 @@ export function RegisterView({
   email,
   feedback,
   loading,
-  handleConfirmationCodeChange,
-  handleEmailChange,
-  handlePasswordChange,
-  handlePasswordAgainChange,
-  handleRegisterClick,
-  handleRegisterKeyUp,
-  handleUsernameChange,
-  handleVerifyClick,
-  handleVerifyKeyUp,
+  confirmationCodeChange,
+  emailChange,
+  passwordChange,
+  passwordAgainChange,
+  registerClick,
+  registerKeyUp,
+  usernameChange,
+  verifyClick,
+  verifyKeyUp,
   password,
   passwordAgain,
   username,
@@ -41,7 +41,7 @@ export function RegisterView({
         id="username"
         maxLength={20}
         name="username"
-        onChange={handleUsernameChange}
+        onChange={usernameChange}
         size={20}
         type="text"
         value={username}
@@ -56,7 +56,7 @@ export function RegisterView({
         id="email"
         maxLength={60}
         name="email"
-        onChange={handleEmailChange}
+        onChange={emailChange}
         size={20}
         type="email"
         value={email}
@@ -71,7 +71,7 @@ export function RegisterView({
         id="password"
         maxLength={20}
         name="password"
-        onChange={handlePasswordChange}
+        onChange={passwordChange}
         size={20}
         type="password"
         value={password}
@@ -86,7 +86,7 @@ export function RegisterView({
         id="passwordAgain"
         maxLength={20}
         name="passwordAgain"
-        onChange={handlePasswordAgainChange}
+        onChange={passwordAgainChange}
         size={20}
         type="password"
         value={passwordAgain}
@@ -99,8 +99,8 @@ export function RegisterView({
         isLoading={loading}
         loadingText="Creating Account..."
         name="submit"
-        onClick={handleRegisterClick}
-        onKeyUp={handleRegisterKeyUp}
+        onClick={registerClick}
+        onKeyUp={registerKeyUp}
         text="Create Account"
       />
     </form>
@@ -121,7 +121,7 @@ export function RegisterView({
         id="confirmationCode"
         maxLength={20}
         name="confirmationCode"
-        onChange={handleConfirmationCodeChange}
+        onChange={confirmationCodeChange}
         size={20}
         type="text"
         value={confirmationCode}
@@ -136,15 +136,15 @@ export function RegisterView({
         isLoading={loading}
         loadingText="Verifying..."
         name="submit"
-        onClick={handleVerifyClick}
-        onKeyUp={handleRegisterKeyUp}
+        onClick={verifyClick}
+        onKeyUp={registerKeyUp}
         text="Verify"
       />
     </form>
   );
 
   return (
-    <div className="register" onKeyUp={e => handleRegisterKeyUp(e)}>
+    <div className="register" onKeyUp={e => registerKeyUp(e)}>
       <Link href="/">
         <a className="register__home-links">
           <img
@@ -188,15 +188,15 @@ type Props = {
   email: string;
   feedback: string;
   loading: boolean;
-  handleConfirmationCodeChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleEmailChange(e: React.SyntheticEvent<EventTarget>): void;
-  handlePasswordChange(e: React.SyntheticEvent<EventTarget>): void;
-  handlePasswordAgainChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleRegisterClick(): void;
-  handleRegisterKeyUp(e: React.KeyboardEvent): void;
-  handleUsernameChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleVerifyClick(): void;
-  handleVerifyKeyUp(e: React.KeyboardEvent): void;
+  confirmationCodeChange(e: React.SyntheticEvent<EventTarget>): void;
+  emailChange(e: React.SyntheticEvent<EventTarget>): void;
+  passwordChange(e: React.SyntheticEvent<EventTarget>): void;
+  passwordAgainChange(e: React.SyntheticEvent<EventTarget>): void;
+  registerClick(): void;
+  registerKeyUp(e: React.KeyboardEvent): void;
+  usernameChange(e: React.SyntheticEvent<EventTarget>): void;
+  verifyClick(): void;
+  verifyKeyUp(e: React.KeyboardEvent): void;
   password: string;
   passwordAgain: string;
   username: string;

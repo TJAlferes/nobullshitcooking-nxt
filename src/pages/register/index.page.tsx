@@ -31,26 +31,26 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     };
   }, [message]);
 
-  const handleConfirmationCodeChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const confirmationCodeChange = (e: React.SyntheticEvent<EventTarget>) =>
     setConfirmationCode((e.target as HTMLInputElement).value);
 
-  const handleEmailChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
     setEmail((e.target as HTMLInputElement).value);
 
-  const handlePasswordChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
     setPassword((e.target as HTMLInputElement).value);
 
-  const handlePasswordAgainChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const passwordAgainChange = (e: React.SyntheticEvent<EventTarget>) =>
     setPasswordAgain((e.target as HTMLInputElement).value);
 
-  const handleRegisterClick = () => {
+  const registerClick = () => {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     setLoading(true);
     dispatch(authUserRegister(email, password, username, router));
   };
 
-  const handleRegisterKeyUp = (e: React.KeyboardEvent) => {
+  const registerKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
@@ -58,17 +58,17 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     dispatch(authUserRegister(email, password, username, router));
   };
 
-  const handleUsernameChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const usernameChange = (e: React.SyntheticEvent<EventTarget>) =>
     setUsername((e.target as HTMLInputElement).value);
 
-  const handleVerifyClick = () => {
+  const verifyClick = () => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     setLoading(true);
     dispatch(authUserVerify(email, password, confirmationCode, router));
   };
 
-  const handleVerifyKeyUp = (e: React.KeyboardEvent) => {
+  const verifyKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
@@ -91,15 +91,15 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
       confirmingUser={confirmingUser}
       email={email}
       feedback={feedback}
-      handleConfirmationCodeChange={handleConfirmationCodeChange}
-      handleEmailChange={handleEmailChange}
-      handlePasswordChange={handlePasswordChange}
-      handlePasswordAgainChange={handlePasswordAgainChange}
-      handleRegisterClick={handleRegisterClick}
-      handleRegisterKeyUp={handleRegisterKeyUp}
-      handleUsernameChange={handleUsernameChange}
-      handleVerifyClick={handleVerifyClick}
-      handleVerifyKeyUp={handleVerifyKeyUp}
+      confirmationCodeChange={confirmationCodeChange}
+      emailChange={emailChange}
+      passwordChange={passwordChange}
+      passwordAgainChange={passwordAgainChange}
+      registerClick={registerClick}
+      registerKeyUp={registerKeyUp}
+      usernameChange={usernameChange}
+      verifyClick={verifyClick}
+      verifyKeyUp={verifyKeyUp}
       loading={loading}
       password={password}
       passwordAgain={passwordAgain}

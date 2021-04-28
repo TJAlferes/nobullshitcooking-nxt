@@ -23,7 +23,6 @@ export default function Dashboard(): JSX.Element {
   const dispatch = useDispatch();
   const authname = useSelector(state => state.auth.authname);
   const creatingPlan = useSelector(state => state.planner.creating);
-  const currentAvatar = useSelector(state => state.auth.avatar);
   const editingId = useSelector(state => state.planner.editingId);
   const message = useSelector(state => state.user.message);
   const {
@@ -96,48 +95,48 @@ export default function Dashboard(): JSX.Element {
     return document.getElementById('root') as Element | Node;
   };
 
-  const handleDeletePlan = () => {
+  const deletePlan = () => {
     if (!deleteId) return;
     setLoading(true);
     dispatch(userDeletePlan(deleteId));
   };
 
-  const handleDeletePrivateEquipment = (id: number) => {
+  const deletePrivateEquipment = (id: number) => {
     setLoading(true);
     dispatch(userDeletePrivateEquipment(id));
   };
 
-  const handleDeletePrivateIngredient = (id: number) => {
+  const deletePrivateIngredient = (id: number) => {
     setLoading(true);
     dispatch(userDeletePrivateIngredient(id));
   };
 
-  const handleDeletePrivateRecipe = () => {
+  const deletePrivateRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
     dispatch(userDeletePrivateRecipe(deleteId));
   };
 
-  const handleDisownPublicRecipe = () => {
+  const disownPublicRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
     dispatch(userDisownPublicRecipe(deleteId));
   };
 
-  const handleSubTabClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const subTabClick = (e: React.SyntheticEvent<EventTarget>) => {
     setSubTab((e.target as HTMLInputElement).name);
   };
 
-  const handleTabClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const tabClick = (e: React.SyntheticEvent<EventTarget>) => {
     setTab((e.target as HTMLInputElement).name);
   };
 
-  const handleUnfavoriteRecipe = (id: number) => {
+  const unfavoriteRecipe = (id: number) => {
     setLoading(true);
     dispatch(userUnfavoriteRecipe(id));
   };
 
-  const handleUnsaveRecipe = (id: number) => {
+  const unsaveRecipe = (id: number) => {
     setLoading(true);
     dispatch(userUnsaveRecipe(id));
   };
@@ -184,22 +183,21 @@ export default function Dashboard(): JSX.Element {
       cancelAvatar={cancelAvatar}
       creatingPlan={creatingPlan}
       crop={crop}
-      currentAvatar={currentAvatar}
       deactivateModal={deactivateModal}
       deleteName={deleteName}
       editingId={editingId}
       feedback={feedback}
       fullCrop={fullCrop}
       getApplicationNode={getApplicationNode}
-      handleDeletePlan={handleDeletePlan}
-      handleDeletePrivateEquipment={handleDeletePrivateEquipment}
-      handleDeletePrivateIngredient={handleDeletePrivateIngredient}
-      handleDeletePrivateRecipe={handleDeletePrivateRecipe}
-      handleDisownPublicRecipe={handleDisownPublicRecipe}
-      handleSubTabClick={handleSubTabClick}
-      handleTabClick={handleTabClick}
-      handleUnfavoriteRecipe={handleUnfavoriteRecipe}
-      handleUnsaveRecipe={handleUnsaveRecipe}
+      deletePlan={deletePlan}
+      deletePrivateEquipment={deletePrivateEquipment}
+      deletePrivateIngredient={deletePrivateIngredient}
+      deletePrivateRecipe={deletePrivateRecipe}
+      disownPublicRecipe={disownPublicRecipe}
+      subTabClick={subTabClick}
+      tabClick={tabClick}
+      unfavoriteRecipe={unfavoriteRecipe}
+      unsaveRecipe={unsaveRecipe}
       loading={loading}
       modalActive={modalActive}
       myFavoriteRecipes={myFavoriteRecipes}

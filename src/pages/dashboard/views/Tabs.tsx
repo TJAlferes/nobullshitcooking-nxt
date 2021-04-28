@@ -1,15 +1,17 @@
-export function Tabs({ handleTabClick, tab }: Props): JSX.Element {
-  const TabButton = ({ displayText, tabName }: TabButtonProps) => (
-    <button
-      className={
-        tab === tabName ? "dashboard__tab--active" : "dashboard__tab"
-      }
-      name={tabName}
-      onClick={e => handleTabClick(e)}
-    >
-      {displayText}
-    </button>
-  );
+export function Tabs({ tabClick, tab }: Props): JSX.Element {
+  function TabButton({ displayText, tabName }: TabButtonProps) {
+    return (
+      <button
+        className={
+          tab === tabName ? "dashboard__tab--active" : "dashboard__tab"
+        }
+        name={tabName}
+        onClick={e => tabClick(e)}
+      >
+        {displayText}
+      </button>
+    );
+  }
 
   return (
     <div className="dashboard__tabs">
@@ -23,7 +25,7 @@ export function Tabs({ handleTabClick, tab }: Props): JSX.Element {
 }
 
 type Props = {
-  handleTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  tabClick(e: React.SyntheticEvent<EventTarget>): void;
   tab: string;
 };
 

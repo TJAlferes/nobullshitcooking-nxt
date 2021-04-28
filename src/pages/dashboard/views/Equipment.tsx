@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { IEquipment } from '../../../store/data/types';
 
 export function Equipment({
-  handleDeletePrivateEquipment,
+  deletePrivateEquipment,
   myPrivateEquipment
 }: Props): JSX.Element {
   return (
@@ -34,7 +34,7 @@ export function Equipment({
 
             <span
               className="dashboard-content__item-delete"
-              onClick={() => handleDeletePrivateEquipment(e.id)}
+              onClick={() => deletePrivateEquipment(e.id)}
             >
               Delete
             </span>
@@ -51,6 +51,6 @@ export function Equipment({
 }
 
 type Props = {
-  handleDeletePrivateEquipment(id: number): void;
+  deletePrivateEquipment(id: number): void;
   myPrivateEquipment: IEquipment[];
 };

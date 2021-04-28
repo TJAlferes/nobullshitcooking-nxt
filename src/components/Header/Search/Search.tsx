@@ -1,5 +1,5 @@
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
-import Image from 'next/image'
+//import Image from 'next/image'
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
@@ -55,11 +55,11 @@ export function Search({
 
   return (
     <div className={`search ${theme}`}>
-
       <div className="search__category">
         <div className="search__facade">
           <span className="search__facade-text">{facadeText}</span>
-          <Image
+
+          <img
             //className="search__facade-arrow"
             src="/images/header/down-arrow-gray.png"
             width="8"
@@ -71,12 +71,15 @@ export function Search({
           <option className="search__prefilter" value="recipes">
             Recipes
           </option>
+
           <option className="search__prefilter" value="ingredients">
             Ingredients
           </option>
+
           <option className="search__prefilter" value="equipment">
             Equipment
           </option>
+
           <option className="search__prefilter" value="products">
             Products
           </option>
@@ -101,7 +104,6 @@ export function Search({
           onSubmit={handleSubmit}
         />
       </div>
-
     </div>
   );
 }

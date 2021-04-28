@@ -9,8 +9,8 @@ export function PrivateRecipes({
   deactivateModal,
   deleteName,
   getApplicationNode,
-  handleDeletePrivateRecipe,
-  handleSubTabClick,
+  deletePrivateRecipe,
+  subTabClick,
   modalActive,
   myPrivateRecipes,
   subTab,
@@ -47,7 +47,7 @@ export function PrivateRecipes({
 
             <button
               className="dashboard-content__modal-action-button"
-              onClick={handleDeletePrivateRecipe}
+              onClick={deletePrivateRecipe}
             >
               Yes, Delete Recipe
             </button>
@@ -56,7 +56,7 @@ export function PrivateRecipes({
         : false
       }
 
-      <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
+      <Subtabs subTabClick={subTabClick} subTab={subTab} />
 
       {myPrivateRecipes.length
         ? myPrivateRecipes.map(r => (
@@ -99,8 +99,8 @@ type Props = {
   deactivateModal(): void;
   deleteName: string;
   getApplicationNode(): Element | Node;
-  handleDeletePrivateRecipe(): void;
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  deletePrivateRecipe(): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
   modalActive: boolean;
   myPrivateRecipes: IWorkRecipe[];
   subTab: string;

@@ -9,8 +9,8 @@ export function PublicRecipes({
   deactivateModal,
   deleteName,
   getApplicationNode,
-  handleDisownPublicRecipe,
-  handleSubTabClick,
+  disownPublicRecipe,
+  subTabClick,
   modalActive,
   myPublicRecipes,
   subTab
@@ -47,7 +47,7 @@ export function PublicRecipes({
 
             <button
               className="dashboard-content__modal-action-button"
-              onClick={handleDisownPublicRecipe}
+              onClick={disownPublicRecipe}
             >
               Yes, Disown Recipe
             </button>
@@ -56,7 +56,7 @@ export function PublicRecipes({
         : false
       }
 
-      <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
+      <Subtabs subTabClick={subTabClick} subTab={subTab} />
 
       {myPublicRecipes.length
         ? myPublicRecipes.map(r => (
@@ -99,8 +99,8 @@ type Props = {
   deactivateModal(): void;
   deleteName: string;
   getApplicationNode(): Element | Node;
-  handleDisownPublicRecipe(): void;
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  disownPublicRecipe(): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
   myPublicRecipes: IWorkRecipe[];
   modalActive: boolean;
   subTab: string;

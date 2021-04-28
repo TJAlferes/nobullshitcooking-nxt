@@ -4,8 +4,8 @@ import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from '.';
 
 export function SavedRecipes({
-  handleSubTabClick,
-  handleUnsaveRecipe,
+  subTabClick,
+  unsaveRecipe,
   mySavedRecipes,
   subTab
 }: Props): JSX.Element {
@@ -13,7 +13,7 @@ export function SavedRecipes({
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading--tall">Saved Recipes</h2>
 
-      <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
+      <Subtabs subTabClick={subTabClick} subTab={subTab} />
 
       {mySavedRecipes.length
         ? mySavedRecipes.map(r => (
@@ -31,7 +31,7 @@ export function SavedRecipes({
 
             <span
               className="dashboard-content__item-delete"
-              onClick={() => handleUnsaveRecipe(r.id)}
+              onClick={() => unsaveRecipe(r.id)}
             >
               Unsave
             </span>
@@ -48,8 +48,8 @@ export function SavedRecipes({
 }
 
 type Props = {
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleUnsaveRecipe(id: number): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  unsaveRecipe(id: number): void;
   mySavedRecipes: IWorkRecipe[];
   subTab: string;
 };

@@ -1,17 +1,19 @@
-export function Subtabs({ handleSubTabClick, subTab }: Props): JSX.Element {
-  const SubtabButton = ({ displayText, subTabName }: SubtabButtonProps) => (
-    <button
-      className={
-        subTab === subTabName
-        ? "dashboard__subtab--active"
-        : "dashboard__subtab"
-      }
-      name={subTabName}
-      onClick={e => handleSubTabClick(e)}
-    >
-      {displayText}
-    </button>
-  );
+export function Subtabs({ subTabClick, subTab }: Props): JSX.Element {
+  function SubtabButton({ displayText, subTabName }: SubtabButtonProps) {
+    return (
+      <button
+        className={
+          subTab === subTabName
+          ? "dashboard__subtab--active"
+          : "dashboard__subtab"
+        }
+        name={subTabName}
+        onClick={e => subTabClick(e)}
+      >
+        {displayText}
+      </button>
+    );
+  }
 
   return (
     <div className="dashboard__subtabs">
@@ -24,7 +26,7 @@ export function Subtabs({ handleSubTabClick, subTab }: Props): JSX.Element {
 }
 
 type Props = {
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
   subTab: string;
 };
 

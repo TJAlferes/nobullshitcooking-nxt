@@ -43,7 +43,6 @@ export function MenuView({
 
   return (
     <div className={`menu-container ${theme}`}>
-
       <div
         className={`menu ${theme}`}
         data-test="menu"
@@ -70,7 +69,6 @@ export function MenuView({
 
       {activeMenuRow !== undefined && (
         <div className={`submenu ${theme}`}>
-
           <h3 className="submenu__heading">
             <Link href={menuItems[activeMenuRow].link}>
               <a className={`submenu__heading-link ${theme}`}>
@@ -90,10 +88,8 @@ export function MenuView({
           </ul>
 
           {getSubmenuImage()}
-
         </div>
       )}
-
     </div>
   );
 }

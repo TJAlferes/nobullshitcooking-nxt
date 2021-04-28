@@ -10,7 +10,7 @@ export function Plans({
   deleteName,
   editingId,
   getApplicationNode,
-  handleDeletePlan,
+  deletePlan,
   modalActive,
   myPlans
 }: Props): JSX.Element {
@@ -60,7 +60,7 @@ export function Plans({
 
             <button
               className="dashboard-content__modal-action-button"
-              onClick={handleDeletePlan}
+              onClick={deletePlan}
             >
               Yes, Delete Plan
             </button>
@@ -109,7 +109,7 @@ type Props = {
   deleteName: string;
   editingId: number | null;
   getApplicationNode(): Element | Node;
-  handleDeletePlan(): void;
+  deletePlan(): void;
   modalActive: boolean;
   myPlans: IPlan[];
 };

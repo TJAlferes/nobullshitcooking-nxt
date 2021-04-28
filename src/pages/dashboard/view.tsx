@@ -26,22 +26,21 @@ export function DashboardView({
   cancelAvatar,
   creatingPlan,
   crop,
-  currentAvatar,
   deactivateModal,
   deleteName,
   editingId,
   feedback,
   fullCrop,
   getApplicationNode,
-  handleDeletePlan,
-  handleDeletePrivateEquipment,
-  handleDeletePrivateIngredient,
-  handleDeletePrivateRecipe,
-  handleDisownPublicRecipe,
-  handleSubTabClick,
-  handleTabClick,
-  handleUnfavoriteRecipe,
-  handleUnsaveRecipe,
+  deletePlan,
+  deletePrivateEquipment,
+  deletePrivateIngredient,
+  deletePrivateRecipe,
+  disownPublicRecipe,
+  subTabClick,
+  tabClick,
+  unfavoriteRecipe,
+  unsaveRecipe,
   loading,
   modalActive,
   myFavoriteRecipes,
@@ -67,14 +66,13 @@ export function DashboardView({
 
       <p className="dashboard__feedback">{feedback}</p>
 
-      {!avatar && <Tabs tab={tab} handleTabClick={handleTabClick} />}
+      {!avatar && <Tabs tab={tab} tabClick={tabClick} />}
 
       {(tab === "avatar") && (
         <>
           {!avatar && (
             <Avatar
               authname={authname}
-              currentAvatar={currentAvatar}
               onSelectFile={onSelectFile}
             />
           )}
@@ -104,7 +102,7 @@ export function DashboardView({
           deleteName={deleteName}
           editingId={editingId}
           getApplicationNode={getApplicationNode}
-          handleDeletePlan={handleDeletePlan}
+          deletePlan={deletePlan}
           modalActive={modalActive}
           myPlans={myPlans}
         />
@@ -116,8 +114,8 @@ export function DashboardView({
           deactivateModal={deactivateModal}
           deleteName={deleteName}
           getApplicationNode={getApplicationNode}
-          handleDeletePrivateRecipe={handleDeletePrivateRecipe}
-          handleSubTabClick={handleSubTabClick}
+          deletePrivateRecipe={deletePrivateRecipe}
+          subTabClick={subTabClick}
           modalActive={modalActive}
           myPrivateRecipes={myPrivateRecipes}
           subTab={subTab}
@@ -130,8 +128,8 @@ export function DashboardView({
           deactivateModal={deactivateModal}
           deleteName={deleteName}
           getApplicationNode={getApplicationNode}
-          handleDisownPublicRecipe={handleDisownPublicRecipe}
-          handleSubTabClick={handleSubTabClick}
+          disownPublicRecipe={disownPublicRecipe}
+          subTabClick={subTabClick}
           modalActive={modalActive}
           myPublicRecipes={myPublicRecipes}
           subTab={subTab}
@@ -140,8 +138,8 @@ export function DashboardView({
 
       {(!avatar && tab == "recipes" && subTab == "favorite") && (
         <FavoriteRecipes
-          handleSubTabClick={handleSubTabClick}
-          handleUnfavoriteRecipe={handleUnfavoriteRecipe}
+          subTabClick={subTabClick}
+          unfavoriteRecipe={unfavoriteRecipe}
           myFavoriteRecipes={myFavoriteRecipes}
           subTab={subTab}
           
@@ -150,8 +148,8 @@ export function DashboardView({
 
       {(!avatar && tab == "recipes" && subTab == "saved") && (
         <SavedRecipes
-          handleSubTabClick={handleSubTabClick}
-          handleUnsaveRecipe={handleUnsaveRecipe}
+          subTabClick={subTabClick}
+          unsaveRecipe={unsaveRecipe}
           mySavedRecipes={mySavedRecipes}
           subTab={subTab}
         />
@@ -159,14 +157,14 @@ export function DashboardView({
 
       {!avatar && tab == "ingredients" && (
         <Ingredients
-          handleDeletePrivateIngredient={handleDeletePrivateIngredient}
+          deletePrivateIngredient={deletePrivateIngredient}
           myPrivateIngredients={myPrivateIngredients}
         />
       )}
 
       {!avatar && tab == "equipment" && (
         <Equipment
-          handleDeletePrivateEquipment={handleDeletePrivateEquipment}
+          deletePrivateEquipment={deletePrivateEquipment}
           myPrivateEquipment={myPrivateEquipment}
         />
       )}
@@ -181,22 +179,21 @@ type Props = {
   cancelAvatar(): void;
   creatingPlan: boolean;
   crop: Crop;
-  currentAvatar: string;
   deactivateModal(): void;
   deleteName: string;
   editingId: number | null;
   feedback: string;
   fullCrop: string;
   getApplicationNode(): Element | Node;
-  handleDeletePlan(): void;
-  handleDeletePrivateEquipment(id: number): void;
-  handleDeletePrivateIngredient(id: number): void;
-  handleDeletePrivateRecipe(): void;
-  handleDisownPublicRecipe(): void;
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleUnfavoriteRecipe(id: number): void;
-  handleUnsaveRecipe(id: number): void;
+  deletePlan(): void;
+  deletePrivateEquipment(id: number): void;
+  deletePrivateIngredient(id: number): void;
+  deletePrivateRecipe(): void;
+  disownPublicRecipe(): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  tabClick(e: React.SyntheticEvent<EventTarget>): void;
+  unfavoriteRecipe(id: number): void;
+  unsaveRecipe(id: number): void;
   loading: boolean;
   modalActive: boolean;
   myFavoriteRecipes: IWorkRecipe[];

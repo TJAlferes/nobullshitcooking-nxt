@@ -4,8 +4,8 @@ import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from '.';
 
 export function FavoriteRecipes({
-  handleSubTabClick,
-  handleUnfavoriteRecipe,
+  subTabClick,
+  unfavoriteRecipe,
   myFavoriteRecipes,
   subTab
 }: Props): JSX.Element {
@@ -13,7 +13,7 @@ export function FavoriteRecipes({
     <div className="dashboard-content">
       <h2 className="dashboard-content__heading--tall">Favorite Recipes</h2>
 
-      <Subtabs handleSubTabClick={handleSubTabClick} subTab={subTab} />
+      <Subtabs subTabClick={subTabClick} subTab={subTab} />
 
       {myFavoriteRecipes.length
         ? myFavoriteRecipes.map(r => (
@@ -31,7 +31,7 @@ export function FavoriteRecipes({
 
             <span
               className="dashboard-content__item-unfavorite"
-              onClick={() => handleUnfavoriteRecipe(r.id)}
+              onClick={() => unfavoriteRecipe(r.id)}
             >
               Unfavorite
             </span>
@@ -48,8 +48,8 @@ export function FavoriteRecipes({
 }
 
 type Props = {
-  handleSubTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  handleUnfavoriteRecipe(id: number): void;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  unfavoriteRecipe(id: number): void;
   myFavoriteRecipes: IWorkRecipe[];
   subTab: string;
 };

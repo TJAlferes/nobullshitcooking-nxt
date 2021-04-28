@@ -2,12 +2,11 @@ import Link from 'next/link';
 
 export function Avatar({
   authname,
-  currentAvatar,
   onSelectFile
 }: Props): JSX.Element {
   return (
     <div className="dashboard__avatar">
-      <Link href={`/user/profile/${authname}`}>
+      <Link href={`/profile/${authname}`}>
         <a className="dashboard__avatar-profile-link">View Profile</a>
       </Link>
 
@@ -16,12 +15,14 @@ export function Avatar({
       <div className="dashboard__avatar-crops">
         <div className="dashboard__avatar-crop-full">
           <span>Full Size: </span>
-          <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${currentAvatar}`} />
+
+          <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${authname}`} />
         </div>
 
         <div className="dashboard__avatar-crop-tiny">
           <span>Tiny Size: </span>
-          <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${currentAvatar}-tiny`} />
+
+          <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${authname}-tiny`} />
         </div>
       </div>
 
@@ -40,6 +41,5 @@ export function Avatar({
 
 type Props = {
   authname: string;
-  currentAvatar: string;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>): void;
 };

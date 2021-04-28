@@ -36,12 +36,12 @@ export default function Friends({ twoColumnATheme }: Props): JSX.Element {
     };
   }, [message]);
 
-  const handleAcceptClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const acceptFriendship = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
     dispatch(userAcceptFriendship((e.target as HTMLInputElement).value));
   };
 
-  const handleBlockClick = () => {
+  const blockUser = () => {
     if (loading) return;
     if (!validateUserToFind()) return;
     const friendName = userToFind.trim();
@@ -51,21 +51,21 @@ export default function Friends({ twoColumnATheme }: Props): JSX.Element {
     setUsertoFind("");
   };
 
-  const handleDeleteClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const deleteFriendship = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
     dispatch(userDeleteFriendship((e.target as HTMLInputElement).value));
   };
 
-  const handleInputChange = (e: React.SyntheticEvent<EventTarget>) => {
+  const inputChange = (e: React.SyntheticEvent<EventTarget>) => {
     setUsertoFind((e.target as HTMLInputElement).value);
   };
 
-  const handleRejectClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const rejectFriendship = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
     dispatch(userRejectFriendship((e.target as HTMLInputElement).value));
   };
 
-  const handleRequestClick = () => {
+  const requestFriendship = () => {
     if (loading) return;
     if (!validateUserToFind()) return;
     const friendName = userToFind.trim();
@@ -75,9 +75,9 @@ export default function Friends({ twoColumnATheme }: Props): JSX.Element {
     setUsertoFind("");
   };
 
-  const handleTabChange = (value: string) => setTab(value);
+  const tabChange = (value: string) => setTab(value);
 
-  const handleUnblockClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const unblockUser = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);
     dispatch(userUnblockUser((e.target as HTMLInputElement).value));
   };
@@ -88,14 +88,14 @@ export default function Friends({ twoColumnATheme }: Props): JSX.Element {
     <FriendsView
       myFriendships={myFriendships}
       feedback={feedback}
-      handleAcceptClick={handleAcceptClick}
-      handleBlockClick={handleBlockClick}
-      handleDeleteClick={handleDeleteClick}
-      handleInputChange={handleInputChange}
-      handleRejectClick={handleRejectClick}
-      handleRequestClick={handleRequestClick}
-      handleTabChange={handleTabChange}
-      handleUnblockClick={handleUnblockClick}
+      acceptFriendship={acceptFriendship}
+      blockUser={blockUser}
+      deleteFriendship={deleteFriendship}
+      inputChange={inputChange}
+      rejectFriendship={rejectFriendship}
+      requestFriendship={requestFriendship}
+      tabChange={tabChange}
+      unblockUser={unblockUser}
       loading={loading}
       tab={tab}
       twoColumnATheme={twoColumnATheme}

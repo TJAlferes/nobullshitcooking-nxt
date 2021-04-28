@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { IIngredient } from '../../../store/data/types';
 
 export function Ingredients({
-  handleDeletePrivateIngredient,
+  deletePrivateIngredient,
   myPrivateIngredients
 }: Props): JSX.Element {
   return (
@@ -34,7 +34,7 @@ export function Ingredients({
 
             <span
               className="dashboard-content__item-delete"
-              onClick={() => handleDeletePrivateIngredient(i.id)}
+              onClick={() => deletePrivateIngredient(i.id)}
             >
               Delete
             </span>
@@ -51,6 +51,6 @@ export function Ingredients({
 }
 
 type Props = {
-  handleDeletePrivateIngredient(id: number): void;
+  deletePrivateIngredient(id: number): void;
   myPrivateIngredients: IIngredient[];
 };

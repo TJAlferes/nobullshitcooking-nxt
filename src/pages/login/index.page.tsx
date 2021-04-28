@@ -31,10 +31,10 @@ export default function Login(): JSX.Element {
     };
   }, [message]);
 
-  const handleEmailChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
     setEmail((e.target as HTMLInputElement).value);
   
-  const handleLoginClick = () => {
+  const loginClick = () => {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
@@ -42,7 +42,7 @@ export default function Login(): JSX.Element {
     if (pathname === "/login") dispatch(authUserLogin(email, password));
   }
 
-  const handleLoginKeyUp = (e: React.KeyboardEvent) => {
+  const loginKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
@@ -51,7 +51,7 @@ export default function Login(): JSX.Element {
     if (pathname === "/login") dispatch(authUserLogin(email, password));
   }
 
-  const handlePasswordChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
     setPassword((e.target as HTMLInputElement).value);
 
   const validateLoginInfo = () => ((email.length > 4) && (password.length > 5));
@@ -60,10 +60,10 @@ export default function Login(): JSX.Element {
     <LoginView
       email={email}
       feedback={feedback}
-      handleEmailChange={handleEmailChange}
-      handleLoginClick={handleLoginClick}
-      handleLoginKeyUp={handleLoginKeyUp}
-      handlePasswordChange={handlePasswordChange}
+      emailChange={emailChange}
+      loginClick={loginClick}
+      loginKeyUp={loginKeyUp}
+      passwordChange={passwordChange}
       loading={loading}
       password={password}
       validateLoginInfo={validateLoginInfo}

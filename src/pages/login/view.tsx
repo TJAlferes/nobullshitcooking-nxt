@@ -7,16 +7,16 @@ const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 export function LoginView({
   email,
   feedback,
-  handleEmailChange,
-  handleLoginClick,
-  handleLoginKeyUp,
-  handlePasswordChange,
+  emailChange,
+  loginClick,
+  loginKeyUp,
+  passwordChange,
   loading,
   password,
   validateLoginInfo
 }: Props): JSX.Element {
   return (
-    <div className="login" onKeyUp={e => handleLoginKeyUp(e)}>
+    <div className="login" onKeyUp={e => loginKeyUp(e)}>
       <Link href="/">
         <a className="login__home-links">
           <img
@@ -46,7 +46,7 @@ export function LoginView({
           id="email"
           maxLength={50}
           name="email"
-          onChange={handleEmailChange}
+          onChange={emailChange}
           size={20}
           type="text"
           value={email}
@@ -61,7 +61,7 @@ export function LoginView({
           id="password"
           maxLength={20}
           name="password"
-          onChange={handlePasswordChange}
+          onChange={passwordChange}
           size={20}
           type="password"
           value={password}
@@ -74,8 +74,8 @@ export function LoginView({
           isLoading={loading}
           loadingText="Signing In..."
           name="submit"
-          onClick={handleLoginClick}
-          onKeyUp={handleLoginKeyUp}
+          onClick={loginClick}
+          onKeyUp={loginKeyUp}
           text="Sign In"
         />
       </form>
@@ -86,10 +86,10 @@ export function LoginView({
 type Props = {
   email: string;
   feedback: string;
-  handleEmailChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleLoginClick(e: React.MouseEvent): void;
-  handleLoginKeyUp(e: React.KeyboardEvent): void;
-  handlePasswordChange(e: React.SyntheticEvent<EventTarget>): void;
+  emailChange(e: React.SyntheticEvent<EventTarget>): void;
+  loginClick(e: React.MouseEvent): void;
+  loginKeyUp(e: React.KeyboardEvent): void;
+  passwordChange(e: React.SyntheticEvent<EventTarget>): void;
   loading: boolean;
   password: string;
   validateLoginInfo(): boolean;
