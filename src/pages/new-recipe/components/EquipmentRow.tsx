@@ -5,7 +5,7 @@ export function EquipmentRow({
   equipment,
   myPrivateEquipment,
   id,
-  handleEquipmentRowChange,
+  changeEquipmentRow,
   removeEquipmentRow,
   rowKey,
   type
@@ -21,7 +21,7 @@ export function EquipmentRow({
       <select
         className="equipment-row-select-amount"
         name="amount"
-        onChange={(e) => handleEquipmentRowChange(e, rowKey)}
+        onChange={(e) => changeEquipmentRow(e, rowKey)}
         required
         value={amount}
       >
@@ -37,7 +37,7 @@ export function EquipmentRow({
       <select
         className="equipment-row-select-equipment-type"
         name="type"
-        onChange={(e) => handleEquipmentRowChange(e, rowKey)}
+        onChange={(e) => changeEquipmentRow(e, rowKey)}
         required
         value={type}
       >
@@ -50,7 +50,7 @@ export function EquipmentRow({
       <select
         className="equipment-row-select-equipment"
         name="equipment"
-        onChange={(e) => handleEquipmentRowChange(e, rowKey)}
+        onChange={(e) => changeEquipmentRow(e, rowKey)}
         required
         value={id}
       >
@@ -78,7 +78,7 @@ type Props = {
   equipment: IEquipment[];
   myPrivateEquipment: IEquipment[];
   id: string | number;
-  handleEquipmentRowChange(
+  changeEquipmentRow(
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ): void;

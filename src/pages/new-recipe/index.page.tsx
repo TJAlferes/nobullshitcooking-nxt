@@ -327,16 +327,16 @@ export default function NewRecipe({
     }));
   };
 
-  const handleCuisineChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeCuisine = (e: React.SyntheticEvent<EventTarget>) =>
     setCuisineId(Number((e.target as HTMLInputElement).value));
 
-  const handleDescriptionChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeDescription = (e: React.SyntheticEvent<EventTarget>) =>
     setDescription((e.target as HTMLInputElement).value);
 
-  const handleDirectionsChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeDirections = (e: React.SyntheticEvent<EventTarget>) =>
     setDirections((e.target as HTMLInputElement).value);
 
-  const handleEquipmentRowChange = (
+  const changeEquipmentRow = (
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ) => {
@@ -348,7 +348,7 @@ export default function NewRecipe({
     setEquipmentRows(newEquipmentRows);
   };
 
-  const handleIngredientRowChange = (
+  const changeIngredientRow = (
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ) => {
@@ -360,12 +360,12 @@ export default function NewRecipe({
     setIngredientRows(newIngredientRows);
   };
 
-  const handleMethodsChange = (e: React.SyntheticEvent<EventTarget>) => {
+  const changeMethods = (e: React.SyntheticEvent<EventTarget>) => {
     const id = (e.target as HTMLInputElement).id;
     setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
   };
 
-  const handleRecipeTypeChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeRecipeType = (e: React.SyntheticEvent<EventTarget>) =>
     setRecipeTypeId(Number((e.target as HTMLInputElement).value));
 
   const handleSubmit = () => {
@@ -467,7 +467,7 @@ export default function NewRecipe({
     }
   };
 
-  const handleSubrecipeRowChange = (
+  const changeSubrecipeRow = (
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ) => {
@@ -682,15 +682,15 @@ export default function NewRecipe({
       equipmentPrevImage={equipmentPrevImage}
       equipmentRows={equipmentRows}
       feedback={feedback}
-      handleCuisineChange={handleCuisineChange}
-      handleDescriptionChange={handleDescriptionChange}
-      handleDirectionsChange={handleDirectionsChange}
-      handleEquipmentRowChange={handleEquipmentRowChange}
-      handleIngredientRowChange={handleIngredientRowChange}
-      handleMethodsChange={handleMethodsChange}
-      handleRecipeTypeChange={handleRecipeTypeChange}
+      changeCuisine={changeCuisine}
+      changeDescription={changeDescription}
+      changeDirections={changeDirections}
+      changeEquipmentRow={changeEquipmentRow}
+      changeIngredientRow={changeIngredientRow}
+      changeMethods={changeMethods}
+      changeRecipeType={changeRecipeType}
       handleSubmit={handleSubmit}
-      handleSubrecipeRowChange={handleSubrecipeRowChange}
+      changeSubrecipeRow={changeSubrecipeRow}
       handleTitleChange={handleTitleChange}
       id={id}
       ingredientsCrop={ingredientsCrop}

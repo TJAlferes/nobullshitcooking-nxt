@@ -22,7 +22,7 @@ export function FriendsView({
     <div className={`friends two-column-a ${twoColumnATheme}`}>
       <h1>Friends</h1>
 
-      <p className="friends__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       <div className="friends__find">
         <label className="friends__find-label" htmlFor="friends-find-input">

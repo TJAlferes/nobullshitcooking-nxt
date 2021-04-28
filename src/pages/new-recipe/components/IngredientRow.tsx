@@ -12,7 +12,7 @@ export function IngredientRow({
   ingredientTypes,
   measurements,
   myPrivateIngredients,
-  handleIngredientRowChange,
+  changeIngredientRow,
   id,
   removeIngredientRow,
   rowKey,
@@ -32,7 +32,7 @@ export function IngredientRow({
         max="9999"
         min="0.125"
         name="amount"
-        onChange={(e) => handleIngredientRowChange(e, rowKey)}
+        onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         step="any"
         type="number"
@@ -43,7 +43,7 @@ export function IngredientRow({
       <select
         className="ingredient-row-select-unit"
         name="unit"
-        onChange={(e) => handleIngredientRowChange(e, rowKey)}
+        onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={measurementId}
       >
@@ -57,7 +57,7 @@ export function IngredientRow({
       <select
         className="ingredient-row-select-ingredient-type"
         name="type"
-        onChange={(e) => handleIngredientRowChange(e, rowKey)}
+        onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={type}
       >
@@ -71,7 +71,7 @@ export function IngredientRow({
       <select
         className="ingredient-row-select-ingredient"
         name="ingredient"
-        onChange={(e) => handleIngredientRowChange(e, rowKey)}
+        onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={id}
       >
@@ -101,7 +101,7 @@ type Props = {
   ingredientTypes: IIngredientType[];
   measurements: IMeasurement[];
   myPrivateIngredients: IIngredient[];
-  handleIngredientRowChange(
+  changeIngredientRow(
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ): void;

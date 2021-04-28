@@ -1,6 +1,5 @@
 import Link from 'next/link';
 
-import { Breadcrumbs } from '../../components';
 import { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton';
 import { IProduct } from './index.page';
@@ -16,22 +15,16 @@ export function ProductView({
   const { id, product_type_id, supplier_id, fullname } = product;
 
   return (
-    <div className="product">
-      {/*<Breadcrumbs id={id} name={fullname} page="/product/" />*/}
-      <Breadcrumbs />
+    <div className={`product one-column-a ${oneColumnATheme}`}>
+      <div className="product__top">
+        <div className="product__top-left">
+          <div></div>
 
-      <div className={`product-view one-column-a ${oneColumnATheme}`}>
-        <div className="product__top">
-          <div className="product__top-left">
-            <div></div>
-            <div>
-              <h1>{product.fullname}</h1>
-            </div>
-          </div>
+          <div><h1>{product.fullname}</h1></div>
+        </div>
 
-          <div className="product__top-right">
-            {/*<AddToCartButton item={product} />*/}
-          </div>
+        <div className="product__top-right">
+          {/*<AddToCartButton item={product} />*/}
         </div>
       </div>
     </div>

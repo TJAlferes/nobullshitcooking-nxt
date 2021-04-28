@@ -64,7 +64,7 @@ export function DashboardView({
     <div className={`dashboard two-column-a ${twoColumnATheme}`}>
       <h1>{authname}</h1>
 
-      <p className="dashboard__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       {!avatar && <Tabs tab={tab} tabClick={tabClick} />}
 

@@ -103,7 +103,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
   // clean/format? *** keys???
   const getPlanData = () => JSON.stringify(recipeListsInsideDays);
 
-  const handlePlanNameChange = (e: React.SyntheticEvent<EventTarget>) => {
+  const changePlanName = (e: React.SyntheticEvent<EventTarget>) => {
     const nextName = (e.target as HTMLInputElement).value.trim();
     if (nextName.length > 20) {
       window.scrollTo(0,0);
@@ -114,7 +114,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
     dispatch(plannerSetPlanName(nextName));
   };
 
-  const handleTabClick = (e: React.SyntheticEvent<EventTarget>) => {
+  const clickTab = (e: React.SyntheticEvent<EventTarget>) => {
     setTab((e.target as HTMLButtonElement).name);
   };
 
@@ -169,9 +169,9 @@ export function NewPlan({ editing }: Props): JSX.Element {
       expandedDay={expandedDay}
       feedback={feedback}
       getApplicationNode={getApplicationNode}
-      handlePlanNameChange={handlePlanNameChange}
+      changePlanName={changePlanName}
       handleSubmit={handleSubmit}
-      handleTabClick={handleTabClick}
+      clickTab={clickTab}
       loading={loading}
       modalActive={modalActive}
       planName={planName}

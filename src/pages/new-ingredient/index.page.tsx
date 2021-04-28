@@ -111,10 +111,10 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
-  const handleDescriptionChange = (e: React.SyntheticEvent<EventTarget>) => 
+  const changeDescription = (e: React.SyntheticEvent<EventTarget>) => 
     setDescription((e.target as HTMLInputElement).value);
 
-  const handleNameChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeName = (e: React.SyntheticEvent<EventTarget>) =>
     setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
@@ -151,7 +151,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     }
   };
 
-  const handleTypeChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeType = (e: React.SyntheticEvent<EventTarget>) =>
     setTypeId(Number((e.target as HTMLInputElement).value));
 
   const makeCrops = async (crop: Crop) => {
@@ -219,10 +219,10 @@ export function NewIngredient({ editing }: Props): JSX.Element {
       editing={editing}
       feedback={feedback}
       fullCrop={fullCrop}
-      handleDescriptionChange={handleDescriptionChange}
-      handleNameChange={handleNameChange}
+      changeDescription={changeDescription}
+      changeName={changeName}
       handleSubmit={handleSubmit}
-      handleTypeChange={handleTypeChange}
+      changeType={changeType}
       image={image}
       loading={loading}
       name={name}

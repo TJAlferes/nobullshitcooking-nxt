@@ -12,10 +12,10 @@ export function NewEquipmentView({
   editing,
   feedback,
   fullCrop,
-  handleDescriptionChange,
-  handleNameChange,
+  changeDescription,
+  changeName,
   handleSubmit,
-  handleTypeChange,
+  changeType,
   image,
   loading,
   name,
@@ -34,142 +34,126 @@ export function NewEquipmentView({
     ? 'https://s3.amazonaws.com/nobsc-images-01/equipment'
     : 'https://s3.amazonaws.com/nobsc-user-equipment';
 
-  const page = staffIsAuthenticated
-    ? editing ? 'Edit Equipment' : 'Create New Equipment'
-    : editing ? 'Edit Private Equipment' : 'Create New Private Equipment';
-
-  const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-
   return (
-    <div className="new-equipment-view">
-      <div>
-        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+    <div className={`new-equipment one-column-a ${oneColumnATheme}`}>
+      <h1>New Equipment</h1>
 
-        <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+      <p className="feedback">{feedback}</p>
 
-        <span>{page}</span>
-      </div>
+      <h2 className="new-equipment__h2" data-test="equipment-type-heading">
+        Type of Equipment
+      </h2>
 
-      <div className={`new-equipment one-column-a ${oneColumnATheme}`}>
-        <h1>{page}</h1>
+      <select
+        name="equipmentType"
+        onChange={changeType}
+        required
+        value={typeId}
+      >
+        <option value=""></option>
+        {equipmentTypes.map(t => (
+          <option key={t.id} value={t.id}>{t.name}</option>
+        ))}
+      </select>
 
-        <p className="new-equipment__feedback">{feedback}</p>
+      <h2 className="new-equipment__h2" data-test="name-heading">Name</h2>
 
-        <h2 className="new-equipment__h2" data-test="equipment-type-heading">
-          Type of Equipment
+      <input
+        className="new-equipment__name"
+        onChange={changeName}
+        type="text"
+        value={name}
+      />
+
+      <h2 className="new-equipment__h2" data-test="description-heading">
+        Description
+      </h2>
+
+      <textarea
+        className="new-equipment__description"
+        onChange={changeDescription}
+        value={description}
+      />
+
+      <div className="new-equipment__image">
+        <h2 className="new-equipment__h2" data-test="image-heading">
+          Image of Equipment
         </h2>
 
-        <select
-          name="equipmentType"
-          onChange={handleTypeChange}
-          required
-          value={typeId}
-        >
-          <option value=""></option>
-          {equipmentTypes.map(t => (
-            <option key={t.id} value={t.id}>{t.name}</option>
-          ))}
-        </select>
+        {!image && (
+          <div>
+            {!editing
+              ? <img src={`${dir}/nobsc-equipment-default`} />
+              : prevImage && <img src={`${dir}/${prevImage}`} />
+            }
 
-        <h2 className="new-equipment__h2" data-test="name-heading">Name</h2>
+            <h4 className="new-equipment__h4">Change</h4>
 
-        <input
-          className="new-equipment__name"
-          onChange={handleNameChange}
-          type="text"
-          value={name}
-        />
+            <input
+              className="new-equipment__image-input"
+              type="file"
+              accept="image/*"
+              onChange={onSelectFile}
+            />
+          </div>
+        )}
 
-        <h2 className="new-equipment__h2" data-test="description-heading">
-          Description
-        </h2>
+        {image && (
+          <div>
+            <ReactCrop
+              className="new-equipment__crop-tool"
+              crop={crop}
+              imageStyle={{minHeight: "300px"}}
+              onChange={onCropChange}
+              onComplete={onCropComplete}
+              onImageLoaded={onImageLoaded}
+              src={image as string}
+              style={{minHeight: "300px"}}
+            />
 
-        <textarea
-          className="new-equipment__description"
-          onChange={handleDescriptionChange}
-          value={description}
-        />
+            <span className="new-equipment__crop-tool-tip">
+              Move the crop to your desired position. These two images will be saved for you:
+            </span>
 
-        <div className="new-equipment__image">
-          <h2 className="new-equipment__h2" data-test="image-heading">
-            Image of Equipment
-          </h2>
+            <div className="new-equipment__crops">
+              <div className="new-equipment__crop-full-outer">
+                <span>Full Size: </span>
 
-          {!image && (
-            <div>
-              {!editing
-                ? <img src={`${dir}/nobsc-equipment-default`} />
-                : prevImage && <img src={`${dir}/${prevImage}`} />
-              }
-
-              <h4 className="new-equipment__h4">Change</h4>
-
-              <input
-                className="new-equipment__image-input"
-                type="file"
-                accept="image/*"
-                onChange={onSelectFile}
-              />
-            </div>
-          )}
-
-          {image && (
-            <div>
-              <ReactCrop
-                className="new-equipment__crop-tool"
-                crop={crop}
-                imageStyle={{minHeight: "300px"}}
-                onChange={onCropChange}
-                onComplete={onCropComplete}
-                onImageLoaded={onImageLoaded}
-                src={image as string}
-                style={{minHeight: "300px"}}
-              />
-
-              <span className="new-equipment__crop-tool-tip">
-                Move the crop to your desired position. These two images will be saved for you:
-              </span>
-
-              <div className="new-equipment__crops">
-                <div className="new-equipment__crop-full-outer">
-                  <span>Full Size: </span>
-
-                  <img className="new-equipment__crop-full" src={fullCrop} />
-                </div>
-
-                <div className="new-equipment__crop-tiny-outer">
-                  <span>Tiny Size: </span>
-
-                  <img className="new-equipment__crop-tiny" src={tinyCrop} />
-                </div>
+                <img className="new-equipment__crop-full" src={fullCrop} />
               </div>
 
-              <button
-                className="new-equipment__image-cancel-button"
-                disabled={loading}
-                onClick={cancelImage}
-              >
-                Cancel
-              </button>
+              <div className="new-equipment__crop-tiny-outer">
+                <span>Tiny Size: </span>
+
+                <img className="new-equipment__crop-tiny" src={tinyCrop} />
+              </div>
             </div>
-          )}
-        </div>
 
-        <div className="new-equipment__finish-area">
-          <Link href={path}>
-            <a className="new-equipment__cancel-button">Cancel</a>
-          </Link>
+            <button
+              className="new-equipment__image-cancel-button"
+              disabled={loading}
+              onClick={cancelImage}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
 
-          <LoaderButton
-            className="new-equipment__submit-button"
-            id="create_new_private_user_equipment_button"
-            isLoading={loading}
-            loadingText="Creating..."
-            name="submit"
-            onClick={handleSubmit}
-            text="Create"
-          />
-        </div>
+      <div className="new-equipment__finish-area">
+        <Link href="/dashboard">
+          <a className="new-equipment__cancel-button">Cancel</a>
+        </Link>
+
+        <LoaderButton
+          className="new-equipment__submit-button"
+          id="create_new_private_user_equipment_button"
+          isLoading={loading}
+          loadingText="Creating..."
+          name="submit"
+          onClick={handleSubmit}
+          text="Create"
+        />
       </div>
     </div>
   );
@@ -183,10 +167,10 @@ type Props = {
   editing: boolean;
   feedback: string;
   fullCrop: string;
-  handleDescriptionChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleNameChange(e: React.SyntheticEvent<EventTarget>): void;
+  changeDescription(e: React.SyntheticEvent<EventTarget>): void;
+  changeName(e: React.SyntheticEvent<EventTarget>): void;
   handleSubmit(): void;
-  handleTypeChange(e: React.SyntheticEvent<EventTarget>): void;
+  changeType(e: React.SyntheticEvent<EventTarget>): void;
   image: string | ArrayBuffer | null;
   loading: boolean;
   name: string;

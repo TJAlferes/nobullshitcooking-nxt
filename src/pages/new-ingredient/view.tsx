@@ -12,10 +12,10 @@ export function NewIngredientView({
   editing,
   feedback,
   fullCrop,
-  handleDescriptionChange,
-  handleNameChange,
+  changeDescription,
+  changeName,
   handleSubmit,
-  handleTypeChange,
+  changeType,
   image,
   loading,
   name,
@@ -34,142 +34,126 @@ export function NewIngredientView({
     ? 'https://s3.amazonaws.com/nobsc-images-01/ingredients'
     : 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
-  const page = staffIsAuthenticated
-    ? editing ? 'Edit Ingredient' : 'Create New Ingredient'
-    : editing ? 'Edit Private Ingredient' : 'Create New Private Ingredient';
-
-  const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-
   return (
-    <div className="new-ingredient-view">
-      <div>
-        <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+    <div className={`new-ingredient one-column-a ${oneColumnATheme}`}>
+      <h1>New Ingredient</h1>
 
-        <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+      <p className="feedback">{feedback}</p>
 
-        <span>{page}</span>
-      </div>
+      <h2 className="new-ingredient__h2" data-test="ingredient-type-heading">
+        Type of Ingredient
+      </h2>
 
-      <div className={`new-ingredient one-column-a ${oneColumnATheme}`}>
-        <h1>{page}</h1>
+      <select
+        name="ingredientType"
+        onChange={changeType}
+        required
+        value={typeId}
+      >
+        <option value=""></option>
+        {ingredientTypes.map(t => (
+          <option key={t.id} value={t.id}>{t.name}</option>
+        ))}
+      </select>
 
-        <p className="new-ingredient__feedback">{feedback}</p>
+      <h2 className="new-ingredient__h2" data-test="name-heading">Name</h2>
 
-        <h2 className="new-ingredient__h2" data-test="ingredient-type-heading">
-          Type of Ingredient
+      <input
+        className="new-ingredient__name"
+        onChange={changeName}
+        type="text"
+        value={name}
+      />
+
+      <h2 className="new-ingredient__h2" data-test="description-heading">
+        Description
+      </h2>
+
+      <textarea
+        className="new-ingredient__description"
+        onChange={changeDescription}
+        value={description}
+      />
+
+      <div className="new-ingredient__image">
+        <h2 className="new-ingredient__h2" data-test="image-heading">
+          Image of Ingredient
         </h2>
 
-        <select
-          name="ingredientType"
-          onChange={handleTypeChange}
-          required
-          value={typeId}
-        >
-          <option value=""></option>
-          {ingredientTypes.map(t => (
-            <option key={t.id} value={t.id}>{t.name}</option>
-          ))}
-        </select>
+        {!image && (
+          <div>
+            {!editing
+              ? <img src={`${dir}/nobsc-ingredient-default`} />
+              : prevImage && <img src={`${dir}/${prevImage}`} />
+            }
 
-        <h2 className="new-ingredient__h2" data-test="name-heading">Name</h2>
+            <h4 className="new-ingredient__h4">Change</h4>
 
-        <input
-          className="new-ingredient__name"
-          onChange={handleNameChange}
-          type="text"
-          value={name}
-        />
+            <input
+              className="new-ingredient__image-input"
+              type="file"
+              accept="image/*"
+              onChange={onSelectFile}
+            />
+          </div>
+        )}
 
-        <h2 className="new-ingredient__h2" data-test="description-heading">
-          Description
-        </h2>
+        {image && (
+          <div>
+            <ReactCrop
+              className="new-ingredient__crop-tool"
+              crop={crop}
+              imageStyle={{minHeight: "300px"}}
+              onChange={onCropChange}
+              onComplete={onCropComplete}
+              onImageLoaded={onImageLoaded}
+              src={image as string}
+              style={{minHeight: "300px"}}
+            />
 
-        <textarea
-          className="new-ingredient__description"
-          onChange={handleDescriptionChange}
-          value={description}
-        />
+            <span className="new-ingredient__crop-tool-tip">
+              Move the crop to your desired position. These two images will be saved for you:
+            </span>
 
-        <div className="new-ingredient__image">
-          <h2 className="new-ingredient__h2" data-test="image-heading">
-            Image of Ingredient
-          </h2>
+            <div className="new-ingredient__crops">
+              <div className="new-ingredient__crop-full-outer">
+                <span>Full Size: </span>
 
-          {!image && (
-            <div>
-              {!editing
-                ? <img src={`${dir}/nobsc-ingredient-default`} />
-                : prevImage && <img src={`${dir}/${prevImage}`} />
-              }
-
-              <h4 className="new-ingredient__h4">Change</h4>
-
-              <input
-                className="new-ingredient__image-input"
-                type="file"
-                accept="image/*"
-                onChange={onSelectFile}
-              />
-            </div>
-          )}
-
-          {image && (
-            <div>
-              <ReactCrop
-                className="new-ingredient__crop-tool"
-                crop={crop}
-                imageStyle={{minHeight: "300px"}}
-                onChange={onCropChange}
-                onComplete={onCropComplete}
-                onImageLoaded={onImageLoaded}
-                src={image as string}
-                style={{minHeight: "300px"}}
-              />
-
-              <span className="new-ingredient__crop-tool-tip">
-                Move the crop to your desired position. These two images will be saved for you:
-              </span>
-
-              <div className="new-ingredient__crops">
-                <div className="new-ingredient__crop-full-outer">
-                  <span>Full Size: </span>
-
-                  <img className="new-ingredient__crop-full" src={fullCrop} />
-                </div>
-
-                <div className="new-ingredient__crop-tiny-outer">
-                  <span>Tiny Size: </span>
-
-                  <img className="new-ingredient__crop-tiny" src={tinyCrop} />
-                </div>
+                <img className="new-ingredient__crop-full" src={fullCrop} />
               </div>
 
-              <button
-                className="new-ingredient-image-cancel-button"
-                disabled={loading}
-                onClick={cancelImage}
-              >
-                Cancel
-              </button>
+              <div className="new-ingredient__crop-tiny-outer">
+                <span>Tiny Size: </span>
+
+                <img className="new-ingredient__crop-tiny" src={tinyCrop} />
+              </div>
             </div>
-          )}
-        </div>
 
-        <div className="new-ingredient__finish-area">
-          <Link href={path}>
-            <a className="new-ingredient__cancel-button">Cancel</a>
-          </Link>
+            <button
+              className="new-ingredient-image-cancel-button"
+              disabled={loading}
+              onClick={cancelImage}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+      </div>
 
-          <LoaderButton
-            className="new-ingredient__submit-button"
-            id="create_new_private_user_ingredient_button"
-            isLoading={loading}
-            loadingText="Creating..."
-            name="submit"
-            onClick={handleSubmit}
-            text="Create"
-          />
-        </div>
+      <div className="new-ingredient__finish-area">
+        <Link href="/dashboard">
+          <a className="new-ingredient__cancel-button">Cancel</a>
+        </Link>
+
+        <LoaderButton
+          className="new-ingredient__submit-button"
+          id="create_new_private_user_ingredient_button"
+          isLoading={loading}
+          loadingText="Creating..."
+          name="submit"
+          onClick={handleSubmit}
+          text="Create"
+        />
       </div>
     </div>
   );
@@ -183,10 +167,10 @@ type Props = {
   editing: boolean;
   feedback: string;
   fullCrop: string;
-  handleDescriptionChange(e: React.SyntheticEvent<EventTarget>): void;
-  handleNameChange(e: React.SyntheticEvent<EventTarget>): void;
+  changeDescription(e: React.SyntheticEvent<EventTarget>): void;
+  changeName(e: React.SyntheticEvent<EventTarget>): void;
   handleSubmit(): void;
-  handleTypeChange(e: React.SyntheticEvent<EventTarget>): void;
+  changeType(e: React.SyntheticEvent<EventTarget>): void;
   image: string | ArrayBuffer | null;
   loading: boolean;
   name: string;

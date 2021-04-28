@@ -49,7 +49,7 @@ export function NewContentView({
     <div className={`new-content ${oneColumnATheme}`}>
       <h1 className="new-content__heading">New Content</h1>
 
-      <p className="new-content__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       <button className="new-content__save-button" onClick={handleSubmit}>
         Save

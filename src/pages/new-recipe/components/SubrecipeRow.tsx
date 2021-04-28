@@ -17,7 +17,7 @@ export function SubrecipeRow({
   recipes,
   recipeTypes,
   editing,
-  handleSubrecipeRowChange,
+  changeSubrecipeRow,
   removeSubrecipeRow,
   rowKey,
   selfId,
@@ -58,7 +58,7 @@ export function SubrecipeRow({
         max="9999"
         min="0.125"
         name="amount"
-        onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
+        onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         step="any"
         type="number"
@@ -69,7 +69,7 @@ export function SubrecipeRow({
       <select
         className="subrecipe-row-select-unit"
         name="unit"
-        onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
+        onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={measurementId}
       >
@@ -83,7 +83,7 @@ export function SubrecipeRow({
       <select
         className="subrecipe-ro-select-subrecipe-type"
         name="type"
-        onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
+        onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={type}
       >
@@ -97,7 +97,7 @@ export function SubrecipeRow({
       <select
         className="subrecipe-row-select-cuisine"
         name="cuisine"
-        onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
+        onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={cuisine}
       >
@@ -113,7 +113,7 @@ export function SubrecipeRow({
         name="subrecipe"
         required
         value={id}
-        onChange={(e) => handleSubrecipeRowChange(e, rowKey)}
+        onChange={(e) => changeSubrecipeRow(e, rowKey)}
       >
         <option value=""></option>
         {availableRecipes
@@ -148,7 +148,7 @@ type Props = {
   recipes: IWorkRecipe[];
   recipeTypes: IRecipeType[];
   editing: boolean;
-  handleSubrecipeRowChange(
+  changeSubrecipeRow(
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ): void;

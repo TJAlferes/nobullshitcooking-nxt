@@ -20,7 +20,7 @@ export function Breadcrumbs() {
       linkPath.shift();
 
       const pathArray = linkPath.map((path, i) => ({
-        breadcrumb: path, href: '/' + linkPath.slice(0, i + 1).join('/')
+        name: path, href: '/' + linkPath.slice(0, i + 1).join('/')
       }));
 
       setBreadcrumbs(pathArray);
@@ -29,19 +29,55 @@ export function Breadcrumbs() {
 
   if (!breadcrumbs) return null;
 
+  if (router.pathname === "/profile/:username") setBreadcrumbs([]);
+
+  if (router.pathname === "/new-equipment") {
+    setBreadcrumbs([
+      {name: "Dashboard", href: "/dashboard"},
+      {name: "New Equipment", href: "#"}
+    ]);
+  }
+
+  if (router.pathname === "/new-ingredient") {
+    setBreadcrumbs([
+      {name: "Dashboard", href: "/dashboard"},
+      {name: "New Ingredient", href: "#"}
+    ]);
+  }
+
+  if (router.pathname === "/new-plan") {
+    setBreadcrumbs([
+      {name: "Dashboard", href: "/dashboard"},
+      {name: "New Plan", href: "#"}
+    ]);
+  }
+
+  if (router.pathname === "/new-recipe") {
+    setBreadcrumbs([
+      {name: "Dashboard", href: "/dashboard"},
+      {name: "New Recipe", href: "#"}
+    ]);
+  }
+
   return (
     <nav aria-label="breadcrumbs">
-      <ol className="breadcrumb">
-        <li><a href="/">Home</a></li>
+      <span>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+        
+        <i>{`&gt;`}</i>
+      </span>
 
-        {breadcrumbs.map(({ breadcrumb, href }) => (
-          <li key={href}>
-            <Link href={href}>
-              <a>{convertBreadcrumb(breadcrumb)}</a>
-            </Link>
-          </li>
-        ))}
-      </ol>
+      {breadcrumbs.map(({ name, href }) => (
+        <span key={href}>
+          <Link href={href}>
+            <a>{convertBreadcrumb(name)}</a>
+          </Link>
+
+          <i>{`&gt;`}</i>
+        </span>
+      ))}
     </nav>
   );
 };
@@ -56,11 +92,54 @@ function convertBreadcrumb(string: string) {
 };
 
 type Breadcrumb = {
-  breadcrumb: string;
+  name: string;
   href: string;
 };
 
-/*export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
+/*
+(same for equipment)
+
+const page = staffIsAuthenticated
+  ? editing ? 'Edit Ingredient' : 'Create New Ingredient'
+  : editing ? 'Edit Private Ingredient' : 'Create New Private Ingredient';
+
+const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+
+<div>
+  <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+
+  <span><Link href={path}><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+
+  <span>{page}</span>
+</div>
+
+<h1>{page}</h1>
+
+
+
+<div>
+  <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
+  <span><Link href="/dashboard"><a>Dashboard</a></Link><i>{`&gt;`}</i></span>
+  <span>{editing ? 'Edit Plan' : 'Create New Plan'}</span>
+</div>
+
+<h1>{editing ? 'Edit Plan' : 'Create New Plan'}</h1>
+
+
+
+const page = staffIsAuthenticated
+  ? editing
+    ? 'Edit Recipe' : 'Create New Recipe'
+  : editing
+    ? ownership === "private"
+      ? 'Edit Private Recipe' : 'Edit Public Recipe'
+    : ownership === "private"
+      ? 'Submit New Private Recipe' : 'Submit New Public Recipe';
+const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+
+
+
+export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
   const theme = useSelector(state => state.theme.breadCrumbsTheme);
 
   const Breadcrumbs = withBreadcrumbs()(({ breadcrumbs }: any): JSX.Element => {
@@ -95,4 +174,5 @@ type Props = {
   id: number;
   name: string;
   page?: string | null;
-};*/
+};
+*/
