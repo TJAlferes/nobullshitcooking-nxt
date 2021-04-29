@@ -1,16 +1,25 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../../store';
+import { useTypedSelector as useSelector } from '../../store';
+import { menuShadowHide, leftNavHide } from '../../store/menu/actions';
 
-// TO DO: MAKE THE HAMBURGER ICON LIKE YOUTUBE
 export default function LeftNav(): JSX.Element {
+  const dispatch = useDispatch();
   const { pathname } = useRouter();
 
   const { authname, userIsAuthenticated } = useSelector(state => state.auth);
   const theme = useSelector(state => state.theme.leftNavTheme);
 
   const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
+
+  // TO DO: MAKE THE HAMBURGER ICON LIKE YOUTUBE
+  
+  const click = () => {
+    dispatch(leftNavHide());
+    dispatch(menuShadowHide());
+  };
 
   function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
     const style = (to === pathname) ? {backgroundColor} : {};
@@ -30,6 +39,8 @@ export default function LeftNav(): JSX.Element {
 
   return (
     <nav className={`left-nav ${theme}`}>
+      <div className="left-nav-toggle" onClick={click}>Toggle</div>
+
       {
         userIsAuthenticated &&
         <NavLink dataTest="dashboard" text={authname} to="/dashboard" />

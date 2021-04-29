@@ -46,6 +46,57 @@ h4 {font-size: 1.4rem;}
   width: 100%;
 }
 
+.cancel-button,
+.submit-button {
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  color: black;
+  cursor: pointer;
+  display: block;
+  height: 30px;
+  line-height: 26px;
+  margin: 15px 30px 0 0;
+  padding: 1px 5px;
+  text-align: center;
+  text-decoration: none;
+  width: 235px;
+}
+
+.cancel-button {
+  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+}
+
+.submit-button {
+  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+}
+
+.crop-tool-tip {display: block;}
+
+.crops {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.crop-full-outer,
+.crop-thumb-outer,
+.crop-tiny-outer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  order: 1;
+  padding: 10px;
+}
+
+.crop-full,
+.crop-thumb,
+.crop-tiny {margin-left: 5px;}
+
+.image-cancel-button {
+  height: 21px;
+  padding: 0 6px;
+}
+
 @media (max-width: 899px) {
   body, html, #root {min-width: 300px;}
 
@@ -56,6 +107,9 @@ h4 {font-size: 1.4rem;}
   h3 {font-size: 1.5rem;}
 
   h4 {font-size: 1.4rem;}
+
+  .cancel-button,
+  .submit-button {margin: 15px auto 0 auto;}
 }
 
 /*@import 'react-image-crop/lib/ReactCrop.scss';*/
@@ -69,6 +123,7 @@ h4 {font-size: 1.4rem;}
 @import './components/feed.css';
 @import './components/footer.css';
 @import './components/header.css';
+@import './components/layout.css';
 @import './components/leftNav.css';
 @import './components/loaderSpinner.css';
 @import './components/logo.css';

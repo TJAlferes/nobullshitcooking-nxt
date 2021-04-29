@@ -88,31 +88,6 @@
   justify-content: flex-end;
 }
 
-.planner__cancel-button,
-.planner__cancel-cancel-button,
-.planner__submit-button {
-  border: 1px solid #aaa;
-  border-radius: 2px;
-  color: black;
-  cursor: pointer;
-  display: block;
-  height: 30px;
-  line-height: 26px;
-  margin-right: 30px;
-  padding: 1px 5px;
-  text-align: center;
-  text-decoration: none;
-  width: 235px;
-}
-
-.planner__cancel-button {
-  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
-}
-
-.planner__submit-button {
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
-}
-
 .planner__cancel-modal {
   background-color: #fff;
   display: flex;
@@ -133,11 +108,4 @@
 
 @media (max-width: 1209px) {
   .planner__finish-area {padding: 10px 0;}
-
-  .planner__cancel-button,
-  .planner__submit-button {
-    display: block;
-    margin: 15px auto 0 auto;
-    width: 235px;
-  }
 }

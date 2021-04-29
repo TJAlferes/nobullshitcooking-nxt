@@ -109,8 +109,8 @@ light
 .two-column-a-light .messenger-channel-current,
 .two-column-a-light .messenger-channel-label,
 .two-column-a-light .messenger-channel-switch,
-.two-column-a-light .messenger-chat,
-.two-column-a-light .messenger-chat-input,
+.two-column-a-light .chat__message-list,
+.two-column-a-light .chat__input,
 .two-column-a-light .messenger-people,
 .two-column-a-light .messenger-room {
   border-color: #ddd;

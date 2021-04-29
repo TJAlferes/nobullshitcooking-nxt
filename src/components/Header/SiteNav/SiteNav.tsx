@@ -15,14 +15,14 @@ export default function SiteNav(): JSX.Element {
   const [ expanded, setExpanded ] = useState(false);
   const [ expandedDropdown, setExpandedDropdown ] = useState("none");
 
-  const handleMouseEnter = (dropdown: string) => {
+  const mouseEnter = (dropdown: string) => {
     if (dropdown === expandedDropdown) return;
     setExpanded(true);
     setExpandedDropdown(dropdown)
     dispatch(menuShadowShow());
   };
 
-  const handleMouseLeave = () => {
+  const mouseLeave = () => {
     setExpanded(false);
     setExpandedDropdown("none");
     dispatch(menuShadowHide());
@@ -34,8 +34,8 @@ export default function SiteNav(): JSX.Element {
       <span
         className="site-nav__anchor"
         data-test="food-area"
-        onMouseEnter={() => handleMouseEnter('Food')}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => mouseEnter('Food')}
+        onMouseLeave={mouseLeave}
       >
         <Link href="/page/guide/food">
           <a className="site-nav__link">Food</a>
@@ -49,8 +49,8 @@ export default function SiteNav(): JSX.Element {
       <span
         className="site-nav__anchor"
         data-test="fitness-area"
-        onMouseEnter={() => handleMouseEnter('Fitness')}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => mouseEnter('Fitness')}
+        onMouseLeave={mouseLeave}
       >
         <Link href="/page/guide/fitness">
           <a className="site-nav__link">Fitness</a>
@@ -64,8 +64,8 @@ export default function SiteNav(): JSX.Element {
       <span
         className="site-nav__anchor"
         data-test="supply-area"
-        onMouseEnter={() => handleMouseEnter('Supply')}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => mouseEnter('Supply')}
+        onMouseLeave={mouseLeave}
       >
         <Link href="/store/storefront">
           <a className="site-nav__link">Supply</a>

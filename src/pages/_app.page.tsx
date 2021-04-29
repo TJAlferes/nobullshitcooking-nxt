@@ -8,14 +8,16 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 
 import '../../styles/styles.css';
-import { Header, Main, Footer } from '../components';
+import { Header, Main, Footer, LeftNav } from '../components';
 import { makeSearchConfig } from '../config/search';
-import { SagaStore, wrapper } from '../store';
+import { SagaStore, wrapper, useTypedSelector as useSelector } from '../store';
 import { chatInit } from '../store/chat/sagas';
 
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
 function NOBSCApp({ Component, pageProps }: AppProps) {
+  const leftNav = useSelector(state => state.menu.leftNav);
+
   const { pathname } = pageProps.router;
   const atAuthPage =
     pathname.match(/\/login/) ||
@@ -33,7 +35,12 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
           <DndProvider options={HTML5toTouch}>
             {atAuthPage ? <Component {...pageProps} /> : (
               <div id="app">
-                <Header /><Main><Component {...pageProps} /></Main><Footer />
+                {leftNav && <LeftNav />}
+                <div id="layout">
+                  <Header />
+                  <Main><Component {...pageProps} /></Main>
+                  <Footer />
+                </div>
               </div>
             )}
           </DndProvider>

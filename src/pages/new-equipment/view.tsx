@@ -111,26 +111,26 @@ export function NewEquipmentView({
               style={{minHeight: "300px"}}
             />
 
-            <span className="new-equipment__crop-tool-tip">
+            <span className="crop-tool-tip">
               Move the crop to your desired position. These two images will be saved for you:
             </span>
 
-            <div className="new-equipment__crops">
-              <div className="new-equipment__crop-full-outer">
+            <div className="crops">
+              <div className="crop-full-outer">
                 <span>Full Size: </span>
 
-                <img className="new-equipment__crop-full" src={fullCrop} />
+                <img className="crop-full" src={fullCrop} />
               </div>
 
-              <div className="new-equipment__crop-tiny-outer">
+              <div className="crop-tiny-outer">
                 <span>Tiny Size: </span>
 
-                <img className="new-equipment__crop-tiny" src={tinyCrop} />
+                <img className="crop-tiny" src={tinyCrop} />
               </div>
             </div>
 
             <button
-              className="new-equipment__image-cancel-button"
+              className="image-cancel-button"
               disabled={loading}
               onClick={cancelImage}
             >
@@ -142,11 +142,11 @@ export function NewEquipmentView({
 
       <div className="new-equipment__finish-area">
         <Link href="/dashboard">
-          <a className="new-equipment__cancel-button">Cancel</a>
+          <a className="cancel-button">Cancel</a>
         </Link>
 
         <LoaderButton
-          className="new-equipment__submit-button"
+          className="submit-button"
           id="create_new_private_user_equipment_button"
           isLoading={loading}
           loadingText="Creating..."

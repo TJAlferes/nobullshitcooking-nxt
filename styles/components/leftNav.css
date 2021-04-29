@@ -1,12 +1,14 @@
 .left-nav {
-  /*display: block;
-  grid-column: 1 / 2;*/
+  display: block;
+  left: 0;
   margin: 10px 0;
   max-width: 200px;
   min-width: 200px;
   /*order: 1;*/
   overflow: auto;
   padding: 10px 10px;
+  position: absolute;
+  top: 0;
   width: 200px;
 }
 

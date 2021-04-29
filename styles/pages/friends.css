@@ -2,15 +2,6 @@
 
 }*/
 
-.friends__feedback {
-  color: #c10006;
-  font-family: Arial;
-  font-size: 14px;
-  height: 31px;
-  text-align: center;
-  width: 100%;
-}
-
 .friends__find {
   display: flex;
   flex-direction: row;

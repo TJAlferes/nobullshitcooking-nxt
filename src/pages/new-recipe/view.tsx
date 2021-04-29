@@ -410,14 +410,14 @@ export function NewRecipeView({
       <div className="new-recipe__finish-area">
         <Link href="/dashboard">
           <a
-            className="new-recipe__cancel-button"
+            className="cancel-button"
             data-test="cancel-link"
           >
             Cancel
           </a>
         </Link>
         <LoaderButton
-          className="new-recipe__submit-button"
+          className="submit-button"
           id="user_submit_recipe_button"
           isLoading={loading}
           loadingText="Submitting Recipe..."

@@ -111,26 +111,26 @@ export function NewIngredientView({
               style={{minHeight: "300px"}}
             />
 
-            <span className="new-ingredient__crop-tool-tip">
+            <span className="crop-tool-tip">
               Move the crop to your desired position. These two images will be saved for you:
             </span>
 
-            <div className="new-ingredient__crops">
-              <div className="new-ingredient__crop-full-outer">
+            <div className="crops">
+              <div className="crop-full-outer">
                 <span>Full Size: </span>
 
-                <img className="new-ingredient__crop-full" src={fullCrop} />
+                <img className="crop-full" src={fullCrop} />
               </div>
 
-              <div className="new-ingredient__crop-tiny-outer">
+              <div className="crop-tiny-outer">
                 <span>Tiny Size: </span>
 
-                <img className="new-ingredient__crop-tiny" src={tinyCrop} />
+                <img className="crop-tiny" src={tinyCrop} />
               </div>
             </div>
 
             <button
-              className="new-ingredient-image-cancel-button"
+              className="image-cancel-button"
               disabled={loading}
               onClick={cancelImage}
             >
@@ -142,11 +142,11 @@ export function NewIngredientView({
 
       <div className="new-ingredient__finish-area">
         <Link href="/dashboard">
-          <a className="new-ingredient__cancel-button">Cancel</a>
+          <a className="cancel-button">Cancel</a>
         </Link>
 
         <LoaderButton
-          className="new-ingredient__submit-button"
+          className="submit-button"
           id="create_new_private_user_ingredient_button"
           isLoading={loading}
           loadingText="Creating..."

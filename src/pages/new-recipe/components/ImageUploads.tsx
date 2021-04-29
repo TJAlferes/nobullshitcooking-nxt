@@ -269,17 +269,17 @@ export function ImageUploads({
               src={cookingImage as string}
               style={{minHeight: "300px"}}
             />
-            <span className="new-recipe__crop-tool-tip">
+            <span className="crop-tool-tip">
               Move the crop to your desired position. This image will be saved for you:
             </span>
-            <div className="new-recipe__crops">
-              <div className="new-recipe__crop-full-outer">
+            <div className="crops">
+              <div className="crop-full-outer">
                 <span>Full Size: </span>
-                <img className="new-recipe__crop-full" src={cookingFullCrop} />
+                <img className="crop-full" src={cookingFullCrop} />
               </div>
             </div>
             <button
-              className="new-recipe__image-cancel-button"
+              className="image-cancel-button"
               disabled={loading}
               onClick={cancelCookingImage}
             >

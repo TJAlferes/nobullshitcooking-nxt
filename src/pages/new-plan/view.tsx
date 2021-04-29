@@ -175,7 +175,7 @@ export function NewPlanView({
       </div>
 
       <div className="planner__finish-area">
-        <button className="planner__cancel-button" onClick={activateModal}>
+        <button className="cancel-button" onClick={activateModal}>
           Cancel
         </button>
 
@@ -202,7 +202,7 @@ export function NewPlanView({
               </button>
 
               <button
-                className="planner__cancel-button"
+                className="cancel-button"
                 onClick={discardChanges}
               >
                 Yes, Discard Changes
@@ -213,7 +213,7 @@ export function NewPlanView({
         }
 
         <LoaderButton
-          className="planner__submit-button"
+          className="submit-button"
           id="planner-submit-button"
           isLoading={loading}
           loadingText="Saving Plan..."

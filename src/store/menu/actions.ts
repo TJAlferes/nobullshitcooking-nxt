@@ -1,6 +1,15 @@
 import { actionTypes } from './types';
 
-const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
+const {
+  LEFT_NAV_SHOW,
+  LEFT_NAV_HIDE,
+  MENU_SHADOW_SHOW,
+  MENU_SHADOW_HIDE
+} = actionTypes;
+
+export const leftNavShow = () => ({type: LEFT_NAV_SHOW});
+
+export const leftNavHide = () => ({type: LEFT_NAV_HIDE});
 
 export const menuShadowShow = () => ({type: MENU_SHADOW_SHOW});
 
