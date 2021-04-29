@@ -1,30 +1,53 @@
 .left-nav {
   display: block;
   left: 0;
-  margin: 10px 0;
-  max-width: 200px;
-  min-width: 200px;
-  /*order: 1;*/
+  margin: 0;
+  max-width: 240px;
+  min-width: 240px;
   overflow: auto;
-  padding: 10px 10px;
   position: absolute;
   top: 0;
-  width: 200px;
+  width: 240px;
+  z-index: 4;
+}
+
+.left-nav-heading {
+  background-color: #c10006;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  height: 62px;
+  padding-left: 16px;
+  max-width: 224px;
+  min-width: 224px;
+  order: 1;
+  width: 224px;
+}
+
+.left-nav-main {
+  padding: 10px 10px;
 }
 
 .left-nav-light {background-color: #fff;}
 
-.left-nav-light .left-nav-link {color: #000;}
+.left-nav-light .left-nav-toggle-line {background-color: #000;}
 
-.left-nav-light .left-nav-link {background-color: inherit;}
+.left-nav-light .left-nav-link {
+  background-color: inherit;
+  color: #000;
+}
 
 .left-nav-light hr {background-color: #bfbfbf;}
 
 .left-nav-dark {background-color: #222;}
 
-.left-nav-dark .left-nav-link {color: #aaa;}
+.left-nav-dark .left-nav-toggle-line {background-color: #aaa;}
 
-.left-nav-dark .left-nav-link {background-color: inherit;}
+.left-nav-dark .left-nav-link {
+  background-color: inherit;
+  color: #aaa;
+}
 
 .left-nav-dark hr {background-color: #444;}
 
@@ -49,8 +72,3 @@
 .left-nav.left-nav-light .left-nav-link:hover {background-color: #ddd;}
 
 .left-nav.left-nav-dark .left-nav-link:hover {background-color: #444;}
-
-/* mobile */ /* 599px */
-@media (max-width: 899px) {
-  .left-nav {display: none;}
-}

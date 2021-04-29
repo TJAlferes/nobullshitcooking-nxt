@@ -1,24 +1,13 @@
+.logo {order: 2;}
+
 .logo,
-.logo__home-links {
+.logo__home-link {
   display: block;
-  width: 450px;
+  margin: 9px 0 0 11px;
+  width: 68px;
 }
 
-.home-link--large {display: block;}
-
-.home-link--small {display: none;}
-
-@media (max-width: 1279px) {
-  .logo,
-  .logo__home-links {
-    display: block;
-    width: 110px;
-  }
-
-  .home-link--large {display: none;}
-
-  .home-link--small {
-    display: block;
-    padding-top: 5px 0 0 8px;
-  }
+.home-link {
+  display: block;
+  /*padding-top: 5px 0 0 8px;*/
 }

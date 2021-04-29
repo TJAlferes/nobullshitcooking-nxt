@@ -13,24 +13,29 @@
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  min-width: 900px;
+  min-width: 300px;
   width: 100%;
 }
 
 .header-row-1 {height: 62px;}
 
 .header-row-1-col-1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   height: inherit;
-  max-width: 510px;
-  min-width: 510px;
+  margin-left: 16px;
+  max-width: 210px;
+  min-width: 210px;
   order: 1;
-  padding-left: 29px;
-  width: 510px;
+  width: 210px;
 }
 
 .header-row-1-col-2 {
   height: inherit;
-  min-width: 410px;
+  min-width: 320px;
+  max-width: 640px;
   order: 2;
   padding: 0 42px 0 20px;
   width: 100%;

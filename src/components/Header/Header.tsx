@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { leftNavShow, menuShadowShow } from '../../store/menu/actions';
-import { Logo } from './Logo/Logo';
+import { Logo } from '..';
 import { Promo } from './Promo/Promo';
 import Search from './Search/Search';
 import SiteNav from './SiteNav/SiteNav';
@@ -22,7 +22,15 @@ export function Header(): JSX.Element {
     <header className={`header ${theme}`}>
       <div className="header-row-1">
         <div className="header-row-1-col-1">
-        <div className="left-nav-toggle" onClick={click}>Toggle</div>
+          <svg className="left-nav-toggle" onClick={click}>
+            <g>
+              <path
+                d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+                fill="white"
+              >
+              </path>
+            </g>
+          </svg>
           <Logo theme={theme} />
         </div>
 

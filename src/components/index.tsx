@@ -6,5 +6,6 @@ export { default as Home } from './Home/Home';
 export { default as LeftNav } from './LeftNav/LeftNav';
 export { LoaderButton } from './LoaderButton/LoaderButton';
 export { LoaderSpinner } from './LoaderSpinner/LoaderSpinner';
+export { Logo } from './Logo/Logo';
 export { Main } from './Main/Main';
 export { StarRating } from './StarRating/StarRating';

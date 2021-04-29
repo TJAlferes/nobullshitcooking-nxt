@@ -60,7 +60,7 @@ export function Search({
           <span className="search__facade-text">{facadeText}</span>
 
           <img
-            //className="search__facade-arrow"
+            className="search__facade-arrow"
             src="/images/header/down-arrow-gray.png"
             width="8"
             height="6"
