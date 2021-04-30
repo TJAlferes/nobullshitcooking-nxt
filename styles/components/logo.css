@@ -1,13 +1,7 @@
-.logo {order: 2;}
-
-.logo,
-.logo__home-link {
-  display: block;
-  margin: 9px 0 0 11px;
+.logo {
+  background-color: #c10006;
+  height: 20px;
+  margin: 17px 0 0 22px;
+  order: 2;
   width: 68px;
-}
-
-.home-link {
-  display: block;
-  /*padding-top: 5px 0 0 8px;*/
 }

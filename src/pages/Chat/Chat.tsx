@@ -54,7 +54,7 @@ export default function Chat(): JSX.Element {
     const setAlertFavicon = () => {
       const nobscFavicon =
         document.getElementById('nobsc-favicon') as HTMLLinkElement;
-      nobscFavicon.href = "/alert.png";
+      nobscFavicon.href = "/icons/alert.png";
     };
 
     // TO DO: fix no longer auto scrolling after spam debounce

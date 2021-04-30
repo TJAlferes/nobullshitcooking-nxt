@@ -1,26 +1,9 @@
 #layout {
   display: grid;
-  grid-template: auto 1fr auto / 1fr;
-  /*grid-template-areas: none;
   grid-template-rows: 92px auto 92px;
-  max-width: calc(100vw - (100vw - 100%));
-  min-width: calc(100vw - (100vw - 100%));
-  min-height: 100vh;*/
-}
-
-.image-default-280-172 {
-  min-height: 172px;
-  min-width: 280px;
-}
-
-.image-default-100-62 {
-  min-height: 62px;
-  min-width: 100px;
-}
-
-.image-default-28-18 {
-  min-height: 18px;
-  min-width: 28px;
+  height: 100vh;
+  min-height: 100vh;
+  z-index: 4;
 }
 
 @media (max-width: 899px) {

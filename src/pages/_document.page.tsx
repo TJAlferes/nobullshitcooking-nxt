@@ -15,7 +15,9 @@ class CustomDocument extends Document {
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <link id="nobsc-favicon" rel="icon" href="/icons/normal.png" />
+        </Head>
         <body>
           <Main />
           <NextScript />

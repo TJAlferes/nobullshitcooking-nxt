@@ -1,4 +1,5 @@
 .left-nav {
+  bottom: 0;
   display: block;
   left: 0;
   margin: 0;
@@ -8,21 +9,18 @@
   position: absolute;
   top: 0;
   width: 240px;
-  z-index: 4;
+  z-index: 6;
 }
 
 .left-nav-heading {
-  background-color: #c10006;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start;
   height: 62px;
   padding-left: 16px;
-  max-width: 224px;
-  min-width: 224px;
   order: 1;
-  width: 224px;
+  width: inherit;
 }
 
 .left-nav-main {
@@ -30,6 +28,9 @@
 }
 
 .left-nav-light {background-color: #fff;}
+
+.left-nav-light .left-nav-heading,
+.left-nav-light .logo {background-color: #c10006;}
 
 .left-nav-light .left-nav-toggle-line {background-color: #000;}
 
@@ -41,6 +42,9 @@
 .left-nav-light hr {background-color: #bfbfbf;}
 
 .left-nav-dark {background-color: #222;}
+
+.left-nav-dark .left-nav-heading,
+.left-nav-dark .logo {background-color: #690004;}
 
 .left-nav-dark .left-nav-toggle-line {background-color: #aaa;}
 
@@ -62,7 +66,10 @@
   margin-bottom: 5px;
 }
 
-.left-nav .left-nav-link {text-decoration: none;}
+.left-nav .left-nav-link {
+  font-size: 1.4rem;
+  text-decoration: none;
+}
 
 .left-nav .left-nav-link:hover {
   cursor: pointer;

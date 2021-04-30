@@ -26,8 +26,7 @@
 
 .main-dark {background-color: #111;}
 
+/* ? */
 @media (max-width: 899px) {
-  .main {
-    max-width: 100vw;  /* ? */
-  }
+  .main {max-width: 100vw;}
 }
