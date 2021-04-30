@@ -4,18 +4,18 @@
   min-height: 100vh;
 }
 
-.left-nav-shadow {
+.shadow--hide,
+.shadow--show {
   background: rgba(0, 0, 0, .5);
   bottom: 1;
-  display: block;
   height: 3000px;
   left: -42px;
   position: absolute;
-  top: 0;
+  top: 0px;
   width: 3000px;
   z-index: 5;
 }
 
-.left-nav-shadow--hide {display: none;}
+.shadow--hide {display: none;}
 
-.left-nav-shadow--show {display: block;}
+.shadow--show {display: block;}

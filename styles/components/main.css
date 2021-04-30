@@ -6,22 +6,6 @@
   padding-bottom: 25px;
 }
 
-.shadow--hide,
-.shadow--show {
-  background: rgba(0, 0, 0, .5);
-  bottom: 1;
-  height: 3000px;
-  left: -42px;
-  position: absolute;
-  top: 92px;
-  width: 3000px;
-  z-index: 2;
-}
-
-.shadow--hide {display: none;}
-
-.shadow--show {display: block;}
-
 .main-light {background-color: #eee;}
 
 .main-dark {background-color: #111;}

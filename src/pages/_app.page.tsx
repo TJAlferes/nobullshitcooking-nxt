@@ -36,9 +36,7 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
             {atAuthPage ? <Component {...pageProps} /> : (
               <div id="app">
                 {leftNav && <LeftNav />}
-                <div className={
-                  leftNav ? 'left-nav-shadow--show' : 'left-nav-shadow--hide'
-                }>
+                <div className={leftNav ? 'shadow--show' : 'shadow--hide'}>
                 </div>
                 <div id="layout">
                   <Header />

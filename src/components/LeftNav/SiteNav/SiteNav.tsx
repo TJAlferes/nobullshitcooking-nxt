@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { menuShadowHide, menuShadowShow } from '../../../store/menu/actions';
 // TO DO: this menu data needs to also come dynamically from content types
 import fitnessMenuData from './data/fitnessMenuData';
 import foodMenuData from './data/foodMenuData';
@@ -10,22 +8,18 @@ import supplyMenuData from './data/supplyMenuData';
 import Menu from './Menu/Menu';
 
 export default function SiteNav(): JSX.Element {
-  const dispatch = useDispatch();
-
   const [ expanded, setExpanded ] = useState(false);
   const [ expandedDropdown, setExpandedDropdown ] = useState("none");
 
   const mouseEnter = (dropdown: string) => {
     if (dropdown === expandedDropdown) return;
     setExpanded(true);
-    setExpandedDropdown(dropdown)
-    dispatch(menuShadowShow());
+    setExpandedDropdown(dropdown);
   };
 
   const mouseLeave = () => {
     setExpanded(false);
     setExpandedDropdown("none");
-    dispatch(menuShadowHide());
   };
 
   return (

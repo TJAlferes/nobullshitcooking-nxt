@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import { Logo } from '..';
+import SiteNav from './SiteNav/SiteNav';
 import { useTypedSelector as useSelector } from '../../store';
-import { menuShadowHide, leftNavHide } from '../../store/menu/actions';
+import { closeLeftNav } from '../../store/menu/actions';
 
 export default function LeftNav(): JSX.Element {
   const dispatch = useDispatch();
@@ -16,8 +17,7 @@ export default function LeftNav(): JSX.Element {
   const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
   
   const click = () => {
-    dispatch(leftNavHide());
-    dispatch(menuShadowHide());
+    dispatch(closeLeftNav());
   };
 
   function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
@@ -70,6 +70,7 @@ export default function LeftNav(): JSX.Element {
         }
         <hr />
 
+        <SiteNav />
         <NavLink
           dataTest="supplements"
           text="Supplements"
