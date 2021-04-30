@@ -5,7 +5,6 @@
   margin: 0;
   max-width: 240px;
   min-width: 240px;
-  overflow: auto;
   position: absolute;
   top: 0;
   width: 240px;
@@ -24,7 +23,12 @@
 }
 
 .left-nav-main {
-  padding: 10px 10px;
+  padding: 10px;
+}
+
+.left-nav-anchor {
+  position: relative;
+  z-index: 7;
 }
 
 .left-nav-light {background-color: #fff;}

@@ -6,11 +6,11 @@
   flex-direction: row;
   flex-wrap: nowrap;
   height: 306px;
-  left: -12px;
+  left: 218px;
   padding: 0;
   position: absolute;
-  top: 18px;
-  z-index: 4;
+  top: -1px;
+  z-index: 7;
 }
 
 .menu {

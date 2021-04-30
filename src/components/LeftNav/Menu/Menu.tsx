@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../../store';
+import { useTypedSelector as useSelector } from '../../../store';
 import { MenuView } from './MenuView';
 
 /*
@@ -118,31 +118,31 @@ function getActivateDelay() {
   return 0;
 }
 
-export default function Menu({ menuItems }: Props): JSX.Element {
+export function Menu({ menuItems }: Props): JSX.Element {
   const theme = useSelector(state => state.theme.dropDownMenuTheme);
 
   const [ activeMenuRow, setActiveMenuRow ] = useState<undefined | number>();
 
   useLayoutEffect(() => {  // useRef? forwardRef?
-    document.addEventListener('mousemove', handleMouseMoveDocument, false);
+    document.addEventListener('mousemove', mouseMoveDocument, false);
     return () => {
-      document.removeEventListener('mousemove', handleMouseMoveDocument);
+      document.removeEventListener('mousemove', mouseMoveDocument);
       mouseLocs = [];
       if (menuTimer) clearTimeout(menuTimer);
       menuTimer = null;
     };
   });
   
-  const handleMouseEnterRow = (row: number) => {
+  const enterRow = (row: number) => {
     if (menuTimer) clearTimeout(menuTimer);
     possiblyActivate(row);
   }
 
-  const handleMouseLeaveMenu = () => {
+  const leaveMenu = () => {
     if (menuTimer) clearTimeout(menuTimer);
   }
 
-  const handleMouseMoveDocument = (e: MouseEvent) => {
+  const mouseMoveDocument = (e: MouseEvent) => {
     mouseLocs.push({x: e.pageX, y: e.pageY});
     if (mouseLocs.length > MOUSE_LOCS_TRACKED) mouseLocs.shift();
   }
@@ -161,8 +161,8 @@ export default function Menu({ menuItems }: Props): JSX.Element {
   return (
     <MenuView
       activeMenuRow={activeMenuRow}
-      handleMouseEnterRow={handleMouseEnterRow}
-      handleMouseLeaveMenu={handleMouseLeaveMenu}
+      enterRow={enterRow}
+      leaveMenu={leaveMenu}
       menuItems={menuItems}
       theme={theme}
     />

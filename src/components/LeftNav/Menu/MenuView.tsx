@@ -29,8 +29,8 @@ const dark: ISubmenuImages = {
 
 export function MenuView({
   activeMenuRow,
-  handleMouseEnterRow,
-  handleMouseLeaveMenu,
+  enterRow,
+  leaveMenu,
   menuItems,
   theme
 }: Props): JSX.Element {
@@ -46,7 +46,7 @@ export function MenuView({
       <div
         className={`menu ${theme}`}
         data-test="menu"
-        onMouseLeave={handleMouseLeaveMenu}
+        onMouseLeave={leaveMenu}
       >
         <ul className="menu__items">
           {menuItems.map((menu, index) => (
@@ -57,7 +57,7 @@ export function MenuView({
               }`}
               data-test="menu-item"
               key={index}
-              onMouseEnter={() => handleMouseEnterRow(index)}
+              onMouseEnter={() => enterRow(index)}
             >
               <Link href={menu.link}>
                 <a className={`menu__item-link ${theme}`}>{menu.name}</a>
@@ -100,8 +100,8 @@ interface ISubmenuImages {
 
 type Props = {
   activeMenuRow: undefined | number;
-  handleMouseEnterRow(row: number): void;
-  handleMouseLeaveMenu(): void;
+  enterRow(row: number): void;
+  leaveMenu(): void;
   menuItems: IMenuItem[];
   theme: string;
 };
