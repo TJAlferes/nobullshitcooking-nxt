@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector as useSelector } from '../../store';
 import { closeLeftNav } from '../../store/menu/actions';
 import { Logo } from '..';
+import menuItems from './Menu/items';
 import { Menu } from './Menu/Menu';
-import { fitnessMenuItems, foodMenuItems, supplyMenuItems } from './menu-items';
 
 // TO DO: dynamically generate menu items from content types
 
@@ -26,12 +26,12 @@ export function LeftNav(): JSX.Element {
     dispatch(closeLeftNav());
   };
 
-  const mouseEnter = (dropdown: string) => {
+  const openMenu = (dropdown: string) => {
     if (dropdown === expanded) return;
     setExpanded(dropdown);
   };
 
-  const mouseLeave = () => {
+  const closeMenus = () => {
     setExpanded("none");
   };
 
@@ -67,6 +67,16 @@ export function LeftNav(): JSX.Element {
         <Logo theme={theme} />
       </div>
 
+      <div className="left-nav-anchor" onMouseLeave={closeMenus}>
+        <Menu
+          closeMenus={closeMenus}
+          expanded={expanded}
+          level={0}
+          menuItems={menuItems}
+          openMenu={openMenu}
+        />
+      </div>
+
       <div className="left-nav-main">
         {userIsAuthenticated && (
           <>
@@ -84,45 +94,6 @@ export function LeftNav(): JSX.Element {
             <hr />
           </>
         )}
-
-        <span
-          className="left-nav-anchor"
-          data-test="food-area"
-          onMouseEnter={() => mouseEnter('Food')}
-          onMouseLeave={mouseLeave}
-        >
-          <NavLink dataTest="food" text="Food" to="/page/guide/food" />
-
-          {expanded === 'Food' ? <Menu menuItems={foodMenuItems} /> : false}
-        </span>
-
-        <span
-          className="left-nav-anchor"
-          data-test="fitness-area"
-          onMouseEnter={() => mouseEnter('Fitness')}
-          onMouseLeave={mouseLeave}
-        >
-          <NavLink
-            dataTest="fitness"
-            text="Fitness"
-            to="/page/guide/fitness"
-          />
-
-          {expanded === 'Fitness'
-            ? <Menu menuItems={fitnessMenuItems} /> : false}
-        </span>
-
-        <span
-          className="left-nav-anchor"
-          data-test="supply-area"
-          onMouseEnter={() => mouseEnter('Supply')}
-          onMouseLeave={mouseLeave}
-        >
-          <NavLink dataTest="supply" text="Supply" to="/store/storefront" />
-
-          {expanded === 'Supply'
-            ? <Menu menuItems={supplyMenuItems} /> : false}
-        </span>
 
         <NavLink
           dataTest="supplements"

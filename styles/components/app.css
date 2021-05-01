@@ -8,11 +8,13 @@
 .shadow--show {
   background: rgba(0, 0, 0, .5);
   bottom: 1;
-  height: 3000px;
+  height: 100vh;
+  min-height: 100vh;
   left: -42px;
   position: absolute;
   top: 0px;
   width: 3000px;
+  min-width: 3000px;
   z-index: 5;
 }
 

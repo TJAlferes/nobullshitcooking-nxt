@@ -118,10 +118,16 @@ function getActivateDelay() {
   return 0;
 }
 
-export function Menu({ menuItems }: Props): JSX.Element {
+export function Menu({
+  expanded,
+  closeMenus,
+  level,
+  menuItems,
+  openMenu
+}: Props): JSX.Element {
   const theme = useSelector(state => state.theme.dropDownMenuTheme);
 
-  const [ activeMenuRow, setActiveMenuRow ] = useState<undefined | number>();
+  const [ activeMenuRow, setActiveMenuRow ] = useState<number | undefined>();
 
   useLayoutEffect(() => {  // useRef? forwardRef?
     document.addEventListener('mousemove', mouseMoveDocument, false);
@@ -162,8 +168,12 @@ export function Menu({ menuItems }: Props): JSX.Element {
     <MenuView
       activeMenuRow={activeMenuRow}
       enterRow={enterRow}
+      expanded={expanded}
+      closeMenus={closeMenus}
       leaveMenu={leaveMenu}
+      level={level}
       menuItems={menuItems}
+      openMenu={openMenu}
       theme={theme}
     />
   );
@@ -172,9 +182,8 @@ export function Menu({ menuItems }: Props): JSX.Element {
 export interface IMenuItem {
   name: string;
   link: string;
-  subMenu: string[];
-  subMenuLinks: string[];
-  image: string;
+  image: string | null;
+  children: IMenuItem[];
 }
 
 interface IMouseLocation {
@@ -183,5 +192,9 @@ interface IMouseLocation {
 }
 
 type Props = {
+  closeMenus(): void;
+  expanded: string;
+  level: number;
   menuItems: IMenuItem[];
+  openMenu(name: string): void;
 };

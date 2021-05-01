@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import React from 'react';
 
-import { IMenuItem } from './Menu';
+import { Menu, IMenuItem } from './Menu';
 
 const url = 'https://s3.amazonaws.com/nobsc-images-01/header/dropdowns/';
 // TO DO: shorten file names
@@ -9,7 +10,7 @@ const light: ISubmenuImages = {
   'equipment': `${url}abundance-ingredients-slide.png`,  // finish
   'exercises': `${url}pushups-exercises-slide.png`,
   'ingredients': `${url}abundance-ingredients-slide.png`,
-  'kitchen-equipment': `${url}kitchen-equipment-slide.png`,
+  'kitchen': `${url}kitchen-equipment-slide.png`,
   'methods': `${url}fire-methods-slide.png`,
   'nutrition': `${url}steve-reeves-nutrition-slide.png`,
   'principles': `${url}vitruvian-man-principles-slide.png`,
@@ -20,7 +21,7 @@ const dark: ISubmenuImages = {
   'equipment': `${url}abundance-ingredients-slide-dark.png`,  // finish
   'exercises': `${url}pushups-exercises-slide-dark.png`,
   'ingredients': `${url}abundance-ingredients-slide-dark.png`,
-  'kitchen-equipment': `${url}kitchen-equipment-slide-dark.png`,
+  'kitchen': `${url}kitchen-equipment-slide-dark.png`,
   'methods': `${url}fire-methods-slide-dark.png`,
   'nutrition': `${url}steve-reeves-nutrition-slide-dark.png`,
   'principles': `${url}vitruvian-man-principles-slide-dark.png`,
@@ -29,67 +30,82 @@ const dark: ISubmenuImages = {
 
 export function MenuView({
   activeMenuRow,
+  closeMenus,
   enterRow,
+  expanded,
   leaveMenu,
+  level,
   menuItems,
+  openMenu,
   theme
 }: Props): JSX.Element {
   const getSubmenuImage = () => {
     if (!activeMenuRow) return;
+
     const img = menuItems[activeMenuRow].image;
+    if (!img) return;
+
     const src = theme === "drop-down-menu-light" ? light[img] : dark[img];
+
     return <img className="submenu__image" src={src} />;
   };
 
+  const mouseEnter = (name: string, index: number) => {
+    if (level === 0) openMenu(name);
+    enterRow(index)
+  };
+
+  const mouseLeave = () => {
+    closeMenus();
+    leaveMenu();
+  };
+
+  const left = `${level}px`;
+  console.log(left);
+
   return (
-    <div className={`menu-container ${theme}`}>
-      <div
-        className={`menu ${theme}`}
-        data-test="menu"
-        onMouseLeave={leaveMenu}
-      >
-        <ul className="menu__items">
-          {menuItems.map((menu, index) => (
-            <li
-              className={`menu__item ${
-                ((activeMenuRow !== undefined) && (index === activeMenuRow)) &&
-                'active'
-              }`}
-              data-test="menu-item"
-              key={index}
-              onMouseEnter={() => enterRow(index)}
-            >
-              <Link href={menu.link}>
-                <a className={`menu__item-link ${theme}`}>{menu.name}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {activeMenuRow !== undefined && (
-        <div className={`submenu ${theme}`}>
-          <h3 className="submenu__heading">
-            <Link href={menuItems[activeMenuRow].link}>
-              <a className={`submenu__heading-link ${theme}`}>
-                {menuItems[activeMenuRow].name}
-              </a>
+    <div
+      className={`menu ${theme}`}
+      data-test="menu"
+      onMouseLeave={leaveMenu}
+      style={{left}}
+    >
+      <ul className="menu__items">
+        {menuItems.map((item, index) => (
+          <li
+            className={`menu__item ${
+              ((activeMenuRow !== undefined) && (index === activeMenuRow)) &&
+              'active'
+            }`}
+            data-test="menu-item"
+            key={index}
+            onMouseEnter={() => mouseEnter(item.name, index)}
+          >
+            <Link href={item.link}>
+              <a className={`menu__item-link ${theme}`}>{item.name}</a>
             </Link>
-          </h3>
+          </li>
+        ))}
+      </ul>
 
-          <ul className="submenu__items">
-            {menuItems[activeMenuRow].subMenu.map((subMenu, index) => 
-              <li className="submenu__item" key={index}>
-                <Link href={menuItems[activeMenuRow].subMenuLinks[index]}>
-                  <a className={`submenu__item-link ${theme}`}>{subMenu}</a>
-                </Link>
-              </li>
-            )}
-          </ul>
-
-          {getSubmenuImage()}
-        </div>
-      )}
+      {
+        (
+          activeMenuRow !== undefined &&
+          menuItems[activeMenuRow] &&
+          menuItems[activeMenuRow].children[0] &&
+          expanded !== "none"
+        )
+        ? (
+          <Menu
+            closeMenus={close}
+            expanded={expanded}
+            level={level + 240}
+            menuItems={menuItems[activeMenuRow].children}
+            openMenu={openMenu}
+          />
+        )
+        : false
+      }
     </div>
   );
 }
@@ -99,9 +115,13 @@ interface ISubmenuImages {
 }
 
 type Props = {
-  activeMenuRow: undefined | number;
+  activeMenuRow: number | undefined;
+  closeMenus(): void;
   enterRow(row: number): void;
+  expanded: string;
   leaveMenu(): void;
+  level: number;
   menuItems: IMenuItem[];
+  openMenu(name: string): void;
   theme: string;
 };
