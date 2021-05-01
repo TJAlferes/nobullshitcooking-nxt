@@ -164,9 +164,12 @@ export function Menu({
     setActiveMenuRow(row);
   };
 
+  const clearActiveMenuRow = () => setActiveMenuRow(undefined);
+
   return (
     <MenuView
       activeMenuRow={activeMenuRow}
+      clearActiveMenuRow={clearActiveMenuRow}
       enterRow={enterRow}
       expanded={expanded}
       closeMenus={closeMenus}

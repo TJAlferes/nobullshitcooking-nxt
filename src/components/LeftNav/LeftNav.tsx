@@ -22,18 +22,14 @@ export function LeftNav(): JSX.Element {
 
   const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
   
-  const click = () => {
-    dispatch(closeLeftNav());
-  };
+  const click = () => dispatch(closeLeftNav());
 
   const openMenu = (dropdown: string) => {
     if (dropdown === expanded) return;
     setExpanded(dropdown);
   };
 
-  const closeMenus = () => {
-    setExpanded("none");
-  };
+  const closeMenus = () => setExpanded("none");
 
   function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
     const style = (to === pathname) ? {backgroundColor} : {};
@@ -78,6 +74,8 @@ export function LeftNav(): JSX.Element {
       </div>
 
       <div className="left-nav-main">
+        <hr />
+
         {userIsAuthenticated && (
           <>
             <NavLink dataTest="dashboard" text={authname} to="/dashboard" />
@@ -85,7 +83,7 @@ export function LeftNav(): JSX.Element {
           </>
         )}
 
-        <NavLink dataTest="home" text="News" to="/" />
+        <NavLink dataTest="home" text="Home" to="/" />
 
         {userIsAuthenticated && (
           <>

@@ -30,6 +30,7 @@ const dark: ISubmenuImages = {
 
 export function MenuView({
   activeMenuRow,
+  clearActiveMenuRow,
   closeMenus,
   enterRow,
   expanded,
@@ -56,19 +57,20 @@ export function MenuView({
   };
 
   const mouseLeave = () => {
-    closeMenus();
+    clearActiveMenuRow();
     leaveMenu();
   };
 
   const left = `${level}px`;
-  console.log(left);
+  const height = level === 0 ? 'fit-content' : '490px';
+  const minHeight = height;
 
   return (
     <div
       className={`menu ${theme}`}
       data-test="menu"
-      onMouseLeave={leaveMenu}
-      style={{left}}
+      onMouseLeave={mouseLeave}
+      style={{height, minHeight, left}}
     >
       <ul className="menu__items">
         {menuItems.map((item, index) => (
@@ -99,7 +101,7 @@ export function MenuView({
           <Menu
             closeMenus={close}
             expanded={expanded}
-            level={level + 240}
+            level={240}
             menuItems={menuItems[activeMenuRow].children}
             openMenu={openMenu}
           />
@@ -116,6 +118,7 @@ interface ISubmenuImages {
 
 type Props = {
   activeMenuRow: number | undefined;
+  clearActiveMenuRow(): void;
   closeMenus(): void;
   enterRow(row: number): void;
   expanded: string;

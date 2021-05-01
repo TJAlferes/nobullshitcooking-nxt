@@ -29,8 +29,8 @@
 
 .left-nav-anchor {
   display: block;
-  min-height: fit-content;
-  height: fit-content;
+  min-height: 130px;
+  height: 130px;
   position: relative;
   z-index: 6;
 }
@@ -65,8 +65,7 @@
 
 .left-nav-link {
   display: block;
-  height: 48px;
-  margin-bottom: 5px;
+  height: 40px;
 }
 
 .left-nav hr {
