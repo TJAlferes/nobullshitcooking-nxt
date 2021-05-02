@@ -1,57 +1,48 @@
 export function OptionsView({
   room,
-  handleRoomChange,
-  handleConnect,
-  handleDisconnect,
-  handleRoomInputChange,
+  changeRoom,
+  connect,
+  disconnect,
+  changeRoomInput,
   loading,
   roomToEnter,
   status
 }: Props): JSX.Element {
   return (
     <div className="chat__options">
-      <div className="options__connection">
-        <div className="connection-button-frame">
-          <button
-            className="connection-button"
-            disabled={loading}
-            onClick={
-              (status === "Connected") ? handleDisconnect : handleConnect
-            }
-          >
-            {(status === "Connected") ? 'Disconnect' : 'Connect'}
-          </button>
-        </div>
+      <button
+        className="connection__button"
+        disabled={loading}
+        onClick={(status === "Connected") ? disconnect : connect}
+      >
+        {(status === "Connected") ? 'Disconnect' : 'Connect'}
+      </button>
 
-        <span className="connection-spacer"></span>
-      </div>
+      <div className="current-room">
+        <span className="current-room__label">Current Room:</span>
 
-      <div className="options__current-room">
-        <span className="current-room-label">Current Room:</span>
         <span className="current-room">{room}</span>
       </div>
 
-      <div className="options__change-room">
-        <span className="change-room-label">Go To Room:</span>
+      <div className="change-room">
+        <span className="change-room__label">Go To Room:</span>
 
         <input
-          className="change-room-input"
+          className="change-room__input"
           disabled={(status !== "Connected") || loading}
           name="change-room-input"
-          onChange={handleRoomInputChange}
+          onChange={changeRoomInput}
           type="text"
           value={roomToEnter}
         />
 
-        <div className="change-room-button-frame">
-          <button
-            className="change-room-button"
-            disabled={(status !== "Connected") || loading}
-            onClick={handleRoomChange}
-          >
-            Enter
-          </button>
-        </div>
+        <button
+          className="change-room__button"
+          disabled={(status !== "Connected") || loading}
+          onClick={changeRoom}
+        >
+          Enter
+        </button>
       </div>
     </div>
   );
@@ -59,10 +50,10 @@ export function OptionsView({
 
 type Props = {
   room: string;
-  handleRoomChange(): void;
-  handleConnect(): void;
-  handleDisconnect(): void;
-  handleRoomInputChange(e: React.SyntheticEvent<EventTarget>): void;
+  changeRoom(): void;
+  connect(): void;
+  disconnect(): void;
+  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
   loading: boolean;
   roomToEnter: string;
   status: string;

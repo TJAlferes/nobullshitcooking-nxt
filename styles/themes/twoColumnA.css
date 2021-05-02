@@ -45,29 +45,28 @@
 
 /* CHAT */
 
-.two-column-a-light .messenger-channel-current,
-.two-column-a-light .messenger-channel-label,
-.two-column-a-light .messenger-channel-switch,
-.two-column-a-light .chat__message-list,
-.two-column-a-light .chat__input,
-.two-column-a-light .messenger-people,
-.two-column-a-light .messenger-room {border-color: #ddd;}
+.light .messenger-channel-current,
+.light .messenger-channel-label,
+.light .messenger-channel-switch,
+.light .chat__message-list,
+.light .chat__input,
+.light .messenger-people,
+.light .messenger-room {border-color: #ddd;}
 
-.two-column-a-light .messenger-chat-message .chat-ts {color: #bbb;}
+.light .messenger-chat-message .chat-ts {color: #bbb;}
 
-.two-column-a-light .messenger-channel-switch,
-.two-column-a-light .messenger-channel-label,
-.two-column-a-light .messenger-connect-disconnect-mobile-spacer,
-.two-column-a-light .messenger-current-container,
-.two-column-a-light .messenger-go-container,
-.two-column-a-light .messenger-room,
-.two-column-a-light .messenger-spacer-one,
-.two-column-a-light .messenger-spacer-two {background-color: #ddd;}
+.light .messenger-channel-switch,
+.light .messenger-channel-label,
+.light .messenger-current-container,
+.light .messenger-go-container,
+.light .messenger-room,
+.light .messenger-spacer-one,
+.light .messenger-spacer-two {background-color: #ddd;}
 
-.two-column-a-light .messenger-channel-current {background-color: #fff;}
+.light .messenger-channel-current {background-color: #fff;}
 
-.two-column-a-light .messenger-friend,
-.two-column-a-light .messenger-user-in-room {
+.light .messenger-friend,
+.light .messenger-user-in-room {
   background-color: #eaeaea;
   border-color: #fff #b3b3b3 #b3b3b3 #fff;
   color: #292929;
@@ -104,41 +103,39 @@
 
 /* CHAT */
 
-.two-column-a-dark .messenger-channel-current,
-.two-column-a-dark .messenger-channel-label,
-.two-column-a-dark .messenger-channel-switch,
-.two-column-a-dark .messenger-chat,
-.two-column-a-dark .messenger-chat-input,
-.two-column-a-dark .messenger-people,
-.two-column-a-dark .messenger-room {border-color: #444}
+.dark .messenger-channel-current,
+.dark .messenger-channel-label,
+.dark .messenger-channel-switch,
+.dark .messenger-chat,
+.dark .messenger-chat-input,
+.dark .messenger-people,
+.dark .messenger-room {border-color: #444}
 
-.two-column-a-dark .messenger-chat-message .chat-ts {color: #666;}
+.dark .messenger-chat-message .chat-ts {color: #666;}
 
-.two-column-a-dark .messenger-channel-label,
-.two-column-a-dark .messenger-channel-switch,
-.two-column-a-dark .messenger-connect-disconnect-mobile-spacer,
-.two-column-a-dark .messenger-current-container,
-.two-column-a-dark .messenger-go-container,
-.two-column-a-dark .messenger-room,
-.two-column-a-dark .messenger-spacer-two,
-.two-column-a-dark .messenger-spacer-one {background-color: #444;}
+.dark .messenger-channel-label,
+.dark .messenger-channel-switch,
+.dark .messenger-current-container,
+.dark .messenger-go-container,
+.dark .messenger-room,
+.dark .messenger-spacer-two,
+.dark .messenger-spacer-one {background-color: #444;}
 
-
-.two-column-a-dark .messenger-channel-current,
-.two-column-a-dark .messenger-chat,
-.two-column-a-dark .messenger-chat-input input,
-.two-column-a-dark .messenger-chat-message,
-.two-column-a-dark .messenger-chat-messages,
-.two-column-a-dark .messenger-friends,
-.two-column-a-dark .messenger-people,
-.two-column-a-dark .messenger-room input,
-.two-column-a-dark .messenger-users-in-room {
+.dark .messenger-channel-current,
+.dark .messenger-chat,
+.dark .messenger-chat-input input,
+.dark .messenger-chat-message,
+.dark .messenger-chat-messages,
+.dark .messenger-friends,
+.dark .messenger-people,
+.dark .messenger-room input,
+.dark .messenger-users-in-room {
   background-color: #1e1e1e;
   color: #bbb;
 }
 
-.two-column-a-dark .messenger-friend,
-.two-column-a-dark .messenger-user-in-room {
+.dark .messenger-friend,
+.dark .messenger-user-in-room {
   border-color: #222 #000 #000 #222;
   background-color: #2c2c2c;
   color: #bbb;

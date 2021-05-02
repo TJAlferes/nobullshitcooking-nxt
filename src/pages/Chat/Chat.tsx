@@ -32,6 +32,7 @@ export default function Chat(): JSX.Element {
   const [ focusedUser, setFocusedUser ] = useState<string | null>(null);
   const [ loading, setLoading ] = useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
+  const [ mobileTab, setMobileTab ] = useState("Messages");
   const [ peopleTab, setPeopleTab ] = useState("Room");
   const [ roomToEnter, setRoomToEnter ] = useState("");
   const [ spamCount, setSpamCount ] = useState(1);
@@ -87,7 +88,7 @@ export default function Chat(): JSX.Element {
     autoScroll();
   }, [messages]);
 
-  const handleRoomChange = () => {
+  const changeRoom = () => {
     if (loading) return;
     if (debounced) {
       setFeedback("Slow down there partner...");
@@ -112,25 +113,25 @@ export default function Chat(): JSX.Element {
     setLoading(false);
   };
 
-  const handleConnect = () => {
+  const connect = () => {
     setLoading(true);
     dispatch(chatConnect());
     setLoading(false);
   };
 
-  const handleDisconnect = () => {
+  const disconnect = () => {
     setLoading(true);
     dispatch(chatDisconnect());
     setLoading(false);
   };
 
-  const handleFriendClick = (friend: string) => setFocusedFriend(friend);
+  const focusFriend = (friend: string) => setFocusedFriend(friend);
 
-  const handleMessageInputChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) =>
     setMessageToSend((e.target as HTMLInputElement).value.trim());
 
   // TO DO: improve this
-  const handleMessageSend = (e: React.KeyboardEvent) => {
+  const sendMessage = (e: React.KeyboardEvent) => {
     // TO DO: move into 
     if (e.key && (e.key !== "Enter")) return;
     if (loading) return;
@@ -174,13 +175,14 @@ export default function Chat(): JSX.Element {
     setLoading(false);
   };
 
-  const handlePeopleTabChange = (value: string) => setPeopleTab(value);
+  const changeMobileTab = (value: string) => setMobileTab(value);
 
-  const handleRoomInputChange = (e: React.SyntheticEvent<EventTarget>) =>
+  const changePeopleTab = (value: string) => setPeopleTab(value);
+
+  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) =>
     setRoomToEnter((e.target as HTMLInputElement).value.trim());
 
-  const handleUserClick = (user: string) =>
-    user !== authname && setFocusedUser(user);
+  const focusUser = (user: string) => user !== authname && setFocusedUser(user);
   
   const preventSpam = () => {
     setSpamCount(prev => prev + 1);
@@ -204,19 +206,21 @@ export default function Chat(): JSX.Element {
       feedback={feedback}
       focusedFriend={focusedFriend}
       focusedUser={focusedUser}
-      handleRoomChange={handleRoomChange}
-      handleConnect={handleConnect}
-      handleDisconnect={handleDisconnect}
-      handleFriendClick={handleFriendClick}
-      handleMessageInputChange={handleMessageInputChange}
-      handleMessageSend={handleMessageSend}
-      handlePeopleTabChange={handlePeopleTabChange}
-      handleRoomInputChange={handleRoomInputChange}
-      handleUserClick={handleUserClick}
+      changeRoom={changeRoom}
+      connect={connect}
+      disconnect={disconnect}
+      focusFriend={focusFriend}
+      changeMessageInput={changeMessageInput}
+      sendMessage={sendMessage}
+      changeMobileTab={changeMobileTab}
+      changePeopleTab={changePeopleTab}
+      changeRoomInput={changeRoomInput}
+      focusUser={focusUser}
       loading={loading}
       messages={messages}
       messagesRef={messagesRef}
       messageToSend={messageToSend}
+      mobileTab={mobileTab}
       onlineFriends={onlineFriends}
       peopleTab={peopleTab}
       roomToEnter={roomToEnter}

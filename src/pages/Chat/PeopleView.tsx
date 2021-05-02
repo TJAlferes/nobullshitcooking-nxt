@@ -3,34 +3,29 @@ import { IUser } from '../../store/chat/types';
 export function PeopleView({
   focusedFriend,
   focusedUser,
-  handleFriendClick,
-  handlePeopleTabChange,
-  handleUserClick,
+  focusFriend,
+  changePeopleTab,
+  focusUser,
   onlineFriends,
   peopleTab,
   startPrivateMessage,
   users
 }: Props): JSX.Element {
+  const Tab = ({ tab }: TabProps) => (
+    <button
+      className={(peopleTab === tab) ? "people__tab--current" : "people__tab"}
+      onClick={() => changePeopleTab(tab)}
+    >
+      {tab}
+    </button>
+  );
+
   return (
     <div className="chat__people">
       <div className="people__tabs">
-        <button
-          className={
-            (peopleTab === "Room") ? "people__tab--current" : "people__tab"
-          }
-          onClick={() => handlePeopleTabChange("Room")}
-        >
-          Room
-        </button>
+        <Tab tab="Room" />
 
-        <button
-          className={
-            (peopleTab === "Friends") ? "people__tab--current" : "people__tab"
-          }
-          onClick={() => handlePeopleTabChange("Friends")}
-        >
-          Friends
-        </button>
+        <Tab tab="Friends" />
       </div>
 
       {peopleTab === "Room" && (
@@ -39,14 +34,17 @@ export function PeopleView({
             <li
               className="chat__person"
               key={username}
-              onClick={() => handleUserClick(username)}
+              onClick={() => focusUser(username)}
             >
-              <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`} />
+              <img
+                className="person-avatar"
+                src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`}
+              />
               
-              <span>{username}</span>
+              <span className="person-username">{username}</span>
 
               {focusedUser && focusedUser === username &&
-                <div className="chat__person-tooltip">
+                <div className="person-tooltip">
                   <button
                     className="person-tooltip__start-private-message"
                     onClick={() => startPrivateMessage(username)}
@@ -66,14 +64,17 @@ export function PeopleView({
             <li
               className="chat__person"
               key={username}
-              onClick={() => handleFriendClick(username)}
+              onClick={() => focusFriend(username)}
             >
-              <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`} />
+              <img
+                className="person-avatar"
+                src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`}
+              />
               
-              <span>{username}</span>
+              <span className="person-username">{username}</span>
               
               {focusedFriend && focusedFriend === username &&
-                <div className="chat__person-tooltip">
+                <div className="person-tooltip">
                   <button
                     className="person-tooltip__start-private-message"
                     onClick={() => startPrivateMessage(username)}
@@ -93,11 +94,15 @@ export function PeopleView({
 type Props = {
   focusedFriend: string | null;
   focusedUser: string | null;
-  handleFriendClick(friend: string): void;
-  handlePeopleTabChange(value: string): void;
-  handleUserClick(user: string): void;
+  focusFriend(friend: string): void;
+  changePeopleTab(value: string): void;
+  focusUser(user: string): void;
   onlineFriends: IUser[];
   peopleTab: string;
   startPrivateMessage(username: string): void;
   users: IUser[];
+};
+
+type TabProps = {
+  tab: string;
 };

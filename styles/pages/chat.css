@@ -2,6 +2,16 @@
 
 }*/
 
+.chat__desktop {display: block;}
+
+.chat__mobile {display: none;}
+
+.chat__mobile-tabs {}
+
+.chat__mobile-tab {}
+
+.chat__mobile-tab--curent {}
+
 .chat__main {
   border: none;
   border-radius: 0;
@@ -10,4 +20,10 @@
   flex-wrap: wrap;
   margin: 0;
   width: 100%;
+}
+
+@media (max-width: 799px) {
+  .chat__desktop {display: none;}
+
+  .chat__mobile {display: block;}
 }

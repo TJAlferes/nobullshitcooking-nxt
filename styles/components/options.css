@@ -1,86 +1,45 @@
 .chat__options {
-  border-left: 10px solid;
-  border-right: 9px solid;
-  border-top: 10px solid;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  height: 42px;
+  height: 40px;
   width: 100%;
 }
 
-.options__connection,
-.options__current-room,
-.options__change-room {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  height: 32px;
-}
+.connection__button {order: 1;}
 
-.options__connection {order: 1;}
+.current-room {order: 2;}
 
-.options__current-room {order: 2;}
+.change-room {order: 3;}
 
-.options__change-room {order: 3;}
-
-.change-room-button-frame,
-.connection-button-frame {
-  border-bottom: 2px solid #6cabe4;
-  display: block;
-}
-
-.change-room-button,
-.connection-button {
+.change-room__button,
+.connection__button {
   border: 1px solid;
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border-color: #ddd #666 #666 #ddd;
   border-radius: 1px;
   color: #222;
   cursor: pointer;
-  display: inline-block;
-  font-family: 'Play', sans-serif;
+  display: block;
   font-size: 1.3rem;
-  height: 30px;
+  height: 32px;
   line-height: 26px;
   padding: 0 8px;
   text-align: center;
   width: 85px;
 }
 
-.connection-spacer {
-  display: block;
+.current-room,
+.change-room {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   height: 32px;
-  width: 0px;
-}
-
-.change-room-label,
-.current-room-label {
-  font-size: 13px;
-  height: 32px;
-  line-height: 30px;
-}
-
-.change-room-label {padding: 0 10px 0 191px;}
-
-.current-room-label {padding: 0 10px 0 200px;}
-
-.change-room-input {
-  border: 2px solid #68abe6;
-  font-family: 'Play', sans-serif;
-  height: 32px;
-  padding-left: 7px;
-  width: 85px;
-}
-
-.change-room-input:focus {
-  outline: none;
-  border: 2px solid #87c6fd;
 }
 
 .current-room {
   border: 2px solid;
-  font-size: 13px;
+  font-size: 1.3rem;
   line-height: 30px;
   max-width: 85px;
   overflow: hidden;
@@ -88,12 +47,34 @@
   width: 85px;
 }
 
+.change-room__label,
+.current-room__label {
+  font-size: 1.3rem;
+  height: 32px;
+  line-height: 30px;
+  padding: 0 10px 0 200px;
+}
+
+.change-room__input {
+  border: 2px solid #68abe6;
+  height: 32px;
+  padding-left: 7px;
+  width: 85px;
+}
+
+.change-room__input:focus {
+  outline: none;
+  border: 2px solid #87c6fd;
+}
+
+
+
+/* JUST MAKE RESPONSIVE... FLEXBOX... GRID... */
+
 @media (max-width: 1279px) {
-  .connection-spacer {width: 0px;}
+  .current-room__label {padding-left: 50px;}
 
-  .current-room-label {padding-left: 50px;}
-
-  .change-room-label {padding-left: 41px;}
+  .change-room__label {padding-left: 41px;}
 }
 
 @media (max-width: 799px) {
@@ -102,18 +83,12 @@
     height: 118px;
   }
 
-  .options__connection,
-  .connection-button-frame,
-  .options__change-room {margin-bottom: 4px;}
+  .current-room__label {padding-left: 0px;}
 
-  .options__connection {width: 85px;}
+  .change-room {margin-bottom: 4px;}
 
-  .connection-spacer {width: 100%;}
-
-  .change-room-label {
+  .change-room__label {
     padding-right: 20px;
     padding-left: 0px;
   }
-
-  .current-room-label {padding-left: 0px;}
 }
