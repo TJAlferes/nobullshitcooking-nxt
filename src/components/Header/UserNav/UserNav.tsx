@@ -64,18 +64,12 @@ export default function UserNav({ theme }: Props): JSX.Element {
       {staffIsAuthenticated && (
         <>
           <Link href="/staff-dashboard">
-            <a
-              className="user-nav__link--authenticated"
-              data-test="staff-dashboard"
-            >
+            <a className="user-nav__link--auth" data-test="staff-dashboard">
               {`Hello, ${authname}`}
             </a>
           </Link>
 
-          <span
-            className="user-nav__link--authenticated"
-            onClick={handleLogout}
-          >
+          <span className="user-nav__link--auth" onClick={handleLogout}>
             Sign Out
           </span>
         </>
@@ -84,18 +78,12 @@ export default function UserNav({ theme }: Props): JSX.Element {
       {userIsAuthenticated && (
         <>
           <Link href="/dashboard">
-            <a
-              className="user-nav__link--authenticated"
-              data-test="dashboard"
-            >
+            <a className="user-nav__link--auth" data-test="dashboard">
               {`Hello, ${authname}`}
             </a>
           </Link>
 
-          <span
-            className="user-nav__link--authenticated"
-            onClick={handleLogout}
-          >
+          <span className="user-nav__link--auth"onClick={handleLogout}>
             Sign Out
           </span>
         </>

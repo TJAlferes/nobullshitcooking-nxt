@@ -1,98 +1,37 @@
-.two-column-a {
+.two-col-a {
   background-color: #fff;
   display: block;
   margin: 0 auto;
-  /*margin: 10px 0 10px 10px;*/
   max-width: 100%;
   min-width: 300px;
   /*overflow: auto;*/
   padding: 10px 0 10px 0;
-  /*padding: 10px 10px;*/
 }
 
-/*
-
-light
-
-*/
-
-.two-column-a-light {
+.two-col-a.light {
   background-color: #fff;
   color: #000;
 }
 
-.two-column-a-light .image-default-280-172,
-.two-column-a-light .image-default-100-62,
-.two-column-a-light .image-default-28-18 {
-  background-color: #c10006;
+.two-col-a.dark {
+  background-color: #222;
+  color: #aaa;
 }
 
-.two-column-a-light .user-new-plan__name-label {
-  color: #777;
-}
 
-.two-column-a-light .user-new-plan__name-input {
-  background-color: #fff;
-  border-color: #bbb;
-  color: #000;
-}
 
-.two-column-a-light .monthly-plan__header,
-.two-column-a-light .monthly-plan__header-day {
-  background-color: #b1d7f9;
-  color: #000;
-}
 
-.two-column-a-light .monthly-plan__body {
-  background-color: #b1d7f9;
-  border: 1px solid #b1d7f9;
-}
 
-.two-column-a-light .planner_day_white {
-  background-color: #fff;
-}
-
-.two-column-a-light .planner_day_green {
-  background-color: #d6ffd6;
-}
-
-.two-column-a-light .the_date {
-  color: #afafaf;
-}
-
-.two-column-a-light .expanded-day-container {
-  border: 1px solid #fff;
-}
-
-.two-column-a-light .planner_expanded_day {
-  background-color: #fff;
-  border: 1px solid #bfbfbf;
-  box-shadow: 1px 1px 1px #555;
-}
-
-.two-column-a-light #planner_recipes_list {
-  border: 1px solid #bfbfbf;
-}
-
-.two-column-a-light .planner_recipe {
-  background-color: #fff3cc;
-  border: 1px solid #ffdec3;
-  box-shadow: 1px 1px 1px #999;
-  color: #000;
-}
+/* DASHBOARD, FRIENDS, etc. */
 
 .two-column-a-light .dashboard-hr,
 .two-column-a-light .friends-hr,
 .two-column-a-light .plan__hr,
 .two-column-a-light .user-plan__hr,
-.two-column-a-light .user-new-plan__hr {
-  background-color: #bfbfbf;
-}
+.two-column-a-light .user-new-plan__hr {background-color: #bfbfbf;}
 
 .two-column-a-light .dashboard-content-item,
-.two-column-a-light .friends-list-item {
-  border-color: #ddd;
-}
+.two-column-a-light .friends-list-item {border-color: #ddd;}
 
 .two-column-a-light .dashboard-content-item:nth-child(even),
 .two-column-a-light .friends-list-item:nth-child(even) {
@@ -102,9 +41,9 @@ light
 .two-column-a-light .dashboard-content-item-action a:hover,
 .two-column-a-light .dashboard-content-item-name a:hover,
 .two-column-a-light .friends-list-item-username a:hover,
-.two-column-a-light .supplements td a:hover {
-  color: #c10006;
-}
+.two-column-a-light .supplements td a:hover {color: #c10006;}
+
+/* CHAT */
 
 .two-column-a-light .messenger-channel-current,
 .two-column-a-light .messenger-channel-label,
@@ -112,13 +51,9 @@ light
 .two-column-a-light .chat__message-list,
 .two-column-a-light .chat__input,
 .two-column-a-light .messenger-people,
-.two-column-a-light .messenger-room {
-  border-color: #ddd;
-}
+.two-column-a-light .messenger-room {border-color: #ddd;}
 
-.two-column-a-light .messenger-chat-message .chat-ts {
-  color: #bbb;
-}
+.two-column-a-light .messenger-chat-message .chat-ts {color: #bbb;}
 
 .two-column-a-light .messenger-channel-switch,
 .two-column-a-light .messenger-channel-label,
@@ -127,13 +62,9 @@ light
 .two-column-a-light .messenger-go-container,
 .two-column-a-light .messenger-room,
 .two-column-a-light .messenger-spacer-one,
-.two-column-a-light .messenger-spacer-two {
-  background-color: #ddd;
-}
+.two-column-a-light .messenger-spacer-two {background-color: #ddd;}
 
-.two-column-a-light .messenger-channel-current {
-  background-color: #fff;
-}
+.two-column-a-light .messenger-channel-current {background-color: #fff;}
 
 .two-column-a-light .messenger-friend,
 .two-column-a-light .messenger-user-in-room {
@@ -142,102 +73,24 @@ light
   color: #292929;
 }
 
-.two-column-a-light .expand-collapse {
-  background-color: #d5fdd5;
-}
+/* EXPANDCOLLAPSE */
 
-.two-column-a-light .expand-collapse-heading {
-  color: #777;
-}
+.two-column-a-light .expand-collapse {background-color: #d5fdd5;}
 
-/*
+.two-column-a-light .expand-collapse-heading {color: #777;}
 
-dark
 
-*/
 
-.two-column-a-dark {
-  background-color: #222;
-  color: #aaa;
-}
 
-.two-column-a-dark .image-default-280-172,
-.two-column-a-dark .image-default-100-62,
-.two-column-a-dark .image-default-28-18 {
-  background-color: #690004;
-}
-
-.two-column-a-dark .user-new-plan__name-label {
-  color: #999;
-}
-
-.two-column-a-dark .user-new-plan__name-input {
-  background-color: #1e1e1e;
-  border-color: #666;
-  color: #bbb;
-}
-
-.two-column-a-dark .monthly-plan__header,
-.two-column-a-dark .monthly-plan__header-day {
-  background-color: #507ea7;
-  color: #bbb;
-}
-
-.two-column-a-dark .monthly-plan__body {
-  background-color: #507ea7;
-  border: 1px solid #507ea7;
-}
-
-.two-column-a-dark .planner_day_white {
-  background-color: #222;
-}
-
-.two-column-a-dark .planner_day_green {
-  background-color: #3d6d3d;
-}
-
-.two-column-a-dark .the_date {
-  color: #666;
-}
-
-.two-column-a-dark .expanded-day-container {
-  border: 1px solid #222;
-}
-
-.two-column-a-dark .planner_expanded_day {
-  background-color: #222;
-  border: 1px solid #5a5a5a;
-  box-shadow: 1px 1px 1px #131313;
-}
-
-.two-column-a-dark #planner_recipes_list {
-  border: 1px solid #5a5a5a;
-}
-
-.two-column-a-dark .planner_recipe {
-  background-color: #afae8f;
-  border: 1px solid #826e52;
-  box-shadow: 1px 1px 1px #131313;
-  color: #000;
-}
-
-.two-column-a-dark .demo-only-notice {
-  background-color: #507ea7;
-  color: #000;
-}
 
 .two-column-a-dark .dashboard-hr,
 .two-column-a-dark .friends-hr,
 .two-column-a-dark .plan__hr,
 .two-column-a-dark .user-plan__hr,
-.two-column-a-dark .user-new-plan__hr {
-  background-color: #444;
-}
+.two-column-a-dark .user-new-plan__hr {background-color: #444;}
 
 .two-column-a-dark .dashboard-content-item,
-.two-column-a-dark .friends-list-item {
-  border-color: #3a3a3a;
-}
+.two-column-a-dark .friends-list-item {border-color: #3a3a3a;}
 
 .two-column-a-dark .dashboard-content-item:nth-child(even),
 .two-column-a-dark .friends-list-item:nth-child(even) {
@@ -247,9 +100,9 @@ dark
 .two-column-a-dark .dashboard-content-item-action a:hover,
 .two-column-a-dark .dashboard-content-item-name a:hover,
 .two-column-a-dark .friends-list-item-username a:hover,
-.two-column-a-dark .supplements td a:hover {
-  color: #690004;
-}
+.two-column-a-dark .supplements td a:hover {color: #690004;}
+
+/* CHAT */
 
 .two-column-a-dark .messenger-channel-current,
 .two-column-a-dark .messenger-channel-label,
@@ -257,13 +110,9 @@ dark
 .two-column-a-dark .messenger-chat,
 .two-column-a-dark .messenger-chat-input,
 .two-column-a-dark .messenger-people,
-.two-column-a-dark .messenger-room {
-  border-color: #444
-}
+.two-column-a-dark .messenger-room {border-color: #444}
 
-.two-column-a-dark .messenger-chat-message .chat-ts {
-  color: #666;
-}
+.two-column-a-dark .messenger-chat-message .chat-ts {color: #666;}
 
 .two-column-a-dark .messenger-channel-label,
 .two-column-a-dark .messenger-channel-switch,
@@ -272,9 +121,7 @@ dark
 .two-column-a-dark .messenger-go-container,
 .two-column-a-dark .messenger-room,
 .two-column-a-dark .messenger-spacer-two,
-.two-column-a-dark .messenger-spacer-one {
-  background-color: #444;
-}
+.two-column-a-dark .messenger-spacer-one {background-color: #444;}
 
 
 .two-column-a-dark .messenger-channel-current,
@@ -297,11 +144,11 @@ dark
   color: #bbb;
 }
 
+/* EXPANDCOLLAPSE */
+
 .two-column-a-dark .expand-collapse {
   background-color: #507ea7;
   color: #000;
 }
 
-.two-column-a-dark .expand-collapse-heading {
-  color: #ccc;
-}
+.two-column-a-dark .expand-collapse-heading {color: #ccc;}

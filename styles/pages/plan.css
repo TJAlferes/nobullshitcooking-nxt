@@ -69,6 +69,8 @@
 }
 
 .monthly-plan__body {
+  border-style: solid;
+  border-width: 1px;
   height: 300px;
   max-height: 300px;
   min-height: 300px;
@@ -102,7 +104,8 @@
 }
 
 .expanded-day-container {
-  border: 1px solid #fff;
+  border-style: solid;
+  border-width: 1px;
   height: 319px;
   margin: 1px 0 0 10px;
   order: 2;
@@ -122,7 +125,8 @@
 
 .plan__day,
 .plan__expanded-day {
-  background: #fff;
+  border-style: solid;
+  border-width: 1px;
   cursor: hand;
   cursor: pointer;
   max-height: 100%;
@@ -141,8 +145,8 @@
 }
 
 .plan__expanded-day {
-  border: 1px solid #bfbfbf;
-  box-shadow: 1px 1px 1px #555;
+  border-style: solid;
+  border-width: 1px;
   padding-left: 6px;
 }
 
@@ -155,8 +159,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  font-family: Arial, sans-serif;
-  font-size: 11px;
+  font-size: 1.1rem;
   height: 27px;
   margin: 6px 1px;
   max-width: 200px;
@@ -169,8 +172,53 @@
 .plan__recipe-image {margin: 1px 0 0 1px;}
 
 .plan__recipe-text {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
+  font-size: 1.1rem;
   text-align: center;
   width: 100%;
+}
+
+
+
+.light .monthly-plan__header,
+.light .monthly-plan__header-day {
+  background-color: #b1d7f9;
+  color: #000;
+}
+
+.light .monthly-plan__body {
+  background-color: #b1d7f9;
+  border-color: #b1d7f9;
+}
+
+.light .expanded-day-container {border-color: #fff;}
+
+.light .plan__date {color: #afafaf;}
+
+.light .plan__expanded-day {
+  background-color: #fff;
+  border-color: #bfbfbf;
+  box-shadow: 1px 1px 1px #555;
+}
+
+
+
+.dark .monthly-plan__header,
+.dark .monthly-plan__header-day {
+  background-color: #507ea7;
+  color: #bbb;
+}
+
+.dark .monthly-plan__body {
+  background-color: #507ea7;
+  border-color: #507ea7;
+}
+
+.dark .expanded-day-container {border-color: #222;}
+
+.dark .plan__date {color: #666;}
+
+.dark .plan__expanded-day {
+  background-color: #222;
+  border-color: #5a5a5a;
+  box-shadow: 1px 1px 1px #131313;
 }

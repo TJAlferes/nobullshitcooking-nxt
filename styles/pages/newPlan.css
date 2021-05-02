@@ -12,7 +12,8 @@
 }
 
 .new-plan__name-input {
-  border: 1px solid;
+  border-style: solid;
+  border-width: 1px;
   border-radius: 1px;
   display: block;
   height: 31px;
@@ -27,22 +28,9 @@
   width: 100%;
 }
 
-.plan__day--green,
-.plan__expanded-day--green {background: #d6ffd6;}
-
-.plan__day--white,
-.plan__expanded-day--white {background: #fff;}
-
-.expanded-day-container {
-  border: 1px solid #fff;
-  height: 319px;
-  margin: 1px 0 0 10px;
-  order: 2;
-  width: 150px;
-}
-
 .planner__recipes {
-  border: 1px solid #bfbfbf;
+  border-style: solid;
+  border-width: 1px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -54,6 +42,8 @@
 }
 
 .planner__recipes .planner__recipe {
+  border-style: solid;
+  border-width: 1px;
   display: inline-block;
   margin: 6px 1px;
 }
@@ -66,9 +56,10 @@
 
 .planner__recipes-tab {
   background-image: linear-gradient(to bottom, #eee, #bbb);
-  border: 1px solid;
   border-color: #ddd #666 #666 #ddd;
   border-radius: 1px;
+  border-style: solid;
+  border-width: 1px;
   color: #222;
   cursor: pointer;
   font-family: 'Play', sans-serif;
@@ -105,6 +96,58 @@
   margin-bottom: 10px;
   text-align: center;
 }
+
+
+
+.light .new-plan__name-label {color: #777;}
+
+.light .new-plan__name-input {
+  background-color: #fff;
+  border-color: #bbb;
+  color: #000;
+}
+
+.light .plan__day--white,
+.light .plan__expanded-day--white {background-color: #fff;}
+
+.light .plan__day--green,
+.light .plan__expanded-day--green {background-color: #d6ffd6;}
+
+.light .planner__recipes {border-color: #bfbfbf;}
+
+.light .planner__recipe {
+  background-color: #fff3cc;
+  border-color: #ffdec3;
+  box-shadow: 1px 1px 1px #999;
+  color: #000;
+}
+
+
+
+.dark .new-plan__name-label {color: #999;}
+
+.dark .new-plan__name-input {
+  background-color: #1e1e1e;
+  border-color: #666;
+  color: #bbb;
+}
+
+.dark .plan__day--white,
+.dark .plan__expanded-day--white {background-color: #222;}
+
+.dark .plan__day--green,
+.dark .plan__expanded-day--green {background-color: #3d6d3d;}
+
+.dark .planner__recipes {border-color: #5a5a5a;}
+
+.dark .planner__recipe {
+  background-color: #afae8f;
+  border-color: #826e52;
+  box-shadow: 1px 1px 1px #131313;
+  color: #000;
+}
+
+
 
 @media (max-width: 1209px) {
   .planner__finish-area {padding: 10px 0;}
