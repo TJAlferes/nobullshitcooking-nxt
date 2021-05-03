@@ -11,7 +11,7 @@ export function FavoriteRecipes({
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
-      <h2 className="dashboard-content__heading--tall">Favorite Recipes</h2>
+      <h2 className="dashboard-content__h2--tall">Favorite Recipes</h2>
 
       <Subtabs subTabClick={subTabClick} subTab={subTab} />
 

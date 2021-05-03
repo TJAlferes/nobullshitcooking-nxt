@@ -67,16 +67,15 @@ export function MessagesView({
         })}
       </ul>
 
-      <div className="chat__input">
-        <input
-          disabled={status !== "Connected"}
-          name="chat-input"
-          onChange={changeMessageInput}
-          onKeyUp={(e) => sendMessage(e)}
-          type="text"
-          value={messageToSend}
-        />
-      </div>
+      <input
+        className="chat__input"
+        disabled={status !== "Connected"}
+        name="chat-input"
+        onChange={changeMessageInput}
+        onKeyUp={(e) => sendMessage(e)}
+        type="text"
+        value={messageToSend}
+      />
     </div>
   );
 }

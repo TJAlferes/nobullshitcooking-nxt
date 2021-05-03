@@ -1,10 +1,8 @@
 export function Tabs({ tabClick, tab }: Props): JSX.Element {
-  function TabButton({ displayText, tabName }: TabButtonProps) {
+  function Tab({ displayText, tabName }: TabProps) {
     return (
       <button
-        className={
-          tab === tabName ? "dashboard__tab--active" : "dashboard__tab"
-        }
+        className={tab === tabName ? "dashboard-tab--active" : "dashboard-tab"}
         name={tabName}
         onClick={e => tabClick(e)}
       >
@@ -14,12 +12,12 @@ export function Tabs({ tabClick, tab }: Props): JSX.Element {
   }
 
   return (
-    <div className="dashboard__tabs">
-      <TabButton displayText="Avatar" tabName="avatar" />
-      <TabButton displayText="Plans" tabName="plans" />
-      <TabButton displayText="Recipes" tabName="recipes" />
-      <TabButton displayText="Ingredients" tabName="ingredients" />
-      <TabButton displayText="Equipment" tabName="equipment" />
+    <div className="dashboard-tabs">
+      <Tab displayText="Avatar" tabName="avatar" />
+      <Tab displayText="Plans" tabName="plans" />
+      <Tab displayText="Recipes" tabName="recipes" />
+      <Tab displayText="Ingredients" tabName="ingredients" />
+      <Tab displayText="Equipment" tabName="equipment" />
     </div>
   );
 }
@@ -29,7 +27,7 @@ type Props = {
   tab: string;
 };
 
-type TabButtonProps = {
+type TabProps = {
   displayText: string;
   tabName: string;
 };

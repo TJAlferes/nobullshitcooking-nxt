@@ -34,7 +34,7 @@ export default function Dashboard(): JSX.Element {
     myPublicRecipes,
     mySavedRecipes
   } = useSelector(state => state.data);
-  const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -215,7 +215,7 @@ export default function Dashboard(): JSX.Element {
       subTab={subTab}
       tab={tab}
       tinyCrop={tinyCrop}
-      twoColumnATheme={twoColumnATheme}
+      theme={theme}
     />
   );
 }

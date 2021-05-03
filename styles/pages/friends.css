@@ -2,67 +2,29 @@
 
 }*/
 
-.friends__find {
+.friends-find {
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
   width: 100%;
 }
 
-.friends__find-label {
-  font-size: 1.3rem;
-  font-weight: 900;
+.friends-find__label {
+  font-size: 1.4rem;
   margin: 7px 3px 10px 0;
 }
 
-.friends__find-input {
+.friends-find__input {
   height: 30px;
   margin: 0 30px 10px 0;
 }
 
-.friends__hr {
-  border: 0 none;
-  height: 1px;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.friends__tabs {
-  border-bottom: 2px solid #6cabe4;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
-.friends__tab {
-  background-image: linear-gradient(to bottom, #eee, #bbb);
-  border: 1px solid;
-  border-color: #ddd #666 #666 #ddd;
-  border-radius: 1px;
-  color: #222;
-  cursor: pointer;
-  height: 30px;
-  font-family: 'Play', sans-serif;
-  font-size: 1.3rem;
-  line-height: 26px;
-  padding: 0 8px;
-  width: 33.33%;
-}
-
-.friends__tab--active {
-  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
-}
-
-.friends__list {
-  width: 100%;
-}
-
-.friends__find-request-button,
-.friends__find-block-button {
+.friends-find__button--request,
+.friends-find__button--block {
   border: 1px solid #aaa;
   border-radius: 2px;
   color: #000;
   display: block;
-  font-family: 'Play', sans-serif;
   height: 30px;
   line-height: 26px;
   margin: 0 30px 10px 0;
@@ -72,19 +34,51 @@
   width: 235px;
 }
 
-.friends__find-request-button {
+.friends-find__button--request {
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
 }
 
-.friends__find-block-button {
+.friends-find__button--block {
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
 }
 
-.friends__list-none {
-  font-size: 13px;
+.friends-tabs {
+  border-bottom: 2px solid #6cabe4;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+  width: 100%;
 }
 
-.friends__list-item {
+.friends-tab,
+.friends-tab--active {
+  border: 1px solid;
+  border-color: #ddd #666 #666 #ddd;
+  border-radius: 1px;
+  color: #222;
+  cursor: pointer;
+  flex-grow: 1;
+  font-size: 1.4rem;
+  height: 30px;
+  line-height: 26px;
+  padding: 0 8px;
+  text-align: center;
+}
+
+.friends-tab {
+  background-image: linear-gradient(to bottom, #eee, #bbb);
+}
+
+.friends-tab--active {
+  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
+}
+
+.friends-list {width: 100%;}
+
+/*.friends-list--none {font-size: 1.3rem;} ???*/
+
+.friends-item {
   align-items: center;
   border-bottom: 1px solid;
   border-left: 1px solid;
@@ -97,31 +91,25 @@
   width: 100%;
 }
 
-.friends__list-item:first-of-type {
-  border-top: 1px solid;
-}
+.friends-item:first-of-type {border-top: 1px solid;}
 
-.friends__list-item-avatar {
+.friends-item-avatar {
   height: 25px;
   margin-left: 1px;
   width: 25px;
 }
 
-.friends__list-item-username {
+.friends-item-username {
   padding: 0 10px;
   width: 760px;
 }
 
-.friends__list-item-username a {
-  color: #68abe6;
-}
+/* a NEEDS CLASS */
+.friends-item-username__a,
+.friends-item-username__a:visited {color: #68abe6;}
 
-.friends__list-item-username a:visited {
-  color: #68abe6;
-}
-
-.friends__list-item-action,
-.friends__list-item-delete {
+.friends-item-action,
+.friends-item-delete {
   border: 1px solid #aaa;
   border-radius: 2px;
   color: #000;
@@ -133,33 +121,48 @@
   width: 75px;
 }
 
-.friends__list-item-action {
+.friends-item-action {
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
 }
 
-.friends__list-item-delete {
+.friends-item-delete {
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
 }
 
-@media (max-width: 1209px) {
-  .friends__find {
-    flex-direction: column;
-  }
 
-  .friends__find-label,
-  .friends__find-input,
-  .friends__find-request-button,
-  .friends__find-block-button {
+
+.light .friends-item {border-color: #ddd;}
+
+.light .friends-item:nth-child(even) {background-color: #eee;}
+
+.light .friends-item-username__a:hover {color: #c10006;}
+
+
+
+.dark .friends-item {border-color: #3a3a3a;}
+
+.dark .friends-item:nth-child(even) {background-color: #2d2d2d;}
+
+.dark .friends-item-username__a:hover {color: #690004;}
+
+
+
+/* change */
+@media (max-width: 1209px) {
+  .friends-find {flex-direction: column;}
+
+  .friends-find__label,
+  .friends-find__input,
+  .friends-find__button--request,
+  .friends-find__button--block {
     display: block;
     margin: 0 auto 10px auto;
   }
 
-  .friends__tab {
-    padding: 0;
-  }
+  .friends-tab {padding: 0;}
 
-  .friends__list-item-action,
-  .friends__list-item-delete {
+  .friends-item-action,
+  .friends-item-delete {
     padding: 0 2px;
     width: 44px;
   }

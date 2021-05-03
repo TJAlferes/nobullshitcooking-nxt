@@ -139,8 +139,6 @@ export function NewPlanView({
         </div>
       </div>
 
-      <hr className="plan__hr" />
-
       <div className="new-plan__calendar-container">
         {memoizedMonthlyPlan}
 

@@ -8,7 +8,7 @@ export function Equipment({
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
-      <h2 className="dashboard-content__heading">Private Equipment</h2>
+      <h2 className="dashboard-content__h2">Private Equipment</h2>
 
       <Link href="/user-equipment/submit">
         <a className="new-entity">Create New Equipment</a>
@@ -20,7 +20,7 @@ export function Equipment({
             <span className="dashboard-content__item-tiny">
               {e.image !== "nobsc-equipment-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-equipment/${e.image}-tiny`} />
-                : <div className="image-default-28-18"></div>
+                : <div className="img-28-18"></div>
               }
             </span>
 

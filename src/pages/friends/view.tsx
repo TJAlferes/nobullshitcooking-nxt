@@ -15,29 +15,29 @@ export function FriendsView({
   unblockUser,
   loading,
   tab,
-  twoColumnATheme,
+  theme,
   userToFind
 }: Props): JSX.Element {
   return (
-    <div className={`friends two-column-a ${twoColumnATheme}`}>
+    <div className={`friends two-col-a ${theme}`}>
       <h1>Friends</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <div className="friends__find">
-        <label className="friends__find-label" htmlFor="friends-find-input">
+      <div className="friends-find">
+        <label className="friends-find__label" htmlFor="friends-find-input">
           Username:
         </label>
 
         <input
-          className="friends__find-input"
+          className="friends-find__input"
           name="friends-find-input"
           onChange={inputChange}
           value={userToFind}
         />
 
         <button
-          className="friends__find-request-button"
+          className="friends-find__button--request"
           disabled={loading}
           name="friends-find-request"
           onClick={requestFriendship}
@@ -46,7 +46,7 @@ export function FriendsView({
         </button>
 
         <button
-          className="friends__find-block-button"
+          className="friends-find__button--block"
           disabled={loading}
           name="friends-find-block"
           onClick={blockUser}
@@ -55,13 +55,9 @@ export function FriendsView({
         </button>
       </div>
 
-      <hr className="friends__hr" />
-
-      <div className="friends__tabs">
+      <div className="friends-tabs">
         <button
-          className={
-            tab === "accepted" ? "friends__tab--active" : "friends__tab"
-          }
+          className={tab === "accepted" ? "friends-tab--active" : "friends-tab"}
           name="current"
           onClick={() => tabChange("accepted")}
         >
@@ -70,9 +66,7 @@ export function FriendsView({
 
         <button
           className={
-            tab === "pending-received"
-            ? "friends__tab--active"
-            : "friends__tab"
+            tab === "pending-received" ? "friends-tab--active" : "friends-tab"
           }
           name="pending"
           onClick={() => tabChange("pending-received")}
@@ -81,9 +75,7 @@ export function FriendsView({
         </button>
 
         <button
-          className={
-            tab === "blocked" ? "friends__tab--active" : "friends__tab"
-          }
+          className={tab === "blocked" ? "friends-tab--active" : "friends-tab"}
           name="blocked"
           onClick={() => tabChange("blocked")}
         >
@@ -91,24 +83,24 @@ export function FriendsView({
         </button>
       </div>
 
-      <div className="friends__list">
+      <div className="friends-list">
         {myFriendships
           .filter(f => f.status === tab)
           .map(f => (
-            <div className="friends__list-item" key={f.username}>
-              <span className="friends__list-item-avatar">
+            <div className="friends-item" key={f.username}>
+              <span className="friends-item-avatar">
                 <img src={`https://s3.amazonaws.com/nobsc-user-avatars/${f.avatar}-tiny`} />
               </span>
 
-              <span className="friends__list-item-username">
+              <span className="friends-item-username">
                 <Link href={`/profile/${f.username}`}>
-                  <a>{f.username}</a>
+                  <a className="friends-item-username__a">{f.username}</a>
                 </Link>
               </span>
 
               {f.status === "pending-received" &&
                 <button
-                  className="friends__list-item-action"
+                  className="friends-item-action"
                   disabled={loading}
                   name="accept"
                   onClick={acceptFriendship}
@@ -120,7 +112,7 @@ export function FriendsView({
 
               {f.status === "pending-received" &&
                 <button
-                  className="friends__list-item-delete"
+                  className="friends-item-delete"
                   disabled={loading}
                   name="reject"
                   onClick={rejectFriendship}
@@ -132,7 +124,7 @@ export function FriendsView({
 
               {f.status === "accepted" &&
                 <button
-                  className="friends__list-item-delete"
+                  className="friends-item-delete"
                   disabled={loading}
                   name="unfriend"
                   onClick={deleteFriendship}
@@ -144,7 +136,7 @@ export function FriendsView({
               
               {f.status === "blocked" &&
                 <button
-                  className="friends__list-item-delete"
+                  className="friends-item-delete"
                   disabled={loading}
                   name="unblock"
                   onClick={unblockUser}
@@ -174,6 +166,6 @@ type Props = {
   unblockUser(e: React.SyntheticEvent<EventTarget>): void;
   loading: boolean;
   tab: string;
-  twoColumnATheme: string;
+  theme: string;
   userToFind: string;
 };

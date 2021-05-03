@@ -10,6 +10,7 @@ State
 */
 
 export interface IThemeState {
+  theme: string;
   headerTheme: string
   mainTheme: string
   footerTheme: string
@@ -31,7 +32,7 @@ Actions
 
 */
 
-export type ThemeActions = IThemeDarkTrigger|IThemeLightTrigger;
+export type ThemeActions = IThemeDarkTrigger | IThemeLightTrigger;
 
 interface IThemeDarkTrigger {
   type: typeof actionTypes.THEME_DARK_TRIGGER

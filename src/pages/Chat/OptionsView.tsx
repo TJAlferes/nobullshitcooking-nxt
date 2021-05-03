@@ -21,7 +21,7 @@ export function OptionsView({
       <div className="current-room">
         <span className="current-room__label">Current Room:</span>
 
-        <span className="current-room">{room}</span>
+        <span className="current-room__value">{room}</span>
       </div>
 
       <div className="change-room">

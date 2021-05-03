@@ -1,11 +1,11 @@
 export function Subtabs({ subTabClick, subTab }: Props): JSX.Element {
-  function SubtabButton({ displayText, subTabName }: SubtabButtonProps) {
+  function Subtab({ displayText, subTabName }: SubtabProps) {
     return (
       <button
         className={
           subTab === subTabName
-          ? "dashboard__subtab--active"
-          : "dashboard__subtab"
+            ? "dashboard-subtab--active"
+            : "dashboard-subtab"
         }
         name={subTabName}
         onClick={e => subTabClick(e)}
@@ -16,11 +16,11 @@ export function Subtabs({ subTabClick, subTab }: Props): JSX.Element {
   }
 
   return (
-    <div className="dashboard__subtabs">
-      <SubtabButton displayText="Private" subTabName="private" />
-      <SubtabButton displayText="Public" subTabName="public" />
-      <SubtabButton displayText="Favorite" subTabName="favorite" />
-      <SubtabButton displayText="Saved" subTabName="saved" />
+    <div className="dashboard-subtabs">
+      <Subtab displayText="Private" subTabName="private" />
+      <Subtab displayText="Public" subTabName="public" />
+      <Subtab displayText="Favorite" subTabName="favorite" />
+      <Subtab displayText="Saved" subTabName="saved" />
     </div>
   );
 }
@@ -30,7 +30,7 @@ type Props = {
   subTab: string;
 };
 
-type SubtabButtonProps = {
+type SubtabProps = {
   displayText: string;
   subTabName: string;
 };

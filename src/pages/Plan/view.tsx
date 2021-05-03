@@ -21,8 +21,6 @@ export function PlanView({
         </div>
       </div>
 
-      <hr className="plan__hr" />
-
       <div className="plan__calendar-container">
         <div className="plan__monthly-plan">
           <div className="monthly-plan">

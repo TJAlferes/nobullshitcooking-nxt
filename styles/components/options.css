@@ -69,6 +69,28 @@
 
 
 
+/*.light .chat__options,*/
+.light .current-room,
+.light .change-room,
+.light .change-room__label {background-color: #ddd;} /*{border-color: #ddd;}*/
+
+.light .current-room__value {background-color: #fff;}
+
+
+
+/*.dark .chat__options,*/
+.dark .current-room,
+.dark .change-room,
+.dark .change-room__label {background-color: #444;} /*{border-color: #444;}*/
+
+.dark .current-room__value,
+.dark .change-room__input {
+  background-color: #1e1e1e;
+  color: #bbb;
+}
+
+
+
 /* JUST MAKE RESPONSIVE... FLEXBOX... GRID... */
 
 @media (max-width: 1279px) {

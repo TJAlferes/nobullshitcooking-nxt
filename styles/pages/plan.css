@@ -2,13 +2,6 @@
 
 }*/
 
-.plan__hr {
-  border: 0 none;
-  height: 1px;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
 .plan__name {
   display: flex;
   flex-direction: row;

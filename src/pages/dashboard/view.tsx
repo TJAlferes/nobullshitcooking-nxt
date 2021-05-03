@@ -58,10 +58,10 @@ export function DashboardView({
   subTab,
   tab,
   tinyCrop,
-  twoColumnATheme
+  theme
 }: Props): JSX.Element {
   return (
-    <div className={`dashboard two-column-a ${twoColumnATheme}`}>
+    <div className={`dashboard two-col-a ${theme}`}>
       <h1>{authname}</h1>
 
       <p className="feedback">{feedback}</p>
@@ -71,10 +71,7 @@ export function DashboardView({
       {(tab === "avatar") && (
         <>
           {!avatar && (
-            <Avatar
-              authname={authname}
-              onSelectFile={onSelectFile}
-            />
+            <Avatar authname={authname} onSelectFile={onSelectFile} />
           )}
 
           {avatar && (
@@ -211,5 +208,5 @@ type Props = {
   subTab: string;
   tab: string;
   tinyCrop: string;
-  twoColumnATheme: string;
+  theme: string;
 };

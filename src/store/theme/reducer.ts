@@ -3,6 +3,7 @@ import { actionTypes, IThemeState, ThemeActions } from './types';
 const { THEME_DARK_TRIGGER, THEME_LIGHT_TRIGGER } = actionTypes;
 
 const initialState: IThemeState = {
+  theme: "light",
   headerTheme: "header-light",
   mainTheme: "main-light",
   footerTheme: "footer-light",
@@ -27,6 +28,7 @@ export const themeReducer = (
       return {
         ...state,
         ...{
+          theme: "dark",
           headerTheme: "header-dark",
           mainTheme: "main-dark",
           footerTheme: "footer-dark",

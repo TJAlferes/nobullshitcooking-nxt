@@ -14,25 +14,7 @@
   overflow-y: scroll;
 }
 
-.chat__input {
-  border-top: 1px solid;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-}
-
-.chat__input input {
-  border: 2px solid #68abe6;
-  height: 30px;
-  padding-left: 7px;
-  width: 100%;
-}
-
-.chat__input input:focus {
-  border: 2px solid #87c6fd;
-  outline: none;
-}
+/*.chat__message {}*/
 
 .message__admin {
   color: #c10006;
@@ -44,6 +26,44 @@
 .message__other {color: #326fff;}
 
 .message__private {color: #a100ff;}
+
+.chat__input {
+  border: 2px solid #68abe6;
+  bottom: 0;
+  height: 30px;
+  left: 0;
+  padding-left: 7px;
+  position: absolute;
+  width: 100%;
+}
+
+.chat__input:focus {
+  border: 2px solid #87c6fd;
+  outline: none;
+}
+
+
+
+.light .chat__message-list {border-color: #ddd;}
+
+.light .message__ts {color: #bbb;}
+
+
+
+/*.dark .chat__messages,
+.dark .chat__input,*/
+.dark .chat__message-list {border-color: #444;}
+
+.dark .message__ts {color: #666;}
+
+.dark .chat__messages,
+.dark .chat__message-list,
+.dark .chat__message,
+.dark .chat__input {
+  background-color: #1e1e1e;
+  color: #bbb;
+}
+
 
 
 /* TO DO: just fill remaining space after 180px of People */
