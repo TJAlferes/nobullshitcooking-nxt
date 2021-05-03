@@ -9,9 +9,7 @@ body, html, #root {
   min-height: 100vh;
 }
 
-html {
-  font-size: 10px;
-}
+html {font-size: 10px;}
 
 body {
   font-family: Helvetica, sans-serif;
@@ -117,17 +115,23 @@ h4 {font-size: 1.4rem;}
   min-width: 28px;
 }
 
+
+
 .light .img-280-172,
 .light .img-100-62,
 .light .img-28-18 {
   background-color: #c10006;
 }
 
+
+
 .dark .img-280-172,
 .dark .img-100-62,
 .dark .img-28-18 {
   background-color: #690004;
 }
+
+
 
 @media (max-width: 899px) {
   body, html, #root {min-width: 300px;}
@@ -172,6 +176,12 @@ h4 {font-size: 1.4rem;}
 @import './components/suggestions.css';
 @import './components/userNav.css';
 
+@import './layouts/navGridA.css';
+@import './layouts/oneColumnA.css';
+@import './layouts/tableA.css';
+@import './layouts/twoColumnA.css';
+@import './layouts/twoColumnB.css';
+
 @import './pages/cart.css';
 @import './pages/chat.css';
 @import './pages/checkout.css';
@@ -198,9 +208,3 @@ h4 {font-size: 1.4rem;}
 @import './pages/recipes.css';
 @import './pages/register.css';
 @import './pages/supply.css';
-
-@import './themes/navGridA.css';
-@import './themes/oneColumnA.css';
-@import './themes/tableA.css';
-@import './themes/twoColumnA.css';
-@import './themes/twoColumnB.css';

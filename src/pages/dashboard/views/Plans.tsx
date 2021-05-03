@@ -16,7 +16,7 @@ export function Plans({
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
-      <h2 className="dashboard-content__heading">Plans</h2>
+      <h2 className="dashboard__h2">Plans</h2>
 
       {(!creatingPlan && !editingId) &&
         <Link href="/user-plan/submit">
@@ -39,7 +39,7 @@ export function Plans({
       {modalActive
         ? (
           <AriaModal
-            dialogClass="dashboard-content__modal"
+            dialogClass="dashboard-modal"
             focusDialog={true}
             focusTrapOptions={{returnFocusOnDeactivate: false}}
             getApplicationNode={getApplicationNode}
@@ -47,19 +47,19 @@ export function Plans({
             titleText="Cancel?"
             underlayClickExits={false}
           >
-            <p className="dashboard-content__prompt">
+            <p className="dashboard-prompt">
               {'Delete Plan: '}{deleteName}{' ?'}
             </p>
 
             <button
-              className="dashboard-content__modal-cancel-button"
+              className="dashboard-modal__button--cancel"
               onClick={deactivateModal}
             >
               No
             </button>
 
             <button
-              className="dashboard-content__modal-action-button"
+              className="dashboard-modal__button--action"
               onClick={deletePlan}
             >
               Yes, Delete Plan
@@ -71,20 +71,24 @@ export function Plans({
 
       {myPlans.length
         ? myPlans.map(p => (
-          <div className="dashboard-content__item" key={p.id}>
-            <span className="dashboard-content__item-name">
-              <Link href={`/user-plan/${p.id}`}><a>{p.name}</a></Link>
+          <div className="dashboard-item" key={p.id}>
+            <span className="dashboard-item-name">
+              <Link href={`/user-plan/${p.id}`}>
+                <a className="dashboard-item__a">{p.name}</a>
+              </Link>
             </span>
 
             {(!creatingPlan && !editingId) &&
-              <span className="dashboard-content__item-action">
-                <Link href={`/user-plan/edit/${p.id}`}><a>Edit</a></Link>
+              <span className="dashboard-item-action">
+                <Link href={`/user-plan/edit/${p.id}`}>
+                  <a className="dashboard-item__a">Edit</a>
+                </Link>
               </span>
             }
 
             {(!creatingPlan && !editingId) &&
               <span
-                className="dashboard-content__item-delete"
+                className="dashboard-item-delete"
                 onClick={() => activateModal(p.id, p.name)}
               >
                 Delete
@@ -93,7 +97,7 @@ export function Plans({
           </div>
         ))
         : (
-          <div className="dashboard-content__none">
+          <div className="dashboard-no-content">
             You haven't created any plans yet.
           </div>
         )

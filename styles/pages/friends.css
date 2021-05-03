@@ -104,9 +104,8 @@
   width: 760px;
 }
 
-/* a NEEDS CLASS */
-.friends-item-username__a,
-.friends-item-username__a:visited {color: #68abe6;}
+.friends-item__a,
+.friends-item__a:visited {color: #68abe6;}
 
 .friends-item-action,
 .friends-item-delete {
@@ -135,7 +134,7 @@
 
 .light .friends-item:nth-child(even) {background-color: #eee;}
 
-.light .friends-item-username__a:hover {color: #c10006;}
+.light .friends-item__a:hover {color: #c10006;}
 
 
 
@@ -143,7 +142,7 @@
 
 .dark .friends-item:nth-child(even) {background-color: #2d2d2d;}
 
-.dark .friends-item-username__a:hover {color: #690004;}
+.dark .friends-item__a:hover {color: #690004;}
 
 
 

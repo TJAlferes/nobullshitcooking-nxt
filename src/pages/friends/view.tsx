@@ -94,7 +94,7 @@ export function FriendsView({
 
               <span className="friends-item-username">
                 <Link href={`/profile/${f.username}`}>
-                  <a className="friends-item-username__a">{f.username}</a>
+                  <a className="friends-item__a">{f.username}</a>
                 </Link>
               </span>
 

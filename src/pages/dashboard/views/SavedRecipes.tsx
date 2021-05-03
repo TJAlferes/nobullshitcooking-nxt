@@ -11,26 +11,28 @@ export function SavedRecipes({
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
-      <h2 className="dashboard-content__heading--tall">Saved Recipes</h2>
+      <h2 className="dashboard__h2--tall">Saved Recipes</h2>
 
       <Subtabs subTabClick={subTabClick} subTab={subTab} />
 
       {mySavedRecipes.length
         ? mySavedRecipes.map(r => (
-          <div className="dashboard-content__item" key={r.id}>
-            <span className="dashboard-content__item-tiny">
+          <div className="dashboard-item" key={r.id}>
+            <span className="dashboard-item-tiny">
               {r.recipe_image !== "nobsc-recipe-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${r.recipe_image}-tiny`} />
-                : <div className="image-default-28-18"></div>
+                : <div className="img-28-18"></div>
               }
             </span>
 
-            <span className="dashboard-content__item-name">
-              <Link href={`/recipe/${r.id}`}><a>{r.title}</a></Link>
+            <span className="dashboard-item-name">
+              <Link href={`/recipe/${r.id}`}>
+                <a className="dashboard-item__a">{r.title}</a>
+              </Link>
             </span>
 
             <span
-              className="dashboard-content__item-delete"
+              className="dashboard-item-unsave"
               onClick={() => unsaveRecipe(r.id)}
             >
               Unsave
@@ -38,7 +40,7 @@ export function SavedRecipes({
           </div>
         ))
         : (
-          <div className="dashboard-content__none">
+          <div className="dashboard-no-content">
             You haven't saved any recipes yet.
           </div>
         )

@@ -17,7 +17,7 @@ export function PublicRecipes({
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
-      <h2 className="dashboard-content__heading">Public Recipes</h2>
+      <h2 className="dashboard__h2">Public Recipes</h2>
 
       <Link href="/user-recipes/public/submit">
         <a className="new-entity">Create New Public Recipe</a>
@@ -26,7 +26,7 @@ export function PublicRecipes({
       {modalActive
         ? (
           <AriaModal
-            dialogClass="dashboard-content__modal"
+            dialogClass="dashboard-modal"
             focusDialog={true}
             focusTrapOptions={{returnFocusOnDeactivate: false}}
             getApplicationNode={getApplicationNode}
@@ -34,19 +34,19 @@ export function PublicRecipes({
             titleText="Cancel?"
             underlayClickExits={false}
           >
-            <p className="dashboard-content__prompt">
+            <p className="dashboard-prompt">
               {'Disown Recipe: '}{deleteName}{' ?'}
             </p>
 
             <button
-              className="dashboard-content__modal-cancel-button"
+              className="dashboard-modal__button--cancel"
               onClick={deactivateModal}
             >
               No
             </button>
 
             <button
-              className="dashboard-content__modal-action-button"
+              className="dashboard-modal__button--action"
               onClick={disownPublicRecipe}
             >
               Yes, Disown Recipe
@@ -60,24 +60,28 @@ export function PublicRecipes({
 
       {myPublicRecipes.length
         ? myPublicRecipes.map(r => (
-          <div className="dashboard-content__item" key={r.id}>
-            <span className="dashboard-content__item-tiny">
+          <div className="dashboard-item" key={r.id}>
+            <span className="dashboard-item-tiny">
               {r.recipe_image !== "nobsc-recipe-default"
                 ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe${r.recipe_image}-tiny`} />
-                : <div className="image-default-28-18"></div>
+                : <div className="img-28-18"></div>
               }
             </span>
 
-            <span className="dashboard-content__item-name">
-              <Link href={`/recipe/${r.id}`}><a>{r.title}</a></Link>
+            <span className="dashboard-item-name">
+              <Link href={`/recipe/${r.id}`}>
+                <a className="dashboard-item__a">{r.title}</a>
+              </Link>
             </span>
 
-            <span className="dashboard-content__item-action">
-              <Link href={`/user-recipe/public/edit/${r.id}`}><a>Edit</a></Link>
+            <span className="dashboard-item-action">
+              <Link href={`/user-recipe/public/edit/${r.id}`}>
+                <a className="dashboard-item__a">Edit</a>
+              </Link>
             </span>
 
             <span
-              className="dashboard-content__item-delete"
+              className="dashboard-item-delete"
               onClick={() => activateModal(r.id, r.title)}
             >
               Disown
@@ -85,7 +89,7 @@ export function PublicRecipes({
           </div>
         ))
         : (
-          <div className="dashboard-content__none">
+          <div className="dashboard-no-content">
             You haven't created any public recipes yet.
           </div>
         )
