@@ -7,8 +7,11 @@ function buildMatch(term: string, currIdx: string) {
 }
 
 function buildFrom(current: number, resultsPerPage: number) {
-  if (!current || !resultsPerPage) return;
   return (current - 1) * resultsPerPage;
+}
+
+function buildSort(sortDirection: string, sortField: string) {
+  return [{[`${sortField}.keyword`]: sortDirection}];
 }
 
 function getTermFilterValue(field: any, fieldValue: any) {
@@ -51,23 +54,17 @@ function buildRequestFilter(filters: any, currIdx: string) {
       currIdx === "recipes" &&
       ["cuisine_name", "method_name", "recipe_type_name"]
         .includes(filter.field)
-    ) {
-      return [...acc, getTermFilter(filter)];
-    }
+    ) return [...acc, getTermFilter(filter)];
     
     if (
       currIdx === "ingredients" &&
       ["ingredient_type_name"].includes(filter.field)
-    ) {
-      return [...acc, getTermFilter(filter)];
-    }
+    ) return [...acc, getTermFilter(filter)];
     
     if (
       currIdx === "equipment" &&
       ["equipment_type_name"].includes(filter.field)
-    ) {
-      return [...acc, getTermFilter(filter)];
-    }
+    ) return [...acc, getTermFilter(filter)];
   }, []);
 
   if (filters.length < 1) return;

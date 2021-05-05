@@ -9,34 +9,39 @@ import {
 } from '../utils/search';
 import { NOBSCAPI as endpoint } from './NOBSCAPI';
 
-// put currentIndex on window?
-
 export function makeSearchConfig(store: Store) {
-  /*function getSearchState() {
-    const { search } = store.getState();
-    return search;
-  }
-  
-  function getFacetsConfig() {
-    if (getSearchState().currentIndex === "recipes") {
+  function getFacets() {
+    const { search: { currentIndex } } = store.getState();
+
+    if (currentIndex === "recipes") {
       return {
-        cuisine_name: {type: "value", size: 24},  // change size
-        //ingredient_type_names, (for allergies)
-        //method_names,
-        recipe_type_name: {type: "value", size: 12}
+        // TO DO: allergies (ingredient_type_name and ingredient fullname)
+        cuisine_name: {type: "value", size: 24},  // TO DO: change size
+        method_name: {type: "value", size: 12},
+        recipe_type_name: {type: "value", size: 12},
       };
-    } else if (getSearchState().currentIndex === "ingredients") {
+    }
+    
+    if (currentIndex === "ingredients") {
       return {ingredient_type_name: {type: "value", size: 18}};
     }
+
+    if (currentIndex === "equipment") {
+      return {equipment_type_name: {type: "value", size: 5}}
+    }
   }
 
-  function getDisjunctiveFacetsConfig() {
-    if (getSearchState().currentIndex === "recipes") {
-      return ["recipe_type_name", "cuisine_name"];
-    } else if (getSearchState().currentIndex === "ingredients") {
-      return ["ingredient_type_name"];
+  function getDisjunctiveFacets() {
+    const { search: { currentIndex } } = store.getState();
+
+    if (currentIndex === "recipes") {
+      return ["cuisine_name", "method_name", "recipe_type_name"];
     }
-  }*/
+    
+    if (currentIndex === "ingredients") return ["ingredient_type_name"];
+
+    if (currentIndex === "equipment") return ["equipment_type_name"];
+  }
 
   return {
     //debug: true,
@@ -62,13 +67,7 @@ export function makeSearchConfig(store: Store) {
     },
     onSearch: async function(state: any) {  // JSON.stringify()?
       const { search: { currentIndex } } = store.getState();
-
-      let names;
-      if (currentIndex === "recipes") {
-        names = ["recipe_type_name", "cuisine_name"];
-      }
-      if (currentIndex === "ingredients") names = ["ingredient_type_name"];
-      if (currentIndex === "equipment") names = ["equipment_type_name"];
+      const names = getDisjunctiveFacets();
 
       const { data: { found } } = await axios.post(
         `${endpoint}/search/find/${currentIndex}`,
@@ -79,22 +78,15 @@ export function makeSearchConfig(store: Store) {
       const resWithDisjunctiveFacetCounts =
         await applyDisjunctiveFaceting(found, state, names, currentIndex);
 
-      const newState = buildSearchState(
+      return buildSearchState(
         resWithDisjunctiveFacetCounts,
         state.resultsPerPage,
         currentIndex
       );
-
-      return newState;
     },
     searchQuery: {
-      facets: {
-        cuisine_name: {type: "value", size: 24},  // change size
-        //ingredient_type_names, (for allergies)
-        //method_names,
-        recipe_type_name: {type: "value", size: 12}
-      },
-      disjunctiveFacets: ["cuisine_name", "recipe_type_name"]  // any others?
+      facets: getFacets(),
+      disjunctiveFacets: getDisjunctiveFacets()
     }
   };
 }
