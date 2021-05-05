@@ -157,7 +157,7 @@
 
 .recipes__method,
 .recipes__ingredient {
-  font-size: 13px;
+  font-size: 1.3rem;
   margin: 0 4px 4px 0;
   max-width: fit-content;
   padding: 1px 3px;

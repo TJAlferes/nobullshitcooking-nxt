@@ -10,7 +10,7 @@
   padding: 10px 0;
 }
 
-.two-col-b__left {
+.two-col-b-left {
   border-right: 1px solid;
   max-width: 600px;
   margin: 10px 0;
@@ -21,7 +21,7 @@
   width: 100%;
 }
 
-.two-col-b__right {
+.two-col-b-right {
   margin: 10px 0;
   max-width: 300px;
   min-width: 300px;
@@ -29,140 +29,101 @@
   order: 2;
 }
 
-/*
 
-light
 
-*/
-
-.light .two-col-b__left,
-.light .two-col-b__right {
+.light .two-col-b-left,
+.light .two-col-b-right {
   background-color: #fff;
   color: #000;
 }
 
-.light .two-col-b__left {border-right-color: #bfbfbf;}
+.light .two-col-b-left {border-right-color: #bfbfbf;}
+
+
+
+.dark .two-col-b-left,
+.dark .two-col-b-right {
+  background-color: #222;
+  color: #aaa;
+}
+
+.dark .two-col-b-left {border-right-color: #444;}
+
+
 
 
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.two-column-b-light .page_links {border-color: #fff;}
+.light .page_links {border-color: #fff;}
 
-.two-column-b-light .current_page_number {color: #000;}
-
-/* ? */
-
-.two-column-b-light .equipments-list-item a,
-.two-column-b-light .ingredients-list-item a,
-.two-column-b-light .recipes-list-item a {
-  background-color: #fff;
-  color: #000;
-}
-
-/* EXPANDCOLLAPSE */
-
-.two-column-b-light .expand-collapse {background-color: #d5fdd5;}
-
-.two-column-b-light .expand-collapse-heading {color: #777;}
+.light .current_page_number {color: #000;}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.two-column-b-light .search-result-recipe-link:hover,
-.two-column-b-light .search-result-recipe-link:active,
-.two-column-b-light .search-result-ingredient-link:hover,
-.two-column-b-light .search-result-ingredient-link:active,
-.two-column-b-light .search-result-equipment-link:hover,
-.two-column-b-light .search-result-equipment-link:active {
+.light .search-result-recipe-link:hover,
+.light .search-result-recipe-link:active,
+.light .search-result-ingredient-link:hover,
+.light .search-result-ingredient-link:active,
+.light .search-result-equipment-link:hover,
+.light .search-result-equipment-link:active {
   background-color: #eee;
 }
 
-.two-column-b-light .search-result-recipe-text__title,
-.two-column-b-light .search-result-recipe-text__author,
-.two-column-b-light .search-result-recipe-text__types-cuisine,
-.two-column-b-light .search-result-recipe-text__types-recipe-type,
-.two-column-b-light .search-result-recipe-text__tags-methods,
-.two-column-b-light .search-result-recipe-text__tags-ingredients,
-.two-column-b-light .search-result-ingredient-text__name,
-.two-column-b-light .search-result-ingredient-text__type,
-.two-column-b-light .search-result-equipment-text__name,
-.two-column-b-light .search-result-equipment-text__type {color: #000;}
+.light .search-result-recipe-text__title,
+.light .search-result-recipe-text__author,
+.light .search-result-recipe-text__types-cuisine,
+.light .search-result-recipe-text__types-recipe-type,
+.light .search-result-recipe-text__tags-methods,
+.light .search-result-recipe-text__tags-ingredients,
+.light .search-result-ingredient-text__name,
+.light .search-result-ingredient-text__type,
+.light .search-result-equipment-text__name,
+.light .search-result-equipment-text__type {color: #000;}
 
-.two-column-b-light .search-result-recipe-text__tags-method {
+.light .search-result-recipe-text__tags-method {
   background-color: #cfcfcf;
 }
 
-.two-column-b-light .search-result-recipe-text__tags-ingredient {
+.light .search-result-recipe-text__tags-ingredient {
   background-color: #dedede;
 }
 
-/*
-
-dark
-
-*/
-
-.dark .two-col-b__left,
-.dark .two-col-b__right {
-  background-color: #222;
-  color: #aaa;
-}
-
-.dark .two-col-b__left {border-right-color: #444;}
-
 
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.two-column-b-dark .page_links {border-color: #222;}
+.dark .page_links {border-color: #222;}
 
-.two-column-b-dark .current_page_number {color: #aaa;}
-
-/* ? */
-
-.two-column-b-dark .equipments-list-item a,
-.two-column-b-dark .ingredients-list-item a,
-.two-column-b-dark .equipments-list-item a {
-  background-color: #222;
-  color: #aaa;
-}
-
-/* EXPANDCOLLAPSE */
-
-.two-column-b-dark .expand-collapse {
-  background-color: #507ea7;
-  color: #000;
-}
-
-.two-column-b-dark .expand-collapse-heading {color: #ccc;}
+.dark .current_page_number {color: #aaa;}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.two-column-b-dark .search-result-recipe-link:hover,
-.two-column-b-dark .search-result-recipe-link:active,
-.two-column-b-dark .search-result-ingredient-link:hover,
-.two-column-b-dark .search-result-ingredient-link:active,
-.two-column-b-dark .search-result-equipment-link:hover,
-.two-column-b-dark .search-result-equipment-link:active {
+.dark .search-result-recipe-link:hover,
+.dark .search-result-recipe-link:active,
+.dark .search-result-ingredient-link:hover,
+.dark .search-result-ingredient-link:active,
+.dark .search-result-equipment-link:hover,
+.dark .search-result-equipment-link:active {
   background-color: #333;
 }
 
-.two-column-b-dark .search-result-recipe-text__title,
-.two-column-b-dark .search-result-recipe-text__author,
-.two-column-b-dark .search-result-recipe-text__types-cuisine,
-.two-column-b-dark .search-result-recipe-text__types-recipe-type,
-.two-column-b-dark .search-result-recipe-text__tags-methods,
-.two-column-b-dark .search-result-recipe-text__tags-ingredients,
-.two-column-b-dark .search-result-ingredient-text__name,
-.two-column-b-dark .search-result-ingredient-text__type,
-.two-column-b-dark .search-result-equipment-text__name,
-.two-column-b-dark .search-result-equipment-text__type {color: #aaa;}
+.dark .search-result-recipe-text__title,
+.dark .search-result-recipe-text__author,
+.dark .search-result-recipe-text__types-cuisine,
+.dark .search-result-recipe-text__types-recipe-type,
+.dark .search-result-recipe-text__tags-methods,
+.dark .search-result-recipe-text__tags-ingredients,
+.dark .search-result-ingredient-text__name,
+.dark .search-result-ingredient-text__type,
+.dark .search-result-equipment-text__name,
+.dark .search-result-equipment-text__type {color: #aaa;}
 
-.two-column-b-dark .search-result-recipe-text__tags-method {
+.dark .search-result-recipe-text__tags-method {
   background-color: #555;
 }
 
-.two-column-b-dark .search-result-recipe-text__tags-ingredient {
+.dark .search-result-recipe-text__tags-ingredient {
   background-color: #444;
 }
 
@@ -172,12 +133,12 @@ dark
 
 /* NOT USED (Recipes? Recipe?) */
 
-.two-column-b-light .recipe-details__required-method {
+.light .recipe-details__required-method {
   background-color: #cfcfcf;
 }
 
-.two-column-b-light .recipe-details__author-name:hover {color: #c10006;}
+.light .recipe-details__author-name:hover {color: #c10006;}
 
-.two-column-b-dark .recipe-details__required-method {background-color: #555;}
+.dark .recipe-details__required-method {background-color: #555;}
 
-.two-column-b-dark .recipe-details__author-name:hover {color: #690004;}
+.dark .recipe-details__author-name:hover {color: #690004;}

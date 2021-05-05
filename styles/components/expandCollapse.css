@@ -4,22 +4,22 @@
   padding: 5px;
 }
 
-.expand-collapse__heading {
+.expand-collapse-heading {
   cursor: pointer;
   font-size: 1.1rem;
 }
 
 
 
-.two-col-a.light .expand-collapse {background-color: #d5fdd5;}
+.light .expand-collapse {background-color: #d5fdd5;}
 
-.two-col-a.light .expand-collapse__heading {color: #777;}
+.light .expand-collapse-heading {color: #777;}
 
 
 
-.two-col-a.dark .expand-collapse {
+.dark .expand-collapse {
   background-color: #507ea7;
   color: #000;
 }
 
-.two-col-a.dark .expand-collapse__heading {color: #ccc;}
+.dark .expand-collapse-heading {color: #ccc;}

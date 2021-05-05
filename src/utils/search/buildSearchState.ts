@@ -1,11 +1,5 @@
 function getHighlight(hit: any, fieldName: string) {
-  if (
-    !hit.highlight ||
-    !hit.highlight[fieldName] ||
-    hit.highlight[fieldName].length < 1
-  ) {
-    return;
-  }
+  if (hit.highlight[fieldName]?.length < 1) return;
   return hit.highlight[fieldName][0];
 }
 
@@ -33,17 +27,17 @@ function buildTotalPages(resultsPerPage: number, totalResults: number) {
   return Math.ceil(totalResults / resultsPerPage);
 }
 
-function getValueFacet(aggregations: any, fieldName: string) {
+function getValueFacet(aggs: any, fieldName: string) {
   if (
-   aggregations &&
-   aggregations[fieldName] &&
-   aggregations[fieldName].buckets  // remove also?
+   aggs &&
+   aggs[fieldName] &&
+   aggs[fieldName].buckets  // remove also?
    //aggregations[fieldName].buckets.length > 0
   ) {
     return [{
       field: fieldName,
       type: "value",
-      data: aggregations[fieldName].buckets.map((bucket: any) => ({ 
+      data: aggs[fieldName].buckets.map((bucket: any) => ({ 
         // Note: boolean & date require key_as_string
         value: bucket.key_as_string || bucket.key,
         count: bucket.doc_count
@@ -52,32 +46,28 @@ function getValueFacet(aggregations: any, fieldName: string) {
   }
 }
 
-function buildStateFacets(aggregations: any, currentIndex: string) {
-  if (currentIndex === "recipes") {
-    const recipeTypeName = getValueFacet(aggregations, "recipe_type_name");
-    const cuisineName = getValueFacet(aggregations, "cuisine_name");
+function buildStateFacets(aggs: any, currIdx: string) {
+  if (currIdx === "recipes") {
+    const recipe_type_name = getValueFacet(aggs, "recipe_type_name");
+    const cuisine_name = getValueFacet(aggs, "cuisine_name");
     const facets = {
-      ...(recipeTypeName && {recipe_type_name: recipeTypeName}),
-      ...(cuisineName && {cuisine_name: cuisineName})
+      ...(recipe_type_name && {recipe_type_name}),
+      ...(cuisine_name && {cuisine_name})
     };
 
     if (Object.keys(facets).length > 0) return facets;
   }
   
-  if (currentIndex === "ingredients") {
-    const ingredientTypeName =
-      getValueFacet(aggregations, "ingredient_type_name");
-    const facets =
-      {...(ingredientTypeName && {ingredient_type_name: ingredientTypeName})};
+  if (currIdx === "ingredients") {
+    const ingredient_type_name = getValueFacet(aggs, "ingredient_type_name");
+    const facets = {...(ingredient_type_name && {ingredient_type_name})};
 
     if (Object.keys(facets).length > 0) return facets;
   }
   
-  if (currentIndex === "equipment") {
-    const equipmentTypeName =
-      getValueFacet(aggregations, "equipment_type_name");
-    const facets =
-      {...(equipmentTypeName && {equipment_type_name: equipmentTypeName})};
+  if (currIdx === "equipment") {
+    const equipment_type_name = getValueFacet(aggs, "equipment_type_name");
+    const facets = {...(equipment_type_name && {equipment_type_name})};
 
     if (Object.keys(facets).length > 0) return facets;
   }
@@ -92,6 +82,7 @@ export function buildSearchState(
   const totalResults = response.hits.total.value;
   const totalPages = buildTotalPages(resultsPerPage, totalResults);
   const facets = buildStateFacets(response.aggregations, currentIndex);
+  
   return {results, totalPages, totalResults, ...(facets && {facets})};
 }
 

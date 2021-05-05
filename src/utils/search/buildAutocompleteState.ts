@@ -1,15 +1,9 @@
 function getHighlight(hit: any, fieldName: string) {
-  if (
-    !hit.highlight ||
-    !hit.highlight[fieldName] ||
-    hit.highlight[fieldName].length < 1
-  ) {
-    return;
-  }
+  if (hit.highlight[fieldName]?.length < 1) return;
   return hit.highlight[fieldName][0];
 }
 
-function buildResults(hits: any, currentIndex: string) {
+function buildResults(hits: any, currIdx: string) {
   const addEachKeyValueToObject = (
     acc: any,
     [key, value]: (Default|string)[]
@@ -19,9 +13,9 @@ function buildResults(hits: any, currentIndex: string) {
     ({raw: value, ...(snippet && {snippet})});
 
   let idValue: string;
-  if (currentIndex === "recipes") idValue = "id";
-  if (currentIndex === "ingredients") idValue = "id";
-  if (currentIndex === "equipment") idValue = "id";
+  if (currIdx === "recipes") idValue = "id";
+  if (currIdx === "ingredients") idValue = "id";
+  if (currIdx === "equipment") idValue = "id";
 
   return hits.map((record: any) => ({
     id: {raw: record._source[idValue]},
@@ -35,8 +29,8 @@ function buildResults(hits: any, currentIndex: string) {
   }));
 }
 
-export function buildAutocompleteState(response: any, currentIndex: string) {
-  const results = buildResults(response.hits.hits, currentIndex);
+export function buildAutocompleteState(response: any, currIdx: string) {
+  const results = buildResults(response.hits.hits, currIdx);
   return {results};
 }
 

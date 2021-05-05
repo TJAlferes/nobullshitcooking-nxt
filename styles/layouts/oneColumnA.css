@@ -18,13 +18,9 @@
 
 
 
-
-
 /* NEED CLASSES */
 
-.one-column-a-light label {
-  color: #777;
-}
+.one-column-a-light label {color: #777;}
 
 .one-column-a-light input,
 .one-column-a-light select,
@@ -39,12 +35,6 @@
   color: #000;
 }
 
-/* EXPANDCOLLAPSE */
-
-.one-column-a-light .expand-collapse {background-color: #d5fdd5;}
-
-.one-column-a-light .expand-collapse-heading {color: #777;}
-
 /* PROFILE (a needs a class) */
 
 .one-column-a-light .profile-list-item {border-color: #ddd;}
@@ -54,8 +44,6 @@
 }
 
 .one-column-a-light .profile-list-item-name a:hover {color: #c10006;}
-
-
 
 
 
@@ -83,15 +71,6 @@
   background-color: #1e1e1e;
   color: #bbb;
 }
-
-/* EXPANDCOLLAPSE */
-
-.one-column-a-dark .expand-collapse {
-  background-color: #507ea7;
-  color: #000;
-}
-
-.one-column-a-dark .expand-collapse-heading {color: #ccc;}
 
 /* PROFILE (a needs a class) */
 

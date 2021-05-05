@@ -3,7 +3,7 @@ import axios from 'axios';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { buildSearchRequest } from './buildSearchRequest';
 
-function combineAggregationsFromResponses(responses: any) {
+function combineAggsFromResponses(responses: any) {
   return responses.reduce((acc: any, response: any) => ({
     ...acc,
     ...response.aggregations
@@ -35,31 +35,31 @@ async function getDisjunctiveFacetCounts(
   // TO DO: don't make request if "not" filter is currently applied
   // TO DO: await Promise.all([])
   disjunctiveFacetNames.map(async (facetName: string) => {
-    let newState = removeFilterByName(state, facetName);  // const?
-    let body = buildSearchRequest(newState, currentIndex);  // const?
+    const newState = removeFilterByName(state, facetName);
+    let body = buildSearchRequest(newState, currentIndex);
     body = changeSizeToZero(body);
     body = removeAllFacetsExcept(body, facetName);
 
-    const res = await axios.post(
+    const { data: { found } } = await axios.post(
       `${endpoint}/search/find/${currentIndex}`,
       {body},
       {withCredentials: true}
     );
 
-    responses.push(res.data.found);
+    responses.push(found);
   });
 
-  return combineAggregationsFromResponses(responses);
+  return combineAggsFromResponses(responses);
 }
 
 export async function applyDisjunctiveFaceting(
   json: any,
   state: any,
   disjunctiveFacetNames: any,
-  currentIndex: string
+  currIdx: string
 ) {
   const disjunctiveFacetCounts =
-    await getDisjunctiveFacetCounts(state, disjunctiveFacetNames, currentIndex);
+    await getDisjunctiveFacetCounts(state, disjunctiveFacetNames, currIdx);
 
   return {
     ...json,

@@ -48,82 +48,44 @@ export function makeSearchConfig(store: Store) {
       //console.log('clicked!');
     },
     onAutocomplete: async function({ searchTerm }: {searchTerm: string;}) {  // JSON.stringify()?
-      const { search } = store.getState();
-      const res = await axios.post(
-        `${endpoint}/search/autocomplete/${search.currentIndex}`,
+      const { search: { currentIndex } } = store.getState();
+
+      const { data: { found } } = await axios.post(
+        `${endpoint}/search/autocomplete/${currentIndex}`,
         {searchTerm},
         {withCredentials: true}
       );
-      const newState = buildAutocompleteState(res.data.found, search.currentIndex);
-      return {autocompletedResults: newState.results};
+
+      const { results } = buildAutocompleteState(found, currentIndex);
+
+      return {autocompletedResults: results};
     },
     onSearch: async function(state: any) {  // JSON.stringify()?
-      const { search } = store.getState();
+      const { search: { currentIndex } } = store.getState();
 
-      if (search.currentIndex === "recipes") {
-
-        const res = await axios.post(
-          `${endpoint}/search/find/recipes`,
-          {body: buildSearchRequest(state, "recipes")},
-          {withCredentials: true}
-        );
-        const resWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(
-          res.data.found,
-          state,
-          ["recipe_type_name", "cuisine_name"],
-          "recipes"
-        );
-        const newState = buildSearchState(
-          resWithDisjunctiveFacetCounts,
-          state.resultsPerPage,
-          "recipes"
-        );
-
-        return newState;
-
-      } else if (search.currentIndex === "ingredients") {
-
-        const res = await axios.post(
-          `${endpoint}/search/find/ingredients`,
-          {body: buildSearchRequest(state, "ingredients")},
-          {withCredentials: true}
-        );
-        const resWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(
-          res.data.found,
-          state,
-          ["ingredient_type_name"],
-          "ingredients"
-        );
-        const newState = buildSearchState(
-          resWithDisjunctiveFacetCounts,
-          state.resultsPerPage,
-          "ingredients"
-        );
-
-        return newState;
-
-      } else if (search.currentIndex === "equipment") {
-
-        const res = await axios.post(
-          `${endpoint}/search/find/equipment`,
-          {body: buildSearchRequest(state, "equipment")},
-          {withCredentials: true}
-        );
-        const resWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(
-          res.data.found,
-          state,
-          ["equipment_type_name"],
-          "equipment"
-        );
-        const newState = buildSearchState(
-          resWithDisjunctiveFacetCounts,
-          state.resultsPerPage,
-          "equipment"
-        );
-
-        return newState;
-        
+      let names;
+      if (currentIndex === "recipes") {
+        names = ["recipe_type_name", "cuisine_name"];
       }
+      if (currentIndex === "ingredients") names = ["ingredient_type_name"];
+      if (currentIndex === "equipment") names = ["equipment_type_name"];
+
+      const { data: { found } } = await axios.post(
+        `${endpoint}/search/find/${currentIndex}`,
+        {body: buildSearchRequest(state, currentIndex)},
+        {withCredentials: true}
+      );
+
+      const resWithDisjunctiveFacetCounts =
+        await applyDisjunctiveFaceting(found, state, names, currentIndex);
+
+      const newState = buildSearchState(
+        resWithDisjunctiveFacetCounts,
+        state.resultsPerPage,
+        currentIndex
+      );
+
+      return newState;
     },
     searchQuery: {
       facets: {

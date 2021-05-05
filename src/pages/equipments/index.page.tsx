@@ -8,6 +8,7 @@ import {
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
+import { useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
@@ -37,15 +38,16 @@ function listResults(results: any) {
 }
 
 export function Equipments({
-  twoColumnBTheme,
   facets,  // ?
   filters,  // ?
   results,
   wasSearched
-}: Props) {
+}: PropsFromContext) {
+  const theme = useSelector(state => state.theme.theme);
+
   return (
-    <div className={`search-results two-column-b ${twoColumnBTheme}`}>
-      <div className="left-column">
+    <div className={`search-results two-col-b ${theme}`}>
+      <div className="two-col-b-left">
         <h1>Equipment</h1>
 
         <ExpandCollapse
@@ -93,8 +95,7 @@ export function Equipments({
         <Paging />
       </div>
 
-      <div className="right-column">
-      </div>
+      <div className="two-col-b-right"></div>
     </div>
   );
 }
@@ -105,10 +106,6 @@ type PropsFromContext = {
   results: any;
   wasSearched: boolean;
 }
-
-type Props = PropsFromContext & {
-  twoColumnBTheme: string;
-};
 
 const mapContextToProps = ({
   facets,

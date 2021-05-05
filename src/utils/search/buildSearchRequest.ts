@@ -1,16 +1,11 @@
-function buildMatch(searchTerm: string, currentIndex: string) {
-  if (currentIndex === "recipes") {
-    return searchTerm ? {match: {title: {query: searchTerm}}} : {match_all: {}};
-  }
-  
-  if (currentIndex === "ingredients") {
-    return searchTerm
-      ? {match: {fullname: {query: searchTerm}}} : {match_all: {}};
-  }
-  
-  if (currentIndex === "equipment") {
-    return searchTerm ? {match: {name: {query: searchTerm}}} : {match_all: {}};
-  }
+function buildMatch(term: string, currIdx: string) {
+  let match;
+
+  if (currIdx === "recipes") match = {title: {query: term}};
+  if (currIdx === "ingredients") match = {fullname: {query: term}};
+  if (currIdx === "equipment") match = {name: {query: term}};
+
+  return term ? {match} : {match_all: {}};
 }
 
 function buildFrom(current: number, resultsPerPage: number) {
@@ -21,6 +16,7 @@ function buildFrom(current: number, resultsPerPage: number) {
 function getTermFilterValue(field: any, fieldValue: any) {
   return {[`${field}`]: fieldValue};
 }
+
 
 function getTermFilter(filter: any) {
   if (filter.type === "all") {
@@ -49,27 +45,27 @@ function getTermFilter(filter: any) {
   }
 }
 
-function buildRequestFilter(filters: any, currentIndex: string) {
+function buildRequestFilter(filters: any, currIdx: string) {
   if (!filters) return;
 
   filters = filters.reduce((acc: any, filter: any) => {
     // also add methodNames, allergy ingredients, etc. (index them first)
     if (
-      currentIndex === "recipes" &&
+      currIdx === "recipes" &&
       ["recipe_type_name", "cuisine_name"].includes(filter.field)
     ) {
       return [...acc, getTermFilter(filter)];
     }
     
     if (
-      currentIndex === "ingredients" &&
+      currIdx === "ingredients" &&
       ["ingredient_type_name"].includes(filter.field)
     ) {
       return [...acc, getTermFilter(filter)];
     }
     
     if (
-      currentIndex === "equipment" &&
+      currIdx === "equipment" &&
       ["equipment_type_name"].includes(filter.field)
     ) {
       return [...acc, getTermFilter(filter)];
@@ -81,18 +77,18 @@ function buildRequestFilter(filters: any, currentIndex: string) {
   return filters;
 }
 
-export function buildSearchRequest(state: any, currentIndex: string) {
+export function buildSearchRequest(state: any, currIdx: string) {
   const { searchTerm, filters, current, resultsPerPage } = state;
 
-  const match = buildMatch(searchTerm, currentIndex);
-  const filter = buildRequestFilter(filters, currentIndex);
+  const match = buildMatch(searchTerm, currIdx);
+  const filter = buildRequestFilter(filters, currIdx);
   const from = buildFrom(current, resultsPerPage);  // starting
   const size = resultsPerPage;  // limit
 
   let aggs;
   let highlightFields;
 
-  if (currentIndex === "recipes") {
+  if (currIdx === "recipes") {
     aggs = {
       cuisine_name: {terms: {field: "cuisine_name"}},
       recipe_type_name: {terms: {field: "recipe_type_name"}},
@@ -103,12 +99,12 @@ export function buildSearchRequest(state: any, currentIndex: string) {
     highlightFields = {title: {}};
   }
 
-  if (currentIndex === "ingredients") {
+  if (currIdx === "ingredients") {
     aggs = {ingredient_type_name: {terms: {field: "ingredient_type_name"}}};
     highlightFields = {fullname: {}};
   }
 
-  if (currentIndex === "equipment") {
+  if (currIdx === "equipment") {
     aggs = {equipment_type_name: {terms: {field: "equipment_type_name"}}};
     highlightFields = {name: {}};
   }

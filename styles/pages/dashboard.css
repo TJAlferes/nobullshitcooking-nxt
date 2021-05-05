@@ -221,7 +221,11 @@
 
 
 
-.light .dashboard-item {border-color: #ddd;}
+.light .dashboard-item {
+  background-color: #fff;
+  border-color: #ddd;
+  color: #000;
+}
 
 .light .dashboard-item:nth-child(even) {background-color: #eee;}
 
@@ -229,7 +233,11 @@
 
 
 
-.dark .dashboard-item {border-color: #3a3a3a;}
+.dark .dashboard-item {
+  background-color: #222;
+  border-color: #3a3a3a;
+  color: #aaa;
+}
 
 .dark .dashboard-item:nth-child(even) {background-color: #2d2d2d;}
 
