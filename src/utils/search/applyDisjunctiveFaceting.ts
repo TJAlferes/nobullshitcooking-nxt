@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { buildSearchRequest } from './buildSearchRequest';
+import { buildSearchRequest } from '.';
 
 function combineAggsFromResponses(responses: any) {
   return responses.reduce((acc: any, response: any) => ({

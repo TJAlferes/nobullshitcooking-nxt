@@ -10,10 +10,15 @@ import {
 import { NOBSCAPI as endpoint } from './NOBSCAPI';
 
 export function makeSearchConfig(store: Store) {
-  function getFacets() {
+  function getCurrIdx() {
     const { search: { currentIndex } } = store.getState();
+    return currentIndex;
+  }
 
-    if (currentIndex === "recipes") {
+  function getFacets() {
+    const currIdx = getCurrIdx();
+
+    if (currIdx === "recipes") {
       return {
         // TO DO: allergies (ingredient_type_name and ingredient fullname)
         cuisine_name: {type: "value", size: 24},  // TO DO: change size
@@ -22,71 +27,65 @@ export function makeSearchConfig(store: Store) {
       };
     }
     
-    if (currentIndex === "ingredients") {
+    if (currIdx === "ingredients") {
       return {ingredient_type_name: {type: "value", size: 18}};
     }
 
-    if (currentIndex === "equipment") {
+    if (currIdx === "equipment") {
       return {equipment_type_name: {type: "value", size: 5}}
     }
   }
 
   function getDisjunctiveFacets() {
-    const { search: { currentIndex } } = store.getState();
+    const currIdx = getCurrIdx();
 
-    if (currentIndex === "recipes") {
+    if (currIdx === "recipes") {
       return ["cuisine_name", "method_name", "recipe_type_name"];
     }
     
-    if (currentIndex === "ingredients") return ["ingredient_type_name"];
+    if (currIdx === "ingredients") return ["ingredient_type_name"];
 
-    if (currentIndex === "equipment") return ["equipment_type_name"];
+    if (currIdx === "equipment") return ["equipment_type_name"];
   }
 
   return {
     //debug: true,
-    trackUrlState: false,  // ?
-    onResultClick: function() {
-      //console.log('clicked!');
-    },
-    onAutocompleteResultClick: function() {
-      //console.log('clicked!');
-    },
-    onAutocomplete: async function({ searchTerm }: {searchTerm: string;}) {  // JSON.stringify()?
-      const { search: { currentIndex } } = store.getState();
+    onAutocomplete: async function({ searchTerm }: {searchTerm: string;}) {
+      const currIdx = getCurrIdx();
 
       const { data: { found } } = await axios.post(
-        `${endpoint}/search/autocomplete/${currentIndex}`,
+        `${endpoint}/search/autocomplete/${currIdx}`,
         {searchTerm},
         {withCredentials: true}
       );
 
-      const { results } = buildAutocompleteState(found, currentIndex);
+      const { results } = buildAutocompleteState(found, currIdx);
 
       return {autocompletedResults: results};
     },
-    onSearch: async function(state: any) {  // JSON.stringify()?
-      const { search: { currentIndex } } = store.getState();
+    onSearch: async function(state: any) {
+      const currIdx = getCurrIdx();
       const names = getDisjunctiveFacets();
 
       const { data: { found } } = await axios.post(
-        `${endpoint}/search/find/${currentIndex}`,
-        {body: buildSearchRequest(state, currentIndex)},
+        `${endpoint}/search/find/${currIdx}`,
+        {body: buildSearchRequest(state, currIdx)},
         {withCredentials: true}
       );
 
       const resWithDisjunctiveFacetCounts =
-        await applyDisjunctiveFaceting(found, state, names, currentIndex);
+        await applyDisjunctiveFaceting(found, state, names, currIdx);
 
       return buildSearchState(
         resWithDisjunctiveFacetCounts,
         state.resultsPerPage,
-        currentIndex
+        currIdx
       );
     },
     searchQuery: {
       facets: getFacets(),
       disjunctiveFacets: getDisjunctiveFacets()
-    }
+    },
+    trackUrlState: false  // ?
   };
 }

@@ -12,6 +12,7 @@ function buildResults(hits: any, currIdx: string) {
   const toObject = (value: any, snippet: any) =>
     ({raw: value, ...(snippet && {snippet})});
 
+  // TO DO: WTF is this?
   let idValue: string;
   if (currIdx === "recipes") idValue = "id";
   if (currIdx === "ingredients") idValue = "id";
@@ -34,7 +35,7 @@ export function buildAutocompleteState(response: any, currIdx: string) {
   return {results};
 }
 
-// rename and finish
+// TO DO: rename and finish
 type Default = {
   raw: any;
   snippet: any;

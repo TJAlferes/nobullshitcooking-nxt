@@ -28,12 +28,7 @@ function buildTotalPages(resultsPerPage: number, totalResults: number) {
 }
 
 function getValueFacet(aggs: any, fieldName: string) {
-  if (
-   aggs &&
-   aggs[fieldName] &&
-   aggs[fieldName].buckets  // remove also?
-   //aggregations[fieldName].buckets.length > 0
-  ) {
+  if (aggs[fieldName]?.buckets?.length > 0) {
     return [{
       field: fieldName,
       type: "value",
@@ -75,6 +70,16 @@ function buildStateFacets(aggs: any, currIdx: string) {
   }
 }
 
+/*
+Converts Elasticsearch response to new state. onSearch handler needs to convert
+search results into a new state that search-ui understands.
+
+For example, Elasticsearch returns "hits" for search results. This maps to the
+"results" property in state, which requires a specific format. buildSearchState
+iterates through "hits" and reformats them to "results".
+
+Similar for totals and facets.
+*/
 export function buildSearchState(
   response: any,
   resultsPerPage: number,
