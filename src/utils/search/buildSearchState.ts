@@ -48,11 +48,13 @@ function getValueFacet(aggs: any, fieldName: string) {
 
 function buildStateFacets(aggs: any, currIdx: string) {
   if (currIdx === "recipes") {
-    const recipe_type_name = getValueFacet(aggs, "recipe_type_name");
     const cuisine_name = getValueFacet(aggs, "cuisine_name");
+    const method_name = getValueFacet(aggs, "method_name");
+    const recipe_type_name = getValueFacet(aggs, "recipe_type_name");
     const facets = {
-      ...(recipe_type_name && {recipe_type_name}),
-      ...(cuisine_name && {cuisine_name})
+      ...(cuisine_name && {cuisine_name}),
+      ...(method_name && {method_name}),
+      ...(recipe_type_name && {recipe_type_name})
     };
 
     if (Object.keys(facets).length > 0) return facets;

@@ -10,6 +10,9 @@ function combineAggsFromResponses(responses: any) {
   }), {});
 }
 
+// To calculate a disjunctive facet correctly, calculate the facet counts as if
+// the filter was not applied. Otherwise the list of facet values would collapse
+// to one value: whatever you have filtered on in that facet.
 function removeFilterByName(state: any, facetName: string) {
   return {
     ...state,
@@ -28,20 +31,22 @@ function changeSizeToZero(body: any) {
 async function getDisjunctiveFacetCounts(
   state: any,
   disjunctiveFacetNames: any,
-  currentIndex: string
+  currIdx: string
 ) {
   let responses: any = [];
 
   // TO DO: don't make request if "not" filter is currently applied
   // TO DO: await Promise.all([])
+  // TO DO: optimize this by *not* executing a request if "not" filter is
+  // currently applied for that field.
   disjunctiveFacetNames.map(async (facetName: string) => {
     const newState = removeFilterByName(state, facetName);
-    let body = buildSearchRequest(newState, currentIndex);
+    let body = buildSearchRequest(newState, currIdx);
     body = changeSizeToZero(body);
     body = removeAllFacetsExcept(body, facetName);
 
     const { data: { found } } = await axios.post(
-      `${endpoint}/search/find/${currentIndex}`,
+      `${endpoint}/search/find/${currIdx}`,
       {body},
       {withCredentials: true}
     );
@@ -52,6 +57,8 @@ async function getDisjunctiveFacetCounts(
   return combineAggsFromResponses(responses);
 }
 
+// Recalculates facets that need to be disjunctive (sticky).
+// Calculating sticky facets requires a second query for each sticky facet.
 export async function applyDisjunctiveFaceting(
   json: any,
   state: any,

@@ -1,10 +1,8 @@
 function buildMatch(term: string, currIdx: string) {
   let match;
-
   if (currIdx === "recipes") match = {title: {query: term}};
   if (currIdx === "ingredients") match = {fullname: {query: term}};
   if (currIdx === "equipment") match = {name: {query: term}};
-
   return term ? {match} : {match_all: {}};
 }
 
@@ -16,7 +14,6 @@ function buildFrom(current: number, resultsPerPage: number) {
 function getTermFilterValue(field: any, fieldValue: any) {
   return {[`${field}`]: fieldValue};
 }
-
 
 function getTermFilter(filter: any) {
   if (filter.type === "all") {
@@ -49,10 +46,11 @@ function buildRequestFilter(filters: any, currIdx: string) {
   if (!filters) return;
 
   filters = filters.reduce((acc: any, filter: any) => {
-    // also add methodNames, allergy ingredients, etc. (index them first)
+    // TO DO: allergy ingredients (index them first)
     if (
       currIdx === "recipes" &&
-      ["recipe_type_name", "cuisine_name"].includes(filter.field)
+      ["cuisine_name", "method_name", "recipe_type_name"]
+        .includes(filter.field)
     ) {
       return [...acc, getTermFilter(filter)];
     }
@@ -91,10 +89,8 @@ export function buildSearchRequest(state: any, currIdx: string) {
   if (currIdx === "recipes") {
     aggs = {
       cuisine_name: {terms: {field: "cuisine_name"}},
-      recipe_type_name: {terms: {field: "recipe_type_name"}},
-      //ingredientTypes: {terms: {fields: "ingredientTypes"}},
-      //methodName: {terms: {fields: "methodNames"}}  ???
-      //methodName: {terms: {fields: ["methodName"]}}
+      method_name: {terms: {fields: "method_name"}},
+      recipe_type_name: {terms: {field: "recipe_type_name"}}
     };
     highlightFields = {title: {}};
   }
