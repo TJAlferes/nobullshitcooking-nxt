@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector as useSelector } from '../../store';
 import { openLeftNav } from '../../store/menu/actions';
 import { Logo } from '..';
-import Search from './Search/Search';
-import UserNav from './UserNav/UserNav';
+import Search from './Search';
+import { UserNav } from './UserNav';
 
 export function Header(): JSX.Element {
   const dispatch = useDispatch();

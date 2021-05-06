@@ -9,7 +9,7 @@ import {
   themeLightTrigger
 } from '../../../store/theme/actions';
 
-export default function UserNav(): JSX.Element {
+export function UserNav(): JSX.Element {
   const router = useRouter();
 
   const dispatch = useDispatch();

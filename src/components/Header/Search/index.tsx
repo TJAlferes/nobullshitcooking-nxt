@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
 import { searchSetIndex } from '../../../store/search/actions';
-import { AutocompleteView } from './AutocompleteView';
+import { AutocompleteView } from './view';
 
 export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const router = useRouter();
@@ -23,12 +23,12 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
     sInsert.focus();
   }
 
-  const handleSelectAutocomplete = (selection: any) => {
+  const selectAutocomplete = (selection: any) => {
     setSearchTerm(selection[field as string].raw);
     router.push(`/${currentIndex}`);
   };
 
-  const handleSubmit = () => {
+  const submit = () => {
     setSearchTerm(searchTerm);
     redirectToSearchPage();
   };
@@ -90,11 +90,11 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
           }}
           autocompleteView={AutocompleteView}
           inputProps={{placeholder: ""}}
-          onSelectAutocomplete={handleSelectAutocomplete}
-          onSubmit={handleSubmit}
+          onSelectAutocomplete={selectAutocomplete}
+          onSubmit={submit}
         />
 
-        <div className="magnifying-glass-holder" onClick={handleSubmit}>
+        <div className="magnifying-glass-holder" onClick={submit}>
           <span className="magnifying-glass"></span>
         </div>
       </div>
