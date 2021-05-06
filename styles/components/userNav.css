@@ -3,16 +3,12 @@
   flex-direction: row;
   flex-flow: row;
   flex-wrap: nowrap;
-  float: right;
   justify-content: center;
-  list-style-type: none;
-}
-
-.mode-button {line-height: 16px;}
-
-.mode-button:hover {
-  cursor: pointer;
-  text-decoration: none;
+  max-width: 300px;
+  min-width: 300px;
+  order: 3;
+  padding: 17px 15px 0 0;
+  width: 300px;
 }
 
 .sun-symbol {
@@ -25,26 +21,20 @@
   font-style: normal;
 }
 
-.mode-button,
-.user-nav__link,
-.user-nav__link--auth {
+.mode {line-height: 16px;}
+
+.mode,
+.user-nav__a {
   color: #fff;
+  cursor: pointer;
   display: block;
-  font-size: 14px;
-  height: 24px;
+  font-size: 1.4rem;
+  height: 16px;
   margin: 0 9px;
   text-decoration: none;
 }
 
-/* fix these... */
-
-.user-nav__link:hover,
-.user-nav__link:active {text-decoration: underline;}
-
-.user-nav__link--auth:hover {
-  cursor: pointer;
+.user-nav__a:hover,
+.user-nav__a:active {
   text-decoration: underline;
 }
-
-.mode-button:active
-.user-nav__link--auth:active {cursor: pointer;}

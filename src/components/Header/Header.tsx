@@ -8,8 +8,7 @@ import UserNav from './UserNav/UserNav';
 
 export function Header(): JSX.Element {
   const dispatch = useDispatch();
-
-  const theme = useSelector(state => state.theme.headerTheme);  // useContext?
+  const theme = useSelector(state => state.theme.theme);
 
   const click = () => {
     dispatch(openLeftNav());
@@ -17,7 +16,7 @@ export function Header(): JSX.Element {
 
   return (
     <header className={`header ${theme}`}>
-      <div className="header-col-1">
+      <div className="header-l">
         <svg className="left-nav-toggle" onClick={click}>
           <g>
             <path
@@ -27,12 +26,12 @@ export function Header(): JSX.Element {
             </path>
           </g>
         </svg>
-        <Logo theme={theme} />
+        <Logo />
       </div>
 
-      <div className="header-col-2"><Search theme={theme} /></div>
+      <Search />
 
-      <div className="header-col-3"><UserNav theme={theme} /></div>
+      <UserNav />
     </header>
   );
 }

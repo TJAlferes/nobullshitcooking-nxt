@@ -5,13 +5,15 @@
   display: flex;
   flex-direction: row;
   height: 32px;
-  margin-top: 11px;
+  margin: 11px 42px 0 20px;
   max-height: 32px;
-  padding: 0;
+  max-width: 640px;
+  min-width: 320px;
+  order: 2;
   width: 100%;
 }
 
-.search__category {
+.search-category {
   display: block;
   height: 30px;
   max-width: 100%;
@@ -20,7 +22,7 @@
   width: auto;
 }
 
-.search__facade {
+.search-facade {
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
@@ -30,20 +32,20 @@
   position: relative;
 }
 
-.search__facade-text {
+.search-facade-text {
   color: #666;
   font-size: 1.4rem;
   line-height: 28px;
   margin: 0 21px 0 8px;
 }
 
-.search__facade-arrow {
+.search-facade-arrow {
   position: absolute;
   right: 7px;
   top: 12px;
 }
 
-.search__prefilters {
+.search-filters {
   border: 0;
   cursor: pointer;
   height: 30px;
@@ -55,9 +57,9 @@
   width: 100%;
 }
 
-.search__prefilter {font-size: 1.4rem;}
+.search-filter {font-size: 1.4rem;}
 
-.search__insert {
+.search-insert {
   flex: 1;
   height: 30px;
   position: relative;
@@ -65,14 +67,43 @@
   width: 100%;
 }
 
+.magnifying-glass-holder {
+  position: absolute;
+  top: 8px;
+  right: 11px;
+  cursor: pointer;
+}
+
+.magnifying-glass {
+  position: relative;
+  display: block;
+  height: 12px;
+  width: 12px;
+  border: 2px solid #555;
+  border-radius: 30px;
+  background-color: #b8dbfb;
+  margin-bottom: 1px;
+  cursor: pointer;
+}
+
+.magnifying-glass:after {
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  height: 2px;
+  width: 7px;
+  background-color: #555;
+  content: "";
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+
+
 /*
+Note: Most of these "sui-" classnames are from @elastic/react-search-ui
 
-Note:
-
-Most of these "sui-" classnames are from @elastic/react-search-ui
-
-We are overriding default values / setting new values to get the look we desire.
-
+We're overriding default values / setting new values to get the look we desire.
 */
 
 .sui-search-box {
@@ -100,16 +131,6 @@ We are overriding default values / setting new values to get the look we desire.
   width: 100%;
 }
 
-.header-light .sui-search-box__text-input {
-  background-color: #fff;
-  color: #111;
-}
-
-.header-dark .sui-search-box__text-input {
-  background-color: #333;
-  color: #bbb;
-}
-
 /*.sui-search-box__autocomplete-container {}*/
 
 .sui-search-box__autocomplete {border: 1px solid #bfbfbf;}
@@ -133,18 +154,6 @@ We are overriding default values / setting new values to get the look we desire.
 
 .sui-search-box__results-list li {padding: 0 10px;}
 
-.header-light .sui-search-box__results-list li,
-.header-light .sui-search-box__results-list li span {
-  background-color: #fff;
-  color: #666;
-}
-
-.header-dark .sui-search-box__results-list li,
-.header-dark .sui-search-box__results-list li span {
-  background-color: #222;
-  color: #aaa;
-}
-
 .sui-search-box__results-list li,
 .sui-search-box__results-list li span {color: #666;}
 
@@ -153,21 +162,7 @@ We are overriding default values / setting new values to get the look we desire.
   font-weight: 700;
 }
 
-.header-light .sui-search-box__results-list li em {color: #111;}
-
-.header-dark .sui-search-box__results-list li em {color: #bcbcbc;}
-
-.header-light .sui-search-box__results-list li[aria-selected=true],
-.header-light .sui-search-box__results-list li[aria-selected=true] > * {
-  background-color: #ddd;
-}
-
-.header-dark .sui-search-box__results-list li[aria-selected=true],
-.header-dark .sui-search-box__results-list li[aria-selected=true] > * {
-  background-color: #444;
-}
-
-.sui-search-box__submit {
+/*.sui-search-box__submit {
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
   border: 1px solid;
   border-color: #ddd #666 #666 #ddd;
@@ -185,4 +180,69 @@ We are overriding default values / setting new values to get the look we desire.
 
 .sui-search-box__submit:hover {
   background-image: linear-gradient(to bottom, #98c6f1, #509fe4);
+}*/
+
+.sui-search-box__submit {
+  order: 2;
+  width: 32px;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 1px;
+  border-top-color: #ddd;
+  border-right-color: #666;
+  border-bottom-color: #666;
+  border-left-color: #ddd;
+  background-image: none;
+  background-color: #b8dbfb;
+  color: #b8dbfb;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.sui-search-box__submit:hover,
+.sui-search-box__submit:active {
+  background-image: none;
+}
+
+
+
+.light .sui-search-box__text-input {
+  background-color: #fff;
+  color: #111;
+}
+
+.light .sui-search-box__results-list li,
+.light .sui-search-box__results-list li span {
+  background-color: #fff;
+  color: #666;
+}
+
+.light .sui-search-box__results-list li em {color: #111;}
+
+.light .sui-search-box__results-list li[aria-selected=true],
+.light .sui-search-box__results-list li[aria-selected=true] > * {
+  background-color: #ddd;
+}
+
+
+
+.dark .sui-search-box__text-input {
+  background-color: #333;
+  color: #bbb;
+}
+
+.dark .sui-search-box__results-list li,
+.dark .sui-search-box__results-list li span {
+  background-color: #222;
+  color: #aaa;
+}
+
+.dark .sui-search-box__results-list li em {color: #bcbcbc;}
+
+.dark .sui-search-box__results-list li[aria-selected=true],
+.dark .sui-search-box__results-list li[aria-selected=true] > * {
+  background-color: #444;
 }

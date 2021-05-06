@@ -9,15 +9,16 @@ import {
   themeLightTrigger
 } from '../../../store/theme/actions';
 
-export default function UserNav({ theme }: Props): JSX.Element {
+export default function UserNav(): JSX.Element {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const {
-    authname,
-    staffIsAuthenticated,
-    userIsAuthenticated
-  } = useSelector(state => state.auth);
+  const authname = useSelector(state => state.auth.authname);
+  const staffIsAuthenticated =
+    useSelector(state => state.auth.staffIsAuthenticated);
+  const userIsAuthenticated =
+    useSelector(state => state.auth.userIsAuthenticated);
+  const theme = useSelector(state => state.theme.theme);
 
   const handleLogout = () => {
     if (staffIsAuthenticated) dispatch(authStaffLogout());
@@ -27,36 +28,30 @@ export default function UserNav({ theme }: Props): JSX.Element {
 
   return (
     <div className="user-nav">
-      {theme === 'header-light' ? (
-        <span
-          className="mode-button"
-          onClick={() => dispatch(themeDarkTrigger())}
-        >
+      {theme === 'light' ? (
+        <span className="mode" onClick={() => dispatch(themeDarkTrigger())}>
           <i className="moon-symbol">☾</i> Night
         </span>
       ) : (
-        <span
-          className="mode-button"
-          onClick={() => dispatch(themeLightTrigger())}
-        >
+        <span className="mode" onClick={() => dispatch(themeLightTrigger())}>
           <i className="sun-symbol">☀︎</i> Day
         </span>
       )}
 
       <Link href="/help">
-        <a className="user-nav__link" data-test="help">Help</a>
+        <a className="user-nav__a" data-test="help">Help</a>
       </Link>
 
       {(!staffIsAuthenticated && !userIsAuthenticated) && (
         <>
           <Link href="/register">
-            <a className="user-nav__link" data-test="register">
+            <a className="user-nav__a" data-test="register">
               Create Account
             </a>
           </Link>
 
           <Link href="/login">
-            <a className="user-nav__link" data-test="login">Sign In</a>
+            <a className="user-nav__a" data-test="login">Sign In</a>
           </Link>
         </>
       )}
@@ -64,36 +59,30 @@ export default function UserNav({ theme }: Props): JSX.Element {
       {staffIsAuthenticated && (
         <>
           <Link href="/staff-dashboard">
-            <a className="user-nav__link--auth" data-test="staff-dashboard">
+            <a className="user-nav__a" data-test="staff-dashboard">
               {`Hello, ${authname}`}
             </a>
           </Link>
 
-          <span className="user-nav__link--auth" onClick={handleLogout}>
-            Sign Out
-          </span>
+          <span className="user-nav__a" onClick={handleLogout}>Sign Out</span>
         </>
       )}
 
       {userIsAuthenticated && (
         <>
           <Link href="/dashboard">
-            <a className="user-nav__link--auth" data-test="dashboard">
+            <a className="user-nav__a" data-test="dashboard">
               {`Hello, ${authname}`}
             </a>
           </Link>
 
-          <span className="user-nav__link--auth"onClick={handleLogout}>
-            Sign Out
-          </span>
+          <span className="user-nav__a"onClick={handleLogout}>Sign Out</span>
         </>
       )}
 
-      {/*<Link className="user-nav__link" to="/store/view_cart">Cart</Link>*/}
+      {/*<Link href="/cart">
+        <a className="user-nav__a" data-test="cart">Cart</a>
+      </Link>*/}
     </div>
   );
 }
-
-type Props = {
-  theme: string;
-};

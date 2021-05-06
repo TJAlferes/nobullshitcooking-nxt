@@ -23,9 +23,7 @@
   width: inherit;
 }
 
-.left-nav-main {
-  padding: 10px;
-}
+.left-nav-main {padding: 10px;}
 
 .left-nav-anchor {
   display: block;
@@ -35,55 +33,58 @@
   z-index: 6;
 }
 
-.left-nav-light {background-color: #fff;}
-
-.left-nav-light .left-nav-heading,
-.left-nav-light .logo {background-color: #c10006;}
-
-.left-nav-light .left-nav-toggle-line {background-color: #000;}
-
-.left-nav-light .left-nav-link {
-  background-color: inherit;
-  color: #000;
-}
-
-.left-nav-light hr {background-color: #bfbfbf;}
-
-.left-nav-dark {background-color: #222;}
-
-.left-nav-dark .left-nav-heading,
-.left-nav-dark .logo {background-color: #690004;}
-
-.left-nav-dark .left-nav-toggle-line {background-color: #aaa;}
-
-.left-nav-dark .left-nav-link {
-  background-color: inherit;
-  color: #aaa;
-}
-
-.left-nav-dark hr {background-color: #444;}
-
-.left-nav-link {
+.left-nav__a {
   display: block;
+  font-size: 1.4rem;
   height: 40px;
+  text-decoration: none;
 }
 
-.left-nav hr {
+.left-nav__a:hover {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.left-nav__hr {
   border: 0 none;
   height: 1px;
   margin-bottom: 5px;
 }
 
-.left-nav .left-nav-link {
-  font-size: 1.4rem;
-  text-decoration: none;
+
+
+.light .left-nav,
+.light .left-nav-main {background-color: #fff;}
+
+.light .left-nav-heading,
+.light .logo {background-color: #c10006;}
+
+.light .left-nav-toggle-line {background-color: #000;}
+
+.light .left-nav__a {
+  background-color: inherit;
+  color: #000;
 }
 
-.left-nav .left-nav-link:hover {
-  cursor: pointer;
-  cursor: hand;
+.light .left-nav__a:hover {background-color: #ddd;}
+
+.light .left-nav__hr {background-color: #bfbfbf;}
+
+
+
+.dark .left-nav,
+.dark .left-nav-main {background-color: #222;}
+
+.dark .left-nav-heading,
+.dark .logo {background-color: #690004;}
+
+.dark .left-nav-toggle-line {background-color: #aaa;}
+
+.dark .left-nav__a {
+  background-color: inherit;
+  color: #aaa;
 }
 
-.left-nav.left-nav-light .left-nav-link:hover {background-color: #ddd;}
+.dark .left-nav__a:hover {background-color: #444;}
 
-.left-nav.left-nav-dark .left-nav-link:hover {background-color: #444;}
+.dark .left-nav__hr {background-color: #444;}

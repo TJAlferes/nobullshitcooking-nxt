@@ -12,11 +12,13 @@ import { Menu } from './Menu/Menu';
 // TO DO: dynamically generate menu items from content types
 
 export function LeftNav(): JSX.Element {
-  const dispatch = useDispatch();
   const { pathname } = useRouter();
 
-  const { authname, userIsAuthenticated } = useSelector(state => state.auth);
-  const theme = useSelector(state => state.theme.leftNavTheme);
+  const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
+  const userIsAuthenticated =
+    useSelector(state => state.auth.userIsAuthenticated);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ expanded, setExpanded ] = useState("none");
 
@@ -38,7 +40,7 @@ export function LeftNav(): JSX.Element {
       <Link href={to}>
         <a
           style={style}
-          className="left-nav-link"
+          className="left-nav__a"
           data-test={dataTest}
         >
           {`${text}`}
@@ -60,7 +62,7 @@ export function LeftNav(): JSX.Element {
           </g>
         </svg>
 
-        <Logo theme={theme} />
+        <Logo />
       </div>
 
       <div className="left-nav-anchor" onMouseLeave={closeMenus}>
@@ -74,12 +76,12 @@ export function LeftNav(): JSX.Element {
       </div>
 
       <div className="left-nav-main">
-        <hr />
+        <hr className="left-nav__hr" />
 
         {userIsAuthenticated && (
           <>
             <NavLink dataTest="dashboard" text={authname} to="/dashboard" />
-            <hr />
+            <hr className="left-nav__hr" />
           </>
         )}
 
@@ -89,7 +91,7 @@ export function LeftNav(): JSX.Element {
           <>
             <NavLink dataTest="chat" text="Chat" to="/chat" />
             <NavLink dataTest="friends" text="Friends" to="/friends" />
-            <hr />
+            <hr className="left-nav__hr" />
           </>
         )}
 
@@ -105,7 +107,7 @@ export function LeftNav(): JSX.Element {
           to="/supply/kitchen-equipment"
         />
 
-        <hr />
+        <hr className="left-nav__hr" />
 
         <NavLink
           dataTest="filtration"
@@ -117,7 +119,7 @@ export function LeftNav(): JSX.Element {
 
         <NavLink dataTest="coffee" text="Coffee" to="/page/promo/coffee" />
 
-        <hr />
+        <hr className="left-nav__hr" />
 
         <NavLink
           dataTest="outdoors"
@@ -129,7 +131,7 @@ export function LeftNav(): JSX.Element {
 
         <NavLink dataTest="tools" text="Tools" to="/page/promo/tools" />
 
-        <hr />
+        <hr className="left-nav__hr" />
 
         <NavLink
           dataTest="seasonal"
@@ -137,7 +139,7 @@ export function LeftNav(): JSX.Element {
           to="/page/promo/seasonal"
         />
 
-        <hr />
+        <hr className="left-nav__hr" />
 
         <NavLink dataTest="charity" text="Charity" to="/page/site/charity" />
       </div>

@@ -11,9 +11,9 @@ https://github.com/jasonslyvia/react-menu-aim
 https://github.com/kamens/jQuery-menu-aim
 */
 
-const DELAY = 300;  //200      // ms delay when user appears to be entering submenu
+const DELAY = 200;             // ms delay when appearing to entering submenu
 const MOUSE_LOCS_TRACKED = 3;  // number of past mouse locations to track
-const TOLERANCE = 75;  //50    // bigger = more forgivey when entering submenu
+const TOLERANCE = 50;          // bigger = more forgivey when entering submenu
 
 let lastDelayLoc: IMouseLocation | null;
 let mouseLocs: IMouseLocation[] = [];

@@ -1,14 +1,17 @@
-//import Image from 'next/image';
 import Link from 'next/link';
 
-export function Logo({ theme }: Props): JSX.Element {
+import { useTypedSelector as useSelector } from '../../store';
+
+export function Logo(): JSX.Element {
+  const theme = useSelector(state => state.theme.theme);
+
   return (
     <div className={`logo ${theme}`}>
       <Link href="/">
-        <a className="logo__home-link">
+        <a className="logo__a">
           <img
             className="home-link"
-            src={(theme === "header-light" || theme === "left-nav-light")
+            src={theme === "light"
               ? "/images/header/logo-mobile-red-small.png"
               : "/images/header/logo-mobile-dark-red-small.png"
             }
@@ -20,7 +23,3 @@ export function Logo({ theme }: Props): JSX.Element {
     </div>
   );
 }
-
-type Props = {
-  theme: string;
-};

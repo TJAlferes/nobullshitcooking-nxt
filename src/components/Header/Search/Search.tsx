@@ -1,5 +1,4 @@
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
-//import Image from 'next/image'
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
@@ -7,19 +6,14 @@ import { useTypedSelector as useSelector } from '../../../store';
 import { searchSetIndex } from '../../../store/search/actions';
 import { AutocompleteView } from './AutocompleteView';
 
-export function Search({
-  searchTerm,
-  setSearchTerm,
-  theme
-}: Props): JSX.Element {
+export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const router = useRouter();
 
   const dispatch = useDispatch();
   const currentIndex = useSelector(state => state.search.currentIndex);
+  const theme = useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // use responsive design instead of adaptive design?
-    //.getElementsByClassName("sui-search-box__wrapper")[1]
     const sInsert = document
       .getElementsByClassName("sui-search-box__wrapper")[0]
       .firstChild as HTMLElement;
@@ -55,54 +49,54 @@ export function Search({
 
   return (
     <div className={`search ${theme}`}>
-      <div className="search__category">
-        <div className="search__facade">
-          <span className="search__facade-text">{facadeText}</span>
+      <div className="search-category">
+        <div className="search-facade">
+          <span className="search-facade-text">{facadeText}</span>
 
           <img
-            className="search__facade-arrow"
+            className="search-facade-arrow"
             src="/images/header/down-arrow-gray.png"
             width="8"
             height="6"
           />
         </div>
 
-        <select className="search__prefilters" onChange={changeSearchIndex}>
-          <option className="search__prefilter" value="recipes">
+        <select className="search-filters" onChange={changeSearchIndex}>
+          <option className="search-filter" value="recipes">
             Recipes
           </option>
 
-          <option className="search__prefilter" value="ingredients">
+          <option className="search-filter" value="ingredients">
             Ingredients
           </option>
 
-          <option className="search__prefilter" value="equipment">
+          <option className="search-filter" value="equipment">
             Equipment
           </option>
 
-          <option className="search__prefilter" value="products">
+          <option className="search-filter" value="products">
             Products
           </option>
         </select>
       </div>
 
-      <div className="search__insert">
+      <div className="search-insert">
         <SearchBox
           autocompleteMinimumCharacters={2}
           autocompleteResults={{
-            //clickThroughTags: string[],
-            //linkTarget: "",
-            //sectionTitle: "",
             shouldTrackClickThrough: true,
             titleField: field as string,
             urlField: field as string
           }}
           autocompleteView={AutocompleteView}
-          //className=""
           inputProps={{placeholder: ""}}
           onSelectAutocomplete={handleSelectAutocomplete}
           onSubmit={handleSubmit}
         />
+
+        <div className="magnifying-glass-holder" onClick={handleSubmit}>
+          <span className="magnifying-glass"></span>
+        </div>
       </div>
     </div>
   );
@@ -116,12 +110,8 @@ interface RootContext {
 type Props = {
   searchTerm: string;
   setSearchTerm: any;
-  theme: string;
 };
 
-const mapContextToProps = ({ searchTerm, setSearchTerm }: RootContext) => ({
-  searchTerm,
-  setSearchTerm
-});
-
-export default withSearch(mapContextToProps)(Search);
+export default withSearch(
+  ({ searchTerm, setSearchTerm }: RootContext) => ({searchTerm, setSearchTerm})
+)(Search);
