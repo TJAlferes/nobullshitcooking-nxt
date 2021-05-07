@@ -46,19 +46,19 @@ export function MenuView({
     const img = menuItems[activeMenuRow].image;
     if (!img) return;
 
-    const src = theme === "drop-down-menu-light" ? light[img] : dark[img];
+    const src = theme === "light" ? light[img] : dark[img];
 
-    return <img className="submenu__image" src={src} />;
+    return <img className="menu__img" src={src} />;
   };
 
   const mouseEnter = (name: string, index: number) => {
     if (level === 0) openMenu(name);
-    enterRow(index)
+    enterRow(index);
   };
 
   const mouseLeave = () => {
     clearActiveMenuRow();
-    leaveMenu();
+    //leaveMenu();
   };
 
   const left = `${level}px`;
@@ -72,10 +72,10 @@ export function MenuView({
       onMouseLeave={mouseLeave}
       style={{height, minHeight, left}}
     >
-      <ul className="menu__items">
+      <ul className="menu-items">
         {menuItems.map((item, index) => (
           <li
-            className={`menu__item ${
+            className={`menu-item ${
               ((activeMenuRow !== undefined) && (index === activeMenuRow)) &&
               'active'
             }`}
@@ -84,7 +84,7 @@ export function MenuView({
             onMouseEnter={() => mouseEnter(item.name, index)}
           >
             <Link href={item.link}>
-              <a className={`menu__item-link ${theme}`}>{item.name}</a>
+              <a className={`menu-item__a ${theme}`}>{item.name}</a>
             </Link>
           </li>
         ))}
@@ -99,7 +99,7 @@ export function MenuView({
         )
         ? (
           <Menu
-            closeMenus={close}
+            closeMenus={closeMenus}
             expanded={expanded}
             level={240}
             menuItems={menuItems[activeMenuRow].children}

@@ -125,7 +125,7 @@ export function Menu({
   menuItems,
   openMenu
 }: Props): JSX.Element {
-  const theme = useSelector(state => state.theme.dropDownMenuTheme);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ activeMenuRow, setActiveMenuRow ] = useState<number | undefined>();
 
@@ -162,6 +162,7 @@ export function Menu({
       return;
     }
     setActiveMenuRow(row);
+    console.log('row: ', row);
   };
 
   const clearActiveMenuRow = () => setActiveMenuRow(undefined);

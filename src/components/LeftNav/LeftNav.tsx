@@ -22,7 +22,7 @@ export function LeftNav(): JSX.Element {
 
   const [ expanded, setExpanded ] = useState("none");
 
-  const backgroundColor = theme === "left-nav-light" ? "#ddd" : "#444";
+  const backgroundColor = theme === "light" ? "#ddd" : "#444";
   
   const click = () => dispatch(closeLeftNav());
 
