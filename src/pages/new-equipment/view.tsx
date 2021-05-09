@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ReactCrop, { Crop } from "react-image-crop";
 
-import { LoaderButton } from '../../components';
+import { CropPreview, LoaderButton } from '../../components';
 import { IEquipmentType } from '../../store/data/types';
 
 export function NewEquipmentView({
@@ -14,18 +14,18 @@ export function NewEquipmentView({
   fullCrop,
   changeDescription,
   changeName,
-  handleSubmit,
   changeType,
   image,
   loading,
   name,
   onCropChange,
   onCropComplete,
-  oneColumnATheme,
   onImageLoaded,
   onSelectFile,
   prevImage,
   staffIsAuthenticated,
+  submit,
+  theme,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
@@ -35,14 +35,12 @@ export function NewEquipmentView({
     : 'https://s3.amazonaws.com/nobsc-user-equipment';
 
   return (
-    <div className={`new-equipment one-column-a ${oneColumnATheme}`}>
+    <div className={`new-equipment one-col-a ${theme}`}>
       <h1>New Equipment</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2 className="new-equipment__h2" data-test="equipment-type-heading">
-        Type of Equipment
-      </h2>
+      <h2 className="new-equipment__h2">Type of Equipment</h2>
 
       <select
         name="equipmentType"
@@ -51,34 +49,30 @@ export function NewEquipmentView({
         value={typeId}
       >
         <option value=""></option>
-        {equipmentTypes.map(t => (
-          <option key={t.id} value={t.id}>{t.name}</option>
+        {equipmentTypes.map(({ id, name }) => (
+          <option key={id} value={id}>{name}</option>
         ))}
       </select>
 
-      <h2 className="new-equipment__h2" data-test="name-heading">Name</h2>
+      <h2 className="new-equipment__h2">Name</h2>
 
       <input
-        className="new-equipment__name"
+        className="new-equipment-name"
         onChange={changeName}
         type="text"
         value={name}
       />
 
-      <h2 className="new-equipment__h2" data-test="description-heading">
-        Description
-      </h2>
+      <h2 className="new-equipment__h2">Description</h2>
 
       <textarea
-        className="new-equipment__description"
+        className="new-equipment-description"
         onChange={changeDescription}
         value={description}
       />
 
-      <div className="new-equipment__image">
-        <h2 className="new-equipment__h2" data-test="image-heading">
-          Image of Equipment
-        </h2>
+      <div className="new-equipment-image">
+        <h2 className="new-equipment__h2">Image of Equipment</h2>
 
         {!image && (
           <div>
@@ -90,10 +84,10 @@ export function NewEquipmentView({
             <h4 className="new-equipment__h4">Change</h4>
 
             <input
-              className="new-equipment__image-input"
-              type="file"
               accept="image/*"
+              className="new-equipment-image__input"
               onChange={onSelectFile}
+              type="file"
             />
           </div>
         )}
@@ -101,7 +95,7 @@ export function NewEquipmentView({
         {image && (
           <div>
             <ReactCrop
-              className="new-equipment__crop-tool"
+              className="crop-tool"
               crop={crop}
               imageStyle={{minHeight: "300px"}}
               onChange={onCropChange}
@@ -111,36 +105,17 @@ export function NewEquipmentView({
               style={{minHeight: "300px"}}
             />
 
-            <span className="crop-tool-tip">
-              Move the crop to your desired position. These two images will be saved for you:
-            </span>
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span>
-
-                <img className="crop-full" src={fullCrop} />
-              </div>
-
-              <div className="crop-tiny-outer">
-                <span>Tiny Size: </span>
-
-                <img className="crop-tiny" src={tinyCrop} />
-              </div>
-            </div>
-
-            <button
-              className="image-cancel-button"
-              disabled={loading}
-              onClick={cancelImage}
-            >
-              Cancel
-            </button>
+            <CropPreview
+              cancelImage={cancelImage}
+              fullCrop={fullCrop}
+              loading={loading}
+              tinyCrop={tinyCrop}
+            />
           </div>
         )}
       </div>
 
-      <div className="new-equipment__finish-area">
+      <div className="new-equipment-finish">
         <Link href="/dashboard">
           <a className="cancel-button">Cancel</a>
         </Link>
@@ -151,7 +126,7 @@ export function NewEquipmentView({
           isLoading={loading}
           loadingText="Creating..."
           name="submit"
-          onClick={handleSubmit}
+          onClick={submit}
           text="Create"
         />
       </div>
@@ -169,18 +144,18 @@ type Props = {
   fullCrop: string;
   changeDescription(e: React.SyntheticEvent<EventTarget>): void;
   changeName(e: React.SyntheticEvent<EventTarget>): void;
-  handleSubmit(): void;
   changeType(e: React.SyntheticEvent<EventTarget>): void;
   image: string | ArrayBuffer | null;
   loading: boolean;
   name: string;
   onCropChange(crop: Crop): void;
   onCropComplete(crop: Crop): void;
-  oneColumnATheme: string;
   onImageLoaded(image: HTMLImageElement): void;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>): void;
   prevImage: string;
   staffIsAuthenticated?: boolean;
+  submit(): void;
+  theme: string;
   tinyCrop: string;
   typeId: number;
 };

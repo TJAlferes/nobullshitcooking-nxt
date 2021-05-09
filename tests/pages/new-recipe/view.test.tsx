@@ -15,16 +15,15 @@ const cancelCookingImage = jest.fn();
 const cancelEquipmentImage = jest.fn();
 const cancelIngredientsImage = jest.fn();
 const cancelRecipeImage = jest.fn();
-const handleCuisineChange = jest.fn();
-const handleDescriptionChange = jest.fn();
-const handleDirectionsChange = jest.fn();
-const handleEquipmentRowChange = jest.fn();
-const handleIngredientRowChange = jest.fn();
-const handleMethodsChange = jest.fn();
-const handleRecipeTypeChange = jest.fn();
-const handleSubmit = jest.fn();
-const handleSubrecipeRowChange = jest.fn();
-const handleTitleChange = jest.fn();
+const changeCuisine = jest.fn();
+const changeDescription = jest.fn();
+const changeDirections = jest.fn();
+const changeEquipmentRow = jest.fn();
+const changeIngredientRow = jest.fn();
+const changeMethods = jest.fn();
+const changeRecipeType = jest.fn();
+const changeSubrecipeRow = jest.fn();
+const changeTitle = jest.fn();
 const onCookingCropChange = jest.fn();
 const onCookingCropComplete = jest.fn();
 const onCookingImageLoaded = jest.fn();
@@ -44,6 +43,7 @@ const onSelectRecipeFile = jest.fn();
 const removeEquipmentRow = jest.fn();
 const removeIngredientRow = jest.fn();
 const removeSubrecipeRow = jest.fn();
+const submit = jest.fn();
 
 const beginProps = {
   addEquipmentRow,
@@ -54,6 +54,15 @@ const beginProps = {
   cancelEquipmentImage,
   cancelIngredientsImage,
   cancelRecipeImage,
+  changeCuisine,
+  changeDescription,
+  changeDirections,
+  changeEquipmentRow,
+  changeIngredientRow,
+  changeMethods,
+  changeRecipeType,
+  changeSubrecipeRow,
+  changeTitle,
   cookingCrop: {aspect: 280 / 172},
   cookingFullCrop: "",
   cookingImage: null,
@@ -146,17 +155,6 @@ const beginProps = {
     13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
     19: false, 20: false, 21: false, 22: false, 23: false, 24: false
   },
-  handleCuisineChange,
-  handleDescriptionChange,
-  handleDirectionsChange,
-  handleEquipmentRowChange,
-  handleIngredientRowChange,
-  handleMethodsChange,
-  handleRecipeTypeChange,
-  handleSubmit,
-  handleSubrecipeRowChange,
-  handleTitleChange,
-  oneColumnATheme: "one-column-a-light",
   onCookingCropChange,
   onCookingCropComplete,
   onCookingImageLoaded,
@@ -185,7 +183,9 @@ const beginProps = {
   removeIngredientRow,
   removeSubrecipeRow,
   staffIsAuthenticated: false,  // test for this
+  submit,
   subrecipeRows: [],
+  theme: "light",
   title: "Title"
 };
 
@@ -276,8 +276,7 @@ describe('NewRecipeView', () => {
     const wrapper = shallow(<NewRecipeView {...beginProps} />);
 
     it('displays feedback', () => {
-      expect(wrapper.find('p.new-recipe__feedback').text())
-      .toEqual("Some message.");
+      expect(wrapper.find('p.feedback').text()).toEqual("Some message.");
     });
 
     it('displays an ExpandCollapse component', () => {
@@ -285,53 +284,44 @@ describe('NewRecipeView', () => {
     });
 
     it('displays a h2 element with text Ownership', () => {
-      expect(wrapper.find('[data-test="ownership-heading"]').text())
-      .toEqual("Ownership");
+      expect(wrapper.find('h2').contains("Ownership")).toEqual(true);
     });
 
     it('displays a h2 element with text Type Of Recipe', () => {
-      expect(wrapper.find('[data-test="recipe-type-heading"]').text())
-      .toEqual("Type of Recipe");
+      expect(wrapper.find('h2').contains("Type of Recipe")).toEqual(true);
     });
 
     it('displays a h2 element with text Cuisine', () => {
-      expect(wrapper.find('[data-test="cuisine-heading"]').text())
-      .toEqual("Cuisine");
+      expect(wrapper.find('h2').contains("Cuisine")).toEqual(true);
     });
 
     it('displays a h2 element with text Title', () => {
-      expect(wrapper.find('[data-test="title-heading"]').text())
-      .toEqual("Title");
+      expect(wrapper.find('h2').contains("Title")).toEqual(true);
     });
 
     it('displays a h2 element with text Description / Author Note', () => {
-      expect(wrapper.find('[data-test="description-heading"]').text())
-      .toEqual("Description / Author Note");
+      expect(wrapper.find('h2').contains("Description / Author Note"))
+        .toEqual(true);
     });
 
     it('displays a h2 element with text Methods', () => {
-      expect(wrapper.find('[data-test="methods-heading"]').text())
-      .toEqual("Methods");
+      expect(wrapper.find('h2').contains("Methods")).toEqual(true);
     });
 
     it('displays a h2 element with text Equipment', () => {
-      expect(wrapper.find('[data-test="equipment-heading"]').text())
-      .toEqual("Equipment");
+      expect(wrapper.find('h2').contains("Equipment")).toEqual(true);
     });
 
     it('displays a h2 element with text Ingredients', () => {
-      expect(wrapper.find('[data-test="ingredients-heading"]').text())
-      .toEqual("Ingredients");
+      expect(wrapper.find('h2').contains("Ingredients")).toEqual(true);
     });
 
     it('displays a h2 element with text Subrecipes', () => {
-      expect(wrapper.find('[data-test="subrecipes-heading"]').text())
-      .toEqual("Subrecipes");
+      expect(wrapper.find('h2').contains("Subrecipes")).toEqual(true);
     });
 
     it('displays a h2 element with text Directions', () => {
-      expect(wrapper.find('[data-test="directions-heading"]').text())
-      .toEqual("Directions");
+      expect(wrapper.find('h2').contains("Directions")).toEqual(true);
     });
 
     it('displays a recipe type select element', () => {

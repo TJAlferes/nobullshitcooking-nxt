@@ -3,33 +3,33 @@ import Link from 'next/link';
 import { useTypedSelector as useSelector } from '../../store';
 
 export function Footer(): JSX.Element {
-  const theme = useSelector(state => state.theme.footerTheme);  // useContext?
+  const theme = useSelector(state => state.theme.theme);
 
   return (
     <footer className={`footer ${theme}`}>
-      <div className="footer__links">
+      <div className="footer-links">
         <Link href="/page/site/sitemap">
-          <a className="footer__link">Sitemap</a>
+          <a className="footer__a">Sitemap</a>
         </Link>
 
         <Link href="/page/site/disclaimer">
-          <a className="footer__link">Disclaimer</a>
+          <a className="footer__a">Disclaimer</a>
         </Link>
 
         <Link href="/page/site/terms">
-          <a className="footer__link">Terms of Use</a>
+          <a className="footer__a">Terms of Use</a>
         </Link>
 
         <Link href="/page/site/privacy">
-          <a className="footer__link">Privacy Policy</a>
+          <a className="footer__a">Privacy Policy</a>
         </Link>
         
         <Link href="/page/site/help">
-          <a className="footer__link">Help</a>
+          <a className="footer__a">Help</a>
         </Link>
       </div>
 
-      <p className="footer__copyright">
+      <p className="footer-copyright">
         &copy; 
         {` 
           2015 - ${(new Date().getFullYear())},

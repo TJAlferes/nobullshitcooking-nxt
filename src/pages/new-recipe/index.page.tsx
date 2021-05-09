@@ -22,15 +22,12 @@ import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './view';
 
-export default function NewRecipe({
-  editing,
-  oneColumnATheme,
-  ownership
-}: Props): JSX.Element {
+export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
+  // don't do this?
   const {
     authname,
     staffIsAuthenticated
@@ -52,6 +49,7 @@ export default function NewRecipe({
     recipeTypes
   } = useSelector(state => state.data);
   const staffMessage = useSelector(state => state.staff.message);
+  const theme = useSelector(state => state.theme.theme);
   const userMessage = useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
@@ -703,7 +701,6 @@ export default function NewRecipe({
       onCookingCropChange={onCookingCropChange}
       onCookingCropComplete={onCookingCropComplete}
       onCookingImageLoaded={onCookingImageLoaded}
-      oneColumnATheme={oneColumnATheme}
       onEquipmentCropChange={onEquipmentCropChange}
       onEquipmentCropComplete={onEquipmentCropComplete}
       onEquipmentImageLoaded={onEquipmentImageLoaded}
@@ -730,6 +727,7 @@ export default function NewRecipe({
       removeSubrecipeRow={removeSubrecipeRow}
       staffIsAuthenticated={staffIsAuthenticated}
       subrecipeRows={subrecipeRows}
+      theme={theme}
       title={title}
     />
   );
@@ -837,6 +835,5 @@ export interface ISubrecipeRow {
 
 type Props = {
   editing: boolean;
-  oneColumnATheme: string;
   ownership: string;
 };

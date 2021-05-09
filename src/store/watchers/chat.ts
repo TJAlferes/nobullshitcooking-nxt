@@ -1,3 +1,4 @@
+/*
 import { all, takeEvery } from 'redux-saga/effects';
 
 import { actionTypes as authActionTypes } from '../auth/types';
@@ -29,3 +30,4 @@ export function* watchChat() {
     takeEvery(CHAT_SEND_PRIVATE_MESSAGE, chatSendPrivateMessageSaga)
   ]);
 }
+*/

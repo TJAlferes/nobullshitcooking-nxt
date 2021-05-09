@@ -24,11 +24,11 @@ export function IngredientRow({
     ...(myPrivateIngredients.length ? myPrivateIngredients : [])
   ];
   return (
-    <div className="ingredient-row">
+    <div className="recipe-row">
+      <label className="recipe-row__label">Amount:</label>
 
-      <label className="ingredient-row-label">Amount:</label>
       <input
-        className="ingredient-row-manual-amount"
+        className="recipe-row__input"
         max="9999"
         min="0.125"
         name="amount"
@@ -39,43 +39,49 @@ export function IngredientRow({
         value={amount}
       />
 
-      <label className="ingredient-row-label">Unit:</label>
+      <label className="recipe-row__label">Unit:</label>
+
       <select
-        className="ingredient-row-select-unit"
+        className="recipe-row__select"
         name="unit"
         onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={measurementId}
       >
         <option value=""></option>
+
         {measurements.map((m, index) => (
           <option key={index} value={m.id}>{m.name}</option>
         ))}
       </select>
 
-      <label className="ingredient-row-label">Type:</label>
+      <label className="recipe-row__label">Type:</label>
+
       <select
-        className="ingredient-row-select-ingredient-type"
+        className="recipe-row__select"
         name="type"
         onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={type}
       >
         <option value=""></option>
+
         {ingredientTypes.map((i, index) => (
           <option key={index} value={i.id}>{i.name}</option>
         ))}
       </select>
 
-      <label className="ingredient-row-label">Ingredient:</label>
+      <label className="recipe-row__label">Ingredient:</label>
+
       <select
-        className="ingredient-row-select-ingredient"
+        className="recipe-row__select"
         name="ingredient"
         onChange={(e) => changeIngredientRow(e, rowKey)}
         required
         value={id}
       >
         <option value=""></option>
+
         {availableIngredients
           .filter(i => i.ingredient_type_id == type)
           .map((i, index) => (
@@ -84,27 +90,25 @@ export function IngredientRow({
       </select>
 
       <button
-        className="new-recipe__remove-row-button"
-        data-test="ingredient-row-remove-row"
+        className="recipe-row__button--remove"
         onClick={() => removeIngredientRow(rowKey)}
       >
         Remove
       </button>
-
     </div>
   );
 }
 
 type Props = {
   amount: string | number;
-  ingredients: IIngredient[];
-  ingredientTypes: IIngredientType[];
-  measurements: IMeasurement[];
-  myPrivateIngredients: IIngredient[];
   changeIngredientRow(
     e: React.SyntheticEvent<EventTarget>,
     rowKey: string
   ): void;
+  ingredients: IIngredient[];
+  ingredientTypes: IIngredientType[];
+  measurements: IMeasurement[];
+  myPrivateIngredients: IIngredient[];
   id: string | number;
   removeIngredientRow(rowKey: string): void;
   rowKey: string;

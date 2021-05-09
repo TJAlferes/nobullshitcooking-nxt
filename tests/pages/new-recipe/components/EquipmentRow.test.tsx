@@ -1,13 +1,11 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 
+import { EquipmentRow } from '../../../../src/pages/new-recipe/components';
 import { IEquipment } from '../../../../src/store/data/types';
-import { EquipmentRow } from '../../../../src/pages/new-recipe/components/EquipmentRow';
 
-const rowKey = "XYZ";
 const amount = 1;
-const type = 2;
-const id = 1;
+const changeEquipmentRow = jest.fn();
 const equipment = [
   {
     id: 1,
@@ -28,9 +26,11 @@ const equipment = [
     image: "nobsc-metal-spatula"
   },
 ];
-const dataMyPrivateEquipment: IEquipment[] = [];
-const handleEquipmentRowChange = jest.fn();
+const id = 1;
+const myPrivateEquipment: IEquipment[] = [];
 const removeEquipmentRow = jest.fn();
+const rowKey = "XYZ";
+const type = 2;
 
 let wrapper: ShallowWrapper;
 
@@ -38,15 +38,15 @@ describe('EquipmentRow', () => {
   beforeEach(() => {
     wrapper = shallow(
       <EquipmentRow
-        key={rowKey}
-        rowKey={rowKey}
         amount={amount}
-        type={type}
-        id={id}
+        changeEquipmentRow={changeEquipmentRow}
         equipment={equipment}
-        myPrivateEquipment={dataMyPrivateEquipment}
-        handleEquipmentRowChange={handleEquipmentRowChange}
+        id={id}
+        key={rowKey}
+        myPrivateEquipment={myPrivateEquipment}
         removeEquipmentRow={removeEquipmentRow}
+        rowKey={rowKey}
+        type={type}
       />
     );
   });
@@ -70,7 +70,7 @@ describe('EquipmentRow', () => {
   });
 
   it('displays a button element with text Remove', () => {
-    expect(wrapper.find('[data-test="equipment-row-remove-row"]').text())
+    expect(wrapper.find('.recipe-row__button--remove').text())
       .toEqual("Remove");
   });
 });

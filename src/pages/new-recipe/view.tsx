@@ -34,6 +34,15 @@ export function NewRecipeView({
   cancelEquipmentImage,
   cancelIngredientsImage,
   cancelRecipeImage,
+  changeCuisine,
+  changeDescription,
+  changeDirections,
+  changeEquipmentRow,
+  changeIngredientRow,
+  changeMethods,
+  changeRecipeType,
+  changeSubrecipeRow,
+  changeTitle,
   cookingCrop,
   cookingFullCrop,
   cookingImage,
@@ -62,16 +71,6 @@ export function NewRecipeView({
   equipmentPrevImage,
   equipmentRows,
   feedback,
-  changeCuisine,
-  changeDescription,
-  changeDirections,
-  changeEquipmentRow,
-  changeIngredientRow,
-  changeMethods,
-  changeRecipeType,
-  handleSubmit,
-  changeSubrecipeRow,
-  changeTitle,
   id,
   ingredientsCrop,
   ingredientsFullCrop,
@@ -83,7 +82,6 @@ export function NewRecipeView({
   onCookingCropChange,
   onCookingCropComplete,
   onCookingImageLoaded,
-  oneColumnATheme,
   onEquipmentCropChange,
   onEquipmentCropComplete,
   onEquipmentImageLoaded,
@@ -109,18 +107,19 @@ export function NewRecipeView({
   removeIngredientRow,
   removeSubrecipeRow,
   staffIsAuthenticated,
+  submit,
   subrecipeRows,
+  theme,
   title
 }: Props): JSX.Element {
   return (
-    <div className={`new-recipe one-column-a ${oneColumnATheme}`}>
+    <div className={`new-recipe one-col-a ${theme}`}>
       <h1 className="new-recipe__h1">New Recipe</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2 className="new-recipe__h2" data-test="ownership-heading">
-        Ownership
-      </h2>
+      <h2 className="new-recipe__h2">Ownership</h2>
+
       <ExpandCollapse>
         <div>
           <p>Once submitted, a recipe's ownership can't be changed.</p>
@@ -141,37 +140,37 @@ export function NewRecipeView({
           <br />
         </div>
       </ExpandCollapse>
-      <div className="new-recipe__ownerships">
-        <span className="new-recipe__ownership">
+
+      <div className="new-recipe-ownerships">
+        <span className="new-recipe-ownership">
           <input
             checked={ownership === "private"}
-            className="new-recipe__ownership-input"
+            className="new-recipe-ownership__input"
             disabled={true}
             name="private"
             type="radio"
             value="private"
           />
 
-          <label className="new-recipe__ownership-label">Private</label>
+          <label className="new-recipe-ownership__label">Private</label>
         </span>
 
-        <span className="new-recipe__ownership">
+        <span className="new-recipe-ownership">
           <input
             checked={ownership === "public"}
-            className="new-recipe__ownership-input"
+            className="new-recipe-ownership__input"
             disabled={true}
             name="public"
             type="radio"
             value="public"
           />
 
-          <label className="new-recipe__ownership-label">Public</label>
+          <label className="new-recipe-ownership__label">Public</label>
         </span>
       </div>
 
-      <h2 className="new-recipe__h2" data-test="recipe-type-heading">
-        Type of Recipe
-      </h2>
+      <h2 className="new-recipe__h2">Type of Recipe</h2>
+
       <select
         id="recipe_type_id"
         name="recipeType"
@@ -180,16 +179,14 @@ export function NewRecipeView({
         value={recipeTypeId}
       >
         <option value=""></option>
-        {recipeTypes.map(r => (
-          <option key={r.id} data-test={r.name} value={r.id}>
-            {r.name}
-          </option>
+
+        {recipeTypes.map(({ id, name }) => (
+          <option key={id} data-test={name} value={id}>{name}</option>
         ))}
       </select>
 
-      <h2 className="new-recipe__h2" data-test="cuisine-heading">
-        Cuisine
-      </h2>
+      <h2 className="new-recipe__h2">Cuisine</h2>
+
       <select
         id="cuisine_id"
         name="cuisine"
@@ -198,16 +195,14 @@ export function NewRecipeView({
         value={cuisineId}
       >
         <option value=""></option>
-        {cuisines.map(c => (
-          <option key={c.id} value={c.id} data-test={c.name}>
-            {c.name}
-          </option>
+
+        {cuisines.map(({ id, name }) => (
+          <option key={id} value={id} data-test={name}>{name}</option>
         ))}
       </select>
 
-      <h2 className="new-recipe__h2" data-test="title-heading">
-        Title
-      </h2>
+      <h2 className="new-recipe__h2">Title</h2>
+
       <input
         className="new-recipe-title"
         id="recipe_title"
@@ -217,9 +212,8 @@ export function NewRecipeView({
         value={title}
       />
 
-      <h2 className="new-recipe__h2" data-test="description-heading">
-        Description / Author Note
-      </h2>
+      <h2 className="new-recipe__h2">Description / Author Note</h2>
+
       <input
         className="new-recipe-description"
         id="recipe_description"
@@ -229,50 +223,50 @@ export function NewRecipeView({
         value={description}
       />
 
-      <h2 className="new-recipe__h2" data-test="methods-heading">
-        Methods
-      </h2>
-      <div className="new-recipe__methods">
-        {methods.map(m => (
-          <span className="new-recipe__method" key={m.id}>
+      <h2 className="new-recipe__h2">Methods</h2>
+
+      <div className="new-recipe-methods">
+        {methods.map(({ id, name }) => (
+          <span className="new-recipe-method" key={id}>
             <input
-              checked={usedMethods[m.id] === true ? true : false}
-              className="new-recipe__method-input"
-              data-test={`${m.id}-${m.name}`}
-              id={`${m.id}`}
+              checked={usedMethods[id] === true ? true : false}
+              className="new-recipe-method__input"
+              data-test={`${id}-${name}`}
+              id={`${id}`}
               onChange={e => changeMethods(e)}
               type="checkbox"
             />
-            <label className="new-recipe__method-label" data-test={m.name}>
-              {m.name}
+
+            <label className="new-recipe-method__label" data-test={name}>
+              {name}
             </label>
           </span>
         ))}
       </div>
 
-      <div className="new-recipe__required-equipment">
-        <h2 className="new-recipe__h2" data-test="equipment-heading">
-          Equipment
-        </h2>
-        <div className="new-recipe__equipment-rows">
-          {equipmentRows.map(e => (
+      <div className="new-recipe-required-equipment">
+        <h2 className="new-recipe__h2">Equipment</h2>
+
+        <div className="new-recipe-equipment-rows">
+          {equipmentRows.map(({ amount, id, key, type }) => (
             <EquipmentRow
-              amount={e.amount}
+              amount={amount}
               equipment={equipment}
               myPrivateEquipment={
                 ownership === "private" ? myPrivateEquipment : []
               }
-              id={e.id}
+              id={id}
               changeEquipmentRow={changeEquipmentRow}
-              key={e.key}
+              key={key}
               removeEquipmentRow={removeEquipmentRow}
-              rowKey={e.key}
-              type={e.type}
+              rowKey={key}
+              type={type}
             />
           ))}
         </div>
+
         <button
-          className="new-recipe__add-row-button"
+          className="new-recipe__button--add-row"
           data-test="add-equipment"
           onClick={addEquipmentRow}
         >
@@ -280,32 +274,32 @@ export function NewRecipeView({
         </button>
       </div>
 
-      <div className="new-recipe__required-ingredients">
-        <h2 className="new-recipe__h2" data-test="ingredients-heading">
-          Ingredients
-        </h2>
-        <div className="new-recipe__ingredient-rows">
-          {ingredientRows.map(i => (
+      <div className="new-recipe-required-ingredients">
+        <h2 className="new-recipe__h2">Ingredients</h2>
+
+        <div className="new-recipe-ingredient-rows">
+          {ingredientRows.map(({ amount, unit, id, key, type }) => (
             <IngredientRow
-              amount={i.amount}
+              amount={amount}
               ingredients={ingredients}
               ingredientTypes={ingredientTypes}
-              measurementId={i.unit}
+              measurementId={unit}
               measurements={measurements}
               myPrivateIngredients={
                 ownership === "private" ? myPrivateIngredients : []
               }
               changeIngredientRow={changeIngredientRow}
-              id={i.id}
-              key={i.key}
+              id={id}
+              key={key}
               removeIngredientRow={removeIngredientRow}
-              rowKey={i.key}
-              type={i.type}
+              rowKey={key}
+              type={type}
             />
           ))}
         </div>
+
         <button
-          className="new-recipe__add-row-button"
+          className="new-recipe__button--add-row"
           data-test="add-ingredient"
           onClick={addIngredientRow}
         >
@@ -313,11 +307,10 @@ export function NewRecipeView({
         </button>
       </div>
 
-      <div className="new-recipe__required-subrecipes">
-        <h2 className="new-recipe__h2" data-test="subrecipes-heading">
-          Subrecipes
-        </h2>
-        <div className="new-recipe__subrecipe-rows">
+      <div className="new-recipe-required-subrecipes">
+        <h2 className="new-recipe__h2">Subrecipes</h2>
+
+        <div className="new-recipe-subrecipe-rows">
           {subrecipeRows.map(s => (
             <SubrecipeRow
               amount={s.amount}
@@ -344,8 +337,9 @@ export function NewRecipeView({
             />
           ))}
         </div>
+
         <button
-          className="new-recipe__add-row-button"
+          className="new-recipe__button--add-row"
           data-test="add-subrecipe"
           onClick={addSubrecipeRow}
         >
@@ -353,9 +347,8 @@ export function NewRecipeView({
         </button>
       </div>
 
-      <h2 className="new-recipe__h2" data-test="directions-heading">
-        Directions
-      </h2>
+      <h2 className="new-recipe__h2">Directions</h2>
+      
       <textarea
         className="new-recipe-directions"
         id="recipe_directions"
@@ -407,7 +400,7 @@ export function NewRecipeView({
         recipeTinyCrop={recipeTinyCrop}
       />
 
-      <div className="new-recipe__finish-area">
+      <div className="new-recipe-finish">
         <Link href="/dashboard">
           <a
             className="cancel-button"
@@ -416,13 +409,14 @@ export function NewRecipeView({
             Cancel
           </a>
         </Link>
+        
         <LoaderButton
           className="submit-button"
           id="user_submit_recipe_button"
           isLoading={loading}
           loadingText="Submitting Recipe..."
           name="submit"
-          onClick={handleSubmit}
+          onClick={submit}
           text="Submit Recipe"
         />
       </div>
@@ -439,6 +433,24 @@ type Props = {
   cancelEquipmentImage(): void;
   cancelIngredientsImage(): void;
   cancelRecipeImage(): void;
+  changeCuisine(e: React.SyntheticEvent<EventTarget>): void;
+  changeDescription(e: React.SyntheticEvent<EventTarget>): void;
+  changeDirections(e: React.SyntheticEvent<EventTarget>): void;
+  changeEquipmentRow(
+    e: React.SyntheticEvent<EventTarget>,
+    rowKey: string
+  ): void;
+  changeIngredientRow(
+    e: React.SyntheticEvent<EventTarget>,
+    rowKey: string
+  ): void;
+  changeMethods(e: React.SyntheticEvent<EventTarget>): void;
+  changeRecipeType(e: React.SyntheticEvent<EventTarget>): void;
+  changeSubrecipeRow(
+    e: React.SyntheticEvent<EventTarget>,
+    rowKey: string
+  ): void;
+  changeTitle(e: React.SyntheticEvent<EventTarget>): void;
   cookingCrop: Crop;
   cookingFullCrop: string;
   cookingImage: string | ArrayBuffer | null;
@@ -467,25 +479,6 @@ type Props = {
   equipmentPrevImage: string;
   equipmentRows: IEquipmentRow[];
   feedback: string;
-  changeCuisine(e: React.SyntheticEvent<EventTarget>): void;
-  changeDescription(e: React.SyntheticEvent<EventTarget>): void;
-  changeDirections(e: React.SyntheticEvent<EventTarget>): void;
-  changeEquipmentRow(
-    e: React.SyntheticEvent<EventTarget>,
-    rowKey: string
-  ): void;
-  changeIngredientRow(
-    e: React.SyntheticEvent<EventTarget>,
-    rowKey: string
-  ): void;
-  changeMethods(e: React.SyntheticEvent<EventTarget>): void;
-  changeRecipeType(e: React.SyntheticEvent<EventTarget>): void;
-  handleSubmit(): void;
-  changeSubrecipeRow(
-    e: React.SyntheticEvent<EventTarget>,
-    rowKey: string
-  ): void;
-  changeTitle(e: React.SyntheticEvent<EventTarget>): void;
   id: number;
   ingredientsCrop: Crop;
   ingredientsFullCrop: string;
@@ -497,7 +490,6 @@ type Props = {
   onCookingCropChange(crop: Crop): void;
   onCookingCropComplete(crop: Crop): void;
   onCookingImageLoaded(image: HTMLImageElement): void;
-  oneColumnATheme: string;
   onEquipmentCropChange(crop: Crop): void;
   onEquipmentCropComplete(crop: Crop): void;
   onEquipmentImageLoaded(image: HTMLImageElement): void;
@@ -523,6 +515,8 @@ type Props = {
   removeIngredientRow(rowKey: string): void;
   removeSubrecipeRow(rowKey: string): void;
   staffIsAuthenticated?: boolean;
+  submit(): void;
   subrecipeRows: ISubrecipeRow[];
+  theme: string;
   title: string;
 };

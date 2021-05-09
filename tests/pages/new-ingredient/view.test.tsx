@@ -5,10 +5,10 @@ import { LoaderButton } from '../../../src/components';
 import { NewIngredientView } from '../../../src/pages/new-ingredient/view';
 
 const cancelImage = jest.fn();
-const handleDescriptionChange = jest.fn();
-const handleNameChange = jest.fn();
-const handleSubmit = jest.fn();
-const handleTypeChange = jest.fn();
+const changeDescription = jest.fn();
+const changeName = jest.fn();
+const submit = jest.fn();
+const changeType = jest.fn();
 const onCropChange = jest.fn();
 const onCropComplete = jest.fn();
 const onImageLoaded = jest.fn();
@@ -16,27 +16,27 @@ const onSelectFile = jest.fn();
 
 const intialProps = {
   cancelImage,
+  changeDescription,
+  changeName,
+  changeType,
   crop: {aspect: 280 / 172},
-  dataIngredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
   description: "",
   feedback: "Some message.",
   fullCrop: "",
-  handleDescriptionChange,
-  handleNameChange,
-  handleSubmit,
-  handleTypeChange,
   image: null,
+  ingredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
   loading: false,
   name: "",
-  oneColumnATheme: "one-column-a-light",
   onCropChange,
   onCropComplete,
   onImageLoaded,
   onSelectFile,
   prevImage: "nobsc-ingredient-default",
   staffIsAuthenticated: false,  // TO DO: test for this
+  submit,
+  theme: "light",
   tinyCrop: "",
-  typeId: 1,
+  typeId: 1
 };
 
 describe('NewIngredientView', () => {
@@ -45,7 +45,7 @@ describe('NewIngredientView', () => {
       const wrapper =
         shallow(<NewIngredientView editing={false} {...intialProps} />);
       expect(wrapper.find('h1').text())
-      .toEqual("Create New Private Ingredient");
+        .toEqual("Create New Private Ingredient");
     });
   });
 
@@ -62,13 +62,11 @@ describe('NewIngredientView', () => {
       shallow(<NewIngredientView editing={false} {...intialProps} />);
 
     it('displays feedback', () => {
-      expect(wrapper.find('p.new-ingredient__feedback').text())
-      .toEqual("Some message.");
+      expect(wrapper.find('p.feedback').text()).toEqual("Some message.");
     });
 
     it('displays a h2 element with text Type Of Ingredient', () => {
-      expect(wrapper.find('[data-test="ingredient-type-heading"]').text())
-      .toEqual("Type of Ingredient");
+      expect(wrapper.find('h2').contains("Type of Ingredient")).toEqual(true);
     });
 
     it('displays an ingredient type select element', () => {
@@ -76,36 +74,33 @@ describe('NewIngredientView', () => {
     });
 
     it('displays a h2 element with text Name', () => {
-      expect(wrapper.find('[data-test="name-heading"]').text())
-      .toEqual("Name");
+      expect(wrapper.find('h2').contains("Name")).toEqual(true);
     });
 
     it('displays a name input element', () => {
-      expect(wrapper.find('input.new-ingredient__name')).toHaveLength(1);
+      expect(wrapper.find('input.new-ingredient-name')).toHaveLength(1);
     });
 
     it('displays a h2 element with text Description', () => {
-      expect(wrapper.find('[data-test="description-heading"]').text())
-      .toEqual("Description");
+      expect(wrapper.find('h2').contains("Description")).toEqual(true);
     });
 
-    it('displays a description input element', () => {
-      expect(wrapper.find('textarea.new-ingredient__description'))
-      .toHaveLength(1);
+    it('displays a description textarea element', () => {
+      expect(wrapper.find('textarea.new-ingredient-description'))
+        .toHaveLength(1);
     });
 
     it('displays a h2 element with text Image of Ingredient', () => {
-      expect(wrapper.find('[data-test="image-heading"]').text())
-      .toEqual("Image of Ingredient");
+      expect(wrapper.find('h2').contains("Image of Ingredient")).toEqual(true);
     });
 
-    // finish
+    // TO DO: finish
 
     it('displays a Link to /dashboard with text Cancel', () => {
       expect(wrapper.find('.new-ingredient__cancel-button').props().to)
-      .toEqual("/dashboard");
+        .toEqual("/dashboard");
       expect(wrapper.find('.new-ingredient__cancel-button').props().children)
-      .toEqual("Cancel");
+        .toEqual("Cancel");
     });
 
     it('displays a LoaderButton with text Create', () => {

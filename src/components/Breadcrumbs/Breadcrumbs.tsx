@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTypedSelector as useSelector } from '../../store';
 
@@ -9,7 +9,7 @@ import { useTypedSelector as useSelector } from '../../store';
 export function Breadcrumbs() {
   const router = useRouter();
 
-  const theme = useSelector(state => state.theme.breadCrumbsTheme);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
 

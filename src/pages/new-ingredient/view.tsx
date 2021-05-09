@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import ReactCrop, { Crop } from "react-image-crop";
 
-import { LoaderButton } from '../../components';
+import { CropPreview, LoaderButton } from '../../components';
 import { IIngredientType } from '../../store/data/types';
 
 export function NewIngredientView({
@@ -14,18 +14,18 @@ export function NewIngredientView({
   fullCrop,
   changeDescription,
   changeName,
-  handleSubmit,
   changeType,
   image,
   loading,
   name,
   onCropChange,
   onCropComplete,
-  oneColumnATheme,
   onImageLoaded,
   onSelectFile,
   prevImage,
   staffIsAuthenticated,
+  submit,
+  theme,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
@@ -35,14 +35,12 @@ export function NewIngredientView({
     : 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
   return (
-    <div className={`new-ingredient one-column-a ${oneColumnATheme}`}>
+    <div className={`new-ingredient one-col-a ${theme}`}>
       <h1>New Ingredient</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2 className="new-ingredient__h2" data-test="ingredient-type-heading">
-        Type of Ingredient
-      </h2>
+      <h2 className="new-ingredient__h2">Type of Ingredient</h2>
 
       <select
         name="ingredientType"
@@ -51,34 +49,30 @@ export function NewIngredientView({
         value={typeId}
       >
         <option value=""></option>
-        {ingredientTypes.map(t => (
-          <option key={t.id} value={t.id}>{t.name}</option>
+        {ingredientTypes.map(({ id, name }) => (
+          <option key={id} value={id}>{name}</option>
         ))}
       </select>
 
-      <h2 className="new-ingredient__h2" data-test="name-heading">Name</h2>
+      <h2 className="new-ingredient__h2">Name</h2>
 
       <input
-        className="new-ingredient__name"
+        className="new-ingredient-name"
         onChange={changeName}
         type="text"
         value={name}
       />
 
-      <h2 className="new-ingredient__h2" data-test="description-heading">
-        Description
-      </h2>
+      <h2 className="new-ingredient__h2">Description</h2>
 
       <textarea
-        className="new-ingredient__description"
+        className="new-ingredient-description"
         onChange={changeDescription}
         value={description}
       />
 
-      <div className="new-ingredient__image">
-        <h2 className="new-ingredient__h2" data-test="image-heading">
-          Image of Ingredient
-        </h2>
+      <div className="new-ingredient-image">
+        <h2 className="new-ingredient__h2">Image of Ingredient</h2>
 
         {!image && (
           <div>
@@ -90,10 +84,10 @@ export function NewIngredientView({
             <h4 className="new-ingredient__h4">Change</h4>
 
             <input
-              className="new-ingredient__image-input"
-              type="file"
               accept="image/*"
+              className="new-ingredient-image__input"
               onChange={onSelectFile}
+              type="file"
             />
           </div>
         )}
@@ -101,7 +95,7 @@ export function NewIngredientView({
         {image && (
           <div>
             <ReactCrop
-              className="new-ingredient__crop-tool"
+              className="crop-tool"
               crop={crop}
               imageStyle={{minHeight: "300px"}}
               onChange={onCropChange}
@@ -111,36 +105,17 @@ export function NewIngredientView({
               style={{minHeight: "300px"}}
             />
 
-            <span className="crop-tool-tip">
-              Move the crop to your desired position. These two images will be saved for you:
-            </span>
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span>
-
-                <img className="crop-full" src={fullCrop} />
-              </div>
-
-              <div className="crop-tiny-outer">
-                <span>Tiny Size: </span>
-
-                <img className="crop-tiny" src={tinyCrop} />
-              </div>
-            </div>
-
-            <button
-              className="image-cancel-button"
-              disabled={loading}
-              onClick={cancelImage}
-            >
-              Cancel
-            </button>
+            <CropPreview
+              cancelImage={cancelImage}
+              fullCrop={fullCrop}
+              loading={loading}
+              tinyCrop={tinyCrop}
+            />
           </div>
         )}
       </div>
 
-      <div className="new-ingredient__finish-area">
+      <div className="new-ingredient-finish">
         <Link href="/dashboard">
           <a className="cancel-button">Cancel</a>
         </Link>
@@ -151,7 +126,7 @@ export function NewIngredientView({
           isLoading={loading}
           loadingText="Creating..."
           name="submit"
-          onClick={handleSubmit}
+          onClick={submit}
           text="Create"
         />
       </div>
@@ -169,18 +144,18 @@ type Props = {
   fullCrop: string;
   changeDescription(e: React.SyntheticEvent<EventTarget>): void;
   changeName(e: React.SyntheticEvent<EventTarget>): void;
-  handleSubmit(): void;
   changeType(e: React.SyntheticEvent<EventTarget>): void;
   image: string | ArrayBuffer | null;
   loading: boolean;
   name: string;
   onCropChange(crop: Crop): void;
   onCropComplete(crop: Crop): void;
-  oneColumnATheme: string;
   onImageLoaded(image: HTMLImageElement): void;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>): void;
   prevImage: string;
   staffIsAuthenticated?: boolean;
+  submit(): void;
+  theme: string;
   tinyCrop: string;
   typeId: number;
 };

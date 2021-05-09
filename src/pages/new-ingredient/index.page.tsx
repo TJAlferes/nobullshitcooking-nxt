@@ -26,10 +26,11 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const userMessage = useSelector(state => state.user.message);
   const officialIngredients =
     useSelector(state => state.data.officialIngredients);
-  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
   const ingredientTypes = useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients =
     useSelector(state => state.data.myPrivateIngredients);
+  const theme = useSelector(state => state.theme.theme);
+
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -118,7 +119,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
-  const handleSubmit = () => {
+  const submit = () => {
     if (!valid()) return;
     setLoading(true);
     if (editing && editingId) {
@@ -186,7 +187,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     const validTypeId = typeId !== 0;
     if (!validTypeId) {
       window.scrollTo(0,0);
-      setFeedback("You forgot to select the ingredient type...");
+      setFeedback("Select ingredient type.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -194,7 +195,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     const validName = name.trim() !== "";
     if (!validName) {
       window.scrollTo(0,0);
-      setFeedback("Umm, double check your name...");
+      setFeedback("Check name.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -202,7 +203,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     const validDescription = description.trim() !== "";
     if (!validDescription) {
       window.scrollTo(0,0);
-      setFeedback("Umm, double check your description...");
+      setFeedback("Check description.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -221,18 +222,18 @@ export function NewIngredient({ editing }: Props): JSX.Element {
       fullCrop={fullCrop}
       changeDescription={changeDescription}
       changeName={changeName}
-      handleSubmit={handleSubmit}
       changeType={changeType}
       image={image}
       loading={loading}
       name={name}
       onCropChange={onCropChange}
       onCropComplete={onCropComplete}
-      oneColumnATheme={oneColumnATheme}
       onImageLoaded={onImageLoaded}
       onSelectFile={onSelectFile}
       prevImage={prevImage}
       staffIsAuthenticated={staffIsAuthenticated}
+      submit={submit}
+      theme={theme}
       tinyCrop={tinyCrop}
       typeId={typeId}
     />

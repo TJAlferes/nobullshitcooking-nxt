@@ -24,10 +24,10 @@ export function NewEquipment({ editing }: Props): JSX.Element {
   const equipmentTypes = useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =
     useSelector(state => state.data.myPrivateEquipment);
-  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
   const staffIsAuthenticated =
     useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage = useSelector(state => state.staff.message);
+  const theme = useSelector(state => state.theme.theme);
   const userMessage = useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
@@ -117,7 +117,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
-  const handleSubmit = () => {
+  const submit = () => {
     if (!valid()) return;
     setLoading(true);
     if (editing && editingId) {
@@ -220,18 +220,18 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       fullCrop={fullCrop}
       changeDescription={changeDescription}
       changeName={changeName}
-      handleSubmit={handleSubmit}
       changeType={changeType}
       image={image}
       loading={loading}
       name={name}
       onCropChange={onCropChange}
       onCropComplete={onCropComplete}
-      oneColumnATheme={oneColumnATheme}
       onImageLoaded={onImageLoaded}
       onSelectFile={onSelectFile}
       prevImage={prevImage}
       staffIsAuthenticated={staffIsAuthenticated}
+      submit={submit}
+      theme={theme}
       tinyCrop={tinyCrop}
       typeId={typeId}
     />

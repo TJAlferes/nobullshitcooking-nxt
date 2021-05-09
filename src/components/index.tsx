@@ -1,4 +1,5 @@
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
+export { CropPreview } from './CropPreview';
 export { ExpandCollapse } from './ExpandCollapse/ExpandCollapse';
 export { Footer } from './Footer/Footer';
 export { Header } from './Header/Header';

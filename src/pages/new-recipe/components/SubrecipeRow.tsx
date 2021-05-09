@@ -50,11 +50,11 @@ export function SubrecipeRow({
   ];
 
   return (
-    <div className="subrecipe-row">
+    <div className="recipe-row">
+      <label className="recipe-row__label">Amount:</label>
 
-      <label className="subrecipe-row-label">Amount:</label>
       <input
-        className="subrecipe-row-manual-amount"
+        className="recipe-row__input"
         max="9999"
         min="0.125"
         name="amount"
@@ -65,57 +65,65 @@ export function SubrecipeRow({
         value={amount}
       />
 
-      <label className="subrecipe-row-label">Unit:</label>
+      <label className="recipe-row__label">Unit:</label>
+
       <select
-        className="subrecipe-row-select-unit"
+        className="recipe-row__select"
         name="unit"
         onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={measurementId}
       >
         <option value=""></option>
+
         {measurements.map((m, index) => (
           <option key={index} value={m.id}>{m.name}</option>
         ))}
       </select>
 
-      <label className="subrecipe-row-label">Type:</label>
+      <label className="recipe-row__label">Type:</label>
+
       <select
-        className="subrecipe-ro-select-subrecipe-type"
+        className="recipe-row__select"
         name="type"
         onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={type}
       >
         <option value=""></option>
+
         {recipeTypes.map((r, index) => (
           <option key={index} value={r.id}>{r.name}</option>
         ))}
       </select>
 
-      <label className="subrecipe-row-label">Cuisine:</label>
+      <label className="recipe-row__label">Cuisine:</label>
+
       <select
-        className="subrecipe-row-select-cuisine"
+        className="recipe-row__select"
         name="cuisine"
         onChange={(e) => changeSubrecipeRow(e, rowKey)}
         required
         value={cuisine}
       >
         <option value=""></option>
+
         {cuisines.map((c, index) => (
           <option key={index} value={c.id}>{c.name}</option>
         ))}
       </select>
 
-      <label className="subrecipe-row-label">Subrecipe:</label>
+      <label className="recipe-row__label">Subrecipe:</label>
+
       <select
-        className="subrecipe-row-select-subrecipe"
+        className="recipe-row__select--subrecipe"
         name="subrecipe"
         required
         value={id}
         onChange={(e) => changeSubrecipeRow(e, rowKey)}
       >
         <option value=""></option>
+
         {availableRecipes
           .filter(r => r.recipe_type_id == type)
           .filter(r => r.cuisine_id == cuisine)
@@ -125,19 +133,21 @@ export function SubrecipeRow({
       </select>
 
       <button
-        className="new-recipe__remove-row-button"
-        data-test="subrecipe-row-remove-row"
+        className="recipe-row__button--remove"
         onClick={() => removeSubrecipeRow(rowKey)}
       >
         Remove
       </button>
-
     </div>
   );
 }
 
 type Props = {
   amount: string | number;
+  changeSubrecipeRow(
+    e: React.SyntheticEvent<EventTarget>,
+    rowKey: string
+  ): void;
   cuisine: string | number;
   cuisines: ICuisine[];
   measurements: IMeasurement[];
@@ -148,10 +158,6 @@ type Props = {
   recipes: IWorkRecipe[];
   recipeTypes: IRecipeType[];
   editing: boolean;
-  changeSubrecipeRow(
-    e: React.SyntheticEvent<EventTarget>,
-    rowKey: string
-  ): void;
   removeSubrecipeRow(rowKey: string): void;
   rowKey: string;
   selfId: number;

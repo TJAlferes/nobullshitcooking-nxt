@@ -22,7 +22,7 @@ import {
   IChatSendPublicMessage,
   IChatSendPrivateMessage
 } from './types';
-
+/*
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
 
@@ -47,11 +47,7 @@ export function chatInit(store: Store) {
     socket.username = username;                        // save their username
   });
 
-  /*
-
-  Users
-
-  */
+  // Users
 
   socket.on('GetOnline', (online: []) => {
     if (!online) return;
@@ -68,11 +64,7 @@ export function chatInit(store: Store) {
     store.dispatch(chatShowOffline(user));
   });
 
-  /*
-
-  Messages
-
-  */
+  // Messages
 
   socket.on('AddPublicMessage', (message: IMessage) => {
     if (!message) return;
@@ -89,11 +81,7 @@ export function chatInit(store: Store) {
     store.dispatch(chatFailedPrivateMessage(feedback));
   });
 
-  /*
-
-  Rooms
-
-  */
+  // Rooms
 
   socket.on('GetUser', (users: [], roomToAdd: string) => {
     if (!users || !roomToAdd) return;
@@ -115,11 +103,7 @@ export function chatInit(store: Store) {
     store.dispatch(chatLeftUser(user));
   });
 
-  /*
-
-  SocketIO Events
-
-  */
+  // SocketIO Events
 
   socket.on('connect', () => {
     store.dispatch(chatConnected());
@@ -135,11 +119,7 @@ export function chatInit(store: Store) {
   });
 }
 
-/*
-
-Sagas
-
-*/
+// Sagas
 
 // use call([socket, socket.method(), ...args])
 // these don't even need to be sagas
@@ -176,3 +156,4 @@ export function chatRejoinRoomSaga() {
   if (chat.channel === "") return;
   socket.emit('RejoinRoom', chat.channel);
 }
+*/

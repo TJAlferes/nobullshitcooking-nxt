@@ -1,36 +1,30 @@
-/*.new-equipment {
-  width: 1000px;
-}*/
+/*.new-equipment {}*/
 
 .new-equipment__h2 {
   font-size: 1.7rem;
   padding-top: 18px;
 }
 
-.new-equipment__name {
+.new-equipment-name {
   border: 1px solid;
   border-radius: 1px;
   display: block;
   height: 31px;
-  margin: 0 auto 0 auto;
-  padding: 3px 7px 3px 7px;
+  margin: 0 auto;
+  padding: 3px 7px;
   width: 100%;
 }
 
-.new-equipment__description {
-  width: 100%;
-}
+.new-equipment-description {width: 100%;}
 
-.new-equipment__h4 {
-  padding-bottom: 3px;
-}
+.new-equipment__h4 {padding-bottom: 3px;}
 
-.new-equipment__finish-area {
+.new-equipment-finish {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
 }
 
 @media (max-width: 899px) {
-  .new-equipment__finish-area {flex-direction: column;}
+  .new-equipment-finish {flex-direction: column;}
 }

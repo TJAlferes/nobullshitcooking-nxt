@@ -5,10 +5,10 @@ import { LoaderButton } from '../../../src/components';
 import { NewEquipmentView } from '../../../src/pages/new-equipment/view';
 
 const cancelImage = jest.fn();
-const handleDescriptionChange = jest.fn();
-const handleNameChange = jest.fn();
-const handleSubmit = jest.fn();
-const handleTypeChange = jest.fn();
+const changeDescription = jest.fn();
+const changeName = jest.fn();
+const submit = jest.fn();
+const changeType = jest.fn();
 const onCropChange = jest.fn();
 const onCropComplete = jest.fn();
 const onImageLoaded = jest.fn();
@@ -16,27 +16,27 @@ const onSelectFile = jest.fn();
 
 const intialProps = {
   cancelImage,
+  changeDescription,
+  changeName,
+  changeType,
   crop: {aspect: 280 / 172},
-  dataEquipmentTypes: [{id: 2, name: "Preparing"}, {id: 3, name: "Cooking"}],
   description: "",
+  equipmentTypes: [{id: 2, name: "Preparing"}, {id: 3, name: "Cooking"}],
   feedback: "Some message.",
   fullCrop: "",
-  handleDescriptionChange,
-  handleNameChange,
-  handleSubmit,
-  handleTypeChange,
   image: null,
   loading: false,
   name: "",
-  oneColumnATheme: "one-column-a-light",
   onCropChange,
   onCropComplete,
   onImageLoaded,
   onSelectFile,
   prevImage: "nobsc-equipment-default",
   staffIsAuthenticated: false,  // TO DO: test for this
+  submit,
+  theme: "light",
   tinyCrop: "",
-  typeId: 1,
+  typeId: 1
 };
 
 describe('NewEquipmentView', () => {
@@ -61,13 +61,11 @@ describe('NewEquipmentView', () => {
       shallow(<NewEquipmentView editing={false} {...intialProps} />);
 
     it('displays feedback', () => {
-      expect(wrapper.find('p.new-equipment__feedback').text())
-      .toEqual("Some message.");
+      expect(wrapper.find('p.feedback').text()).toEqual("Some message.");
     });
 
     it('displays a h2 element with text Type Of Equipment', () => {
-      expect(wrapper.find('[data-test="equipment-type-heading"]').text())
-      .toEqual("Type of Equipment");
+      expect(wrapper.find('h2').contains("Type of Equipment")).toEqual(true);
     });
 
     it('displays an equipment type select element', () => {
@@ -75,36 +73,33 @@ describe('NewEquipmentView', () => {
     });
 
     it('displays a h2 element with text Name', () => {
-      expect(wrapper.find('[data-test="name-heading"]').text())
-      .toEqual("Name");
+      expect(wrapper.find('h2').contains("Name")).toEqual(true);
     });
 
     it('displays a name input element', () => {
-      expect(wrapper.find('input.new-equipment__name')).toHaveLength(1);
+      expect(wrapper.find('input.new-equipment-name')).toHaveLength(1);
     });
 
     it('displays a h2 element with text Description', () => {
-      expect(wrapper.find('[data-test="description-heading"]').text())
-      .toEqual("Description");
+      expect(wrapper.find('h2').contains("Description")).toEqual(true);
     });
 
     it('displays a description textarea element', () => {
-      expect(wrapper.find('textarea.new-equipment__description'))
-      .toHaveLength(1);
+      expect(wrapper.find('textarea.new-equipment-description'))
+        .toHaveLength(1);
     });
 
     it('displays a h2 element with text Image of Equipment', () => {
-      expect(wrapper.find('[data-test="image-heading"]').text())
-      .toEqual("Image of Equipment");
+      expect(wrapper.find('h2').contains("Image of Ingredient")).toEqual(true);
     });
 
-    // finish
+    // TO DO: finish
 
     it('displays a Link to /dashboard with text Cancel', () => {
       expect(wrapper.find('.new-equipment__cancel-button').props().to)
-      .toEqual("/dashboard");
+        .toEqual("/dashboard");
       expect(wrapper.find('.new-equipment__cancel-button').props().children)
-      .toEqual("Cancel");
+        .toEqual("Cancel");
     });
 
     it('displays a LoaderButton with text Create', () => {
