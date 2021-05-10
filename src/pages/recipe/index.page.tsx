@@ -10,7 +10,7 @@ import { userFavoriteRecipe } from '../../store/user/favorite/actions';
 import { userSaveRecipe } from '../../store/user/save/actions';
 import { RecipeView } from './view';
 
-export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
+export default function Recipe(): JSX.Element {
   const router = useRouter();
   const { pathname } = router;
   const { id } = router.query;
@@ -23,14 +23,15 @@ export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
     mySavedRecipes
   } = useSelector(state => state.data);
   const message = useSelector(state => state.user.message);
+  const theme = useSelector(state => state.theme.theme);
   const userIsAuthenticated =
     useSelector(state => state.auth.userIsAuthenticated);
 
-  const [ favoriteClicked, setFavoriteClicked ] = useState(false);
+  const [ favorited, setFavorited ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
   const [ recipe, setRecipe ] = useState<IRecipe>();
-  const [ saveClicked, setSaveClicked ] = useState(false);
+  const [ saved, setSaved ] = useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -75,18 +76,18 @@ export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
     else getPublicRecipe(Number(id));
   }, []);
 
-  const handleFavoriteClick = () => {
+  const favorite = () => {
     if (!userIsAuthenticated) return;
-    if (favoriteClicked) return;
-    setFavoriteClicked(true);
+    if (favorited) return;
+    setFavorited(true);
     setLoading(true);
     dispatch(userFavoriteRecipe(Number(id)));
   };
 
-  const handleSaveClick = () => {
+  const save = () => {
     if (!userIsAuthenticated) return;
-    if (saveClicked) return;
-    setSaveClicked(true);
+    if (saved) return;
+    setSaved(true);
     setLoading(true);
     dispatch(userSaveRecipe(Number(id)));
   };
@@ -95,18 +96,18 @@ export default function Recipe({ twoColumnBTheme }: Props): JSX.Element {
     ? <LoaderSpinner />
     : (
       <RecipeView
+        favorite={favorite}
+        favorited={favorited}
+        feedback={feedback}
+        loading={loading}
         myFavoriteRecipes={myFavoriteRecipes}
         myPrivateRecipes={myPrivateRecipes}
         myPublicRecipes={myPublicRecipes}
         mySavedRecipes={mySavedRecipes}
-        favoriteClicked={favoriteClicked}
-        feedback={feedback}
-        handleFavoriteClick={handleFavoriteClick}
-        handleSaveClick={handleSaveClick}
-        loading={loading}
         recipe={recipe}
-        saveClicked={saveClicked}
-        twoColumnBTheme={twoColumnBTheme}
+        save={save}
+        saved={saved}
+        theme={theme}
         userIsAuthenticated={userIsAuthenticated}
       />
     );
@@ -157,7 +158,3 @@ interface IRequiredSubrecipe {
   measurement_name: string;
   subrecipe_title: string;
 }
-
-type Props = {
-  twoColumnBTheme: string;
-};

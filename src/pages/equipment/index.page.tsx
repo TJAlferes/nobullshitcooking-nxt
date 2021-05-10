@@ -13,7 +13,7 @@ export default function Equipment(): JSX.Element {
   const officialEquipment = useSelector(state => state.data.officialEquipment);
   const myPrivateEquipment =
     useSelector(state => state.data.myPrivateEquipment);
-  const twoColumnBTheme = useSelector(state => state.theme.twoColumnBTheme);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ equipment, setEquipment ] = useState<IEquipment>();
 
@@ -40,9 +40,9 @@ export default function Equipment(): JSX.Element {
     ? <LoaderSpinner />
     : (
       <EquipmentView
-        myPrivateEquipment={myPrivateEquipment}
         equipment={equipment}
-        twoColumnBTheme={twoColumnBTheme}
+        myPrivateEquipment={myPrivateEquipment}
+        theme={theme}
       />
     );
 }

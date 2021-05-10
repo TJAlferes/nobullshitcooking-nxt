@@ -7,7 +7,7 @@ import Ingredient from '../../../src/pages/ingredient/index.page';
 import { IngredientView } from '../../../src/pages/ingredient/view';
 
 const initialProps = {
-  dataIngredients: [
+  ingredients: [
     {
       id: 1,
       owner_id: 1,
@@ -31,8 +31,8 @@ const initialProps = {
       image: "nobsc-spinach"
     }
   ],
-  dataMyPrivateIngredients: [],
-  twoColumnBTheme: "light"
+  myPrivateIngredients: [],
+  theme: "light"
 };
 
 const mockHistoryPush = jest.fn();
@@ -98,9 +98,8 @@ describe('Ingredient', () => {
     await act(async () => {
       Promise.resolve(() => {
         setImmediate(() => wrapper.update());
-        expect(wrapper.find('[data-test="ingredient-view"]')).toHaveLength(1);
-        expect(wrapper.find(IngredientView).props().ingredient.id)
-        .toEqual(1);
+        expect(wrapper.find('.ingredient')).toHaveLength(1);
+        expect(wrapper.find(IngredientView).props().ingredient.id).toEqual(1);
       });
     });
   });

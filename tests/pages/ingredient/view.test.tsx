@@ -3,21 +3,8 @@ import React from 'react';
 
 import { IngredientView } from '../../../src/pages/ingredient/view';
 
-const ingredient = {
-  id: 1,
-  owner_id: 1,
-  ingredient_type_id: 1,
-  brand: null,
-  variety: "Chilean",
-  name: "Salmon",
-  ingredient_type_name: "Fish",
-  description: "Some note.",
-  image: "nobsc-salmon"
-};
-
 const initialProps = {
-  twoColumnBTheme: "light",
-  dataMyPrivateIngredients: [
+  myPrivateIngredients: [
     {
       id: 600,
       owner_id: 88,
@@ -40,21 +27,33 @@ const initialProps = {
       description: "Some note.",
       image: "0123456790"
     }
-  ]
+  ],
+  theme: "light"
+};
+const ingredient = {
+  id: 1,
+  owner_id: 1,
+  ingredient_type_id: 1,
+  brand: null,
+  variety: "Chilean",
+  name: "Salmon",
+  ingredient_type_name: "Fish",
+  description: "Some note.",
+  image: "nobsc-salmon"
 };
 
 describe('IngredientView', () => {
   describe('when the ingredient is a private user ingredient', () => {
     const wrapper = shallow(
       <IngredientView
-        ingredient={initialProps.dataMyPrivateIngredients[0]}
+        ingredient={initialProps.myPrivateIngredients[0]}
         {...initialProps}
       />
     );
 
     it('displays a h1 element with text My Special Apple', () => {
-      expect(wrapper.find('.ingredient__name').text())
-      .toEqual("My Special Apple");
+      expect(wrapper.find('.ingredient-name').text())
+        .toEqual("My Special Apple");
     });
 
     it('displays the correct ingredient image', () => {
@@ -64,22 +63,21 @@ describe('IngredientView', () => {
     });
 
     it('displays a span element with text Fruit', () => {
-      expect(wrapper.find('.ingredient__type').text()).toEqual("Fruit");
+      expect(wrapper.find('.ingredient-type').text()).toEqual("Fruit");
     });
 
     it('displays a div element with text Some note.', () => {
-      expect(wrapper.find('.ingredient__description').text())
-      .toEqual("Some note.");
+      expect(wrapper.find('.ingredient-description').text())
+        .toEqual("Some note.");
     });
   });
 
   describe('when the ingredient is an official ingredient', () => {
-    const wrapper = shallow(
-      <IngredientView ingredient={ingredient} {...initialProps} />
-    );
+    const wrapper =
+      shallow(<IngredientView ingredient={ingredient} {...initialProps} />);
 
     it('displays a h1 element with text Chilean Salmon', () => {
-      expect(wrapper.find('.ingredient__name').text()).toEqual("Chilean Salmon");
+      expect(wrapper.find('.ingredient-name').text()).toEqual("Chilean Salmon");
     });
 
     it('displays the correct ingredient image', () => {
@@ -89,12 +87,12 @@ describe('IngredientView', () => {
     });
 
     it('displays a span element with text Fish', () => {
-      expect(wrapper.find('.ingredient__type').text()).toEqual("Fish");
+      expect(wrapper.find('.ingredient-type').text()).toEqual("Fish");
     });
 
     it('displays a div element with text Some note.', () => {
-      expect(wrapper.find('.ingredient__description').text())
-      .toEqual("Some note.");
+      expect(wrapper.find('.ingredient-description').text())
+        .toEqual("Some note.");
     });
   });
 });

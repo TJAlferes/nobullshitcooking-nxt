@@ -23,6 +23,7 @@ export function IngredientRow({
     ...ingredients,
     ...(myPrivateIngredients.length ? myPrivateIngredients : [])
   ];
+  
   return (
     <div className="recipe-row">
       <label className="recipe-row__label">Amount:</label>

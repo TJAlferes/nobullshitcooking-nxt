@@ -14,9 +14,9 @@ export default function Ingredient(): JSX.Element {
     useSelector(state => state.data.officialIngredients);
   const myPrivateIngredients =
     useSelector(state => state.data.myPrivateIngredients);
-  const twoColumnBTheme = useSelector(state => state.theme.twoColumnBTheme);
+  const theme = useSelector(state => state.theme.theme);
 
-  const [ ingredient, setIngredient ] = useState<IIngredient | null>(null);
+  const [ ingredient, setIngredient ] = useState<IIngredient>();
 
   useEffect(() => {
     if (!id) {
@@ -41,9 +41,9 @@ export default function Ingredient(): JSX.Element {
     ? <LoaderSpinner />
     : (
       <IngredientView
-        myPrivateIngredients={myPrivateIngredients}
         ingredient={ingredient}
-        twoColumnBTheme={twoColumnBTheme}
+        myPrivateIngredients={myPrivateIngredients}
+        theme={theme}
       />
     );
 }

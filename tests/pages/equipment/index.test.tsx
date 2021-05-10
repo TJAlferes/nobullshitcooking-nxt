@@ -7,7 +7,7 @@ import Equipment from '../../../src/pages/equipment/index.page';
 import { EquipmentView } from '../../../src/pages/equipment/view';
 
 const initialProps = {
-  dataEquipment: [
+  equipment: [
     {
       id: 1,
       owner_id: 1,
@@ -27,8 +27,8 @@ const initialProps = {
       image: "nobsc-cutting-board"
     }
   ],
-  dataMyPrivateEquipment: [],
-  twoColumnBTheme: "light"
+  myPrivateEquipment: [],
+  theme: "light"
 };
 
 const mockHistoryPush = jest.fn();
@@ -100,7 +100,7 @@ describe('Equipment', () => {
     await act(async () => {
       Promise.resolve(() => {
         setImmediate(() => wrapper.update());
-        expect(wrapper.find('[data-test="equipment-view"]')).toHaveLength(1);
+        expect(wrapper.find('.equipment')).toHaveLength(1);
         expect(wrapper.find(EquipmentView).props().equipment.id).toEqual(1);
       });
     });

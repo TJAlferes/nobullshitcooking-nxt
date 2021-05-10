@@ -13,7 +13,7 @@ export default function Product(): JSX.Element {
 
   const products = useSelector(state => state.data.products);
   const message = useSelector(state => state.user.message);
-  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
+  const theme = useSelector(state => state.theme.theme);
   const userIsAuthenticated =
     useSelector(state => state.auth.userIsAuthenticated);
 
@@ -57,7 +57,7 @@ export default function Product(): JSX.Element {
         feedback={feedback}
         loading={loading}
         product={product}
-        oneColumnATheme={oneColumnATheme}
+        theme={theme}
         userIsAuthenticated={userIsAuthenticated}
       />
     );

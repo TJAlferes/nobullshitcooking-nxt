@@ -1,48 +1,43 @@
 import { IIngredient } from '../../store/data/types';
 
+const url = "https://s3.amazonaws.com/nobsc-";
+
 export function IngredientView({
-  myPrivateIngredients,
   ingredient: { id, full_name, image, ingredient_type_name, description },
-  twoColumnBTheme
+  myPrivateIngredients,
+  theme
 }: Props): JSX.Element {
   return (
-    <div
-      className={`ingredient two-column-b ${twoColumnBTheme}`}
-      data-test="ingredient"
-    >
-      <div className="left-column">
-        <div className="ingredient-details">
-          <h1 className="ingredient__fullname">{full_name}</h1>
+    <div className={`ingredient two-col-b ${theme}`} data-test="ingredient">
+      <div className="two-col-b-left">
+        <h1 className="ingredient-fullname">{full_name}</h1>
 
-          <div className="ingredient__image">
-            {myPrivateIngredients.find(ing => ing.id === id)
-              ? <img src={`https://s3.amazonaws.com/nobsc-user-ingredients/${image}`} />
-              : <img src={`https://s3.amazonaws.com/nobsc-images-01/ingredients/${image}.jpg`} />
-            }
-          </div>
+        <div className="ingredient-image">
+          {myPrivateIngredients.find(ing => ing.id === id)
+            ? <img src={`${url}user-ingredients/${image}`} />
+            : <img src={`${url}images-01/ingredients/${image}.jpg`} />}
+        </div>
 
-          <div className="ingredient__type-outer">
-            <b>Ingredient Type:</b>
-            {' '}
-            <span className="ingredient__type">{ingredient_type_name}</span>
-          </div>
+        <div className="ingredient-type-outer">
+          <b>Ingredient Type:</b>
+          {' '}
+          <span className="ingredient-type">{ingredient_type_name}</span>
+        </div>
 
-          <div className="equipment__description-outer">
-            <b>Ingredient Description:</b>
-            {' '}
-            <div className="ingredient__description">{description}</div>
-          </div>
+        <div className="equipment-description-outer">
+          <b>Ingredient Description:</b>
+          {' '}
+          <div className="ingredient-description">{description}</div>
         </div>
       </div>
 
-      <div className="right-column">
-      </div>
+      <div className="two-col-b-right"></div>
     </div>
   );
 }
 
 type Props = {
-  myPrivateIngredients: IIngredient[];
   ingredient: IIngredient;
-  twoColumnBTheme: string;
+  myPrivateIngredients: IIngredient[];
+  theme: string;
 }

@@ -9,21 +9,21 @@ export function ProductView({
   feedback,
   loading,
   product,
-  oneColumnATheme,
+  theme,
   userIsAuthenticated
 }: Props): JSX.Element {
   const { id, product_type_id, supplier_id, fullname } = product;
 
   return (
-    <div className={`product one-column-a ${oneColumnATheme}`}>
-      <div className="product__top">
-        <div className="product__top-left">
+    <div className={`product one-col-a ${theme}`}>
+      <div className="product-top">
+        <div className="product-top-left">
           <div></div>
 
           <div><h1>{product.fullname}</h1></div>
         </div>
 
-        <div className="product__top-right">
+        <div className="product-top-right">
           {/*<AddToCartButton item={product} />*/}
         </div>
       </div>
@@ -36,6 +36,6 @@ type Props = {
   feedback: string;
   loading: boolean;
   product: IProduct;
-  oneColumnATheme: string;
+  theme: string;
   userIsAuthenticated: boolean;
 };

@@ -24,7 +24,7 @@ const initialProps = {
       image: "0123456790"
     }
   ],
-  twoColumnBTheme: "light",
+  theme: "light",
 };
 const equipment = {
   id: 1,
@@ -46,7 +46,7 @@ describe('EquipmentView', () => {
     );
 
     it('displays a h1 element with text My Spatula', () => {
-      expect(wrapper.find('.equipment__name').text()).toEqual("My Spatula");
+      expect(wrapper.find('.equipment-name').text()).toEqual("My Spatula");
     });
 
     it('displays the correct equipment image', () => {
@@ -56,22 +56,21 @@ describe('EquipmentView', () => {
     });
 
     it('displays a span element with text Cooking', () => {
-      expect(wrapper.find('.equipment__type').text()).toEqual("Cooking");
+      expect(wrapper.find('.equipment-type').text()).toEqual("Cooking");
     });
 
     it('displays a div element with text Some note.', () => {
-      expect(wrapper.find('.equipment__description').text())
-      .toEqual("Some note.");
+      expect(wrapper.find('.equipment-description').text())
+        .toEqual("Some note.");
     });
   });
 
   describe('when the equipment is an official equipment', () => {
-    const wrapper = shallow(
-      <EquipmentView equipment={equipment} {...initialProps} />
-    );
+    const wrapper =
+      shallow(<EquipmentView equipment={equipment} {...initialProps} />);
 
     it('displays a h1 element with text Cutting Board', () => {
-      expect(wrapper.find('.equipment__name').text()).toEqual("Cutting Board");
+      expect(wrapper.find('.equipment-name').text()).toEqual("Cutting Board");
     });
 
     it('displays the correct equipment image', () => {
@@ -81,12 +80,12 @@ describe('EquipmentView', () => {
     });
 
     it('displays a span element with text Preparing', () => {
-      expect(wrapper.find('.equipment__type').text()).toEqual("Preparing");
+      expect(wrapper.find('.equipment-type').text()).toEqual("Preparing");
     });
 
     it('displays a div element with text Some note.', () => {
-      expect(wrapper.find('.equipment__description').text())
-      .toEqual("Some note.");
+      expect(wrapper.find('.equipment-description').text())
+        .toEqual("Some note.");
     });
   });
 });

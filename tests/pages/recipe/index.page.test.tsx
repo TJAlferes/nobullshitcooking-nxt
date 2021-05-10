@@ -29,12 +29,8 @@ const recipe = {
   equipment_image: "nobsc-recipe-equipment-default",
   ingredients_image: "nobsc-recipe-ingredients-default",
   cooking_image: "nobsc-recipe-cooking-default",
-  required_methods: [
-    {method_name: "Simmer"}
-  ],
-  required_equipment: [
-    {amount: 1, equipment_name: "Wooden Spoon"}
-  ],
+  required_methods: [{method_name: "Simmer"}],
+  required_equipment: [{amount: 1, equipment_name: "Wooden Spoon"}],
   required_ingredients: [
     {amount: 1, measurement_name: "teaspoon", ingredient_name: "Salt"}
   ],
@@ -52,7 +48,7 @@ const initialProps = {
   dataMyPublicRecipes: [],
   dataMySavedRecipes: [],
   message: "Some message.",
-  twoColumnBTheme: "light",
+  theme: "light",
   userFavoriteRecipe,
   //userIsAuthenticated: false,
   userSaveRecipe

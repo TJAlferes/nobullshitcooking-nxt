@@ -267,7 +267,6 @@ export function NewRecipeView({
 
         <button
           className="new-recipe__button--add-row"
-          data-test="add-equipment"
           onClick={addEquipmentRow}
         >
           Add Equipment
@@ -300,7 +299,6 @@ export function NewRecipeView({
 
         <button
           className="new-recipe__button--add-row"
-          data-test="add-ingredient"
           onClick={addIngredientRow}
         >
           Add Ingredient
@@ -340,7 +338,6 @@ export function NewRecipeView({
 
         <button
           className="new-recipe__button--add-row"
-          data-test="add-subrecipe"
           onClick={addSubrecipeRow}
         >
           Add Subrecipe
@@ -401,14 +398,7 @@ export function NewRecipeView({
       />
 
       <div className="new-recipe-finish">
-        <Link href="/dashboard">
-          <a
-            className="cancel-button"
-            data-test="cancel-link"
-          >
-            Cancel
-          </a>
-        </Link>
+        <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
         
         <LoaderButton
           className="submit-button"

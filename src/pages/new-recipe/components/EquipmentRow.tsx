@@ -14,6 +14,7 @@ export function EquipmentRow({
     ...equipment,
     ...(myPrivateEquipment.length ? myPrivateEquipment : [])
   ];
+  
   return (
     <div className="recipe-row">
       <label className="recipe-row__label">Amount:</label>

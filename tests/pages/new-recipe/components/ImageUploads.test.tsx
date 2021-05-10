@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { ImageUploads } from '../../../../src/pages/new-recipe/components/ImageUploads';
+import { ImageUploads } from '../../../../src/pages/new-recipe/components';
 
 const cancelCookingImage = jest.fn();
 const cancelEquipmentImage = jest.fn();
@@ -67,13 +67,11 @@ const intialProps = {
 };
 
 describe ('ImageUploads', () => {
-  const wrapper = shallow(
-    <ImageUploads editing={false} {...intialProps} />
-  );
+  const wrapper = shallow(<ImageUploads editing={false} {...intialProps} />);
 
   it('displays a h2 element with text Image of Finished Recipe', () => {
-    expect(wrapper.find('[data-test="image-heading"]').text())
-    .toEqual("Image of Finished Recipe");
+    expect(wrapper.find('h2').contains("Image of Finished Recipe"))
+      .toEqual(true);
   });
 
   // TO DO: finish
