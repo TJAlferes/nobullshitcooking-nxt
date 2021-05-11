@@ -15,17 +15,17 @@ const chatSendPrivateMessage = jest.fn();
 
 const initialProps = {
   authname: "Person",
-  room: "5067",
-  message: "Some message.",
-  messages: [],
   chatChangeRoom,
   chatConnect,
   chatDisconnect,
   chatSendPublicMessage,
   chatSendPrivateMessage,
+  message: "Some message.",
+  messages: [],
   onlineFriends: [{userId: "151", username: "Person2"}],
+  room: "5067",
   status: "Connected",
-  twoColumnATheme: "light",
+  theme: "light",
   users: [
     {userId: "150", username: "Person"},
     {userId: "151", username: "Person2"},

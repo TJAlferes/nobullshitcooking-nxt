@@ -3,15 +3,15 @@ import React from 'react';
 
 import { PeopleView } from '../../../src/pages/chat/PeopleView';
 
-const handleFriendClick = jest.fn();
-const handlePeopleTabChange = jest.fn();
-const handleUserClick = jest.fn();
+const changePeopleTab = jest.fn();
+const focusFriend = jest.fn();
+const focusUser = jest.fn();
 const startPrivateMessage = jest.fn();
 
 const initialProps = {
-  handleFriendClick,
-  handlePeopleTabChange,
-  handleUserClick,
+  changePeopleTab,
+  focusFriend,
+  focusUser,
   onlineFriends: [{userId: "151", username: "Person2"}],
   startPrivateMessage,
   users: [
@@ -39,45 +39,41 @@ describe('PeopleView', () => {
 
     it(`
       displays a button element
-      with className people__tab--current and
+      with className people-tab--current and
       with text 'Room'
     `, () => {
-      expect(wrapper.find('button.people__tab--current').text())
-        .toEqual('Room');
+      expect(wrapper.find('button.people-tab--current').text()).toEqual('Room');
     });
 
     it(`
       displays a ul element
-      with className messenger__persons and
+      with className chat-persons and
     `, () => {
-      expect(wrapper.find('ul.messenger__persons')).toHaveLength(1);
+      expect(wrapper.find('ul.chat-persons')).toHaveLength(1);
     });
 
     it(`
       displays a li element
-      with className messenger__person and
+      with className chat-person and
       with key 'Person'
     `, () => {
-      expect(wrapper.find('li.messenger__person').at(0).key())
-        .toEqual('Person');
+      expect(wrapper.find('li.chat-person').at(0).key()).toEqual('Person');
     });
 
     it(`
       displays a li element
-      with className messenger__person and
+      with className chat-person and
       with key 'Person2'
     `, () => {
-      expect(wrapper.find('li.messenger__person').at(1).key())
-        .toEqual('Person2');
+      expect(wrapper.find('li.chat-person').at(1).key()).toEqual('Person2');
     });
 
     it(`
       displays a li element
-      with className messenger__person and
+      with className chat-person and
       with key 'Person3'
     `, () => {
-      expect(wrapper.find('li.messenger__person').at(2).key())
-        .toEqual('Person3');
+      expect(wrapper.find('li.chat-person').at(2).key()).toEqual('Person3');
     });
 
     describe('when user in room is focused', () => {
@@ -92,10 +88,10 @@ describe('PeopleView', () => {
 
       it(`
         displays a button element
-        with className person-tooltip__start-whisper and
+        with className person-tooltip__button and
         with text 'Whisper'
       `, () => {
-        expect(wrapper.find('button.person-tooltip__start-whisper').text())
+        expect(wrapper.find('button.person-tooltip__button').text())
           .toEqual('Whisper');
       });
     });
@@ -114,26 +110,26 @@ describe('PeopleView', () => {
 
     it(`
       displays a button element
-      with className people__tab--current and
+      with className people-tab--current and
       with text 'Friends'
     `, () => {
-      expect(wrapper.find('button.people__tab--current').text())
+      expect(wrapper.find('button.people-tab--current').text())
         .toEqual('Friends');
     });
 
     it(`
       displays a ul element
-      with className messenger__persons and
+      with className chat-persons and
     `, () => {
-      expect(wrapper.find('ul.messenger__persons')).toHaveLength(1);
+      expect(wrapper.find('ul.chat-persons')).toHaveLength(1);
     });
 
     it(`
       displays a li element
-      with className messenger__person and
+      with className chat-person and
       with key 'Person2'
     `, () => {
-      expect(wrapper.find('li.messenger__person').key()).toEqual('Person2');
+      expect(wrapper.find('li.chat-person').key()).toEqual('Person2');
     });
 
     describe('when online friend is focused', () => {
@@ -148,10 +144,10 @@ describe('PeopleView', () => {
 
       it(`
         displays a button element
-        with className person-tooltip__start-whisper and
+        with className person-tooltip__button and
         with text 'Whisper'
       `, () => {
-        expect(wrapper.find('button.person-tooltip__start-whisper').text())
+        expect(wrapper.find('button.person-tooltip__button').text())
           .toEqual('Whisper');
       });
     });

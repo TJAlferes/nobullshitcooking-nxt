@@ -15,7 +15,7 @@ export function PeopleView({
 }: Props): JSX.Element {
   const Tab = ({ tab }: TabProps) => (
     <button
-      className={peopleTab === tab ? "people__tab--current" : "people__tab"}
+      className={peopleTab === tab ? "people-tab--current" : "people-tab"}
       onClick={() => changePeopleTab(tab)}
     >
       {tab}
@@ -23,18 +23,18 @@ export function PeopleView({
   );
 
   return (
-    <div className="chat__people">
-      <div className="people__tabs">
+    <div className="chat-people">
+      <div className="people-tabs">
         <Tab tab="Room" />
 
         <Tab tab="Friends" />
       </div>
 
       {peopleTab === "Room" && (
-        <ul className="chat__persons">
+        <ul className="chat-persons">
           {users && users.map(({ username }) => (
             <li
-              className="chat__person"
+              className="chat-person"
               key={username}
               onClick={() => focusUser(username)}
             >
@@ -45,7 +45,7 @@ export function PeopleView({
               {focusedUser && focusedUser === username &&
                 <div className="person-tooltip">
                   <button
-                    className="person-tooltip__start-private-message"
+                    className="person-tooltip__button"
                     onClick={() => startPrivateMessage(username)}
                   >
                     Whisper
@@ -58,10 +58,10 @@ export function PeopleView({
       )}
 
       {peopleTab === "Friends" && (
-        <ul className="chat__persons">
+        <ul className="chat-persons">
           {onlineFriends && onlineFriends.map(({ username }) => (
             <li
-              className="chat__person"
+              className="chat-person"
               key={username}
               onClick={() => focusFriend(username)}
             >
@@ -72,7 +72,7 @@ export function PeopleView({
               {focusedFriend && focusedFriend === username &&
                 <div className="person-tooltip">
                   <button
-                    className="person-tooltip__start-private-message"
+                    className="person-tooltip__button"
                     onClick={() => startPrivateMessage(username)}
                   >
                     Whisper

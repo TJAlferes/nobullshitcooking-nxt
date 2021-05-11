@@ -12,43 +12,46 @@ jest.mock('react', () => {
   return {...originalModule, useRef: mockUseRef};
 });
 
-const handleConnect = jest.fn();
-const handleDisconnect = jest.fn();
-const handleRoomInputChange = jest.fn();
-const handleRoomChange = jest.fn();
-const handleMessageInputChange = jest.fn();
-const handleMessageSend = jest.fn();
-const handlePeopleTabChange = jest.fn();
-const handleFriendClick = jest.fn();
-const handleUserClick = jest.fn();
+const changeMessageInput = jest.fn();
+const changeMobileTab = jest.fn();
+const changePeopleTab = jest.fn();
+const changeRoom = jest.fn();
+const changeRoomInput = jest.fn();
+const connect = jest.fn();
+const disconnect = jest.fn();
+const focusFriend = jest.fn();
+const focusUser = jest.fn();
 const messagesRef = useRef<HTMLUListElement>(null);
+const sendMessage = jest.fn();
 const startPrivateMessage = jest.fn();
 
 const initialProps = {
   authname: "Person",
-  room: "5067",
+  changeMessageInput,
+  changeMobileTab,
+  changePeopleTab,
+  changeRoom,
+  changeRoomInput,
+  connect,
+  disconnect,
   feedback: "Some message.",
   focusedFriend: null,
+  focusFriend,
   focusedUser: null,
-  handleRoomChange,
-  handleConnect,
-  handleDisconnect,
-  handleFriendClick,
-  handleMessageInputChange,
-  handleMessageSend,
-  handlePeopleTabChange,
-  handleRoomInputChange,
-  handleUserClick,
+  focusUser,
   loading: false,
   messages: [],
   messagesRef,
   messageToSend: "How goes it?",
+  mobileTab: "Options",
   onlineFriends: [],
   peopleTab: "Room",
+  room: "5067",
   roomToEnter: "",
+  sendMessage,
   startPrivateMessage,
   status: "Disconnected",
-  twoColumnATheme: "light",
+  theme: "light",
   users: []
 };
 
