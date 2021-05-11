@@ -28,19 +28,15 @@ export function DashboardView({
   crop,
   deactivateModal,
   deleteName,
-  editingId,
-  feedback,
-  fullCrop,
-  getApplicationNode,
   deletePlan,
   deletePrivateEquipment,
   deletePrivateIngredient,
   deletePrivateRecipe,
   disownPublicRecipe,
-  subTabClick,
-  tabClick,
-  unfavoriteRecipe,
-  unsaveRecipe,
+  editingId,
+  feedback,
+  fullCrop,
+  getApplicationNode,
   loading,
   modalActive,
   myFavoriteRecipes,
@@ -56,9 +52,13 @@ export function DashboardView({
   onSelectFile,
   submitAvatar,
   subTab,
+  subTabClick,
   tab,
+  tabClick,
+  theme,
   tinyCrop,
-  theme
+  unfavoriteRecipe,
+  unsaveRecipe,
 }: Props): JSX.Element {
   return (
     <div className={`dashboard two-col-a ${theme}`}>
@@ -81,9 +81,9 @@ export function DashboardView({
               crop={crop}
               fullCrop={fullCrop}
               loading={loading}
-              onImageLoaded={onImageLoaded}
               onCropChange={onCropChange}
               onCropComplete={onCropComplete}
+              onImageLoaded={onImageLoaded}
               submitAvatar={submitAvatar}
               tinyCrop={tinyCrop}
             />
@@ -97,9 +97,9 @@ export function DashboardView({
           creatingPlan={creatingPlan}
           deactivateModal={deactivateModal}
           deleteName={deleteName}
+          deletePlan={deletePlan}
           editingId={editingId}
           getApplicationNode={getApplicationNode}
-          deletePlan={deletePlan}
           modalActive={modalActive}
           myPlans={myPlans}
         />
@@ -110,12 +110,12 @@ export function DashboardView({
           activateModal={activateModal}
           deactivateModal={deactivateModal}
           deleteName={deleteName}
-          getApplicationNode={getApplicationNode}
           deletePrivateRecipe={deletePrivateRecipe}
-          subTabClick={subTabClick}
+          getApplicationNode={getApplicationNode}
           modalActive={modalActive}
           myPrivateRecipes={myPrivateRecipes}
           subTab={subTab}
+          subTabClick={subTabClick}
         />
       )}
 
@@ -124,31 +124,30 @@ export function DashboardView({
           activateModal={activateModal}
           deactivateModal={deactivateModal}
           deleteName={deleteName}
-          getApplicationNode={getApplicationNode}
           disownPublicRecipe={disownPublicRecipe}
-          subTabClick={subTabClick}
+          getApplicationNode={getApplicationNode}
           modalActive={modalActive}
           myPublicRecipes={myPublicRecipes}
           subTab={subTab}
+          subTabClick={subTabClick}
         />
       )}
 
       {(!avatar && tab == "recipes" && subTab == "favorite") && (
         <FavoriteRecipes
-          subTabClick={subTabClick}
-          unfavoriteRecipe={unfavoriteRecipe}
           myFavoriteRecipes={myFavoriteRecipes}
           subTab={subTab}
-          
+          subTabClick={subTabClick}
+          unfavoriteRecipe={unfavoriteRecipe}
         />
       )}
 
       {(!avatar && tab == "recipes" && subTab == "saved") && (
         <SavedRecipes
-          subTabClick={subTabClick}
-          unsaveRecipe={unsaveRecipe}
           mySavedRecipes={mySavedRecipes}
           subTab={subTab}
+          subTabClick={subTabClick}
+          unsaveRecipe={unsaveRecipe}
         />
       )}
 
@@ -178,19 +177,15 @@ type Props = {
   crop: Crop;
   deactivateModal(): void;
   deleteName: string;
-  editingId: number | null;
-  feedback: string;
-  fullCrop: string;
-  getApplicationNode(): Element | Node;
   deletePlan(): void;
   deletePrivateEquipment(id: number): void;
   deletePrivateIngredient(id: number): void;
   deletePrivateRecipe(): void;
   disownPublicRecipe(): void;
-  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  tabClick(e: React.SyntheticEvent<EventTarget>): void;
-  unfavoriteRecipe(id: number): void;
-  unsaveRecipe(id: number): void;
+  editingId: number | null;
+  feedback: string;
+  fullCrop: string;
+  getApplicationNode(): Element | Node;
   loading: boolean;
   modalActive: boolean;
   myFavoriteRecipes: IWorkRecipe[];
@@ -200,13 +195,17 @@ type Props = {
   myPrivateRecipes: IWorkRecipe[];
   myPublicRecipes: IWorkRecipe[];
   mySavedRecipes: IWorkRecipe[];
-  onImageLoaded(image: HTMLImageElement): void;
   onCropChange(crop: Crop): void;
   onCropComplete(crop: Crop): void;
+  onImageLoaded(image: HTMLImageElement): void;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>): void;
   submitAvatar(): void;
   subTab: string;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
   tab: string;
-  tinyCrop: string;
+  tabClick(e: React.SyntheticEvent<EventTarget>): void;
   theme: string;
+  tinyCrop: string;
+  unfavoriteRecipe(id: number): void;
+  unsaveRecipe(id: number): void;
 };

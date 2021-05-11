@@ -1,9 +1,8 @@
 import Link from 'next/link';
 
-export function Avatar({
-  authname,
-  onSelectFile
-}: Props): JSX.Element {
+const url = "https://s3.amazonaws.com/nobsc-user-avatars";
+
+export function Avatar({ authname, onSelectFile }: Props): JSX.Element {
   return (
     <div className="dashboard-avatar">
       <Link href={`/profile/${authname}`}>
@@ -16,10 +15,7 @@ export function Avatar({
         <div className="avatar-crop--full">
           <span>Full Size: </span>
 
-          <img
-            className="avatar-crop__img--full"
-            src={`https://s3.amazonaws.com/nobsc-user-avatars/${authname}`}
-          />
+          <img className="avatar-crop__img--full" src={`${url}/${authname}`} />
         </div>
 
         <div className="avatar-crop--tiny">
@@ -27,7 +23,7 @@ export function Avatar({
 
           <img
             className="avatar-crop__img--tiny"
-            src={`https://s3.amazonaws.com/nobsc-user-avatars/${authname}-tiny`}
+            src={`${url}/${authname}-tiny`}
           />
         </div>
       </div>

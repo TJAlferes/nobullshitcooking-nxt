@@ -8,9 +8,9 @@ export function Plans({
   creatingPlan,
   deactivateModal,
   deleteName,
+  deletePlan,
   editingId,
   getApplicationNode,
-  deletePlan,
   modalActive,
   myPlans
 }: Props): JSX.Element {
@@ -111,9 +111,9 @@ type Props = {
   creatingPlan: boolean;
   deactivateModal(): void;
   deleteName: string;
+  deletePlan(): void;
   editingId: number | null;
   getApplicationNode(): Element | Node;
-  deletePlan(): void;
   modalActive: boolean;
   myPlans: IPlan[];
 };

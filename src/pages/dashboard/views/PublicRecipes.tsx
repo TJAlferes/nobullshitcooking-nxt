@@ -4,16 +4,18 @@ import AriaModal from 'react-aria-modal';
 import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from '.';
 
+const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+
 export function PublicRecipes({
   activateModal,
   deactivateModal,
   deleteName,
-  getApplicationNode,
   disownPublicRecipe,
-  subTabClick,
+  getApplicationNode,
   modalActive,
   myPublicRecipes,
-  subTab
+  subTab,
+  subTabClick
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
@@ -56,16 +58,15 @@ export function PublicRecipes({
         : false
       }
 
-      <Subtabs subTabClick={subTabClick} subTab={subTab} />
+      <Subtabs subTab={subTab} subTabClick={subTabClick} />
 
       {myPublicRecipes.length
         ? myPublicRecipes.map(r => (
           <div className="dashboard-item" key={r.id}>
             <span className="dashboard-item-tiny">
               {r.recipe_image !== "nobsc-recipe-default"
-                ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe${r.recipe_image}-tiny`} />
-                : <div className="img-28-18"></div>
-              }
+                ? <img src={`${url}/${r.recipe_image}-tiny`} />
+                : <div className="img-28-18"></div>}
             </span>
 
             <span className="dashboard-item-name">
@@ -102,10 +103,10 @@ type Props = {
   activateModal(id: number, name: string): void;
   deactivateModal(): void;
   deleteName: string;
-  getApplicationNode(): Element | Node;
   disownPublicRecipe(): void;
-  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  getApplicationNode(): Element | Node;
   myPublicRecipes: IWorkRecipe[];
   modalActive: boolean;
   subTab: string;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
 };

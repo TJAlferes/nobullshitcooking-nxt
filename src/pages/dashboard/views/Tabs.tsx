@@ -1,4 +1,4 @@
-export function Tabs({ tabClick, tab }: Props): JSX.Element {
+export function Tabs({ tab, tabClick }: Props): JSX.Element {
   function Tab({ displayText, tabName }: TabProps) {
     return (
       <button
@@ -23,8 +23,8 @@ export function Tabs({ tabClick, tab }: Props): JSX.Element {
 }
 
 type Props = {
-  tabClick(e: React.SyntheticEvent<EventTarget>): void;
   tab: string;
+  tabClick(e: React.SyntheticEvent<EventTarget>): void;
 };
 
 type TabProps = {

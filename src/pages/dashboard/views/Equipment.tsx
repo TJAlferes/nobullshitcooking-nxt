@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { IEquipment } from '../../../store/data/types';
 
+const url = "https://s3.amazonaws.com/nobsc-user-equipment";
+
 export function Equipment({
   deletePrivateEquipment,
   myPrivateEquipment
@@ -19,9 +21,8 @@ export function Equipment({
           <div className="dashboard-item" key={e.id}>
             <span className="dashboard-item-tiny">
               {e.image !== "nobsc-equipment-default"
-                ? <img src={`https://s3.amazonaws.com/nobsc-user-equipment/${e.image}-tiny`} />
-                : <div className="img-28-18"></div>
-              }
+                ? <img src={`${url}/${e.image}-tiny`} />
+                : <div className="img-28-18"></div>}
             </span>
 
             <span className="dashboard-item-name">

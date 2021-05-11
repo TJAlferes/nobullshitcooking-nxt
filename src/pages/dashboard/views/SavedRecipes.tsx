@@ -3,26 +3,27 @@ import Link from 'next/link';
 import { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from '.';
 
+const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+
 export function SavedRecipes({
-  subTabClick,
-  unsaveRecipe,
   mySavedRecipes,
-  subTab
+  subTab,
+  subTabClick,
+  unsaveRecipe
 }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
       <h2 className="dashboard__h2--tall">Saved Recipes</h2>
 
-      <Subtabs subTabClick={subTabClick} subTab={subTab} />
+      <Subtabs subTab={subTab} subTabClick={subTabClick} />
 
       {mySavedRecipes.length
         ? mySavedRecipes.map(r => (
           <div className="dashboard-item" key={r.id}>
             <span className="dashboard-item-tiny">
               {r.recipe_image !== "nobsc-recipe-default"
-                ? <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${r.recipe_image}-tiny`} />
-                : <div className="img-28-18"></div>
-              }
+                ? <img src={`${url}/${r.recipe_image}-tiny`} />
+                : <div className="img-28-18"></div>}
             </span>
 
             <span className="dashboard-item-name">
@@ -50,8 +51,8 @@ export function SavedRecipes({
 }
 
 type Props = {
-  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  unsaveRecipe(id: number): void;
   mySavedRecipes: IWorkRecipe[];
   subTab: string;
+  subTabClick(e: React.SyntheticEvent<EventTarget>): void;
+  unsaveRecipe(id: number): void;
 };

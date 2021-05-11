@@ -6,9 +6,9 @@ export function AvatarEdit({
   crop,
   fullCrop,
   loading,
-  onImageLoaded,
   onCropChange,
   onCropComplete,
+  onImageLoaded,
   submitAvatar,
   tinyCrop,
 }: Props): JSX.Element {

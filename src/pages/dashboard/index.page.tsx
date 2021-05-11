@@ -22,9 +22,6 @@ import { DashboardView } from './view';
 export default function Dashboard(): JSX.Element {
   const dispatch = useDispatch();
   const authname = useSelector(state => state.auth.authname);
-  const creatingPlan = useSelector(state => state.planner.creating);
-  const editingId = useSelector(state => state.planner.editingId);
-  const message = useSelector(state => state.user.message);
   const {
     myFavoriteRecipes,
     myPlans,
@@ -34,6 +31,9 @@ export default function Dashboard(): JSX.Element {
     myPublicRecipes,
     mySavedRecipes
   } = useSelector(state => state.data);
+  const creatingPlan = useSelector(state => state.planner.creating);
+  const editingId = useSelector(state => state.planner.editingId);
+  const message = useSelector(state => state.user.message);
   const theme = useSelector(state => state.theme.theme);
 
   const [ feedback, setFeedback ] = useState("");
@@ -91,10 +91,6 @@ export default function Dashboard(): JSX.Element {
     setModalActive(false);
   };
 
-  const getApplicationNode = (): Element | Node => {
-    return document.getElementById('root') as Element | Node;
-  };
-
   const deletePlan = () => {
     if (!deleteId) return;
     setLoading(true);
@@ -123,23 +119,8 @@ export default function Dashboard(): JSX.Element {
     dispatch(userDisownPublicRecipe(deleteId));
   };
 
-  const subTabClick = (e: React.SyntheticEvent<EventTarget>) => {
-    setSubTab((e.target as HTMLInputElement).name);
-  };
-
-  const tabClick = (e: React.SyntheticEvent<EventTarget>) => {
-    setTab((e.target as HTMLInputElement).name);
-  };
-
-  const unfavoriteRecipe = (id: number) => {
-    setLoading(true);
-    dispatch(userUnfavoriteRecipe(id));
-  };
-
-  const unsaveRecipe = (id: number) => {
-    setLoading(true);
-    dispatch(userUnsaveRecipe(id));
-  };
+  const getApplicationNode = (): Element | Node =>
+    document.getElementById('root') as Element | Node;
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
@@ -175,6 +156,22 @@ export default function Dashboard(): JSX.Element {
     dispatch(authUpdateLocalAvatar(authname));
   };
 
+  const subTabClick = (e: React.SyntheticEvent<EventTarget>) =>
+    setSubTab((e.target as HTMLInputElement).name);
+
+  const tabClick = (e: React.SyntheticEvent<EventTarget>) =>
+    setTab((e.target as HTMLInputElement).name);
+
+  const unfavoriteRecipe = (id: number) => {
+    setLoading(true);
+    dispatch(userUnfavoriteRecipe(id));
+  };
+
+  const unsaveRecipe = (id: number) => {
+    setLoading(true);
+    dispatch(userUnsaveRecipe(id));
+  };
+
   return (
     <DashboardView
       activateModal={activateModal}
@@ -185,19 +182,15 @@ export default function Dashboard(): JSX.Element {
       crop={crop}
       deactivateModal={deactivateModal}
       deleteName={deleteName}
-      editingId={editingId}
-      feedback={feedback}
-      fullCrop={fullCrop}
-      getApplicationNode={getApplicationNode}
       deletePlan={deletePlan}
       deletePrivateEquipment={deletePrivateEquipment}
       deletePrivateIngredient={deletePrivateIngredient}
       deletePrivateRecipe={deletePrivateRecipe}
       disownPublicRecipe={disownPublicRecipe}
-      subTabClick={subTabClick}
-      tabClick={tabClick}
-      unfavoriteRecipe={unfavoriteRecipe}
-      unsaveRecipe={unsaveRecipe}
+      editingId={editingId}
+      feedback={feedback}
+      fullCrop={fullCrop}
+      getApplicationNode={getApplicationNode}
       loading={loading}
       modalActive={modalActive}
       myFavoriteRecipes={myFavoriteRecipes}
@@ -213,9 +206,13 @@ export default function Dashboard(): JSX.Element {
       onSelectFile={onSelectFile}
       submitAvatar={submitAvatar}
       subTab={subTab}
+      subTabClick={subTabClick}
       tab={tab}
-      tinyCrop={tinyCrop}
+      tabClick={tabClick}
       theme={theme}
+      tinyCrop={tinyCrop}
+      unfavoriteRecipe={unfavoriteRecipe}
+      unsaveRecipe={unsaveRecipe}
     />
   );
 }

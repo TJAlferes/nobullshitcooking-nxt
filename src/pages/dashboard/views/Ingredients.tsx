@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { IIngredient } from '../../../store/data/types';
 
+const url = "https://s3.amazonaws.com/nobsc-user-ingredients";
+
 export function Ingredients({
   deletePrivateIngredient,
   myPrivateIngredients
@@ -19,9 +21,8 @@ export function Ingredients({
           <div className="dashboard-item" key={i.id}>
             <span className="dashboard-item-tiny">
               {i.image !== "nobsc-ingredient-default"
-                ? <img src={`https://s3.amazonaws.com/nobsc-user-ingredients/${i.image}-tiny`} />
-                : <div className="img-28-18"></div>
-              }
+                ? <img src={`${url}/${i.image}-tiny`} />
+                : <div className="img-28-18"></div>}
             </span>
 
             <span className="dashboard-item-name">

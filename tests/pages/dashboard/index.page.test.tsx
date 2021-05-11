@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Dashboard from '../../../src/pages/dashboard/index.page';
 import { DashboardView } from '../../../src/pages/dashboard/view';
 
-const authUpdateLocalAvatar = jest.fn();
+//const authUpdateLocalAvatar = jest.fn();
 const userDeletePlan = jest.fn();
 const userDeletePrivateEquipment = jest.fn();
 const userDeletePrivateIngredient = jest.fn();
@@ -17,8 +17,8 @@ const userUnsaveRecipe = jest.fn();
 
 const initialProps = {
   authname: "Person",
-  authUpdateLocalAvatar,
-  currentAvatar: "Person",
+  //authUpdateLocalAvatar,
+  //currentAvatar: "Person",
   message: "Some message.",
   myPlans: [],
   myFavoriteRecipes: [],
@@ -27,7 +27,7 @@ const initialProps = {
   myPrivateRecipes: [],
   myPublicRecipes: [],
   mySavedRecipes: [],
-  twoColumnATheme: "light",
+  theme: "light",
   userDeletePlan,
   userDeletePrivateEquipment,
   userDeletePrivateIngredient,
@@ -54,7 +54,7 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-// finish testing!
+// TO DO: finish testing!
 describe('Dashboard', () => {
   it('should change tab to plans', () => {
     wrapper.find('button[name="plans"]').simulate('click');
