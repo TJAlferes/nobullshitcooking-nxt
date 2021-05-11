@@ -63,11 +63,11 @@ const data = {
 
 const initialProps = {
   authname: "Person",
-  dataCuisines: [
+  cuisines: [
     {id: 1, name: "American", nation: "America"},
     {id: 2, name: "Japanese", nation: "Japan"},
   ],
-  dataEquipment: [
+  equipment: [
     {
       id: 1,
       name: "Cutting Board",
@@ -87,7 +87,7 @@ const initialProps = {
       image: "nobsc-metal-spatula"
     },
   ],
-  dataIngredients: [
+  ingredients: [
     {
       id: 1,
       brand: null,
@@ -111,20 +111,20 @@ const initialProps = {
       image: "nobsc-spinach"
     }
   ],
-  dataIngredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
-  dataMeasurements: [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
-  dataMethods: [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
-  dataMyFavoriteRecipes: [],
-  dataMyPrivateEquipment: [],
-  dataMyPrivateIngredients: [],
-  dataMyPrivateRecipes: [],
-  dataMyPublicRecipes: [],
-  dataMySavedRecipes: [],
-  dataRecipes: [],
-  dataRecipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
-  oneColumnATheme: "one-column-a-light",
+  ingredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
+  measurements: [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
+  methods: [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
+  myFavoriteRecipes: [],
+  myPrivateEquipment: [],
+  myPrivateIngredients: [],
+  myPrivateRecipes: [],
+  myPublicRecipes: [],
+  mySavedRecipes: [],
+  recipes: [],
+  recipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
   staffIsAuthenticated: false,  // test for this
   staffMessage: "",
+  theme: "light",
   userMessage: "Some message."
 };
 

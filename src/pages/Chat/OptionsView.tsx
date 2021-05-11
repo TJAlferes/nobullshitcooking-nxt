@@ -1,15 +1,15 @@
 export function OptionsView({
-  room,
   changeRoom,
+  changeRoomInput,
   connect,
   disconnect,
-  changeRoomInput,
   loading,
+  room,
   roomToEnter,
   status
 }: Props): JSX.Element {
   return (
-    <div className="chat__options">
+    <div className="chat-options">
       <button
         className="connection__button"
         disabled={loading}
@@ -49,12 +49,12 @@ export function OptionsView({
 }
 
 type Props = {
-  room: string;
   changeRoom(): void;
+  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
   connect(): void;
   disconnect(): void;
-  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
   loading: boolean;
+  room: string;
   roomToEnter: string;
   status: string;
 };

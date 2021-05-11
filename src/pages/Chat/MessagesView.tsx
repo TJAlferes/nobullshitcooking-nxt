@@ -3,26 +3,26 @@ import { IMessageWithClientTimestamp } from '../../store/chat/types';
 export function MessagesView({
   authname,
   changeMessageInput,
-  sendMessage,
   messages,
   messagesRef,
   messageToSend,
+  sendMessage,
   status
 }: Props): JSX.Element {
   const publicMessage =
     ({ from: { username }, text }: IMessageWithClientTimestamp) => {
     // status message
     if (username === "messengerstatus") {
-      return <span className="message__admin">{text}</span>;
+      return <span className="message--admin">{text}</span>;
     }
 
     // sent public message
     if (authname === username) {
-      return <><span className="message__self">{username}:{' '}</span>{text}</>;
+      return <><span className="message--self">{username}:{' '}</span>{text}</>;
     }
 
     // received public message
-    return <><span className="message__other">{username}:{' '}</span>{text}</>;
+    return <><span className="message--other">{username}:{' '}</span>{text}</>;
   };
 
   const privateMessage =
@@ -31,8 +31,8 @@ export function MessagesView({
     if (authname === username) {
       return (
         <>
-          <span className="message__self">You whisper to{' '}{to}:{' '}</span>
-          <span className="message__private">{text}</span>
+          <span className="message--self">You whisper to{' '}{to}:{' '}</span>
+          <span className="message--private">{text}</span>
         </>
       );
     }
@@ -40,26 +40,26 @@ export function MessagesView({
     // received private message
     return (
       <>
-        <span className="message__other">
+        <span className="message--other">
           {username}{' '}whispers to you:{' '}
         </span>
-        <span className="message__private">{text}</span>
+        <span className="message--private">{text}</span>
       </>
     );
   };
 
   return (
-    <div className="chat__messages">
-      <ul className="chat__message-list" ref={messagesRef}>
-        <li className="chat__message">
-          <span className="message__admin">COOK EAT WIN REPEAT</span>
+    <div className="chat-messages">
+      <ul className="chat-message-list" ref={messagesRef}>
+        <li className="chat-message">
+          <span className="message--admin">COOK EAT WIN REPEAT</span>
         </li>
 
         {messages && messages.map(message => {
           const { id, kind, ts } = message;
           return (
-            <li className="chat__message" key={id}>
-              <span className="message__ts">{ts}{' '}</span>
+            <li className="chat-message" key={id}>
+              <span className="message-ts">{ts}{' '}</span>
               {(kind === "public") && publicMessage(message)}
               {(kind === "private") && privateMessage(message)}
             </li>
@@ -83,9 +83,9 @@ export function MessagesView({
 type Props = {
   authname: string;
   changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  sendMessage(e: React.KeyboardEvent): void;
   messages: IMessageWithClientTimestamp[];
   messagesRef: React.RefObject<HTMLUListElement>;
   messageToSend: string;
+  sendMessage(e: React.KeyboardEvent): void;
   status: string;
 };

@@ -1,10 +1,12 @@
 import { IUser } from '../../store/chat/types';
 
+const url = "https://s3.amazonaws.com/nobsc-user-avatars";
+
 export function PeopleView({
-  focusedFriend,
-  focusedUser,
-  focusFriend,
   changePeopleTab,
+  focusedFriend,
+  focusFriend,
+  focusedUser,
   focusUser,
   onlineFriends,
   peopleTab,
@@ -13,7 +15,7 @@ export function PeopleView({
 }: Props): JSX.Element {
   const Tab = ({ tab }: TabProps) => (
     <button
-      className={(peopleTab === tab) ? "people__tab--current" : "people__tab"}
+      className={peopleTab === tab ? "people__tab--current" : "people__tab"}
       onClick={() => changePeopleTab(tab)}
     >
       {tab}
@@ -36,10 +38,7 @@ export function PeopleView({
               key={username}
               onClick={() => focusUser(username)}
             >
-              <img
-                className="person-avatar"
-                src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`}
-              />
+              <img className="person-avatar" src={`${url}/${username}-tiny`} />
               
               <span className="person-username">{username}</span>
 
@@ -66,10 +65,7 @@ export function PeopleView({
               key={username}
               onClick={() => focusFriend(username)}
             >
-              <img
-                className="person-avatar"
-                src={`https://s3.amazonaws.com/nobsc-user-avatars/${username}-tiny`}
-              />
+              <img className="person-avatar" src={`${url}/${username}-tiny`} />
               
               <span className="person-username">{username}</span>
               
@@ -92,10 +88,10 @@ export function PeopleView({
 }
 
 type Props = {
-  focusedFriend: string | null;
-  focusedUser: string | null;
-  focusFriend(friend: string): void;
   changePeopleTab(value: string): void;
+  focusedFriend: string | null;
+  focusFriend(friend: string): void;
+  focusedUser: string | null;
   focusUser(user: string): void;
   onlineFriends: IUser[];
   peopleTab: string;

@@ -11,21 +11,16 @@ import {
   userUnblockUser
 } from '../../../src/store/user/friendship/actions';
 
-const initialProps = {twoColumnATheme: "light"};
-
 const mockedStoreData = {
-  auth: {
-    authname: "Person"
-  },
+  auth: {authname: "Person"},
   data: {
     myFriendships: [
       {user_id: 1, username: "Jack", status: "accepted"},
       {user_id: 2, username: "Jill", status: "accepted"}
     ]
   },
-  user: {
-    message: "Some message."
-  }
+  theme: {theme: "light"},
+  user: {message: "Some message."}
 };
 const mockedSelector = jest.fn(cb => cb(mockedStoreData));
 jest
@@ -41,14 +36,14 @@ jest
   .spyOn(require("next/router"), "useRouter")
   .mockImplementation(() => ({route: "/friends", pathname: "/friends"}));
 
-jest.mock('../../../src/components/LeftNav/LeftNav');
+//jest.mock('../../../src/components/LeftNav/LeftNav');
 
 window.scrollTo = jest.fn();
 
 let wrapper: ReactWrapper;
 
 beforeEach(() => {
-  wrapper = mount(<Friends {...initialProps} />);
+  wrapper = mount(<Friends />);
 });
 
 afterEach(() => {

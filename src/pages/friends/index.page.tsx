@@ -14,7 +14,6 @@ import { FriendsView } from './view';
 
 export default function Friends(): JSX.Element {
   const dispatch = useDispatch();
-
   const authname = useSelector(state => state.auth.authname);
   const myFriendships = useSelector(state => state.data.myFriendships);
   const theme = useSelector(state => state.theme.theme);
@@ -87,19 +86,19 @@ export default function Friends(): JSX.Element {
 
   return (
     <FriendsView
-      myFriendships={myFriendships}
-      feedback={feedback}
       acceptFriendship={acceptFriendship}
       blockUser={blockUser}
       deleteFriendship={deleteFriendship}
+      feedback={feedback}
       inputChange={inputChange}
+      loading={loading}
+      myFriendships={myFriendships}
       rejectFriendship={rejectFriendship}
       requestFriendship={requestFriendship}
-      tabChange={tabChange}
-      unblockUser={unblockUser}
-      loading={loading}
       tab={tab}
+      tabChange={tabChange}
       theme={theme}
+      unblockUser={unblockUser}
       userToFind={userToFind}
     />
   );

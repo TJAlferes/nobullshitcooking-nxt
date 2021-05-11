@@ -5,19 +5,17 @@ import { PeopleView } from './PeopleView';
 
 export function ChatView({
   authname,
-  room,
-  feedback,
-  focusedFriend,
-  focusedUser,
-  changeRoom,
-  connect,
-  disconnect,
-  focusFriend,
   changeMessageInput,
-  sendMessage,
   changeMobileTab,
   changePeopleTab,
+  changeRoom,
   changeRoomInput,
+  connect,
+  disconnect,
+  feedback,
+  focusedFriend,
+  focusFriend,
+  focusedUser,
   focusUser,
   loading,
   messages,
@@ -26,16 +24,18 @@ export function ChatView({
   mobileTab,
   onlineFriends,
   peopleTab,
+  room,
   roomToEnter,
+  sendMessage,
   startPrivateMessage,
   status,
-  twoColumnATheme,
+  theme,
   users
 }: Props): JSX.Element {
-  const Tab = ({ tab }: TabProps) => (
+  const MobileTab = ({ tab }: MobileTabProps) => (
     <button
       className={
-        (mobileTab === tab) ? "chat__mobile-tab--current" : "chat__mobile-tab"
+        mobileTab === tab ? "chat-mobile-tab--current" : "chat-mobile-tab"
       }
       onClick={() => changeMobileTab(tab)}
     >
@@ -44,39 +44,39 @@ export function ChatView({
   );
 
   return (
-    <div className={`chat two-column-a ${twoColumnATheme}`}>
-      <div className="chat__desktop">
+    <div className={`chat two-col-a ${theme}`}>
+      <div className="chat-desktop">
         <h1>Chat</h1>
 
         <p className="feedback">{feedback}</p>
 
         <OptionsView
-          room={room}
           changeRoom={changeRoom}
+          changeRoomInput={changeRoomInput}
           connect={connect}
           disconnect={disconnect}
-          changeRoomInput={changeRoomInput}
           loading={loading}
+          room={room}
           roomToEnter={roomToEnter}
           status={status}
         />
 
-        <div className="chat__main">
+        <div className="chat-main">
           <MessagesView
             authname={authname}
             changeMessageInput={changeMessageInput}
-            sendMessage={sendMessage}
             messages={messages}
             messagesRef={messagesRef}
             messageToSend={messageToSend}
+            sendMessage={sendMessage}
             status={status}
           />
 
           <PeopleView
-            focusedFriend={focusedFriend}
-            focusedUser={focusedUser}
-            focusFriend={focusFriend}
             changePeopleTab={changePeopleTab}
+            focusedFriend={focusedFriend}
+            focusFriend={focusFriend}
+            focusedUser={focusedUser}
             focusUser={focusUser}
             onlineFriends={onlineFriends}
             peopleTab={peopleTab}
@@ -86,25 +86,25 @@ export function ChatView({
         </div>
       </div>
 
-      <div className="chat__mobile">
+      <div className="chat-mobile">
         <p className="feedback">{feedback}</p>
 
-        <div className="chat__mobile-tabs">
-          <Tab tab="Messages" />
+        <div className="chat-mobile-tabs">
+          <MobileTab tab="Messages" />
 
-          <Tab tab="People" />
+          <MobileTab tab="People" />
 
-          <Tab tab="Options" />
+          <MobileTab tab="Options" />
         </div>
 
         {mobileTab === "Options" && (
           <OptionsView
-            room={room}
             changeRoom={changeRoom}
+            changeRoomInput={changeRoomInput}
             connect={connect}
             disconnect={disconnect}
-            changeRoomInput={changeRoomInput}
             loading={loading}
+            room={room}
             roomToEnter={roomToEnter}
             status={status}
           />
@@ -114,20 +114,20 @@ export function ChatView({
           <MessagesView
             authname={authname}
             changeMessageInput={changeMessageInput}
-            sendMessage={sendMessage}
             messages={messages}
             messagesRef={messagesRef}
             messageToSend={messageToSend}
+            sendMessage={sendMessage}
             status={status}
           />
         )}
 
         {mobileTab === "People" && (
           <PeopleView
-            focusedFriend={focusedFriend}
-            focusedUser={focusedUser}
-            focusFriend={focusFriend}
             changePeopleTab={changePeopleTab}
+            focusedFriend={focusedFriend}
+            focusFriend={focusFriend}
+            focusedUser={focusedUser}
             focusUser={focusUser}
             onlineFriends={onlineFriends}
             peopleTab={peopleTab}
@@ -142,19 +142,17 @@ export function ChatView({
 
 type Props = {
   authname: string;
-  room: string;
-  feedback: string;
-  focusedFriend: string | null;
-  focusedUser: string | null;
-  changeRoom(): void;
-  connect(): void;
-  disconnect(): void;
-  focusFriend(friend: string): void;
   changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  sendMessage(e: React.KeyboardEvent): void;
   changeMobileTab(value: string): void;
   changePeopleTab(value: string): void;
   changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
+  changeRoom(): void;
+  connect(): void;
+  disconnect(): void;
+  feedback: string;
+  focusedFriend: string | null;
+  focusFriend(friend: string): void;
+  focusedUser: string | null;
   focusUser(user: string): void;
   loading: boolean;
   messages: IMessageWithClientTimestamp[];
@@ -163,13 +161,15 @@ type Props = {
   mobileTab: string;
   onlineFriends: IUser[];
   peopleTab: string;
+  room: string;
   roomToEnter: string;
+  sendMessage(e: React.KeyboardEvent): void;
   startPrivateMessage(username: string): void;
   status: string;
-  twoColumnATheme: string;
+  theme: string;
   users: IUser[];
 };
 
-type TabProps = {
+type MobileTabProps = {
   tab: string;
 };

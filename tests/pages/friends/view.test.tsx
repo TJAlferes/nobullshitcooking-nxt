@@ -10,28 +10,28 @@ const myFriendships = [
   {user_id: 5, username: "Jane", status: "blocked"}
 ];
 
-const handleAcceptClick = jest.fn();
-const handleBlockClick = jest.fn();
-const handleDeleteClick = jest.fn();
-const handleInputChange = jest.fn();
-const handleRejectClick = jest.fn();
-const handleRequestClick = jest.fn();
-const handleTabChange = jest.fn();
-const handleUnblockClick = jest.fn();
+const acceptFriendship = jest.fn();
+const blockUser = jest.fn();
+const deleteFriendship = jest.fn();
+const inputChange = jest.fn();
+const rejectFriendship = jest.fn();
+const requestFriendship = jest.fn();
+const tabChange = jest.fn();
+const unblockUser = jest.fn();
 
 const initialProps = {
-  myFriendships: myFriendships,
+  acceptFriendship,
+  blockUser,
+  deleteFriendship,
   feedback: "Some message.",
-  handleAcceptClick,
-  handleBlockClick,
-  handleDeleteClick,
-  handleInputChange,
-  handleRejectClick,
-  handleRequestClick,
-  handleTabChange,
-  handleUnblockClick,
+  inputChange,
   loading: false,
-  twoColumnATheme: "light",
+  myFriendships,
+  rejectFriendship,
+  requestFriendship,
+  tabChange,
+  theme: "light",
+  unblockUser,
   userToFind: "Person2"
 };
 
@@ -43,7 +43,7 @@ describe('FriendsView', () => {
   const wrapper = shallow(<FriendsView tab="accepted" {...initialProps} />);
 
   it('displays feedback', () => {
-    expect(wrapper.find('p.friends__feedback').text()).toEqual("Some message.");
+    expect(wrapper.find('p.feedback').text()).toEqual("Some message.");
   });
 
   it('displays a username input element', () => {
@@ -52,27 +52,24 @@ describe('FriendsView', () => {
 
   it('displays a button element with text Send Friend Request', () => {
     expect(wrapper.find('button[name="friends-find-request"]').text())
-    .toEqual("Send Friend Request");
+      .toEqual("Send Friend Request");
   });
 
   it('displays a button element with text Block User', () => {
     expect(wrapper.find('button[name="friends-find-block"]').text())
-    .toEqual("Block User");
+      .toEqual("Block User");
   });
 
   it('displays a button element with text Current', () => {
-    expect(wrapper.find('button[name="current"]').text())
-    .toEqual("Current");
+    expect(wrapper.find('button[name="current"]').text()).toEqual("Current");
   });
 
   it('displays a button element with text Pending', () => {
-    expect(wrapper.find('button[name="pending"]').text())
-    .toEqual("Pending");
+    expect(wrapper.find('button[name="pending"]').text()).toEqual("Pending");
   });
 
   it('displays a button element with text Blocked', () => {
-    expect(wrapper.find('button[name="blocked"]').text())
-    .toEqual("Blocked");
+    expect(wrapper.find('button[name="blocked"]').text()).toEqual("Blocked");
   });
 
   it('displays an unfriend button element for each accepted friend', () => {
@@ -84,9 +81,9 @@ describe('when on Pending tab', () => {
   it(
     'displays accept and reject button elements for each pending friend',
     () => {
-      const wrapper = shallow(
-        <FriendsView tab="pending-received" {...initialProps} />
-      );
+      const wrapper =
+        shallow(<FriendsView tab="pending-received" {...initialProps} />);
+
       expect(wrapper.find('button[name="accept"]')).toHaveLength(1);
       expect(wrapper.find('button[name="reject"]')).toHaveLength(1);
     }
@@ -96,6 +93,7 @@ describe('when on Pending tab', () => {
 describe('when on Blocked tab', () => {
   it('displays an unblock button element for each blocked user', () => {
     const wrapper = shallow(<FriendsView tab="blocked" {...initialProps} />);
+    
     expect(wrapper.find('button[name="unblock"]')).toHaveLength(1);
   });
 });

@@ -34,8 +34,8 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   } = useSelector(state => state.auth);
   const {
     cuisines,
-    officialEquipment,
-    officialIngredients,
+    equipment,
+    ingredients,
     ingredientTypes,
     measurements,
     methods,
@@ -45,7 +45,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     myPrivateRecipes,
     myPublicRecipes,
     mySavedRecipes,
-    officialRecipes,
+    recipes,
     recipeTypes
   } = useSelector(state => state.data);
   const staffMessage = useSelector(state => state.staff.message);
@@ -658,8 +658,8 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       cookingPrevImage={cookingPrevImage}
       cuisineId={cuisineId}
       cuisines={cuisines}
-      equipment={officialEquipment}
-      ingredients={officialIngredients}
+      equipment={equipment}
+      ingredients={ingredients}
       ingredientTypes={ingredientTypes}
       measurements={measurements}
       methods={methods}
@@ -669,7 +669,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       myPrivateRecipes={myPrivateRecipes}
       myPublicRecipes={myPublicRecipes}
       mySavedRecipes={mySavedRecipes}
-      recipes={officialRecipes}
+      recipes={recipes}
       recipeTypes={recipeTypes}
       description={description}
       directions={directions}

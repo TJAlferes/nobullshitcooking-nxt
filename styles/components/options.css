@@ -1,4 +1,4 @@
-.chat__options {
+.chat-options {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -100,7 +100,7 @@
 }
 
 @media (max-width: 799px) {
-  .chat__options {
+  .chat-options {
     flex-direction: column;
     height: 118px;
   }

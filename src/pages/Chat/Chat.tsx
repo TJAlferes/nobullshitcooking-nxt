@@ -22,7 +22,7 @@ export default function Chat(): JSX.Element {
   const messages = useSelector(state => state.chat.messages);
   const onlineFriends = useSelector(state => state.chat.onlineFriends);
   const status = useSelector(state => state.chat.status);
-  const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);
+  const theme = useSelector(state => state.theme.theme);
   const users = useSelector(state => state.chat.users);
   const windowFocused = useSelector(state => state.nobscapp.windowFocused);
 
@@ -88,6 +88,13 @@ export default function Chat(): JSX.Element {
     autoScroll();
   }, [messages]);
 
+  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) =>
+    setMessageToSend((e.target as HTMLInputElement).value.trim());
+  
+  const changeMobileTab = (value: string) => setMobileTab(value);
+
+  const changePeopleTab = (value: string) => setPeopleTab(value);
+  
   const changeRoom = () => {
     if (loading) return;
     if (debounced) {
@@ -113,6 +120,9 @@ export default function Chat(): JSX.Element {
     setLoading(false);
   };
 
+  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) =>
+    setRoomToEnter((e.target as HTMLInputElement).value.trim());
+
   const connect = () => {
     setLoading(true);
     dispatch(chatConnect());
@@ -127,9 +137,17 @@ export default function Chat(): JSX.Element {
 
   const focusFriend = (friend: string) => setFocusedFriend(friend);
 
-  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) =>
-    setMessageToSend((e.target as HTMLInputElement).value.trim());
+  const focusUser = (user: string) => user !== authname && setFocusedUser(user);
 
+  const preventSpam = () => {
+    setSpamCount(prev => prev + 1);
+    setTimeout(() => setSpamCount(prev => prev - 1), 2000);
+    if (spamCount > 2) {
+      setDebounced(true);
+      setTimeout(() => setDebounced(false), 6000);
+    }
+  };
+  
   // TO DO: improve this
   const sendMessage = (e: React.KeyboardEvent) => {
     // TO DO: move into 
@@ -175,24 +193,6 @@ export default function Chat(): JSX.Element {
     setLoading(false);
   };
 
-  const changeMobileTab = (value: string) => setMobileTab(value);
-
-  const changePeopleTab = (value: string) => setPeopleTab(value);
-
-  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) =>
-    setRoomToEnter((e.target as HTMLInputElement).value.trim());
-
-  const focusUser = (user: string) => user !== authname && setFocusedUser(user);
-  
-  const preventSpam = () => {
-    setSpamCount(prev => prev + 1);
-    setTimeout(() => setSpamCount(prev => prev - 1), 2000);
-    if (spamCount > 2) {
-      setDebounced(true);
-      setTimeout(() => setDebounced(false), 6000);
-    }
-  };
-
   const startPrivateMessage = (username: string) => {
     setFocusedFriend(null);
     setFocusedUser(null);
@@ -202,19 +202,17 @@ export default function Chat(): JSX.Element {
   return (
     <ChatView
       authname={authname}
-      room={room}
-      feedback={feedback}
-      focusedFriend={focusedFriend}
-      focusedUser={focusedUser}
-      changeRoom={changeRoom}
-      connect={connect}
-      disconnect={disconnect}
-      focusFriend={focusFriend}
       changeMessageInput={changeMessageInput}
-      sendMessage={sendMessage}
       changeMobileTab={changeMobileTab}
       changePeopleTab={changePeopleTab}
+      changeRoom={changeRoom}
       changeRoomInput={changeRoomInput}
+      connect={connect}
+      disconnect={disconnect}
+      feedback={feedback}
+      focusedFriend={focusedFriend}
+      focusFriend={focusFriend}
+      focusedUser={focusedUser}
       focusUser={focusUser}
       loading={loading}
       messages={messages}
@@ -223,10 +221,12 @@ export default function Chat(): JSX.Element {
       mobileTab={mobileTab}
       onlineFriends={onlineFriends}
       peopleTab={peopleTab}
+      room={room}
       roomToEnter={roomToEnter}
+      sendMessage={sendMessage}
       startPrivateMessage={startPrivateMessage}
       status={status}
-      twoColumnATheme={twoColumnATheme}
+      theme={theme}
       users={users}
     />
   );

@@ -1,18 +1,16 @@
-/*.chat {
+/*.chat {}*/
 
-}*/
+.chat-desktop {display: block;}
 
-.chat__desktop {display: block;}
+.chat-mobile {display: none;}
 
-.chat__mobile {display: none;}
+.chat-mobile-tabs {}
 
-.chat__mobile-tabs {}
+.chat-mobile-tab {}
 
-.chat__mobile-tab {}
+.chat-mobile-tab--curent {}
 
-.chat__mobile-tab--curent {}
-
-.chat__main {
+.chat-main {
   border: none;
   border-radius: 0;
   display: flex;
@@ -23,7 +21,7 @@
 }
 
 @media (max-width: 799px) {
-  .chat__desktop {display: none;}
+  .chat-desktop {display: none;}
 
-  .chat__mobile {display: block;}
+  .chat-mobile {display: block;}
 }

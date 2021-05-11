@@ -1,4 +1,4 @@
-.chat__messages {
+.chat-messages {
   border: 1px solid;
   height: 450px;
   order: 1;
@@ -7,25 +7,25 @@
   width: 750px;
 }
 
-.chat__message-list {
+.chat-message-list {
   display: block;
   height: calc(100% - 40px);
   list-style-type: none;
   overflow-y: scroll;
 }
 
-/*.chat__message {}*/
+/*.chat-message {}*/
 
-.message__admin {
+.message--admin {
   color: #c10006;
   font-style: italic;
 }
 
-.message__self {color: #009fff;}
+.message--self {color: #009fff;}
 
-.message__other {color: #326fff;}
+.message--other {color: #326fff;}
 
-.message__private {color: #a100ff;}
+.message--private {color: #a100ff;}
 
 .chat__input {
   border: 2px solid #68abe6;
@@ -44,21 +44,21 @@
 
 
 
-.light .chat__message-list {border-color: #ddd;}
+.light .chat-message-list {border-color: #ddd;}
 
-.light .message__ts {color: #bbb;}
+.light .message-ts {color: #bbb;}
 
 
 
-/*.dark .chat__messages,
+/*.dark .chat-messages,
 .dark .chat__input,*/
-.dark .chat__message-list {border-color: #444;}
+.dark .chat-message-list {border-color: #444;}
 
-.dark .message__ts {color: #666;}
+.dark .message-ts {color: #666;}
 
-.dark .chat__messages,
-.dark .chat__message-list,
-.dark .chat__message,
+.dark .chat-messages,
+.dark .chat-message-list,
+.dark .chat-message,
 .dark .chat__input {
   background-color: #1e1e1e;
   color: #bbb;
@@ -68,5 +68,5 @@
 
 /* TO DO: just fill remaining space after 180px of People */
 @media (max-width: 1279px) {
-  .chat__messages {width: 450px;}
+  .chat-messages {width: 450px;}
 }

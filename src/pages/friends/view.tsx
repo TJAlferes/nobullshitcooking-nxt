@@ -3,19 +3,19 @@ import Link from 'next/link';
 import { IFriendship } from '../../store/data/types';
 
 export function FriendsView({
-  myFriendships,
-  feedback,
   acceptFriendship,
   blockUser,
   deleteFriendship,
+  feedback,
   inputChange,
+  loading,
+  myFriendships,
   rejectFriendship,
   requestFriendship,
-  tabChange,
-  unblockUser,
-  loading,
   tab,
+  tabChange,
   theme,
+  unblockUser,
   userToFind
 }: Props): JSX.Element {
   return (
@@ -154,18 +154,18 @@ export function FriendsView({
 }
 
 type Props = {
-  myFriendships: IFriendship[];
-  feedback: string;
   acceptFriendship(e: React.SyntheticEvent<EventTarget>): void;
   blockUser(): void;
   deleteFriendship(e: React.SyntheticEvent<EventTarget>): void;
+  feedback: string;
   inputChange(e: React.SyntheticEvent<EventTarget>): void;
+  loading: boolean;
+  myFriendships: IFriendship[];
   rejectFriendship(e: React.SyntheticEvent<EventTarget>): void;
   requestFriendship(): void;
-  tabChange(value: string): void;
-  unblockUser(e: React.SyntheticEvent<EventTarget>): void;
-  loading: boolean;
   tab: string;
+  tabChange(value: string): void;
   theme: string;
+  unblockUser(e: React.SyntheticEvent<EventTarget>): void;
   userToFind: string;
 };

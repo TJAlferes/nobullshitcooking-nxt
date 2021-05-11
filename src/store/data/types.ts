@@ -17,20 +17,20 @@ State
 export interface IDataState extends IInitialData, IInitialUserData {};
 
 export interface IInitialData {
-  officialContent: IWorkContent[];
+  content: IWorkContent[];
   contentTypes: IContentType[];
   cuisines: ICuisine[];
-  officialEquipment: IEquipment[];
+  equipment: IEquipment[];
   equipmentTypes: IEquipmentType[];
-  officialIngredients: IIngredient[];
+  ingredients: IIngredient[];
   measurements: IMeasurement[];
   methods: IMethod[];
   ingredientTypes: IIngredientType[];
-  officialRecipes: IWorkRecipe[];
-  recipeTypes: IRecipeType[];
   products: IWorkProduct[];
   productCategories: IProductCategory[];
   productTypes: IProductType[];
+  recipes: IWorkRecipe[];
+  recipeTypes: IRecipeType[];
 }
 
 export interface IInitialUserData {

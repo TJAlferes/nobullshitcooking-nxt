@@ -25,10 +25,10 @@ Actions
 */
 
 export type GeoActions =
-IGeoAddress |
-IGeoLatitude |
-IGeoLongitude |
-IGeoNearbyStoresClicked;
+  IGeoAddress |
+  IGeoLatitude |
+  IGeoLongitude |
+  IGeoNearbyStoresClicked;
 
 interface IGeoAddress {
   type: typeof actionTypes.GEO_ADDRESS;

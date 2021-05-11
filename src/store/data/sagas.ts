@@ -21,19 +21,19 @@ export function* dataGetInitialDataSaga() {
   }
 }
 
-export const dataGetContentSaga = makeDataSaga("/content", "officialContent");
+export const dataGetContentSaga = makeDataSaga("/content", "content");
 export const dataGetContentTypesSaga = makeDataSaga("/content-type", "contentTypes");
 export const dataGetCuisinesSaga = makeDataSaga("/cuisine", "cuisines");
-export const dataGetEquipmentsSaga = makeDataSaga("/equipment/official/all", "officialEquipment");
+export const dataGetEquipmentsSaga = makeDataSaga("/equipment/official/all", "equipment");
 export const dataGetEquipmentTypesSaga = makeDataSaga("/equipment-type", "equipmentTypes");
-export const dataGetIngredientsSaga = makeDataSaga("/ingredient/official/all", "officialIngredients");
+export const dataGetIngredientsSaga = makeDataSaga("/ingredient/official/all", "ingredients");
 export const dataGetIngredientTypesSaga = makeDataSaga("/ingredient-type", "ingredientTypes");
 export const dataGetMeasurementsSaga = makeDataSaga("/measurement", "measurements");
 export const dataGetMethodsSaga = makeDataSaga("/method", "methods");
 export const dataGetProductsSaga = makeDataSaga("/product", "products");
 export const dataGetProductCategoriesSaga = makeDataSaga("/product-category", "productCategories");
 export const dataGetProductTypesSaga = makeDataSaga("/product-type", "productTypes");
-export const dataGetRecipesSaga = makeDataSaga("/recipe/official/all", "officialRecipes");
+export const dataGetRecipesSaga = makeDataSaga("/recipe/official/all", "recipes");
 export const dataGetRecipeTypesSaga = makeDataSaga("/recipe-type", "recipeTypes");
 
 export function* dataGetInitialUserDataSaga() {
