@@ -9,19 +9,19 @@ const {
 } = actionTypes;
 
 const initialState: IDataState = {
-  officialContent: [],
+  content: [],
   contentTypes: [],
   cuisines: [],
-  officialEquipment: [],
+  equipment: [],
   equipmentTypes: [],
-  officialIngredients: [],
+  ingredients: [],
   ingredientTypes: [],
   measurements: [],
   methods: [],
   products: [],
   productCategories: [],
   productTypes: [],
-  officialRecipes: [],
+  recipes: [],
   recipeTypes: [],
 
   myContent: [],
@@ -36,18 +36,12 @@ const initialState: IDataState = {
 };
 
 describe('data reducer', () => {
-  it('returns initial state', () => {
-    expect(
-      dataReducer(undefined, {type: DATA_GET_MEASUREMENTS,measurements: []})
-    ).toEqual(initialState);
-  });
-
   it('handles actions of type DATA_GET_INITIAL_DATA', () => {
     const initialData = {
-      officialContent: [],
+      content: [],
       contentTypes: [{id: 1, parent_id: 0, name: "Page", path: "/page"}],
       cuisines: [{"id": 1, "name": "Russian", "nation": "Russia"}],
-      officialEquipment: [
+      equipment: [
         {
           id: 1,
           equipment_type_id: 4,
@@ -59,7 +53,7 @@ describe('data reducer', () => {
         }
       ],
       equipmentTypes: [{"id": 1, "name": "Cleaning"}],
-      officialIngredients: [
+      ingredients: [
         {
           id: 1,
           ingredient_type_id: 1,
@@ -78,7 +72,7 @@ describe('data reducer', () => {
       products: [],
       productCategories: [],
       productTypes: [],
-      officialRecipes: [
+      recipes: [
         {
           id: 1,
           owner_id: 1,
@@ -96,19 +90,19 @@ describe('data reducer', () => {
       initialData
     });
 
-    expect(actual.officialContent).toEqual(initialData.officialContent);
+    expect(actual.content).toEqual(initialData.content);
     expect(actual.contentTypes).toEqual(initialData.contentTypes);
     expect(actual.cuisines).toEqual(initialData.cuisines);
-    expect(actual.officialEquipment).toEqual(initialData.officialEquipment);
+    expect(actual.equipment).toEqual(initialData.equipment);
     expect(actual.equipmentTypes).toEqual(initialData.equipmentTypes);
-    expect(actual.officialIngredients).toEqual(initialData.officialIngredients);
+    expect(actual.ingredients).toEqual(initialData.ingredients);
     expect(actual.ingredientTypes).toEqual(initialData.ingredientTypes);
     expect(actual.measurements).toEqual(initialData.measurements);
     expect(actual.methods).toEqual(initialData.methods);
     expect(actual.products).toEqual(initialData.products);
     expect(actual.productCategories).toEqual(initialData.productCategories);
     expect(actual.productTypes).toEqual(initialData.productTypes);
-    expect(actual.officialRecipes).toEqual(initialData.officialRecipes);
+    expect(actual.recipes).toEqual(initialData.recipes);
     expect(actual.recipeTypes).toEqual(initialData.recipeTypes);
   });
 

@@ -5,9 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ExpandCollapse, LoaderButton } from '../../components';
 import { IWorkRecipe } from '../../store/data/types';
 import { IPlannerData } from '../../store/planner/types';
-import Day from './components/Day';
-import ExpandedDay from './components/ExpandedDay';
-import Recipes from './components/Recipes';
+import { Day, ExpandedDay, Recipes } from './components';
 
 export function NewPlanView({
   activateModal,
@@ -31,7 +29,7 @@ export function NewPlanView({
   planName,
   recipeListsInsideDays,
   tab,
-  twoColumnATheme
+  theme
 }: Props): JSX.Element {
   const memoizedMonthlyPlan = useMemo(() => {
     return (
@@ -121,17 +119,17 @@ export function NewPlanView({
   );
 
   return (
-    <div className={`new-plan two-column-a ${twoColumnATheme}`}> 
+    <div className={`new-plan two-col-a ${theme}`}>
       <div className="new-plan__heading">
         <h1>New Plan</h1>
 
         <p className="feedback">{feedback}</p>
 
         <div className="plan__name">
-          <label className="new-plan__name-label">Plan Name:</label>
+          <label className="new-plan-name__label">Plan Name:</label>
 
           <input
-            className="new-plan__name-input"
+            className="new-plan-name__input"
             onChange={changePlanName}
             type="text"
             value={planName}
@@ -255,7 +253,7 @@ type Props = {
   planName: string;
   recipeListsInsideDays: IPlannerData;
   tab: string;
-  twoColumnATheme: string;
+  theme: string;
 };
 
 type TabButtonProps = {

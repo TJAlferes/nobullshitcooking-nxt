@@ -1,8 +1,6 @@
-/*.new-plan {
+/*.new-plan {}*/
 
-}*/
-
-.new-plan__name-label {
+.new-plan-name__label {
   display: block;
   font-size: 1.3rem;
   font-weight: 900;
@@ -11,7 +9,7 @@
   order: 1;
 }
 
-.new-plan__name-input {
+.new-plan-name__input {
   border-style: solid;
   border-width: 1px;
   border-radius: 1px;
