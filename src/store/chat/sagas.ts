@@ -1,5 +1,5 @@
 import { Store } from 'redux';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
@@ -22,18 +22,15 @@ import {
   IChatSendPublicMessage,
   IChatSendPrivateMessage
 } from './types';
-/*
+
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
 
-  const socket = io(`${endpoint}`, {
-    autoConnect: false,
-    reconnection: true,
-    //withCredentials: true
-  });
-
+  const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
+    `${endpoint}`,
+    {autoConnect: false, reconnection: true, /*withCredentials: true*/}
+  );
   const sessionId = localStorage.getItem("chatSessionId");
-
   if (sessionId) {
     socket.auth = {sessionId};
     socket.connect();
@@ -66,7 +63,7 @@ export function chatInit(store: Store) {
 
   // Messages
 
-  socket.on('AddPublicMessage', (message: IMessage) => {
+  socket.on('AddMessage', (message: IMessage) => {
     if (!message) return;
     store.dispatch(chatReceivedPublicMessage(message));
   });
@@ -156,4 +153,32 @@ export function chatRejoinRoomSaga() {
   if (chat.channel === "") return;
   socket.emit('RejoinRoom', chat.channel);
 }
-*/
+
+interface IClientToServerEvents {
+  // Users
+  GetOnline(): void;
+  GetUser(room: string): void;
+  // Messages
+  AddMessage(text: string): void;
+  AddPrivateMessage(text: string, to: string): void;
+  // Rooms
+  AddRoom(room: string): void;
+  RejoinRoom(room: string): void;
+  //disconnecting
+}
+
+interface IServerToClientEvents {
+  // Users
+  GetOnline(online: []): void;
+  ShowOnline(user: string): void;
+  ShowOffline(user: string): void;
+  // Messages
+  AddMessage(message: IMessage): void;
+  AddPrivateMessage(message: IMessage): void;
+  FailedPrivateMessage(feedback: string): void;
+  // Rooms
+  GetUser(users: [], roomToAdd: string): void;
+  RegetUser(users: [], roomToRejoin: string): void;
+  AddUser(user: string): void;
+  RemoveUser(user: string): void;
+}
