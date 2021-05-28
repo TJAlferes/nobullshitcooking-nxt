@@ -150,9 +150,9 @@ type Props = {
   connect(): void;
   disconnect(): void;
   feedback: string;
-  focusedFriend: string | null;
+  focusedFriend: string | undefined;
   focusFriend(friend: string): void;
-  focusedUser: string | null;
+  focusedUser: string | undefined;
   focusUser(user: string): void;
   loading: boolean;
   messages: IMessageWithClientTimestamp[];

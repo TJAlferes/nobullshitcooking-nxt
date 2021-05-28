@@ -5,21 +5,21 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
   chatConnected,
   chatDisconnected,
-  chatGetOnline,
-  chatShowOnline,
-  chatShowOffline,
-  chatChangedRoom,
+  chatOnlineFriends,
+  chatFriendCameOnline,
+  chatFriendWentOffline,
+  chatJoinedRoom,
   chatRejoinedRoom,
-  chatJoinedUser,
-  chatLeftUser,
-  chatReceivedPublicMessage,
+  chatUserJoinedRoom,
+  chatUserLeftRoom,
+  chatReceivedMessage,
   chatReceivedPrivateMessage,
   chatFailedPrivateMessage
 } from './actions';
 import {
   IMessage,
   IChatChangeRoom,
-  IChatSendPublicMessage,
+  IChatSendMessage,
   IChatSendPrivateMessage
 } from './types';
 
@@ -30,81 +30,68 @@ export function chatInit(store: Store) {
     `${endpoint}`,
     {autoConnect: false, reconnection: true, /*withCredentials: true*/}
   );
-  const sessionId = localStorage.getItem("chatSessionId");
-  if (sessionId) {
-    socket.auth = {sessionId};
-    socket.connect();
-  }
-
-  // TO DO: make better event names (server side too)
-
-  socket.on('session', ({ sessionId, username }) => {
-    socket.auth = {sessionId};                         // attach the sessionId to the next reconnection attempts
-    localStorage.setItem("chatSessionId", sessionId);  // store the sessionId in localStorage
-    socket.username = username;                        // save their username
-  });
 
   // Users
 
-  socket.on('GetOnline', (online: []) => {
-    if (!online) return;
-    store.dispatch(chatGetOnline(online));
+  socket.on('OnlineFriends', (onlineFriends) => {
+    if (!onlineFriends) return;
+    store.dispatch(chatOnlineFriends(onlineFriends));
   });
 
-  socket.on('ShowOnline', (user: string) => {
-    if (!user) return;
-    store.dispatch(chatShowOnline(user));
+  socket.on('FriendCameOnline', (friend) => {
+    if (!friend) return;
+    store.dispatch(chatFriendCameOnline(friend));
   });
 
-  socket.on('ShowOffline', (user: string) => {
-    if (!user) return;
-    store.dispatch(chatShowOffline(user));
+  socket.on('FriendWentOffline', (friend) => {
+    if (!friend) return;
+    store.dispatch(chatFriendWentOffline(friend));
   });
 
   // Messages
 
-  socket.on('AddMessage', (message: IMessage) => {
+  socket.on('ReceivedMessage', (message) => {
     if (!message) return;
-    store.dispatch(chatReceivedPublicMessage(message));
+    store.dispatch(chatReceivedMessage(message));
   });
 
-  socket.on('AddPrivateMessage', (privateMessage: IMessage) => {
-    if (!privateMessage) return;
-    store.dispatch(chatReceivedPrivateMessage(privateMessage));
+  socket.on('ReceivedPrivateMessage', (message) => {
+    if (!message) return;
+    store.dispatch(chatReceivedPrivateMessage(message));
   });
 
-  socket.on('FailedPrivateMessage', (feedback: string) => {
+  socket.on('FailedPrivateMessage', (feedback) => {
     if (!feedback) return;
     store.dispatch(chatFailedPrivateMessage(feedback));
   });
 
   // Rooms
 
-  socket.on('GetUser', (users: [], roomToAdd: string) => {
-    if (!users || !roomToAdd) return;
-    store.dispatch(chatChangedRoom(users, roomToAdd));
+  socket.on('JoinedRoom', (users, room) => {
+    if (!users || !room) return;
+    store.dispatch(chatJoinedRoom(users, room));
   });
 
-  socket.on('RegetUser', (users: [], roomToRejoin: string) => {
-    if (!users || !roomToRejoin) return;
-    store.dispatch(chatRejoinedRoom(users, roomToRejoin));
+  socket.on('RejoinedRoom', (users, room) => {
+    if (!users || !room) return;
+    store.dispatch(chatRejoinedRoom(users, room));
   });
 
-  socket.on('AddUser', (user: string) => {
+  socket.on('UserJoinedRoom', (user) => {
     if (!user) return;
-    store.dispatch(chatJoinedUser(user));
+    store.dispatch(chatUserJoinedRoom(user));
   });
 
-  socket.on('RemoveUser', (user: string) => {
+  socket.on('UserLeftRoom', (user) => {
     if (!user) return;
-    store.dispatch(chatLeftUser(user));
+    store.dispatch(chatUserLeftRoom(user));
   });
 
   // SocketIO Events
 
   socket.on('connect', () => {
     store.dispatch(chatConnected());
-    socket.emit('GetOnline');
+    socket.emit('GetOnlineFriends');
   });
 
   socket.on('disconnect', () => {
@@ -145,7 +132,7 @@ export function* chatSendPrivateMessageSaga(action: IChatSendPrivateMessage) {
 // pass store in from actions?
 export function* chatUpdateOnlineSaga() {
   const { chat } = store.getState();
-  if (chat.status === "Connected") socket.emit('GetOnline');
+  if (chat.status === "Connected") socket.emit('GetOnlineFriends');
 }
 
 export function chatRejoinRoomSaga() {
@@ -156,29 +143,29 @@ export function chatRejoinRoomSaga() {
 
 interface IClientToServerEvents {
   // Users
-  GetOnline(): void;
-  GetUser(room: string): void;
+  GetOnlineFriends(): void;
+  GetUsersInRoom(room: string): void;
   // Messages
-  AddMessage(text: string): void;
-  AddPrivateMessage(text: string, to: string): void;
+  Message(text: string): void;
+  PrivateMessage(text: string, to: string): void;
   // Rooms
-  AddRoom(room: string): void;
+  JoinRoom(room: string): void;
   RejoinRoom(room: string): void;
   //disconnecting
 }
 
 interface IServerToClientEvents {
   // Users
-  GetOnline(online: []): void;
-  ShowOnline(user: string): void;
-  ShowOffline(user: string): void;
+  OnlineFriends(onlineFriends: string[]): void;
+  FriendCameOnline(friend: string): void;
+  FriendWentOffline(friend: string): void;
   // Messages
-  AddMessage(message: IMessage): void;
-  AddPrivateMessage(message: IMessage): void;
+  ReceivedMessage(message: IMessage): void;
+  ReceivedPrivateMessage(message: IMessage): void;
   FailedPrivateMessage(feedback: string): void;
   // Rooms
-  GetUser(users: [], roomToAdd: string): void;
-  RegetUser(users: [], roomToRejoin: string): void;
-  AddUser(user: string): void;
-  RemoveUser(user: string): void;
+  UsersInRoom(users: string[], room: string): void;
+  UsersInRoomRefetched(users: string[], room: string): void;
+  UserJoinedRoom(user: string): void;
+  UserLeftRoom(user: string): void;
 }

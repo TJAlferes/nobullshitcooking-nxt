@@ -1,4 +1,4 @@
-import { actionTypes, IMessage, IUser } from './types';
+import { actionTypes, IMessage } from './types';
 
 const {
   CHAT_CONNECT,
@@ -13,8 +13,8 @@ const {
   CHAT_REJOINED_ROOM,
   CHAT_JOINED_USER,
   CHAT_LEFT_USER,
-  CHAT_SEND_PUBLIC_MESSAGE,
-  CHAT_RECEIVED_PUBLIC_MESSAGE,
+  CHAT_SEND_MESSAGE,
+  CHAT_RECEIVED_MESSAGE,
   CHAT_SEND_PRIVATE_MESSAGE,
   CHAT_RECEIVED_PRIVATE_MESSAGE,
   CHAT_FAILED_PRIVATE_MESSAGE
@@ -28,50 +28,50 @@ export const chatDisconnect = () => ({type: CHAT_DISCONNECT});
 
 export const chatDisconnected = () => ({type: CHAT_DISCONNECTED});
 
-export const chatGetOnline = (online: IUser[]) =>
+export const chatOnlineFriends = (online: string[]) =>
   ({type: CHAT_GET_ONLINE, online});
 
-export const chatShowOnline = (user: IUser) =>
+export const chatShowOnline = (user: string) =>
   ({type: CHAT_SHOW_ONLINE, user});
 
-export const chatShowOffline = (user: IUser) =>
+export const chatShowOffline = (user: string) =>
   ({type: CHAT_SHOW_OFFLINE, user});
 
 export const chatChangeRoom = (room: string) =>
   ({type: CHAT_CHANGE_ROOM, room});
 
-export const chatChangedRoom = (users: IUser[], room: string) =>
+export const chatChangedRoom = (users: string[], room: string) =>
   ({type: CHAT_CHANGED_ROOM, users, room});
 
-export const chatRejoinedRoom = (users: IUser[], room: string) =>
+export const chatRejoinedRoom = (users: string[], room: string) =>
   ({type: CHAT_REJOINED_ROOM, users, room});
 
-export const chatJoinedUser = (user: IUser) => {
+export const chatJoinedUser = (user: string) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
   return {type: CHAT_JOINED_USER, user, ts};
 };
 
-export const chatLeftUser = (user: IUser) => {
+export const chatLeftUser = (user: string) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
   return {type: CHAT_LEFT_USER, user, ts};
 };
 
-export const chatSendPublicMessage = (text: string) =>
-  ({type: CHAT_SEND_PUBLIC_MESSAGE, text});
+export const chatSendMessage = (text: string) =>
+  ({type: CHAT_SEND_MESSAGE, text});
 
-export const chatReceivedPublicMessage = (publicMessage: IMessage) => {
+export const chatReceivedMessage = (message: IMessage) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_RECEIVED_PUBLIC_MESSAGE, message: {...publicMessage, ts}};
+  return {type: CHAT_RECEIVED_MESSAGE, message: {...message, ts}};
 };
 
 export const chatSendPrivateMessage = (text: string, to: string) =>
   ({type: CHAT_SEND_PRIVATE_MESSAGE, text, to});
 
-export const chatReceivedPrivateMessage = (privateMessage: IMessage) => {
+export const chatReceivedPrivateMessage = (message: IMessage) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
   return {
     type: CHAT_RECEIVED_PRIVATE_MESSAGE,
-    privateMessage: {...privateMessage, ts}
+    message: {...message, ts}
   };
 };
 

@@ -6,20 +6,20 @@ export const actionTypes = {
   CHAT_DISCONNECT: 'CHAT_DISCONNECT',
   CHAT_DISCONNECTED: 'CHAT_DISCONNECTED',
 
-  CHAT_GET_ONLINE: 'CHAT_GET_ONLINE',  // needs a better name FETCH_ONLINE_USERS
-  CHAT_SHOW_ONLINE: 'CHAT_SHOW_ONLINE',  // needs a better name?
-  CHAT_SHOW_OFFLINE: 'CHAT_SHOW_OFFLINE',  // needs a better name?
+  CHAT_ONLINE_FRIENDS: 'CHAT_ONLINE_FRIENDS',
+  CHAT_FRIEND_CAME_ONLINE: 'CHAT_FRIEND_CAME_ONLINE',
+  CHAT_FRIEND_WENT_OFFLINE: 'CHAT_FRIEND_WENT_OFFLINE',
 
-  CHAT_CHANGE_ROOM: 'CHAT_CHANGE_ROOM',
-  CHAT_CHANGED_ROOM: 'CHAT_CHANGED_ROOM',
+  CHAT_JOIN_ROOM: 'CHAT_JOIN_ROOM',
+  CHAT_JOINED_ROOM: 'CHAT_JOINED_ROOM',
   CHAT_REJOINED_ROOM: 'CHAT_REJOINED_ROOM',
 
-  CHAT_JOINED_USER: 'CHAT_JOINED_USER',  // needs a better name USER_JOINED_ROOM
-  CHAT_LEFT_USER: 'CHAT_LEFT_USER',  // needs a better name USER_LEFT_ROOM
+  CHAT_USER_JOINED_ROOM: 'CHAT_USER_JOINED_ROOM',
+  CHAT_USER_LEFT_ROOM: 'CHAT_USER_LEFT_ROOM',
 
-  CHAT_SEND_PUBLIC_MESSAGE: 'CHAT_SEND_PUBLIC_MESSAGE',
+  CHAT_SEND_MESSAGE: 'CHAT_SEND_MESSAGE',
   CHAT_SEND_PRIVATE_MESSAGE: 'CHAT_SEND_PRIVATE_MESSAGE',
-  CHAT_RECEIVED_PUBLIC_MESSAGE: 'CHAT_RECEIVED_PUBLIC_MESSAGE',
+  CHAT_RECEIVED_MESSAGE: 'CHAT_RECEIVED_MESSAGE',
   CHAT_RECEIVED_PRIVATE_MESSAGE: 'CHAT_RECEIVED_PRIVATE_MESSAGE',
   CHAT_FAILED_PRIVATE_MESSAGE: 'CHAT_FAILED_PRIVATE_MESSAGE'
 } as const;
@@ -35,8 +35,8 @@ State
 export interface IChatState {
   room: string;
   messages: IMessageWithClientTimestamp[];
-  users: IUser[];
-  onlineFriends: IUser[];
+  users: string[];
+  onlineFriends: string[];
   status: string;
   connectButtonDisabled: boolean;
   disconnectButtonDisabled: boolean;
@@ -49,17 +49,12 @@ export interface IMessage {
   kind: typeof PRIVATE | typeof PUBLIC;
   id: string;
   to: string;
-  from: IUser;
+  from: string;
   text: string;
 }
 
 export interface IMessageWithClientTimestamp extends IMessage {
   ts: string;
-}
-
-export interface IUser {
-  userId: string;
-  username: string;
 }
 
 /*
@@ -74,16 +69,16 @@ IChatConnect |
 IChatConnected |
 IChatDisconnect |
 IChatDisconnected |
-IChatGetOnline |
-IChatShowOnline |
-IChatShowOffline |
-IChatChangeRoom |
-IChatChangedRoom |
+IChatOnlineFriends |
+IChatFriendCameOnline |
+IChatFriendWentOffline |
+IChatJoinRoom |
+IChatJoinedRoom |
 IChatRejoinedRoom |
-IChatJoinedUser |
-IChatLeftUser |
-IChatSendPublicMessage |
-IChatReceivedPublicMessage |
+IChatUserJoinedRoom |
+IChatUserLeftRoom |
+IChatSendMessage |
+IChatReceivedMessage |
 IChatSendPrivateMessage |
 IChatReceivedPrivateMessage |
 IChatFailedPrivateMessage;
@@ -104,58 +99,58 @@ interface IChatDisconnected {
   type: typeof actionTypes.CHAT_DISCONNECTED;
 }
 
-interface IChatGetOnline {
-  type: typeof actionTypes.CHAT_GET_ONLINE;
-  online: IUser[];
+interface IChatOnlineFriends {
+  type: typeof actionTypes.CHAT_ONLINE_FRIENDS;
+  online: string[];
 }
 
-interface IChatShowOnline {
-  type: typeof actionTypes.CHAT_SHOW_ONLINE;
-  user: IUser;
+interface IChatFriendCameOnline {
+  type: typeof actionTypes.CHAT_FRIEND_CAME_ONLINE;
+  user: string;
 }
 
-interface IChatShowOffline {
-  type: typeof actionTypes.CHAT_SHOW_OFFLINE;
-  user: IUser;
+interface IChatFriendWentOffline {
+  type: typeof actionTypes.CHAT_FRIEND_WENT_OFFLINE;
+  user: string;
 }
 
-export interface IChatChangeRoom {
-  type: typeof actionTypes.CHAT_CHANGE_ROOM;
+export interface IChatJoinRoom {
+  type: typeof actionTypes.CHAT_JOIN_ROOM;
   room: string;
 }
 
-interface IChatChangedRoom {
-  type: typeof actionTypes.CHAT_CHANGED_ROOM;
-  users: IUser[];
+interface IChatJoinedRoom {
+  type: typeof actionTypes.CHAT_JOINED_ROOM;
+  users: string[];
   room: string;
 }
 
 interface IChatRejoinedRoom {
   type: typeof actionTypes.CHAT_REJOINED_ROOM;
-  users: IUser[];
+  users: string[];
   room: string;
 }
 
-interface IChatJoinedUser {
-  type: typeof actionTypes.CHAT_JOINED_USER;
-  user: IUser;
+interface IChatUserJoinedRoom {
+  type: typeof actionTypes.CHAT_USER_JOINED_ROOM;
+  user: string;
   ts: string;
 }
 
-interface IChatLeftUser {
-  type: typeof actionTypes.CHAT_LEFT_USER;
-  user: IUser;
+interface IChatUserLeftRoom {
+  type: typeof actionTypes.CHAT_USER_LEFT_ROOM;
+  user: string;
   ts: string;
 }
 
-export interface IChatSendPublicMessage {
-  type: typeof actionTypes.CHAT_SEND_PUBLIC_MESSAGE;
+export interface IChatSendMessage {
+  type: typeof actionTypes.CHAT_SEND_MESSAGE;
   text: string;
 }
 
-export interface IChatReceivedPublicMessage {
-  type: typeof actionTypes.CHAT_RECEIVED_PUBLIC_MESSAGE;
-  publicMessage: IMessageWithClientTimestamp;
+export interface IChatReceivedMessage {
+  type: typeof actionTypes.CHAT_RECEIVED_MESSAGE;
+  message: IMessageWithClientTimestamp;
 }
 
 export interface IChatSendPrivateMessage {
@@ -166,11 +161,11 @@ export interface IChatSendPrivateMessage {
 
 export interface IChatReceivedPrivateMessage {
   type: typeof actionTypes.CHAT_RECEIVED_PRIVATE_MESSAGE;
-  privateMessage: IMessageWithClientTimestamp;
+  message: IMessageWithClientTimestamp;
 }
 
 interface IChatFailedPrivateMessage {
   type: typeof actionTypes.CHAT_FAILED_PRIVATE_MESSAGE;
   feedback: string;
-  ts: string;
+  ts: string;  // ?
 }

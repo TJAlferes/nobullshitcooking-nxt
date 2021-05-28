@@ -28,8 +28,8 @@ export default function Chat(): JSX.Element {
 
   const [ debounced, setDebounced ] = useState(false);
   const [ feedback, setFeedback ] = useState("");
-  const [ focusedFriend, setFocusedFriend ] = useState<string | null>(null);
-  const [ focusedUser, setFocusedUser ] = useState<string | null>(null);
+  const [ focusedFriend, setFocusedFriend ] = useState<string>();
+  const [ focusedUser, setFocusedUser ] = useState<string>();
   const [ loading, setLoading ] = useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
   const [ mobileTab, setMobileTab ] = useState("Messages");
@@ -61,22 +61,16 @@ export default function Chat(): JSX.Element {
     // TO DO: fix no longer auto scrolling after spam debounce
     const autoScroll = () => {
       if (!messagesRef || !messagesRef.current) return;
-
       const newestMessage: HTMLUListElement =
         messagesRef.current.lastElementChild as HTMLUListElement;
-      
       if (!newestMessage) return;
-
       const containerHeight = messagesRef.current.scrollHeight;
-
       const newestMessageHeight =
         newestMessage.offsetHeight +
         parseInt(getComputedStyle(newestMessage).marginBottom);
-
       const scrollOffset =
         messagesRef.current.scrollTop +
         messagesRef.current.offsetHeight;
-
       // cancels autoscroll if user is scrolling up through older messages
       if ((containerHeight - newestMessageHeight) <= scrollOffset) {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -84,7 +78,6 @@ export default function Chat(): JSX.Element {
     };
 
     if (windowFocused === false) setAlertFavicon();
-
     autoScroll();
   }, [messages]);
 
@@ -102,7 +95,6 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 6000);
       return;
     }
-
     const trimmedRoom = roomToEnter.trim();
     if (trimmedRoom.length < 1 || trimmedRoom === "") return;
     if (trimmedRoom.length > 20) {
@@ -110,9 +102,7 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 4000);
       return;
     }
-
     setLoading(true);
-
     //setCurrentFriend("");
     dispatch(chatChangeRoom(trimmedRoom));
     setRoomToEnter("");
@@ -158,7 +148,6 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 6000);
       return;
     }
-
     const trimmedMessage = messageToSend.trim();
     if (trimmedMessage.length < 1 || trimmedMessage === "") return;
     if (trimmedMessage.length > 4000) {
@@ -166,19 +155,14 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 4000);
       return;
     }
-
     setLoading(true);
-
     const whispering = trimmedMessage.slice(0, 3) === "/w ";
     if (whispering) {
       // TO DO: MESS AROUND AGAIN WITH "WRONG" WHITESPACES, if return here, or clean
       const trimmedWhisper = trimmedMessage.replace(/^([\S]+\s){2}/, '');
       const userToWhisper = trimmedMessage.match(/^(\S+? \S+?) ([\s\S]+?)$/);
-
       if (!userToWhisper) return;
-
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
-
       dispatch(chatSendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
     } else {
       dispatch(chatSendPublicMessage(trimmedMessage));
@@ -187,15 +171,22 @@ export default function Chat(): JSX.Element {
       const trimmedFriend = currentFriend.trim();
       messengerSendWhisper(trimmedMessage, trimmedFriend);
     }*/
-
     setMessageToSend("");
     preventSpam();
     setLoading(false);
   };
 
+  const sortedUsers = users.sort((a, b) => {
+    // sorts yourself first, then others in alphabetically
+    if (a.username === authname) return -1;
+    if (b.username === authname) return 1;
+    if (a.username < b.username) return -1;
+    return a.username > b.username ? 1 : 0;
+  });
+
   const startPrivateMessage = (username: string) => {
-    setFocusedFriend(null);
-    setFocusedUser(null);
+    setFocusedFriend(undefined);
+    setFocusedUser(undefined);
     setMessageToSend(`/w ${username}`);
   };
 
@@ -227,7 +218,7 @@ export default function Chat(): JSX.Element {
       startPrivateMessage={startPrivateMessage}
       status={status}
       theme={theme}
-      users={users}
+      users={sortedUsers}
     />
   );
 }

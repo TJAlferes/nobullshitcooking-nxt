@@ -89,9 +89,9 @@ export function PeopleView({
 
 type Props = {
   changePeopleTab(value: string): void;
-  focusedFriend: string | null;
+  focusedFriend: string | undefined;
   focusFriend(friend: string): void;
-  focusedUser: string | null;
+  focusedUser: string | undefined;
   focusUser(user: string): void;
   onlineFriends: IUser[];
   peopleTab: string;
