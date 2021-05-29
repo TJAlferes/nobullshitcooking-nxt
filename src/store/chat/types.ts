@@ -38,8 +38,6 @@ export interface IChatState {
   users: string[];
   onlineFriends: string[];
   status: string;
-  connectButtonDisabled: boolean;
-  disconnectButtonDisabled: boolean;
 }
 
 export const PRIVATE = "private" as const;
@@ -101,17 +99,17 @@ interface IChatDisconnected {
 
 interface IChatOnlineFriends {
   type: typeof actionTypes.CHAT_ONLINE_FRIENDS;
-  online: string[];
+  onlineFriends: string[];
 }
 
 interface IChatFriendCameOnline {
   type: typeof actionTypes.CHAT_FRIEND_CAME_ONLINE;
-  user: string;
+  friend: string;
 }
 
 interface IChatFriendWentOffline {
   type: typeof actionTypes.CHAT_FRIEND_WENT_OFFLINE;
-  user: string;
+  friend: string;
 }
 
 export interface IChatJoinRoom {

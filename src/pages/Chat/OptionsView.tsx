@@ -13,9 +13,9 @@ export function OptionsView({
       <button
         className="connection__button"
         disabled={loading}
-        onClick={status === "Connected" ? disconnect : connect}
+        onClick={status === "connected" ? disconnect : connect}
       >
-        {status === "Connected" ? 'Disconnect' : 'Connect'}
+        {status === "connected" ? "disconnect" : "connect"}
       </button>
 
       <div className="current-room">
@@ -29,7 +29,7 @@ export function OptionsView({
 
         <input
           className="change-room__input"
-          disabled={(status !== "Connected") || loading}
+          disabled={(status !== "connected") || loading}
           name="change-room-input"
           onChange={changeRoomInput}
           type="text"
@@ -38,7 +38,7 @@ export function OptionsView({
 
         <button
           className="change-room__button"
-          disabled={(status !== "Connected") || loading}
+          disabled={(status !== "connected") || loading}
           onClick={changeRoom}
         >
           Enter

@@ -6,46 +6,35 @@ import { dataGetMySavedRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import { IUserSaveRecipe, IUserUnsaveRecipe } from './types';
 
-export function* userSaveRecipeSaga(action: IUserSaveRecipe) {
+export function* userSaveRecipeSaga({ recipeId }: IUserSaveRecipe) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/user/saved-recipe/create`,
-      {recipeId: action.recipeId},
+      {recipeId},
       {withCredentials: true}
     );
-
     yield put(userMessage(message));
-    
     yield call(dataGetMySavedRecipesSaga);
-
   } catch(err) {
-
     yield put(userMessage('An error occurred. Please try again.'));
   }
-
   yield delay(4000);
   yield put(userMessageClear());
 }
 
-export function* userUnsaveRecipeSaga(action: IUserUnsaveRecipe) {
+export function* userUnsaveRecipeSaga({ recipeId }: IUserUnsaveRecipe) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/saved-recipe/delete`,
-      {withCredentials: true, data: {recipeId: action.recipeId}}
+      {withCredentials: true, data: {recipeId}}
     );
-
     yield put(userMessage(message));
-
     yield call(dataGetMySavedRecipesSaga);
-
   } catch(err) {
-
     yield put(userMessage('An error occurred. Please try again.'));
-
   }
-
   yield delay(4000);
   yield put(userMessageClear());
 }

@@ -9,30 +9,33 @@ export const actionTypes = {
 
 export interface IUserRequestFriendship {
   type: typeof actionTypes.USER_REQUEST_FRIENDSHIP;
-  friendName: string;
+  friend: string;
 }
 
 export interface IUserAcceptFriendship {
   type: typeof actionTypes.USER_ACCEPT_FRIENDSHIP;
-  friendName: string;
+  friend: string;
+  status: string;
 }
 
 export interface IUserRejectFriendship {
   type: typeof actionTypes.USER_REJECT_FRIENDSHIP;
-  friendName: string;
+  friend: string;
 }
 
 export interface IUserDeleteFriendship {
   type: typeof actionTypes.USER_DELETE_FRIENDSHIP;
-  friendName: string;
+  friend: string;
+  status: string;
 }
 
 export interface IUserBlockUser {
   type: typeof actionTypes.USER_BLOCK_USER;
-  friendName: string;
+  friend: string;
+  status: string;
 }
 
 export interface IUserUnblockUser {
   type: typeof actionTypes.USER_UNBLOCK_USER;
-  friendName: string;
+  friend: string;
 }

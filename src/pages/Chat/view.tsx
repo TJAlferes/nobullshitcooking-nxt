@@ -1,4 +1,4 @@
-import { IMessageWithClientTimestamp, IUser } from '../../store/chat/types';
+import { IMessageWithClientTimestamp } from '../../store/chat/types';
 import { MessagesView } from './MessagesView';
 import { OptionsView } from './OptionsView';
 import { PeopleView } from './PeopleView';
@@ -159,7 +159,7 @@ type Props = {
   messagesRef: React.RefObject<HTMLUListElement>;
   messageToSend: string;
   mobileTab: string;
-  onlineFriends: IUser[];
+  onlineFriends: string[];
   peopleTab: string;
   room: string;
   roomToEnter: string;
@@ -167,7 +167,7 @@ type Props = {
   startPrivateMessage(username: string): void;
   status: string;
   theme: string;
-  users: IUser[];
+  users: string[];
 };
 
 type MobileTabProps = {

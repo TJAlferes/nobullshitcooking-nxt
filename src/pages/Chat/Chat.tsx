@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import {
-  chatChangeRoom,
   chatConnect,
   chatDisconnect,
-  chatSendPrivateMessage,
-  chatSendPublicMessage
+  chatJoinRoom,
+  chatSendMessage,
+  chatSendPrivateMessage
 } from '../../store/chat/actions';
 import { ChatView } from './view';
 
@@ -104,7 +104,7 @@ export default function Chat(): JSX.Element {
     }
     setLoading(true);
     //setCurrentFriend("");
-    dispatch(chatChangeRoom(trimmedRoom));
+    dispatch(chatJoinRoom(trimmedRoom));
     setRoomToEnter("");
     preventSpam();
     setLoading(false);
@@ -165,7 +165,7 @@ export default function Chat(): JSX.Element {
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
       dispatch(chatSendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
     } else {
-      dispatch(chatSendPublicMessage(trimmedMessage));
+      dispatch(chatSendMessage(trimmedMessage));
     }
     /*else if (currentFriend !== "") {
       const trimmedFriend = currentFriend.trim();
@@ -177,11 +177,11 @@ export default function Chat(): JSX.Element {
   };
 
   const sortedUsers = users.sort((a, b) => {
-    // sorts yourself first, then others in alphabetically
-    if (a.username === authname) return -1;
-    if (b.username === authname) return 1;
-    if (a.username < b.username) return -1;
-    return a.username > b.username ? 1 : 0;
+    // sorts yourself first, then others alphabetically
+    if (a === authname) return -1;
+    if (b === authname) return 1;
+    if (a < b) return -1;
+    return a > b ? 1 : 0;
   });
 
   const startPrivateMessage = (username: string) => {

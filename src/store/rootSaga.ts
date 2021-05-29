@@ -3,7 +3,7 @@ import { fork } from 'redux-saga/effects';
 import {
   watchAuth,
   watchAvatar,
-  //watchChat,
+  watchChat,
   watchContent,
   //watchData,
   watchEquipment,
@@ -19,7 +19,7 @@ export function* rootSaga() {
   yield fork(watchAuth);
   yield fork(watchAvatar);
   yield fork(watchContent);
-  //yield fork(watchChat);
+  yield fork(watchChat);
   //yield fork(watchData);
   yield fork(watchEquipment);
   yield fork(watchFavorite);

@@ -11,14 +11,14 @@ const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
   CHAT_CONNECTED,
   CHAT_DISCONNECTED,
-  CHAT_GET_ONLINE,
-  CHAT_SHOW_ONLINE,
-  CHAT_SHOW_OFFLINE,
-  CHAT_CHANGED_ROOM,
+  CHAT_ONLINE_FRIENDS,
+  CHAT_FRIEND_CAME_ONLINE,
+  CHAT_FRIEND_WENT_OFFLINE,
+  CHAT_JOINED_ROOM,
   CHAT_REJOINED_ROOM,
-  CHAT_JOINED_USER,
-  CHAT_LEFT_USER,
-  CHAT_RECEIVED_PUBLIC_MESSAGE,
+  CHAT_USER_JOINED_ROOM,
+  CHAT_USER_LEFT_ROOM,
+  CHAT_RECEIVED_MESSAGE,
   CHAT_RECEIVED_PRIVATE_MESSAGE,
   CHAT_FAILED_PRIVATE_MESSAGE
 } = actionTypes;
@@ -31,9 +31,7 @@ const initialState: IChatState = {
   messages: [],
   users: [],
   onlineFriends: [],
-  status: "Disconnected",
-  connectButtonDisabled: false,
-  disconnectButtonDisabled: true,
+  status: "disconnected"
 };
 
 export const chatReducer = (
@@ -42,64 +40,40 @@ export const chatReducer = (
 ): IChatState => {
   switch (action.type) {
     case CHAT_CONNECTED:
-      return {
-        ...state,
-        ...{
-          status: "Connected",
-          connectButtonDisabled: true,
-          disconnectButtonDisabled: false
-        }
-      };
+      return {...state, ...{status: "connected"}};
     
     case CHAT_DISCONNECTED:
     case AUTH_USER_LOGOUT:
+      return {...state, ...{status: "disconnected"}};
+    
+    case CHAT_ONLINE_FRIENDS:
       return {
         ...state,
-        ...{
-          status: "Disconnected",
-          connectButtonDisabled: false,
-          disconnectButtonDisabled: true
-        }
+        ...{onlineFriends: action.onlineFriends}
       };
     
-    case CHAT_GET_ONLINE:
+    case CHAT_FRIEND_CAME_ONLINE:
       return {
         ...state,
-        ...{onlineFriends: action.online}
+        ...{onlineFriends: state.onlineFriends.concat(action.friend)}
       };
     
-    case CHAT_SHOW_ONLINE:
+    case CHAT_FRIEND_WENT_OFFLINE:
       return {
         ...state,
-        ...{onlineFriends: state.onlineFriends.concat(action.user)}
+        ...{onlineFriends: state.onlineFriends.filter(f => f !== action.friend)}
       };
     
-    case CHAT_SHOW_OFFLINE:
+    case CHAT_JOINED_ROOM:
       return {
         ...state,
-        ...{onlineFriends: state.onlineFriends.filter(f => f !== action.user)}
-      };
-    
-    case CHAT_CHANGED_ROOM:
-      return {
-        ...state,
-        ...{
-          room: action.room,
-          messages: [],
-          users: action.users
-        }
+        ...{room: action.room, messages: [], users: action.users}
       };
     
     case CHAT_REJOINED_ROOM:
-      return {
-        ...state,
-        ...{
-          room: action.room,
-          users: action.users
-        }
-      };
+      return {...state, ...{room: action.room, users: action.users}};
     
-    case CHAT_JOINED_USER:
+    case CHAT_USER_JOINED_ROOM:
       return {
         ...state,
         ...{
@@ -107,18 +81,15 @@ export const chatReducer = (
             kind: PUBLIC,
             id: 'admin' + action.ts,
             to: state.room,
-            from: {
-              userId: "messengerstatus",
-              username: "messengerstatus"
-            },
-            text: `${action.user.username} has joined the room.`,
+            from: "messengerstatus",
+            text: `${action.user} has joined the room.`,
             ts: action.ts,
           }),
           users: state.users.concat(action.user)
         }
       };
     
-    case CHAT_LEFT_USER:
+    case CHAT_USER_LEFT_ROOM:
       return {
         ...state,
         ...{
@@ -126,10 +97,7 @@ export const chatReducer = (
             kind: PUBLIC,
             id: 'admin' + action.ts,
             to: state.room,
-            from: {
-              userId: "messengerstatus",
-              username: "messengerstatus"
-            },
+            from: "messengerstatus",
             text: `${action.user} has left the room.`,
             ts: action.ts,
           }),
@@ -137,19 +105,13 @@ export const chatReducer = (
         }
       };
     
-    case CHAT_RECEIVED_PUBLIC_MESSAGE:
-      return {
-        ...state,
-        ...{messages: state.messages.concat(action.publicMessage)}
-      };
+    case CHAT_RECEIVED_MESSAGE:
+      return {...state, ...{messages: state.messages.concat(action.message)}};
     
     case CHAT_RECEIVED_PRIVATE_MESSAGE:
-      return {
-        ...state,
-        ...{messages: state.messages.concat(action.privateMessage)}
-      };
+      return {...state, ...{messages: state.messages.concat(action.message)}};
     
-    // ???
+    // ?
     case CHAT_FAILED_PRIVATE_MESSAGE:
       return {
         ...state,
@@ -158,10 +120,7 @@ export const chatReducer = (
             kind: PRIVATE,
             id: 'admin' + action.ts,
             to: '',
-            from: {
-              userId: "messengerstatus",
-              username: "messengerstatus"
-            },
+            from: "messengerstatus",
             text: action.feedback,
             ts: action.ts,
           })

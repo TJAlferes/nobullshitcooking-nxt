@@ -8,23 +8,18 @@ import { IUserCreatePlan, IUserEditPlan, IUserDeletePlan } from './types';
 
 export function* userCreateNewPlanSaga(action: IUserCreatePlan) {
   try {
-
     const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/user/plan/create`,
       {planInfo: action.planInfo},
       {withCredentials: true}
     );
-
     yield put(userMessage(message));
       // if it refreshes too quickly, put a delay here?
     yield call(dataGetMyPlansSaga);
-
   } catch(err) {
-
     yield put(userMessage('An error occurred. Please try again.'));
   }
-
   yield delay(4000);
   yield put(userMessageClear());
 }
@@ -37,16 +32,11 @@ export function* userEditPlanSaga(action: IUserEditPlan) {
       {planInfo: action.planInfo},
       {withCredentials: true}
     );
-
     yield put(userMessage(message));
-
     yield call(dataGetMyPlansSaga);
-
   } catch(err) {
-
     yield put(userMessage('An error occurred. Please try again.'));
   }
-
   yield delay(4000);
   yield put(userMessageClear());
 }
@@ -58,16 +48,11 @@ export function* userDeletePlanSaga(action: IUserDeletePlan) {
       `${endpoint}/user/plan/delete`,
       {withCredentials: true, data: {id: action.id}}
     );
-
     yield put(userMessage(message));
-
     yield call(dataGetMyPlansSaga);
-
   } catch(err) {
-
     yield put(userMessage('An error occurred. Please try again.'));
   }
-
   yield delay(4000);
   yield put(userMessageClear());
 }

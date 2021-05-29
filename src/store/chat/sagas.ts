@@ -18,18 +18,18 @@ import {
 } from './actions';
 import {
   IMessage,
-  IChatChangeRoom,
+  IChatJoinRoom,
   IChatSendMessage,
   IChatSendPrivateMessage
 } from './types';
 
+const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
+  `${endpoint}`,
+  {autoConnect: false, reconnection: true, /*withCredentials: true*/}
+);
+
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
-
-  const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
-    `${endpoint}`,
-    {autoConnect: false, reconnection: true, /*withCredentials: true*/}
-  );
 
   // Users
 
@@ -67,12 +67,12 @@ export function chatInit(store: Store) {
 
   // Rooms
 
-  socket.on('JoinedRoom', (users, room) => {
+  socket.on('UsersInRoom', (users, room) => {
     if (!users || !room) return;
     store.dispatch(chatJoinedRoom(users, room));
   });
 
-  socket.on('RejoinedRoom', (users, room) => {
+  socket.on('UsersInRoomRefetched', (users, room) => {
     if (!users || !room) return;
     store.dispatch(chatRejoinedRoom(users, room));
   });
@@ -99,15 +99,14 @@ export function chatInit(store: Store) {
   });
 
   socket.on('reconnect', () => {
-    chatRejoinRoomSaga();
+    const { chat } = store.getState();
+    socket.emit('RejoinRoom', chat.room);
   });
 }
 
 // Sagas
 
-// use call([socket, socket.method(), ...args])
-// these don't even need to be sagas
-// channels?
+// call([socket, socket.method(), ...args])? channels?
 
 export function* chatConnectSaga() {
   socket.connect();
@@ -117,28 +116,21 @@ export function* chatDisconnectSaga() {
   socket.disconnect();
 }
 
-export function* chatChangeRoomSaga(action: IChatChangeRoom) {
-  socket.emit('AddRoom', action.room);
+export function* chatJoinRoomSaga({ room }: IChatJoinRoom) {
+  socket.emit('JoinRoom', room);
 }
 
-export function* chatSendPublicMessageSaga(action: IChatSendPublicMessage) {
-  socket.emit('AddMessage', action.text);
+export function* chatSendMessageSaga({ text }: IChatSendMessage) {
+  socket.emit('SendMessage', text);
 }
 
 export function* chatSendPrivateMessageSaga(action: IChatSendPrivateMessage) {
-  socket.emit('AddWhisper', action.text, action.to);
+  socket.emit('SendPrivateMessage', action.text, action.to);
 }
 
-// pass store in from actions?
-export function* chatUpdateOnlineSaga() {
-  const { chat } = store.getState();
-  if (chat.status === "Connected") socket.emit('GetOnlineFriends');
-}
-
-export function chatRejoinRoomSaga() {
-  const { chat } = store.getState();
-  if (chat.channel === "") return;
-  socket.emit('RejoinRoom', chat.channel);
+// TO DO: give this an action?
+export function* chatUpdateOnlineSaga(status: string) {
+  if (status === "connected") socket.emit('GetOnlineFriends');
 }
 
 interface IClientToServerEvents {
@@ -146,8 +138,8 @@ interface IClientToServerEvents {
   GetOnlineFriends(): void;
   GetUsersInRoom(room: string): void;
   // Messages
-  Message(text: string): void;
-  PrivateMessage(text: string, to: string): void;
+  SendMessage(text: string): void;
+  SendPrivateMessage(text: string, to: string): void;
   // Rooms
   JoinRoom(room: string): void;
   RejoinRoom(room: string): void;

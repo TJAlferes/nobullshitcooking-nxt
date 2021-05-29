@@ -10,25 +10,25 @@ export function MessagesView({
   status
 }: Props): JSX.Element {
   const publicMessage =
-    ({ from: { username }, text }: IMessageWithClientTimestamp) => {
+    ({ from, text }: IMessageWithClientTimestamp) => {
     // status message
-    if (username === "messengerstatus") {
+    if (from === "messengerstatus") {
       return <span className="message--admin">{text}</span>;
     }
 
     // sent public message
-    if (authname === username) {
-      return <><span className="message--self">{username}:{' '}</span>{text}</>;
+    if (authname === from) {
+      return <><span className="message--self">{from}:{' '}</span>{text}</>;
     }
 
     // received public message
-    return <><span className="message--other">{username}:{' '}</span>{text}</>;
+    return <><span className="message--other">{from}:{' '}</span>{text}</>;
   };
 
   const privateMessage =
-    ({ to, from: { username }, text }: IMessageWithClientTimestamp) => {
+    ({ to, from, text }: IMessageWithClientTimestamp) => {
     // sent private message
-    if (authname === username) {
+    if (authname === from) {
       return (
         <>
           <span className="message--self">You whisper to{' '}{to}:{' '}</span>
@@ -41,7 +41,7 @@ export function MessagesView({
     return (
       <>
         <span className="message--other">
-          {username}{' '}whispers to you:{' '}
+          {from}{' '}whispers to you:{' '}
         </span>
         <span className="message--private">{text}</span>
       </>

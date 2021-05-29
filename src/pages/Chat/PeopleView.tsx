@@ -1,5 +1,3 @@
-import { IUser } from '../../store/chat/types';
-
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 export function PeopleView({
@@ -32,21 +30,21 @@ export function PeopleView({
 
       {peopleTab === "Room" && (
         <ul className="chat-persons">
-          {users && users.map(({ username }) => (
+          {users && users.map(user => (
             <li
               className="chat-person"
-              key={username}
-              onClick={() => focusUser(username)}
+              key={user}
+              onClick={() => focusUser(user)}
             >
-              <img className="person-avatar" src={`${url}/${username}-tiny`} />
+              <img className="person-avatar" src={`${url}/${user}-tiny`} />
               
-              <span className="person-username">{username}</span>
+              <span className="person-username">{user}</span>
 
-              {focusedUser && focusedUser === username &&
+              {focusedUser && focusedUser === user &&
                 <div className="person-tooltip">
                   <button
                     className="person-tooltip__button"
-                    onClick={() => startPrivateMessage(username)}
+                    onClick={() => startPrivateMessage(user)}
                   >
                     Whisper
                   </button>
@@ -59,21 +57,21 @@ export function PeopleView({
 
       {peopleTab === "Friends" && (
         <ul className="chat-persons">
-          {onlineFriends && onlineFriends.map(({ username }) => (
+          {onlineFriends && onlineFriends.map(friend => (
             <li
               className="chat-person"
-              key={username}
-              onClick={() => focusFriend(username)}
+              key={friend}
+              onClick={() => focusFriend(friend)}
             >
-              <img className="person-avatar" src={`${url}/${username}-tiny`} />
+              <img className="person-avatar" src={`${url}/${friend}-tiny`} />
               
-              <span className="person-username">{username}</span>
+              <span className="person-username">{friend}</span>
               
-              {focusedFriend && focusedFriend === username &&
+              {focusedFriend && focusedFriend === friend &&
                 <div className="person-tooltip">
                   <button
                     className="person-tooltip__button"
-                    onClick={() => startPrivateMessage(username)}
+                    onClick={() => startPrivateMessage(friend)}
                   >
                     Whisper
                   </button>
@@ -93,10 +91,10 @@ type Props = {
   focusFriend(friend: string): void;
   focusedUser: string | undefined;
   focusUser(user: string): void;
-  onlineFriends: IUser[];
+  onlineFriends: string[];
   peopleTab: string;
   startPrivateMessage(username: string): void;
-  users: IUser[];
+  users: string[];
 };
 
 type TabProps = {

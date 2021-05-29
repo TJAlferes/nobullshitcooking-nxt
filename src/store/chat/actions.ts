@@ -5,14 +5,14 @@ const {
   CHAT_CONNECTED,
   CHAT_DISCONNECT,
   CHAT_DISCONNECTED,
-  CHAT_GET_ONLINE,
-  CHAT_SHOW_ONLINE,
-  CHAT_SHOW_OFFLINE,
-  CHAT_CHANGE_ROOM,
-  CHAT_CHANGED_ROOM,
+  CHAT_ONLINE_FRIENDS,
+  CHAT_FRIEND_CAME_ONLINE,
+  CHAT_FRIEND_WENT_OFFLINE,
+  CHAT_JOIN_ROOM,
+  CHAT_JOINED_ROOM,
   CHAT_REJOINED_ROOM,
-  CHAT_JOINED_USER,
-  CHAT_LEFT_USER,
+  CHAT_USER_JOINED_ROOM,
+  CHAT_USER_LEFT_ROOM,
   CHAT_SEND_MESSAGE,
   CHAT_RECEIVED_MESSAGE,
   CHAT_SEND_PRIVATE_MESSAGE,
@@ -28,32 +28,32 @@ export const chatDisconnect = () => ({type: CHAT_DISCONNECT});
 
 export const chatDisconnected = () => ({type: CHAT_DISCONNECTED});
 
-export const chatOnlineFriends = (online: string[]) =>
-  ({type: CHAT_GET_ONLINE, online});
+export const chatOnlineFriends = (onlineFriends: string[]) =>
+  ({type: CHAT_ONLINE_FRIENDS, onlineFriends});
 
-export const chatShowOnline = (user: string) =>
-  ({type: CHAT_SHOW_ONLINE, user});
+export const chatFriendCameOnline = (friend: string) =>
+  ({type: CHAT_FRIEND_CAME_ONLINE, friend});
 
-export const chatShowOffline = (user: string) =>
-  ({type: CHAT_SHOW_OFFLINE, user});
+export const chatFriendWentOffline = (friend: string) =>
+  ({type: CHAT_FRIEND_WENT_OFFLINE, friend});
 
-export const chatChangeRoom = (room: string) =>
-  ({type: CHAT_CHANGE_ROOM, room});
+export const chatJoinRoom = (room: string) =>
+  ({type: CHAT_JOIN_ROOM, room});
 
-export const chatChangedRoom = (users: string[], room: string) =>
-  ({type: CHAT_CHANGED_ROOM, users, room});
+export const chatJoinedRoom = (users: string[], room: string) =>
+  ({type: CHAT_JOINED_ROOM, users, room});
 
 export const chatRejoinedRoom = (users: string[], room: string) =>
   ({type: CHAT_REJOINED_ROOM, users, room});
 
-export const chatJoinedUser = (user: string) => {
+export const chatUserJoinedRoom = (user: string) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_JOINED_USER, user, ts};
+  return {type: CHAT_USER_JOINED_ROOM, user, ts};
 };
 
-export const chatLeftUser = (user: string) => {
+export const chatUserLeftRoom = (user: string) => {
   const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_LEFT_USER, user, ts};
+  return {type: CHAT_USER_LEFT_ROOM, user, ts};
 };
 
 export const chatSendMessage = (text: string) =>

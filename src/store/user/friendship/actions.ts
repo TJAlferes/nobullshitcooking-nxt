@@ -9,32 +9,35 @@ const {
   USER_UNBLOCK_USER
 } = actionTypes;
 
-export const userRequestFriendship = (friendName: string) => ({
+export const userRequestFriendship = (friend: string) => ({
   type: USER_REQUEST_FRIENDSHIP,
-  friendName
+  friend
 });
 
-export const userAcceptFriendship = (friendName: string) => ({
+export const userAcceptFriendship = (friend: string, status: string) => ({
   type: USER_ACCEPT_FRIENDSHIP,
-  friendName
+  friend,
+  status
 });
 
-export const userRejectFriendship = (friendName: string) => ({
+export const userRejectFriendship = (friend: string) => ({
   type: USER_REJECT_FRIENDSHIP,
-  friendName
+  friend
 });
 
-export const userDeleteFriendship = (friendName: string) => ({
+export const userDeleteFriendship = (friend: string, status: string) => ({
   type: USER_DELETE_FRIENDSHIP,
-  friendName
+  friend,
+  status
 });
 
-export const userBlockUser = (friendName: string) => ({
+export const userBlockUser = (friend: string, status: string) => ({
   type: USER_BLOCK_USER,
-  friendName
+  friend,
+  status
 });
 
-export const userUnblockUser = (friendName: string) => ({
+export const userUnblockUser = (friend: string) => ({
   type: USER_UNBLOCK_USER,
-  friendName
+  friend
 });
