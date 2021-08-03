@@ -50,12 +50,12 @@ export function chatInit(store: Store) {
 
   // Messages
 
-  socket.on('ReceivedMessage', (message) => {
+  socket.on('Message', (message) => {
     if (!message) return;
     store.dispatch(chatReceivedMessage(message));
   });
 
-  socket.on('ReceivedPrivateMessage', (message) => {
+  socket.on('PrivateMessage', (message) => {
     if (!message) return;
     store.dispatch(chatReceivedPrivateMessage(message));
   });
@@ -99,8 +99,9 @@ export function chatInit(store: Store) {
   });
 
   socket.on('reconnect', () => {
-    const { chat } = store.getState();
-    socket.emit('RejoinRoom', chat.room);
+    const { chat: { room } } = store.getState();
+    if (room === "") return;  // ?
+    socket.emit('RejoinRoom', room);
   });
 }
 
@@ -124,8 +125,10 @@ export function* chatSendMessageSaga({ text }: IChatSendMessage) {
   socket.emit('SendMessage', text);
 }
 
-export function* chatSendPrivateMessageSaga(action: IChatSendPrivateMessage) {
-  socket.emit('SendPrivateMessage', action.text, action.to);
+export function* chatSendPrivateMessageSaga(
+  { text, to }: IChatSendPrivateMessage
+) {
+  socket.emit('SendPrivateMessage', text, to);
 }
 
 // TO DO: give this an action?
@@ -152,8 +155,8 @@ interface IServerToClientEvents {
   FriendCameOnline(friend: string): void;
   FriendWentOffline(friend: string): void;
   // Messages
-  ReceivedMessage(message: IMessage): void;
-  ReceivedPrivateMessage(message: IMessage): void;
+  Message(message: IMessage): void;
+  PrivateMessage(message: IMessage): void;
   FailedPrivateMessage(feedback: string): void;
   // Rooms
   UsersInRoom(users: string[], room: string): void;
