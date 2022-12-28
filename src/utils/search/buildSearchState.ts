@@ -4,19 +4,13 @@ function getHighlight(hit: any, fieldName: string) {
 }
 
 function buildResults(hits: any) {
-  const addEachKeyValueToObject = (
-    acc: any,
-    [key, value]: (Default|string)[]
-  ) => ({...acc, [key as string]: value});
+  const addEachKeyValueToObject = (acc: any, [key, value]: (Default|string)[]) => ({...acc, [key as string]: value});
 
-  const toObject = (value: any, snippet: any) =>
-    ({raw: value, ...(snippet && {snippet})});
+  const toObject = (value: any, snippet: any) => ({raw: value, ...(snippet && {snippet})});
 
   return hits.map((record: any) =>
-    Object.entries(record._source).map(([fieldName, fieldValue]) => [
-      fieldName,
-      toObject(fieldValue, getHighlight(record, fieldName))
-    ])
+    Object.entries(record._source)
+    .map(([fieldName, fieldValue]) => [fieldName, toObject(fieldValue, getHighlight(record, fieldName))])
     .reduce(addEachKeyValueToObject, {})
   );
 }
@@ -32,19 +26,18 @@ function getValueFacet(aggs: any, fieldName: string) {
     return [{
       field: fieldName,
       type: "value",
-      data: aggs[fieldName].buckets.map((bucket: any) => ({ 
-        // Note: boolean & date require key_as_string
-        value: bucket.key_as_string || bucket.key,
+      data: aggs[fieldName].buckets.map((bucket: any) => ({
+        value: bucket.key_as_string || bucket.key,  // boolean & date require key_as_string
         count: bucket.doc_count
       }))
     }];
   }
 }
 
-function buildStateFacets(aggs: any, currIdx: string) {
-  if (currIdx === "recipes") {
-    const cuisine_name = getValueFacet(aggs, "cuisine_name");
-    const method_name = getValueFacet(aggs, "method_name");
+function buildStateFacets(aggs: any, index: string) {
+  if (index === "recipes") {
+    const cuisine_name =     getValueFacet(aggs, "cuisine_name");
+    const method_name =      getValueFacet(aggs, "method_name");
     const recipe_type_name = getValueFacet(aggs, "recipe_type_name");
     const facets = {
       ...(cuisine_name && {cuisine_name}),
@@ -55,14 +48,14 @@ function buildStateFacets(aggs: any, currIdx: string) {
     if (Object.keys(facets).length > 0) return facets;
   }
   
-  if (currIdx === "ingredients") {
+  if (index === "ingredients") {
     const ingredient_type_name = getValueFacet(aggs, "ingredient_type_name");
     const facets = {...(ingredient_type_name && {ingredient_type_name})};
 
     if (Object.keys(facets).length > 0) return facets;
   }
   
-  if (currIdx === "equipment") {
+  if (index === "equipment") {
     const equipment_type_name = getValueFacet(aggs, "equipment_type_name");
     const facets = {...(equipment_type_name && {equipment_type_name})};
 
@@ -71,20 +64,16 @@ function buildStateFacets(aggs: any, currIdx: string) {
 }
 
 /*
-Converts Elasticsearch response to new state. onSearch handler needs to convert
-search results into a new state that search-ui understands.
+Converts Elasticsearch response to new state.
+onSearch handler needs to convert search results into a new state that search-ui understands.
 
-For example, Elasticsearch returns "hits" for search results. This maps to the
-"results" property in state, which requires a specific format. buildSearchState
-iterates through "hits" and reformats them to "results".
+For example, Elasticsearch returns "hits" for search results.
+This maps to the "results" property in state, which requires a specific format.
+buildSearchState iterates through "hits" and reformats them to "results".
 
 Similar for totals and facets.
 */
-export function buildSearchState(
-  response: any,
-  resultsPerPage: number,
-  currentIndex: string
-) {
+export function buildSearchState(response: any, resultsPerPage: number, currentIndex: string) {
   const results = buildResults(response.hits.hits);
   const totalResults = response.hits.total.value;
   const totalPages = buildTotalPages(resultsPerPage, totalResults);

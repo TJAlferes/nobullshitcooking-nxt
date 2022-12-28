@@ -49,21 +49,12 @@ export function ImageUploads({
 
         {!recipeImage && (
           <div>
-            {
-              !editing
+            {!editing
               ? <img src="https://s3.amazonaws.com/nobsc-user-recipe/nobsc-recipe-default" />
               : recipePrevImage && <img src={`https://s3.amazonaws.com/nobsc-user-recipe${recipePrevImage}`} />
             }
-
             <h4 className="new-recipe__h4">Change</h4>
-
-            <input
-              accept="image/*"
-              className="new-recipe-image__input"
-              name="image-input"
-              onChange={onSelectRecipeFile}
-              type="file"
-            />
+            <input accept="image/*" className="new-recipe-image__input" name="image-input" onChange={onSelectRecipeFile} type="file" />
           </div>
         )}
 
@@ -86,37 +77,15 @@ export function ImageUploads({
               style={{minHeight: "300px"}}
             />
 
-            <span className="new-recipe__crop-tool-tip">
-              Move the crop to your desired position. These three images will be saved for you:
-            </span>
+            <span className="new-recipe__crop-tool-tip">Move the crop to your desired position. These three images will be saved for you:</span>
 
             <div className="new-recipe__crops">
-              <div className="new-recipe__crop-full-outer">
-                <span>Full Size: </span>
-
-                <img className="new-recipe__crop-full" src={recipeFullCrop} />
-              </div>
-
-              <div className="new-recipe__crop-thumb-outer">
-                <span>Thumb Size: </span>
-
-                <img className="new-recipe__crop-thumb" src={recipeThumbCrop} />
-              </div>
-
-              <div className="new-recipe__crop-tiny-outer">
-                <span>Tiny Size: </span>
-
-                <img className="new-recipe__crop-tiny" src={recipeTinyCrop} />
-              </div>
+              <div className="new-recipe__crop-full-outer"><span>Full Size: </span><img className="new-recipe__crop-full" src={recipeFullCrop} /></div>
+              <div className="new-recipe__crop-thumb-outer"><span>Thumb Size: </span><img className="new-recipe__crop-thumb" src={recipeThumbCrop} /></div>
+              <div className="new-recipe__crop-tiny-outer"><span>Tiny Size: </span><img className="new-recipe__crop-tiny" src={recipeTinyCrop} /></div>
             </div>
 
-            <button
-              className="new-recipe__button--cancel-image"
-              disabled={loading}
-              onClick={cancelRecipeImage}
-            >
-              Cancel
-            </button>
+            <button className="new-recipe__button--cancel-image" disabled={loading} onClick={cancelRecipeImage}>Cancel</button>
           </div>
         )}
       </div>
@@ -128,21 +97,12 @@ export function ImageUploads({
 
         {!equipmentImage && (
           <div>
-            {
-              !editing
+            {!editing
               ? <img src="https://s3.amazonaws.com/nobsc-user-recipe/nobsc-recipe-default" />
               : equipmentPrevImage && <img src={`https://s3.amazonaws.com/nobsc-user-recipe-equipment/${equipmentPrevImage}`} />
             }
-
             <h4 className="new-recipe__h4">Change</h4>
-
-            <input
-              accept="image/*"
-              className="new-recipe__equipment-image-input"
-              name="equipment-image-input"
-              onChange={onSelectEquipmentFile}
-              type="file"
-            />
+            <input accept="image/*" className="new-recipe__equipment-image-input" name="equipment-image-input" onChange={onSelectEquipmentFile} type="file" />
           </div>
         )}
 
@@ -165,28 +125,15 @@ export function ImageUploads({
               style={{minHeight: "300px"}}
             />
 
-            <span className="new-recipe__crop-tool-tip">
-              Move the crop to your desired position. This image will be saved for you:
-            </span>
+            <span className="new-recipe__crop-tool-tip">Move the crop to your desired position. This image will be saved for you:</span>
 
             <div className="new-recipe__crops">
               <div className="new-recipe__crop-full-outer">
-                <span>Full Size: </span>
-
-                <img
-                  className="new-recipe__crop-full"
-                  src={equipmentFullCrop}
-                />
+                <span>Full Size: </span><img className="new-recipe__crop-full" src={equipmentFullCrop} />
               </div>
             </div>
 
-            <button
-              className="new-recipe__image-cancel-button"
-              disabled={loading}
-              onClick={cancelEquipmentImage}
-            >
-              Cancel
-            </button>
+            <button className="new-recipe__image-cancel-button" disabled={loading} onClick={cancelEquipmentImage}>Cancel</button>
           </div>
         )}
       </div>
@@ -198,21 +145,14 @@ export function ImageUploads({
 
         {!ingredientsImage && (
           <div>
-            {
-              !editing
+            {!editing
               ? <img src="https://s3.amazonaws.com/nobsc-user-recipe/nobsc-recipe-default" />
               : ingredientsPrevImage && <img src={`https://.s3.amazonaws.com/nobsc-user-recipe-ingredients/${ingredientsPrevImage}`} />
             }
 
             <h4 className="new-recipe__h4">Change</h4>
 
-            <input
-              accept="image/*"
-              className="new-recipe__ingredients-image-input"
-              name="ingredients-image-input"
-              onChange={onSelectIngredientsFile}
-              type="file"
-            />
+            <input accept="image/*" className="new-recipe__ingredients-image-input" name="ingredients-image-input" onChange={onSelectIngredientsFile} type="file" />
           </div>
         )}
 
@@ -235,28 +175,15 @@ export function ImageUploads({
               style={{minHeight: "300px"}}
             />
 
-            <span className="new-recipe__crop-tool-tip">
-              Move the crop to your desired position. This image will be saved for you:
-            </span>
+            <span className="new-recipe__crop-tool-tip">Move the crop to your desired position. This image will be saved for you:</span>
 
             <div className="new-recipe__crops">
               <div className="new-recipe__crop-full-outer">
-                <span>Full Size: </span>
-
-                <img
-                  className="new-recipe__crop-full"
-                  src={ingredientsFullCrop}
-                />
+                <span>Full Size: </span><img className="new-recipe__crop-full" src={ingredientsFullCrop} />
               </div>
             </div>
 
-            <button
-              className="new-recipe__image-cancel-button"
-              disabled={loading}
-              onClick={cancelIngredientsImage}
-            >
-              Cancel
-            </button>
+            <button className="new-recipe__image-cancel-button" disabled={loading} onClick={cancelIngredientsImage}>Cancel</button>
           </div>
         )}
       </div>
@@ -268,21 +195,14 @@ export function ImageUploads({
 
         {!cookingImage && (
           <div>
-            {
-              !editing
+            {!editing
               ? <img src="https://s3.amazonaws.com/nobsc-user-recipe/nobsc-recipe-default" />
               : cookingPrevImage && <img src={`https://.s3.amazonaws.com/nobsc-user-recipe-cooking/${cookingPrevImage}`} />
             }
 
             <h4 className="new-recipe__h4">Change</h4>
             
-            <input
-              accept="image/*"
-              className="new-recipe__cooking-image-input"
-              name="cooking-image-input"
-              onChange={onSelectCookingFile}
-              type="file"
-            />
+            <input accept="image/*" className="new-recipe__cooking-image-input" name="cooking-image-input" onChange={onSelectCookingFile} type="file" />
           </div>
         )}
 
@@ -305,25 +225,15 @@ export function ImageUploads({
               style={{minHeight: "300px"}}
             />
 
-            <span className="crop-tool-tip">
-              Move the crop to your desired position. This image will be saved for you:
-            </span>
+            <span className="crop-tool-tip">Move the crop to your desired position. This image will be saved for you:</span>
 
             <div className="crops">
               <div className="crop-full-outer">
-                <span>Full Size: </span>
-
-                <img className="crop-full" src={cookingFullCrop} />
+                <span>Full Size: </span><img className="crop-full" src={cookingFullCrop} />
               </div>
             </div>
 
-            <button
-              className="image-cancel-button"
-              disabled={loading}
-              onClick={cancelCookingImage}
-            >
-              Cancel
-            </button>
+            <button className="image-cancel-button" disabled={loading} onClick={cancelCookingImage}>Cancel</button>
           </div>
         )}
       </div>

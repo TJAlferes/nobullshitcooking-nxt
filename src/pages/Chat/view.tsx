@@ -34,13 +34,9 @@ export function ChatView({
 }: Props): JSX.Element {
   const MobileTab = ({ tab }: MobileTabProps) => (
     <button
-      className={
-        mobileTab === tab ? "chat-mobile-tab--current" : "chat-mobile-tab"
-      }
+      className={mobileTab === tab ? "chat-mobile-tab--current" : "chat-mobile-tab"}
       onClick={() => changeMobileTab(tab)}
-    >
-      {tab}
-    </button>
+    >{tab}</button>
   );
 
   return (
@@ -89,13 +85,7 @@ export function ChatView({
       <div className="chat-mobile">
         <p className="feedback">{feedback}</p>
 
-        <div className="chat-mobile-tabs">
-          <MobileTab tab="Messages" />
-
-          <MobileTab tab="People" />
-
-          <MobileTab tab="Options" />
-        </div>
+        <div className="chat-mobile-tabs"><MobileTab tab="Messages" /><MobileTab tab="People" /><MobileTab tab="Options" /></div>
 
         {mobileTab === "Options" && (
           <OptionsView

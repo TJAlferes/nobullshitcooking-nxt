@@ -32,7 +32,6 @@ export function RegisterView({
       <p className="feedback">{feedback}</p>
 
       <label className="register__label">Username</label>
-
       <input
         autoComplete="username"
         autoFocus
@@ -48,7 +47,6 @@ export function RegisterView({
       />
 
       <label className="register-label">Email</label>
-      
       <input
         autoComplete="email"
         className="register__input"
@@ -63,7 +61,6 @@ export function RegisterView({
       />
 
       <label className="register-label">Password</label>
-
       <input
         autoComplete="current-password"
         className="register__input"
@@ -78,7 +75,6 @@ export function RegisterView({
       />
 
       <label className="register-label">Password Again</label>
-
       <input
         autoComplete="current-password"
         className="register__input"
@@ -147,37 +143,20 @@ export function RegisterView({
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
       <Link href="/">
         <a className="register__home-links">
-          <img
-            className="home-link--desktop"
-            src={`${url}logo-large-white.png`}
-          />
-
-          <img
-            className="home-link--mobile"
-            src={`${url}logo-small-white.png`}
-          />
+          <img className="home-link--desktop" src={`${url}logo-large-white.png`} />
+          <img className="home-link--mobile" src={`${url}logo-small-white.png`} />
         </a>
       </Link>
 
       {confirmingUser === true ? verifyForm() : registerForm()}
 
       <div className="register__links">
-        <Link href="/page/site/terms">
-          <a className="register__link">Terms of Use</a>
-        </Link>
-
-        <Link href="/page/site/privacy">
-          <a className="register__link">Privacy Policy</a>
-        </Link>
-        
-        <Link href="/page/site/help">
-          <a className="register__link">Help</a>
-        </Link>
+        <Link href="/page/site/terms"><a className="register__link">Terms of Use</a></Link>
+        <Link href="/page/site/privacy"><a className="register__link">Privacy Policy</a></Link>
+        <Link href="/page/site/help"><a className="register__link">Help</a></Link>
       </div>
 
-      <p className="register__copyright">
-        Copyright 2015-2020 NoBullshitCooking. All Rights Reserved.
-      </p>
+      <p className="register__copyright">Copyright 2015-2023 NoBullshitCooking. All Rights Reserved.</p>
     </div>
   );
 }

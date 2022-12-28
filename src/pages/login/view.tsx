@@ -4,30 +4,13 @@ import { LoaderButton } from '../../components';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
-export function LoginView({
-  email,
-  feedback,
-  emailChange,
-  loginClick,
-  loginKeyUp,
-  passwordChange,
-  loading,
-  password,
-  validateLoginInfo
-}: Props): JSX.Element {
+export function LoginView({ email, feedback, emailChange, loginClick, loginKeyUp, passwordChange, loading, password, validateLoginInfo }: Props): JSX.Element {
   return (
     <div className="login" onKeyUp={e => loginKeyUp(e)}>
       <Link href="/">
         <a className="login__home-links">
-          <img
-            className="home-link--desktop"
-            src={`${url}logo-large-white.png`}
-          />
-          
-          <img
-            className="home-link--mobile"
-            src={`${url}logo-small-white.png`}
-          />
+          <img className="home-link--desktop" src={`${url}logo-large-white.png`} />
+          <img className="home-link--mobile" src={`${url}logo-small-white.png`} />
         </a>
       </Link>
 
@@ -37,7 +20,6 @@ export function LoginView({
         <p className="feedback">{feedback}</p>
 
         <label className="login__label">Email</label>
-
         <input
           autoComplete="email"
           autoFocus
@@ -53,7 +35,6 @@ export function LoginView({
         />
 
         <label className="login__label">Password</label>
-
         <input
           autoComplete="current-password"
           className="login__input"

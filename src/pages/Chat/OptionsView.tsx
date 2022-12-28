@@ -1,26 +1,12 @@
-export function OptionsView({
-  changeRoom,
-  changeRoomInput,
-  connect,
-  disconnect,
-  loading,
-  room,
-  roomToEnter,
-  status
-}: Props): JSX.Element {
+export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, loading, room, roomToEnter, status}: Props): JSX.Element {
   return (
     <div className="chat-options">
-      <button
-        className="connection__button"
-        disabled={loading}
-        onClick={status === "connected" ? disconnect : connect}
-      >
+      <button className="connection__button" disabled={loading} onClick={status === "connected" ? disconnect : connect}>
         {status === "connected" ? "disconnect" : "connect"}
       </button>
 
       <div className="current-room">
         <span className="current-room__label">Current Room:</span>
-
         <span className="current-room__value">{room}</span>
       </div>
 
@@ -36,13 +22,7 @@ export function OptionsView({
           value={roomToEnter}
         />
 
-        <button
-          className="change-room__button"
-          disabled={(status !== "connected") || loading}
-          onClick={changeRoom}
-        >
-          Enter
-        </button>
+        <button className="change-room__button" disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
       </div>
     </div>
   );

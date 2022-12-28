@@ -8,10 +8,8 @@ import { RegisterView } from './view';
 
 export default function Register({ confirmingUser }: Props): JSX.Element {
   const router = useRouter();
-
   const dispatch = useDispatch();
   const message = useSelector(state => state.auth.message);
-
   const [ confirmationCode, setConfirmationCode ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ feedback, setFeedback ] = useState("");
@@ -31,17 +29,15 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     };
   }, [message]);
 
-  const confirmationCodeChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setConfirmationCode((e.target as HTMLInputElement).value);
+  const confirmationCodeChange = (e: React.SyntheticEvent<EventTarget>) => setConfirmationCode((e.target as HTMLInputElement).value);
 
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setEmail((e.target as HTMLInputElement).value);
+  const emailChange = (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
 
-  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setPassword((e.target as HTMLInputElement).value);
+  const usernameChange = (e: React.SyntheticEvent<EventTarget>) => setUsername((e.target as HTMLInputElement).value);
 
-  const passwordAgainChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setPasswordAgain((e.target as HTMLInputElement).value);
+  const passwordChange = (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
+
+  const passwordAgainChange = (e: React.SyntheticEvent<EventTarget>) => setPasswordAgain((e.target as HTMLInputElement).value);
 
   const registerClick = () => {
     if (loading) return;
@@ -57,9 +53,6 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     setLoading(true);
     dispatch(authUserRegister(email, password, username, router));
   };
-
-  const usernameChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setUsername((e.target as HTMLInputElement).value);
 
   const verifyClick = () => {
     if (loading) return;
@@ -78,12 +71,7 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
 
   const validateConfirmationCode = () => confirmationCode.length > 1;
   
-  const validateRegistrationInfo = () => (
-    (username.length > 1) &&
-    (email.length > 4) &&
-    (password.length > 5) &&
-    (password == passwordAgain)
-  );
+  const validateRegistrationInfo = () => ((username.length > 1) && (email.length > 4) && (password.length > 5) && (password == passwordAgain));
   
   return (
     <RegisterView

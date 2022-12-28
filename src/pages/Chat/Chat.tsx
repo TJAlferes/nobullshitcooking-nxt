@@ -2,20 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import {
-  chatConnect,
-  chatDisconnect,
-  chatJoinRoom,
-  chatSendMessage,
-  chatSendPrivateMessage
-} from '../../store/chat/actions';
+import { chatConnect, chatDisconnect, chatJoinRoom, chatSendMessage, chatSendPrivateMessage } from '../../store/chat/actions';
 import { ChatView } from './view';
 
 // TO DO: fix no longer auto scrolling after spam debounce
-
 export default function Chat(): JSX.Element {
   const dispatch = useDispatch();
-  // would it make sense to move some of this down in the component tree?
+  // move some of this down in the component tree?
   const authname = useSelector(state => state.auth.authname);
   const room = useSelector(state => state.chat.room);
   const message = useSelector(state => state.user.message);
@@ -53,36 +46,31 @@ export default function Chat(): JSX.Element {
 
   useEffect(() => {
     const setAlertFavicon = () => {
-      const nobscFavicon =
-        document.getElementById('nobsc-favicon') as HTMLLinkElement;
+      const nobscFavicon = document.getElementById('nobsc-favicon') as HTMLLinkElement;
       nobscFavicon.href = "/icons/alert.png";
     };
 
-    // TO DO: fix no longer auto scrolling after spam debounce
-    const autoScroll = () => {
+    const autoScroll = () => {  // TO DO: fix no longer auto scrolling after spam debounce
       if (!messagesRef || !messagesRef.current) return;
-      const newestMessage: HTMLUListElement =
-        messagesRef.current.lastElementChild as HTMLUListElement;
+
+      const newestMessage: HTMLUListElement = messagesRef.current.lastElementChild as HTMLUListElement;
       if (!newestMessage) return;
+
       const containerHeight = messagesRef.current.scrollHeight;
-      const newestMessageHeight =
-        newestMessage.offsetHeight +
-        parseInt(getComputedStyle(newestMessage).marginBottom);
-      const scrollOffset =
-        messagesRef.current.scrollTop +
-        messagesRef.current.offsetHeight;
+      const newestMessageHeight = newestMessage.offsetHeight + parseInt(getComputedStyle(newestMessage).marginBottom);
+      const scrollOffset = messagesRef.current.scrollTop + messagesRef.current.offsetHeight;
+
       // cancels autoscroll if user is scrolling up through older messages
-      if ((containerHeight - newestMessageHeight) <= scrollOffset) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      }
+      if ((containerHeight - newestMessageHeight) <= scrollOffset) messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     };
 
     if (windowFocused === false) setAlertFavicon();
     autoScroll();
   }, [messages]);
 
-  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) =>
-    setMessageToSend((e.target as HTMLInputElement).value.trim());
+  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
+
+  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) => setMessageToSend((e.target as HTMLInputElement).value.trim());
   
   const changeMobileTab = (value: string) => setMobileTab(value);
 
@@ -90,11 +78,13 @@ export default function Chat(): JSX.Element {
   
   const changeRoom = () => {
     if (loading) return;
+
     if (debounced) {
       setFeedback("Slow down there partner...");
       setTimeout(() => setFeedback(""), 6000);
       return;
     }
+
     const trimmedRoom = roomToEnter.trim();
     if (trimmedRoom.length < 1 || trimmedRoom === "") return;
     if (trimmedRoom.length > 20) {
@@ -102,6 +92,7 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 4000);
       return;
     }
+
     setLoading(true);
     //setCurrentFriend("");
     dispatch(chatJoinRoom(trimmedRoom));
@@ -109,9 +100,6 @@ export default function Chat(): JSX.Element {
     preventSpam();
     setLoading(false);
   };
-
-  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) =>
-    setRoomToEnter((e.target as HTMLInputElement).value.trim());
 
   const connect = () => {
     setLoading(true);
@@ -138,9 +126,8 @@ export default function Chat(): JSX.Element {
     }
   };
   
-  // TO DO: improve this
-  const sendMessage = (e: React.KeyboardEvent) => {
-    // TO DO: move into 
+  const sendMessage = (e: React.KeyboardEvent) => {  // TO DO: improve this
+    // TO DO: move into (?)
     if (e.key && (e.key !== "Enter")) return;
     if (loading) return;
     if (debounced) {
@@ -148,6 +135,7 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 6000);
       return;
     }
+
     const trimmedMessage = messageToSend.trim();
     if (trimmedMessage.length < 1 || trimmedMessage === "") return;
     if (trimmedMessage.length > 4000) {
@@ -155,6 +143,7 @@ export default function Chat(): JSX.Element {
       setTimeout(() => setFeedback(""), 4000);
       return;
     }
+
     setLoading(true);
     const whispering = trimmedMessage.slice(0, 3) === "/w ";
     if (whispering) {
@@ -167,28 +156,24 @@ export default function Chat(): JSX.Element {
     } else {
       dispatch(chatSendMessage(trimmedMessage));
     }
-    /*else if (currentFriend !== "") {
-      const trimmedFriend = currentFriend.trim();
-      messengerSendWhisper(trimmedMessage, trimmedFriend);
-    }*/
+    /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trimmedMessage, trimmedFriend);}*/
     setMessageToSend("");
     preventSpam();
     setLoading(false);
   };
-
-  const sortedUsers = users.sort((a, b) => {
-    // sorts yourself first, then others alphabetically
-    if (a === authname) return -1;
-    if (b === authname) return 1;
-    if (a < b) return -1;
-    return a > b ? 1 : 0;
-  });
 
   const startPrivateMessage = (username: string) => {
     setFocusedFriend(undefined);
     setFocusedUser(undefined);
     setMessageToSend(`/w ${username}`);
   };
+
+  const sortedUsers = users.sort((a, b) => {  // sorts yourself first, then others alphabetically
+    if (a === authname) return -1;
+    if (b === authname) return 1;
+    if (a < b) return -1;
+    return a > b ? 1 : 0;
+  });
 
   return (
     <ChatView

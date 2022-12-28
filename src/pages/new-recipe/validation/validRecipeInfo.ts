@@ -1,9 +1,4 @@
-import {
-  IEquipmentRow,
-  IIngredientRow,
-  IMethods,
-  ISubrecipeRow
-} from '../index.page';
+import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
 
 export function validRecipeInfo({
   cuisineId,
@@ -52,31 +47,22 @@ export function validRecipeInfo({
     equipmentRows.map(r => {
       if (r.amount === "" || r.equipment === "") validEquipmentRows = false;
     });
-
     if (!validEquipmentRows) return feedback("Review equipment.");
   }
 
   let validIngredientRows = true;
   if (ingredientRows.length) {
     ingredientRows.map(r => {
-      // TO DO: change to measurementId or measurementName?
-      if (r.amount === "" || r.unit === "" || r.ingredient === "") {
-        validIngredientRows = false;
-      }
+      if (r.amount === "" || r.unit === "" || r.ingredient === "") validIngredientRows = false;  // TO DO: change to measurementId or measurementName?
     });
-
     if (!validIngredientRows) return feedback("Review ingredients.");
   }
 
   let validSubrecipeRows = true;
   if (subrecipeRows.length) {
     subrecipeRows.map(r => {
-      // TO DO: change to measurementId or measurementName?
-      if (r.amount === "" || r.unit === "" || r.subrecipe === "") {
-        validSubrecipeRows = false;
-      }
+      if (r.amount === "" || r.unit === "" || r.subrecipe === "") validSubrecipeRows = false;  // TO DO: change to measurementId or measurementName?
     });
-
     if (!validSubrecipeRows) return feedback("Review subrecipes.");
   }
 

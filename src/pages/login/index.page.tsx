@@ -8,13 +8,10 @@ import { LoginView } from './view';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
 // TO DO: finite state machine!!!
-
 export default function Login(): JSX.Element {
   const { pathname } = useRouter();
-
   const dispatch = useDispatch();
   const message = useSelector(state => state.auth.message);
-
   const [ email, setEmail ] = useState("");
   const [ feedback, setFeedback ] = useState("");
   const [ loading, setLoading ] = useState(false);
@@ -31,15 +28,16 @@ export default function Login(): JSX.Element {
     };
   }, [message]);
 
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setEmail((e.target as HTMLInputElement).value);
+  const emailChange = (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
   
+  const passwordChange = (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
+
   const loginClick = () => {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
     if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
-    if (pathname === "/login") dispatch(authUserLogin(email, password));
+    if (pathname === "/login")       dispatch(authUserLogin(email, password));
   }
 
   const loginKeyUp = (e: React.KeyboardEvent) => {
@@ -48,11 +46,8 @@ export default function Login(): JSX.Element {
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
     if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
-    if (pathname === "/login") dispatch(authUserLogin(email, password));
+    if (pathname === "/login")       dispatch(authUserLogin(email, password));
   }
-
-  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setPassword((e.target as HTMLInputElement).value);
 
   const validateLoginInfo = () => ((email.length > 4) && (password.length > 5));
 

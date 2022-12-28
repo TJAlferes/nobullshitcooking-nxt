@@ -18,33 +18,35 @@ import { chatInit } from '../store/chat/sagas';
 function NOBSCApp({ Component, pageProps }: AppProps) {
   const leftNav = useSelector(state => state.menu.leftNav);
 
-  const { pathname } = pageProps.router;
-  const atAuthPage =
-    pathname.match(/\/login/) ||
-    pathname.match(/\/register/) ||
-    pathname.match(/\/verify/);
-  
   const queryClientRef = useRef<QueryClient>();
-
   if (!queryClientRef.current) queryClientRef.current = new QueryClient();
+
+  const { pathname } = pageProps.router;
+  const atAuthPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);
 
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps ? pageProps.dehydratedState: {}}>
         <SearchProvider config={pageProps.searchConfig}>
           <DndProvider options={HTML5toTouch}>
-            {atAuthPage ? <Component {...pageProps} /> : (
-              <div id="app">
-                {leftNav && <LeftNav />}
-                <div className={leftNav ? 'shadow--show' : 'shadow--hide'}>
+            {atAuthPage
+              ? <Component {...pageProps} />
+              : (
+                <div id="app">
+                  {leftNav && <LeftNav />}
+
+                  <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
+
+                  <div id="layout">
+                    <Header />
+                    <Main>
+                      <Component {...pageProps} />
+                    </Main>
+                    <Footer />
+                  </div>
                 </div>
-                <div id="layout">
-                  <Header />
-                  <Main><Component {...pageProps} /></Main>
-                  <Footer />
-                </div>
-              </div>
-            )}
+              )
+            }
           </DndProvider>
         </SearchProvider>
       </Hydrate>
@@ -63,9 +65,8 @@ NOBSCApp.getInitialProps = wrapper.getInitialAppProps(store =>
     if (ctx.req) {  // if server-side, stop saga
       ctx.store?.dispatch(END);
       await (ctx.store as SagaStore)?.sagaTask?.toPromise();
-    } else {
-      chatInit(store);
     }
+    else chatInit(store);
 
     return {pageProps};
   }
