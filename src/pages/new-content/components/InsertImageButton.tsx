@@ -10,6 +10,7 @@ export function InsertImageButton() {
     e.preventDefault();
     const url = window.prompt('Enter the URL of the image:');  // change
     if (!url) return;
+
     Transforms.insertNodes(editor, {
       type: "image",
       url,
@@ -17,9 +18,5 @@ export function InsertImageButton() {
     });
   };
 
-  return (
-    <Button onMouseDown={handleMouseDown}>
-      <Icon className="link-icon">image</Icon>
-    </Button>
-  );
+  return <Button onMouseDown={handleMouseDown}><Icon className="link-icon">image</Icon></Button>;
 }

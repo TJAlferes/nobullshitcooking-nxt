@@ -62,7 +62,7 @@ export function PublicRecipes({
             <span className="dashboard-item-delete" onClick={() => activateModal(r.id, r.title)}>Disown</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't created any public recipes yet.</div>)
+        : <div className="dashboard-no-content">You haven't created any public recipes yet.</div>
       }
     </div>
   );

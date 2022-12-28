@@ -1,22 +1,11 @@
 import React from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import { Node } from 'slate';
-import {
-  Editable,
-  RenderElementProps,
-  RenderLeafProps,
-  Slate
-} from 'slate-react';
+import { Editable, RenderElementProps, RenderLeafProps, Slate } from 'slate-react';
 
 import { LoaderSpinner } from '../../components';
 import { IContentType } from '../../store/data/types';
-import {
-  BlockButton,
-  InsertImageButton,
-  LinkButton,
-  MarkButton,
-  Toolbar
-} from './components';
+import { BlockButton, InsertImageButton, LinkButton, MarkButton, Toolbar } from './components';
 
 export function NewContentView({
   cancelImage,
@@ -51,36 +40,19 @@ export function NewContentView({
 
       <p className="feedback">{feedback}</p>
 
-      <button className="new-content__save-button" onClick={handleSubmit}>
-        Save
-      </button>
+      <button className="new-content__save-button" onClick={handleSubmit}>Save</button>
 
       {staffIsAuthenticated && (
         <>
-          <h2 className="new-content__h2" data-test="content-type-heading">
-            Type of Content
-          </h2>
-
-          <select
-            id="content_type_id"
-            name="contentType"
-            onChange={handleContentTypeChange}
-            required
-            value={contentTypeId}
-          >
+          <h2 className="new-content__h2" data-test="content-type-heading">Type of Content</h2>
+          <select id="content_type_id" name="contentType" onChange={handleContentTypeChange} required value={contentTypeId}>
             <option value=""></option>
-            {contentTypes.map(c => (
-              <option data-test={c.name} key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
+            {contentTypes.map(c => <option data-test={c.name} key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </>
       )}
 
-      <h2 className="new-content__h2" data-test="save-type-heading">
-        Save Type
-      </h2>
+      <h2 className="new-content__h2" data-test="save-type-heading">Save Type</h2>
 
       <div className="save-type-spans">
         <span className="save-type-span">
@@ -93,7 +65,6 @@ export function NewContentView({
             type="radio"
             value="draft"
           />
-
           <label className="save-type-span-label">Draft</label>
         </span>
 
@@ -107,7 +78,6 @@ export function NewContentView({
             type="radio"
             value="publish"
           />
-
           <label className="save-type-span-label">Publish</label>
         </span>
       </div>
@@ -121,15 +91,7 @@ export function NewContentView({
           <LinkButton />
           <InsertImageButton />
         </Toolbar>
-        
-        <Editable
-          autoFocus
-          onKeyDown={handleKeyDown}
-          placeholder="COOK EAT WIN REPEAT"
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          spellCheck
-        />
+        <Editable autoFocus onKeyDown={handleKeyDown} placeholder="COOK EAT WIN REPEAT" renderElement={renderElement} renderLeaf={renderLeaf} spellCheck />
       </Slate>
     </div>
   );

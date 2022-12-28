@@ -1,10 +1,4 @@
-import {
-  Facet,
-  Paging,
-  PagingInfo,
-  ResultsPerPage,
-  withSearch,
-} from '@elastic/react-search-ui';
+import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
@@ -24,65 +18,45 @@ function listResults(results: any) {
 
               <div className="recipes__types">
                 <div className="recipes__cuisine">{r.cuisine_name.raw}</div>
-
                 <div className="recipes__type">{r.recipe_type_name.raw}</div>
               </div>
 
               <div className="recipes__tags">
                 <div className="recipes__methods">
-                  {r.method_names.raw.map((m: any) => (
-                    <span className="recipes__method" key={m}>{m}</span>
-                  ))}
+                  {r.method_names.raw.map((m: any) => <span className="recipes__method" key={m}>{m}</span>)}
                 </div>
-
                 <div className="recipes__ingredients">
-                  {r.ingredient_names.raw.map((i: any) => (
-                    <span className="recipes__ingredient" key={i}>{i}</span>
-                  ))}
+                  {r.ingredient_names.raw.map((i: any) => <span className="recipes__ingredient" key={i}>{i}</span>)}
                 </div>
               </div>
             </div>
             
             {r.recipe_image.raw !== "nobsc-recipe-default"
-              ? (
-                <img
-                  className="recipes-image"
-                  src={`${url}${r.recipe_image.raw}-thumb`}
-                />
-              )
+              ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
               : <div className="image-default-100-62"></div>
             }
           </a>
         </Link>
       </div>
     ));
-  } else {
-    return <div>Loading...</div>;
   }
+
+  return <div>Loading...</div>;
 }
 
-export function Recipes({
-  facets,  // ?
-  filters,  // ?
-  results,
-  twoColumnBTheme,
-  wasSearched
-}: Props) {
+// facets, filters ?
+export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
   return (
     <div className={`search-results two-column-b ${twoColumnBTheme}`}>
       <div className="left-column">
         <h1>Recipes</h1>
 
-        {/* Note to self: the `facets` props below are set incorrectly, fix them */}
+        {/* the `facets` props below are set incorrectly, fix them */}
         {/*<p>{"props.facets: "}{JSON.stringify(props.facets)}</p>*/}
 
-        <ExpandCollapse
-          headingWhileCollapsed="Filter Results (Click here to expand)"
-        >
+        <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
           <div className="search-results__filters">
-            <span className="search-results__filter-title">
-              Filter recipes by:
-            </span>
+            <span className="search-results__filter-title">Filter recipes by:</span>
 
             <Facet
               facets={{
@@ -198,20 +172,16 @@ export function Recipes({
         </ExpandCollapse>
 
         {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
-
         {wasSearched && <PagingInfo />}
-
         <Paging />
 
         <div className="search-results__list">{listResults(results)}</div>
 
         {wasSearched && <PagingInfo />}
-
         <Paging />
       </div>
 
-      <div className="right-column">
-      </div>
+      <div className="right-column"></div>
     </div>
   );
 }
@@ -227,11 +197,6 @@ type Props = PropsFromContext & {
   twoColumnBTheme: string;
 };
 
-const mapContextToProps = ({
-  facets,
-  filters,
-  results,
-  wasSearched
-}: PropsFromContext) => ({facets, filters, results, wasSearched});
+const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 
 export default withSearch(mapContextToProps)(Recipes);

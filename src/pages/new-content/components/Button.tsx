@@ -1,34 +1,7 @@
 import { forwardRef, FunctionComponent, Ref } from 'react';
 
 export const Button: FunctionComponent<Props> = forwardRef(
-  (
-    {
-      //className,
-      active,
-      //reversed,
-      onMouseDown,
-      ...props
-    },
-    ref: Ref<HTMLSpanElement>
-  ) => (
-    <span
-      {...props}
-      ref={ref}
-      //className={className}
-      style={{
-        cursor: "pointer",
-        /*color: `${
-          reversed
-          ? active
-            ? 'white'
-            : '#aaa'
-          : active
-          ? 'black'
-          : '#ccc'
-        }`*/
-      }}
-    />
-  )
+  ({ active, onMouseDown, ...props }, ref: Ref<HTMLSpanElement>) => <span {...props} ref={ref} style={{cursor: "pointer"}} />
 );
 
 type Props = {
@@ -37,3 +10,14 @@ type Props = {
   //reversed: boolean;
   onMouseDown(e: React.MouseEvent): void;
 };
+
+//className={className}
+/*color: `${
+          reversed
+          ? active
+            ? 'white'
+            : '#aaa'
+          : active
+          ? 'black'
+          : '#ccc'
+        }`*/

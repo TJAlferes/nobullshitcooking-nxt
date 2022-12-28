@@ -1,14 +1,6 @@
 export function Tabs({ tab, tabClick }: Props): JSX.Element {
   function Tab({ displayText, tabName }: TabProps) {
-    return (
-      <button
-        className={tab === tabName ? "dashboard-tab--active" : "dashboard-tab"}
-        name={tabName}
-        onClick={e => tabClick(e)}
-      >
-        {displayText}
-      </button>
-    );
+    return <button className={tab === tabName ? "dashboard-tab--active" : "dashboard-tab"} name={tabName} onClick={e => tabClick(e)}>{displayText}</button>;
   }
 
   return (

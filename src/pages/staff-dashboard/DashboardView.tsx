@@ -1,9 +1,4 @@
-import {
-  IEquipment,
-  IIngredient,
-  IWorkContent,
-  IWorkRecipe
-} from '../../store/data/types';
+import { IEquipment, IIngredient, IWorkContent, IWorkRecipe } from '../../store/data/types';
 import { Content } from './tabs/Content';
 import { Equipment } from './tabs/Equipment';
 import { Ingredients } from './tabs/Ingredients';
@@ -67,19 +62,9 @@ export function DashboardView({
         />
       )}
 
-      {tab === "ingredients" && (
-        <Ingredients
-          handleDeleteIngredient={handleDeleteIngredient}
-          ingredients={ingredients}
-        />
-      )}
+      {tab === "ingredients" && <Ingredients handleDeleteIngredient={handleDeleteIngredient} ingredients={ingredients} />}
 
-      {tab === "equipment" && (
-        <Equipment
-          equipment={equipment}
-          handleDeleteEquipment={handleDeleteEquipment}
-        />
-      )}
+      {tab === "equipment" &&  <Equipment equipment={equipment} handleDeleteEquipment={handleDeleteEquipment} />}
     </div>
   );
 }

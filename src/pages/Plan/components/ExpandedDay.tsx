@@ -4,11 +4,7 @@ import { plannerViewClickDay } from '../../../store/plannerView/actions';
 import { IPlannerViewRecipe } from '../../../store/plannerView/types';
 import { Recipe } from './Recipe';
 
-export default function ExpandedDay({
-  day,
-  expanded,
-  recipes
-}: Props): JSX.Element | null {
+export default function ExpandedDay({ day, expanded, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
 
   const handleClickDay = () => dispatch(plannerViewClickDay(day));
@@ -17,7 +13,6 @@ export default function ExpandedDay({
   ? (
     <div className="plan__expanded-day" onClick={handleClickDay}>
       <span className="plan__date">{day}</span>
-      
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
   )

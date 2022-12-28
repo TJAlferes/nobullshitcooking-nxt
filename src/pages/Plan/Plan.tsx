@@ -12,11 +12,10 @@ export default function Plan({ twoColumnATheme }: Props): JSX.Element {
 
   const dispatch = useDispatch();
   const myPlans = useSelector(state => state.data.myPlans);
-  const expanded = useSelector(state => state.plannerView.expanded);
+  const expanded =    useSelector(state => state.plannerView.expanded);
   const expandedDay = useSelector(state => state.plannerView.expandedDay);
-  const planName = useSelector(state => state.plannerView.planName);
-  const recipeListsInsideDays =
-    useSelector(state => state.plannerView.recipeListsInsideDays);
+  const planName =    useSelector(state => state.plannerView.planName);
+  const recipeListsInsideDays = useSelector(state => state.plannerView.recipeListsInsideDays);
 
   useEffect(() => {
     const getPlan = () => {
@@ -29,15 +28,7 @@ export default function Plan({ twoColumnATheme }: Props): JSX.Element {
     else router.push('/home');
   }, []);
 
-  return (
-    <PlanView
-      expanded={expanded}
-      expandedDay={expandedDay}
-      planName={planName}
-      recipeListsInsideDays={recipeListsInsideDays}
-      twoColumnATheme={twoColumnATheme}
-    />
-  );
+  return (<PlanView expanded={expanded} expandedDay={expandedDay} planName={planName} recipeListsInsideDays={recipeListsInsideDays} twoColumnATheme={twoColumnATheme} />);
 }
 
 type Props = {

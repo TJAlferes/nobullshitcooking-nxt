@@ -62,7 +62,7 @@ export function PrivateRecipes({
             <span className="dashboard-item-delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't created any private recipes yet.</div>)
+        : <div className="dashboard-no-content">You haven't created any private recipes yet.</div>
       }
     </div>
   );

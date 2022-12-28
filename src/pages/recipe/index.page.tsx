@@ -16,22 +16,16 @@ export default function Recipe(): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const {
-    myFavoriteRecipes,
-    myPrivateRecipes,
-    myPublicRecipes,
-    mySavedRecipes
-  } = useSelector(state => state.data);
+  const { myFavoriteRecipes, myPrivateRecipes, myPublicRecipes, mySavedRecipes } = useSelector(state => state.data);  // don't destructure useSelector?
   const message = useSelector(state => state.user.message);
   const theme = useSelector(state => state.theme.theme);
-  const userIsAuthenticated =
-    useSelector(state => state.auth.userIsAuthenticated);
+  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ favorited, setFavorited ] = useState(false);
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
-  const [ recipe, setRecipe ] = useState<IRecipe>();
-  const [ saved, setSaved ] = useState(false);
+  const [ feedback,  setFeedback ] =  useState("");
+  const [ loading,   setLoading ] =   useState(false);
+  const [ recipe,    setRecipe ] =    useState<IRecipe>();
+  const [ saved,     setSaved ] =     useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -54,11 +48,7 @@ export default function Recipe(): JSX.Element {
     }
 
     const getPrivateRecipe = async (id: number) => {
-      const res = await axios.post(
-        `${endpoint}/user/recipe/private/one`,
-        {id},
-        {withCredentials: true}
-      );
+      const res = await axios.post(`${endpoint}/user/recipe/private/one`, {id}, {withCredentials: true});
       if (res.data) setRecipe(res.data);
       //else TO DO (and on all other component fetches) (react query?)
     };
@@ -69,8 +59,7 @@ export default function Recipe(): JSX.Element {
       //else TO DO
     };
 
-    const isPrivateUserRecipe =
-      pathname.match(/^(\/user-recipe\/([1-9][0-9]*))$/);
+    const isPrivateUserRecipe = pathname.match(/^(\/user-recipe\/([1-9][0-9]*))$/);
     
     if (isPrivateUserRecipe) getPrivateRecipe(Number(id));
     else getPublicRecipe(Number(id));

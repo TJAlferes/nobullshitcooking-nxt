@@ -86,18 +86,18 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 
   */
 
-  const [ recipeCrop,      setRecipeCrop ] = useState<Crop>({aspect: 280 / 172});
-  const [ recipeFullCrop,  setRecipeFullCrop ] = useState("");
+  const [ recipeCrop,      setRecipeCrop ] =      useState<Crop>({aspect: 280 / 172});
+  const [ recipeFullCrop,  setRecipeFullCrop ] =  useState("");
   const [ recipeThumbCrop, setRecipeThumbCrop ] = useState("");
-  const [ recipeTinyCrop,  setRecipeTinyCrop ] = useState("");
+  const [ recipeTinyCrop,  setRecipeTinyCrop ] =  useState("");
 
-  const [ equipmentCrop,     setEquipmentCrop ] = useState<Crop>({aspect: 280 / 172});
+  const [ equipmentCrop,     setEquipmentCrop ] =     useState<Crop>({aspect: 280 / 172});
   const [ equipmentFullCrop, setEquipmentFullCrop ] = useState("");
 
-  const [ ingredientsCrop,     setIngredientsCrop ] = useState<Crop>({aspect: 280 / 172});
+  const [ ingredientsCrop,     setIngredientsCrop ] =     useState<Crop>({aspect: 280 / 172});
   const [ ingredientsFullCrop, setIngredientsFullCrop ] = useState("");
 
-  const [ cookingCrop,     setCookingCrop ] = useState<Crop>({aspect: 280 / 172});
+  const [ cookingCrop,     setCookingCrop ] =     useState<Crop>({aspect: 280 / 172});
   const [ cookingFullCrop, setCookingFullCrop ] = useState("");
 
   //

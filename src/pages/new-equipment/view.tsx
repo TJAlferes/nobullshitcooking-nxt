@@ -41,54 +41,25 @@ export function NewEquipmentView({
       <p className="feedback">{feedback}</p>
 
       <h2 className="new-equipment__h2">Type of Equipment</h2>
-
-      <select
-        name="equipmentType"
-        onChange={changeType}
-        required
-        value={typeId}
-      >
+      <select name="equipmentType" onChange={changeType} required value={typeId}>
         <option value=""></option>
-        {equipmentTypes.map(({ id, name }) => (
-          <option key={id} value={id}>{name}</option>
-        ))}
+        {equipmentTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
       </select>
 
       <h2 className="new-equipment__h2">Name</h2>
-
-      <input
-        className="new-equipment-name"
-        onChange={changeName}
-        type="text"
-        value={name}
-      />
+      <input className="new-equipment-name" onChange={changeName} type="text" value={name} />
 
       <h2 className="new-equipment__h2">Description</h2>
-
-      <textarea
-        className="new-equipment-description"
-        onChange={changeDescription}
-        value={description}
-      />
+      <textarea className="new-equipment-description" onChange={changeDescription} value={description} />
 
       <div className="new-equipment-image">
         <h2 className="new-equipment__h2">Image of Equipment</h2>
 
         {!image && (
           <div>
-            {!editing
-              ? <img src={`${dir}/nobsc-equipment-default`} />
-              : prevImage && <img src={`${dir}/${prevImage}`} />
-            }
-
+            {!editing ? <img src={`${dir}/nobsc-equipment-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
             <h4 className="new-equipment__h4">Change</h4>
-
-            <input
-              accept="image/*"
-              className="new-equipment-image__input"
-              onChange={onSelectFile}
-              type="file"
-            />
+            <input accept="image/*" className="new-equipment-image__input" onChange={onSelectFile} type="file" />
           </div>
         )}
 
@@ -104,21 +75,13 @@ export function NewEquipmentView({
               src={image as string}
               style={{minHeight: "300px"}}
             />
-
-            <CropPreview
-              cancelImage={cancelImage}
-              fullCrop={fullCrop}
-              loading={loading}
-              tinyCrop={tinyCrop}
-            />
+            <CropPreview cancelImage={cancelImage} fullCrop={fullCrop} loading={loading} tinyCrop={tinyCrop} />
           </div>
         )}
       </div>
 
       <div className="new-equipment-finish">
-        <Link href="/dashboard">
-          <a className="cancel-button">Cancel</a>
-        </Link>
+        <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
 
         <LoaderButton
           className="submit-button"

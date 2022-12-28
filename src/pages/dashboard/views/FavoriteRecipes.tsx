@@ -26,7 +26,7 @@ export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavo
             <span className="dashboard-item-unfavorite" onClick={() => unfavoriteRecipe(r.id)}>Unfavorite</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't favorited any recipes yet.</div>)
+        : <div className="dashboard-no-content">You haven't favorited any recipes yet.</div>
       }
     </div>
   );

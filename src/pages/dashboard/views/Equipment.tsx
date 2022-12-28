@@ -29,7 +29,7 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
             <span className="dashboard-item-delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't created any private equipment yet.</div>)
+        : <div className="dashboard-no-content">You haven't created any private equipment yet.</div>
       }
     </div>
   );

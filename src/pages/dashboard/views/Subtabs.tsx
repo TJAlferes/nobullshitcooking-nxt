@@ -1,14 +1,6 @@
 export function Subtabs({ subTab, subTabClick }: Props): JSX.Element {
   function Subtab({ displayText, subTabName }: SubtabProps) {
-    return (
-      <button
-        className={subTab === subTabName ? "dashboard-subtab--active" : "dashboard-subtab"}
-        name={subTabName}
-        onClick={e => subTabClick(e)}
-      >
-        {displayText}
-      </button>
-    );
+    return <button className={subTab === subTabName ? "dashboard-subtab--active" : "dashboard-subtab"} name={subTabName} onClick={e => subTabClick(e)}>{displayText}</button>;
   }
 
   return (

@@ -11,14 +11,7 @@ export function BlockButton({ format, icon }: Props) {
     toggleBlock(editor, format);
   };
 
-  return (
-    <Button
-      active={isBlockActive(editor, format)}
-      onMouseDown={handleMouseDown}
-    >
-      <Icon className="link-icon">{icon}</Icon>
-    </Button>
-  );
+  return <Button active={isBlockActive(editor, format)} onMouseDown={handleMouseDown}><Icon className="link-icon">{icon}</Icon></Button>;
 }
 
 type Props = {

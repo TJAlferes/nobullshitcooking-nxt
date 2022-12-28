@@ -19,52 +19,32 @@ export function Content({
 
       <h2 className="staff-dashboard-content-heading">Content</h2>
 
-      <Link className="create-new-entity" to="/staff-content/submit">
-        Create New Content
-      </Link>
+      <Link className="create-new-entity" to="/staff-content/submit">Create New Content</Link>
 
-      {modalActive ? (
-        <AriaModal
-          dialogClass="content-delete-modal"
-          focusDialog={true}
-          focusTrapOptions={{returnFocusOnDeactivate: false}}
-          getApplicationNode={getApplicationNode}
-          onExit={deactivateModal}
-          titleText="Cancel?"
-          underlayClickExits={false}
-        >
-          <p className="content-delete-prompt">
-            {'Delete Content: '}{deleteName}{' ?'}
-          </p>
-          <button
-            className="content-delete-cancel-button"
-            onClick={deactivateModal}
+      {modalActive
+        ? (
+          <AriaModal
+            dialogClass="content-delete-modal"
+            focusDialog={true}
+            focusTrapOptions={{returnFocusOnDeactivate: false}}
+            getApplicationNode={getApplicationNode}
+            onExit={deactivateModal}
+            titleText="Cancel?"
+            underlayClickExits={false}
           >
-            No
-          </button>
-          <button
-            className="content-delete-button"
-            onClick={handleDeleteContent}
-          >
-            Yes, Delete Content
-          </button>
-        </AriaModal>
-      ) : false}
+            <p className="content-delete-prompt">{'Delete Content: '}{deleteName}{' ?'}</p>
+            <button className="content-delete-cancel-button" onClick={deactivateModal}>No</button>
+            <button className="content-delete-button" onClick={handleDeleteContent}>Yes, Delete Content</button>
+          </AriaModal>
+        )
+        : false
+      }
 
       {content && content.map(c => (
         <div className="staff-dashboard-content-item" key={c.id}>
-          <span className="staff-dashboard-content-item-name">
-            <Link to={`/content/${c.id}`}>{c.title}</Link>
-          </span>
-          <span className="staff-dashboard-content-item-action">
-            <Link to={`/staff-content/edit/${c.id}`}>Edit</Link>
-          </span>
-          <span
-            className="staff-dashboard-content-item-delete"
-            onClick={() => activateModal(c.id, c.title)}
-          >
-            Delete
-          </span>
+          <span className="staff-dashboard-content-item-name"><Link to={`/content/${c.id}`}>{c.title}</Link></span>
+          <span className="staff-dashboard-content-item-action"><Link to={`/staff-content/edit/${c.id}`}>Edit</Link></span>
+          <span className="staff-dashboard-content-item-delete" onClick={() => activateModal(c.id, c.title)}>Delete</span>
         </div>
       ))}
 

@@ -11,12 +11,12 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
   const dispatch = useDispatch();
   const message = useSelector(state => state.auth.message);
   const [ confirmationCode, setConfirmationCode ] = useState("");
-  const [ email, setEmail ] = useState("");
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
-  const [ password, setPassword ] = useState("");
-  const [ passwordAgain, setPasswordAgain ] = useState("");
-  const [ username, setUsername ] = useState("");
+  const [ email,            setEmail ] =            useState("");
+  const [ feedback,         setFeedback ] =         useState("");
+  const [ loading,          setLoading ] =          useState(false);
+  const [ password,         setPassword ] =         useState("");
+  const [ passwordAgain,    setPasswordAgain ] =    useState("");
+  const [ username,         setUsername ] =         useState("");
 
   useEffect(() => {
     let isSubscribed = true;

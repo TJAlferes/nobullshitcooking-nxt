@@ -10,7 +10,7 @@ export default function Equipment(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const officialEquipment =  useSelector(state => state.data.officialEquipment);
+  const officialEquipment =  useSelector(state => state.data.equipment);
   const myPrivateEquipment = useSelector(state => state.data.myPrivateEquipment);
   const theme = useSelector(state => state.theme.theme);
 

@@ -2,22 +2,13 @@ import { IPlannerViewData } from '../../store/plannerView/types';
 import Day from './components/Day';
 import ExpandedDay from './components/ExpandedDay';
 
-export function PlanView({
-  expanded,
-  expandedDay,
-  planName,
-  recipeListsInsideDays,
-  twoColumnATheme
-}: Props): JSX.Element {
+export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDays, twoColumnATheme }: Props): JSX.Element {
   return (
     <div className={`plan two-column-a ${twoColumnATheme}`}>
       <div className="plan__header">
         <h1>Plan</h1>
-
         <div className="plan__name">
-          <label className="plan__name-label">Plan Name:</label>
-          
-          <span className="plan__name-value">{planName}</span>
+          <label className="plan__name-label">Plan Name:</label><span className="plan__name-value">{planName}</span>
         </div>
       </div>
 
@@ -35,27 +26,20 @@ export function PlanView({
             </div>
 
             <div className="monthly-plan__body">
-              {Object.keys(recipeListsInsideDays).map((recipeList, i) => (
-                <div className="monthly-plan__body-day" key={i}>
-                  <div className="body-day__content">
-                    <Day
-                      day={i + 1}
-                      expanded={expanded}
-                      expandedDay={expandedDay}
-                      recipes={recipeListsInsideDays[Number(recipeList)]}
-                    />
+              {Object.keys(recipeListsInsideDays)
+                .map((recipeList, i) => (
+                  <div className="monthly-plan__body-day" key={i}>
+                    <div className="body-day__content">
+                      <Day day={i + 1} expanded={expanded} expandedDay={expandedDay} recipes={recipeListsInsideDays[Number(recipeList)]} />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              }
             </div>
           </div>
           
           <div className="expanded-day-container">
-            {expandedDay && <ExpandedDay
-              day={expandedDay}
-              expanded={expanded}
-              recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []}
-            />}
+            {expandedDay && <ExpandedDay day={expandedDay} expanded={expanded} recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []} />}
           </div>
         </div>
       </div>

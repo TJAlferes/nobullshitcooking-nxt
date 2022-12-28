@@ -14,19 +14,19 @@ export default function Profile(): JSX.Element {
   const username = router.query.username as string;
 
   const dispatch = useDispatch();
-  const authname = useSelector(state => state.auth.authname);
-  const myFriendships = useSelector(state => state.data.myFriendships);
-  const oneColumnATheme = useSelector(state => state.theme.oneColumnATheme);
+  const authname =            useSelector(state => state.auth.authname);
+  const myFriendships =       useSelector(state => state.data.myFriendships);
+  const oneColumnATheme =     useSelector(state => state.theme.oneColumnATheme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const message = useSelector(state => state.user.message);
+  const message =             useSelector(state => state.user.message);
 
-  const [ clicked, setClicked ] = useState(false);
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
-  const [ tab, setTab ] = useState("public");
+  const [ clicked,    setClicked ] =    useState(false);
+  const [ feedback,   setFeedback ] =   useState("");
+  const [ loading,    setLoading ] =    useState(false);
+  const [ tab,        setTab ] =        useState("public");
   const [ userAvatar, setUserAvatar ] = useState("nobsc-user-default");
   const [ userFavoriteRecipes, setUserFavoriteRecipes ]= useState([]);
-  const [ userPublicRecipes, setUserPublicRecipes ]= useState([]);
+  const [ userPublicRecipes,   setUserPublicRecipes ]=   useState([]);
 
   useEffect(() => {
     let isSubscribed = true;

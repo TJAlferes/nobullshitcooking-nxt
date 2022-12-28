@@ -8,9 +8,7 @@ export default function AddToCartButton({ item }: Props): JSX.Element {
 
   const handleClick = () => dispatch(cartAddItem(item));
 
-  return (
-    <button className="add-to-cart-button" onClick={handleClick}>Add</button>
-  );
+  return <button className="add-to-cart-button" onClick={handleClick}>Add</button>;
 }
 
 type Props = {

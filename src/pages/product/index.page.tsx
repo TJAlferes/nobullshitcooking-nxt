@@ -12,14 +12,13 @@ export default function Product(): JSX.Element {
   const { id } = router.query;
 
   const products = useSelector(state => state.data.products);
-  const message = useSelector(state => state.user.message);
-  const theme = useSelector(state => state.theme.theme);
-  const userIsAuthenticated =
-    useSelector(state => state.auth.userIsAuthenticated);
+  const message =  useSelector(state => state.user.message);
+  const theme =    useSelector(state => state.theme.theme);
+  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
-  const [ product, setProduct ] = useState<IProduct>();
+  const [ loading,  setLoading ] =  useState(false);
+  const [ product,  setProduct ] =  useState<IProduct>();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -51,16 +50,7 @@ export default function Product(): JSX.Element {
 
   return !product
     ? <LoaderSpinner />
-    : (
-      <ProductView
-        products={products}
-        feedback={feedback}
-        loading={loading}
-        product={product}
-        theme={theme}
-        userIsAuthenticated={userIsAuthenticated}
-      />
-    );
+    : <ProductView products={products} feedback={feedback} loading={loading} product={product} theme={theme} userIsAuthenticated={userIsAuthenticated} />;
 }
 
 export interface IProduct {

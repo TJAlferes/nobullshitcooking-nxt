@@ -10,7 +10,7 @@ export default function Ingredient(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const officialIngredients =  useSelector(state => state.data.officialIngredients);
+  const officialIngredients =  useSelector(state => state.data.ingredients);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
   const theme = useSelector(state => state.theme.theme);
 

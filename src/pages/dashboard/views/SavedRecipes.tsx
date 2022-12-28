@@ -26,7 +26,7 @@ export function SavedRecipes({ mySavedRecipes, subTab, subTabClick, unsaveRecipe
             <span className="dashboard-item-unsave" onClick={() => unsaveRecipe(r.id)}>Unsave</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't saved any recipes yet.</div>)
+        : <div className="dashboard-no-content">You haven't saved any recipes yet.</div>
       }
     </div>
   );

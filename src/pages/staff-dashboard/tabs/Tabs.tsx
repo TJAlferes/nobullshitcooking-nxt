@@ -1,17 +1,6 @@
 export function Tabs({ handleTabClick, tab }: Props): JSX.Element {
-  const TabButton = ({ displayText, tabName }: TabButtonProps) => (
-    <button
-      className={
-        tab === tabName
-        ? "staff-dashboard-tab active"
-        : "staff-dashboard-tab inactive"
-      }
-      name={tabName}
-      onClick={e => handleTabClick(e)}
-    >
-      {displayText}
-    </button>
-  );
+  const TabButton = ({ displayText, tabName }: TabButtonProps) =>
+    <button className={tab === tabName ? "staff-dashboard-tab active" : "staff-dashboard-tab inactive"} name={tabName} onClick={e => handleTabClick(e)}>{displayText}</button>;
 
   return (
     <div className="staff-dashboard-tabs">

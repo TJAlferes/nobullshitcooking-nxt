@@ -1,11 +1,8 @@
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, onlineFriends, peopleTab, startPrivateMessage, users}: Props): JSX.Element {
-  const Tab = ({ tab }: TabProps) => (
-    <button className={peopleTab === tab ? "people-tab--current" : "people-tab"} onClick={() => changePeopleTab(tab)}>
-      {tab}
-    </button>
-  );
+  const Tab = ({ tab }: TabProps) =>
+    <button className={peopleTab === tab ? "people-tab--current" : "people-tab"} onClick={() => changePeopleTab(tab)}>{tab}</button>;
 
   return (
     <div className="chat-people">

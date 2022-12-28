@@ -61,7 +61,7 @@ export function Plans({
             }
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't created any plans yet.</div>)
+        : <div className="dashboard-no-content">You haven't created any plans yet.</div>
       }
     </div>
   );

@@ -29,7 +29,7 @@ export function Ingredients({ deletePrivateIngredient, myPrivateIngredients }: P
             <span className="dashboard-item-delete" onClick={() => deletePrivateIngredient(i.id)}>Delete</span>
           </div>
         ))
-        : (<div className="dashboard-no-content">You haven't created any private ingredients yet.</div>)
+        : <div className="dashboard-no-content">You haven't created any private ingredients yet.</div>
       }
     </div>
   );

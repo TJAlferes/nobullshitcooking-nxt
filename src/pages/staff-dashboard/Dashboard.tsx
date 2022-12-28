@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import {
-  IEquipment,
-  IIngredient,
-  IWorkContent,
-  IWorkRecipe
-} from '../../store/data/types';
+import { IEquipment, IIngredient, IWorkContent, IWorkRecipe } from '../../store/data/types';
 import { staffDeleteContent } from '../../store/staff/content/actions';
 import { staffDeleteEquipment } from '../../store/staff/equipment/actions';
 import { staffDeleteIngredient } from '../../store/staff/ingredient/actions';
@@ -29,12 +24,12 @@ export function StaffDashboard({
   staffDeleteIngredient,
   staffDeleteRecipe
 }: Props): JSX.Element {
-  const [ deleteId, setDeleteId ] = useState<number | undefined>();
-  const [ deleteName, setDeleteName ] = useState("");
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
+  const [ deleteId,    setDeleteId ] =    useState<number | undefined>();
+  const [ deleteName,  setDeleteName ] =  useState("");
+  const [ feedback,    setFeedback ] =    useState("");
+  const [ loading,     setLoading ] =     useState(false);
   const [ modalActive, setModalActive ] = useState(false);
-  const [ tab, setTab ] = useState("content");
+  const [ tab,         setTab ] =         useState("content");
 
   useEffect(() => {
     let isSubscribed = true;
@@ -61,9 +56,7 @@ export function StaffDashboard({
     setModalActive(false);
   };
 
-  const getApplicationNode = (): Element | Node => {
-    return document.getElementById('root') as Element | Node;
-  };
+  const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
 
   const handleDeleteContent = () => {
     if (!deleteId) return;
@@ -87,9 +80,7 @@ export function StaffDashboard({
     staffDeleteRecipe(deleteId);
   };
 
-  const handleTabClick = (e: React.SyntheticEvent<EventTarget>) => {
-    setTab((e.target as HTMLInputElement).name);
-  };
+  const handleTabClick = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
 
   return (
     <DashboardView

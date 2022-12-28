@@ -6,9 +6,7 @@ import { ReactEditor } from 'slate-react';
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 
 export function wrapLink(editor: ReactEditor, url: string|ArrayBuffer|null) {
-  if (isLinkActive(editor)) {
-    Transforms.unwrapNodes(editor, {match: n => n.type === "link"});
-  }
+  if (isLinkActive(editor)) Transforms.unwrapNodes(editor, {match: n => n.type === "link"});
 
   const { selection } = editor;
   const isCollapsed = selection && Range.isCollapsed(selection);
@@ -47,13 +45,9 @@ export function toggleBlock(editor: ReactEditor, format: string) {
     split: true
   });
 
-  Transforms.setNodes(editor, {
-    type: isActive ? 'paragraph' : isList ? 'list-item' : format
-  });
+  Transforms.setNodes(editor, {type: isActive ? 'paragraph' : isList ? 'list-item' : format});
 
-  if (!isActive && isList) {
-    Transforms.wrapNodes(editor, {type: format, children: []});
-  }
+  if (!isActive && isList) Transforms.wrapNodes(editor, {type: format, children: []});
 }
 
 export function toggleMark(editor: ReactEditor, format: string) {
@@ -77,38 +71,20 @@ export function withImages(editor: ReactEditor) {
     const { files } = data;
 
     if (files && files.length) {
-
       for (const file of files) {
         const [ mime ] = file.type.split('/');
-
         if (mime !== 'image') continue;
-
         const reader = new FileReader();
 
         reader.addEventListener('load', () => {
-          Transforms.insertNodes(editor, {
-            type: "image",
-            url: reader.result,
-            children: [{text: ""}]
-          });
+          Transforms.insertNodes(editor, {type: "image", url: reader.result, children: [{text: ""}]});
         });
 
         reader.readAsDataURL(file);
       }
-
-    } else if (isImageUrl(text)) {
-
-      Transforms.insertNodes(editor, {
-        type: "image",
-        url: text,
-        children: [{text: ""}]
-      });
-
-    } else {
-
-      insertData(data);
-
     }
+    else if (isImageUrl(text)) Transforms.insertNodes(editor, {type: "image", url: text, children: [{text: ""}]});
+    else insertData(data);
   };
 
   editor.isVoid = element => element.type === "image" ? true : isVoid(element);
@@ -130,8 +106,7 @@ export function withLinks(editor: ReactEditor) {
     else insertText(text);
   };
 
-  editor.isInline = element =>
-    element.type === "link" ? true : isInline(element);
+  editor.isInline = element => element.type === "link" ? true : isInline(element);
 
   return editor;
 }
