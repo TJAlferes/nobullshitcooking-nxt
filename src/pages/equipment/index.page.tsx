@@ -10,9 +10,8 @@ export default function Equipment(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const officialEquipment = useSelector(state => state.data.officialEquipment);
-  const myPrivateEquipment =
-    useSelector(state => state.data.myPrivateEquipment);
+  const officialEquipment =  useSelector(state => state.data.officialEquipment);
+  const myPrivateEquipment = useSelector(state => state.data.myPrivateEquipment);
   const theme = useSelector(state => state.theme.theme);
 
   const [ equipment, setEquipment ] = useState<IEquipment>();
@@ -23,10 +22,7 @@ export default function Equipment(): JSX.Element {
       return;
     }
 
-    const localEquipment = (
-      officialEquipment.find(e => e.id == Number(id)) ||
-      myPrivateEquipment.find(e => e.id == Number(id))
-    );
+    const localEquipment = (officialEquipment.find(e => e.id == Number(id)) || myPrivateEquipment.find(e => e.id == Number(id)));
 
     if (!localEquipment) {
       router.push('/home');
@@ -36,13 +32,5 @@ export default function Equipment(): JSX.Element {
     setEquipment(localEquipment);
   }, []);
 
-  return !equipment
-    ? <LoaderSpinner />
-    : (
-      <EquipmentView
-        equipment={equipment}
-        myPrivateEquipment={myPrivateEquipment}
-        theme={theme}
-      />
-    );
+  return !equipment ? <LoaderSpinner /> : <EquipmentView equipment={equipment} myPrivateEquipment={myPrivateEquipment} theme={theme} />;
 }

@@ -21,9 +21,7 @@ export function PrivateRecipes({
     <div className="dashboard-content">
       <h2 className="dashboard__h2">Private Recipes</h2>
 
-      <Link href="/user-recipes/private/submit">
-        <a className="new-entity">Create New Private Recipe</a>
-      </Link>
+      <Link href="/user-recipes/private/submit"><a className="new-entity">Create New Private Recipe</a></Link>
 
       {modalActive
         ? (
@@ -36,23 +34,9 @@ export function PrivateRecipes({
             titleText="Cancel?"
             underlayClickExits={false}
           >
-            <p className="dashboard-prompt">
-              {'Delete Recipe: '}{deleteName}{' ?'}
-            </p>
-
-            <button
-              className="dashboard-modal__button--cancel"
-              onClick={deactivateModal}
-            >
-              No
-            </button>
-
-            <button
-              className="dashboard-modal__button--action"
-              onClick={deletePrivateRecipe}
-            >
-              Yes, Delete Recipe
-            </button>
+            <p className="dashboard-prompt">{'Delete Recipe: '}{deleteName}{' ?'}</p>
+            <button className="dashboard-modal__button--cancel" onClick={deactivateModal}>No</button>
+            <button className="dashboard-modal__button--action" onClick={deletePrivateRecipe}>Yes, Delete Recipe</button>
           </AriaModal>
         )
         : false
@@ -64,36 +48,21 @@ export function PrivateRecipes({
         ? myPrivateRecipes.map(r => (
           <div className="dashboard-item" key={r.id}>
             <span className="dashboard-item-tiny">
-              {r.recipe_image !== "nobsc-recipe-default"
-                ? <img src={`${url}/${r.recipe_image}-tiny`} />
-                : <div className="img-28-18"></div>}
+              {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
             </span>
 
             <span className="dashboard-item-name">
-              <Link href={`/user-recipe/${r.id}`}>
-                <a className="dashboard-item__a">{r.title}</a>
-              </Link>
+              <Link href={`/user-recipe/${r.id}`}><a className="dashboard-item__a">{r.title}</a></Link>
             </span>
 
             <span className="dashboard-item-action">
-              <Link href={`/user-recipe/private/edit/${r.id}`}>
-                <a className="dashboard-item__a">Edit</a>
-              </Link>
+              <Link href={`/user-recipe/private/edit/${r.id}`}><a className="dashboard-item__a">Edit</a></Link>
             </span>
 
-            <span
-              className="dashboard-item-delete"
-              onClick={() => activateModal(r.id, r.title)}
-            >
-              Delete
-            </span>
+            <span className="dashboard-item-delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
           </div>
         ))
-        : (
-          <div className="dashboard-no-content">
-            You haven't created any private recipes yet.
-          </div>
-        )
+        : (<div className="dashboard-no-content">You haven't created any private recipes yet.</div>)
       }
     </div>
   );

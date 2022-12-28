@@ -2,11 +2,7 @@ import { IEquipment } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function EquipmentView({
-  equipment: { id, name, image, equipment_type_name, description },
-  myPrivateEquipment,
-  theme
-}: Props): JSX.Element {
+export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myPrivateEquipment, theme }: Props): JSX.Element {
   return (
     <div className={`equipment two-col-b ${theme}`} data-test="equipment">
       <div className="two-col-b-left">
@@ -19,15 +15,11 @@ export function EquipmentView({
         </div>
 
         <div className="equipment-type-outer">
-          <b>Equipment Type:</b>
-          {' '}
-          <span className="equipment-type">{equipment_type_name}</span>
+          <b>Equipment Type:</b>{' '}<span className="equipment-type">{equipment_type_name}</span>
         </div>
         
         <div className="equipment-description-outer">
-          <b>Equipment Description:</b>
-          {' '}
-          <div className="equipment-description">{description}</div>
+          <b>Equipment Description:</b>{' '}<div className="equipment-description">{description}</div>
         </div>
       </div>
 

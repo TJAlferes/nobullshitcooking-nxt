@@ -10,10 +10,8 @@ export default function Ingredient(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const officialIngredients =
-    useSelector(state => state.data.officialIngredients);
-  const myPrivateIngredients =
-    useSelector(state => state.data.myPrivateIngredients);
+  const officialIngredients =  useSelector(state => state.data.officialIngredients);
+  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
   const theme = useSelector(state => state.theme.theme);
 
   const [ ingredient, setIngredient ] = useState<IIngredient>();
@@ -24,10 +22,7 @@ export default function Ingredient(): JSX.Element {
       return;
     }
 
-    const localIngredient = (
-      officialIngredients.find(i => i.id == Number(id)) ||
-      myPrivateIngredients.find(i => i.id == Number(id))
-    );
+    const localIngredient = (officialIngredients.find(i => i.id == Number(id)) || myPrivateIngredients.find(i => i.id == Number(id)));
 
     if (!localIngredient) {
       router.push('/home');
@@ -39,11 +34,5 @@ export default function Ingredient(): JSX.Element {
 
   return !ingredient
     ? <LoaderSpinner />
-    : (
-      <IngredientView
-        ingredient={ingredient}
-        myPrivateIngredients={myPrivateIngredients}
-        theme={theme}
-      />
-    );
+    : <IngredientView ingredient={ingredient} myPrivateIngredients={myPrivateIngredients} theme={theme} />;
 }

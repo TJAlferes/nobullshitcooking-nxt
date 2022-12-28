@@ -7,14 +7,9 @@ import { authUpdateLocalAvatar } from '../../store/auth/actions';
 import { userSubmitAvatar } from '../../store/user/avatar/actions';
 import { userUnfavoriteRecipe } from '../../store/user/favorite/actions';
 import { userDeletePrivateEquipment } from '../../store/user/equipment/actions';
-import {
-  userDeletePrivateIngredient
-} from '../../store/user/ingredient/actions';
+import { userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
 import { userDeletePlan } from '../../store/user/plan/actions';
-import {
-  userDeletePrivateRecipe,
-  userDisownPublicRecipe
-} from '../../store/user/recipe/actions';
+import { userDeletePrivateRecipe, userDisownPublicRecipe } from '../../store/user/recipe/actions';
 import { userUnsaveRecipe } from '../../store/user/save/actions';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { DashboardView } from './view';
@@ -22,34 +17,26 @@ import { DashboardView } from './view';
 export default function Dashboard(): JSX.Element {
   const dispatch = useDispatch();
   const authname = useSelector(state => state.auth.authname);
-  const {
-    myFavoriteRecipes,
-    myPlans,
-    myPrivateEquipment,
-    myPrivateIngredients,
-    myPrivateRecipes,
-    myPublicRecipes,
-    mySavedRecipes
-  } = useSelector(state => state.data);
+  const { myFavoriteRecipes, myPlans, myPrivateEquipment, myPrivateIngredients, myPrivateRecipes, myPublicRecipes, mySavedRecipes } = useSelector(state => state.data);
   const creatingPlan = useSelector(state => state.planner.creating);
-  const editingId = useSelector(state => state.planner.editingId);
-  const message = useSelector(state => state.user.message);
-  const theme = useSelector(state => state.theme.theme);
+  const editingId =    useSelector(state => state.planner.editingId);
+  const message =      useSelector(state => state.user.message);
+  const theme =        useSelector(state => state.theme.theme);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
+  const [ loading,  setLoading ] =  useState(false);
 
-  const [ tab, setTab ] = useState("avatar");
-  const [ subTab, setSubTab ] = useState("private");
-  const [ deleteId, setDeleteId ] = useState<number | undefined>();
-  const [ deleteName, setDeleteName ] = useState("");
+  const [ tab,         setTab ] =         useState("avatar");
+  const [ subTab,      setSubTab ] =      useState("private");
+  const [ deleteId,    setDeleteId ] =    useState<number | undefined>();
+  const [ deleteName,  setDeleteName ] =  useState("");
   const [ modalActive, setModalActive ] = useState(false);
 
-  const [ avatar, setAvatar ] = useState<string | ArrayBuffer | null>(null);
+  const [ avatar,     setAvatar ] =     useState<string | ArrayBuffer | null>(null);
   const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
   const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
 
-  const [ crop, setCrop ] = useState<Crop>({aspect: 1 / 1});
+  const [ crop,     setCrop ] =     useState<Crop>({aspect: 1 / 1});
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -119,16 +106,13 @@ export default function Dashboard(): JSX.Element {
     dispatch(userDisownPublicRecipe(deleteId));
   };
 
-  const getApplicationNode = (): Element | Node =>
-    document.getElementById('root') as Element | Node;
+  const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-    const full =
-      await getCroppedImage(250, 250, imageRef.current, crop, "newFile.jpeg");
-    const tiny =
-      await getCroppedImage(25, 25, imageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(250, 250, imageRef.current, crop, "newFile.jpeg");
+    const tiny = await getCroppedImage(25, 25, imageRef.current, crop, "newFile.jpeg");
     if (!full || !tiny) return;
     setFullCrop(full.resizedPreview);
     setTinyCrop(tiny.resizedPreview);
@@ -156,11 +140,9 @@ export default function Dashboard(): JSX.Element {
     dispatch(authUpdateLocalAvatar(authname));
   };
 
-  const subTabClick = (e: React.SyntheticEvent<EventTarget>) =>
-    setSubTab((e.target as HTMLInputElement).name);
+  const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);
 
-  const tabClick = (e: React.SyntheticEvent<EventTarget>) =>
-    setTab((e.target as HTMLInputElement).name);
+  const tabClick = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
 
   const unfavoriteRecipe = (id: number) => {
     setLoading(true);

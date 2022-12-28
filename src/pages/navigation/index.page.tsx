@@ -6,15 +6,8 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 
 const s3Path = 'https://s3.amazonaws.com/nobsc-images-01/content';
 
-export default function Navigation({
-  links,
-  name,
-  navGridATheme,
-  oneColumnATheme,
-  path
-}: Props): JSX.Element {
-  const [ contentLinks, setContentLinks ] =
-    useState<IContentLink[] | null>(null);
+export default function Navigation({ links, name, navGridATheme, oneColumnATheme, path }: Props): JSX.Element {
+  const [ contentLinks, setContentLinks ] = useState<IContentLink[] | null>(null);
 
   useEffect(() => {
     const getContentLinksByTypeName = async (name: string) => {
@@ -34,10 +27,7 @@ export default function Navigation({
             <Link href={`${link.path}`}>
               <a>
                 <span className="nav-grid-a-item-text">{link.name}</span>
-                {/*<img
-                  className="nav-grid-a-item-image"
-                  src={`${s3Path}/${link.category}/${link.image}`}
-                />*/}
+                {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
               </a>
             </Link>
           </div>
@@ -48,10 +38,7 @@ export default function Navigation({
             <Link href={`${link.path}`}>
               <a>
                 <span className="nav-grid-a-item-text">{link.name}</span>
-                {/*<img
-                  className="nav-grid-a-item-image"
-                  src={`${s3Path}/${link.category}/${link.image}`}
-                />*/}
+                {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
               </a>
             </Link>
           </div>

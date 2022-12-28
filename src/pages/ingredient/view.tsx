@@ -2,11 +2,7 @@ import { IIngredient } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function IngredientView({
-  ingredient: { id, full_name, image, ingredient_type_name, description },
-  myPrivateIngredients,
-  theme
-}: Props): JSX.Element {
+export function IngredientView({ ingredient: { id, full_name, image, ingredient_type_name, description }, myPrivateIngredients, theme }: Props): JSX.Element {
   return (
     <div className={`ingredient two-col-b ${theme}`} data-test="ingredient">
       <div className="two-col-b-left">
@@ -19,15 +15,11 @@ export function IngredientView({
         </div>
 
         <div className="ingredient-type-outer">
-          <b>Ingredient Type:</b>
-          {' '}
-          <span className="ingredient-type">{ingredient_type_name}</span>
+          <b>Ingredient Type:</b>{' '}<span className="ingredient-type">{ingredient_type_name}</span>
         </div>
 
         <div className="equipment-description-outer">
-          <b>Ingredient Description:</b>
-          {' '}
-          <div className="ingredient-description">{description}</div>
+          <b>Ingredient Description:</b>{' '}<div className="ingredient-description">{description}</div>
         </div>
       </div>
 

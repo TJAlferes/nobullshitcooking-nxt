@@ -2,14 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import {
-  userAcceptFriendship,
-  userBlockUser,
-  userDeleteFriendship,
-  userRejectFriendship,
-  userRequestFriendship,
-  userUnblockUser
-} from '../../store/user/friendship/actions';
+import { userAcceptFriendship, userBlockUser, userDeleteFriendship, userRejectFriendship, userRequestFriendship, userUnblockUser } from '../../store/user/friendship/actions';
 import { FriendsView } from './view';
 
 export default function Friends(): JSX.Element {
@@ -19,9 +12,9 @@ export default function Friends(): JSX.Element {
   const theme = useSelector(state => state.theme.theme);
   const message = useSelector(state => state.user.message);
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
-  const [ tab, setTab ] = useState("accepted");
+  const [ feedback,   setFeedback ] =   useState("");
+  const [ loading,    setLoading ] =    useState(false);
+  const [ tab,        setTab ] =        useState("accepted");
   const [ userToFind, setUsertoFind ] = useState("");
 
   useEffect(() => {
@@ -56,9 +49,7 @@ export default function Friends(): JSX.Element {
     dispatch(userDeleteFriendship((e.target as HTMLInputElement).value));
   };
 
-  const inputChange = (e: React.SyntheticEvent<EventTarget>) => {
-    setUsertoFind((e.target as HTMLInputElement).value);
-  };
+  const inputChange = (e: React.SyntheticEvent<EventTarget>) => setUsertoFind((e.target as HTMLInputElement).value);
 
   const rejectFriendship = (e: React.SyntheticEvent<EventTarget>) => {
     setLoading(true);

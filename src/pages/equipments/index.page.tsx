@@ -1,10 +1,4 @@
-import {
-  Facet,
-  Paging,
-  PagingInfo,
-  ResultsPerPage,
-  withSearch
-} from '@elastic/react-search-ui';
+import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
@@ -21,16 +15,9 @@ function listResults(results: any) {
         <a className="equipments__link">
           <div className="equipments__text">
             <div className="equipments__name">{e.name.raw}</div>
-
-            <div className="equipments__type">
-              {e.equipment_type_name.raw}
-            </div>
+            <div className="equipments__type">{e.equipment_type_name.raw}</div>
           </div>
-
-          <img
-            className="equipments__image"
-            src={`${url}/${e.image.raw}.jpg`}
-          />
+          <img className="equipments__image" src={`${url}/${e.image.raw}.jpg`} />
         </a>
       </Link>
     </div>
@@ -50,13 +37,9 @@ export function Equipments({
       <div className="two-col-b-left">
         <h1>Equipment</h1>
 
-        <ExpandCollapse
-          headingWhileCollapsed="Filter Results (Click here to expand)"
-        >
+        <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
           <div className="search-results__filters">
-            <span className="search-results__filter-title">
-              Filter equipment by:
-            </span>
+            <span className="search-results__filter-title">Filter equipment by:</span>
 
             <Facet
               facets={{
@@ -107,11 +90,6 @@ type PropsFromContext = {
   wasSearched: boolean;
 }
 
-const mapContextToProps = ({
-  facets,
-  filters,
-  results,
-  wasSearched
-}: PropsFromContext) => ({facets, filters, results, wasSearched});
+const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 
 export default withSearch(mapContextToProps)(Equipments);

@@ -5,14 +5,8 @@ import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import {
-  staffCreateNewEquipment,
-  staffEditEquipment
-} from '../../store/staff/equipment/actions';
-import {
-  userCreateNewPrivateEquipment,
-  userEditPrivateEquipment
-} from '../../store/user/equipment/actions';
+import { staffCreateNewEquipment, staffEditEquipment } from '../../store/staff/equipment/actions';
+import { userCreateNewPrivateEquipment, userEditPrivateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
 export function NewEquipment({ editing }: Props): JSX.Element {
@@ -20,29 +14,27 @@ export function NewEquipment({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const officialEquipment = useSelector(state => state.data.officialEquipment);
-  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
-  const myPrivateEquipment =
-    useSelector(state => state.data.myPrivateEquipment);
-  const staffIsAuthenticated =
-    useSelector(state => state.auth.staffIsAuthenticated);
-  const staffMessage = useSelector(state => state.staff.message);
-  const theme = useSelector(state => state.theme.theme);
-  const userMessage = useSelector(state => state.user.message);
+  const officialEquipment =    useSelector(state => state.data.officialEquipment);
+  const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
+  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
+  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
+  const staffMessage =         useSelector(state => state.staff.message);
+  const theme =                useSelector(state => state.theme.theme);
+  const userMessage =          useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading, setLoading ] = useState(false);
+  const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId, setEditingId ] = useState<number>(0);  // null?
-  const [ typeId, setTypeId ] = useState<number>(0);  // null?
-  const [ name, setName ] = useState("");
+  const [ editingId,   setEditingId ] =   useState<number>(0);  // null?
+  const [ typeId,      setTypeId ] =      useState<number>(0);  // null?
+  const [ name,        setName ] =        useState("");
   const [ description, setDescription ] = useState("");
-  const [ prevImage, setPrevImage ] = useState("nobsc-equipment-default");
-  const [ image, setImage ] = useState<string | ArrayBuffer | null>(null);
-  const [ fullImage, setFullImage ] = useState<File | null>(null);
-  const [ tinyImage, setTinyImage ] = useState<File | null>(null);
+  const [ prevImage,   setPrevImage ] =   useState("nobsc-equipment-default");
+  const [ image,       setImage ] =       useState<string | ArrayBuffer | null>(null);
+  const [ fullImage,   setFullImage ] =   useState<File | null>(null);
+  const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
 
-  const [ crop, setCrop ] = useState<Crop>({aspect: 280 / 172});
+  const [ crop,     setCrop ] =     useState<Crop>({aspect: 280 / 172});
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -60,9 +52,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       window.scrollTo(0,0);
       setLoading(true);
 
-      const [ prev ] = staffIsAuthenticated
-        ? officialEquipment.filter(e => e.id === Number(id))
-        : myPrivateEquipment.filter(e => e.id === Number(id));
+      const [ prev ] = staffIsAuthenticated ? officialEquipment.filter(e => e.id === Number(id)) : myPrivateEquipment.filter(e => e.id === Number(id));
 
       setEditingId(prev.id);
       setTypeId(prev.equipment_type_id);
@@ -80,20 +70,10 @@ export function NewEquipment({ editing }: Props): JSX.Element {
 
     if (isSubscribed) {
       const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath =
-          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-
+      const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
       if (message !== "") window.scrollTo(0,0);
-
       setFeedback(message);
-
-      if (
-        message === "Equipment created." ||
-        message === "Equipment updated."
-      ) {
-        setTimeout(() => router.push(redirectPath), 3000);
-      }
-
+      if (message === "Equipment created." || message === "Equipment updated.") setTimeout(() => router.push(redirectPath), 3000);
       setLoading(false);
     }
     
@@ -110,56 +90,32 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
-  const changeDescription = (e: React.SyntheticEvent<EventTarget>) =>
-    setDescription((e.target as HTMLInputElement).value);
+  const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
 
-  const changeName = (e: React.SyntheticEvent<EventTarget>) =>
-    setName((e.target as HTMLInputElement).value);
+  const changeName = (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
     if (editing && editingId) {
-      const equipmentInfo = {
-        id: editingId,
-        equipmentTypeId: typeId,
-        name,
-        description,
-        image,
-        fullImage,
-        tinyImage,
-        prevImage
-      };
+      const equipmentInfo = {id: editingId, equipmentTypeId: typeId, name, description, image, fullImage, tinyImage, prevImage};
       if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentInfo));
       else dispatch(userEditPrivateEquipment(equipmentInfo));
     } else {
-      const equipmentInfo = {
-        equipmentTypeId: typeId,
-        name,
-        description,
-        image,
-        fullImage,
-        tinyImage
-      };
-      if (staffIsAuthenticated) {
-        dispatch(staffCreateNewEquipment(equipmentInfo));
-      } else {
-        dispatch(userCreateNewPrivateEquipment(equipmentInfo));
-      }
+      const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
+      if (staffIsAuthenticated) dispatch(staffCreateNewEquipment(equipmentInfo));
+      else dispatch(userCreateNewPrivateEquipment(equipmentInfo));
     }
   };
 
-  const changeType = (e: React.SyntheticEvent<EventTarget>) =>
-    setTypeId(Number((e.target as HTMLInputElement).value));
+  const changeType = (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-    const full =
-      await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
-    const tiny =
-      await getCroppedImage(28, 18, imageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
+    const tiny = await getCroppedImage(28, 18, imageRef.current, crop, "newFile.jpeg");
     if (!full || !tiny) return;
     setFullCrop(full.resizedPreview);
     setTinyCrop(tiny.resizedPreview);

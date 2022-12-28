@@ -1,10 +1,4 @@
-import {
-  Facet,
-  Paging,
-  PagingInfo,
-  ResultsPerPage,
-  withSearch,
-} from '@elastic/react-search-ui';
+import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
@@ -19,23 +13,16 @@ function listResults(results: any) {
           <a className="ingredients__link">
             <div className="ingredients__text">
               <div className="ingredients__fullname">{i.fullname.raw}</div>
-
-              <div className="ingredients__type">
-                {i.ingredient_type_name.raw}
-              </div>
+              <div className="ingredients__type">{i.ingredient_type_name.raw}</div>
             </div>
-
-            <img
-              className="ingredients__image"
-              src={`${url}${i.image.raw}.jpg`}
-            />
+            <img className="ingredients__image" src={`${url}${i.image.raw}.jpg`} />
           </a>
         </Link>
       </div>
     ));
-  } else {
-    return <div>Loading...</div>;
   }
+  
+  return <div>Loading...</div>;
 }
 
 export function Ingredients({
@@ -50,13 +37,9 @@ export function Ingredients({
       <div className="left-column">
         <h1>Ingredients</h1>
 
-        <ExpandCollapse
-          headingWhileCollapsed="Filter Results (Click here to expand)"
-        >
+        <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
           <div className="search-results__filters">
-            <span className="search-results__filter-title">
-              Filter ingredients by:
-            </span>
+            <span className="search-results__filter-title">Filter ingredients by:</span>
 
             <Facet
               facets={{
@@ -125,11 +108,6 @@ type Props = PropsFromContext & {
   twoColumnBTheme: string;
 };
 
-const mapContextToProps = ({
-  facets,
-  filters,
-  results,
-  wasSearched
-}: PropsFromContext) => ({facets, filters, results, wasSearched});
+const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 
 export default withSearch(mapContextToProps)(Ingredients);

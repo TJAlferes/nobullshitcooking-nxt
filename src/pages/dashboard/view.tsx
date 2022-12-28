@@ -1,23 +1,7 @@
 import { Crop } from 'react-image-crop';
 
-import {
-  IEquipment,
-  IIngredient,
-  IPlan,
-  IWorkRecipe
-} from '../../store/data/types';
-import {
-  Avatar,
-  AvatarEdit,
-  Equipment,
-  FavoriteRecipes,
-  Ingredients,
-  Plans,
-  PrivateRecipes,
-  PublicRecipes,
-  SavedRecipes,
-  Tabs
-} from './views';
+import { IEquipment, IIngredient, IPlan, IWorkRecipe } from '../../store/data/types';
+import { Avatar, AvatarEdit, Equipment, FavoriteRecipes, Ingredients, Plans, PrivateRecipes, PublicRecipes, SavedRecipes, Tabs } from './views';
 
 export function DashboardView({
   activateModal,
@@ -70,10 +54,7 @@ export function DashboardView({
 
       {(tab === "avatar") && (
         <>
-          {!avatar && (
-            <Avatar authname={authname} onSelectFile={onSelectFile} />
-          )}
-
+          {!avatar && (<Avatar authname={authname} onSelectFile={onSelectFile} />)}
           {avatar && (
             <AvatarEdit
               avatar={avatar}
@@ -134,35 +115,19 @@ export function DashboardView({
       )}
 
       {(!avatar && tab == "recipes" && subTab == "favorite") && (
-        <FavoriteRecipes
-          myFavoriteRecipes={myFavoriteRecipes}
-          subTab={subTab}
-          subTabClick={subTabClick}
-          unfavoriteRecipe={unfavoriteRecipe}
-        />
+        <FavoriteRecipes myFavoriteRecipes={myFavoriteRecipes} subTab={subTab} subTabClick={subTabClick} unfavoriteRecipe={unfavoriteRecipe} />
       )}
 
       {(!avatar && tab == "recipes" && subTab == "saved") && (
-        <SavedRecipes
-          mySavedRecipes={mySavedRecipes}
-          subTab={subTab}
-          subTabClick={subTabClick}
-          unsaveRecipe={unsaveRecipe}
-        />
+        <SavedRecipes mySavedRecipes={mySavedRecipes} subTab={subTab} subTabClick={subTabClick} unsaveRecipe={unsaveRecipe} />
       )}
 
       {!avatar && tab == "ingredients" && (
-        <Ingredients
-          deletePrivateIngredient={deletePrivateIngredient}
-          myPrivateIngredients={myPrivateIngredients}
-        />
+        <Ingredients deletePrivateIngredient={deletePrivateIngredient} myPrivateIngredients={myPrivateIngredients} />
       )}
 
       {!avatar && tab == "equipment" && (
-        <Equipment
-          deletePrivateEquipment={deletePrivateEquipment}
-          myPrivateEquipment={myPrivateEquipment}
-        />
+        <Equipment deletePrivateEquipment={deletePrivateEquipment} myPrivateEquipment={myPrivateEquipment} />
       )}
     </div>
   );

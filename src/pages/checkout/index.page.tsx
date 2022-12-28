@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
-import {
-  CardElement,
-  Elements,
-  useElements,
-  useStripe
-} from '@stripe/react-stripe-js';
+import { CardElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 
 const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
@@ -15,10 +10,7 @@ export default function Checkout(): JSX.Element {
   const stripe = useStripe();
 
   const handleSubmit = async () => {
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements?.getElement(CardElement)
-    });
+    const { error, paymentMethod } = await stripe.createPaymentMethod({type: 'card', card: elements?.getElement(CardElement)});
   };
 
   return (
