@@ -2,13 +2,7 @@ import { useCallback, useState } from 'react';
 
 const nop = () => {};
 
-export function Star({
-  full,
-  index,
-  readOnly,
-  setOverride,
-  setRating
-}: Props): JSX.Element {
+export function Star({ full, index, readOnly, setOverride, setRating }: Props): JSX.Element {
   const [ down, setDown ] = useState(false);
 
   const handleClick = useCallback(() => {

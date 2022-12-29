@@ -11,10 +11,7 @@ export function Logo(): JSX.Element {
         <a className="logo__a">
           <img
             className="home-link"
-            src={theme === "light"
-              ? "/images/header/logo-mobile-red-small.png"
-              : "/images/header/logo-mobile-dark-red-small.png"
-            }
+            src={theme === "light" ? "/images/header/logo-mobile-red-small.png" : "/images/header/logo-mobile-dark-red-small.png"}
             width="68"
             height="20"
           />

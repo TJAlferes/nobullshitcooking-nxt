@@ -9,39 +9,23 @@ function getSnippet(result: IResult, value: string) {
 }
 
 // why use dangerouslySetInnerHTML?
-export function AutocompleteView({
-  autocompleteResults,
-  autocompletedResults,
-  className,
-  getItemProps,
-  getMenuProps
-}: Props) {
+export function AutocompleteView({ autocompleteResults, autocompletedResults, className, getItemProps, getMenuProps }: Props) {
   let index = 0;
+
   return (
-    <div
-      {...getMenuProps({
-        className: `sui-search-box__autocomplete-container ${className}`
-      })}
-    >
-      {
-        !!autocompleteResults &&
-        !!autocompletedResults &&
-        autocompletedResults.length > 0 && (
+    <div {...getMenuProps({className: `sui-search-box__autocomplete-container ${className}`})}>
+      {!!autocompleteResults && !!autocompletedResults && autocompletedResults.length > 0 &&
+        (
           <ul className="sui-search-box__results-list">
             {autocompletedResults.map(r => {
               const titleRaw = getRaw(r, autocompleteResults.titleField);
-              const titleSnippet =
-                getSnippet(r, autocompleteResults.titleField);
+              const titleSnippet = getSnippet(r, autocompleteResults.titleField);
+              
               index++;
+
               return (
-                <li
-                  {...getItemProps({key: r.id.raw, index: index - 1, item: r})}
-                >
-                  {
-                    titleSnippet
-                    ? <span dangerouslySetInnerHTML={{__html: titleSnippet}} />
-                    : <span>{titleRaw}</span>
-                  }
+                <li {...getItemProps({key: r.id.raw, index: index - 1, item: r})}>
+                  {titleSnippet ? <span dangerouslySetInnerHTML={{__html: titleSnippet}} /> : <span>{titleRaw}</span>}
                 </li>
               );
             })}

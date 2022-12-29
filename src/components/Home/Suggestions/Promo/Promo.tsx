@@ -6,15 +6,8 @@ export function Promo(): JSX.Element {
   return (
     <Link href="/">
       <a className="promo">
-        <img
-          className="promo-link--large"
-          src={`${url}announcement-05-03-17-240w.png`}
-        />
-        
-        <img
-          className="promo-link--small"
-          src={`${url}announcement-05-03-17-180w.png`}
-        />
+        <img className="promo-link--large" src={`${url}announcement-05-03-17-240w.png`} />
+        <img className="promo-link--small" src={`${url}announcement-05-03-17-180w.png`} />
       </a>
     </Link>
   );

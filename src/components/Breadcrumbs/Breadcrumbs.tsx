@@ -5,24 +5,16 @@ import React, { useEffect, useState } from 'react';
 import { useTypedSelector as useSelector } from '../../store';
 
 // CREDIT: Adapted from: https://github.com/NiklasMencke/nextjs-breadcrumbs
-
 export function Breadcrumbs() {
   const router = useRouter();
-
   const theme = useSelector(state => state.theme.theme);
-
   const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
 
   useEffect(() => {
     if (router) {
       const linkPath = router.asPath.split('/');
-
       linkPath.shift();
-
-      const pathArray = linkPath.map((path, i) => ({
-        name: path, href: '/' + linkPath.slice(0, i + 1).join('/')
-      }));
-
+      const pathArray = linkPath.map((path, i) => ({name: path, href: '/' + linkPath.slice(0, i + 1).join('/')}));
       setBreadcrumbs(pathArray);
     }
   }, [router]);
@@ -30,54 +22,15 @@ export function Breadcrumbs() {
   if (!breadcrumbs) return null;
 
   if (router.pathname === "/profile/:username") setBreadcrumbs([]);
-
-  if (router.pathname === "/new-equipment") {
-    setBreadcrumbs([
-      {name: "Dashboard", href: "/dashboard"},
-      {name: "New Equipment", href: "#"}
-    ]);
-  }
-
-  if (router.pathname === "/new-ingredient") {
-    setBreadcrumbs([
-      {name: "Dashboard", href: "/dashboard"},
-      {name: "New Ingredient", href: "#"}
-    ]);
-  }
-
-  if (router.pathname === "/new-plan") {
-    setBreadcrumbs([
-      {name: "Dashboard", href: "/dashboard"},
-      {name: "New Plan", href: "#"}
-    ]);
-  }
-
-  if (router.pathname === "/new-recipe") {
-    setBreadcrumbs([
-      {name: "Dashboard", href: "/dashboard"},
-      {name: "New Recipe", href: "#"}
-    ]);
-  }
+  if (router.pathname === "/new-equipment")     setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
+  if (router.pathname === "/new-ingredient")    setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
+  if (router.pathname === "/new-plan")          setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
+  if (router.pathname === "/new-recipe")        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
 
   return (
     <nav aria-label="breadcrumbs">
-      <span>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-        
-        <i>{`&gt;`}</i>
-      </span>
-
-      {breadcrumbs.map(({ name, href }) => (
-        <span key={href}>
-          <Link href={href}>
-            <a>{convertBreadcrumb(name)}</a>
-          </Link>
-
-          <i>{`&gt;`}</i>
-        </span>
-      ))}
+      <span><Link href="/"><a>Home</a></Link><i>{`&gt;`}</i></span>
+      {breadcrumbs.map(({ name, href }) => <span key={href}><Link href={href}><a>{convertBreadcrumb(name)}</a></Link><i>{`&gt;`}</i></span>)}
     </nav>
   );
 };
@@ -95,6 +48,8 @@ type Breadcrumb = {
   name: string;
   href: string;
 };
+
+
 
 /*
 (same for equipment)
