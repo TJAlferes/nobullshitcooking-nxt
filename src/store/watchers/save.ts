@@ -7,7 +7,7 @@ const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
 
 export function* watchSave() {
   yield all([
-    takeEvery(USER_SAVE_RECIPE, userSaveRecipeSaga),
+    takeEvery(USER_SAVE_RECIPE,   userSaveRecipeSaga),
     takeEvery(USER_UNSAVE_RECIPE, userUnsaveRecipeSaga)
   ]);
 }

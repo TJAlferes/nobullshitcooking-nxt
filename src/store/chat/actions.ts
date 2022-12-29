@@ -20,6 +20,10 @@ const {
   CHAT_FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
+function getTime() {
+  return `${(new Date).toLocaleTimeString()}`
+}
+
 export const chatConnect = () => ({type: CHAT_CONNECT});
 
 export const chatConnected = () => ({type: CHAT_CONNECTED});
@@ -28,54 +32,28 @@ export const chatDisconnect = () => ({type: CHAT_DISCONNECT});
 
 export const chatDisconnected = () => ({type: CHAT_DISCONNECTED});
 
-export const chatOnlineFriends = (onlineFriends: string[]) =>
-  ({type: CHAT_ONLINE_FRIENDS, onlineFriends});
+export const chatOnlineFriends = (onlineFriends: string[]) => ({type: CHAT_ONLINE_FRIENDS, onlineFriends});
 
-export const chatFriendCameOnline = (friend: string) =>
-  ({type: CHAT_FRIEND_CAME_ONLINE, friend});
+export const chatFriendCameOnline = (friend: string) => ({type: CHAT_FRIEND_CAME_ONLINE, friend});
 
-export const chatFriendWentOffline = (friend: string) =>
-  ({type: CHAT_FRIEND_WENT_OFFLINE, friend});
+export const chatFriendWentOffline = (friend: string) => ({type: CHAT_FRIEND_WENT_OFFLINE, friend});
 
-export const chatJoinRoom = (room: string) =>
-  ({type: CHAT_JOIN_ROOM, room});
+export const chatJoinRoom = (room: string) => ({type: CHAT_JOIN_ROOM, room});
 
-export const chatJoinedRoom = (users: string[], room: string) =>
-  ({type: CHAT_JOINED_ROOM, users, room});
+export const chatJoinedRoom = (users: string[], room: string) => ({type: CHAT_JOINED_ROOM, users, room});
 
-export const chatRejoinedRoom = (users: string[], room: string) =>
-  ({type: CHAT_REJOINED_ROOM, users, room});
+export const chatRejoinedRoom = (users: string[], room: string) => ({type: CHAT_REJOINED_ROOM, users, room});
 
-export const chatUserJoinedRoom = (user: string) => {
-  const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_USER_JOINED_ROOM, user, ts};
-};
+export const chatUserJoinedRoom = (user: string) => ({type: CHAT_USER_JOINED_ROOM, user, ts: getTime()});
 
-export const chatUserLeftRoom = (user: string) => {
-  const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_USER_LEFT_ROOM, user, ts};
-};
+export const chatUserLeftRoom = (user: string) => ({type: CHAT_USER_LEFT_ROOM, user, ts: getTime()});
 
-export const chatSendMessage = (text: string) =>
-  ({type: CHAT_SEND_MESSAGE, text});
+export const chatSendMessage = (text: string) => ({type: CHAT_SEND_MESSAGE, text});
 
-export const chatReceivedMessage = (message: IMessage) => {
-  const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_RECEIVED_MESSAGE, message: {...message, ts}};
-};
+export const chatReceivedMessage = (message: IMessage) => ({type: CHAT_RECEIVED_MESSAGE, message: {...message, ts: getTime()}});
 
-export const chatSendPrivateMessage = (text: string, to: string) =>
-  ({type: CHAT_SEND_PRIVATE_MESSAGE, text, to});
+export const chatSendPrivateMessage = (text: string, to: string) => ({type: CHAT_SEND_PRIVATE_MESSAGE, text, to});
 
-export const chatReceivedPrivateMessage = (message: IMessage) => {
-  const ts = `${(new Date).toLocaleTimeString()}`;
-  return {
-    type: CHAT_RECEIVED_PRIVATE_MESSAGE,
-    message: {...message, ts}
-  };
-};
+export const chatReceivedPrivateMessage = (message: IMessage) => ({type: CHAT_RECEIVED_PRIVATE_MESSAGE, message: {...message, ts: getTime()}});
 
-export const chatFailedPrivateMessage = (feedback: string) => {
-  const ts = `${(new Date).toLocaleTimeString()}`;
-  return {type: CHAT_FAILED_PRIVATE_MESSAGE, feedback, ts};
-};
+export const chatFailedPrivateMessage = (feedback: string) => ({type: CHAT_FAILED_PRIVATE_MESSAGE, feedback, ts: getTime()});

@@ -19,10 +19,8 @@ const initialState: IThemeState = {
   feedTheme: "feed-light"
 };
 
-export const themeReducer = (
-  state = initialState,
-  action: ThemeActions
-): IThemeState => {
+// TO DO: you only need one property: {theme: "dark"|"light"}
+export const themeReducer = (state = initialState, action: ThemeActions): IThemeState => {
   switch (action.type) {
     case THEME_DARK_TRIGGER:
       return {

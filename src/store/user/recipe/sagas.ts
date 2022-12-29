@@ -2,10 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import {
-  dataGetMyPrivateRecipesSaga,
-  dataGetMyPublicRecipesSaga
-} from '../../data/sagas';
+import { dataGetMyPrivateRecipesSaga, dataGetMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
   IUserCreateNewPrivateRecipe,
@@ -16,137 +13,73 @@ import {
   IUserDisownPublicRecipe
 } from './types';
 
-export function* userCreateNewRecipeSaga(
-  action: (IUserCreateNewPrivateRecipe | IUserCreateNewPublicRecipe)
-) {
+export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | IUserCreateNewPublicRecipe)) {
   let {
-    ownership,
-    recipeTypeId,
-    cuisineId,
-    title,
-    description,
-    directions,
-    requiredMethods,
-    requiredEquipment,
-    requiredIngredients,
-    requiredSubrecipes,
-    recipeImage,
-    recipeFullImage,
-    recipeThumbImage,
-    recipeTinyImage,
-    equipmentImage,
-    equipmentFullImage,
-    ingredientsImage,
-    ingredientsFullImage,
-    cookingImage,
-    cookingFullImage
+    ownership, recipeTypeId, cuisineId,
+    title, description, directions,
+    requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+    recipeImage, recipeFullImage, recipeThumbImage, recipeTinyImage,
+    equipmentImage, equipmentFullImage,
+    ingredientsImage, ingredientsFullImage,
+    cookingImage, cookingFullImage
   } = action.recipeInfo;
+
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
-      const { 
-        data: { fullName, fullSignature, thumbSignature, tinySignature }
-      } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe`,
-        {fileType: recipeFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        recipeFullImage,
-        {headers: {'Content-Type': recipeFullImage.type}}
-      );
-      yield call(
-        [axios, axios.put],
-        thumbSignature,
-        recipeThumbImage,
-        {headers: {'Content-Type': recipeThumbImage.type}}
-      );
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        recipeTinyImage,
-        {headers: {'Content-Type': recipeTinyImage.type}}
-      );
+      const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
+      
+      yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': recipeFullImage.type}});
+      yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': recipeThumbImage.type}});
+      yield call([axios, axios.put], tinySignature, recipeTinyImage, {headers: {'Content-Type': recipeTinyImage.type}});
+
       recipeImage = fullName;
-    } else {
-      recipeImage = "nobsc-recipe-default";
     }
+    else recipeImage = "nobsc-recipe-default";
+
 
     if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.put],
-        `${endpoint}/user/get-signed-url/recipe-equipment`,
-        {fileType: equipmentFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        equipmentFullImage,
-        {headers: {'Content-Type': equipmentFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.put], `${endpoint}/user/get-signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': equipmentFullImage.type}});
+
       equipmentImage = fullName;
-    } else {
-      equipmentImage = "nobsc-recipe-equipment-default";
     }
+    else equipmentImage = "nobsc-recipe-equipment-default";
+
 
     if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe-ingredients`,
-        {fileType: ingredientsFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        ingredientsFullImage,
-        {headers: {'Content-Type': ingredientsFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': ingredientsFullImage.type}});
+
       ingredientsImage = fullName;
-    } else {
-      ingredientsImage = "nobsc-recipe-ingredients-default";
     }
+    else ingredientsImage = "nobsc-recipe-ingredients-default";
+
 
     if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe-cooking`,
-        {fileType: cookingFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        cookingFullImage,
-        {headers: {'Content-Type': cookingFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': cookingFullImage.type}});
+
       cookingImage = fullName;
-    } else {
-      cookingImage = "nobsc-recipe-cooking-default";
     }
+    else cookingImage = "nobsc-recipe-cooking-default";
+
 
     const { data: { message } } = yield call(
       [axios, axios.post],
       `${endpoint}/user/recipe/create`,
       {
         recipeInfo: {
-          ownership,
-          recipeTypeId,
-          cuisineId,
-          title,
-          description,
-          directions,
-          requiredMethods,
-          requiredEquipment,
-          requiredIngredients,
-          requiredSubrecipes,
-          recipeImage,
-          equipmentImage,
-          ingredientsImage,
-          cookingImage
+          ownership, recipeTypeId, cuisineId,
+          title, description, directions,
+          requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+          recipeImage, equipmentImage, ingredientsImage, cookingImage
         }
       },
       {withCredentials: true}
@@ -163,11 +96,9 @@ export function* userCreateNewRecipeSaga(
 
 export function* userDeletePrivateRecipeSaga(action: IUserDeletePrivateRecipe) {
   try {
-    const { data: { message } } = yield call(
-      [axios, axios.delete],
-      `${endpoint}/user/recipe/delete/private`,
-      {withCredentials: true, data: {id: action.id}}
-    );
+    const { data: { message } } =
+      yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {id: action.id}});
+
     yield put(userMessage(message));
     yield call(dataGetMyPrivateRecipesSaga);
   } catch(err) {
@@ -179,11 +110,9 @@ export function* userDeletePrivateRecipeSaga(action: IUserDeletePrivateRecipe) {
 
 export function* userDisownPublicRecipeSaga(action: IUserDisownPublicRecipe) {
   try {
-    const { data: { message } } = yield call(
-      [axios, axios.delete],
-      `${endpoint}/user/recipe/disown/public`,
-      {withCredentials: true, data: {id: action.id}}
-    );
+    const { data: { message } } =
+      yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {id: action.id}});
+      
     yield put(userMessage(message));
     yield call(dataGetMyPublicRecipesSaga);
   } catch(err) {
@@ -193,147 +122,76 @@ export function* userDisownPublicRecipeSaga(action: IUserDisownPublicRecipe) {
   yield put(userMessageClear());
 }
 
-export function* userEditRecipeSaga(
-  action: (IUserEditPrivateRecipe | IUserEditPublicRecipe)
-) {
+export function* userEditRecipeSaga(action: (IUserEditPrivateRecipe | IUserEditPublicRecipe)) {
   let {
-    id,
-    ownership,
-    recipeTypeId,
-    cuisineId,
-    title,
-    description,
-    directions,
-    requiredMethods,
-    requiredEquipment,
-    requiredIngredients,
-    requiredSubrecipes,
-    recipeImage,
-    recipeFullImage,
-    recipePrevImage,
-    recipeThumbImage,
-    recipeTinyImage,
-    equipmentImage,
-    equipmentFullImage,
-    equipmentPrevImage,
-    ingredientsImage,
-    ingredientsFullImage,
-    ingredientsPrevImage,
-    cookingImage,
-    cookingFullImage,
-    cookingPrevImage
+    id, ownership, recipeTypeId, cuisineId,
+    title, description, directions,
+    requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+    recipeImage, recipeFullImage, recipePrevImage, recipeThumbImage, recipeTinyImage,
+    equipmentImage, equipmentFullImage, equipmentPrevImage,
+    ingredientsImage, ingredientsFullImage, ingredientsPrevImage,
+    cookingImage, cookingFullImage, cookingPrevImage
   } = action.recipeInfo;
+
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
-      const {
-        data: { fullName, fullSignature, thumbSignature, tinySignature }
-      } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe`,
-        {fileType: recipeFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        recipeFullImage,
-        {headers: {'Content-Type': recipeFullImage.type}}
-      );
-      yield call(
-        [axios, axios.put],
-        thumbSignature,
-        recipeThumbImage,
-        {headers: {'Content-Type': recipeThumbImage.type}}
-      );
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        recipeTinyImage,
-        {headers: {'Content-Type': recipeTinyImage.type}}
-      );
+      const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': recipeFullImage.type}});
+      yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': recipeThumbImage.type}});
+      yield call([axios, axios.put], tinySignature, recipeTinyImage, {headers: {'Content-Type': recipeTinyImage.type}});
+
       recipeImage = fullName;
-    } else {
-      recipeImage = recipePrevImage;
     }
+    else recipeImage = recipePrevImage;
+
 
     if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe-equipment`,
-        {fileType: equipmentFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        equipmentFullImage,
-        {headers: {'Content-Type': equipmentFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': equipmentFullImage.type}});
+
       equipmentImage = fullName;
-    } else {
-      equipmentImage = equipmentPrevImage;
     }
+    else equipmentImage = equipmentPrevImage;
+
 
     if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe-ingredients`,
-        {fileType: ingredientsFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        ingredientsFullImage,
-        {headers: {'Content-Type': ingredientsFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': ingredientsFullImage.type}});
+
       ingredientsImage = fullName;
-    } else {
-      ingredientsImage = ingredientsPrevImage;
     }
+    else ingredientsImage = ingredientsPrevImage;
+
 
     if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/get-signed-url/recipe-cooking`,
-        {fileType: cookingFullImage.type},
-        {withCredentials: true}
-      );
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        cookingFullImage,
-        {headers: {'Content-Type': cookingFullImage.type}}
-      );
+      const { data: { fullName, fullSignature } } =
+        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
+
+      yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': cookingFullImage.type}});
+
       cookingImage = fullName;
-    } else {
-      cookingImage = cookingPrevImage;
     }
+    else cookingImage = cookingPrevImage;
     
+
     const { data: { message } } = yield call(
       [axios, axios.put],
       `${endpoint}/user/recipe/update`,
       {
         recipeInfo: {
-          id,
-          ownership,
-          recipeTypeId,
-          cuisineId,
-          title,
-          description,
-          directions,
-          requiredMethods,
-          requiredEquipment,
-          requiredIngredients,
-          requiredSubrecipes,
-          recipeImage,
-          recipePrevImage,
-          equipmentImage,
-          equipmentPrevImage,
-          ingredientsImage,
-          ingredientsPrevImage,
-          cookingImage,
-          cookingPrevImage
+          id, ownership, recipeTypeId, cuisineId,
+          title, description, directions,
+          requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+          recipeImage, recipePrevImage,
+          equipmentImage, equipmentPrevImage,
+          ingredientsImage, ingredientsPrevImage,
+          cookingImage, cookingPrevImage
         }
       },
       {withCredentials: true}

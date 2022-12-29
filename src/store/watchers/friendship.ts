@@ -22,10 +22,10 @@ const {
 export function* watchFriendship() {
   yield all([
     takeEvery(USER_REQUEST_FRIENDSHIP, userRequestFriendshipSaga),
-    takeEvery(USER_ACCEPT_FRIENDSHIP, userAcceptFriendshipSaga),
-    takeEvery(USER_REJECT_FRIENDSHIP, userRejectFriendshipSaga),
-    takeEvery(USER_DELETE_FRIENDSHIP, userDeleteFriendshipSaga),
-    takeEvery(USER_BLOCK_USER, userBlockUserSaga),
-    takeEvery(USER_UNBLOCK_USER, userUnblockUserSaga)
+    takeEvery(USER_ACCEPT_FRIENDSHIP,  userAcceptFriendshipSaga),
+    takeEvery(USER_REJECT_FRIENDSHIP,  userRejectFriendshipSaga),
+    takeEvery(USER_DELETE_FRIENDSHIP,  userDeleteFriendshipSaga),
+    takeEvery(USER_BLOCK_USER,         userBlockUserSaga),
+    takeEvery(USER_UNBLOCK_USER,       userUnblockUserSaga)
   ]);
 }

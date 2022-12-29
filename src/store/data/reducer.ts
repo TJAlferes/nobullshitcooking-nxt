@@ -1,11 +1,6 @@
 import { actionTypes, IDataState, DataActions } from './types';
 
-const {
-  DATA_GET_INITIAL_DATA,
-  DATA_GET_DATA,
-  DATA_GET_INITIAL_USER_DATA,
-  DATA_GET_USER_DATA
-} = actionTypes;
+const { DATA_GET_INITIAL_DATA, DATA_GET_DATA, DATA_GET_INITIAL_USER_DATA, DATA_GET_USER_DATA } = actionTypes;
 
 const initialState: IDataState = {
   content: [],
@@ -34,10 +29,7 @@ const initialState: IDataState = {
   mySavedRecipes: []
 };
 
-export const dataReducer = (
-  state = initialState,
-  action: DataActions
-): IDataState => {
+export const dataReducer = (state = initialState, action: DataActions): IDataState => {
   switch (action.type) {
     case DATA_GET_INITIAL_DATA:
       return {
@@ -59,10 +51,7 @@ export const dataReducer = (
           productTypes: action.initialData.productTypes
         }
       };
-    
-    case DATA_GET_DATA:
-      return {...state, ...{[action.data.key]: action.data.value}};
-    
+    case DATA_GET_DATA: return {...state, ...{[action.data.key]: action.data.value}};
     case DATA_GET_INITIAL_USER_DATA:
       return {
         ...state,
@@ -78,10 +67,7 @@ export const dataReducer = (
           myFriendships: action.initialUserData.myFriendships
         }
       };
-    
-    case DATA_GET_USER_DATA:
-      return {...state, ...{[action.userData.key]: action.userData.value}};
-    
+    case DATA_GET_USER_DATA: return {...state, ...{[action.userData.key]: action.userData.value}};
     default: return state;
   }
 };

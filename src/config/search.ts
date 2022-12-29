@@ -36,6 +36,7 @@ export function makeSearchConfig(store: Store) {
         {withCredentials: true}
       );
       const { results } = buildAutocompleteState(found, index);
+
       return {autocompletedResults: results};
     },
 
@@ -48,13 +49,11 @@ export function makeSearchConfig(store: Store) {
         {withCredentials: true}
       );
       const resWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(found, state, names, index);
+
       return buildSearchState(resWithDisjunctiveFacetCounts, state.resultsPerPage, index);
     },
 
-    searchQuery: {
-      facets: getFacets(),
-      disjunctiveFacets: getDisjunctiveFacets()
-    },
+    searchQuery: {facets: getFacets(), disjunctiveFacets: getDisjunctiveFacets()},
 
     trackUrlState: false  // ?
   };

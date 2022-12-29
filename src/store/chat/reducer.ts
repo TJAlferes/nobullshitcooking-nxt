@@ -1,11 +1,5 @@
 import { actionTypes as authActionTypes } from '../auth/types';
-import {
-  actionTypes,
-  IChatState,
-  PUBLIC,
-  PRIVATE,
-  ChatActions
-} from './types';
+import { actionTypes, IChatState, PUBLIC, PRIVATE, ChatActions } from './types';
 
 const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
@@ -26,53 +20,21 @@ const {
 // NORMALIZE STATE, USE OBJECTS/MAPS, NOT ARRAYS (maybe)
 // remember Nir Kofman's actions patterns (maybe)
 
-const initialState: IChatState = {
-  room: "",
-  messages: [],
-  users: [],
-  onlineFriends: [],
-  status: "disconnected"
-};
+const initialState: IChatState = {room: "", messages: [], users: [], onlineFriends: [], status: "disconnected"};
 
-export const chatReducer = (
-  state = initialState,
-  action: ChatActions
-): IChatState => {
+export const chatReducer = (state = initialState, action: ChatActions): IChatState => {
   switch (action.type) {
-    case CHAT_CONNECTED:
-      return {...state, ...{status: "connected"}};
-    
     case CHAT_DISCONNECTED:
     case AUTH_USER_LOGOUT:
       return {...state, ...{status: "disconnected"}};
     
-    case CHAT_ONLINE_FRIENDS:
-      return {
-        ...state,
-        ...{onlineFriends: action.onlineFriends}
-      };
-    
-    case CHAT_FRIEND_CAME_ONLINE:
-      return {
-        ...state,
-        ...{onlineFriends: state.onlineFriends.concat(action.friend)}
-      };
-    
-    case CHAT_FRIEND_WENT_OFFLINE:
-      return {
-        ...state,
-        ...{onlineFriends: state.onlineFriends.filter(f => f !== action.friend)}
-      };
-    
-    case CHAT_JOINED_ROOM:
-      return {
-        ...state,
-        ...{room: action.room, messages: [], users: action.users}
-      };
-    
-    case CHAT_REJOINED_ROOM:
-      return {...state, ...{room: action.room, users: action.users}};
-    
+    case CHAT_CONNECTED: return {...state, ...{status: "connected"}};
+    case CHAT_ONLINE_FRIENDS:      return {...state, ...{onlineFriends: action.onlineFriends}};
+    case CHAT_FRIEND_CAME_ONLINE:  return {...state, ...{onlineFriends: state.onlineFriends.concat(action.friend)}};
+    case CHAT_FRIEND_WENT_OFFLINE: return {...state, ...{onlineFriends: state.onlineFriends.filter(f => f !== action.friend)}};
+    case CHAT_JOINED_ROOM:         return {...state, ...{room: action.room, messages: [], users: action.users}};
+    case CHAT_REJOINED_ROOM:       return {...state, ...{room: action.room, users: action.users}};
+
     case CHAT_USER_JOINED_ROOM:
       return {
         ...state,
@@ -105,11 +67,8 @@ export const chatReducer = (
         }
       };
     
-    case CHAT_RECEIVED_MESSAGE:
-      return {...state, ...{messages: state.messages.concat(action.message)}};
-    
-    case CHAT_RECEIVED_PRIVATE_MESSAGE:
-      return {...state, ...{messages: state.messages.concat(action.message)}};
+    case CHAT_RECEIVED_MESSAGE:         return {...state, ...{messages: state.messages.concat(action.message)}};
+    case CHAT_RECEIVED_PRIVATE_MESSAGE: return {...state, ...{messages: state.messages.concat(action.message)}};
     
     // ?
     case CHAT_FAILED_PRIVATE_MESSAGE:

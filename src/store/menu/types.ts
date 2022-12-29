@@ -1,7 +1,4 @@
-export const actionTypes = {
-  OPEN_LEFT_NAV: 'OPEN_LEFT_NAV',
-  CLOSE_LEFT_NAV: 'CLOSE_LEFT_NAV'
-} as const;
+export const actionTypes = {OPEN_LEFT_NAV: 'OPEN_LEFT_NAV', CLOSE_LEFT_NAV: 'CLOSE_LEFT_NAV'} as const;
 
 /*
 

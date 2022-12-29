@@ -16,17 +16,9 @@ import {
   chatReceivedPrivateMessage,
   chatFailedPrivateMessage
 } from './actions';
-import {
-  IMessage,
-  IChatJoinRoom,
-  IChatSendMessage,
-  IChatSendPrivateMessage
-} from './types';
+import { IMessage, IChatJoinRoom, IChatSendMessage, IChatSendPrivateMessage } from './types';
 
-const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
-  `${endpoint}`,
-  {autoConnect: false, reconnection: true, /*withCredentials: true*/}
-);
+const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, reconnection: true});  //withCredentials: true
 
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
@@ -125,14 +117,11 @@ export function* chatSendMessageSaga({ text }: IChatSendMessage) {
   socket.emit('SendMessage', text);
 }
 
-export function* chatSendPrivateMessageSaga(
-  { text, to }: IChatSendPrivateMessage
-) {
+export function* chatSendPrivateMessageSaga({ text, to }: IChatSendPrivateMessage) {
   socket.emit('SendPrivateMessage', text, to);
 }
 
-// TO DO: give this an action?
-export function* chatUpdateOnlineSaga(status: string) {
+export function* chatUpdateOnlineSaga(status: string) {  // TO DO: give this an action?
   if (status === "connected") socket.emit('GetOnlineFriends');
 }
 

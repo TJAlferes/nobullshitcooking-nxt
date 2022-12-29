@@ -1,6 +1,4 @@
-export const actionTypes = {
-  NOBSCAPP_WINDOW_FOCUSED: 'NOBSCAPP_WINDOW_FOCUSED'
-} as const;
+export const actionTypes = {NOBSCAPP_WINDOW_FOCUSED: 'NOBSCAPP_WINDOW_FOCUSED'} as const;
 
 /*
 

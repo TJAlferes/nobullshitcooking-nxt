@@ -1,7 +1,4 @@
-export const actionTypes = {
-  PLANNER_VIEW_CLICK_DAY: 'PLANNER_VIEW_CLICK_DAY',
-  PLANNER_VIEW_LOAD: 'PLANNER_VIEW_LOAD'
-} as const;
+export const actionTypes = {PLANNER_VIEW_CLICK_DAY: 'PLANNER_VIEW_CLICK_DAY', PLANNER_VIEW_LOAD: 'PLANNER_VIEW_LOAD'} as const;
 
 /*
 

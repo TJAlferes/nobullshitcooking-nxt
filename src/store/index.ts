@@ -1,7 +1,7 @@
 import { Context, createWrapper } from 'next-redux-wrapper';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { applyMiddleware, createStore, Store } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
+//import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import createSagaMiddleware, { Task } from 'redux-saga';
 
 import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/nobscappWindow';
@@ -14,14 +14,8 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 function makeStore(context: Context) {
   const persistedState = loadFromLocalStorage();  // Do this in _app.page.tsx getInitialProps instead?  if (typeof window === 'undefined') then no localStore
-
   const sagaMiddleware = createSagaMiddleware();
-
-  const store = createStore(
-    rootReducer,
-    persistedState,
-    composeWithDevTools(applyMiddleware(sagaMiddleware))
-  );
+  const store = createStore(rootReducer, persistedState, applyMiddleware(sagaMiddleware));
 
   (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 

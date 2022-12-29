@@ -1,12 +1,6 @@
-import {
-  ICreatingEquipmentInfo,
-  IEditingEquipmentInfo
-} from '../../staff/equipment/types';
+import { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
 
-export type {
-  ICreatingEquipmentInfo,
-  IEditingEquipmentInfo
-} from '../../staff/equipment/types';
+export type { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
 
 export const actionTypes = {
   USER_CREATE_NEW_PRIVATE_EQUIPMENT: 'USER_CREATE_NEW_PRIVATE_EQUIPMENT',

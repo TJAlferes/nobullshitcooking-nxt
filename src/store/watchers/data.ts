@@ -1,15 +1,9 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import {
-  dataGetInitialDataSaga,
-  dataGetInitialUserDataSaga,
-} from '../data/sagas';
+import {dataGetInitialDataSaga, dataGetInitialUserDataSaga} from '../data/sagas';
 import { actionTypes } from '../data/types';
 
-const {
-  DATA_INIT,
-  DATA_GET_INITIAL_USER_DATA,
-} = actionTypes;
+const {DATA_INIT, DATA_GET_INITIAL_USER_DATA} = actionTypes;
 
 // TO DO: finish / let Next.js handle now
 /*export function* watchData() {
