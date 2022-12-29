@@ -87,9 +87,9 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
+  const changeType =        (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
   const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
-
-  const changeName = (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
   const submit = () => {
@@ -106,8 +106,6 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     }
   };
 
-  const changeType = (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
-
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
@@ -120,11 +118,9 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     setTinyImage(tiny.resizedFinal);
   };
 
-  const onCropChange = (crop: Crop) => setCrop(crop);
-
-  const onCropComplete = (crop: Crop) => makeCrops(crop);
-
-  const onImageLoaded = (image: HTMLImageElement) => imageRef.current = image;
+  const onCropChange =   (crop: Crop) =>              setCrop(crop);
+  const onCropComplete = (crop: Crop) =>              makeCrops(crop);
+  const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;

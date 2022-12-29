@@ -1,27 +1,14 @@
 import update from 'immutability-helper';  // is this really needed?
 
-import {
-  actionTypes,
-  IPlannerState,
-  PlannerActions,
-  IPlannerClickDay,
-  IPlannerAddRecipeToDay,
-  IPlannerRemoveRecipeFromDay,
-  IPlannerReorderRecipeInDay
-} from './types';
+import { actionTypes, IPlannerState, PlannerActions, IPlannerClickDay, IPlannerAddRecipeToDay, IPlannerRemoveRecipeFromDay, IPlannerReorderRecipeInDay } from './types';
 
 const {
   PLANNER_CLICK_DAY,
-  PLANNER_ADD_RECIPE_TO_DAY,
-  PLANNER_REMOVE_RECIPE_FROM_DAY,
+  PLANNER_ADD_RECIPE_TO_DAY, PLANNER_REMOVE_RECIPE_FROM_DAY,
   PLANNER_REORDER_RECIPE_IN_DAY,
-  //PLANNER_PUBLIC_LOAD_FROM_URL,
-  //PLANNER_PUBLIC_SAVE_TO_URL,
+  //PLANNER_PUBLIC_LOAD_FROM_URL, //PLANNER_PUBLIC_SAVE_TO_URL,
   PLANNER_CLEAR_WORK,
-  PLANNER_SET_CREATING,
-  PLANNER_SET_PLAN_NAME,
-  PLANNER_SET_EDITING_ID,
-  PLANNER_SET_PLAN_DATA,
+  PLANNER_SET_CREATING, PLANNER_SET_PLAN_NAME, PLANNER_SET_EDITING_ID, PLANNER_SET_PLAN_DATA,
 } = actionTypes;
 
 const initialState: IPlannerState = {

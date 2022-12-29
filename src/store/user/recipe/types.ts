@@ -1,16 +1,6 @@
-import {
-  ICreatingRecipeInfo,
-  IEditingRecipeInfo
-} from '../../staff/recipe/types';
+import { ICreatingRecipeInfo, IEditingRecipeInfo } from '../../staff/recipe/types';
 
-export type {
-  ICreatingRecipeInfo,
-  IEditingRecipeInfo,
-  IRequiredMethod,
-  IRequiredEquipment,
-  IRequiredIngredient,
-  IRequiredSubrecipe
-} from '../../staff/recipe/types';
+export type { ICreatingRecipeInfo, IEditingRecipeInfo, IRequiredMethod, IRequiredEquipment, IRequiredIngredient, IRequiredSubrecipe } from '../../staff/recipe/types';
 
 export const actionTypes = {
   USER_CREATE_NEW_PRIVATE_RECIPE: 'USER_CREATE_NEW_PRIVATE_RECIPE',

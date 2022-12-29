@@ -3,18 +3,10 @@ import { actionTypes, IChatState, PUBLIC, PRIVATE, ChatActions } from './types';
 
 const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
-  CHAT_CONNECTED,
-  CHAT_DISCONNECTED,
-  CHAT_ONLINE_FRIENDS,
-  CHAT_FRIEND_CAME_ONLINE,
-  CHAT_FRIEND_WENT_OFFLINE,
-  CHAT_JOINED_ROOM,
-  CHAT_REJOINED_ROOM,
-  CHAT_USER_JOINED_ROOM,
-  CHAT_USER_LEFT_ROOM,
-  CHAT_RECEIVED_MESSAGE,
-  CHAT_RECEIVED_PRIVATE_MESSAGE,
-  CHAT_FAILED_PRIVATE_MESSAGE
+  CHAT_CONNECTED, CHAT_DISCONNECTED,
+  CHAT_ONLINE_FRIENDS, CHAT_FRIEND_CAME_ONLINE, CHAT_FRIEND_WENT_OFFLINE,
+  CHAT_JOINED_ROOM, CHAT_REJOINED_ROOM, CHAT_USER_JOINED_ROOM, CHAT_USER_LEFT_ROOM,
+  CHAT_RECEIVED_MESSAGE, CHAT_RECEIVED_PRIVATE_MESSAGE, CHAT_FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
 // NORMALIZE STATE, USE OBJECTS/MAPS, NOT ARRAYS (maybe)
@@ -28,7 +20,7 @@ export const chatReducer = (state = initialState, action: ChatActions): IChatSta
     case AUTH_USER_LOGOUT:
       return {...state, ...{status: "disconnected"}};
     
-    case CHAT_CONNECTED: return {...state, ...{status: "connected"}};
+    case CHAT_CONNECTED:           return {...state, ...{status: "connected"}};
     case CHAT_ONLINE_FRIENDS:      return {...state, ...{onlineFriends: action.onlineFriends}};
     case CHAT_FRIEND_CAME_ONLINE:  return {...state, ...{onlineFriends: state.onlineFriends.concat(action.friend)}};
     case CHAT_FRIEND_WENT_OFFLINE: return {...state, ...{onlineFriends: state.onlineFriends.filter(f => f !== action.friend)}};
@@ -41,11 +33,11 @@ export const chatReducer = (state = initialState, action: ChatActions): IChatSta
         ...{
           messages: state.messages.concat({
             kind: PUBLIC,
-            id: 'admin' + action.ts,
-            to: state.room,
+            id:   'admin' + action.ts,
+            to:   state.room,
             from: "messengerstatus",
             text: `${action.user} has joined the room.`,
-            ts: action.ts,
+            ts:   action.ts,
           }),
           users: state.users.concat(action.user)
         }
@@ -57,11 +49,11 @@ export const chatReducer = (state = initialState, action: ChatActions): IChatSta
         ...{
           messages: state.messages.concat({
             kind: PUBLIC,
-            id: 'admin' + action.ts,
-            to: state.room,
+            id:   'admin' + action.ts,
+            to:   state.room,
             from: "messengerstatus",
             text: `${action.user} has left the room.`,
-            ts: action.ts,
+            ts:   action.ts,
           }),
           users: state.users.filter(u => u !== action.user)
         }
@@ -77,11 +69,11 @@ export const chatReducer = (state = initialState, action: ChatActions): IChatSta
         ...{
           messages: state.messages.concat({
             kind: PRIVATE,
-            id: 'admin' + action.ts,
-            to: '',
+            id:   'admin' + action.ts,
+            to:   '',
             from: "messengerstatus",
             text: action.feedback,
-            ts: action.ts,
+            ts:   action.ts,
           })
         }
       };

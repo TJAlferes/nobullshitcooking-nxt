@@ -13,6 +13,7 @@ export function* watchEquipment() {
     takeEvery(STAFF_CREATE_NEW_EQUIPMENT,        staffCreateNewEquipmentSaga),
     takeEvery(STAFF_EDIT_EQUIPMENT,              staffEditEquipmentSaga),
     takeEvery(STAFF_DELETE_EQUIPMENT,            staffDeleteEquipmentSaga),
+    
     takeEvery(USER_CREATE_NEW_PRIVATE_EQUIPMENT, userCreateNewPrivateEquipmentSaga),
     takeEvery(USER_EDIT_PRIVATE_EQUIPMENT,       userEditPrivateEquipmentSaga),
     takeEvery(USER_DELETE_PRIVATE_EQUIPMENT,     userDeletePrivateEquipmentSaga)

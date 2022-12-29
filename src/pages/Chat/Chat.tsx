@@ -9,26 +9,26 @@ import { ChatView } from './view';
 export default function Chat(): JSX.Element {
   const dispatch = useDispatch();
   // move some of this down in the component tree?
-  const authname = useSelector(state => state.auth.authname);
-  const room = useSelector(state => state.chat.room);
-  const message = useSelector(state => state.user.message);
-  const messages = useSelector(state => state.chat.messages);
+  const authname =      useSelector(state => state.auth.authname);
+  const room =          useSelector(state => state.chat.room);
+  const message =       useSelector(state => state.user.message);
+  const messages =      useSelector(state => state.chat.messages);
   const onlineFriends = useSelector(state => state.chat.onlineFriends);
-  const status = useSelector(state => state.chat.status);
-  const theme = useSelector(state => state.theme.theme);
-  const users = useSelector(state => state.chat.users);
+  const status =        useSelector(state => state.chat.status);
+  const theme =         useSelector(state => state.theme.theme);
+  const users =         useSelector(state => state.chat.users);
   const windowFocused = useSelector(state => state.nobscapp.windowFocused);
 
-  const [ debounced, setDebounced ] = useState(false);
-  const [ feedback, setFeedback ] = useState("");
+  const [ debounced,     setDebounced ] =     useState(false);
+  const [ feedback,      setFeedback ] =      useState("");
   const [ focusedFriend, setFocusedFriend ] = useState<string>();
-  const [ focusedUser, setFocusedUser ] = useState<string>();
-  const [ loading, setLoading ] = useState(false);
+  const [ focusedUser,   setFocusedUser ] =   useState<string>();
+  const [ loading,       setLoading ] =       useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
-  const [ mobileTab, setMobileTab ] = useState("Messages");
-  const [ peopleTab, setPeopleTab ] = useState("Room");
-  const [ roomToEnter, setRoomToEnter ] = useState("");
-  const [ spamCount, setSpamCount ] = useState(1);
+  const [ mobileTab,     setMobileTab ] =     useState("Messages");
+  const [ peopleTab,     setPeopleTab ] =     useState("Room");
+  const [ roomToEnter,   setRoomToEnter ] =   useState("");
+  const [ spamCount,     setSpamCount ] =     useState(1);
 
   const messagesRef = useRef<HTMLUListElement>(null);
 
@@ -56,9 +56,9 @@ export default function Chat(): JSX.Element {
       const newestMessage: HTMLUListElement = messagesRef.current.lastElementChild as HTMLUListElement;
       if (!newestMessage) return;
 
-      const containerHeight = messagesRef.current.scrollHeight;
+      const containerHeight =     messagesRef.current.scrollHeight;
       const newestMessageHeight = newestMessage.offsetHeight + parseInt(getComputedStyle(newestMessage).marginBottom);
-      const scrollOffset = messagesRef.current.scrollTop + messagesRef.current.offsetHeight;
+      const scrollOffset =        messagesRef.current.scrollTop + messagesRef.current.offsetHeight;
 
       // cancels autoscroll if user is scrolling up through older messages
       if ((containerHeight - newestMessageHeight) <= scrollOffset) messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -68,12 +68,10 @@ export default function Chat(): JSX.Element {
     autoScroll();
   }, [messages]);
 
-  const changeRoomInput = (e: React.SyntheticEvent<EventTarget>) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
-
+  const changeRoomInput =    (e: React.SyntheticEvent<EventTarget>) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
   const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) => setMessageToSend((e.target as HTMLInputElement).value.trim());
   
   const changeMobileTab = (value: string) => setMobileTab(value);
-
   const changePeopleTab = (value: string) => setPeopleTab(value);
   
   const changeRoom = () => {
@@ -114,8 +112,7 @@ export default function Chat(): JSX.Element {
   };
 
   const focusFriend = (friend: string) => setFocusedFriend(friend);
-
-  const focusUser = (user: string) => user !== authname && setFocusedUser(user);
+  const focusUser =   (user: string) =>   user !== authname && setFocusedUser(user);
 
   const preventSpam = () => {
     setSpamCount(prev => prev + 1);
@@ -153,9 +150,8 @@ export default function Chat(): JSX.Element {
       if (!userToWhisper) return;
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
       dispatch(chatSendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
-    } else {
-      dispatch(chatSendMessage(trimmedMessage));
     }
+    else dispatch(chatSendMessage(trimmedMessage));
     /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trimmedMessage, trimmedFriend);}*/
     setMessageToSend("");
     preventSpam();

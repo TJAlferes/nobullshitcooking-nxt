@@ -5,12 +5,8 @@ import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { dataGetMyPrivateRecipesSaga, dataGetMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
-  IUserCreateNewPrivateRecipe,
-  IUserEditPrivateRecipe,
-  IUserDeletePrivateRecipe,
-  IUserCreateNewPublicRecipe,
-  IUserEditPublicRecipe,
-  IUserDisownPublicRecipe
+  IUserCreateNewPrivateRecipe, IUserEditPrivateRecipe, IUserDeletePrivateRecipe,
+  IUserCreateNewPublicRecipe, IUserEditPublicRecipe, IUserDisownPublicRecipe
 } from './types';
 
 export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | IUserCreateNewPublicRecipe)) {

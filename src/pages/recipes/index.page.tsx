@@ -22,12 +22,8 @@ function listResults(results: any) {
               </div>
 
               <div className="recipes__tags">
-                <div className="recipes__methods">
-                  {r.method_names.raw.map((m: any) => <span className="recipes__method" key={m}>{m}</span>)}
-                </div>
-                <div className="recipes__ingredients">
-                  {r.ingredient_names.raw.map((i: any) => <span className="recipes__ingredient" key={i}>{i}</span>)}
-                </div>
+                <div className="recipes__methods">{r.method_names.raw.map((m: any) => <span className="recipes__method" key={m}>{m}</span>)}</div>
+                <div className="recipes__ingredients">{r.ingredient_names.raw.map((i: any) => <span className="recipes__ingredient" key={i}>{i}</span>)}</div>
               </div>
             </div>
             

@@ -1,15 +1,11 @@
 export function Tabs({ tab, tabClick }: Props): JSX.Element {
-  function Tab({ displayText, tabName }: TabProps) {
-    return <button className={tab === tabName ? "dashboard-tab--active" : "dashboard-tab"} name={tabName} onClick={e => tabClick(e)}>{displayText}</button>;
-  }
-
   return (
     <div className="dashboard-tabs">
-      <Tab displayText="Avatar" tabName="avatar" />
-      <Tab displayText="Plans" tabName="plans" />
-      <Tab displayText="Recipes" tabName="recipes" />
-      <Tab displayText="Ingredients" tabName="ingredients" />
-      <Tab displayText="Equipment" tabName="equipment" />
+      <button className={tab === "avatar" ? "dashboard-tab--active" : "dashboard-tab"} name={"avatar"} onClick={e => tabClick(e)}>{"Avatar"}</button>
+      <button className={tab === "plans" ? "dashboard-tab--active" : "dashboard-tab"} name={"plans"} onClick={e => tabClick(e)}>{"Plans"}</button>
+      <button className={tab === "recipes" ? "dashboard-tab--active" : "dashboard-tab"} name={"recipes"} onClick={e => tabClick(e)}>{"Recipes"}</button>
+      <button className={tab === "ingredients" ? "dashboard-tab--active" : "dashboard-tab"} name={"ingredients"} onClick={e => tabClick(e)}>{"Ingredients"}</button>
+      <button className={tab === "equipment" ? "dashboard-tab--active" : "dashboard-tab"} name={"equipment"} onClick={e => tabClick(e)}>{"Equipment"}</button>
     </div>
   );
 }
@@ -17,9 +13,4 @@ export function Tabs({ tab, tabClick }: Props): JSX.Element {
 type Props = {
   tab: string;
   tabClick(e: React.SyntheticEvent<EventTarget>): void;
-};
-
-type TabProps = {
-  displayText: string;
-  tabName: string;
 };

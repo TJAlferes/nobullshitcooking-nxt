@@ -24,12 +24,8 @@ function listResults(results: any) {
   ));
 }
 
-export function Equipments({
-  facets,  // ?
-  filters,  // ?
-  results,
-  wasSearched
-}: PropsFromContext) {
+// facets, filters
+export function Equipments({ results, wasSearched }: PropsFromContext) {
   const theme = useSelector(state => state.theme.theme);
 
   return (

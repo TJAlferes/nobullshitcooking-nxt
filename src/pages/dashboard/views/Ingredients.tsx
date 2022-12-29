@@ -14,17 +14,11 @@ export function Ingredients({ deletePrivateIngredient, myPrivateIngredients }: P
       {myPrivateIngredients.length
         ? myPrivateIngredients.map(i => (
           <div className="dashboard-item" key={i.id}>
-            <span className="dashboard-item-tiny">
-              {i.image !== "nobsc-ingredient-default" ? <img src={`${url}/${i.image}-tiny`} /> : <div className="img-28-18"></div>}
-            </span>
+            <span className="dashboard-item-tiny">{i.image !== "nobsc-ingredient-default" ? <img src={`${url}/${i.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
 
-            <span className="dashboard-item-name">
-              <Link href={`/user-ingredient/${i.id}`}><a className="dashboard-item__a">{i.name}</a></Link>
-            </span>
+            <span className="dashboard-item-name"><Link href={`/user-ingredient/${i.id}`}><a className="dashboard-item__a">{i.name}</a></Link></span>
 
-            <span className="dashboard-item-action">
-              <Link href={`/user-ingredient/edit/${i.id}`}><a className="dashboard-item__a">Edit</a></Link>
-            </span>
+            <span className="dashboard-item-action"><Link href={`/user-ingredient/edit/${i.id}`}><a className="dashboard-item__a">Edit</a></Link></span>
 
             <span className="dashboard-item-delete" onClick={() => deletePrivateIngredient(i.id)}>Delete</span>
           </div>

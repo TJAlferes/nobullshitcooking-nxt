@@ -30,14 +30,10 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
   }, [message]);
 
   const confirmationCodeChange = (e: React.SyntheticEvent<EventTarget>) => setConfirmationCode((e.target as HTMLInputElement).value);
-
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
-
-  const usernameChange = (e: React.SyntheticEvent<EventTarget>) => setUsername((e.target as HTMLInputElement).value);
-
-  const passwordChange = (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
-
-  const passwordAgainChange = (e: React.SyntheticEvent<EventTarget>) => setPasswordAgain((e.target as HTMLInputElement).value);
+  const emailChange =            (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
+  const usernameChange =         (e: React.SyntheticEvent<EventTarget>) => setUsername((e.target as HTMLInputElement).value);
+  const passwordChange =         (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
+  const passwordAgainChange =    (e: React.SyntheticEvent<EventTarget>) => setPasswordAgain((e.target as HTMLInputElement).value);
 
   const registerClick = () => {
     if (loading) return;
@@ -70,7 +66,6 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
   };
 
   const validateConfirmationCode = () => confirmationCode.length > 1;
-  
   const validateRegistrationInfo = () => ((username.length > 1) && (email.length > 4) && (password.length > 5) && (password == passwordAgain));
   
   return (

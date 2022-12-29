@@ -25,8 +25,8 @@ export default function Profile(): JSX.Element {
   const [ loading,    setLoading ] =    useState(false);
   const [ tab,        setTab ] =        useState("public");
   const [ userAvatar, setUserAvatar ] = useState("nobsc-user-default");
-  const [ userFavoriteRecipes, setUserFavoriteRecipes ]= useState([]);
-  const [ userPublicRecipes,   setUserPublicRecipes ]=   useState([]);
+  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState([]);
+  const [ userPublicRecipes,   setUserPublicRecipes ] =   useState([]);
 
   useEffect(() => {
     let isSubscribed = true;

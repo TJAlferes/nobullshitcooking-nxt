@@ -25,13 +25,8 @@ function listResults(results: any) {
   return <div>Loading...</div>;
 }
 
-export function Ingredients({
-  facets,  // ?
-  filters,  // ?
-  results,
-  twoColumnBTheme,
-  wasSearched
-}: Props) {
+// facets, filters
+export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
   return (
     <div className={`search-results two-column-b ${twoColumnBTheme}`}>
       <div className="left-column">

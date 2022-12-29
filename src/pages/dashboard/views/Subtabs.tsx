@@ -1,14 +1,10 @@
 export function Subtabs({ subTab, subTabClick }: Props): JSX.Element {
-  function Subtab({ displayText, subTabName }: SubtabProps) {
-    return <button className={subTab === subTabName ? "dashboard-subtab--active" : "dashboard-subtab"} name={subTabName} onClick={e => subTabClick(e)}>{displayText}</button>;
-  }
-
   return (
     <div className="dashboard-subtabs">
-      <Subtab displayText="Private" subTabName="private" />
-      <Subtab displayText="Public" subTabName="public" />
-      <Subtab displayText="Favorite" subTabName="favorite" />
-      <Subtab displayText="Saved" subTabName="saved" />
+      <button className={subTab === "private" ? "dashboard-subtab--active" : "dashboard-subtab"} name={"private"} onClick={e => subTabClick(e)}>{"Private"}</button>
+      <button className={subTab === "public" ? "dashboard-subtab--active" : "dashboard-subtab"} name={"public"} onClick={e => subTabClick(e)}>{"Public"}</button>
+      <button className={subTab === "favorite" ? "dashboard-subtab--active" : "dashboard-subtab"} name={"favorite"} onClick={e => subTabClick(e)}>{"Favorite"}</button>
+      <button className={subTab === "saved" ? "dashboard-subtab--active" : "dashboard-subtab"} name={"saved"} onClick={e => subTabClick(e)}>{"Saved"}</button>
     </div>
   );
 }
@@ -16,9 +12,4 @@ export function Subtabs({ subTab, subTabClick }: Props): JSX.Element {
 type Props = {
   subTab: string;
   subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-};
-
-type SubtabProps = {
-  displayText: string;
-  subTabName: string;
 };

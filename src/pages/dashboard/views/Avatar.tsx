@@ -10,13 +10,8 @@ export function Avatar({ authname, onSelectFile }: Props): JSX.Element {
       <h2>Profile Picture</h2>
 
       <div className="avatar-crops">
-        <div className="avatar-crop--full">
-          <span>Full Size: </span><img className="avatar-crop__img--full" src={`${url}/${authname}`} />
-        </div>
-
-        <div className="avatar-crop--tiny">
-          <span>Tiny Size: </span><img className="avatar-crop__img--tiny" src={`${url}/${authname}-tiny`} />
-        </div>
+        <div className="avatar-crop--full"><span>Full Size: </span><img className="avatar-crop__img--full" src={`${url}/${authname}`} /></div>
+        <div className="avatar-crop--tiny"><span>Tiny Size: </span><img className="avatar-crop__img--tiny" src={`${url}/${authname}-tiny`} /></div>
       </div>
 
       <label className="dashboard-avatar__label">Change</label>

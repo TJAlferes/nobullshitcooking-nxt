@@ -6,17 +6,7 @@ import { Subtabs } from '.';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-export function PublicRecipes({
-  activateModal,
-  deactivateModal,
-  deleteName,
-  disownPublicRecipe,
-  getApplicationNode,
-  modalActive,
-  myPublicRecipes,
-  subTab,
-  subTabClick
-}: Props): JSX.Element {
+export function PublicRecipes({ activateModal, deactivateModal, deleteName, disownPublicRecipe, getApplicationNode, modalActive, myPublicRecipes, subTab, subTabClick }: Props): JSX.Element {
   return (
     <div className="dashboard-content">
       <h2 className="dashboard__h2">Public Recipes</h2>
@@ -51,13 +41,9 @@ export function PublicRecipes({
               {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
             </span>
 
-            <span className="dashboard-item-name">
-              <Link href={`/recipe/${r.id}`}><a className="dashboard-item__a">{r.title}</a></Link>
-            </span>
+            <span className="dashboard-item-name"><Link href={`/recipe/${r.id}`}><a className="dashboard-item__a">{r.title}</a></Link></span>
 
-            <span className="dashboard-item-action">
-              <Link href={`/user-recipe/public/edit/${r.id}`}><a className="dashboard-item__a">Edit</a></Link>
-            </span>
+            <span className="dashboard-item-action"><Link href={`/user-recipe/public/edit/${r.id}`}><a className="dashboard-item__a">Edit</a></Link></span>
 
             <span className="dashboard-item-delete" onClick={() => activateModal(r.id, r.title)}>Disown</span>
           </div>

@@ -43,8 +43,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
   useEffect(() => {
     const getExistingEquipmentToEdit = () => {
       if (!id) {
-        const redirectPath =
-          staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+        const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
         router.push(redirectPath);
         return;
       }
@@ -90,26 +89,27 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
+  const changeType =        (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
   const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
-
-  const changeName = (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
+
     if (editing && editingId) {
       const equipmentInfo = {id: editingId, equipmentTypeId: typeId, name, description, image, fullImage, tinyImage, prevImage};
+
       if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentInfo));
       else dispatch(userEditPrivateEquipment(equipmentInfo));
     } else {
       const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
+
       if (staffIsAuthenticated) dispatch(staffCreateNewEquipment(equipmentInfo));
       else dispatch(userCreateNewPrivateEquipment(equipmentInfo));
     }
   };
-
-  const changeType = (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
@@ -123,11 +123,9 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setTinyImage(tiny.resizedFinal);
   };
 
-  const onCropChange = (crop: Crop) => setCrop(crop);
-
-  const onCropComplete = (crop: Crop) => makeCrops(crop);
-
-  const onImageLoaded = (image: HTMLImageElement) => imageRef.current = image;
+  const onCropChange =   (crop: Crop) =>              setCrop(crop);
+  const onCropComplete = (crop: Crop) =>              makeCrops(crop);
+  const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;

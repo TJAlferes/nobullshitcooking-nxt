@@ -3,18 +3,10 @@ import { io, Socket } from 'socket.io-client';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
-  chatConnected,
-  chatDisconnected,
-  chatOnlineFriends,
-  chatFriendCameOnline,
-  chatFriendWentOffline,
-  chatJoinedRoom,
-  chatRejoinedRoom,
-  chatUserJoinedRoom,
-  chatUserLeftRoom,
-  chatReceivedMessage,
-  chatReceivedPrivateMessage,
-  chatFailedPrivateMessage
+  chatConnected, chatDisconnected,
+  chatOnlineFriends, chatFriendCameOnline, chatFriendWentOffline,
+  chatJoinedRoom, chatRejoinedRoom, chatUserJoinedRoom, chatUserLeftRoom,
+  chatReceivedMessage, chatReceivedPrivateMessage, chatFailedPrivateMessage
 } from './actions';
 import { IMessage, IChatJoinRoom, IChatSendMessage, IChatSendPrivateMessage } from './types';
 

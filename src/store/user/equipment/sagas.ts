@@ -64,8 +64,7 @@ export function* userEditPrivateEquipmentSaga(action: IUserEditPrivateEquipment)
 
 export function* userDeletePrivateEquipmentSaga(action: IUserDeletePrivateEquipment) {
   try {
-    const { data: { message } } =
-      yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
+    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
 
     yield put(userMessage(message));
     yield call(dataGetMyPrivateEquipmentsSaga);

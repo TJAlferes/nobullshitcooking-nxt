@@ -12,7 +12,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const { myFavoriteRecipes, myPlans, myPrivateRecipes, myPublicRecipes, mySavedRecipes, officialRecipes } = useSelector(state => state.data);  // don't destructure useSelector?
+  const { myFavoriteRecipes, myPlans, myPrivateRecipes, myPublicRecipes, mySavedRecipes, recipes } = useSelector(state => state.data);  // don't destructure useSelector?
   const expanded =    useSelector(state => state.planner.expanded);
   const expandedDay = useSelector(state => state.planner.expandedDay);
   const editingId =   useSelector(state => state.planner.editingId);
@@ -67,8 +67,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
     };
   }, [message]);
 
-  const activateModal = () => setModalActive(true);
-
+  const activateModal =   () => setModalActive(true);
   const deactivateModal = () => setModalActive(false);
 
   const discardChanges = () => {
@@ -133,7 +132,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       myPrivateRecipes={myPrivateRecipes}
       myPublicRecipes={myPublicRecipes}
       mySavedRecipes={mySavedRecipes}
-      officialRecipes={officialRecipes}
+      officialRecipes={recipes}
       editing={editing}
       expanded={expanded}
       expandedDay={expandedDay}

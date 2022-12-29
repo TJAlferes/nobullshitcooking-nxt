@@ -37,6 +37,10 @@ function outerHeight(el: HTMLElement|null) {
   return _height;
 }
 
+function slope(a: IMouseLocation, b: IMouseLocation) {
+  return (b.y - a.y) / (b.x - a.x);
+}
+
 function getActivateDelay() {
   const menu: HTMLElement | null = document.querySelector('.menu');  // findDOMNode? ref? useRef? forwardRef?
   if (!menu) return 0;
@@ -60,10 +64,6 @@ function getActivateDelay() {
   if ( (prevLoc.x < menuOffset.left) || (prevLoc.x > lowerRight.x) || (prevLoc.y < menuOffset.top) || (prevLoc.y > lowerRight.y) ) return 0;
 
   if ( (lastDelayLoc) && (loc.x === lastDelayLoc.x) && (loc.y === lastDelayLoc.y) ) return 0;
-
-  function slope(a: IMouseLocation, b: IMouseLocation) {
-    return (b.y - a.y) / (b.x - a.x);
-  }
 
   const decreasingCorner = upperRight;
   const increasingCorner = lowerRight;

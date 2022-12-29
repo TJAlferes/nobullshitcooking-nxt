@@ -8,12 +8,8 @@ import { IAuthUserRegister, IAuthUserVerify, IAuthUserLogin, IAuthUserLogout, IA
 
 export function* authStaffLoginSaga(action: IAuthStaffLogin) {
   try {
-    const { data: { message, staffname } } = yield call(
-      [axios, axios.post],
-      `${endpoint}/staff/auth/login`,
-      {staffInfo: {email: action.email, password: action.password}},
-      {withCredentials: true}
-    );
+    const { data: { message, staffname } } =
+      yield call([axios, axios.post], `${endpoint}/staff/auth/login`, {staffInfo: {email: action.email, password: action.password}}, {withCredentials: true});
 
     if (message == 'Signed in.') yield put(authStaffDisplay(staffname));
     else yield put(authMessage(message));
@@ -44,12 +40,8 @@ export function* authStaffLogoutSaga(action: IAuthStaffLogout) {
 
 export function* authUserLoginSaga(action: IAuthUserLogin) {
   try {
-    const { data: { message, username } } = yield call(
-      [axios, axios.post],
-      `${endpoint}/user/auth/login`,
-      {userInfo: {email: action.email, password: action.password}},
-      {withCredentials: true}
-    );
+    const { data: { message, username } } =
+      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, password: action.password}}, {withCredentials: true});
 
     if (message == 'Signed in.') yield put(authUserDisplay(username));
     else yield put(authMessage(message));

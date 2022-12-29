@@ -28,8 +28,7 @@ export default function Login(): JSX.Element {
     };
   }, [message]);
 
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
-  
+  const emailChange =    (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
   const passwordChange = (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
 
   const loginClick = () => {

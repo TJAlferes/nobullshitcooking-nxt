@@ -6,8 +6,7 @@ export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, l
       </button>
 
       <div className="current-room">
-        <span className="current-room__label">Current Room:</span>
-        <span className="current-room__value">{room}</span>
+        <span className="current-room__label">Current Room:</span><span className="current-room__value">{room}</span>
       </div>
 
       <div className="change-room">

@@ -1,6 +1,4 @@
-export const actionTypes = {
-  USER_SUBMIT_AVATAR: 'USER_SUBMIT_AVATAR'
-} as const;
+export const actionTypes = {USER_SUBMIT_AVATAR: 'USER_SUBMIT_AVATAR'} as const;
 
 export interface IUserSubmitAvatar {
   type: typeof actionTypes.USER_SUBMIT_AVATAR;

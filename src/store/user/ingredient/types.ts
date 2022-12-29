@@ -1,12 +1,6 @@
-import {
-  ICreatingIngredientInfo,
-  IEditingIngredientInfo
-} from '../../staff/ingredient/types';
+import { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
 
-export type {
-  ICreatingIngredientInfo,
-  IEditingIngredientInfo
-} from '../../staff/ingredient/types';
+export type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
 
 export const actionTypes = {
   USER_CREATE_NEW_PRIVATE_INGREDIENT: 'USER_CREATE_NEW_PRIVATE_INGREDIENT',
