@@ -4,7 +4,7 @@ import React from 'react';
 import AddToCartButton from '../../../src/pages/product/AddToCartButton';
 
 const cartAddItem = jest.fn();
-const item = {id: 18, itemTypeId: 1, name: 'Name', quantity: 1};
+const item =        {id: 18, itemTypeId: 1, name: 'Name', quantity: 1};
 
 const initialProps = {cartAddItem, item};
 

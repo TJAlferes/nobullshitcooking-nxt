@@ -4,33 +4,17 @@ import React from 'react';
 import { EquipmentRow } from '../../../../src/pages/new-recipe/components';
 import { IEquipment } from '../../../../src/store/data/types';
 
-const amount = 1;
+const amount =             1;
 const changeEquipmentRow = jest.fn();
 const equipment = [
-  {
-    id: 1,
-    name: "Cutting Board",
-    equipment_type_id: 2,
-    owner_id: 1,
-    equipment_type_name: "Preparing",
-    description: "You need one.",
-    image: "nobsc-cutting-board"
-  },
-  {
-    id: 2,
-    name: "Metal Spatula",
-    equipment_type_id: 3,
-    owner_id: 1,
-    equipment_type_name: "Cooking",
-    description: "You need one.",
-    image: "nobsc-metal-spatula"
-  },
+  {id: 1, name: "Cutting Board", equipment_type_id: 2, owner_id: 1, equipment_type_name: "Preparing", description: "You need one.", image: "nobsc-cutting-board"},
+  {id: 2, name: "Metal Spatula", equipment_type_id: 3, owner_id: 1, equipment_type_name: "Cooking",   description: "You need one.", image: "nobsc-metal-spatula"},
 ];
-const id = 1;
 const myPrivateEquipment: IEquipment[] = [];
+const id =                 1;
 const removeEquipmentRow = jest.fn();
-const rowKey = "XYZ";
-const type = 2;
+const rowKey =             "XYZ";
+const type =               2;
 
 let wrapper: ShallowWrapper;
 
@@ -70,7 +54,6 @@ describe('EquipmentRow', () => {
   });
 
   it('displays a button element with text Remove', () => {
-    expect(wrapper.find('.recipe-row__button--remove').text())
-      .toEqual("Remove");
+    expect(wrapper.find('.recipe-row__button--remove').text()).toEqual("Remove");
   });
 });

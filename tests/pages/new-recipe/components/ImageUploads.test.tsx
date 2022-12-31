@@ -3,45 +3,45 @@ import React from 'react';
 
 import { ImageUploads } from '../../../../src/pages/new-recipe/components';
 
-const cancelCookingImage = jest.fn();
-const cancelEquipmentImage = jest.fn();
-const cancelIngredientsImage = jest.fn();
-const cancelRecipeImage = jest.fn();
-const onCookingCropChange = jest.fn();
-const onCookingCropComplete = jest.fn();
-const onCookingImageLoaded = jest.fn();
-const onEquipmentCropChange = jest.fn();
-const onEquipmentCropComplete = jest.fn();
-const onEquipmentImageLoaded = jest.fn();
-const onIngredientsCropChange = jest.fn();
+const cancelCookingImage =        jest.fn();
+const cancelEquipmentImage =      jest.fn();
+const cancelIngredientsImage =    jest.fn();
+const cancelRecipeImage =         jest.fn();
+const onCookingCropChange =       jest.fn();
+const onCookingCropComplete =     jest.fn();
+const onCookingImageLoaded =      jest.fn();
+const onEquipmentCropChange =     jest.fn();
+const onEquipmentCropComplete =   jest.fn();
+const onEquipmentImageLoaded =    jest.fn();
+const onIngredientsCropChange =   jest.fn();
 const onIngredientsCropComplete = jest.fn();
-const onIngredientsImageLoaded = jest.fn();
-const onRecipeCropChange = jest.fn();
-const onRecipeCropComplete = jest.fn();
-const onRecipeImageLoaded = jest.fn();
-const onSelectCookingFile = jest.fn();
-const onSelectEquipmentFile = jest.fn();
-const onSelectIngredientsFile = jest.fn();
-const onSelectRecipeFile = jest.fn();
+const onIngredientsImageLoaded =  jest.fn();
+const onRecipeCropChange =        jest.fn();
+const onRecipeCropComplete =      jest.fn();
+const onRecipeImageLoaded =       jest.fn();
+const onSelectCookingFile =       jest.fn();
+const onSelectEquipmentFile =     jest.fn();
+const onSelectIngredientsFile =   jest.fn();
+const onSelectRecipeFile =        jest.fn();
 
 const intialProps = {
   cancelCookingImage,
   cancelEquipmentImage,
   cancelIngredientsImage,
   cancelRecipeImage,
-  cookingCrop: {aspect: 280 / 172},
-  cookingFullCrop: "",
-  cookingImage: null,
-  cookingPrevImage: "nobsc-recipe-cooking-default",
-  equipmentCrop: {aspect: 280 / 172},
-  equipmentFullCrop: "",
-  equipmentImage: null,
-  equipmentPrevImage: "nobsc-recipe-equipment-default",
-  ingredientsCrop: {aspect: 280 / 172},
-  ingredientsFullCrop: "",
-  ingredientsImage: null,
+  cookingCrop:          {aspect: 280 / 172},
+  cookingFullCrop:      "",
+  cookingImage:         null,
+  cookingPrevImage:     "nobsc-recipe-cooking-default",
+  equipmentCrop:        {aspect: 280 / 172},
+  equipmentFullCrop:    "",
+  equipmentImage:       null,
+  equipmentPrevImage:   "nobsc-recipe-equipment-default",
+  ingredientsCrop:      {aspect: 280 / 172},
+  ingredientsFullCrop:  "",
+  ingredientsImage:     null,
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
-  loading: false,
+  loading:              false,
   onCookingCropChange,
   onCookingCropComplete,
   onCookingImageLoaded,
@@ -58,20 +58,19 @@ const intialProps = {
   onSelectEquipmentFile,
   onSelectIngredientsFile,
   onSelectRecipeFile,
-  recipeCrop: {aspect: 280 / 172},
-  recipeFullCrop: "",
-  recipeImage: null,
+  recipeCrop:      {aspect: 280 / 172},
+  recipeFullCrop:  "",
+  recipeImage:     null,
   recipePrevImage: "nobsc-recipe-default",
   recipeThumbCrop: "",
-  recipeTinyCrop: ""
+  recipeTinyCrop:  ""
 };
 
 describe ('ImageUploads', () => {
   const wrapper = shallow(<ImageUploads editing={false} {...intialProps} />);
 
   it('displays a h2 element with text Image of Finished Recipe', () => {
-    expect(wrapper.find('h2').contains("Image of Finished Recipe"))
-      .toEqual(true);
+    expect(wrapper.find('h2').contains("Image of Finished Recipe")).toEqual(true);
   });
 
   // TO DO: finish

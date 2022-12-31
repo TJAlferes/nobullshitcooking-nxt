@@ -5,16 +5,16 @@ import { LoaderButton } from '../../../src/components';
 import { RegisterView } from '../../../src/pages/register/view';
 
 const handleConfirmationCodeChange = jest.fn();
-const handleEmailChange = jest.fn();
-const handlePasswordChange = jest.fn();
-const handlePasswordAgainChange = jest.fn();
-const handleRegisterClick = jest.fn();
-const handleRegisterKeyUp = jest.fn();
-const handleUsernameChange = jest.fn();
-const handleVerifyClick = jest.fn();
-const handleVerifyKeyUp = jest.fn();
-const validateConfirmationCode = jest.fn();
-const validateRegistrationInfo = jest.fn();
+const handleEmailChange =            jest.fn();
+const handlePasswordChange =         jest.fn();
+const handlePasswordAgainChange =    jest.fn();
+const handleRegisterClick =          jest.fn();
+const handleRegisterKeyUp =          jest.fn();
+const handleUsernameChange =         jest.fn();
+const handleVerifyClick =            jest.fn();
+const handleVerifyKeyUp =            jest.fn();
+const validateConfirmationCode =     jest.fn();
+const validateRegistrationInfo =     jest.fn();
 
 const initialProps = {
   handleConfirmationCodeChange,
@@ -50,8 +50,7 @@ describe('RegisterView account creation / registration', () => {
   );
 
   it('displays feedback', () => {
-    expect(wrapper.find('p.register__feedback').text())
-      .toEqual("Some message.");
+    expect(wrapper.find('p.register__feedback').text()).toEqual("Some message.");
   });
 
   it('displays a username input element', () => {
@@ -91,8 +90,7 @@ describe('RegisterView account confirmation / verification', () => {
   );
 
   it('displays feedback', () => {
-    expect(wrapper.find('p.register__feedback').text())
-      .toEqual("Some message.");
+    expect(wrapper.find('p.register__feedback').text()).toEqual("Some message.");
   });
 
   it('displays a password again input element', () => {

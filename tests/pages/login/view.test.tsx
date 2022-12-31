@@ -4,11 +4,11 @@ import React from 'react';
 import { LoaderButton } from '../../../src/components';
 import { LoginView } from '../../../src/pages/login/view';
 
-const handleEmailChange = jest.fn();
-const handleLoginClick = jest.fn();
-const handleLoginKeyUp = jest.fn();
+const handleEmailChange =    jest.fn();
+const handleLoginClick =     jest.fn();
+const handleLoginKeyUp =     jest.fn();
 const handlePasswordChange = jest.fn();
-const validateLoginInfo = jest.fn();
+const validateLoginInfo =    jest.fn();
 
 const initialProps = {
   email: "",

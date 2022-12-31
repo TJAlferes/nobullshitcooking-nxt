@@ -11,44 +11,40 @@ import { RecipeView } from '../../../src/pages/recipe/view';
 //const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const recipe = {
-  id: 1,
-  recipe_type_id: 1,
-  cuisine_id: 1,
-  author_id: 1,
-  owner_id: 1,
-  title: "Some Title",
-  recipe_type_name: "Appetizer",
-  cuisine_name: "Afghan",
-  author: "NOBSC",
-  author_avatar: "NOBSC",
-  description: "A descriptive description.",
-  active_time: "0:10:00",
-  total_time: "0:10:00",
-  directions: "Do this, then that.",
-  recipe_image: "nobsc-recipe-default",
-  equipment_image: "nobsc-recipe-equipment-default",
-  ingredients_image: "nobsc-recipe-ingredients-default",
-  cooking_image: "nobsc-recipe-cooking-default",
-  required_methods: [{method_name: "Simmer"}],
-  required_equipment: [{amount: 1, equipment_name: "Wooden Spoon"}],
-  required_ingredients: [
-    {amount: 1, measurement_name: "teaspoon", ingredient_name: "Salt"}
-  ],
-  required_subrecipes: [
-    {amount: 1, measurement_name: "cup", subrecipe_title: "Beef Stock"}
-  ]
+  id:                   1,
+  recipe_type_id:       1,
+  cuisine_id:           1,
+  author_id:            1,
+  owner_id:             1,
+  title:                "Some Title",
+  recipe_type_name:     "Appetizer",
+  cuisine_name:         "Afghan",
+  author:               "NOBSC",
+  author_avatar:        "NOBSC",
+  description:          "A descriptive description.",
+  active_time:          "0:10:00",
+  total_time:           "0:10:00",
+  directions:           "Do this, then that.",
+  recipe_image:         "nobsc-recipe-default",
+  equipment_image:      "nobsc-recipe-equipment-default",
+  ingredients_image:    "nobsc-recipe-ingredients-default",
+  cooking_image:        "nobsc-recipe-cooking-default",
+  required_methods:     [{method_name: "Simmer"}],
+  required_equipment:   [{amount: 1, equipment_name: "Wooden Spoon"}],
+  required_ingredients: [{amount: 1, measurement_name: "teaspoon", ingredient_name: "Salt"}],
+  required_subrecipes:  [{amount: 1, measurement_name: "cup", subrecipe_title: "Beef Stock"}]
 };
 
 const userFavoriteRecipe = jest.fn();
-const userSaveRecipe = jest.fn();
+const userSaveRecipe =     jest.fn();
 
 const initialProps = {
   dataMyFavoriteRecipes: [],
-  dataMyPrivateRecipes: [],
-  dataMyPublicRecipes: [],
-  dataMySavedRecipes: [],
-  message: "Some message.",
-  theme: "light",
+  dataMyPrivateRecipes:  [],
+  dataMyPublicRecipes:   [],
+  dataMySavedRecipes:    [],
+  message:               "Some message.",
+  theme:                 "light",
   userFavoriteRecipe,
   //userIsAuthenticated: false,
   userSaveRecipe
@@ -67,10 +63,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 mockedAxios.get.mockReturnValueOnce(Promise.resolve({data: recipe}));
 
 const mockRecipeBreadcrumbs = jest.fn();
-jest.mock(
-  '../../../src/components/Breadcrumbs/Breadcrumbs',
-  () => ({RecipeBreadcrumbs: mockRecipeBreadcrumbs})
-);
+jest.mock('../../../src/components/Breadcrumbs/Breadcrumbs', () => ({RecipeBreadcrumbs: mockRecipeBreadcrumbs}));
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -83,11 +76,7 @@ describe('Recipe', () => {
       return {...originalModule, useParams: () => ({})};
     });
 
-    mount(
-      <MemoryRouter>
-        <Recipe userIsAuthenticated={false} {...initialProps} />
-      </MemoryRouter>
-    );
+    mount(<MemoryRouter><Recipe userIsAuthenticated={false} {...initialProps} /></MemoryRouter>);
 
     expect(mockHistoryPush).toHaveBeenCalledWith("/home");
   });
@@ -98,11 +87,7 @@ describe('Recipe', () => {
       return {...originalModule, useParams: () => ({id: "!@#"})};
     });
 
-    mount(
-      <MemoryRouter>
-        <Recipe userIsAuthenticated={false} {...initialProps} />
-      </MemoryRouter>
-    );
+    mount(<MemoryRouter><Recipe userIsAuthenticated={false} {...initialProps} /></MemoryRouter>);
 
     expect(mockHistoryPush).toHaveBeenCalledWith("/home");
   });
@@ -113,11 +98,7 @@ describe('Recipe', () => {
       return {...originalModule, useParams: () => ({id: "1"})};
     });
 
-    const wrapper = mount(
-      <MemoryRouter>
-        <Recipe userIsAuthenticated={false} {...initialProps} />
-      </MemoryRouter>
-    );
+    const wrapper = mount(<MemoryRouter><Recipe userIsAuthenticated={false} {...initialProps} /></MemoryRouter>);
 
     await act(async () => {
       Promise.resolve(() => {
@@ -133,18 +114,13 @@ describe('Recipe', () => {
       return {...originalModule, useParams: () => ({id: "1"})};
     });
 
-    const wrapper = mount(
-      <MemoryRouter>
-        <Recipe userIsAuthenticated={false} {...initialProps} />
-      </MemoryRouter>
-    );
+    const wrapper = mount(<MemoryRouter><Recipe userIsAuthenticated={false} {...initialProps} /></MemoryRouter>);
 
     await act(async () => {
       Promise.resolve(() => {
         setImmediate(() => wrapper.update());
         expect(wrapper.find('.cuisine-view')).toHaveLength(1);
-        expect(wrapper.find(RecipeView).props().recipe.id)
-        .toEqual(1);
+        expect(wrapper.find(RecipeView).props().recipe.id).toEqual(1);
       });
     });
   });
@@ -155,11 +131,7 @@ describe('Recipe', () => {
       return {...originalModule, useParams: () => ({id: "1"})};
     });
 
-    const wrapper = mount(
-      <MemoryRouter>
-        <Recipe userIsAuthenticated={true} {...initialProps} />
-      </MemoryRouter>
-    );
+    const wrapper = mount(<MemoryRouter><Recipe userIsAuthenticated={true} {...initialProps} /></MemoryRouter>);
     
     it ('will let user favorite recipe', async () => {
       await act(async () => {

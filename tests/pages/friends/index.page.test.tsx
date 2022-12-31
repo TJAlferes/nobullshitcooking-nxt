@@ -5,10 +5,10 @@ import Friends from '../../../src/pages/friends/index.page';
 import { userAcceptFriendship, userBlockUser, userDeleteFriendship, userRejectFriendship, userRequestFriendship, userUnblockUser } from '../../../src/store/user/friendship/actions';
 
 const mockedStoreData = {
-  auth: {authname: "Person"},
-  data: {myFriendships: [{user_id: 1, username: "Jack", status: "accepted"}, {user_id: 2, username: "Jill", status: "accepted"}]},
+  auth:  {authname: "Person"},
+  data:  {myFriendships: [{user_id: 1, username: "Jack", status: "accepted"}, {user_id: 2, username: "Jill", status: "accepted"}]},
   theme: {theme: "light"},
-  user: {message: "Some message."}
+  user:  {message: "Some message."}
 };
 const mockedSelector = jest.fn(cb => cb(mockedStoreData));
 jest.spyOn(require("react-redux"), "useSelector").mockImplementation(mockedSelector);

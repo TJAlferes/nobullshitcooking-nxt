@@ -4,67 +4,29 @@ import React from 'react';
 import { SubrecipeRow } from '../../../../src/pages/new-recipe/components';
 import { IWorkRecipe } from '../../../../src/store/data/types';
 
-const amount = 1;
-const changeSubrecipeRow = jest.fn();
-const cuisine = 2;
-const cuisines = [
-  {id: 1, name: "American", nation: "America"},
-  {id: 2, name: "Japanese", nation: "Japan"},
-  {id: 3, name: "Mexican", nation: "Mexico"},
-  {id: 4, name: "Italian", nation: "Italy"}
-];
-const editing = true;
-const id = 2;
+const amount =        1;
+const cuisine =       2;
+const cuisines =      [{id: 1, name: "American", nation: "America"}, {id: 2, name: "Japanese", nation: "Japan"}, {id: 3, name: "Mexican", nation: "Mexico"}, {id: 4, name: "Italian", nation: "Italy"}];
+const editing =       true;
+const id =            2;
 const measurementId = 1;
-const measurements = [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}];
+const measurements =  [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}];
 const myFavoriteRecipes: IWorkRecipe[] = [];
 const myPrivateRecipes: IWorkRecipe[] = [];
 const myPublicRecipes: IWorkRecipe[] = [];
 const mySavedRecipes: IWorkRecipe[] = [];
 const recipes = [
-  {
-    id: 1,
-    title: "Mixed Drink",
-    recipe_type_id: 1,
-    cuisine_id: 1,
-    owner_id: 1,
-    recipe_image: "nobsc-mixed-drink"
-  },
-  {
-    id: 2,
-    title: "Zucchini Tempura",
-    recipe_type_id: 2,
-    cuisine_id: 2,
-    owner_id: 1,
-    recipe_image: "nobsc-zucchini-tempura"
-  },
-  {
-    id: 3,
-    title: "Steak Tacos",
-    recipe_type_id: 3,
-    cuisine_id: 3,
-    owner_id: 1,
-    recipe_image: "nobsc-steak-tacos"
-  },
-  {
-    id: 4,
-    title: "Green Beans",
-    recipe_type_id: 4,
-    cuisine_id: 4,
-    owner_id: 1,
-    recipe_image: "nobsc-green-beans"
-  }
+  {id: 1, title: "Mixed Drink",      recipe_type_id: 1, cuisine_id: 1, owner_id: 1, recipe_image: "nobsc-mixed-drink"},
+  {id: 2, title: "Zucchini Tempura", recipe_type_id: 2, cuisine_id: 2, owner_id: 1, recipe_image: "nobsc-zucchini-tempura"},
+  {id: 3, title: "Steak Tacos",      recipe_type_id: 3, cuisine_id: 3, owner_id: 1, recipe_image: "nobsc-steak-tacos"},
+  {id: 4, title: "Green Beans",      recipe_type_id: 4, cuisine_id: 4, owner_id: 1, recipe_image: "nobsc-green-beans"}
 ];
-const recipeTypes = [
-  {id: 1, name: "Drink"},
-  {id: 2, name: "Appetizer"},
-  {id: 3, name: "Main"},
-  {id: 4, name: "Side"}
-];
+const recipeTypes =        [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}, {id: 3, name: "Main"}, {id: 4, name: "Side"}];
+const changeSubrecipeRow = jest.fn();
 const removeSubrecipeRow = jest.fn();
-const rowKey = "XYZ";
-const selfId = 1;
-const type = 2;
+const rowKey =             "XYZ";
+const selfId =             1;
+const type =               2;
 
 let wrapper: ShallowWrapper;
 
@@ -134,7 +96,6 @@ describe('SubrecipeRow', () => {
   });
 
   it('displays a button element with text Remove', () => {
-    expect(wrapper.find('.recipe-row__button--remove').text())
-      .toEqual("Remove");
+    expect(wrapper.find('.recipe-row__button--remove').text()).toEqual("Remove");
   });
 });

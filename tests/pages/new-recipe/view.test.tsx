@@ -2,50 +2,45 @@ import { shallow } from 'enzyme';
 import React from 'react';
 
 import { ExpandCollapse, LoaderButton } from '../../../src/components';
-import {
-  EquipmentRow,
-  ImageUploads,
-  IngredientRow,
-  SubrecipeRow
-} from '../../../src/pages/new-recipe/components';
+import { EquipmentRow, ImageUploads, IngredientRow, SubrecipeRow } from '../../../src/pages/new-recipe/components';
 import { NewRecipeView } from '../../../src/pages/new-recipe/view';
 
-const addEquipmentRow = jest.fn();
-const addIngredientRow = jest.fn();
-const addSubrecipeRow = jest.fn();
-const cancelCookingImage = jest.fn();
-const cancelEquipmentImage = jest.fn();
-const cancelIngredientsImage = jest.fn();
-const cancelRecipeImage = jest.fn();
-const changeCuisine = jest.fn();
-const changeDescription = jest.fn();
-const changeDirections = jest.fn();
-const changeEquipmentRow = jest.fn();
-const changeIngredientRow = jest.fn();
-const changeMethods = jest.fn();
-const changeRecipeType = jest.fn();
-const changeSubrecipeRow = jest.fn();
-const changeTitle = jest.fn();
-const onCookingCropChange = jest.fn();
-const onCookingCropComplete = jest.fn();
-const onCookingImageLoaded = jest.fn();
-const onEquipmentCropChange = jest.fn();
-const onEquipmentCropComplete = jest.fn();
-const onEquipmentImageLoaded = jest.fn();
-const onIngredientsCropChange = jest.fn();
+const addEquipmentRow =           jest.fn();
+const addIngredientRow =          jest.fn();
+const addSubrecipeRow =           jest.fn();
+const cancelCookingImage =        jest.fn();
+const cancelEquipmentImage =      jest.fn();
+const cancelIngredientsImage =    jest.fn();
+const cancelRecipeImage =         jest.fn();
+const changeCuisine =             jest.fn();
+const changeDescription =         jest.fn();
+const changeDirections =          jest.fn();
+const changeEquipmentRow =        jest.fn();
+const changeIngredientRow =       jest.fn();
+const changeMethods =             jest.fn();
+const changeRecipeType =          jest.fn();
+const changeSubrecipeRow =        jest.fn();
+const changeTitle =               jest.fn();
+const onCookingCropChange =       jest.fn();
+const onCookingCropComplete =     jest.fn();
+const onCookingImageLoaded =      jest.fn();
+const onEquipmentCropChange =     jest.fn();
+const onEquipmentCropComplete =   jest.fn();
+const onEquipmentImageLoaded =    jest.fn();
+const onIngredientsCropChange =   jest.fn();
 const onIngredientsCropComplete = jest.fn();
-const onIngredientsImageLoaded = jest.fn();
-const onRecipeCropChange = jest.fn();
-const onRecipeCropComplete = jest.fn();
-const onRecipeImageLoaded = jest.fn();
-const onSelectCookingFile = jest.fn();
-const onSelectEquipmentFile = jest.fn();
-const onSelectIngredientsFile = jest.fn();
-const onSelectRecipeFile = jest.fn();
-const removeEquipmentRow = jest.fn();
-const removeIngredientRow = jest.fn();
-const removeSubrecipeRow = jest.fn();
-const submit = jest.fn();
+const onIngredientsImageLoaded =  jest.fn();
+const onRecipeCropChange =        jest.fn();
+const onRecipeCropComplete =      jest.fn();
+const onRecipeImageLoaded =       jest.fn();
+const onSelectCookingFile =       jest.fn();
+const onSelectEquipmentFile =     jest.fn();
+const onSelectIngredientsFile =   jest.fn();
+const onSelectRecipeFile =        jest.fn();
+const removeEquipmentRow =        jest.fn();
+const removeIngredientRow =       jest.fn();
+const removeSubrecipeRow =        jest.fn();
+const submit =                    jest.fn();
 
 const beginProps = {
   addEquipmentRow,
@@ -65,92 +60,47 @@ const beginProps = {
   changeRecipeType,
   changeSubrecipeRow,
   changeTitle,
-  cookingCrop: {aspect: 280 / 172},
-  cookingFullCrop: "",
-  cookingImage: null,
+  cookingCrop:      {aspect: 280 / 172},
+  cookingFullCrop:  "",
+  cookingImage:     null,
   cookingPrevImage: "nobsc-recipe-cooking-default",
-  cuisineId: 1,
-  cuisines: [
-    {id: 1, name: "American", nation: "America"},
-    {id: 2, name: "Japanese", nation: "Japan"}
-  ],
+  cuisineId:        1,
+  cuisines: [{id: 1, name: "American", nation: "America"}, {id: 2, name: "Japanese", nation: "Japan"}],
   equipment: [
-    {
-      id: 1,
-      name: "Cutting Board",
-      equipment_type_id: 2,
-      owner_id: 1,
-      equipment_type_name: "Preparing",
-      description: "You need one.",
-      image: "nobsc-cutting-board"
-    },
-    {
-      id: 2,
-      name: "Metal Spatula",
-      equipment_type_id: 3,
-      owner_id: 1,
-      equipment_type_name: "Cooking",
-      description: "You need one.",
-      image: "nobsc-metal-spatula"
-    }
+    {id: 1, name: "Cutting Board", equipment_type_id: 2, owner_id: 1, equipment_type_name: "Preparing", description: "You need one.", image: "nobsc-cutting-board"},
+    {id: 2, name: "Metal Spatula", equipment_type_id: 3, owner_id: 1, equipment_type_name: "Cooking",   description: "You need one.", image: "nobsc-metal-spatula"}
   ],
   ingredients: [
-    {
-      id: 1,
-      brand: null,
-      variety: "Granny Smith",
-      name: "Apple",
-      ingredient_type_id: 12,
-      owner_id: 1,
-      ingredient_type_name: "Fruit",
-      description: "Energizing",
-      image: "nobsc-apple"
-    },
-    {
-      id: 2,
-      brand: null,
-      variety: "Baby",
-      name: "Spinach",
-      ingredient_type_id: 11,
-      owner_id: 1,
-      ingredient_type_name: "Vegetable",
-      description: "Strengthening",
-      image: "nobsc-spinach"
-    }
+    {id: 1, brand: null, variety: "Granny Smith", name: "Apple",   ingredient_type_id: 12, owner_id: 1, ingredient_type_name: "Fruit",     description: "Energizing",    image: "nobsc-apple"},
+    {id: 2, brand: null, variety: "Baby",         name: "Spinach", ingredient_type_id: 11, owner_id: 1, ingredient_type_name: "Vegetable", description: "Strengthening", image: "nobsc-spinach"}
   ],
-  ingredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
-  measurements: [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
-  methods: [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
-  myFavoriteRecipes: [],
-  myPrivateEquipment: [],
+  ingredientTypes:      [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
+  measurements:         [{id: 1, name: "teaspoon"}, {id: 2, name: "Tablespoon"}],
+  methods:              [{id: 1, name: "Steam"}, {id: 2, name: "Freeze"}],
+  myFavoriteRecipes:    [],
+  myPrivateEquipment:   [],
   myPrivateIngredients: [],
-  myPrivateRecipes: [],
-  myPublicRecipes: [],
-  mySavedRecipes: [],
-  recipes: [],
-  recipeTypes: [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
-  description: "",
-  directions: "",
-  editing: false,
-  equipmentCrop: {aspect: 280 / 172},
-  equipmentFullCrop: "",
-  equipmentImage: null,
-  equipmentPrevImage: "nobsc-recipe-equipment-default",
-  equipmentRows: [
-    {key: "XYZ1", amount: "", type: "", id: ""},
-    {key: "XYZ2", amount: "", type: "", id: ""}
-  ],
-  feedback: "Some message.",
-  id: 0,
-  ingredientRows: [
-    {key: "XYZ3", amount: 1, unit: "", type: "", id: ""},
-    {key: "XYZ4", amount: 1, unit: "", type: "", id: ""}
-  ],
-  ingredientsCrop: {aspect: 280 / 172},
-  ingredientsFullCrop: "",
-  ingredientsImage: null,
+  myPrivateRecipes:     [],
+  myPublicRecipes:      [],
+  mySavedRecipes:       [],
+  recipes:              [],
+  recipeTypes:          [{id: 1, name: "Drink"}, {id: 2, name: "Appetizer"}],
+  description:          "",
+  directions:           "",
+  editing:              false,
+  equipmentCrop:        {aspect: 280 / 172},
+  equipmentFullCrop:    "",
+  equipmentImage:       null,
+  equipmentPrevImage:   "nobsc-recipe-equipment-default",
+  equipmentRows:        [{key: "XYZ1", amount: "", type: "", id: ""}, {key: "XYZ2", amount: "", type: "", id: ""}],
+  feedback:             "Some message.",
+  id:                   0,
+  ingredientRows:       [{key: "XYZ3", amount: 1, unit: "", type: "", id: ""}, {key: "XYZ4", amount: 1, unit: "", type: "", id: ""}],
+  ingredientsCrop:      {aspect: 280 / 172},
+  ingredientsFullCrop:  "",
+  ingredientsImage:     null,
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
-  loading: false,
+  loading:              false,
   usedMethods: {
      1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
      7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
@@ -173,22 +123,22 @@ const beginProps = {
   onSelectEquipmentFile,
   onSelectIngredientsFile,
   onSelectRecipeFile,
-  ownership: "private",
-  recipeCrop: {aspect: 280 / 172},
-  recipeFullCrop: "",
-  recipeImage: null,
-  recipePrevImage: "nobsc-recipe-default",
-  recipeThumbCrop: "",
-  recipeTinyCrop: "",
-  recipeTypeId: 1,
+  ownership:            "private",
+  recipeCrop:           {aspect: 280 / 172},
+  recipeFullCrop:       "",
+  recipeImage:          null,
+  recipePrevImage:      "nobsc-recipe-default",
+  recipeThumbCrop:      "",
+  recipeTinyCrop:       "",
+  recipeTypeId:         1,
   removeEquipmentRow,
   removeIngredientRow,
   removeSubrecipeRow,
   staffIsAuthenticated: false,  // test for this
   submit,
-  subrecipeRows: [],
-  theme: "light",
-  title: "Title"
+  subrecipeRows:        [],
+  theme:                "light",
+  title:                "Title"
 };
 
 afterEach(() => {
@@ -302,8 +252,7 @@ describe('NewRecipeView', () => {
     });
 
     it('displays a h2 element with text Description / Author Note', () => {
-      expect(wrapper.find('h2').contains("Description / Author Note"))
-        .toEqual(true);
+      expect(wrapper.find('h2').contains("Description / Author Note")).toEqual(true);
     });
 
     it('displays a h2 element with text Methods', () => {
@@ -365,33 +314,20 @@ describe('NewRecipeView', () => {
     // dynamic elements
 
     it('displays recipe type options', () => {
-      expect(wrapper.find('[data-test="Drink"]').props().children)
-      .toEqual("Drink");
-
-      expect(wrapper.find('[data-test="Appetizer"]').props().children)
-      .toEqual("Appetizer");
+      expect(wrapper.find('[data-test="Drink"]').props().children).toEqual("Drink");
+      expect(wrapper.find('[data-test="Appetizer"]').props().children).toEqual("Appetizer");
     });
 
     it('displays cuisine options', () => {
-      expect(wrapper.find('[data-test="American"]').props().children)
-      .toEqual("American");
-
-      expect(wrapper.find('[data-test="Japanese"]').props().children)
-      .toEqual("Japanese");
+      expect(wrapper.find('[data-test="American"]').props().children).toEqual("American");
+      expect(wrapper.find('[data-test="Japanese"]').props().children).toEqual("Japanese");
     });
 
     it('displays method inputs and labels', () => {
-      expect(wrapper.find('[data-test="1-Steam"]').props().id)
-      .toEqual("1");
-
-      expect(wrapper.find('[data-test="2-Freeze"]').props().id)
-      .toEqual("2");
-
-      expect(wrapper.find('[data-test="Steam"]').props().children)
-      .toEqual("Steam");
-
-      expect(wrapper.find('[data-test="Freeze"]').props().children)
-      .toEqual("Freeze");
+      expect(wrapper.find('[data-test="1-Steam"]').props().id).toEqual("1");
+      expect(wrapper.find('[data-test="2-Freeze"]').props().id).toEqual("2");
+      expect(wrapper.find('[data-test="Steam"]').props().children).toEqual("Steam");
+      expect(wrapper.find('[data-test="Freeze"]').props().children).toEqual("Freeze");
     });
 
     it('displays EquipmentRows', () => {

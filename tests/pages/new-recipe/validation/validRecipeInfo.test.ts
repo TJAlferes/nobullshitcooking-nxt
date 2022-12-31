@@ -21,16 +21,16 @@ describe('validRecipeInfo', () => {
     let actual: boolean;
     beforeEach(() => {
       actual = validRecipeInfo({
-        ownership: "private",
-        recipeTypeId: 1,
-        cuisineId: 1,
-        title: "Sweet Potatoes Roasted With Olive Oil",
-        description: "Very tasty!",
+        ownership:      "private",
+        recipeTypeId:   1,
+        cuisineId:      1,
+        title:          "Sweet Potatoes Roasted With Olive Oil",
+        description:    "Very tasty!",
         methods,
-        equipmentRows: [],
+        equipmentRows:  [],
         ingredientRows: [],
-        subrecipeRows: [],
-        directions: "Do this, then that.",
+        subrecipeRows:  [],
+        directions:     "Do this, then that.",
         setFeedback
       });
     });
@@ -56,16 +56,16 @@ describe('validRecipeInfo', () => {
     let actual: boolean;
     beforeEach(() => {
       actual = validRecipeInfo({
-        ownership: "",  // <-- !
-        recipeTypeId: 1,
-        cuisineId: 1,
-        title: "Sweet Potatoes Roasted With Olive Oil",
-        description: "Very tasty!",
+        ownership:      "",  // <-- !
+        recipeTypeId:   1,
+        cuisineId:      1,
+        title:          "Sweet Potatoes Roasted With Olive Oil",
+        description:    "Very tasty!",
         methods,
-        equipmentRows: [],
+        equipmentRows:  [],
         ingredientRows: [],
-        subrecipeRows: [],
-        directions: "Do this, then that.",
+        subrecipeRows:  [],
+        directions:     "Do this, then that.",
         setFeedback
       });
     });
@@ -75,13 +75,11 @@ describe('validRecipeInfo', () => {
     });
 
     it('sets feedback', () => {
-      expect(setFeedback)
-      .toHaveBeenCalledWith("You forgot to select the ownership...");
+      expect(setFeedback).toHaveBeenCalledWith("You forgot to select the ownership...");
     });
 
     it('sets timeout', () => {
-      expect(setTimeout)
-      .toHaveBeenLastCalledWith(expect.any(Function), 3000);
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 3000);
     });
 
     it('scrolls', () => {

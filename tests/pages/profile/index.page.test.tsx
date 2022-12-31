@@ -7,22 +7,11 @@ import { MemoryRouter } from 'react-router-dom';
 import Profile from '../../../src/pages/profile/index.page';
 //import { ProfileView } from '../../../src/pages/Profile/ProfileView';
 
-const data = {
-  avatar: "Person",
-  favoriteRecipes: [],
-  publicRecipes: []
-};
+const data = {avatar: "Person", favoriteRecipes: [], publicRecipes: []};
 
 const userRequestFriendship = jest.fn();
 
-const initialProps = {
-  authname: "",
-  dataMyFriendships: [],
-  isAuthenticated: false,
-  message: "",
-  oneColumnATheme: "light",
-  userRequestFriendship
-};
+const initialProps = {authname: "", dataMyFriendships: [], isAuthenticated: false, message: "", oneColumnATheme: "light", userRequestFriendship};
 
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {
@@ -69,10 +58,7 @@ describe('Profile', () => {
     () => {
       jest.mock('react-router-dom', () => {
         const originalModule = jest.requireActual('react-router-dom');
-        return {
-          ...originalModule,
-          useParams: () => ({username: "Timmy Timmy Timmy Timmy"})
-        };
+        return {...originalModule, useParams: () => ({username: "Timmy Timmy Timmy Timmy"})};
       });
 
       mount(<MemoryRouter><Profile {...initialProps} /></MemoryRouter>);
@@ -87,8 +73,7 @@ describe('Profile', () => {
       return {...originalModule, useParams: () => ({username: "TimJim"})};
     });
 
-    const wrapper =
-      mount(<MemoryRouter><Profile {...initialProps} /></MemoryRouter>);
+    const wrapper = mount(<MemoryRouter><Profile {...initialProps} /></MemoryRouter>);
 
     await act(async () => {
       Promise.resolve(() => {
