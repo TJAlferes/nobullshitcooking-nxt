@@ -8,34 +8,14 @@ import { IngredientView } from '../../../src/pages/ingredient/view';
 
 const initialProps = {
   ingredients: [
-    {
-      id: 1,
-      owner_id: 1,
-      ingredient_type_id: 12,
-      brand: null,
-      variety: "Granny Smith",
-      name: "Apple",
-      ingredient_type_name: "Fruit",
-      description: "Some note.",
-      image: "nobsc-apple"
-    },
-    {
-      id: 2,
-      owner_id: 1,
-      ingredient_type_id: 11,
-      brand: null,
-      variety: "Baby",
-      name: "Spinach",
-      ingredient_type_name: "Vegetable",
-      description: "Some note.",
-      image: "nobsc-spinach"
-    }
+    {id: 1, owner_id: 1, ingredient_type_id: 12, brand: null, variety: "Granny Smith", name: "Apple",   ingredient_type_name: "Fruit",     description: "Some note.", image: "nobsc-apple"},
+    {id: 2, owner_id: 1, ingredient_type_id: 11, brand: null, variety: "Baby",         name: "Spinach", ingredient_type_name: "Vegetable", description: "Some note.", image: "nobsc-spinach"}
   ],
   myPrivateIngredients: [],
   theme: "light"
 };
 
-const mockHistoryPush = jest.fn();
+const mockHistoryPush =           jest.fn();
 const mockIngredientBreadcrumbs = jest.fn();
 
 jest.mock('react-router-dom', () => {
@@ -43,10 +23,7 @@ jest.mock('react-router-dom', () => {
   return {...originalModule, useHistory: () => ({push: mockHistoryPush})};
 });
 
-jest.mock(
-  '../../../src/components/Breadcrumbs/Breadcrumbs',
-  () => ({IngredientBreadcrumbs: mockIngredientBreadcrumbs})
-);
+jest.mock('../../../src/components/Breadcrumbs/Breadcrumbs', () => ({IngredientBreadcrumbs: mockIngredientBreadcrumbs}));
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -76,9 +53,9 @@ describe('Ingredient', () => {
       const originalModule = jest.requireActual('react-router-dom');
       return {...originalModule, useParams: () => ({id: "1"})};
     });
-    const wrapper = mount(
-      <MemoryRouter><Ingredient {...initialProps} /></MemoryRouter>
-    );
+
+    const wrapper = mount(<MemoryRouter><Ingredient {...initialProps} /></MemoryRouter>);
+
     await act(async () => {
       Promise.resolve(() => {
         setImmediate(() => wrapper.update());
@@ -92,9 +69,9 @@ describe('Ingredient', () => {
       const originalModule = jest.requireActual('react-router-dom');
       return {...originalModule, useParams: () => ({id: "1"})};
     });
-    const wrapper = mount(
-      <MemoryRouter><Ingredient {...initialProps} /></MemoryRouter>
-    );
+    
+    const wrapper = mount(<MemoryRouter><Ingredient {...initialProps} /></MemoryRouter>);
+
     await act(async () => {
       Promise.resolve(() => {
         setImmediate(() => wrapper.update());

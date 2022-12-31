@@ -1,5 +1,5 @@
 import { SearchProvider } from '@elastic/react-search-ui';
-import { mount } from 'enzyme';
+import { mount } from 'enzyme';  // DEAD. Migrate to react-testing-library
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, Store } from 'redux';
@@ -8,23 +8,14 @@ import { createStore, Store } from 'redux';
 import { rootReducer } from '../../../src/store/rootReducer';
 import App from '../../../src/components/App/App';
 
-const storeFactory = (initialState = undefined): Store =>
-  createStore(rootReducer, initialState);
+const storeFactory = (initialState = undefined): Store => createStore(rootReducer, initialState);
 
 const store = storeFactory();
 
-const initialProps = {
-  contentTypes: [],
-  footerTheme: 'footer-light',
-  headerTheme: 'header-light',
-  mainTheme: 'main-light',
-  shadow: false
-};
+const initialProps = {contentTypes: [], footerTheme: 'footer-light', headerTheme: 'header-light', mainTheme: 'main-light', shadow: false};
 
 const mockBreadcrumbs = jest.fn();
-jest.mock('../../../src/components/Breadcrumbs/Breadcrumbs', () => ({
-  Breadcrumbs: mockBreadcrumbs
-}));
+jest.mock('../../../src/components/Breadcrumbs/Breadcrumbs', () => ({Breadcrumbs: mockBreadcrumbs}));
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -33,13 +24,7 @@ afterEach(() => {
 describe('App', () => {
   describe('when pathname is /login', () => {
     //<MemoryRouter initialEntries={["/login"]}>
-    const wrapper = mount(
-      <Provider store={store}>
-        <SearchProvider config={{}}>
-          <App {...initialProps} />
-        </SearchProvider>
-      </Provider>
-    );
+    const wrapper = mount(<Provider store={store}><SearchProvider config={{}}><App {...initialProps} /></SearchProvider></Provider>);
 
     it('does not display a Header component', () => {
       expect(wrapper.find('.header')).toHaveLength(0);
@@ -56,13 +41,7 @@ describe('App', () => {
 
   describe('when pathname is /register', () => {
     //<MemoryRouter initialEntries={["/register"]}>
-    const wrapper = mount(
-      <Provider store={store}>
-        <SearchProvider config={{}}>
-          <App {...initialProps} />
-        </SearchProvider>
-      </Provider>
-    );
+    const wrapper = mount(<Provider store={store}><SearchProvider config={{}}><App {...initialProps} /></SearchProvider></Provider>);
 
     it('does not display a Header component', () => {
       expect(wrapper.find('.header')).toHaveLength(0);
@@ -79,13 +58,7 @@ describe('App', () => {
 
   describe('when pathname is /verify', () => {
     //<MemoryRouter initialEntries={["/verify"]}>
-    const wrapper = mount(
-      <Provider store={store}>
-        <SearchProvider config={{}}>
-          <App {...initialProps} />
-        </SearchProvider>
-      </Provider>
-    );
+    const wrapper = mount(<Provider store={store}><SearchProvider config={{}}><App {...initialProps} /></SearchProvider></Provider>);
 
     it('does not display a Header component', () => {
       expect(wrapper.find('.header')).toHaveLength(0);
@@ -102,13 +75,7 @@ describe('App', () => {
 
   describe('when not at auth page', () => {
     //<MemoryRouter initialEntries={["/"]}>
-    const wrapper = mount(
-      <Provider store={store}>
-        <SearchProvider config={{}}>
-          <App {...initialProps} />
-        </SearchProvider>
-      </Provider>
-    );
+    const wrapper = mount(<Provider store={store}><SearchProvider config={{}}><App {...initialProps} /></SearchProvider></Provider>);
 
     it('displays a Header component', () => {
       expect(wrapper.find('.header')).toHaveLength(1);

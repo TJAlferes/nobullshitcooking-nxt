@@ -22,9 +22,7 @@ const initialProps = {
   oneColumnATheme: "light",
   staffMessage: "",
   userMessage: "",
-  dataContentTypes: [
-    {id: 1, parent_id: 0, name: "Page", path: "/page"}
-  ],
+  dataContentTypes: [{id: 1, parent_id: 0, name: "Page", path: "/page"}],
   value: [{type: 'paragraph', children: [{text: 'COOK EAT WIN REPEAT'}]}],
   editorClearWork,
   editorSetCreating,
@@ -37,7 +35,7 @@ const initialProps = {
 };
 
 window.getSelection = jest.fn();
-window.scrollTo = jest.fn();
+window.scrollTo =     jest.fn();
 
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {

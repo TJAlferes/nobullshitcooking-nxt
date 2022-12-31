@@ -4,42 +4,35 @@ import { MemoryRouter } from 'react-router-dom';
 
 import NewIngredient from '../../../src/pages/new-ingredient/index.page';
 
-const staffCreateNewIngredient = jest.fn();
-const staffEditIngredient = jest.fn();
+const staffCreateNewIngredient =       jest.fn();
+const staffEditIngredient =            jest.fn();
 const userCreateNewPrivateIngredient = jest.fn();
-const userEditPrivateIngredient = jest.fn();
+const userEditPrivateIngredient =      jest.fn();
 
 const initialProps = {
-  dataIngredients: [
-    {
-      id: 24,
-      brand: null,
-      variety: "Baby",
-      name: "Spinach",
-      ingredient_type_id: 11,
-      owner_id: 1,
-      ingredient_type_name: "Vegetable",
-      description: "Strengthening",
-      image: "nobsc-spinach"
-    }
-  ],
-  dataIngredientTypes: [
-    {id: 11, name: "Vegetable"},
-    {id: 12, name: "Fruit"}
-  ],
-  dataMyPrivateIngredients: [
-    {
-      id: 2,
-      brand: null,
-      variety: "Baby",
-      name: "My Spinach",
-      ingredient_type_id: 11,
-      owner_id: 1,
-      ingredient_type_name: "Vegetable",
-      description: "Strengthening",
-      image: "my-spinach"
-    }
-  ],
+  dataIngredients: [{
+    id:                   24,
+    brand:                null,
+    variety:              "Baby",
+    name:                 "Spinach",
+    ingredient_type_id:   11,
+    owner_id:             1,
+    ingredient_type_name: "Vegetable",
+    description:          "Strengthening",
+    image:                "nobsc-spinach"
+  }],
+  dataIngredientTypes: [{id: 11, name: "Vegetable"}, {id: 12, name: "Fruit"}],
+  dataMyPrivateIngredients: [{
+    id:                   2,
+    brand:                null,
+    variety:              "Baby",
+    name:                 "My Spinach",
+    ingredient_type_id:   11,
+    owner_id:             1,
+    ingredient_type_name: "Vegetable",
+    description:          "Strengthening",
+    image:                "my-spinach"
+  }],
   oneColumnATheme: "one-column-a-light",
   staffCreateNewIngredient,
   staffEditIngredient,
@@ -71,11 +64,7 @@ describe('NewIngredient', () => {
         return {...originalModule, useParams: () => ({})};
       });
 
-      mount(
-        <MemoryRouter>
-          <NewIngredient editing={false} {...initialProps} />
-        </MemoryRouter>
-      );
+      mount(<MemoryRouter><NewIngredient editing={false} {...initialProps} /></MemoryRouter>);
 
       expect(mockHistoryPush).not.toHaveBeenCalled();
     });
@@ -88,11 +77,7 @@ describe('NewIngredient', () => {
         return {...originalModule, useParams: () => ({})};
       });
 
-      mount(
-        <MemoryRouter>
-          <NewIngredient editing={true} {...initialProps} />
-        </MemoryRouter>
-      );
+      mount(<MemoryRouter><NewIngredient editing={true} {...initialProps} /></MemoryRouter>);
       
       expect(mockHistoryPush).toHaveBeenCalledWith("/dashboard");
     });

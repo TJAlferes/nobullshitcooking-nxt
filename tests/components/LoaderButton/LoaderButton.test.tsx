@@ -18,26 +18,22 @@ const initialProps = {
 
 describe('LoaderButton', () => {
   it('displays text when not loading', () => {
-    const wrapper =
-      shallow(<LoaderButton isLoading={false} {...initialProps} />);
+    const wrapper = shallow(<LoaderButton isLoading={false} {...initialProps} />);
     expect(wrapper.find('button').text()).toEqual("Some Text");
   });
 
   it('is not disabled when not loading', () => {
-    const wrapper =
-      shallow(<LoaderButton isLoading={false} {...initialProps} />);
+    const wrapper = shallow(<LoaderButton isLoading={false} {...initialProps} />);
     expect(wrapper.find('button').props().disabled).toEqual(false);;
   });
 
   it('displays loadingText when loading', () => {
-    const wrapper =
-      shallow(<LoaderButton isLoading={true} {...initialProps} />);
+    const wrapper = shallow(<LoaderButton isLoading={true} {...initialProps} />);
     expect(wrapper.find('button').text()).toEqual("Some Loading Text...");;
   });
 
   it('is disabled when loading', () => {
-    const wrapper =
-      shallow(<LoaderButton isLoading={true} {...initialProps} />);
+    const wrapper = shallow(<LoaderButton isLoading={true} {...initialProps} />);
     expect(wrapper.find('button').props().disabled).toEqual(true);;
   });
 });

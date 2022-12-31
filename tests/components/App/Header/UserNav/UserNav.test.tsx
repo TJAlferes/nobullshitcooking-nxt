@@ -42,10 +42,8 @@ describe('UserNav', () => {
     );
 
     it(`displays a Link element to "/help" with text "Help"`, () => {
-      expect(wrapper.find('[data-test="help"]').at(0).prop('to'))
-      .toEqual("/help");
-      expect(wrapper.find('[data-test="help"]').at(0).props().children)
-      .toEqual("Help");
+      expect(wrapper.find('[data-test="help"]').at(0).prop('to')).toEqual("/help");
+      expect(wrapper.find('[data-test="help"]').at(0).props().children).toEqual("Help");
     });
   });
 
@@ -65,9 +63,7 @@ describe('UserNav', () => {
       expect(wrapper.find('i.moon-symbol')).toHaveLength(1);
     });
 
-    it (`
-      displays a span element with className "mode-button" and text "☾ Night"
-    `, () => {
+    it (`displays a span element with className "mode-button" and text "☾ Night"`, () => {
       expect(wrapper.find('span.mode-button').text()).toEqual("☾ Night");
     });
 
@@ -93,9 +89,7 @@ describe('UserNav', () => {
       expect(wrapper.find('i.sun-symbol')).toHaveLength(1);
     });
 
-    it (`
-      displays a span element with className "mode-button" and text "☀︎ Day"
-    `, () => {
+    it (`displays a span element with className "mode-button" and text "☀︎ Day"`, () => {
       expect(wrapper.find('span.mode-button').text()).toEqual("☀︎ Day");
     });
 
@@ -117,22 +111,14 @@ describe('UserNav', () => {
       </MemoryRouter>
     );
 
-    it(`
-      displays a Link element to "/register" with text "Create Account"
-    `, () => {
-      expect(wrapper.find('[data-test="register"]').at(0).prop('to'))
-      .toEqual("/register");
-      expect(wrapper.find('[data-test="register"]').at(0).props().children)
-      .toEqual("Create Account");
+    it(`displays a Link element to "/register" with text "Create Account"`, () => {
+      expect(wrapper.find('[data-test="register"]').at(0).prop('to')).toEqual("/register");
+      expect(wrapper.find('[data-test="register"]').at(0).props().children).toEqual("Create Account");
     });
 
-    it(`
-      displays a Link element to "/login" with text "Create Account"
-    `, () => {
-      expect(wrapper.find('[data-test="login"]').at(0).prop('to'))
-      .toEqual("/login");
-      expect(wrapper.find('[data-test="login"]').at(0).props().children)
-      .toEqual("Sign In");
+    it(`displays a Link element to "/login" with text "Create Account"`, () => {
+      expect(wrapper.find('[data-test="login"]').at(0).prop('to')).toEqual("/login");
+      expect(wrapper.find('[data-test="login"]').at(0).props().children).toEqual("Sign In");
     });
   });
 
@@ -148,24 +134,13 @@ describe('UserNav', () => {
       </MemoryRouter>
     );
 
-    it(`
-      displays a Link element to "/staff-dashboard" with text "Hello, Person"
-    `, () => {
-      expect(wrapper.find('[data-test="staff-dashboard"]').at(0).prop('to'))
-      .toEqual("/staff-dashboard");
-      expect(
-        wrapper.find('[data-test="staff-dashboard"]').at(0).props().children
-      )
-      .toEqual("Hello, Person");
+    it(`displays a Link element to "/staff-dashboard" with text "Hello, Person"`, () => {
+      expect(wrapper.find('[data-test="staff-dashboard"]').at(0).prop('to')).toEqual("/staff-dashboard");
+      expect(wrapper.find('[data-test="staff-dashboard"]').at(0).props().children).toEqual("Hello, Person");
     });
 
-    it (`
-      displays a span element
-      with className "user-nav__link--authenticated" and
-      with text "Sign Out"
-    `, () => {
-      expect(wrapper.find('span.user-nav__link--authenticated').text())
-      .toEqual("Sign Out");
+    it (`displays a span element with className "user-nav__link--authenticated" and with text "Sign Out"`, () => {
+      expect(wrapper.find('span.user-nav__link--authenticated').text()).toEqual("Sign Out");
     });
 
     it('logs staff out and redirects home', () => {
@@ -187,20 +162,12 @@ describe('UserNav', () => {
       </MemoryRouter>
     );
 
-    it(`
-      displays a Link element to "/dashboard" with text "Hello, Person"
-    `, () => {
-      expect(wrapper.find('[data-test="dashboard"]').at(0).prop('to'))
-      .toEqual("/dashboard");
-      expect(wrapper.find('[data-test="dashboard"]').at(0).props().children)
-      .toEqual("Hello, Person");
+    it(`displays a Link element to "/dashboard" with text "Hello, Person"`, () => {
+      expect(wrapper.find('[data-test="dashboard"]').at(0).prop('to')).toEqual("/dashboard");
+      expect(wrapper.find('[data-test="dashboard"]').at(0).props().children).toEqual("Hello, Person");
     });
 
-    it (`
-      displays a span element
-      with className "user-nav__link--authenticated" and
-      with text "Sign Out"
-    `, () => {
+    it (`displays a span element with className "user-nav__link--authenticated" and with text "Sign Out"`, () => {
       expect(wrapper.find('span.user-nav__link--authenticated').text())
       .toEqual("Sign Out");
     });

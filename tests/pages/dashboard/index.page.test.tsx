@@ -6,14 +6,14 @@ import Dashboard from '../../../src/pages/dashboard/index.page';
 import { DashboardView } from '../../../src/pages/dashboard/view';
 
 //const authUpdateLocalAvatar = jest.fn();
-const userDeletePlan = jest.fn();
-const userDeletePrivateEquipment = jest.fn();
+const userDeletePlan =              jest.fn();
+const userDeletePrivateEquipment =  jest.fn();
 const userDeletePrivateIngredient = jest.fn();
-const userDeletePrivateRecipe = jest.fn();
-const userDisownPublicRecipe = jest.fn();
-const userSubmitAvatar = jest.fn();
-const userUnfavoriteRecipe = jest.fn();
-const userUnsaveRecipe = jest.fn();
+const userDeletePrivateRecipe =     jest.fn();
+const userDisownPublicRecipe =      jest.fn();
+const userSubmitAvatar =            jest.fn();
+const userUnfavoriteRecipe =        jest.fn();
+const userUnsaveRecipe =            jest.fn();
 
 const initialProps = {
   authname: "Person",
@@ -43,11 +43,7 @@ window.scrollTo = jest.fn();
 let wrapper: ReactWrapper;
 
 beforeEach(() => {
-  wrapper = mount(
-    <MemoryRouter>
-      <Dashboard creatingPlan={false} editingId={null} {...initialProps} />
-    </MemoryRouter>
-  );
+  wrapper = mount(<MemoryRouter><Dashboard creatingPlan={false} editingId={null} {...initialProps} /></MemoryRouter>);
 });
 
 afterEach(() => {

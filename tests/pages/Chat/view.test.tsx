@@ -12,21 +12,21 @@ jest.mock('react', () => {
   return {...originalModule, useRef: mockUseRef};
 });
 
-const changeMessageInput = jest.fn();
-const changeMobileTab = jest.fn();
-const changePeopleTab = jest.fn();
-const changeRoom = jest.fn();
-const changeRoomInput = jest.fn();
-const connect = jest.fn();
-const disconnect = jest.fn();
-const focusFriend = jest.fn();
-const focusUser = jest.fn();
-const messagesRef = useRef<HTMLUListElement>(null);
-const sendMessage = jest.fn();
+const changeMessageInput =  jest.fn();
+const changeMobileTab =     jest.fn();
+const changePeopleTab =     jest.fn();
+const changeRoom =          jest.fn();
+const changeRoomInput =     jest.fn();
+const connect =             jest.fn();
+const disconnect =          jest.fn();
+const focusFriend =         jest.fn();
+const focusUser =           jest.fn();
+const messagesRef =         useRef<HTMLUListElement>(null);
+const sendMessage =         jest.fn();
 const startPrivateMessage = jest.fn();
 
 const initialProps = {
-  authname: "Person",
+  authname:      "Person",
   changeMessageInput,
   changeMobileTab,
   changePeopleTab,
@@ -34,25 +34,25 @@ const initialProps = {
   changeRoomInput,
   connect,
   disconnect,
-  feedback: "Some message.",
+  feedback:      "Some message.",
   focusedFriend: null,
   focusFriend,
-  focusedUser: null,
+  focusedUser:   null,
   focusUser,
-  loading: false,
-  messages: [],
+  loading:       false,
+  messages:      [],
   messagesRef,
   messageToSend: "How goes it?",
-  mobileTab: "Options",
+  mobileTab:     "Options",
   onlineFriends: [],
-  peopleTab: "Room",
-  room: "5067",
-  roomToEnter: "",
+  peopleTab:     "Room",
+  room:          "5067",
+  roomToEnter:   "",
   sendMessage,
   startPrivateMessage,
-  status: "Disconnected",
-  theme: "light",
-  users: []
+  status:        "Disconnected",
+  theme:         "light",
+  users:         []
 };
 
 afterEach(() => {
@@ -63,8 +63,7 @@ describe('ChatView', () => {
   const wrapper = shallow(<ChatView {...initialProps} />);
 
   it('displays feedback', () => {
-    expect(wrapper.find('p.feedback').text())
-      .toEqual("Some message.");
+    expect(wrapper.find('p.feedback').text()).toEqual("Some message.");
   });
 
   it('displays OptionsView component', () => {

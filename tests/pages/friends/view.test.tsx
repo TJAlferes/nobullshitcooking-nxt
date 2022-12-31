@@ -10,14 +10,14 @@ const myFriendships = [
   {user_id: 5, username: "Jane", status: "blocked"}
 ];
 
-const acceptFriendship = jest.fn();
-const blockUser = jest.fn();
-const deleteFriendship = jest.fn();
-const inputChange = jest.fn();
-const rejectFriendship = jest.fn();
+const acceptFriendship =  jest.fn();
+const blockUser =         jest.fn();
+const deleteFriendship =  jest.fn();
+const inputChange =       jest.fn();
+const rejectFriendship =  jest.fn();
 const requestFriendship = jest.fn();
-const tabChange = jest.fn();
-const unblockUser = jest.fn();
+const tabChange =         jest.fn();
+const unblockUser =       jest.fn();
 
 const initialProps = {
   acceptFriendship,
@@ -51,13 +51,11 @@ describe('FriendsView', () => {
   });
 
   it('displays a button element with text Send Friend Request', () => {
-    expect(wrapper.find('button[name="friends-find-request"]').text())
-      .toEqual("Send Friend Request");
+    expect(wrapper.find('button[name="friends-find-request"]').text()).toEqual("Send Friend Request");
   });
 
   it('displays a button element with text Block User', () => {
-    expect(wrapper.find('button[name="friends-find-block"]').text())
-      .toEqual("Block User");
+    expect(wrapper.find('button[name="friends-find-block"]').text()).toEqual("Block User");
   });
 
   it('displays a button element with text Current', () => {
@@ -78,12 +76,8 @@ describe('FriendsView', () => {
 });
 
 describe('when on Pending tab', () => {
-  it(
-    'displays accept and reject button elements for each pending friend',
-    () => {
-      const wrapper =
-        shallow(<FriendsView tab="pending-received" {...initialProps} />);
-
+  it('displays accept and reject button elements for each pending friend', () => {
+      const wrapper = shallow(<FriendsView tab="pending-received" {...initialProps} />);
       expect(wrapper.find('button[name="accept"]')).toHaveLength(1);
       expect(wrapper.find('button[name="reject"]')).toHaveLength(1);
     }
@@ -93,7 +87,6 @@ describe('when on Pending tab', () => {
 describe('when on Blocked tab', () => {
   it('displays an unblock button element for each blocked user', () => {
     const wrapper = shallow(<FriendsView tab="blocked" {...initialProps} />);
-    
     expect(wrapper.find('button[name="unblock"]')).toHaveLength(1);
   });
 });

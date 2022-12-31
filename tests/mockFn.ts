@@ -1,5 +1,4 @@
 /*
-
 This is used in unit test files (like Login.test.tsx)
 of connected React components (like Login.tsx)
 that use react-redux's useDispatch with our redux action creators.
@@ -15,13 +14,10 @@ was explicitly declared in the React component's props.
 This was when we used connect, mapStateToProps, and mapDispatchToProps.
 
 Now, we instead use the useSelector and useDispatch hooks,
-as they seem to be more idiomatic when combining Next.js and redux
+as they seem to be more idiomatic when combining Next.js and redux.
 
-As with almost anything, note there may be an even better way to do this.
-
+As with almost anything, there is likely a better way to do this.
 */
-export default function mockFn<T extends (...args: any[]) => any>(
-  fn: T
-): jest.MockedFunction<T> {
+export default function mockFn<T extends (...args: any[]) => any>(fn: T): jest.MockedFunction<T> {
   return fn as jest.MockedFunction<T>;
 }

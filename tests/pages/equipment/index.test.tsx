@@ -8,30 +8,14 @@ import { EquipmentView } from '../../../src/pages/equipment/view';
 
 const initialProps = {
   equipment: [
-    {
-      id: 1,
-      owner_id: 1,
-      equipment_type_id: 3,
-      name: "Metal Spatula",
-      equipment_type_name: "Cooking",
-      description: "Some note.",
-      image: "nobsc-metal-spatula"
-    },
-    {
-      id: 1,
-      owner_id: 1,
-      equipment_type_id: 2,
-      name: "Cutting Board",
-      equipment_type_name: "Preparing",
-      description: "Some note.",
-      image: "nobsc-cutting-board"
-    }
+    {id: 1, owner_id: 1, equipment_type_id: 3, name: "Metal Spatula", equipment_type_name: "Cooking",   description: "Some note.", image: "nobsc-metal-spatula"},
+    {id: 1, owner_id: 1, equipment_type_id: 2, name: "Cutting Board", equipment_type_name: "Preparing", description: "Some note.", image: "nobsc-cutting-board"}
   ],
   myPrivateEquipment: [],
   theme: "light"
 };
 
-const mockHistoryPush = jest.fn();
+const mockHistoryPush =          jest.fn();
 const mockEquipmentBreadcrumbs = jest.fn();
 
 jest.mock('react-router-dom', () => {
@@ -39,10 +23,7 @@ jest.mock('react-router-dom', () => {
   return {...originalModule, useHistory: () => ({push: mockHistoryPush})};
 });
 
-jest.mock(
-  '../../../src/components/Breadcrumbs/Breadcrumbs',
-  () => ({EquipmentBreadcrumbs: mockEquipmentBreadcrumbs})
-);
+jest.mock('../../../src/components/Breadcrumbs/Breadcrumbs', () => ({EquipmentBreadcrumbs: mockEquipmentBreadcrumbs}));
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -77,8 +58,7 @@ describe('Equipment', () => {
       return {...originalModule, useParams: () => ({id: "1"})};
     });
 
-    const wrapper =
-      mount(<MemoryRouter><Equipment {...initialProps} /></MemoryRouter>);
+    const wrapper = mount(<MemoryRouter><Equipment {...initialProps} /></MemoryRouter>);
 
     await act(async () => {
       Promise.resolve(() => {
@@ -94,8 +74,7 @@ describe('Equipment', () => {
       return {...originalModule, useParams: () => ({id: "1"})};
     });
 
-    const wrapper =
-      mount(<MemoryRouter><Equipment {...initialProps} /></MemoryRouter>);
+    const wrapper = mount(<MemoryRouter><Equipment {...initialProps} /></MemoryRouter>);
 
     await act(async () => {
       Promise.resolve(() => {

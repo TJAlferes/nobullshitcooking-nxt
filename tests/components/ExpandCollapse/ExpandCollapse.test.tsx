@@ -2,9 +2,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 
 import { ExpandCollapse } from '../../../src/components';
-import {
-  ExpandCollapseView
-} from '../../../src/components/ExpandCollapse/ExpandCollapseView';
+import { ExpandCollapseView } from '../../../src/components/ExpandCollapse/ExpandCollapseView';
 
 describe('ExpandCollapse', () => {
   it('expands and collapses', () => {

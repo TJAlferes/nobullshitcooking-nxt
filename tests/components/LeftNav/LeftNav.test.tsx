@@ -9,11 +9,7 @@ const initialProps = {authname: "Person", theme: "light"};
 describe ('LeftNav', () => {
 
   describe('when user is unauthenticated', () => {
-    const wrapper = mount(
-      <MemoryRouter>
-        <LeftNav userIsAuthenticated={false} {...initialProps} />
-      </MemoryRouter>
-    );
+    const wrapper = mount(<MemoryRouter><LeftNav userIsAuthenticated={false} {...initialProps} /></MemoryRouter>);
     
     it(`displays a link to "/home" with text "News"`, () => {
       const element = wrapper.find('[data-test="home"]').at(0);
@@ -21,29 +17,19 @@ describe ('LeftNav', () => {
       expect(element.props().children).toEqual("News");
     });
 
-    it(`
-      displays a link to "/page/guide/food/nutrition/supplements"
-      with text "Supplements"
-    `, () => {
+    it(`displays a link to "/page/guide/food/nutrition/supplements" with text "Supplements"`, () => {
       const element = wrapper.find('[data-test="supplements"]').at(0);
-      expect(element.prop('to'))
-        .toEqual("/page/guide/food/nutrition/supplements");
+      expect(element.prop('to')).toEqual("/page/guide/food/nutrition/supplements");
       expect(element.props().children).toEqual("Supplements");
     });
 
-    it(`
-      displays a link to "/supply/kitchen-equipment"
-      with text "Equipment"
-    `, () => {
+    it(`displays a link to "/supply/kitchen-equipment" with text "Equipment"`, () => {
       const element = wrapper.find('[data-test="equipment"]').at(0);
       expect(element.prop('to')).toEqual("/supply/kitchen-equipment");
       expect(element.props().children).toEqual("Equipment");
     });
 
-    it(`
-      displays a link to "/page/promo/water-filtration"
-      with text "Water Filtration"
-    `, () => {
+    it(`displays a link to "/page/promo/water-filtration" with text "Water Filtration"`, () => {
       const element = wrapper.find('[data-test="filtration"]').at(0);
       expect(element.prop('to')).toEqual("/page/promo/water-filtration");
       expect(element.props().children).toEqual("Water Filtration");
@@ -93,11 +79,7 @@ describe ('LeftNav', () => {
   });
 
   describe('when user is authenticated', () => {
-    const wrapper = mount(
-      <MemoryRouter>
-        <LeftNav userIsAuthenticated={true} {...initialProps} />
-      </MemoryRouter>
-    );
+    const wrapper = mount(<MemoryRouter><LeftNav userIsAuthenticated={true} {...initialProps} /></MemoryRouter>);
     
     it(`displays a link to "/dashboard" with text "Person"`, () => {
       const element = wrapper.find('[data-test="dashboard"]').at(0);

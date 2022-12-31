@@ -10,8 +10,7 @@ import { Menu } from '../../../../../src/components/App/Header/SiteNav/Menu/Menu
 import { SiteNav } from '../../../../../src/components/App/Header/SiteNav/SiteNav';
 import { rootReducer } from '../../../../../src/store/rootReducer';
 
-const storeFactory = (initialState = undefined): Store =>
-  createStore(rootReducer, initialState);
+const storeFactory = (initialState = undefined): Store => createStore(rootReducer, initialState);
 
 const store = storeFactory();
 
@@ -20,13 +19,7 @@ const menuShadowShow = jest.fn();
 
 const initialProps = {menuShadowHide, menuShadowShow};
 
-const wrapper = mount(
-  <Provider store={store}>
-    <MemoryRouter>
-      <SiteNav {...initialProps} />
-    </MemoryRouter>
-  </Provider>
-);
+const wrapper = mount(<Provider store={store}><MemoryRouter><SiteNav {...initialProps} /></MemoryRouter></Provider>);
 
 afterEach(() => {
   jest.clearAllMocks();
