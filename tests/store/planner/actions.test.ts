@@ -27,13 +27,7 @@ const {
   PLANNER_SET_PLAN_DATA
 } = actionTypes;
 
-const recipeOne = {
-  key: "ABC",
-  id: 503,
-  owner_id: 1,
-  title: "Pho",
-  recipe_image: "nobsc-pho"
-};
+const recipeOne = {key: "ABC", id: 503, owner_id: 1, title: "Pho", recipe_image: "nobsc-pho"};
 
 describe('plannerClickDay action creator', () => {
   it('returns the correct action type', () => {
@@ -47,8 +41,7 @@ describe('plannerClickDay action creator', () => {
 
 describe('plannerAddRecipeToDay action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerAddRecipeToDay(5, recipeOne).type)
-      .toEqual(PLANNER_ADD_RECIPE_TO_DAY);
+    expect(plannerAddRecipeToDay(5, recipeOne).type).toEqual(PLANNER_ADD_RECIPE_TO_DAY);
   });
 
   it('returns the correct day', () => {
@@ -62,8 +55,7 @@ describe('plannerAddRecipeToDay action creator', () => {
 
 describe('plannerRemoveRecipeFromDay action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerRemoveRecipeFromDay(5, 0).type)
-      .toEqual(PLANNER_REMOVE_RECIPE_FROM_DAY);
+    expect(plannerRemoveRecipeFromDay(5, 0).type).toEqual(PLANNER_REMOVE_RECIPE_FROM_DAY);
   });
 
   it('returns the correct day', () => {
@@ -77,8 +69,7 @@ describe('plannerRemoveRecipeFromDay action creator', () => {
 
 describe('plannerReorderRecipeInDay action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerReorderRecipeInDay(0, 2).type)
-      .toEqual(PLANNER_REORDER_RECIPE_IN_DAY);
+    expect(plannerReorderRecipeInDay(0, 2).type).toEqual(PLANNER_REORDER_RECIPE_IN_DAY);
   });
 
   it('returns the correct dragIndex', () => {
@@ -114,8 +105,7 @@ describe('plannerSetEditingId action creator', () => {
 
 describe('plannerSetPlanName action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerSetPlanName("A Great Plan").type)
-      .toEqual(PLANNER_SET_PLAN_NAME);
+    expect(plannerSetPlanName("A Great Plan").type).toEqual(PLANNER_SET_PLAN_NAME);
   });
 
   it('returns the correct name', () => {
@@ -125,9 +115,7 @@ describe('plannerSetPlanName action creator', () => {
 
 describe('plannerSetPlanData action creator', () => {
   const dataToSet = {
-    1: [],
-    2: [recipeOne],
-    3: [],  4: [],  5: [],  6: [],  7: [],
+    1: [],  2: [recipeOne], 3: [],  4: [],  5: [],  6: [],  7: [],
     8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
    15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
    22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []

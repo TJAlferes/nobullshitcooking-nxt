@@ -1,8 +1,4 @@
-import {
-  cartAddItem,
-  cartRemoveItem,
-  cartEmpty
-} from '../../../src/store/cart/actions';
+import { cartAddItem, cartRemoveItem, cartEmpty } from '../../../src/store/cart/actions';
 import { actionTypes} from '../../../src/store/cart/types';
 
 const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;

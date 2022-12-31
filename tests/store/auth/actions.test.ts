@@ -1,31 +1,14 @@
 import { useRouter } from 'next/router';
 
-import {
-  authUpdateLocalAvatar,
-  authStaffDisplay,
-  authStaffLogin,
-  authUserDisplay,
-  authUserLogin,
-  authUserRegister,
-  authUserVerify
-} from '../../../src/store/auth/actions';
+import { authUpdateLocalAvatar, authStaffDisplay, authStaffLogin, authUserDisplay, authUserLogin, authUserRegister, authUserVerify } from '../../../src/store/auth/actions';
 import { actionTypes } from '../../../src/store/auth/types';
 
 const router = useRouter();
-const {
-  AUTH_UPDATE_LOCAL_AVATAR,
-  AUTH_STAFF_DISPLAY,
-  AUTH_STAFF_LOGIN,
-  AUTH_USER_DISPLAY,
-  AUTH_USER_LOGIN,
-  AUTH_USER_REGISTER,
-  AUTH_USER_VERIFY
-} = actionTypes;
+const { AUTH_UPDATE_LOCAL_AVATAR, AUTH_STAFF_DISPLAY, AUTH_STAFF_LOGIN, AUTH_USER_DISPLAY, AUTH_USER_LOGIN, AUTH_USER_REGISTER, AUTH_USER_VERIFY } = actionTypes;
 
 describe('authUpdateLocalAvatar action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUpdateLocalAvatar('Leeroy').type)
-      .toEqual(AUTH_UPDATE_LOCAL_AVATAR);
+    expect(authUpdateLocalAvatar('Leeroy').type).toEqual(AUTH_UPDATE_LOCAL_AVATAR);
   });
 
   it('returns the correct avatar', () => {
@@ -35,8 +18,7 @@ describe('authUpdateLocalAvatar action creator', () => {
 
 describe('authStaffDisplay action creator', () => {
   it('returns the correct action type', () => {
-    expect(authStaffDisplay('Allison').type)
-      .toEqual(AUTH_STAFF_DISPLAY);
+    expect(authStaffDisplay('Allison').type).toEqual(AUTH_STAFF_DISPLAY);
   });
 
   it('returns the correct authname', () => {
@@ -46,25 +28,21 @@ describe('authStaffDisplay action creator', () => {
 
 describe('authStaffLogin action creator', () => {
   it('returns the correct action type', () => {
-    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').type)
-      .toEqual(AUTH_STAFF_LOGIN);
+    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').type).toEqual(AUTH_STAFF_LOGIN);
   });
 
   it('returns the correct email', () => {
-    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').email)
-      .toEqual('coolperson@coolplace.com');
+    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').email).toEqual('coolperson@coolplace.com');
   });
 
   it('returns the correct password', () => {
-    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').password)
-      .toEqual('supersecret');
+    expect(authStaffLogin('coolperson@coolplace.com', 'supersecret').password).toEqual('supersecret');
   });
 });
 
 describe('authUserDisplay action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUserDisplay('Allison').type)
-      .toEqual(AUTH_USER_DISPLAY);
+    expect(authUserDisplay('Allison').type).toEqual(AUTH_USER_DISPLAY);
   });
 
   it('returns the correct authname', () => {
@@ -74,93 +52,50 @@ describe('authUserDisplay action creator', () => {
 
 describe('authUserLogin action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').type)
-      .toEqual(AUTH_USER_LOGIN);
+    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').type).toEqual(AUTH_USER_LOGIN);
   });
 
   it('returns the correct email', () => {
-    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').email)
-      .toEqual('coolperson@coolplace.com');
+    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').email).toEqual('coolperson@coolplace.com');
   });
 
   it('returns the correct password', () => {
-    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').password)
-      .toEqual('supersecret');
+    expect(authUserLogin('coolperson@coolplace.com', 'supersecret').password).toEqual('supersecret');
   });
 });
 
 describe('authUserRegister action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUserRegister(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'CoolPerson',
-      router
-    ).type).toEqual(AUTH_USER_REGISTER);
+    expect(authUserRegister('coolperson@coolplace.com', 'supersecret', 'CoolPerson', router).type).toEqual(AUTH_USER_REGISTER);
   });
 
   it('returns the correct email', () => {
-    expect(authUserRegister(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'CoolPerson',
-      router
-    ).email).toEqual('coolperson@coolplace.com');
+    expect(authUserRegister('coolperson@coolplace.com', 'supersecret', 'CoolPerson', router).email).toEqual('coolperson@coolplace.com');
   });
 
   it('returns the correct password', () => {
-    expect(authUserRegister(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'CoolPerson',
-      router
-    ).password).toEqual('supersecret');
+    expect(authUserRegister('coolperson@coolplace.com', 'supersecret', 'CoolPerson', router).password).toEqual('supersecret');
   });
 
   it('returns the correct username', () => {
-    expect(authUserRegister(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'CoolPerson',
-      router
-    ).username).toEqual('CoolPerson');
+    expect(authUserRegister('coolperson@coolplace.com', 'supersecret', 'CoolPerson', router).username).toEqual('CoolPerson');
   });
 });
 
 describe('authUserVerify action creator', () => {
   it('returns the correct action type', () => {
-    expect(authUserVerify(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'SOMERANDOMCODE',
-      router
-    ).type).toEqual(AUTH_USER_VERIFY);
+    expect(authUserVerify('coolperson@coolplace.com', 'supersecret', 'SOMERANDOMCODE', router).type).toEqual(AUTH_USER_VERIFY);
   });
 
   it('returns the correct email', () => {
-    expect(authUserVerify(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'SOMERANDOMCODE',
-      router
-    ).email).toEqual('coolperson@coolplace.com');
+    expect(authUserVerify('coolperson@coolplace.com', 'supersecret', 'SOMERANDOMCODE', router).email).toEqual('coolperson@coolplace.com');
   });
 
   it('returns the correct password', () => {
-    expect(authUserVerify(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'SOMERANDOMCODE',
-      router
-    ).password).toEqual('supersecret');
+    expect(authUserVerify('coolperson@coolplace.com', 'supersecret', 'SOMERANDOMCODE', router).password).toEqual('supersecret');
   });
 
   it('returns the correct confirmationCode', () => {
-    expect(authUserVerify(
-      'coolperson@coolplace.com',
-      'supersecret',
-      'SOMERANDOMCODE',
-      router
-    ).confirmationCode).toEqual('SOMERANDOMCODE');
+    expect(authUserVerify('coolperson@coolplace.com', 'supersecret', 'SOMERANDOMCODE', router).confirmationCode).toEqual('SOMERANDOMCODE');
   });
 });

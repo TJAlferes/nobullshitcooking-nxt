@@ -19,13 +19,13 @@ State
 */
 
 export interface IPlannerState {
-  isLoading: boolean;
-  creating: boolean;
-  editingId: number | null;
-  publicUrl: string;
-  expanded: boolean;
+  isLoading:   boolean;
+  creating:    boolean;
+  editingId:   number | null;
+  publicUrl:   string;
+  expanded:    boolean;
   expandedDay: number | null;
-  planName: string;
+  planName:    string;
   recipeListsInsideDays: IPlannerData;
 }
 
