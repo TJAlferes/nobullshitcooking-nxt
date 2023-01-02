@@ -1,195 +1,190 @@
 import {
-  chatConnect,
-  chatConnected,
-  chatDisconnect,
-  chatDisconnected,
-  chatGetOnline,
-  chatShowOnline,
-  chatShowOffline,
-  chatChangeRoom,
-  chatChangedRoom,
-  chatRejoinedRoom,
-  chatJoinedUser,
-  chatLeftUser,
-  chatSendPublicMessage,
-  chatReceivedPublicMessage,
-  chatSendPrivateMessage,
-  chatReceivedPrivateMessage,
-  chatFailedPrivateMessage
+  connect,
+  connected,
+  disconnect,
+  disconnected,
+  getOnline,
+  showOnline,
+  showOffline,
+  changeRoom,
+  changedRoom,
+  rejoinedRoom,
+  joinedUser,
+  leftUser,
+  sendPublicMessage,
+  receivedPublicMessage,
+  sendPrivateMessage,
+  receivedPrivateMessage,
+  failedPrivateMessage
 } from '../../../src/store/chat/actions';
 import { actionTypes, PRIVATE, PUBLIC } from '../../../src/store/chat/types';
 
 const {
-  CHAT_CONNECT,
-  CHAT_CONNECTED,
-  CHAT_DISCONNECT,
-  CHAT_DISCONNECTED,
-  CHAT_GET_ONLINE,
-  CHAT_SHOW_ONLINE,
-  CHAT_SHOW_OFFLINE,
-  CHAT_CHANGE_ROOM,
-  CHAT_CHANGED_ROOM,
-  CHAT_REJOINED_ROOM,
-  CHAT_JOINED_USER,
-  CHAT_LEFT_USER,
-  CHAT_SEND_PUBLIC_MESSAGE,
-  CHAT_RECEIVED_PUBLIC_MESSAGE,
-  CHAT_SEND_PRIVATE_MESSAGE,
-  CHAT_RECEIVED_PRIVATE_MESSAGE,
-  CHAT_FAILED_PRIVATE_MESSAGE
+  CONNECT,
+  CONNECTED,
+  DISCONNECT,
+  DISCONNECTED,
+  GET_ONLINE,
+  SHOW_ONLINE,
+  SHOW_OFFLINE,
+  CHANGE_ROOM,
+  CHANGED_ROOM,
+  REJOINED_ROOM,
+  JOINED_USER,
+  LEFT_USER,
+  SEND_PUBLIC_MESSAGE,
+  RECEIVED_PUBLIC_MESSAGE,
+  SEND_PRIVATE_MESSAGE,
+  RECEIVED_PRIVATE_MESSAGE,
+  FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
 const aaron = {userId: '4', username: 'Aaron'};
 const alex = {userId: '5', username: 'Alex'};
 const message = {
   kind: PUBLIC,
-  id: '555' + (new Date).getTime().toString(),
-  to: "GrillNChill",
+  id:   '555' + (new Date).getTime().toString(),
+  to:   "GrillNChill",
   from: {userId: '555', username: "Joe555"},
   text: "Hey! How are you?"
 };
 const whisper = {
   kind: PRIVATE,
-  id: '32873443823428384923',
-  to: '0923849323432',
+  id:   '32873443823428384923',
+  to:   '0923849323432',
   from: {userId: '90', username: 'Jill'},
   text: 'How are you?'
 };
 
-describe('chatConnect action creator', () => {
+describe('connect action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatConnect().type).toEqual(CHAT_CONNECT);
+    expect(connect().type).toEqual(CONNECT);
   });
 });
 
-describe('chatConnected action creator', () => {
+describe('connected action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatConnected().type).toEqual(CHAT_CONNECTED);
+    expect(connected().type).toEqual(CONNECTED);
   });
 });
 
-describe('chatDisconnect action creator', () => {
+describe('disconnect action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatDisconnect().type).toEqual(CHAT_DISCONNECT);
+    expect(disconnect().type).toEqual(DISCONNECT);
   });
 });
 
-describe('chatDisconnected action creator', () => {
+describe('disconnected action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatDisconnected().type).toEqual(CHAT_DISCONNECTED);
+    expect(disconnected().type).toEqual(DISCONNECTED);
   });
 });
 
-describe('chatGetOnline action creator', () => {
+describe('getOnline action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatGetOnline([alex]).type).toEqual(CHAT_GET_ONLINE);
+    expect(getOnline([alex]).type).toEqual(GET_ONLINE);
   });
 
   it('returns the correct online', () => {
-    expect(chatGetOnline([alex]).online).toEqual([alex]);
+    expect(getOnline([alex]).online).toEqual([alex]);
   });
 });
 
-describe('chatShowOnline action creator', () => {
+describe('showOnline action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatShowOnline(alex).type).toEqual(CHAT_SHOW_ONLINE);
+    expect(showOnline(alex).type).toEqual(SHOW_ONLINE);
   });
 
   it('returns the correct user', () => {
-    expect(chatShowOnline(alex).user).toEqual(alex);
+    expect(showOnline(alex).user).toEqual(alex);
   });
 });
 
-describe('chatShowOffline action creator', () => {
+describe('showOffline action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatShowOffline(alex).type).toEqual(CHAT_SHOW_OFFLINE);
+    expect(showOffline(alex).type).toEqual(SHOW_OFFLINE);
   });
 
   it('returns the correct user', () => {
-    expect(chatShowOffline(alex).user).toEqual(alex);
+    expect(showOffline(alex).user).toEqual(alex);
   });
 });
 
-describe('chatChangeRoom action creator', () => {
+describe('changeRoom action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatChangeRoom('5067').type).toEqual(CHAT_CHANGE_ROOM);
+    expect(changeRoom('5067').type).toEqual(CHANGE_ROOM);
   });
 
   it('returns the correct room', () => {
-    expect(chatChangeRoom('5067').room).toEqual('5067');
+    expect(changeRoom('5067').room).toEqual('5067');
   });
 });
 
-describe('chatChangedRoom action creator', () => {
+describe('changedRoom action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatChangedRoom([aaron, alex], '5067').type)
-      .toEqual(CHAT_CHANGED_ROOM);
+    expect(changedRoom([aaron, alex], '5067').type).toEqual(CHANGED_ROOM);
   });
 
   it('returns the correct users', () => {
-    expect(chatChangedRoom([aaron, alex], '5067').users).toEqual([aaron, alex]);
+    expect(changedRoom([aaron, alex], '5067').users).toEqual([aaron, alex]);
   });
 
   it('returns the correct channel', () => {
-    expect(chatChangedRoom([aaron, alex], '5067').room).toEqual('5067');
+    expect(changedRoom([aaron, alex], '5067').room).toEqual('5067');
   });
 });
 
-describe('chatRejoinedRoom action creator', () => {
+describe('rejoinedRoom action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatRejoinedRoom([aaron, alex], '5067').type)
-      .toEqual(CHAT_REJOINED_ROOM);
+    expect(rejoinedRoom([aaron, alex], '5067').type).toEqual(REJOINED_ROOM);
   });
 
   it('returns the correct users', () => {
-    expect(chatRejoinedRoom([aaron, alex], '5067').users)
-      .toEqual([aaron, alex]);
+    expect(rejoinedRoom([aaron, alex], '5067').users).toEqual([aaron, alex]);
   });
   
   it('returns the correct room', () => {
-    expect(chatRejoinedRoom([aaron, alex], '5067').room).toEqual('5067');
+    expect(rejoinedRoom([aaron, alex], '5067').room).toEqual('5067');
   });
 });
 
-describe('chatJoinedUser action creator', () => {
+describe('joinedUser action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatJoinedUser(alex).type).toEqual(CHAT_JOINED_USER);
+    expect(joinedUser(alex).type).toEqual(JOINED_USER);
   });
 
   it('returns the correct user', () => {
-    expect(chatJoinedUser(alex).user).toEqual(alex);
+    expect(joinedUser(alex).user).toEqual(alex);
   });
 });
 
-describe('chatLeftUser action creator', () => {
+describe('leftUser action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatLeftUser(alex).type).toEqual(CHAT_LEFT_USER);
+    expect(leftUser(alex).type).toEqual(LEFT_USER);
   });
 
   it('returns the correct user', () => {
-    expect(chatLeftUser(alex).user).toEqual(alex);
+    expect(leftUser(alex).user).toEqual(alex);
   });
 });
 
-describe('chatSendPublicMessage action creator', () => {
+describe('sendPublicMessage action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatSendPublicMessage('howdy').type)
-      .toEqual(CHAT_SEND_PUBLIC_MESSAGE);
+    expect(sendPublicMessage('howdy').type).toEqual(SEND_PUBLIC_MESSAGE);
   });
 
   it('returns the correct text', () => {
-    expect(chatSendPublicMessage('howdy').text).toEqual('howdy');
+    expect(sendPublicMessage('howdy').text).toEqual('howdy');
   });
 });
 
-describe('chatReceivedPublicMessage action creator', () => {
+describe('receivedPublicMessage action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatReceivedPublicMessage(message).type)
-      .toEqual(CHAT_RECEIVED_PUBLIC_MESSAGE);
+    expect(receivedPublicMessage(message).type).toEqual(RECEIVED_PUBLIC_MESSAGE);
   });
 
   it('returns the correct message', () => {
-    const actual = chatReceivedPublicMessage(message).message;
+    const actual = receivedPublicMessage(message).message;
     const expected = message;
 
     expect(actual.kind).toEqual(expected.kind);
@@ -201,30 +196,27 @@ describe('chatReceivedPublicMessage action creator', () => {
   });
 });
 
-describe('chatSendPrivateMessage action creator', () => {
+describe('sendPrivateMessage action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatSendPrivateMessage('How are you?', 'John').type)
-      .toEqual(CHAT_SEND_PRIVATE_MESSAGE);
+    expect(sendPrivateMessage('How are you?', 'John').type).toEqual(SEND_PRIVATE_MESSAGE);
   });
 
   it('returns the correct text', () => {
-    expect(chatSendPrivateMessage('How are you?', 'John').text)
-      .toEqual('How are you?');
+    expect(sendPrivateMessage('How are you?', 'John').text).toEqual('How are you?');
   });
 
   it('returns the correct to', () => {
-    expect(chatSendPrivateMessage('How are you?', 'John').to).toEqual('John');
+    expect(sendPrivateMessage('How are you?', 'John').to).toEqual('John');
   });
 });
 
-describe('chatReceivedPrivateMessage action creator', () => {
+describe('receivedPrivateMessage action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatReceivedPrivateMessage(whisper).type)
-      .toEqual(CHAT_RECEIVED_PRIVATE_MESSAGE);
+    expect(receivedPrivateMessage(whisper).type).toEqual(RECEIVED_PRIVATE_MESSAGE);
   });
 
-  it('returns the correct ', () => {
-    const actual = chatReceivedPrivateMessage(whisper).privateMessage;
+  it('returns the correct message', () => {
+    const actual = receivedPrivateMessage(whisper).privateMessage;
     const expected = whisper;
 
     expect(actual.kind).toEqual(expected.kind);
@@ -236,14 +228,12 @@ describe('chatReceivedPrivateMessage action creator', () => {
   });
 });
 
-describe('chatFailedPrivateMessage action creator', () => {
+describe('failedPrivateMessage action creator', () => {
   it('returns the correct action type', () => {
-    expect(chatFailedPrivateMessage("User not found.").type)
-      .toEqual(CHAT_FAILED_PRIVATE_MESSAGE);
+    expect(failedPrivateMessage("User not found.").type).toEqual(FAILED_PRIVATE_MESSAGE);
   });
 
   it('returns the correct feedback', () => {
-    expect(chatFailedPrivateMessage("User not found.").feedback)
-      .toEqual("User not found.");
+    expect(failedPrivateMessage("User not found.").feedback).toEqual("User not found.");
   });
 });

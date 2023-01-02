@@ -1,12 +1,12 @@
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
-export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, onlineFriends, peopleTab, startPrivateMessage, users}: Props): JSX.Element {
-  const Tab = ({ tab }: TabProps) =>
-    <button className={peopleTab === tab ? "people-tab--current" : "people-tab"} onClick={() => changePeopleTab(tab)}>{tab}</button>;
-
+export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, friends, peopleTab, startPrivateMessage, users}: Props): JSX.Element {
   return (
     <div className="chat-people">
-      <div className="people-tabs"><Tab tab="Room" /><Tab tab="Friends" /></div>
+      <div className="people-tabs">
+        <button className={peopleTab === "Room" ? "people-tab--current" : "people-tab"} onClick={() => changePeopleTab("Room")}>Room</button>
+        <button className={peopleTab === "Friends" ? "people-tab--current" : "people-tab"} onClick={() => changePeopleTab("Friends")}>Friends</button>
+      </div>
 
       {peopleTab === "Room" && (
         <ul className="chat-persons">
@@ -26,7 +26,7 @@ export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focused
 
       {peopleTab === "Friends" && (
         <ul className="chat-persons">
-          {onlineFriends && onlineFriends.map(friend => (
+          {friends && friends.map(friend => (
             <li className="chat-person" key={friend} onClick={() => focusFriend(friend)}>
               <img className="person-avatar" src={`${url}/${friend}-tiny`} />
               
@@ -44,15 +44,15 @@ export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focused
 }
 
 type Props = {
-  changePeopleTab(value: string): void;
-  focusedFriend: string | undefined;
-  focusFriend(friend: string): void;
-  focusedUser: string | undefined;
-  focusUser(user: string): void;
-  onlineFriends: string[];
-  peopleTab: string;
+  changePeopleTab(value: string):        void;
+  focusedFriend:                         string | undefined;
+  focusFriend(friend: string):           void;
+  focusedUser:                           string | undefined;
+  focusUser(user: string):               void;
+  friends:                               string[];
+  peopleTab:                             string;
   startPrivateMessage(username: string): void;
-  users: string[];
+  users:                                 string[];
 };
 
 type TabProps = {

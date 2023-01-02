@@ -22,23 +22,16 @@ export function ChatView({
   messagesRef,
   messageToSend,
   mobileTab,
-  onlineFriends,
+  friends,
   peopleTab,
   room,
   roomToEnter,
-  sendMessage,
+  send,
   startPrivateMessage,
   status,
   theme,
   users
 }: Props): JSX.Element {
-  const MobileTab = ({ tab }: MobileTabProps) => (
-    <button
-      className={mobileTab === tab ? "chat-mobile-tab--current" : "chat-mobile-tab"}
-      onClick={() => changeMobileTab(tab)}
-    >{tab}</button>
-  );
-
   return (
     <div className={`chat two-col-a ${theme}`}>
       <div className="chat-desktop">
@@ -64,7 +57,7 @@ export function ChatView({
             messages={messages}
             messagesRef={messagesRef}
             messageToSend={messageToSend}
-            sendMessage={sendMessage}
+            send={send}
             status={status}
           />
 
@@ -74,7 +67,7 @@ export function ChatView({
             focusFriend={focusFriend}
             focusedUser={focusedUser}
             focusUser={focusUser}
-            onlineFriends={onlineFriends}
+            friends={friends}
             peopleTab={peopleTab}
             startPrivateMessage={startPrivateMessage}
             users={users}
@@ -85,7 +78,11 @@ export function ChatView({
       <div className="chat-mobile">
         <p className="feedback">{feedback}</p>
 
-        <div className="chat-mobile-tabs"><MobileTab tab="Messages" /><MobileTab tab="People" /><MobileTab tab="Options" /></div>
+        <div className="chat-mobile-tabs">
+          <button className={mobileTab === "Messages" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("Messages")}>Messages</button>
+          <button className={mobileTab === "People" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("People")}>People</button>
+          <button className={mobileTab === "Options" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("Options")}>Options</button>
+        </div>
 
         {mobileTab === "Options" && (
           <OptionsView
@@ -107,7 +104,7 @@ export function ChatView({
             messages={messages}
             messagesRef={messagesRef}
             messageToSend={messageToSend}
-            sendMessage={sendMessage}
+            send={send}
             status={status}
           />
         )}
@@ -119,7 +116,7 @@ export function ChatView({
             focusFriend={focusFriend}
             focusedUser={focusedUser}
             focusUser={focusUser}
-            onlineFriends={onlineFriends}
+            friends={friends}
             peopleTab={peopleTab}
             startPrivateMessage={startPrivateMessage}
             users={users}
@@ -131,33 +128,33 @@ export function ChatView({
 }
 
 type Props = {
-  authname: string;
+  authname:                                                 string;
   changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  changeMobileTab(value: string): void;
-  changePeopleTab(value: string): void;
-  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
-  changeRoom(): void;
-  connect(): void;
-  disconnect(): void;
-  feedback: string;
-  focusedFriend: string | undefined;
-  focusFriend(friend: string): void;
-  focusedUser: string | undefined;
-  focusUser(user: string): void;
-  loading: boolean;
-  messages: IMessageWithClientTimestamp[];
-  messagesRef: React.RefObject<HTMLUListElement>;
-  messageToSend: string;
-  mobileTab: string;
-  onlineFriends: string[];
-  peopleTab: string;
-  room: string;
-  roomToEnter: string;
-  sendMessage(e: React.KeyboardEvent): void;
-  startPrivateMessage(username: string): void;
-  status: string;
-  theme: string;
-  users: string[];
+  changeMobileTab(value: string):                           void;
+  changePeopleTab(value: string):                           void;
+  changeRoomInput(e: React.SyntheticEvent<EventTarget>):    void;
+  changeRoom():                                             void;
+  connect():                                                void;
+  disconnect():                                             void;
+  feedback:                                                 string;
+  focusedFriend:                                            string | undefined;
+  focusFriend(friend: string):                              void;
+  focusedUser:                                              string | undefined;
+  focusUser(user: string):                                  void;
+  loading:                                                  boolean;
+  messages:                                                 IMessageWithClientTimestamp[];
+  messagesRef:                                              React.RefObject<HTMLUListElement>;
+  messageToSend:                                            string;
+  mobileTab:                                                string;
+  friends:                                                  string[];
+  peopleTab:                                                string;
+  room:                                                     string;
+  roomToEnter:                                              string;
+  send(e: React.KeyboardEvent):                             void;
+  startPrivateMessage(username: string):                    void;
+  status:                                                   string;
+  theme:                                                    string;
+  users:                                                    string[];
 };
 
 type MobileTabProps = {

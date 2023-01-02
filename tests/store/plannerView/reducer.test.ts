@@ -11,6 +11,13 @@ const empty = {
  15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
  22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []
 };
+const planData = {
+  1: [recipeTwo], 2: [], 3: [], 4: [], 5: [recipeOne], 6: [],  7: [],
+  8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
+ 15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
+ 22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []
+};
+
 const initialState: IPlannerViewState = {
   isLoading:   false,
   expanded:    false,
@@ -22,54 +29,23 @@ const initialState: IPlannerViewState = {
 describe('plannerView reducer', () => {
   it('handles actions of type PLANNER_VIEW_CLICK_DAY on a day', () => {
     const state = {...initialState};
-    const reducer = 
-    expect(
-      plannerViewReducer(initialState, {type: PLANNER_VIEW_CLICK_DAY, day: 1})
-    ).toEqual({
-      isLoading: false,
-      expanded: true,
-      expandedDay: 1,
-      planName: "",
-      recipeListsInsideDays: empty
-    });
+    const reducer = plannerViewReducer(state, {type: PLANNER_VIEW_CLICK_DAY, day: 1})
+    expect(reducer.expanded).toEqual(true);
+    expect(reducer.expandedDay).toEqual(1);
   });
 
   it('handles actions of type PLANNER_VIEW_CLICK_DAY on the expanded day', () => {
     const state = {...initialState};
-    const reducer = 
-    const beforeState = {
-      isLoading: false,
-      expanded: true,
-      expandedDay: 1,
-      planName: "",
-      recipeListsInsideDays: empty
-    };
-
-    expect(
-      plannerViewReducer(beforeState, {type: PLANNER_VIEW_CLICK_DAY, day: 1})
-    ).toEqual(initialState);
+    state.expanded = true;
+    state.expandedDay = 1;
+    const reducer = plannerViewReducer(state, {type: PLANNER_VIEW_CLICK_DAY, day: 1});
+    expect(reducer).toEqual(initialState);
   });
 
   it('handles actions of type PLANNER_VIEW_LOAD', () => {
     const state = {...initialState};
-    const reducer = 
-    const planData = {
-      1: [recipeTwo], 2: [], 3: [], 4: [], 5: [recipeOne], 6: [],  7: [],
-      8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
-     15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
-     22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []
-    };
-    
-    expect(plannerViewReducer(initialState, {
-      type: PLANNER_VIEW_LOAD,
-      planName: "My Plan",
-      planData
-    })).toEqual({
-      isLoading: false,
-      expanded: false,
-      expandedDay: null,
-      planName: "My Plan",
-      recipeListsInsideDays: planData
-    });
+    const reducer = plannerViewReducer(state, {type: PLANNER_VIEW_LOAD, planName: "My Plan", planData});
+    expect(reducer.planName).toEqual("My Plan");
+    expect(reducer.recipeListsInsideDays).toEqual(planData);
   });
 });

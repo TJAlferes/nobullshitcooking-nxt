@@ -1,409 +1,275 @@
 import { actionTypes as authActionTypes } from '../../../src/store/auth/types';
 import { chatReducer } from '../../../src/store/chat/reducer';
-import {
-  actionTypes as chatActionTypes,
-  PRIVATE,
-  PUBLIC
-} from '../../../src/store/chat/types';
+import { actionTypes as chatActionTypes, IChatState, PRIVATE, PUBLIC } from '../../../src/store/chat/types';
 
 const { AUTH_USER_LOGOUT } = authActionTypes;
 const {
-  CHAT_CONNECTED,
-  CHAT_DISCONNECTED,
-  CHAT_GET_ONLINE,
-  CHAT_SHOW_ONLINE,
-  CHAT_SHOW_OFFLINE,
-  CHAT_CHANGED_ROOM,
-  CHAT_REJOINED_ROOM,
-  CHAT_JOINED_USER,
-  CHAT_LEFT_USER,
-  CHAT_RECEIVED_PUBLIC_MESSAGE,
-  CHAT_RECEIVED_PRIVATE_MESSAGE,
-  CHAT_FAILED_PRIVATE_MESSAGE
+  CONNECT,
+  CONNECTED,
+  DISCONNECT,
+  DISCONNECTED,
+
+  ONLINE_FRIENDS,
+  FRIEND_CAME_ONLINE,
+  FRIEND_WENT_OFFLINE,
+
+  JOIN_ROOM,
+  JOINED_ROOM,
+  REJOINED_ROOM,
+
+  USER_JOINED_ROOM,
+  USER_LEFT_ROOM,
+
+  SEND_MESSAGE,
+  SEND_PRIVATE_MESSAGE,
+  RECEIVED_MESSAGE,
+  RECEIVED_PRIVATE_MESSAGE,
+  FAILED_PRIVATE_MESSAGE
 } = chatActionTypes;
 
-const jane = {userId: 888, username: "Jane888"};
-const joe = {userId: 555, username: "Joe555"};
-const clientTimeStr = (new Date).toLocaleTimeString();
-const message1 = {
-  kind: PUBLIC,
-  id: 555 + clientTimeStr,
-  to: "GrillNChill",
-  from: joe,
-  text: "Hey! How are you?",
-  ts: `${clientTimeStr}`
-};
-const message2 = {
-  kind: PUBLIC,
-  id: 888 + clientTimeStr,
-  to: "GrillNChill",
-  from: jane,
-  text: "I'm good, thanks! You?",
-  ts: `${clientTimeStr}`
-};
+const time = (new Date).toLocaleTimeString();
+const jack = {userId: 7, username: "Jack"};
+const jill = {userId: 8, username: "Jill"};
+const message1 = {kind: PUBLIC, id: 7 + time, to: "GrillNChill", from: jack, text: "Hey! How are you?",  ts: `${time}`};
+const message2 = {kind: PUBLIC, id: 8 + time, to: "GrillNChill", from: jill, text: "Good, thanks! You?", ts: `${time}`};
 //const whisper1 = 
-const whisper2 = {
-  kind: PRIVATE,
-  id: 888 + clientTimeStr,
-  to: "Joe555",
-  from: jane,
-  text: "Are you still moving next year?",
-  ts: `${clientTimeStr}`
-};
+const whisper2 = {kind: PRIVATE, id: 8 + time, to: "Jack", from: jill, text: "Are you still moving next year?", ts: `${time}`};
 
-const initialState = {
-  room: "",
+const initialState: IChatState = {
+  status:   "disconnected",
+  room:     "",
   messages: [],
-  users: [],
-  onlineFriends: [],
-  status: "Disconnected",
-  connectButtonDisabled: false,
-  disconnectButtonDisabled: true,
+  users:    [],
+  friends:  []
 };
 
 describe('messenger reducer', () => {
   it('returns initial state', () => {
-    expect(chatReducer(undefined, {type: CHAT_CONNECTED}))
-      .toEqual({
-        room: "",
-        messages: [],
-        users: [],
-        onlineFriends: [],
-        status: "Connected",
-        connectButtonDisabled: true,
-        disconnectButtonDisabled: false
-      });
+    const state =   undefined;
+    const reducer = chatReducer(state, {type: DISCONNECTED});
+    expect(reducer).toEqual(initialState);
   });
 
-  it('handles actions of type CHAT_CONNECTED', () => {
-    expect(chatReducer(initialState, {type: CHAT_CONNECTED}))
-      .toEqual({
-        room: "",
-        messages: [],
-        users: [],
-        onlineFriends: [],
-        status: "Connected",
-        connectButtonDisabled: true,
-        disconnectButtonDisabled: false
-      });
+  it('handles actions of type CONNECTED', () => {
+    const state =   {...initialState};
+    const reducer = chatReducer(state, {type: CONNECTED});
+    expect(reducer.status).toEqual("Connected");
   });
 
-  it('handles actions of type CHAT_DISCONNECTED', () => {
-    const beforeState = {
-      room: "",
-      messages: [],
-      users: [],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
-    };
-
-    expect(chatReducer(beforeState, {type: CHAT_DISCONNECTED}))
-      .toEqual({
-        room: "",
-        messages: [],
-        users: [],
-        onlineFriends: [],
-        status: "Disconnected",
-        connectButtonDisabled: false,
-        disconnectButtonDisabled: true
-      });
+  it('handles actions of type DISCONNECTED', () => {
+    const state =   {...initialState};
+    state.status =  "connected";
+    const reducer = chatReducer(state, {type: DISCONNECTED});
+    expect(reducer).toEqual(initialState);
   });
 
   it('handles actions of type AUTH_USER_LOGOUT', () => {
-    const beforeState = {
-      room: "",
-      messages: [],
-      users: [],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
-    };
+    const state =   {...initialState};
+    state.status =  "connected";
+    const reducer = chatReducer(state, {type: AUTH_USER_LOGOUT});
+    expect(reducer).toEqual(initialState);
+  });
 
-    expect(chatReducer(beforeState, {type: AUTH_USER_LOGOUT}))
+  it('handles actions of type GET_ONLINE', () => {
+    expect(chatReducer(initialState, {type: GET_ONLINE, ["John", "Jane"]}))
       .toEqual({
         room: "",
         messages: [],
         users: [],
-        onlineFriends: [],
-        status: "Disconnected",
-        connectButtonDisabled: false,
-        disconnectButtonDisabled: true
+        friends: ["John", "Jane"],
+        status: "disconnected"
       });
   });
 
-  it('handles actions of type CHAT_GET_ONLINE', () => {
-    const online = [
-      {userId: 43, username: "MrClean"},
-      {userId: 52, username: "Shabsquash"}
-    ];
-
-    expect(chatReducer(initialState, {type: CHAT_GET_ONLINE, online}))
-      .toEqual({
-        room: "",
-        messages: [],
-        users: [],
-        onlineFriends: online,
-        status: "Disconnected",
-        connectButtonDisabled: false,
-        disconnectButtonDisabled: true,
-      });
-  });
-
-  it('handles actions of type CHAT_SHOW_ONLINE', () => {
+  it('handles actions of type SHOW_ONLINE', () => {
     const beforeState = {
       room: "",
       messages: [],
       users: [],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [],
+      status: "connected"
     };
 
-    expect(
-      chatReducer(beforeState, {type: CHAT_SHOW_ONLINE, user: joe})
-    ).toEqual({
+    expect(chatReducer(beforeState, {type: SHOW_ONLINE, user: jack})).toEqual({
       room: "",
       messages: [],
       users: [],
-      onlineFriends: [joe],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [jack],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_SHOW_OFFLINE', () => {
+  it('handles actions of type SHOW_OFFLINE', () => {
     const beforeState = {
       room: "",
       messages: [],
       users: [],
-      onlineFriends: [joe],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [jack],
+      status: "connected"
     };
 
-    expect(
-      chatReducer(beforeState, {type: CHAT_SHOW_OFFLINE, user: joe})
-    ).toEqual({
+    expect(chatReducer(beforeState, {type: SHOW_OFFLINE, user: jack})).toEqual({
       room: "",
       messages: [],
       users: [],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_CHANGED_ROOM', () => {
+  it('handles actions of type CHANGED_ROOM', () => {
     const beforeState = {
       room: "",
       messages: [],
       users: [],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_CHANGED_ROOM,
-      room: "autos101",
-      users: [{userId: 93, username: "CarEnthusiast"}]
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: CHANGED_ROOM, room: "autos101", users: [{userId: 93, username: "CarEnthusiast"}]})).toEqual({
       room: "autos101",
       messages: [],
       users: [{userId: 93, username: "CarEnthusiast"}],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_REJOINED_ROOM', () => {
+  it('handles actions of type REJOINED_ROOM', () => {
     const beforeState = {
       room: "GrillNChill",
       messages: [message1, message2],
-      users: [joe, jane],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack, jill],
+      friends: [],
+      status: "connected"
     };
     
-    expect(chatReducer(beforeState, {
-      type: CHAT_REJOINED_ROOM,
-      room: "GrillNChill",
-      users: [joe, jane]
-    })).toEqual(beforeState);
+    expect(chatReducer(beforeState, {type: REJOINED_ROOM, room: "GrillNChill", users: [jack, jill]})).toEqual(beforeState);
   });
 
-  it('handles actions of type CHAT_JOINED_USER', () => {
+  it('handles actions of type JOINED_USER', () => {
     const beforeState = {
       room: "GrillNChill",
       messages: [message1, message2],
-      users: [joe, jane],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack, jill],
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_JOINED_USER,
-      user: {userId: 23, username: "Bubbles"},
-      ts: `${clientTimeStr}`
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: JOINED_USER, user: {userId: 23, username: "Bubbles"}, ts: `${time}`})).toEqual({
       room: "GrillNChill",
       messages: [
         message1,
         message2,
         {
           kind: PUBLIC,
-          id: 'admin' + clientTimeStr,
+          id: 'admin' + time,
           to: "GrillNChill",
           from: {userId: 'messengerstatus', username: "messengerstatus"},
           text: "Bubbles has joined the room.",
-          ts: `${clientTimeStr}`,
+          ts: `${time}`,
         }
       ],
       users: [
-        joe,
-        jane,
+        jack,
+        jill,
         {userId: 23, username: "Bubbles"}
       ],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_LEFT_USER', () => {
+  it('handles actions of type LEFT_USER', () => {
     const beforeState = {
       room: "GrillNChill",
       messages: [message1, message2],
-      users: [joe, jane],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack, jill],
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_LEFT_USER,
-      user: jane,
-      ts: `${clientTimeStr}`
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: LEFT_USER, user: jill, ts: `${time}`})).toEqual({
       room: "GrillNChill",
       messages: [
         message1,
         message2,
         {
           kind: PUBLIC,
-          id: 'admin' + clientTimeStr,
+          id: 'admin' + time,
           to: "GrillNChill",
           from: {userId: 'messengerstatus', username: "messengerstatus"},
-          text: `Jane888 has left the room.`,
-          ts: `${clientTimeStr}`,
+          text: `jill888 has left the room.`,
+          ts: `${time}`,
         }
       ],
-      users: [joe],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack],
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_RECEIVED_PUBLIC_MESSAGE', () => {
+  it('handles actions of type RECEIVED_PUBLIC_MESSAGE', () => {
     const beforeState = {
       room: "GrillNChill",
       messages: [message1],
-      users: [joe, jane],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack, jill],
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_RECEIVED_PUBLIC_MESSAGE,
-      message: message2
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: RECEIVED_PUBLIC_MESSAGE, message: message2})).toEqual({
       room: "GrillNChill",
       messages: [message1, message2],
-      users: [joe, jane],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack, jill],
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_RECEIVED_PRIVATE_MESSAGE', () => {
+  it('handles actions of type RECEIVED_PRIVATE_MESSAGE', () => {
     const beforeState = {
       room: "GrillNChill",
       messages: [],
-      users: [joe],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack],
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_RECEIVED_PRIVATE_MESSAGE,
-      whisper: whisper2
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: RECEIVED_PRIVATE_MESSAGE, whisper: whisper2})).toEqual({
       room: "GrillNChill",
       messages: [whisper2],
-      users: [joe],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack],
+      friends: [],
+      status: "connected"
     });
   });
 
-  it('handles actions of type CHAT_FAILED_PRIVATE_MESSAGE', () => {
+  it('handles actions of type FAILED_PRIVATE_MESSAGE', () => {
+    const state = {...initialState};
     const beforeState = {
       room: "GrillNChill",
       messages: [],
-      users: [joe],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack],
+      friends: [],
+      status: "connected"
     };
 
-    expect(chatReducer(beforeState, {
-      type: CHAT_FAILED_PRIVATE_MESSAGE,
-      feedback: 'User not found.',
-      ts: `${clientTimeStr}`
-    })).toEqual({
+    expect(chatReducer(beforeState, {type: FAILED_PRIVATE_MESSAGE, feedback: 'User not found.', ts: `${time}`})).toEqual({
       room: "GrillNChill",
       messages: [
         {
           kind: PRIVATE,
-          id: 'admin' + clientTimeStr,
+          id: 'admin' + time,
           to: '',
           from: {userId: 'messengerstatus', username: "messengerstatus"},
           text: 'User not found.',
-          ts: `${clientTimeStr}`,
+          ts: `${time}`,
         }
       ],
-      users: [joe],
-      onlineFriends: [],
-      status: "Connected",
-      connectButtonDisabled: true,
-      disconnectButtonDisabled: false
+      users: [jack],
+      friends: [],
+      status: "connected"
     });
   });
 });

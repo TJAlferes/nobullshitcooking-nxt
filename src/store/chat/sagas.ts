@@ -3,12 +3,24 @@ import { io, Socket } from 'socket.io-client';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
-  chatConnected, chatDisconnected,
-  chatOnlineFriends, chatFriendCameOnline, chatFriendWentOffline,
-  chatJoinedRoom, chatRejoinedRoom, chatUserJoinedRoom, chatUserLeftRoom,
-  chatReceivedMessage, chatReceivedPrivateMessage, chatFailedPrivateMessage
+  connected,
+  disconnected,
+
+  onlineFriends,
+  friendCameOnline,
+  friendWentOffline,
+
+  joinedRoom,
+  rejoinedRoom,
+
+  userJoinedRoom,
+  userLeftRoom,
+  
+  receivedMessage,
+  receivedPrivateMessage,
+  failedPrivateMessage
 } from './actions';
-import { IMessage, IChatJoinRoom, IChatSendMessage, IChatSendPrivateMessage } from './types';
+import { IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
 
 const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, reconnection: true});  //withCredentials: true
 
@@ -17,69 +29,69 @@ export function chatInit(store: Store) {
 
   // Users
 
-  socket.on('OnlineFriends', (onlineFriends) => {
-    if (!onlineFriends) return;
-    store.dispatch(chatOnlineFriends(onlineFriends));
+  socket.on('OnlineFriends', (friends) => {
+    if (!friends) return;
+    store.dispatch(onlineFriends(friends));
   });
 
   socket.on('FriendCameOnline', (friend) => {
     if (!friend) return;
-    store.dispatch(chatFriendCameOnline(friend));
+    store.dispatch(friendCameOnline(friend));
   });
 
   socket.on('FriendWentOffline', (friend) => {
     if (!friend) return;
-    store.dispatch(chatFriendWentOffline(friend));
+    store.dispatch(friendWentOffline(friend));
   });
 
   // Messages
 
   socket.on('Message', (message) => {
     if (!message) return;
-    store.dispatch(chatReceivedMessage(message));
+    store.dispatch(receivedMessage(message));
   });
 
   socket.on('PrivateMessage', (message) => {
     if (!message) return;
-    store.dispatch(chatReceivedPrivateMessage(message));
+    store.dispatch(receivedPrivateMessage(message));
   });
 
   socket.on('FailedPrivateMessage', (feedback) => {
     if (!feedback) return;
-    store.dispatch(chatFailedPrivateMessage(feedback));
+    store.dispatch(failedPrivateMessage(feedback));
   });
 
   // Rooms
 
   socket.on('UsersInRoom', (users, room) => {
     if (!users || !room) return;
-    store.dispatch(chatJoinedRoom(users, room));
+    store.dispatch(joinedRoom(users, room));
   });
 
   socket.on('UsersInRoomRefetched', (users, room) => {
     if (!users || !room) return;
-    store.dispatch(chatRejoinedRoom(users, room));
+    store.dispatch(rejoinedRoom(users, room));
   });
 
   socket.on('UserJoinedRoom', (user) => {
     if (!user) return;
-    store.dispatch(chatUserJoinedRoom(user));
+    store.dispatch(userJoinedRoom(user));
   });
 
   socket.on('UserLeftRoom', (user) => {
     if (!user) return;
-    store.dispatch(chatUserLeftRoom(user));
+    store.dispatch(userLeftRoom(user));
   });
 
   // SocketIO Events
 
   socket.on('connect', () => {
-    store.dispatch(chatConnected());
+    store.dispatch(connected());
     socket.emit('GetOnlineFriends');
   });
 
   socket.on('disconnect', () => {
-    store.dispatch(chatDisconnected());
+    store.dispatch(disconnected());
   });
 
   socket.on('reconnect', () => {
@@ -93,27 +105,27 @@ export function chatInit(store: Store) {
 
 // call([socket, socket.method(), ...args])? channels?
 
-export function* chatConnectSaga() {
+export function* connectSaga() {
   socket.connect();
 }
 
-export function* chatDisconnectSaga() {
+export function* disconnectSaga() {
   socket.disconnect();
 }
 
-export function* chatJoinRoomSaga({ room }: IChatJoinRoom) {
+export function* joinRoomSaga({ room }: IJoinRoom) {
   socket.emit('JoinRoom', room);
 }
 
-export function* chatSendMessageSaga({ text }: IChatSendMessage) {
+export function* sendMessageSaga({ text }: ISendMessage) {
   socket.emit('SendMessage', text);
 }
 
-export function* chatSendPrivateMessageSaga({ text, to }: IChatSendPrivateMessage) {
+export function* sendPrivateMessageSaga({ text, to }: ISendPrivateMessage) {
   socket.emit('SendPrivateMessage', text, to);
 }
 
-export function* chatUpdateOnlineSaga(status: string) {  // TO DO: give this an action?
+export function* updateOnlineSaga(status: string) {  // TO DO: give this an action?
   if (status === "connected") socket.emit('GetOnlineFriends');
 }
 
@@ -130,9 +142,10 @@ interface IClientToServerEvents {
   //disconnecting
 }
 
+// TO DO: more consistent, shorter names
 interface IServerToClientEvents {
   // Users
-  OnlineFriends(onlineFriends: string[]): void;
+  OnlineFriends(friends: string[]): void;
   FriendCameOnline(friend: string): void;
   FriendWentOffline(friend: string): void;
   // Messages

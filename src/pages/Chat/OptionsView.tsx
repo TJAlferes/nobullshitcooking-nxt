@@ -2,7 +2,7 @@ export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, l
   return (
     <div className="chat-options">
       <button className="connection__button" disabled={loading} onClick={status === "connected" ? disconnect : connect}>
-        {status === "connected" ? "disconnect" : "connect"}
+        {status === "connected" ? "Disconnect" : "Connect"}
       </button>
 
       <div className="current-room">
@@ -12,14 +12,7 @@ export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, l
       <div className="change-room">
         <span className="change-room__label">Go To Room:</span>
 
-        <input
-          className="change-room__input"
-          disabled={(status !== "connected") || loading}
-          name="change-room-input"
-          onChange={changeRoomInput}
-          type="text"
-          value={roomToEnter}
-        />
+        <input className="change-room__input" disabled={(status !== "connected") || loading} name="change-room-input" onChange={changeRoomInput} type="text" value={roomToEnter} />
 
         <button className="change-room__button" disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
       </div>
@@ -28,12 +21,12 @@ export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, l
 }
 
 type Props = {
-  changeRoom(): void;
+  changeRoom():                                          void;
   changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
-  connect(): void;
-  disconnect(): void;
-  loading: boolean;
-  room: string;
-  roomToEnter: string;
-  status: string;
+  connect():                                             void;
+  disconnect():                                          void;
+  loading:                                               boolean;
+  room:                                                  string;
+  roomToEnter:                                           string;
+  status:                                                string;
 };

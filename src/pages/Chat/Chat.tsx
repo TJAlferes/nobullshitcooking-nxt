@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { chatConnect, chatDisconnect, chatJoinRoom, chatSendMessage, chatSendPrivateMessage } from '../../store/chat/actions';
+import { connect as chatConnect, disconnect as chatDisconnect, joinRoom, sendMessage, sendPrivateMessage } from '../../store/chat/actions';
 import { ChatView } from './view';
 
 // TO DO: fix no longer auto scrolling after spam debounce
@@ -13,7 +13,7 @@ export default function Chat(): JSX.Element {
   const room =          useSelector(state => state.chat.room);
   const message =       useSelector(state => state.user.message);
   const messages =      useSelector(state => state.chat.messages);
-  const onlineFriends = useSelector(state => state.chat.onlineFriends);
+  const friends =       useSelector(state => state.chat.friends);
   const status =        useSelector(state => state.chat.status);
   const theme =         useSelector(state => state.theme.theme);
   const users =         useSelector(state => state.chat.users);
@@ -93,7 +93,7 @@ export default function Chat(): JSX.Element {
 
     setLoading(true);
     //setCurrentFriend("");
-    dispatch(chatJoinRoom(trimmedRoom));
+    dispatch(joinRoom(trimmedRoom));
     setRoomToEnter("");
     preventSpam();
     setLoading(false);
@@ -123,7 +123,7 @@ export default function Chat(): JSX.Element {
     }
   };
   
-  const sendMessage = (e: React.KeyboardEvent) => {  // TO DO: improve this
+  const send = (e: React.KeyboardEvent) => {  // TO DO: improve this
     // TO DO: move into (?)
     if (e.key && (e.key !== "Enter")) return;
     if (loading) return;
@@ -149,9 +149,9 @@ export default function Chat(): JSX.Element {
       const userToWhisper = trimmedMessage.match(/^(\S+? \S+?) ([\s\S]+?)$/);
       if (!userToWhisper) return;
       const trimmedUserToWhisper = userToWhisper[1].substring(3);
-      dispatch(chatSendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
+      dispatch(sendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
     }
-    else dispatch(chatSendMessage(trimmedMessage));
+    else dispatch(sendMessage(trimmedMessage));
     /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trimmedMessage, trimmedFriend);}*/
     setMessageToSend("");
     preventSpam();
@@ -191,11 +191,11 @@ export default function Chat(): JSX.Element {
       messagesRef={messagesRef}
       messageToSend={messageToSend}
       mobileTab={mobileTab}
-      onlineFriends={onlineFriends}
+      friends={friends}
       peopleTab={peopleTab}
       room={room}
       roomToEnter={roomToEnter}
-      sendMessage={sendMessage}
+      send={send}
       startPrivateMessage={startPrivateMessage}
       status={status}
       theme={theme}

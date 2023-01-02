@@ -1,27 +1,28 @@
 import { IAuthUserLogout } from '../auth/types';
 
 export const actionTypes = {
-  CHAT_CONNECT: 'CHAT_CONNECT',
-  CHAT_CONNECTED: 'CHAT_CONNECTED',
-  CHAT_DISCONNECT: 'CHAT_DISCONNECT',
-  CHAT_DISCONNECTED: 'CHAT_DISCONNECTED',
+  CONNECT:      'CONNECT',
+  CONNECTED:    'CONNECTED',
+  DISCONNECT:   'DISCONNECT',
+  DISCONNECTED: 'DISCONNECTED',
 
-  CHAT_ONLINE_FRIENDS: 'CHAT_ONLINE_FRIENDS',
-  CHAT_FRIEND_CAME_ONLINE: 'CHAT_FRIEND_CAME_ONLINE',
-  CHAT_FRIEND_WENT_OFFLINE: 'CHAT_FRIEND_WENT_OFFLINE',
+  ONLINE_FRIENDS:      'ONLINE_FRIENDS',
+  FRIEND_CAME_ONLINE:  'FRIEND_CAME_ONLINE',
+  FRIEND_WENT_OFFLINE: 'FRIEND_WENT_OFFLINE',
 
-  CHAT_JOIN_ROOM: 'CHAT_JOIN_ROOM',
-  CHAT_JOINED_ROOM: 'CHAT_JOINED_ROOM',
-  CHAT_REJOINED_ROOM: 'CHAT_REJOINED_ROOM',
+  JOIN_ROOM:     'JOIN_ROOM',
+  JOINED_ROOM:   'JOINED_ROOM',
+  REJOINED_ROOM: 'REJOINED_ROOM',
 
-  CHAT_USER_JOINED_ROOM: 'CHAT_USER_JOINED_ROOM',
-  CHAT_USER_LEFT_ROOM: 'CHAT_USER_LEFT_ROOM',
+  USER_JOINED_ROOM: 'USER_JOINED_ROOM',
+  USER_LEFT_ROOM:   'USER_LEFT_ROOM',
 
-  CHAT_SEND_MESSAGE: 'CHAT_SEND_MESSAGE',
-  CHAT_SEND_PRIVATE_MESSAGE: 'CHAT_SEND_PRIVATE_MESSAGE',
-  CHAT_RECEIVED_MESSAGE: 'CHAT_RECEIVED_MESSAGE',
-  CHAT_RECEIVED_PRIVATE_MESSAGE: 'CHAT_RECEIVED_PRIVATE_MESSAGE',
-  CHAT_FAILED_PRIVATE_MESSAGE: 'CHAT_FAILED_PRIVATE_MESSAGE'
+  SEND_MESSAGE:             'SEND_MESSAGE',
+  RECEIVED_MESSAGE:         'RECEIVED_MESSAGE',
+
+  SEND_PRIVATE_MESSAGE:     'SEND_PRIVATE_MESSAGE',
+  RECEIVED_PRIVATE_MESSAGE: 'RECEIVED_PRIVATE_MESSAGE',
+  FAILED_PRIVATE_MESSAGE:   'FAILED_PRIVATE_MESSAGE'
 } as const;
 
 /*
@@ -33,20 +34,20 @@ State
 // TO DO: double-check times
 
 export interface IChatState {
-  room: string;
+  status:   string;
+  room:     string;
   messages: IMessageWithClientTimestamp[];
-  users: string[];
-  onlineFriends: string[];
-  status: string;
+  users:    string[];
+  friends:  string[];
 }
 
 export const PRIVATE = "private" as const;
-export const PUBLIC = "public" as const;
+export const PUBLIC =  "public" as const;
 
 export interface IMessage {
   kind: typeof PRIVATE | typeof PUBLIC;
-  id: string;
-  to: string;
+  id:   string;
+  to:   string;
   from: string;
   text: string;
 }
@@ -63,107 +64,107 @@ Actions
 
 export type ChatActions =
 IAuthUserLogout |
-IChatConnect |
-IChatConnected |
-IChatDisconnect |
-IChatDisconnected |
-IChatOnlineFriends |
-IChatFriendCameOnline |
-IChatFriendWentOffline |
-IChatJoinRoom |
-IChatJoinedRoom |
-IChatRejoinedRoom |
-IChatUserJoinedRoom |
-IChatUserLeftRoom |
-IChatSendMessage |
-IChatReceivedMessage |
-IChatSendPrivateMessage |
-IChatReceivedPrivateMessage |
-IChatFailedPrivateMessage;
+IConnect |
+IConnected |
+IDisconnect |
+IDisconnected |
+IOnlineFriends |
+IFriendCameOnline |
+IFriendWentOffline |
+IJoinRoom |
+IJoinedRoom |
+IRejoinedRoom |
+IUserJoinedRoom |
+IUserLeftRoom |
+ISendMessage |
+IReceivedMessage |
+ISendPrivateMessage |
+IReceivedPrivateMessage |
+IFailedPrivateMessage;
 
-interface IChatConnect {
-  type: typeof actionTypes.CHAT_CONNECT;
+interface IConnect {
+  type: typeof actionTypes.CONNECT;
 }
 
-interface IChatConnected {
-  type: typeof actionTypes.CHAT_CONNECTED;
+interface IConnected {
+  type: typeof actionTypes.CONNECTED;
 }
 
-interface IChatDisconnect {
-  type: typeof actionTypes.CHAT_DISCONNECT;
+interface IDisconnect {
+  type: typeof actionTypes.DISCONNECT;
 }
 
-interface IChatDisconnected {
-  type: typeof actionTypes.CHAT_DISCONNECTED;
+interface IDisconnected {
+  type: typeof actionTypes.DISCONNECTED;
 }
 
-interface IChatOnlineFriends {
-  type: typeof actionTypes.CHAT_ONLINE_FRIENDS;
-  onlineFriends: string[];
+interface IOnlineFriends {
+  type:    typeof actionTypes.ONLINE_FRIENDS;
+  friends: string[];
 }
 
-interface IChatFriendCameOnline {
-  type: typeof actionTypes.CHAT_FRIEND_CAME_ONLINE;
+interface IFriendCameOnline {
+  type:   typeof actionTypes.FRIEND_CAME_ONLINE;
   friend: string;
 }
 
-interface IChatFriendWentOffline {
-  type: typeof actionTypes.CHAT_FRIEND_WENT_OFFLINE;
+interface IFriendWentOffline {
+  type:   typeof actionTypes.FRIEND_WENT_OFFLINE;
   friend: string;
 }
 
-export interface IChatJoinRoom {
-  type: typeof actionTypes.CHAT_JOIN_ROOM;
+export interface IJoinRoom {
+  type: typeof actionTypes.JOIN_ROOM;
   room: string;
 }
 
-interface IChatJoinedRoom {
-  type: typeof actionTypes.CHAT_JOINED_ROOM;
+interface IJoinedRoom {
+  type:  typeof actionTypes.JOINED_ROOM;
   users: string[];
-  room: string;
+  room:  string;
 }
 
-interface IChatRejoinedRoom {
-  type: typeof actionTypes.CHAT_REJOINED_ROOM;
+interface IRejoinedRoom {
+  type:  typeof actionTypes.REJOINED_ROOM;
   users: string[];
-  room: string;
+  room:  string;
 }
 
-interface IChatUserJoinedRoom {
-  type: typeof actionTypes.CHAT_USER_JOINED_ROOM;
+interface IUserJoinedRoom {
+  type: typeof actionTypes.USER_JOINED_ROOM;
   user: string;
-  ts: string;
+  ts:   string;
 }
 
-interface IChatUserLeftRoom {
-  type: typeof actionTypes.CHAT_USER_LEFT_ROOM;
+interface IUserLeftRoom {
+  type: typeof actionTypes.USER_LEFT_ROOM;
   user: string;
-  ts: string;
+  ts:   string;
 }
 
-export interface IChatSendMessage {
-  type: typeof actionTypes.CHAT_SEND_MESSAGE;
+export interface ISendMessage {
+  type: typeof actionTypes.SEND_MESSAGE;
   text: string;
 }
 
-export interface IChatReceivedMessage {
-  type: typeof actionTypes.CHAT_RECEIVED_MESSAGE;
+export interface IReceivedMessage {
+  type:    typeof actionTypes.RECEIVED_MESSAGE;
   message: IMessageWithClientTimestamp;
 }
 
-export interface IChatSendPrivateMessage {
-  type: typeof actionTypes.CHAT_SEND_PRIVATE_MESSAGE;
+export interface ISendPrivateMessage {
+  type: typeof actionTypes.SEND_PRIVATE_MESSAGE;
   text: string;
-  to: string;
+  to:   string;
 }
 
-export interface IChatReceivedPrivateMessage {
-  type: typeof actionTypes.CHAT_RECEIVED_PRIVATE_MESSAGE;
+export interface IReceivedPrivateMessage {
+  type:    typeof actionTypes.RECEIVED_PRIVATE_MESSAGE;
   message: IMessageWithClientTimestamp;
 }
 
-interface IChatFailedPrivateMessage {
-  type: typeof actionTypes.CHAT_FAILED_PRIVATE_MESSAGE;
+interface IFailedPrivateMessage {
+  type:     typeof actionTypes.FAILED_PRIVATE_MESSAGE;
   feedback: string;
-  ts: string;  // ?
+  ts:       string;  // ?
 }

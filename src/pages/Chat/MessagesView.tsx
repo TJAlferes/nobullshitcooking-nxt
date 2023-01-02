@@ -1,59 +1,38 @@
 import { IMessageWithClientTimestamp } from '../../store/chat/types';
 
-export function MessagesView({authname, changeMessageInput, messages, messagesRef, messageToSend, sendMessage, status}: Props): JSX.Element {
-  const publicMessage = ({ from, text }: IMessageWithClientTimestamp) => {
-    if (from === "messengerstatus")
-      return <span className="message--admin">{text}</span>;  // status
+function formattedMessage(authname: string, { kind, from, to, text }: IMessageWithClientTimestamp) {
+  if (kind === "public") {
+    if (from === "messengerstatus") return <span className="message--admin">{text}</span>;                  // status
+    if (authname === from)          return <><span className="message--self">{from}:{' '}</span>{text}</>;  // sent
+    return <><span className="message--other">{from}:{' '}</span>{text}</>;                                 // received
+  }
 
-    if (authname === from)
-      return <><span className="message--self">{from}:{' '}</span>{text}</>;  // sent
+  if (authname === from)
+    return <><span className="message--self">You whisper to{' '}{to}:{' '}</span><span className="message--private">{text}</span></>;    // sent
 
-    return <><span className="message--other">{from}:{' '}</span>{text}</>;  // received
-  };
+  return <><span className="message--other">{from}{' '}whispers to you:{' '}</span><span className="message--private">{text}</span></>;  // received
+};
 
-  const privateMessage = ({ to, from, text }: IMessageWithClientTimestamp) => {
-    if (authname === from)
-      return <><span className="message--self">You whisper to{' '}{to}:{' '}</span><span className="message--private">{text}</span></>;  // sent
-      
-    return <><span className="message--other">{from}{' '}whispers to you:{' '}</span><span className="message--private">{text}</span></>;  // received
-  };
-
+export function MessagesView({ authname, changeMessageInput, messages, messagesRef, messageToSend, send, status }: Props): JSX.Element {
   return (
     <div className="chat-messages">
       <ul className="chat-message-list" ref={messagesRef}>
-        <li className="chat-message"><span className="message--admin">COOK EAT WIN REPEAT</span></li>
-
-        {messages && messages.map(message => {
-          const { id, kind, ts } = message;
-          return (
-            <li className="chat-message" key={id}>
-              <span className="message-ts">{ts}{' '}</span>
-              {(kind === "public") && publicMessage(message)}
-              {(kind === "private") && privateMessage(message)}
-            </li>
-          );
-        })}
+        {messages && messages.map(message =>
+          <li className="chat-message" key={message.id}><span className="message-ts">{message.ts}{' '}</span>{formattedMessage(authname, message)}</li>
+        )}
       </ul>
 
-      <input
-        className="chat__input"
-        disabled={status !== "Connected"}
-        name="chat-input"
-        onChange={changeMessageInput}
-        onKeyUp={(e) => sendMessage(e)}
-        type="text"
-        value={messageToSend}
-      />
+      <input className="chat__input" disabled={status !== "connected"} name="chat-input" onChange={changeMessageInput} onKeyUp={(e) => send(e)} type="text" value={messageToSend} />
     </div>
   );
 }
 
 type Props = {
-  authname: string;
+  authname:                                                 string;
   changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  messages: IMessageWithClientTimestamp[];
-  messagesRef: React.RefObject<HTMLUListElement>;
-  messageToSend: string;
-  sendMessage(e: React.KeyboardEvent): void;
-  status: string;
+  messages:                                                 IMessageWithClientTimestamp[];
+  messagesRef:                                              React.RefObject<HTMLUListElement>;
+  messageToSend:                                            string;
+  send(e: React.KeyboardEvent):                             void;
+  status:                                                   string;
 };
