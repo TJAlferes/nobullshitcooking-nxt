@@ -15,7 +15,7 @@ import {
 
   userJoinedRoom,
   userLeftRoom,
-  
+
   receivedMessage,
   receivedPrivateMessage,
   failedPrivateMessage
@@ -28,60 +28,21 @@ export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
 
   // Users
-
-  socket.on('OnlineFriends', (friends) => {
-    if (!friends) return;
-    store.dispatch(onlineFriends(friends));
-  });
-
-  socket.on('FriendCameOnline', (friend) => {
-    if (!friend) return;
-    store.dispatch(friendCameOnline(friend));
-  });
-
-  socket.on('FriendWentOffline', (friend) => {
-    if (!friend) return;
-    store.dispatch(friendWentOffline(friend));
-  });
+  socket.on('OnlineFriends',     (friends) => friends && store.dispatch(onlineFriends(friends)));
+  socket.on('FriendCameOnline',  (friend) => friend && store.dispatch(friendCameOnline(friend)));
+  socket.on('FriendWentOffline', (friend) => friend && store.dispatch(friendWentOffline(friend)));
 
   // Messages
-
-  socket.on('Message', (message) => {
-    if (!message) return;
-    store.dispatch(receivedMessage(message));
-  });
-
-  socket.on('PrivateMessage', (message) => {
-    if (!message) return;
-    store.dispatch(receivedPrivateMessage(message));
-  });
-
-  socket.on('FailedPrivateMessage', (feedback) => {
-    if (!feedback) return;
-    store.dispatch(failedPrivateMessage(feedback));
-  });
+  socket.on('Message',              (message) => message && store.dispatch(receivedMessage(message)));
+  socket.on('PrivateMessage',       (message) => message && store.dispatch(receivedPrivateMessage(message)));
+  socket.on('FailedPrivateMessage', (feedback) => feedback && store.dispatch(failedPrivateMessage(feedback)));
 
   // Rooms
-
-  socket.on('UsersInRoom', (users, room) => {
-    if (!users || !room) return;
-    store.dispatch(joinedRoom(users, room));
-  });
-
-  socket.on('UsersInRoomRefetched', (users, room) => {
-    if (!users || !room) return;
-    store.dispatch(rejoinedRoom(users, room));
-  });
-
-  socket.on('UserJoinedRoom', (user) => {
-    if (!user) return;
-    store.dispatch(userJoinedRoom(user));
-  });
-
-  socket.on('UserLeftRoom', (user) => {
-    if (!user) return;
-    store.dispatch(userLeftRoom(user));
-  });
+  socket.on('UsersInRoom',          (users, room) => (users && room) && store.dispatch(joinedRoom(users, room)));
+  socket.on('UsersInRoomRefetched', (users, room) => (users && room) && store.dispatch(rejoinedRoom(users, room)));  // source of bug?
+  
+  socket.on('UserJoinedRoom',       (user) => user && store.dispatch(userJoinedRoom(user)));
+  socket.on('UserLeftRoom',         (user) => user && store.dispatch(userLeftRoom(user)));
 
   // SocketIO Events
 
@@ -90,13 +51,11 @@ export function chatInit(store: Store) {
     socket.emit('GetOnlineFriends');
   });
 
-  socket.on('disconnect', () => {
-    store.dispatch(disconnected());
-  });
+  socket.on('disconnect', () => store.dispatch(disconnected()));
 
   socket.on('reconnect', () => {
-    const { chat: { room } } = store.getState();
-    if (room === "") return;  // ?
+    const room = store.getState().chat.room;
+    if (room === "") return;                  // ?
     socket.emit('RejoinRoom', room);
   });
 }
@@ -131,30 +90,31 @@ export function* updateOnlineSaga(status: string) {  // TO DO: give this an acti
 
 interface IClientToServerEvents {
   // Users
-  GetOnlineFriends(): void;
-  GetUsersInRoom(room: string): void;
+  GetOnlineFriends():                           void;
+  GetUsersInRoom(room: string):                 void;
   // Messages
-  SendMessage(text: string): void;
+  SendMessage(text: string):                    void;
   SendPrivateMessage(text: string, to: string): void;
   // Rooms
-  JoinRoom(room: string): void;
-  RejoinRoom(room: string): void;
+  JoinRoom(room: string):                       void;
+  RejoinRoom(room: string):                     void;
   //disconnecting
 }
 
 // TO DO: more consistent, shorter names
+// TO DO: question everything: do you need a saga? do you need the event/state in redux? do you need the event/state at all?
 interface IServerToClientEvents {
   // Users
-  OnlineFriends(friends: string[]): void;
-  FriendCameOnline(friend: string): void;
-  FriendWentOffline(friend: string): void;
+  OnlineFriends(friends: string[]):                    void;
+  FriendCameOnline(friend: string):                    void;
+  FriendWentOffline(friend: string):                   void;
   // Messages
-  Message(message: IMessage): void;
-  PrivateMessage(message: IMessage): void;
-  FailedPrivateMessage(feedback: string): void;
+  Message(message: IMessage):                          void;
+  PrivateMessage(message: IMessage):                   void;
+  FailedPrivateMessage(feedback: string):              void;
   // Rooms
-  UsersInRoom(users: string[], room: string): void;
+  UsersInRoom(users: string[], room: string):          void;
   UsersInRoomRefetched(users: string[], room: string): void;
-  UserJoinedRoom(user: string): void;
-  UserLeftRoom(user: string): void;
+  UserJoinedRoom(user: string):                        void;
+  UserLeftRoom(user: string):                          void;
 }
