@@ -1,5 +1,4 @@
-import { IEquipment, IIngredient, IWorkContent, IWorkRecipe } from '../../store/data/types';
-import { Content } from './tabs/Content';
+import { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
 import { Equipment } from './tabs/Equipment';
 import { Ingredients } from './tabs/Ingredients';
 import { Recipes } from './tabs/Recipes';
@@ -7,16 +6,11 @@ import { Tabs } from './tabs/Tabs';
 
 export function DashboardView({
   activateModal,
-  authname,
-  content,
-  creatingContent,
   deactivateModal,
   deleteName,
-  editingId,
   equipment,
   feedback,
   getApplicationNode,
-  handleDeleteContent,
   handleDeleteEquipment,
   handleDeleteIngredient,
   handleDeleteRecipe,
@@ -35,20 +29,6 @@ export function DashboardView({
       <p className="staff-dashboard__feedback">{feedback}</p>
 
       <Tabs tab={tab} handleTabClick={handleTabClick} />
-
-      {tab === "content" && (
-        <Content
-          activateModal={activateModal}
-          content={content}
-          creatingContent={creatingContent}
-          deactivateModal={deactivateModal}
-          deleteName={deleteName}
-          editingId={editingId}
-          getApplicationNode={getApplicationNode}
-          handleDeleteContent={handleDeleteContent}
-          modalActive={modalActive}
-        />
-      )}
 
       {tab === "recipes" && (
         <Recipes
@@ -70,25 +50,20 @@ export function DashboardView({
 }
 
 type Props = {
-  activateModal(id: number, name: string): void;
-  authname: string;
-  content: IWorkContent[];
-  creatingContent: boolean;
-  deactivateModal(): void;
-  deleteName: string;
-  editingId: number | null;
-  equipment: IEquipment[];
-  feedback: string;
-  getApplicationNode(): Element | Node;
-  handleDeleteContent(): void;
-  handleDeleteEquipment(id: number): void;
-  handleDeleteIngredient(id: number): void;
-  handleDeleteRecipe(): void;
+  activateModal(id: number, name: string):              void;
+  deactivateModal():                                    void;
+  deleteName:                                           string;
+  equipment:                                            IEquipment[];
+  feedback:                                             string;
+  getApplicationNode():                                 Element | Node;
+  handleDeleteEquipment(id: number):                    void;
+  handleDeleteIngredient(id: number):                   void;
+  handleDeleteRecipe():                                 void;
   handleTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  ingredients: IIngredient[];
-  loading: boolean;
-  modalActive: boolean;
-  oneColumnATheme: string;
-  recipes: IWorkRecipe[];
-  tab: string;
+  ingredients:                                          IIngredient[];
+  loading:                                              boolean;
+  modalActive:                                          boolean;
+  oneColumnATheme:                                      string;
+  recipes:                                              IWorkRecipe[];
+  tab:                                                  string;
 };

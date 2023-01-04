@@ -51,12 +51,12 @@ export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName
 
 type Props = {
   activateModal(id: number, name: string): void;
-  creatingPlan: boolean;
-  deactivateModal(): void;
-  deleteName: string;
-  deletePlan(): void;
-  editingId: number | null;
-  getApplicationNode(): Element | Node;
-  modalActive: boolean;
-  myPlans: IPlan[];
+  creatingPlan:                            boolean;
+  deactivateModal():                       void;
+  deleteName:                              string;
+  deletePlan():                            void;
+  editingId:                               number | null;
+  getApplicationNode():                    Element | Node;
+  modalActive:                             boolean;
+  myPlans:                                 IPlan[];
 };

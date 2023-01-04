@@ -55,13 +55,13 @@ export function PublicRecipes({ activateModal, deactivateModal, deleteName, diso
 }
 
 type Props = {
-  activateModal(id: number, name: string): void;
-  deactivateModal(): void;
-  deleteName: string;
-  disownPublicRecipe(): void;
-  getApplicationNode(): Element | Node;
-  myPublicRecipes: IWorkRecipe[];
-  modalActive: boolean;
-  subTab: string;
+  activateModal(id: number, name: string):           void;
+  deactivateModal():                                 void;
+  deleteName:                                        string;
+  disownPublicRecipe():                              void;
+  getApplicationNode():                              Element | Node;
+  myPublicRecipes:                                   IWorkRecipe[];
+  modalActive:                                       boolean;
+  subTab:                                            string;
   subTabClick(e: React.SyntheticEvent<EventTarget>): void;
 };

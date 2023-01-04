@@ -21,6 +21,6 @@ export function Equipment({ equipment, handleDeleteEquipment }: Props): JSX.Elem
 }
 
 type Props = {
-  equipment: IEquipment[];
+  equipment:                         IEquipment[];
   handleDeleteEquipment(id: number): void;
 };

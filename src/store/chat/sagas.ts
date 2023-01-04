@@ -5,46 +5,23 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import {
   connected,
   disconnected,
-
   onlineFriends,
   friendCameOnline,
   friendWentOffline,
-
   joinedRoom,
   rejoinedRoom,
-
   userJoinedRoom,
   userLeftRoom,
-
   receivedMessage,
   receivedPrivateMessage,
   failedPrivateMessage
 } from './actions';
 import { IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
 
-const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, reconnection: true});  //withCredentials: true
+const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false});  //withCredentials: true
 
 export function chatInit(store: Store) {
   if (typeof window === 'undefined') return;
-
-  // Users
-  socket.on('OnlineFriends',     (friends) => friends && store.dispatch(onlineFriends(friends)));
-  socket.on('FriendCameOnline',  (friend) => friend && store.dispatch(friendCameOnline(friend)));
-  socket.on('FriendWentOffline', (friend) => friend && store.dispatch(friendWentOffline(friend)));
-
-  // Messages
-  socket.on('Message',              (message) => message && store.dispatch(receivedMessage(message)));
-  socket.on('PrivateMessage',       (message) => message && store.dispatch(receivedPrivateMessage(message)));
-  socket.on('FailedPrivateMessage', (feedback) => feedback && store.dispatch(failedPrivateMessage(feedback)));
-
-  // Rooms
-  socket.on('UsersInRoom',          (users, room) => (users && room) && store.dispatch(joinedRoom(users, room)));
-  socket.on('UsersInRoomRefetched', (users, room) => (users && room) && store.dispatch(rejoinedRoom(users, room)));  // source of bug?
-  
-  socket.on('UserJoinedRoom',       (user) => user && store.dispatch(userJoinedRoom(user)));
-  socket.on('UserLeftRoom',         (user) => user && store.dispatch(userLeftRoom(user)));
-
-  // SocketIO Events
 
   socket.on('connect', () => {
     store.dispatch(connected());
@@ -58,6 +35,20 @@ export function chatInit(store: Store) {
     if (room === "") return;                  // ?
     socket.emit('RejoinRoom', room);
   });
+
+  socket.on('OnlineFriends',        (friends) => friends && store.dispatch(onlineFriends(friends)));
+  socket.on('FriendCameOnline',     (friend) => friend && store.dispatch(friendCameOnline(friend)));
+  socket.on('FriendWentOffline',    (friend) => friend && store.dispatch(friendWentOffline(friend)));
+
+  socket.on('Message',              (message) => message && store.dispatch(receivedMessage(message)));
+  socket.on('PrivateMessage',       (message) => message && store.dispatch(receivedPrivateMessage(message)));
+  socket.on('FailedPrivateMessage', (feedback) => feedback && store.dispatch(failedPrivateMessage(feedback)));
+
+  socket.on('UsersInRoom',          (users, room) => (users && room) && store.dispatch(joinedRoom(users, room)));
+  socket.on('UsersInRoomRefetched', (users, room) => (users && room) && store.dispatch(rejoinedRoom(users, room)));  // source of bug?
+
+  socket.on('UserJoinedRoom',       (user) => user && store.dispatch(userJoinedRoom(user)));
+  socket.on('UserLeftRoom',         (user) => user && store.dispatch(userLeftRoom(user)));
 }
 
 // Sagas
@@ -101,7 +92,6 @@ interface IClientToServerEvents {
   //disconnecting
 }
 
-// TO DO: more consistent, shorter names
 // TO DO: question everything: do you need a saga? do you need the event/state in redux? do you need the event/state at all?
 interface IServerToClientEvents {
   // Users

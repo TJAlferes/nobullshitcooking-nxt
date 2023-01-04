@@ -31,5 +31,5 @@ export function Ingredients({ deletePrivateIngredient, myPrivateIngredients }: P
 
 type Props = {
   deletePrivateIngredient(id: number): void;
-  myPrivateIngredients: IIngredient[];
+  myPrivateIngredients:                IIngredient[];
 };

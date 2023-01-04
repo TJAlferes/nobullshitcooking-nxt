@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { IEquipment, IIngredient, IWorkContent, IWorkRecipe } from '../../store/data/types';
-import { staffDeleteContent } from '../../store/staff/content/actions';
+import { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
 import { staffDeleteEquipment } from '../../store/staff/equipment/actions';
 import { staffDeleteIngredient } from '../../store/staff/ingredient/actions';
 import { staffDeleteRecipe } from '../../store/staff/recipe/actions';
@@ -10,16 +9,11 @@ import { DashboardView } from './DashboardView';
 import './dashboard.css';
 
 export function StaffDashboard({
-  authname,
-  creatingContent,
-  content,
-  editingId,
   equipment,
   ingredients,
   message,
   oneColumnATheme,
   recipes,
-  staffDeleteContent,
   staffDeleteEquipment,
   staffDeleteIngredient,
   staffDeleteRecipe
@@ -29,7 +23,7 @@ export function StaffDashboard({
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);
   const [ modalActive, setModalActive ] = useState(false);
-  const [ tab,         setTab ] =         useState("content");
+  const [ tab,         setTab ] =         useState("recipes");
 
   useEffect(() => {
     let isSubscribed = true;
@@ -58,12 +52,6 @@ export function StaffDashboard({
 
   const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
 
-  const handleDeleteContent = () => {
-    if (!deleteId) return;
-    setLoading(true);
-    staffDeleteContent(deleteId);
-  };
-
   const handleDeleteEquipment = (id: number) => {
     setLoading(true);
     staffDeleteEquipment(id);
@@ -85,16 +73,11 @@ export function StaffDashboard({
   return (
     <DashboardView
       activateModal={activateModal}
-      authname={authname}
-      content={content}
-      creatingContent={creatingContent}
       deactivateModal={deactivateModal}
       deleteName={deleteName}
-      editingId={editingId}
       equipment={equipment}
       feedback={feedback}
       getApplicationNode={getApplicationNode}
-      handleDeleteContent={handleDeleteContent}
       handleDeleteEquipment={handleDeleteEquipment}
       handleDeleteIngredient={handleDeleteIngredient}
       handleDeleteRecipe={handleDeleteRecipe}
@@ -110,18 +93,10 @@ export function StaffDashboard({
 }
 
 interface RootState {
-  auth: {
-    authname: string;
-  };
   data: {
-    officialContent: IWorkContent[];
     officialEquipment: IEquipment[];
     officialIngredients: IIngredient[];
     officialRecipes: IWorkRecipe[];
-  };
-  editor: {
-    creating: boolean;
-    editingId: number|null;
   };
   staff: {
     message: string;
@@ -135,18 +110,13 @@ type Props = PropsFromRedux & {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  authname: state.auth.authname,
-  content: state.data.officialContent,
   equipment: state.data.officialEquipment,
   ingredients: state.data.officialIngredients,
   recipes: state.data.officialRecipes,
-  creatingContent: state.editor.creating,
-  editingId: state.editor.editingId,
   message: state.staff.message
 });
 
 const mapDispatchToProps = {
-  staffDeleteContent: (id: number) => staffDeleteContent(id),
   staffDeleteEquipment: (id: number) => staffDeleteEquipment(id),
   staffDeleteIngredient: (id: number) => staffDeleteIngredient(id),
   staffDeleteRecipe: (id: number) => staffDeleteRecipe(id)

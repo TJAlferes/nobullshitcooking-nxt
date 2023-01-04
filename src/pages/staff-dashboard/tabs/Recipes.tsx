@@ -44,10 +44,10 @@ export function Recipes({ activateModal, deactivateModal, deleteName, getApplica
 
 type Props = {
   activateModal(id: number, name: string): void;
-  deactivateModal(): void;
-  deleteName: string;
-  getApplicationNode(): Element | Node;
-  handleDeleteRecipe(): void;
-  modalActive: boolean;
-  recipes: IWorkRecipe[];
+  deactivateModal():                       void;
+  deleteName:                              string;
+  getApplicationNode():                    Element | Node;
+  handleDeleteRecipe():                    void;
+  modalActive:                             boolean;
+  recipes:                                 IWorkRecipe[];
 };

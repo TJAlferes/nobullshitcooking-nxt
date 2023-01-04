@@ -31,5 +31,5 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
 
 type Props = {
   deletePrivateEquipment(id: number): void;
-  myPrivateEquipment: IEquipment[];
+  myPrivateEquipment:                 IEquipment[];
 };

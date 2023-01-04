@@ -22,5 +22,5 @@ export function Ingredients({ handleDeleteIngredient, ingredients }: Props): JSX
 
 type Props = {
   handleDeleteIngredient(id: number): void;
-  ingredients: IIngredient[];
+  ingredients:                        IIngredient[];
 };

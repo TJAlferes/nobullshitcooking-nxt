@@ -28,14 +28,14 @@ export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCr
 }
 
 type Props = {
-  avatar: string | ArrayBuffer | null;
-  cancelAvatar(): void;
-  crop: Crop;
-  fullCrop: string;
-  loading: boolean;
-  onCropChange(crop: Crop): void;
-  onCropComplete(crop: Crop): void;
+  avatar:                                 string | ArrayBuffer | null;
+  cancelAvatar():                         void;
+  crop:                                   Crop;
+  fullCrop:                               string;
+  loading:                                boolean;
+  onCropChange(crop: Crop):               void;
+  onCropComplete(crop: Crop):             void;
   onImageLoaded(image: HTMLImageElement): void;
-  submitAvatar(): void;
-  tinyCrop: string;
+  submitAvatar():                         void;
+  tinyCrop:                               string;
 };

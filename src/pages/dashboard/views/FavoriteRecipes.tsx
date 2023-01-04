@@ -31,8 +31,8 @@ export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavo
 }
 
 type Props = {
-  myFavoriteRecipes: IWorkRecipe[];
-  subTab: string;
+  myFavoriteRecipes:                                 IWorkRecipe[];
+  subTab:                                            string;
   subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  unfavoriteRecipe(id: number): void;
+  unfavoriteRecipe(id: number):                      void;
 };

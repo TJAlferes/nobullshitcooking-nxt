@@ -31,8 +31,8 @@ export function SavedRecipes({ mySavedRecipes, subTab, subTabClick, unsaveRecipe
 }
 
 type Props = {
-  mySavedRecipes: IWorkRecipe[];
-  subTab: string;
+  mySavedRecipes:                                    IWorkRecipe[];
+  subTab:                                            string;
   subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  unsaveRecipe(id: number): void;
+  unsaveRecipe(id: number):                          void;
 };

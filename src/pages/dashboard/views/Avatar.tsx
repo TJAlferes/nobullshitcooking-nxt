@@ -21,6 +21,6 @@ export function Avatar({ authname, onSelectFile }: Props): JSX.Element {
 }
 
 type Props = {
-  authname: string;
+  authname:                                             string;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>): void;
 };
