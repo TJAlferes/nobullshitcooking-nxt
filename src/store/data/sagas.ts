@@ -16,8 +16,6 @@ export function* dataGetInitialDataSaga() {
   }
 }
 
-export const dataGetContentSaga =           makeDataSaga("/content", "content");
-export const dataGetContentTypesSaga =      makeDataSaga("/content-type", "contentTypes");
 export const dataGetCuisinesSaga =          makeDataSaga("/cuisine", "cuisines");
 export const dataGetEquipmentsSaga =        makeDataSaga("/equipment/official/all", "equipment");
 export const dataGetEquipmentTypesSaga =    makeDataSaga("/equipment-type", "equipmentTypes");
@@ -40,7 +38,6 @@ export function* dataGetInitialUserDataSaga() {
   }
 }
 
-export const dataGetMyContentSaga =            makeUserDataSaga("/content/all", "myContent");
 export const dataGetMyFavoriteRecipesSaga =    makeUserDataSaga("/favorite-recipe", "myFavoriteRecipes");
 export const dataGetMyFriendshipsSaga =        makeUserDataSaga("/friendship", "myFriendships");
 export const dataGetMyPlansSaga =              makeUserDataSaga("/plan/all", "myPlans");

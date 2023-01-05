@@ -53,7 +53,7 @@ export function validRecipeInfo({
   let validIngredientRows = true;
   if (ingredientRows.length) {
     ingredientRows.map(r => {
-      if (r.amount === "" || r.unit === "" || r.ingredient === "") validIngredientRows = false;  // TO DO: change to measurementId or measurementName?
+      if (r.amount === "" || r.unit === "" || r.ingredient === "") validIngredientRows = false;  // TO DO: change to measurementId or measurementName? 
     });
     if (!validIngredientRows) return feedback("Review ingredients.");
   }

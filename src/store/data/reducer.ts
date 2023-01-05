@@ -3,8 +3,6 @@ import { actionTypes, IDataState, DataActions } from './types';
 const { DATA_GET_INITIAL_DATA, DATA_GET_DATA, DATA_GET_INITIAL_USER_DATA, DATA_GET_USER_DATA } = actionTypes;
 
 const initialState: IDataState = {
-  content: [],
-  contentTypes: [],
   cuisines: [],
   equipment: [],
   equipmentTypes: [],
@@ -18,7 +16,6 @@ const initialState: IDataState = {
   recipes: [],
   recipeTypes: [],
   
-  myContent: [],
   myFavoriteRecipes: [],
   myFriendships: [],
   myPlans: [],
@@ -35,8 +32,6 @@ export const dataReducer = (state = initialState, action: DataActions): IDataSta
       return {
         ...state,
         ...{
-          content: action.initialData.content,
-          contentTypes: action.initialData.contentTypes,
           cuisines: action.initialData.cuisines,
           equipment: action.initialData.equipment,
           equipmentTypes: action.initialData.equipmentTypes,
@@ -56,7 +51,6 @@ export const dataReducer = (state = initialState, action: DataActions): IDataSta
       return {
         ...state,
         ...{
-          myContent: action.initialUserData.myContent,
           myPublicRecipes: action.initialUserData.myPublicRecipes,
           myPrivateEquipment: action.initialUserData.myPrivateEquipment,
           myPrivateIngredients: action.initialUserData.myPrivateIngredients,

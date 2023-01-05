@@ -110,7 +110,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       const {
         recipe_type_id, cuisine_id,
         title, description, directions,
-        required_equipment, required_ingredients, required_methods, required_subrecipes,
+        equipment, ingredients, methods, subrecipes,
         recipe_image, equipment_image, ingredients_image, cooking_image
       } = recipe;
 
@@ -122,7 +122,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       setDirections(directions);
 
       let methodsToSet: number[] = [];
-      required_methods.length && required_methods.map(m => methodsToSet.push(m.method_id));
+      methods.length && methods.map(m => methodsToSet.push(m.method_id));
       setUsedMethods(prevState => {
         const nextState = {...prevState};
         methodsToSet.map(method => {
@@ -131,9 +131,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
         return nextState;
       });
 
-      setRequiredEquipment(required_equipment);
-      setRequiredIngredients(required_ingredients);
-      setRequiredSubrecipes(required_subrecipes);
+      setRequiredEquipment(equipment);
+      setRequiredIngredients(ingredients);
+      setRequiredSubrecipes(subrecipes);
       setRecipePrevImage(recipe_image);
       setEquipmentPrevImage(equipment_image);
       setIngredientsPrevImage(ingredients_image);
@@ -270,10 +270,10 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
         ownership,
         recipeTypeId, cuisineId,
         title, description, directions,
-        requiredMethods: getCheckedMethods(),
-        requiredEquipment: getRequiredEquipment(),
-        requiredIngredients: getRequiredIngredients(),
-        requiredSubrecipes: getRequiredSubrecipes(),
+        methods: getCheckedMethods(),
+        equipment: getRequiredEquipment(),
+        ingredients: getRequiredIngredients(),
+        subrecipes: getRequiredSubrecipes(),
         recipeImage, recipeFullImage, recipePrevImage, recipeThumbImage, recipeTinyImage,
         equipmentImage, equipmentFullImage, equipmentPrevImage,
         ingredientsImage, ingredientsFullImage, ingredientsPrevImage,
@@ -291,10 +291,10 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
         ownership,
         recipeTypeId, cuisineId,
         title, description, directions,
-        requiredMethods: getCheckedMethods(),
-        requiredEquipment: getRequiredEquipment(),
-        requiredIngredients: getRequiredIngredients(),
-        requiredSubrecipes: getRequiredSubrecipes(),
+        methods: getCheckedMethods(),
+        equipment: getRequiredEquipment(),
+        ingredients: getRequiredIngredients(),
+        subrecipes: getRequiredSubrecipes(),
         recipeImage, recipeFullImage, recipeThumbImage, recipeTinyImage,
         equipmentImage, equipmentFullImage,
         ingredientsImage, ingredientsFullImage,
@@ -533,21 +533,21 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 type IImage = string | ArrayBuffer | null;
 
 export interface IExistingRecipeToEdit {
-  id:                   number;
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  owner_id:             number;
-  title:                string;
-  description:          string;
-  directions:           string;
-  required_methods:     IExistingRequiredMethod[];
-  required_equipment:   IExistingRequiredEquipment[];
-  required_ingredients: IExistingRequiredIngredient[];
-  required_subrecipes:  IExistingRequiredSubrecipe[];
-  recipe_image:         string;
-  equipment_image:      string;
-  ingredients_image:    string;
-  cooking_image:        string;
+  id:                number;
+  recipe_type_id:    number;
+  cuisine_id:        number;
+  owner_id:          number;
+  title:             string;
+  description:       string;
+  directions:        string;
+  methods:           IExistingRequiredMethod[];
+  equipment:         IExistingRequiredEquipment[];
+  ingredients:       IExistingRequiredIngredient[];
+  subrecipes:        IExistingRequiredSubrecipe[];
+  recipe_image:      string;
+  equipment_image:   string;
+  ingredients_image: string;
+  cooking_image:     string;
 }
 
 export interface IExistingRequiredMethod {
@@ -603,6 +603,7 @@ export interface IMethods {
   24: boolean;
 }
 
+// fix these?
 export interface IEquipmentRow {
   [index: string]: any;
   key:             string;

@@ -121,10 +121,10 @@ export interface IRecipe {
   equipment_image:      string;
   ingredients_image:    string;
   cooking_image:        string;
-  required_methods:     IRequiredMethod[];
-  required_equipment:   IRequiredEquipment[];
-  required_ingredients: IRequiredIngredient[];
-  required_subrecipes:  IRequiredSubrecipe[];
+  methods:     IRequiredMethod[];
+  equipment:   IRequiredEquipment[];
+  ingredients: IRequiredIngredient[];
+  subrecipes:  IRequiredSubrecipe[];
 }
 
 interface IRequiredMethod {

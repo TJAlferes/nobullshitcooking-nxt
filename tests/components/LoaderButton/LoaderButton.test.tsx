@@ -7,13 +7,13 @@ const onClick = jest.fn();
 const onKeyUp = jest.fn();
 
 const initialProps = {
-  className: "something",
-  id: "something",
+  className:   "something",
+  id:          "something",
   loadingText: "Some Loading Text...",
-  name: "something",
+  name:        "something",
   onClick,
   onKeyUp,
-  text: "Some Text"
+  text:        "Some Text"
 };
 
 describe('LoaderButton', () => {

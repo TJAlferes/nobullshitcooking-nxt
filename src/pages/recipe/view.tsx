@@ -22,7 +22,7 @@ export function RecipeView({
 }: Props): JSX.Element {
   const {
     id, author, title, description, cuisine_name, recipe_type_name, directions,
-    required_equipment, required_ingredients, required_subrecipes, required_methods,
+    equipment, ingredients, subrecipes, methods,
     recipe_image, equipment_image, ingredients_image, cooking_image
   } = recipe;
 
@@ -76,7 +76,7 @@ export function RecipeView({
 
         <h2 className="recipe__h2">Required Methods</h2>
         <div className="recipe-required-methods">
-          {required_methods && required_methods.map(m => <div className="recipe-required-method" key={m.method_name}>{m.method_name}</div>)}
+          {methods && methods.map(m => <div className="recipe-required-method" key={m.method_name}>{m.method_name}</div>)}
         </div>
 
         <h2 className="recipe__h2">Required Equipment</h2>
@@ -84,7 +84,7 @@ export function RecipeView({
           {equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>}
         </div>
         <div className="recipe-required-equipments">
-          {required_equipment && required_equipment.map(e => <div className="recipe-required-equipment" key={e.equipment_name}>{e.amount}{' '}{e.equipment_name}</div>)}
+          {equipment && equipment.map(e => <div className="recipe-required-equipment" key={e.equipment_name}>{e.amount}{' '}{e.equipment_name}</div>)}
         </div>
 
         <h2 className="recipe__h2">Required Ingredients</h2>
@@ -92,7 +92,7 @@ export function RecipeView({
           {ingredients_image !== "nobsc-recipe-ingredients-default" ? <img src={`${url}-ingredients/${ingredients_image}`} /> : <div className="img-280-172"></div>}
         </div>
         <div className="recipe-required-ingredients">
-          {required_ingredients && required_ingredients.map(i => (
+          {ingredients && ingredients.map(i => (
             <div className="recipe-required-ingredient" key={i.ingredient_name}>
               {i.amount}{' '}{i.measurement_name}{' '}{i.ingredient_name}
             </div>
@@ -101,8 +101,8 @@ export function RecipeView({
 
         <h2 className="recipe__h2">Required Subrecipes</h2>
         <div className="recipe-required-subrecipes">
-          {required_subrecipes
-            ? required_subrecipes.map(s => <div className="recipe-required-subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.measurement_name}{' '}{s.subrecipe_title}</div>)
+          {subrecipes
+            ? subrecipes.map(s => <div className="recipe-required-subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.measurement_name}{' '}{s.subrecipe_title}</div>)
             : "none"}
         </div>
 

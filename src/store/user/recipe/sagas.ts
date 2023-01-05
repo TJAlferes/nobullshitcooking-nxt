@@ -13,7 +13,7 @@ export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | 
   let {
     ownership, recipeTypeId, cuisineId,
     title, description, directions,
-    requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+    methods, equipment, ingredients, subrecipes,
     recipeImage, recipeFullImage, recipeThumbImage, recipeTinyImage,
     equipmentImage, equipmentFullImage,
     ingredientsImage, ingredientsFullImage,
@@ -74,7 +74,7 @@ export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | 
         recipeInfo: {
           ownership, recipeTypeId, cuisineId,
           title, description, directions,
-          requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+          methods, equipment, ingredients, subrecipes,
           recipeImage, equipmentImage, ingredientsImage, cookingImage
         }
       },
@@ -122,7 +122,7 @@ export function* userEditRecipeSaga(action: (IUserEditPrivateRecipe | IUserEditP
   let {
     id, ownership, recipeTypeId, cuisineId,
     title, description, directions,
-    requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+    methods, equipment, ingredients, subrecipes,
     recipeImage, recipeFullImage, recipePrevImage, recipeThumbImage, recipeTinyImage,
     equipmentImage, equipmentFullImage, equipmentPrevImage,
     ingredientsImage, ingredientsFullImage, ingredientsPrevImage,
@@ -183,7 +183,7 @@ export function* userEditRecipeSaga(action: (IUserEditPrivateRecipe | IUserEditP
         recipeInfo: {
           id, ownership, recipeTypeId, cuisineId,
           title, description, directions,
-          requiredMethods, requiredEquipment, requiredIngredients, requiredSubrecipes,
+          methods, equipment, ingredients, subrecipes,
           recipeImage, recipePrevImage,
           equipmentImage, equipmentPrevImage,
           ingredientsImage, ingredientsPrevImage,

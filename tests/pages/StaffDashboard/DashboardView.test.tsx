@@ -6,7 +6,6 @@ import { DashboardView } from '../../../src/pages/StaffDashboard/DashboardView';
 const activateModal = jest.fn();
 const deactivateModal = jest.fn();
 const getApplicationNode = jest.fn();
-const handleDeleteContent = jest.fn();
 const handleDeleteEquipment = jest.fn();
 const handleDeleteIngredient = jest.fn();
 const handleDeleteRecipe = jest.fn();
@@ -15,15 +14,12 @@ const handleTabClick = jest.fn();
 const initialProps = {
   activateModal,
   authname: "Person",
-  content: [],
-  creatingContent: false,
   deactivateModal,
   deleteName: "",
   editingId: null,
   equipment: [],
   feedback: "Some message.",
   getApplicationNode,
-  handleDeleteContent,
   handleDeleteEquipment,
   handleDeleteIngredient,
   handleDeleteRecipe,
