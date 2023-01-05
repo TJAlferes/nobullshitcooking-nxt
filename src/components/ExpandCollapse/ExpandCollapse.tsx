@@ -16,5 +16,5 @@ export const ExpandCollapse: FC<Props> = ({ children, headingWhileCollapsed = "M
 
 type Props = {
   headingWhileCollapsed?: string;
-  headingWhileExpanded?: string;
+  headingWhileExpanded?:  string;
 };

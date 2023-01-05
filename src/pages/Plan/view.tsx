@@ -48,9 +48,9 @@ export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDay
 }
 
 type Props = {
-  expanded: boolean;
-  expandedDay: number | null;
-  planName: string;
+  expanded:              boolean;
+  expandedDay:           number | null;
+  planName:              string;
   recipeListsInsideDays: IPlannerViewData;
-  twoColumnATheme: string;
+  twoColumnATheme:       string;
 };

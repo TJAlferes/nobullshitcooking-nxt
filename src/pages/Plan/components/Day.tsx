@@ -18,8 +18,8 @@ export default function Day({ day, expanded, expandedDay, recipes }: Props): JSX
 }
 
 type Props = {
-  day: number;
-  expanded: boolean;
+  day:         number;
+  expanded:    boolean;
   expandedDay: number | null;
-  recipes: IPlannerViewRecipe[];
+  recipes:     IPlannerViewRecipe[];
 };

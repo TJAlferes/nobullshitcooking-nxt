@@ -73,17 +73,17 @@ export function FriendsView({
 
 type Props = {
   acceptFriendship(e: React.SyntheticEvent<EventTarget>): void;
-  blockUser(): void;
+  blockUser():                                            void;
   deleteFriendship(e: React.SyntheticEvent<EventTarget>): void;
-  feedback: string;
-  inputChange(e: React.SyntheticEvent<EventTarget>): void;
-  loading: boolean;
-  myFriendships: IFriendship[];
+  feedback:                                               string;
+  inputChange(e: React.SyntheticEvent<EventTarget>):      void;
+  loading:                                                boolean;
+  myFriendships:                                          IFriendship[];
   rejectFriendship(e: React.SyntheticEvent<EventTarget>): void;
-  requestFriendship(): void;
-  tab: string;
-  tabChange(value: string): void;
-  theme: string;
-  unblockUser(e: React.SyntheticEvent<EventTarget>): void;
-  userToFind: string;
+  requestFriendship():                                    void;
+  tab:                                                    string;
+  tabChange(value: string):                               void;
+  theme:                                                  string;
+  unblockUser(e: React.SyntheticEvent<EventTarget>):      void;
+  userToFind:                                             string;
 };

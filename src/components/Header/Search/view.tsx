@@ -41,20 +41,20 @@ interface IResult {
 }
 
 interface IResultValue {
-  raw: string;
+  raw:     string;
   snippet: string;
 }
 
 type Props = {
   allAutoCompletedItemsCount: number;
   autocompleteResults: {
-    titleField: string;
-    urlField: string;
-    linkTarget: string;
+    titleField:   string;
+    urlField:     string;
+    linkTarget:   string;
     sectionTitle: string;
   };
-  autocompletedResults: any[],
-  className: string;
+  autocompletedResults:     any[],
+  className:                string;
   getItemProps(props: any): any;
   getMenuProps(props: any): any;
 };

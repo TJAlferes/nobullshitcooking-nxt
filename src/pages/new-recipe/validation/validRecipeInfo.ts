@@ -70,15 +70,15 @@ export function validRecipeInfo({
 }
 
 type RecipeInfo = {
-  cuisineId: number;
-  description: string;
-  directions: string;
-  equipmentRows: IEquipmentRow[];
-  ingredientRows: IIngredientRow[];
-  usedMethods: IMethods;
-  ownership: string;
-  recipeTypeId: number;
+  cuisineId:                     number;
+  description:                   string;
+  directions:                    string;
+  equipmentRows:                 IEquipmentRow[];
+  ingredientRows:                IIngredientRow[];
+  usedMethods:                   IMethods;
+  ownership:                     string;
+  recipeTypeId:                  number;
   setFeedback(feedback: string): void;
-  subrecipeRows: ISubrecipeRow[];
-  title: string;
+  subrecipeRows:                 ISubrecipeRow[];
+  title:                         string;
 };

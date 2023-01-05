@@ -78,14 +78,14 @@ interface ISubmenuImages {
 }
 
 type Props = {
-  activeMenuRow: number | undefined;
-  clearActiveMenuRow(): void;
-  closeMenus(): void;
-  enterRow(row: number): void;
-  expanded: string;
-  leaveMenu(): void;
-  level: number;
-  menuItems: IMenuItem[];
+  activeMenuRow:          number | undefined;
+  clearActiveMenuRow():   void;
+  closeMenus():           void;
+  enterRow(row: number):  void;
+  expanded:               string;
+  leaveMenu():            void;
+  level:                  number;
+  menuItems:              IMenuItem[];
   openMenu(name: string): void;
-  theme: string;
+  theme:                  string;
 };

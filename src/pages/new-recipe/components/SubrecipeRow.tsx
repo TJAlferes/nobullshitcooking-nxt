@@ -87,23 +87,25 @@ export function SubrecipeRow({
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  amount: string | number;
-  changeSubrecipeRow(e: React.SyntheticEvent<EventTarget>, rowKey: string): void;
-  cuisine: string | number;
-  cuisines: ICuisine[];
-  measurements: IMeasurement[];
-  myFavoriteRecipes: IWorkRecipe[];
-  myPrivateRecipes: IWorkRecipe[];
-  myPublicRecipes: IWorkRecipe[];
-  mySavedRecipes: IWorkRecipe[];
-  recipes: IWorkRecipe[];
-  recipeTypes: IRecipeType[];
-  editing: boolean;
-  removeSubrecipeRow(rowKey: string): void;
-  rowKey: string;
-  selfId: number;
-  id: string | number;
-  type: string | number;
-  measurementId: string | number;
+  amount:                                                string | number;
+  changeSubrecipeRow(e: SyntheticEvent, rowKey: string): void;
+  cuisine:                                               string | number;
+  cuisines:                                              ICuisine[];
+  measurements:                                          IMeasurement[];
+  myFavoriteRecipes:                                     IWorkRecipe[];
+  myPrivateRecipes:                                      IWorkRecipe[];
+  myPublicRecipes:                                       IWorkRecipe[];
+  mySavedRecipes:                                        IWorkRecipe[];
+  recipes:                                               IWorkRecipe[];
+  recipeTypes:                                           IRecipeType[];
+  editing:                                               boolean;
+  removeSubrecipeRow(rowKey: string):                    void;
+  rowKey:                                                string;
+  selfId:                                                number;
+  id:                                                    string | number;
+  type:                                                  string | number;
+  measurementId:                                         string | number;
 };

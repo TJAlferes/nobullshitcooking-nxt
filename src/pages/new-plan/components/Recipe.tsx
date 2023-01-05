@@ -72,20 +72,20 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
 };
 
 interface IDragItem {
-  id: string;
+  id:    string;
   index: number;
-  type: string;
+  type:  string;
 }
 
 type Props = {
-  day: number;
-  expanded: boolean;
+  day:         number;
+  expanded:    boolean;
   expandedDay: number | null;
-  id: string;
-  index: number;
-  key: string;
-  listId: number;
-  recipe: IPlannerRecipe;
+  id:          string;
+  index:       number;
+  key:         string;
+  listId:      number;
+  recipe:      IPlannerRecipe;
 };
 
 export default Recipe;

@@ -119,17 +119,17 @@ export function RecipeView({
 }
 
 type Props = {
-  favorite(): void;
-  favorited: boolean;
-  feedback: string;
-  loading: boolean;
-  myFavoriteRecipes: IWorkRecipe[];
-  myPrivateRecipes: IWorkRecipe[];
-  myPublicRecipes: IWorkRecipe[];
-  mySavedRecipes: IWorkRecipe[];
-  recipe: IRecipe;
-  save(): void;
-  saved: boolean;
-  theme: string;
+  favorite():          void;
+  favorited:           boolean;
+  feedback:            string;
+  loading:             boolean;
+  myFavoriteRecipes:   IWorkRecipe[];
+  myPrivateRecipes:    IWorkRecipe[];
+  myPublicRecipes:     IWorkRecipe[];
+  mySavedRecipes:      IWorkRecipe[];
+  recipe:              IRecipe;
+  save():              void;
+  saved:               boolean;
+  theme:               string;
   userIsAuthenticated: boolean;
 };

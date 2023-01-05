@@ -25,13 +25,13 @@ export function LoaderButton({
 };
 
 type Props = {
-  className: string;
-  disabled?: boolean;
-  id: string;
-  isLoading: boolean;
-  loadingText: string;
-  name: string;
-  onClick(e?: React.MouseEvent): void;
+  className:                        string;
+  disabled?:                        boolean;
+  id:                               string;
+  isLoading:                        boolean;
+  loadingText:                      string;
+  name:                             string;
+  onClick(e?: React.MouseEvent):    void;
   onKeyUp?(e: React.KeyboardEvent): void;
-  text: string;
+  text:                             string;
 };

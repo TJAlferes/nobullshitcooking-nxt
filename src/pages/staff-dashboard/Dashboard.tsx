@@ -94,9 +94,9 @@ export function StaffDashboard({
 
 interface RootState {
   data: {
-    officialEquipment: IEquipment[];
+    officialEquipment:   IEquipment[];
     officialIngredients: IIngredient[];
-    officialRecipes: IWorkRecipe[];
+    officialRecipes:     IWorkRecipe[];
   };
   staff: {
     message: string;
@@ -110,16 +110,16 @@ type Props = PropsFromRedux & {
 };
 
 const mapStateToProps = (state: RootState) => ({
-  equipment: state.data.officialEquipment,
+  equipment:   state.data.officialEquipment,
   ingredients: state.data.officialIngredients,
-  recipes: state.data.officialRecipes,
-  message: state.staff.message
+  recipes:     state.data.officialRecipes,
+  message:     state.staff.message
 });
 
 const mapDispatchToProps = {
-  staffDeleteEquipment: (id: number) => staffDeleteEquipment(id),
+  staffDeleteEquipment:  (id: number) => staffDeleteEquipment(id),
   staffDeleteIngredient: (id: number) => staffDeleteIngredient(id),
-  staffDeleteRecipe: (id: number) => staffDeleteRecipe(id)
+  staffDeleteRecipe:     (id: number) => staffDeleteRecipe(id)
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

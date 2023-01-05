@@ -127,36 +127,34 @@ export function ChatView({
   );
 }
 
-type Props = {
-  authname:                                                 string;
-  changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  changeMobileTab(value: string):                           void;
-  changePeopleTab(value: string):                           void;
-  changeRoomInput(e: React.SyntheticEvent<EventTarget>):    void;
-  changeRoom():                                             void;
-  connect():                                                void;
-  disconnect():                                             void;
-  feedback:                                                 string;
-  focusedFriend:                                            string | undefined;
-  focusFriend(friend: string):                              void;
-  focusedUser:                                              string | undefined;
-  focusUser(user: string):                                  void;
-  loading:                                                  boolean;
-  messages:                                                 IMessageWithClientTimestamp[];
-  messagesRef:                                              React.RefObject<HTMLUListElement>;
-  messageToSend:                                            string;
-  mobileTab:                                                string;
-  friends:                                                  string[];
-  peopleTab:                                                string;
-  room:                                                     string;
-  roomToEnter:                                              string;
-  send(e: React.KeyboardEvent):                             void;
-  startPrivateMessage(username: string):                    void;
-  status:                                                   string;
-  theme:                                                    string;
-  users:                                                    string[];
-};
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
-type MobileTabProps = {
-  tab: string;
+type Props = {
+  authname:                              string;
+  changeMessageInput(e: SyntheticEvent): void;
+  changeMobileTab(value: string):        void;
+  changePeopleTab(value: string):        void;
+  changeRoomInput(e: SyntheticEvent):    void;
+  changeRoom():                          void;
+  connect():                             void;
+  disconnect():                          void;
+  feedback:                              string;
+  focusedFriend:                         string | undefined;
+  focusFriend(friend: string):           void;
+  focusedUser:                           string | undefined;
+  focusUser(user: string):               void;
+  loading:                               boolean;
+  messages:                              IMessageWithClientTimestamp[];
+  messagesRef:                           React.RefObject<HTMLUListElement>;
+  messageToSend:                         string;
+  mobileTab:                             string;
+  friends:                               string[];
+  peopleTab:                             string;
+  room:                                  string;
+  roomToEnter:                           string;
+  send(e: React.KeyboardEvent):          void;
+  startPrivateMessage(username: string): void;
+  status:                                string;
+  theme:                                 string;
+  users:                                 string[];
 };

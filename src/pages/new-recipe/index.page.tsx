@@ -533,21 +533,21 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 type IImage = string | ArrayBuffer | null;
 
 export interface IExistingRecipeToEdit {
-  id: number;
-  recipe_type_id: number;
-  cuisine_id: number;
-  owner_id: number;
-  title: string;
-  description: string;
-  directions: string;
-  required_methods: IExistingRequiredMethod[];
-  required_equipment: IExistingRequiredEquipment[];
+  id:                   number;
+  recipe_type_id:       number;
+  cuisine_id:           number;
+  owner_id:             number;
+  title:                string;
+  description:          string;
+  directions:           string;
+  required_methods:     IExistingRequiredMethod[];
+  required_equipment:   IExistingRequiredEquipment[];
   required_ingredients: IExistingRequiredIngredient[];
-  required_subrecipes: IExistingRequiredSubrecipe[];
-  recipe_image: string;
-  equipment_image: string;
-  ingredients_image: string;
-  cooking_image: string;
+  required_subrecipes:  IExistingRequiredSubrecipe[];
+  recipe_image:         string;
+  equipment_image:      string;
+  ingredients_image:    string;
+  cooking_image:        string;
 }
 
 export interface IExistingRequiredMethod {
@@ -555,37 +555,37 @@ export interface IExistingRequiredMethod {
 }
 
 export interface IExistingRequiredEquipment {
-  amount: number;
+  amount:            number;
   equipment_type_id: number;
-  equipment_id: number;
+  equipment_id:      number;
 }
 
 export interface IExistingRequiredIngredient {
-  amount: number;
-  measurement_id: number;
+  amount:             number;
+  measurement_id:     number;
   ingredient_type_id: number;
-  ingredient_id: number;
+  ingredient_id:      number;
 }
 
 export interface IExistingRequiredSubrecipe {
-  amount: number;
+  amount:         number;
   measurement_id: number;
   recipe_type_id: number;
-  cuisine_id: number;
-  subrecipe_id: number;
+  cuisine_id:     number;
+  subrecipe_id:   number;
 }
 
 export interface IMethods {
   [index: string]: any;
-  1: boolean;
-  2: boolean;
-  3: boolean;
-  4: boolean;
-  5: boolean;
-  6: boolean;
-  7: boolean;
-  8: boolean;
-  9: boolean;
+  1:  boolean;
+  2:  boolean;
+  3:  boolean;
+  4:  boolean;
+  5:  boolean;
+  6:  boolean;
+  7:  boolean;
+  8:  boolean;
+  9:  boolean;
   10: boolean;
   11: boolean;
   12: boolean;
@@ -605,32 +605,32 @@ export interface IMethods {
 
 export interface IEquipmentRow {
   [index: string]: any;
-  key: string;
-  amount: string | number;
-  type: string | number;
-  id: string | number;
+  key:             string;
+  amount:          string | number;
+  type:            string | number;
+  id:              string | number;
 }
 
 export interface IIngredientRow {
   [index: string]: any;
-  key: string;
-  amount: string | number;
-  measurementId: string | number;
-  type: string | number;
-  id: string | number;
+  key:             string;
+  amount:          string | number;
+  measurementId:   string | number;
+  type:            string | number;
+  id:              string | number;
 }
 
 export interface ISubrecipeRow {
   [index: string]: any;
-  key: string;
-  amount: string | number;
-  measurementId: string | number;
-  type: string | number;
-  cuisine: string | number;
-  id: string | number;
+  key:             string;
+  amount:          string | number;
+  measurementId:   string | number;
+  type:            string | number;
+  cuisine:         string | number;
+  id:              string | number;
 }
 
 type Props = {
-  editing: boolean;
+  editing:   boolean;
   ownership: string;
 };

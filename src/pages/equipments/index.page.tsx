@@ -80,9 +80,9 @@ export function Equipments({ results, wasSearched }: PropsFromContext) {
 }
 
 type PropsFromContext = {
-  facets: any;
-  filters: any;
-  results: any;
+  facets:      any;
+  filters:     any;
+  results:     any;
   wasSearched: boolean;
 }
 

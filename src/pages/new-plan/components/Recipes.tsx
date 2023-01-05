@@ -27,10 +27,10 @@ function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
 }
 
 type Props = {
-  day: number;
-  expanded: boolean;
+  day:         number;
+  expanded:    boolean;
   expandedDay: number | null;
-  recipes: IPlannerRecipe[];
+  recipes:     IPlannerRecipe[];
 };
 
 export default DropTarget(Types.PLANNER_RECIPE, recipesTarget, collect)(Recipes);

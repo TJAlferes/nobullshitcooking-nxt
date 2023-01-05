@@ -29,7 +29,7 @@ export function IngredientView({ ingredient: { id, full_name, image, ingredient_
 }
 
 type Props = {
-  ingredient: IIngredient;
+  ingredient:           IIngredient;
   myPrivateIngredients: IIngredient[];
-  theme: string;
+  theme:                string;
 }

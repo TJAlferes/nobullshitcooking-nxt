@@ -12,8 +12,8 @@ const MOUSE_LOCS_TRACKED = 3;    // number of past mouse locations to track
 const TOLERANCE =          50;   // bigger = more forgivey when entering submenu
 
 let lastDelayLoc: IMouseLocation | null;
-let mouseLocs: IMouseLocation[] = [];
-let menuTimer: ReturnType<typeof setTimeout> | null;
+let mouseLocs:    IMouseLocation[] = [];
+let menuTimer:    ReturnType<typeof setTimeout> | null;
 
 function offset(el: HTMLElement|null) {
   if (!el) return {left: 0, top: 0};
@@ -142,9 +142,9 @@ export function Menu({ expanded, closeMenus, level, menuItems, openMenu }: Props
 }
 
 export interface IMenuItem {
-  name: string;
-  link: string;
-  image: string | null;
+  name:     string;
+  link:     string;
+  image:    string | null;
   children: IMenuItem[];
 }
 
@@ -154,9 +154,9 @@ interface IMouseLocation {
 }
 
 type Props = {
-  closeMenus(): void;
-  expanded: string;
-  level: number;
-  menuItems: IMenuItem[];
+  closeMenus():           void;
+  expanded:               string;
+  level:                  number;
+  menuItems:              IMenuItem[];
   openMenu(name: string): void;
 };

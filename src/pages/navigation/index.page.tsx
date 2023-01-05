@@ -51,17 +51,17 @@ export default function Navigation({ links, name, navGridATheme, oneColumnATheme
 //.png
 
 type Props = {
-  links: any[];
-  name: string;
-  navGridATheme: string;
+  links:           any[];
+  name:            string;
+  navGridATheme:   string;
   oneColumnATheme: string;
-  path: string;
+  path:            string;
 };
 
 interface IContentLink {
-  content_id: number;
-  content_type_id: number;
+  content_id:        number;
+  content_type_id:   number;
   content_type_name: string;
-  published: string;
-  title: string;
+  published:         string;
+  title:             string;
 }

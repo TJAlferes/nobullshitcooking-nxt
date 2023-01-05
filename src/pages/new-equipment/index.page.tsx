@@ -14,7 +14,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const officialEquipment =    useSelector(state => state.data.officialEquipment);
+  const equipment =            useSelector(state => state.data.equipment);
   const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
@@ -51,7 +51,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       window.scrollTo(0,0);
       setLoading(true);
 
-      const [ prev ] = staffIsAuthenticated ? officialEquipment.filter(e => e.id === Number(id)) : myPrivateEquipment.filter(e => e.id === Number(id));
+      const [ prev ] = staffIsAuthenticated ? equipment.filter(e => e.id === Number(id)) : myPrivateEquipment.filter(e => e.id === Number(id));
 
       setEditingId(prev.id);
       setTypeId(prev.equipment_type_id);

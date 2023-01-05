@@ -20,13 +20,15 @@ export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, l
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  changeRoom():                                          void;
-  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
-  connect():                                             void;
-  disconnect():                                          void;
-  loading:                                               boolean;
-  room:                                                  string;
-  roomToEnter:                                           string;
-  status:                                                string;
+  changeRoom():                       void;
+  changeRoomInput(e: SyntheticEvent): void;
+  connect():                          void;
+  disconnect():                       void;
+  loading:                            boolean;
+  room:                               string;
+  roomToEnter:                        string;
+  status:                             string;
 };

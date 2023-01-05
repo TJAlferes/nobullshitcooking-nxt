@@ -27,12 +27,14 @@ export function MessagesView({ authname, changeMessageInput, messages, messagesR
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  authname:                                                 string;
-  changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  messages:                                                 IMessageWithClientTimestamp[];
-  messagesRef:                                              React.RefObject<HTMLUListElement>;
-  messageToSend:                                            string;
-  send(e: React.KeyboardEvent):                             void;
-  status:                                                   string;
+  authname:                              string;
+  changeMessageInput(e: SyntheticEvent): void;
+  messages:                              IMessageWithClientTimestamp[];
+  messagesRef:                           React.RefObject<HTMLUListElement>;
+  messageToSend:                         string;
+  send(e: React.KeyboardEvent):          void;
+  status:                                string;
 };

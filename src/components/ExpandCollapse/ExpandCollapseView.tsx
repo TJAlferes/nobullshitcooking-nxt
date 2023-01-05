@@ -18,8 +18,8 @@ export const ExpandCollapseView: FC<Props> = ({ children, expanded, headingWhile
 };
 
 type Props = {
-  expanded: boolean;
+  expanded:              boolean;
   headingWhileCollapsed: string;
-  headingWhileExpanded: string;
-  toggle(): void; 
+  headingWhileExpanded:  string;
+  toggle():              void; 
 };

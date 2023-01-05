@@ -35,13 +35,15 @@ export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, change
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  amount: string | number;
-  changeEquipmentRow(e: React.SyntheticEvent<EventTarget>, rowKey: string): void;
-  equipment: IEquipment[];
-  myPrivateEquipment: IEquipment[];
-  id: string | number;
-  removeEquipmentRow(rowKey: string): void;
-  rowKey: string;
-  type: string | number;
+  amount:                                                string | number;
+  changeEquipmentRow(e: SyntheticEvent, rowKey: string): void;
+  equipment:                                             IEquipment[];
+  myPrivateEquipment:                                    IEquipment[];
+  id:                                                    string | number;
+  removeEquipmentRow(rowKey: string):                    void;
+  rowKey:                                                string;
+  type:                                                  string | number;
 };

@@ -93,9 +93,9 @@ export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
 }
 
 type PropsFromContext = {
-  facets: any;
-  filters: any;
-  results: any;
+  facets:      any;
+  filters:     any;
+  results:     any;
   wasSearched: boolean;
 }
 

@@ -14,6 +14,6 @@ export function StarRating ({ onChange, rating, readOnly = false }: Props): JSX.
 
 type Props = {
   onChange(): void;  // change
-  rating: number;
-  readOnly: boolean;
+  rating:     number;
+  readOnly:   boolean;
 };

@@ -9,8 +9,6 @@ import { Logo } from '..';
 import menuItems from './Menu/items';
 import { Menu } from './Menu/Menu';
 
-// TO DO: dynamically generate menu items from content types
-
 function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
   const { pathname } = useRouter();
   const theme = useSelector(state => state.theme.theme);
@@ -82,6 +80,6 @@ export function LeftNav(): JSX.Element {
 
 type NavLinkProps = {
   dataTest: string;
-  to: string;
-  text: string;
+  to:       string;
+  text:     string;
 };

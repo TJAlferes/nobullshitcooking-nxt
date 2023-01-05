@@ -49,21 +49,23 @@ export function DashboardView({
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  activateModal(id: number, name: string):              void;
-  deactivateModal():                                    void;
-  deleteName:                                           string;
-  equipment:                                            IEquipment[];
-  feedback:                                             string;
-  getApplicationNode():                                 Element | Node;
-  handleDeleteEquipment(id: number):                    void;
-  handleDeleteIngredient(id: number):                   void;
-  handleDeleteRecipe():                                 void;
-  handleTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  ingredients:                                          IIngredient[];
-  loading:                                              boolean;
-  modalActive:                                          boolean;
-  oneColumnATheme:                                      string;
-  recipes:                                              IWorkRecipe[];
-  tab:                                                  string;
+  activateModal(id: number, name: string): void;
+  deactivateModal():                       void;
+  deleteName:                              string;
+  equipment:                               IEquipment[];
+  feedback:                                string;
+  getApplicationNode():                    Element | Node;
+  handleDeleteEquipment(id: number):       void;
+  handleDeleteIngredient(id: number):      void;
+  handleDeleteRecipe():                    void;
+  handleTabClick(e: SyntheticEvent):       void;
+  ingredients:                             IIngredient[];
+  loading:                                 boolean;
+  modalActive:                             boolean;
+  oneColumnATheme:                         string;
+  recipes:                                 IWorkRecipe[];
+  tab:                                     string;
 };

@@ -29,7 +29,7 @@ export function EquipmentView({ equipment: { id, name, image, equipment_type_nam
 }
 
 type Props = {
-  equipment: IEquipment;
+  equipment:          IEquipment;
   myPrivateEquipment: IEquipment[];
-  theme: string;
+  theme:              string;
 }

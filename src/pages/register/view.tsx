@@ -161,24 +161,26 @@ export function RegisterView({
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  confirmationCode: string;
-  confirmingUser: boolean;
-  email: string;
-  feedback: string;
-  loading: boolean;
-  confirmationCodeChange(e: React.SyntheticEvent<EventTarget>): void;
-  emailChange(e: React.SyntheticEvent<EventTarget>): void;
-  passwordChange(e: React.SyntheticEvent<EventTarget>): void;
-  passwordAgainChange(e: React.SyntheticEvent<EventTarget>): void;
-  registerClick(): void;
-  registerKeyUp(e: React.KeyboardEvent): void;
-  usernameChange(e: React.SyntheticEvent<EventTarget>): void;
-  verifyClick(): void;
-  verifyKeyUp(e: React.KeyboardEvent): void;
-  password: string;
-  passwordAgain: string;
-  username: string;
-  validateConfirmationCode(): boolean;
-  validateRegistrationInfo(): boolean;
+  confirmationCode:                          string;
+  confirmingUser:                            boolean;
+  email:                                     string;
+  feedback:                                  string;
+  loading:                                   boolean;
+  confirmationCodeChange(e: SyntheticEvent): void;
+  emailChange(e: SyntheticEvent):            void;
+  passwordChange(e: SyntheticEvent):         void;
+  passwordAgainChange(e: SyntheticEvent):    void;
+  registerClick():                           void;
+  registerKeyUp(e: React.KeyboardEvent):     void;
+  usernameChange(e: SyntheticEvent):         void;
+  verifyClick():                             void;
+  verifyKeyUp(e: React.KeyboardEvent):       void;
+  password:                                  string;
+  passwordAgain:                             string;
+  username:                                  string;
+  validateConfirmationCode():                boolean;
+  validateRegistrationInfo():                boolean;
 };

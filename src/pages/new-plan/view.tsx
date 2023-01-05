@@ -68,10 +68,10 @@ export function NewPlanView({
   const memoizedRecipes = useMemo(() => {
     const tabToList: ITabToList = {
       "official": officialRecipes,
-      "private": myPrivateRecipes,
-      "public": myPublicRecipes,
+      "private":  myPrivateRecipes,
+      "public":   myPublicRecipes,
       "favorite": myFavoriteRecipes,
-      "saved": mySavedRecipes
+      "saved":    mySavedRecipes
     };
     const recipes: IWorkRecipe[] = tabToList[tab];
 
@@ -87,9 +87,6 @@ export function NewPlanView({
     );
   }, [tab]);
 
-  const TabButton = ({ displayText, tabName }: TabButtonProps) =>
-    (<button className={(tab === tabName) ? "planner__recipes-tab--active" : "planner__recipes-tab"} name={tabName} onClick={e => clickTab(e)}>{displayText}</button>);
-
   return (
     <div className={`new-plan two-col-a ${theme}`}>
       <div className="new-plan__heading">
@@ -104,11 +101,11 @@ export function NewPlanView({
       <div className="new-plan__calendar-container">
         {memoizedMonthlyPlan}
         <div className="planner__recipes-tabs">
-          <TabButton displayText="All Official" tabName="official" />
-          <TabButton displayText="My Private" tabName="private" />
-          <TabButton displayText="My Public" tabName="public" />
-          <TabButton displayText="My Favorite" tabName="favorite" />
-          <TabButton displayText="My Saved" tabName="saved" />
+          <button className={(tab === "official") ? "planner__recipes-tab--active" : "planner__recipes-tab"} name="official" onClick={e => clickTab(e)}>"All Official"</button>
+          <button className={(tab === "private") ? "planner__recipes-tab--active" : "planner__recipes-tab"}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
+          <button className={(tab === "public") ? "planner__recipes-tab--active" : "planner__recipes-tab"}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
+          <button className={(tab === "favorite") ? "planner__recipes-tab--active" : "planner__recipes-tab"} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
+          <button className={(tab === "saved") ? "planner__recipes-tab--active" : "planner__recipes-tab"}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
         </div>
         {memoizedRecipes}
       </div>
@@ -170,38 +167,35 @@ export function NewPlanView({
 interface ITabToList {
   [index: string]: any;
   "official": IWorkRecipe[];
-  "private": IWorkRecipe[];
-  "public": IWorkRecipe[];
+  "private":  IWorkRecipe[];
+  "public":   IWorkRecipe[];
   "favorite": IWorkRecipe[];
-  "saved": IWorkRecipe[];
+  "saved":    IWorkRecipe[];
 }
 
-type Props = {
-  activateModal(): void;
-  deactivateModal(): void;
-  discardChanges(): void;
-  myFavoriteRecipes: IWorkRecipe[];
-  myPrivateRecipes: IWorkRecipe[];
-  myPublicRecipes: IWorkRecipe[];
-  mySavedRecipes: IWorkRecipe[];
-  officialRecipes: IWorkRecipe[];
-  editing: boolean;
-  expanded: boolean;
-  expandedDay: number | null;
-  feedback: string;
-  getApplicationNode(): Element | Node;
-  changePlanName(e: React.SyntheticEvent<EventTarget>): void;
-  handleSubmit(): void;
-  clickTab(e: React.SyntheticEvent<EventTarget>): void;
-  loading: boolean;
-  modalActive: boolean;
-  planName: string;
-  recipeListsInsideDays: IPlannerData;
-  tab: string;
-  theme: string;
-};
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
-type TabButtonProps = {
-  displayText: string;
-  tabName: string;
+type Props = {
+  activateModal():                   void;
+  deactivateModal():                 void;
+  discardChanges():                  void;
+  myFavoriteRecipes:                 IWorkRecipe[];
+  myPrivateRecipes:                  IWorkRecipe[];
+  myPublicRecipes:                   IWorkRecipe[];
+  mySavedRecipes:                    IWorkRecipe[];
+  officialRecipes:                   IWorkRecipe[];
+  editing:                           boolean;
+  expanded:                          boolean;
+  expandedDay:                       number | null;
+  feedback:                          string;
+  getApplicationNode():              Element | Node;
+  changePlanName(e: SyntheticEvent): void;
+  handleSubmit():                    void;
+  clickTab(e: SyntheticEvent):       void;
+  loading:                           boolean;
+  modalActive:                       boolean;
+  planName:                          string;
+  recipeListsInsideDays:             IPlannerData;
+  tab:                               string;
+  theme:                             string;
 };

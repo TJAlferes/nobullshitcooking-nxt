@@ -17,7 +17,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage =         useSelector(state => state.staff.message);
   const userMessage =          useSelector(state => state.user.message);
-  const officialIngredients =  useSelector(state => state.data.ingredients);
+  const ingredients =  useSelector(state => state.data.ingredients);
   const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
   const theme =                useSelector(state => state.theme.theme);
@@ -50,7 +50,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
       }
       setLoading(true);
       window.scrollTo(0,0);
-      const [ prev ] = staffIsAuthenticated ? officialIngredients.filter(i => i.id === Number(id)) : myPrivateIngredients.filter(i => i.id === Number(id));
+      const [ prev ] = staffIsAuthenticated ? ingredients.filter(i => i.id === Number(id)) : myPrivateIngredients.filter(i => i.id === Number(id));
       setEditingId(prev.id);
       setTypeId(prev.ingredient_type_id);
       setName(prev.name);

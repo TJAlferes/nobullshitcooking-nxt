@@ -65,13 +65,13 @@ export function LoginView({ email, feedback, emailChange, loginClick, loginKeyUp
 }
 
 type Props = {
-  email: string;
-  feedback: string;
-  emailChange(e: React.SyntheticEvent<EventTarget>): void;
-  loginClick(e: React.MouseEvent): void;
-  loginKeyUp(e: React.KeyboardEvent): void;
+  email:                                                string;
+  feedback:                                             string;
+  emailChange(e: React.SyntheticEvent<EventTarget>):    void;
+  loginClick(e: React.MouseEvent):                      void;
+  loginKeyUp(e: React.KeyboardEvent):                   void;
   passwordChange(e: React.SyntheticEvent<EventTarget>): void;
-  loading: boolean;
-  password: string;
-  validateLoginInfo(): boolean;
+  loading:                                              boolean;
+  password:                                             string;
+  validateLoginInfo():                                  boolean;
 };

@@ -90,18 +90,18 @@ export function ProfileView({
 }
 
 type Props = {
-  authname: string;
-  clicked: boolean;
-  myFriendships: IFriendship[];
-  feedback: string;
-  requestFriendship(): void;
+  authname:                 string;
+  clicked:                  boolean;
+  myFriendships:            IFriendship[];
+  feedback:                 string;
+  requestFriendship():      void;
   changeTab(value: string): void;
-  userIsAuthenticated: boolean;
-  loading: boolean;
-  oneColumnATheme: string;
-  tab: string;
-  userAvatar: string;
-  username: string;
-  userPublicRecipes: IWorkRecipe[];
-  userFavoriteRecipes: IWorkRecipe[];
+  userIsAuthenticated:      boolean;
+  loading:                  boolean;
+  oneColumnATheme:          string;
+  tab:                      string;
+  userAvatar:               string;
+  username:                 string;
+  userPublicRecipes:        IWorkRecipe[];
+  userFavoriteRecipes:      IWorkRecipe[];
 };

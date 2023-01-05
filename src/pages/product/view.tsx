@@ -22,10 +22,10 @@ export function ProductView({ products, feedback, loading, product, theme, userI
 }
 
 type Props = {
-  products: IWorkProduct[];
-  feedback: string;
-  loading: boolean;
-  product: IProduct;
-  theme: string;
+  products:            IWorkProduct[];
+  feedback:            string;
+  loading:             boolean;
+  product:             IProduct;
+  theme:               string;
   userIsAuthenticated: boolean;
 };

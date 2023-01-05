@@ -103,28 +103,28 @@ export default function Recipe(): JSX.Element {
 }
 
 export interface IRecipe {
-  id: number;
-  recipe_type_id: number;
-  cuisine_id: number;
-  author_id: number;
-  owner_id: number;
-  title: string;
-  recipe_type_name: string;
-  cuisine_name: string;
-  author: string;
-  author_avatar: string;
-  description: string;
-  active_time: string;
-  total_time: string;
-  directions: string;
-  recipe_image: string;
-  equipment_image: string;
-  ingredients_image: string;
-  cooking_image: string;
-  required_methods: IRequiredMethod[];
-  required_equipment: IRequiredEquipment[];
+  id:                   number;
+  recipe_type_id:       number;
+  cuisine_id:           number;
+  author_id:            number;
+  owner_id:             number;
+  title:                string;
+  recipe_type_name:     string;
+  cuisine_name:         string;
+  author:               string;
+  author_avatar:        string;
+  description:          string;
+  active_time:          string;
+  total_time:           string;
+  directions:           string;
+  recipe_image:         string;
+  equipment_image:      string;
+  ingredients_image:    string;
+  cooking_image:        string;
+  required_methods:     IRequiredMethod[];
+  required_equipment:   IRequiredEquipment[];
   required_ingredients: IRequiredIngredient[];
-  required_subrecipes: IRequiredSubrecipe[];
+  required_subrecipes:  IRequiredSubrecipe[];
 }
 
 interface IRequiredMethod {
@@ -132,18 +132,18 @@ interface IRequiredMethod {
 }
 
 interface IRequiredEquipment {
-  amount: number;
+  amount:         number;
   equipment_name: string;
 }
 
 interface IRequiredIngredient {
-  amount: number;
+  amount:           number;
   measurement_name: string;
-  ingredient_name: string;
+  ingredient_name:  string;
 }
 
 interface IRequiredSubrecipe {
-  amount: number;
+  amount:           number;
   measurement_name: string;
-  subrecipe_title: string;
+  subrecipe_title:  string;
 }

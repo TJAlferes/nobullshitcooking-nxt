@@ -38,17 +38,17 @@ export function Day({ canDrop, day, expanded, expandedDay, isOver, recipes, plan
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & {
-  canDrop: boolean;
-  day: number;
-  expanded: boolean;
+  canDrop:     boolean;
+  day:         number;
+  expanded:    boolean;
   expandedDay: number | null;
-  isOver: boolean;
-  recipes: IPlannerRecipe[];
+  isOver:      boolean;
+  recipes:     IPlannerRecipe[];
 };
 
 const mapDispatchToProps = {
   plannerAddRecipeToDay: (day: number, recipe: IPlannerRecipe) => plannerAddRecipeToDay(day, recipe),
-  plannerClickDay: (day: number) => plannerClickDay(day)
+  plannerClickDay:       (day: number) =>                         plannerClickDay(day)
 };
 
 const connector = connect(null, mapDispatchToProps);

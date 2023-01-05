@@ -20,7 +20,7 @@ export default function ExpandedDay({ day, expanded, recipes }: Props): JSX.Elem
 }
 
 type Props = {
-  day: number;
+  day:      number;
   expanded: boolean;
-  recipes: IPlannerViewRecipe[];
+  recipes:  IPlannerViewRecipe[];
 };

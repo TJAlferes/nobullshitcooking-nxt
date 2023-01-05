@@ -54,8 +54,8 @@ export default function Product(): JSX.Element {
 }
 
 export interface IProduct {
-  id: number;
+  id:              number;
   product_type_id: number;
-  supplier_id: number;
-  fullname: string;
+  supplier_id:     number;
+  fullname:        string;
 };

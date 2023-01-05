@@ -47,16 +47,18 @@ export function IngredientRow({
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  amount: string | number;
-  changeIngredientRow(e: React.SyntheticEvent<EventTarget>, rowKey: string): void;
-  ingredients: IIngredient[];
-  ingredientTypes: IIngredientType[];
-  measurements: IMeasurement[];
-  myPrivateIngredients: IIngredient[];
-  id: string | number;
-  removeIngredientRow(rowKey: string): void;
-  rowKey: string;
-  type: string | number;
-  measurementId: string | number;
+  amount:                                                 string | number;
+  changeIngredientRow(e: SyntheticEvent, rowKey: string): void;
+  ingredients:                                            IIngredient[];
+  ingredientTypes:                                        IIngredientType[];
+  measurements:                                           IMeasurement[];
+  myPrivateIngredients:                                   IIngredient[];
+  id:                                                     string | number;
+  removeIngredientRow(rowKey: string):                    void;
+  rowKey:                                                 string;
+  type:                                                   string | number;
+  measurementId:                                          string | number;
 };

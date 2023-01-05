@@ -15,7 +15,7 @@ export function CropPreview({ cancelImage, fullCrop, loading, tinyCrop }: Props)
 
 type Props = {
   cancelImage(): void;
-  fullCrop: string;
-  loading: boolean;
-  tinyCrop: string;
+  fullCrop:      string;
+  loading:       boolean;
+  tinyCrop:      string;
 };

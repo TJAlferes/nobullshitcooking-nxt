@@ -54,7 +54,3 @@ type Props = {
   startPrivateMessage(username: string): void;
   users:                                 string[];
 };
-
-type TabProps = {
-  tab: string;
-};
