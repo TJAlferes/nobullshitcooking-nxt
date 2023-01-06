@@ -121,11 +121,9 @@ export default function Dashboard(): JSX.Element {
     setTinyAvatar(tiny.resizedFinal);
   };
 
-  const onCropChange = (crop: Crop) => setCrop(crop);
-
-  const onCropComplete = (crop: Crop) => makeCrops(crop);
-
-  const onImageLoaded = (image: HTMLImageElement) => imageRef.current = image;
+  const onCropChange =   (crop: Crop) =>              setCrop(crop);
+  const onCropComplete = (crop: Crop) =>              makeCrops(crop);
+  const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -142,8 +140,7 @@ export default function Dashboard(): JSX.Element {
   };
 
   const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);
-
-  const tabClick = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
+  const tabClick =    (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
 
   const unfavoriteRecipe = (id: number) => {
     setLoading(true);

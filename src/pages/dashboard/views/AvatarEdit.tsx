@@ -14,15 +14,15 @@ export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCr
         style={{minHeight: "300px"}}
       />
 
-      <span className="avatar-edit-tip">Move the crop to your desired position, then click "Complete". These two images will be saved for you:</span>
+      <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
 
       <div className="avatar-crops">
-        <div className="avatar-crop--full"><span>Full Size: </span><img src={fullCrop} /></div>
-        <div className="avatar-crop--tiny"><span>Tiny Size: </span><img src={tinyCrop} /></div>
+        <div className="--full"><span>Full Size: </span><img src={fullCrop} /></div>
+        <div className="--tiny"><span>Tiny Size: </span><img src={tinyCrop} /></div>
       </div>
 
-      <button className="avatar-edit__button--cancel" disabled={loading} name="cancel-avatar" onClick={cancelAvatar}>Cancel</button>
-      <button className="avatar-edit__button--submit" disabled={loading} name="submit-avatar" onClick={submitAvatar}>Complete</button>
+      <button className="--cancel" disabled={loading} name="cancel-avatar" onClick={cancelAvatar}>Cancel</button>
+      <button className="--submit" disabled={loading} name="submit-avatar" onClick={submitAvatar}>Complete</button>
     </div>
   );
 }
