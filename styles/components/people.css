@@ -12,8 +12,8 @@
   width: 180px;
 }
 
-.people-tab,
-.people-tab--current {
+.people-tabs button,
+.people-tabs button.--current {
   border: 1px solid;
   border-color: #ddd #666 #666 #ddd;
   border-radius: 1px;
@@ -28,11 +28,11 @@
   text-align: center;
 }
 
-.people-tab {
+.people-tabs button {
   background-image: linear-gradient(to bottom, #eee, #bbb);
 }
 
-.people-tab--current {
+.people-tabs button.--current {
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
 }
 
@@ -55,14 +55,14 @@
   position: relative;
 }
 
-.person-avatar {
+.chat-person img {
   display: block;
   height: 25px;
   order: 1;
   width: 25px;
 }
 
-.person-username {
+.chat-person span {
   display: block;
   height: 25px;
   line-height: 25px;

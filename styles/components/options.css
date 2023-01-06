@@ -6,14 +6,14 @@
   width: 100%;
 }
 
-.connection__button {order: 1;}
+.chat-options > button {order: 1;}
 
 .current-room {order: 2;}
 
 .change-room {order: 3;}
 
-.change-room__button,
-.connection__button {
+.change-room button,
+.chat-options > button {
   border: 1px solid;
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border-color: #ddd #666 #666 #ddd;
@@ -47,22 +47,22 @@
   width: 85px;
 }
 
-.change-room__label,
-.current-room__label {
+.change-room label,
+.current-room label {
   font-size: 1.3rem;
   height: 32px;
   line-height: 30px;
   padding: 0 10px 0 200px;
 }
 
-.change-room__input {
+.change-room input {
   border: 2px solid #68abe6;
   height: 32px;
   padding-left: 7px;
   width: 85px;
 }
 
-.change-room__input:focus {
+.change-room input:focus {
   outline: none;
   border: 2px solid #87c6fd;
 }
@@ -72,19 +72,19 @@
 /*.light .chat__options,*/
 .light .current-room,
 .light .change-room,
-.light .change-room__label {background-color: #ddd;} /*{border-color: #ddd;}*/
+.light .change-room label {background-color: #ddd;} /*{border-color: #ddd;}*/
 
-.light .current-room__value {background-color: #fff;}
+.light .current-room span {background-color: #fff;}
 
 
 
 /*.dark .chat__options,*/
 .dark .current-room,
 .dark .change-room,
-.dark .change-room__label {background-color: #444;} /*{border-color: #444;}*/
+.dark .change-room label {background-color: #444;} /*{border-color: #444;}*/
 
-.dark .current-room__value,
-.dark .change-room__input {
+.dark .current-room span,
+.dark .change-room input {
   background-color: #1e1e1e;
   color: #bbb;
 }
@@ -94,9 +94,9 @@
 /* TO DO: JUST MAKE RESPONSIVE... FLEXBOX... GRID... */
 
 @media (max-width: 1279px) {
-  .current-room__label {padding-left: 50px;}
+  .current-room label {padding-left: 50px;}
 
-  .change-room__label {padding-left: 41px;}
+  .change-room label {padding-left: 41px;}
 }
 
 @media (max-width: 799px) {
@@ -105,11 +105,11 @@
     height: 118px;
   }
 
-  .current-room__label {padding-left: 0px;}
+  .current-room label {padding-left: 0px;}
 
   .change-room {margin-bottom: 4px;}
 
-  .change-room__label {
+  .change-room label {
     padding-right: 20px;
     padding-left: 0px;
   }

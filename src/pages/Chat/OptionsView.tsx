@@ -1,34 +1,32 @@
 export function OptionsView({changeRoom, changeRoomInput, connect, disconnect, loading, room, roomToEnter, status}: Props): JSX.Element {
   return (
     <div className="chat-options">
-      <button className="connection__button" disabled={loading} onClick={status === "connected" ? disconnect : connect}>
+      <button disabled={loading} onClick={status === "connected" ? disconnect : connect}>
         {status === "connected" ? "Disconnect" : "Connect"}
       </button>
 
       <div className="current-room">
-        <span className="current-room__label">Current Room:</span><span className="current-room__value">{room}</span>
+        <label>Current Room:</label><span>{room}</span>
       </div>
 
       <div className="change-room">
-        <span className="change-room__label">Go To Room:</span>
+        <label>Go To Room:</label>
 
-        <input className="change-room__input" disabled={(status !== "connected") || loading} name="change-room-input" onChange={changeRoomInput} type="text" value={roomToEnter} />
+        <input disabled={(status !== "connected") || loading} name="change-room-input" onChange={changeRoomInput} type="text" value={roomToEnter} />
 
-        <button className="change-room__button" disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
+        <button disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
       </div>
     </div>
   );
 }
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 type Props = {
-  changeRoom():                       void;
-  changeRoomInput(e: SyntheticEvent): void;
-  connect():                          void;
-  disconnect():                       void;
-  loading:                            boolean;
-  room:                               string;
-  roomToEnter:                        string;
-  status:                             string;
+  changeRoom():                                          void;
+  changeRoomInput(e: React.SyntheticEvent<EventTarget>): void;
+  connect():                                             void;
+  disconnect():                                          void;
+  loading:                                               boolean;
+  room:                                                  string;
+  roomToEnter:                                           string;
+  status:                                                string;
 };
