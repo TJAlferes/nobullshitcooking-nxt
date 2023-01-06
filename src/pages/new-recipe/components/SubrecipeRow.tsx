@@ -43,34 +43,24 @@ export function SubrecipeRow({
   return (
     <div className="recipe-row">
       <label>Amount:</label>
-      <input
-        className="recipe-row__input"
-        max="9999"
-        min="0.125"
-        name="amount"
-        onChange={(e) => changeSubrecipeRow(e, rowKey)}
-        required
-        step="any"
-        type="number"
-        value={amount}
-      />
+      <input max="9999" min="0.125" name="amount" onChange={(e) => changeSubrecipeRow(e, rowKey)} required step="any" type="number" value={amount} />
 
       <label>Unit:</label>
       <select name="unit" onChange={(e) => changeSubrecipeRow(e, rowKey)} required value={measurementId}>
         <option value=""></option>
-        {measurements.map((m, index) => (<option key={index} value={m.id}>{m.name}</option>))}
+        {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
       </select>
 
       <label>Type:</label>
       <select name="type" onChange={(e) => changeSubrecipeRow(e, rowKey)} required value={type}>
         <option value=""></option>
-        {recipeTypes.map((r, index) => (<option key={index} value={r.id}>{r.name}</option>))}
+        {recipeTypes.map((r, index) => <option key={index} value={r.id}>{r.name}</option>)}
       </select>
 
       <label>Cuisine:</label>
       <select name="cuisine" onChange={(e) => changeSubrecipeRow(e, rowKey)} required value={cuisine}>
         <option value=""></option>
-        {cuisines.map((c, index) => (<option key={index} value={c.id}>{c.name}</option>))}
+        {cuisines.map((c, index) => <option key={index} value={c.id}>{c.name}</option>)}
       </select>
 
       <label>Subrecipe:</label>
@@ -79,7 +69,7 @@ export function SubrecipeRow({
         {availableRecipes
           .filter(r => r.recipe_type_id == type)
           .filter(r => r.cuisine_id == cuisine)
-          .map((r, index) => (<option key={index} value={r.id}>{r.title}</option>))}
+          .map((r, index) => <option key={index} value={r.id}>{r.title}</option>)}
       </select>
 
       <button className="--remove" onClick={() => removeSubrecipeRow(rowKey)}>Remove</button>

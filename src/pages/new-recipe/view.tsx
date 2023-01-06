@@ -143,10 +143,10 @@ export function NewRecipeView({
       </select>
 
       <h2>Title</h2>
-      <input className="new-recipe-title" id="recipe_title" name="title" onChange={changeTitle} type="text" value={title} />
+      <input className="new-recipe-title" id="recipe_title" max={100} min={2} name="title" onChange={changeTitle} type="text" value={title} />
 
       <h2>Description / Author Note</h2>
-      <input className="new-recipe-description" id="recipe_description" name="description" onChange={changeDescription} type="text" value={description} />
+      <input className="new-recipe-description" id="recipe_description" max={150} min={2} name="description" onChange={changeDescription} type="text" value={description} />
 
       <h2>Methods</h2>
       <div className="new-recipe-methods">
@@ -164,10 +164,10 @@ export function NewRecipeView({
         ))}
       </div>
 
-      <div className="new-recipe-required-equipment">
+      <div className="required-equipment">
         <h2>Equipment</h2>
-        <div className="new-recipe-equipment-rows">
-          {equipmentRows.map(({ amount, id, key, type }) => (
+        <div className="equipment-rows">
+          {equipmentRows.map(({ key, amount, type, id }) => (
             <EquipmentRow
               amount={amount}
               equipment={equipment}
@@ -184,9 +184,9 @@ export function NewRecipeView({
         <button className="--add-row" onClick={addEquipmentRow}>Add Equipment</button>
       </div>
 
-      <div className="new-recipe-required-ingredients">
+      <div className="required-ingredients">
         <h2>Ingredients</h2>
-        <div className="new-recipe-ingredient-rows">
+        <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
             <IngredientRow
               amount={amount}
@@ -207,9 +207,9 @@ export function NewRecipeView({
         <button className="--add-row" onClick={addIngredientRow}>Add Ingredient</button>
       </div>
 
-      <div className="new-recipe-required-subrecipes">
+      <div className="required-subrecipes">
         <h2>Subrecipes</h2>
-        <div className="new-recipe-subrecipe-rows">
+        <div className="subrecipe-rows">
           {subrecipeRows.map(s => (
             <SubrecipeRow
               amount={s.amount}

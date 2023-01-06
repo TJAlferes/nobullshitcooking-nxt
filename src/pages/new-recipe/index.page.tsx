@@ -24,8 +24,20 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const theme =        useSelector(state => state.theme.theme);
   const { authname, staffIsAuthenticated } = useSelector(state => state.auth);  // don't destructure useSelector?
   const {
-    cuisines, equipment, ingredients, ingredientTypes, measurements, methods, myFavoriteRecipes, myPrivateEquipment,
-    myPrivateIngredients, myPrivateRecipes, myPublicRecipes, mySavedRecipes, recipes, recipeTypes
+    cuisines,
+    equipment,
+    ingredients,
+    ingredientTypes,
+    measurements,
+    methods,
+    myFavoriteRecipes,
+    myPrivateEquipment,
+    myPrivateIngredients,
+    myPrivateRecipes,
+    myPublicRecipes,
+    mySavedRecipes,
+    recipes,
+    recipeTypes
   } = useSelector(state => state.data);
 
   const [ feedback, setFeedback ] = useState("");
@@ -50,9 +62,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     {key: uuid(), amount: "", type: "", id: ""},
   ]);
   const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
-    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
-    {key: uuid(), amount: 1, measurementId: "", type: "", id: ""},
+    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
+    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
+    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
   ]);
   const [ subrecipeRows, setSubrecipeRows ] = useState<ISubrecipeRow[]>([]);
 
@@ -109,10 +121,19 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       }
 
       const {
-        recipe_type_id, cuisine_id,
-        title, description, directions,
-        equipment, ingredients, methods, subrecipes,
-        recipe_image, equipment_image, ingredients_image, cooking_image
+        recipe_type_id,
+        cuisine_id,
+        title,
+        description,
+        directions,
+        equipment,
+        ingredients,
+        methods,
+        subrecipes,
+        recipe_image,
+        equipment_image,
+        ingredients_image,
+        cooking_image
       } = recipe;
 
       setEditingId(recipe.id);
@@ -152,7 +173,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     let isSubscribed = true;
 
     if (isSubscribed) {
-      const message = staffIsAuthenticated ? staffMessage : userMessage;
+      const message =      staffIsAuthenticated ? staffMessage : userMessage;
       const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
       if (message !== "") window.scrollTo(0,0);
       setFeedback(message);
@@ -219,28 +240,17 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 
   const getRequiredEquipment = () => {
     //if (!equipmentRows.length) return [];
-    return equipmentRows.map(e => ({
-      amount: Number(e.amount),
-      id:     Number(e.id)
-    }));
+    return equipmentRows.map(e => ({amount: Number(e.amount), id: Number(e.id)}));
   };
 
   const getRequiredIngredients = () => {
     //if (!ingredientRows.length) return [];
-    return ingredientRows.map(i => ({
-      amount:        Number(i.amount),
-      measurementId: Number(i.measurementId),
-      id:            Number(i.id)
-    }));
+    return ingredientRows.map(i => ({amount: Number(i.amount), measurementId: Number(i.measurementId), id: Number(i.id)}));
   };
 
   const getRequiredSubrecipes = () => {
     //if (subrecipeRows.length) return [];
-    return subrecipeRows.map(s => ({
-      amount:        Number(s.amount),
-      measurementId: Number(s.measurementId),
-      id:            Number(s.id)
-    }));
+    return subrecipeRows.map(s => ({amount: Number(s.amount), measurementId: Number(s.measurementId), id: Number(s.id)}));
   };
 
   const changeRecipeType =  (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
@@ -282,6 +292,20 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   };
 
   const submit = () => {
+    if (!validRecipeInfo({
+      ownership,
+      recipeTypeId,
+      cuisineId,
+      title,
+      description,
+      directions,
+      methods: usedMethods,
+      equipment: equipmentRows,
+      ingredients: ingredientRows,
+      subrecipes: subrecipeRows,
+      setFeedback
+    })) return;
+
     const recipeInfo = {
       ownership,
       recipeTypeId,
@@ -304,20 +328,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       cookingImage,
       cookingFullImage
     };
-
-    if (!validRecipeInfo({
-      ownership,
-      recipeTypeId,
-      cuisineId,
-      title,
-      description,
-      directions,
-      methods: recipeInfo.methods,
-      equipment: recipeInfo.equipment,
-      ingredients: recipeInfo.ingredients,
-      subrecipes: recipeInfo.subrecipes,
-      setFeedback
-    })) return;
 
     setLoading(true);
 

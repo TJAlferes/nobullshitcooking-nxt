@@ -1,8 +1,5 @@
-// use superstruct here too?
-import { IRequiredEquipment, IRequiredIngredient, IRequiredMethod, IRequiredSubrecipe } from '../../../store/staff/recipe/types';
-//import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
+import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
 
-// finish
 export function validRecipeInfo({
   ownership,
   recipeTypeId,
@@ -48,7 +45,6 @@ export function validRecipeInfo({
   let validEquipment = true;
   if (equipment.length) {
     equipment.map(r => {
-      // not sufficient?
       if (r.amount === "" || r.equipment === "") validEquipment = false;
     });
     if (!validEquipment) return feedback("Review equipment.");
@@ -57,7 +53,6 @@ export function validRecipeInfo({
   let validIngredients = true;
   if (ingredients.length) {
     ingredients.map(r => {
-      // not sufficient?
       if (r.amount === "" || r.measurementId === "" || r.type === "" || r.id === "") validIngredients = false;
     });
     if (!validIngredients) return feedback("Review ingredients.");
@@ -66,7 +61,6 @@ export function validRecipeInfo({
   let validSubrecipes = true;
   if (subrecipes.length) {
     subrecipes.map(r => {
-      // not sufficient?
       if (r.amount === "" || r.measurementId === "" || r.type === "" || r.cuisine === "" || r.id === "") validSubrecipes = false;
     });
     if (!validSubrecipes) return feedback("Review subrecipes.");
@@ -82,9 +76,9 @@ type RecipeInfo = {
   title:                         string;
   description:                   string;
   directions:                    string;
-  methods:                       IRequiredMethod[];
-  equipment:                     IRequiredEquipment[];
-  ingredients:                   IRequiredIngredient[];
-  subrecipes:                    IRequiredSubrecipe[];
+  methods:                       IMethods;
+  equipment:                     IEquipmentRow[];
+  ingredients:                   IIngredientRow[];
+  subrecipes:                    ISubrecipeRow[];
   setFeedback(feedback: string): void;
 };

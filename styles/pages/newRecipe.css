@@ -1,12 +1,12 @@
 /*.new-recipe {}*/
 
-.new-recipe-required-equipment,
-.new-recipe-required-ingredients,
-.new-recipe-required-subrecipes,
-.new-recipe-recipe-image,
-.new-recipe-equipment-image,
-.new-recipe-ingredients-image,
-.new-recipe-cooking-image {
+.new-recipe .required-equipment,
+.new-recipe .required-ingredients,
+.new-recipe .required-subrecipes,
+.new-recipe .recipe-image,
+.new-recipe .equipment-image,
+.new-recipe .ingredients-image,
+.new-recipe .cooking-image {
   padding-top: 18px;
 }
 

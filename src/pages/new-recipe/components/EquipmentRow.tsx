@@ -27,7 +27,7 @@ export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, change
         <option value=""></option>
         {availableEquipment
           .filter(e => e.equipment_type_id == type)
-          .map((e, index) => (<option key={index} value={e.id}>{e.name}</option>))}
+          .map((e, index) => <option key={index} value={e.id}>{e.name}</option>)}
       </select>
 
       <button className="--remove" onClick={() => removeEquipmentRow(rowKey)}>Remove</button>

@@ -25,7 +25,7 @@ export function IngredientRow({
       <label>Unit:</label>
       <select name="unit" onChange={(e) => changeIngredientRow(e, rowKey)} required value={measurementId}>
         <option value=""></option>
-        {measurements.map((m, index) => (<option key={index} value={m.id}>{m.name}</option>))}
+        {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
       </select>
 
       <label>Type:</label>
@@ -39,7 +39,7 @@ export function IngredientRow({
         <option value=""></option>
         {availableIngredients
           .filter(i => i.ingredient_type_id == type)
-          .map((i, index) => (<option key={index} value={i.id}>{i.name}</option>))}
+          .map((i, index) => <option key={index} value={i.id}>{i.name}</option>)}
       </select>
 
       <button className="--remove" onClick={() => removeIngredientRow(rowKey)}>Remove</button>
