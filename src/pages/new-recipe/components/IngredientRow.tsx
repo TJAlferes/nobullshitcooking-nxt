@@ -19,30 +19,30 @@ export function IngredientRow({
   
   return (
     <div className="recipe-row">
-      <label className="recipe-row__label">Amount:</label>
-      <input className="recipe-row__input" max="9999" min="0.125" name="amount" onChange={(e) => changeIngredientRow(e, rowKey)} required step="any" type="number" value={amount} />
+      <label>Amount:</label>
+      <input max="9999" min="0.125" name="amount" onChange={(e) => changeIngredientRow(e, rowKey)} required step="any" type="number" value={amount} />
 
-      <label className="recipe-row__label">Unit:</label>
-      <select className="recipe-row__select" name="unit" onChange={(e) => changeIngredientRow(e, rowKey)} required value={measurementId}>
+      <label>Unit:</label>
+      <select name="unit" onChange={(e) => changeIngredientRow(e, rowKey)} required value={measurementId}>
         <option value=""></option>
         {measurements.map((m, index) => (<option key={index} value={m.id}>{m.name}</option>))}
       </select>
 
-      <label className="recipe-row__label">Type:</label>
-      <select className="recipe-row__select" name="type" onChange={(e) => changeIngredientRow(e, rowKey)} required value={type}>
+      <label>Type:</label>
+      <select name="type" onChange={(e) => changeIngredientRow(e, rowKey)} required value={type}>
         <option value=""></option>
         {ingredientTypes.map((i, index) => (<option key={index} value={i.id}>{i.name}</option>))}
       </select>
 
-      <label className="recipe-row__label">Ingredient:</label>
-      <select className="recipe-row__select" name="ingredient" onChange={(e) => changeIngredientRow(e, rowKey)} required value={id}>
+      <label>Ingredient:</label>
+      <select name="ingredient" onChange={(e) => changeIngredientRow(e, rowKey)} required value={id}>
         <option value=""></option>
         {availableIngredients
           .filter(i => i.ingredient_type_id == type)
           .map((i, index) => (<option key={index} value={i.id}>{i.name}</option>))}
       </select>
 
-      <button className="recipe-row__button--remove" onClick={() => removeIngredientRow(rowKey)}>Remove</button>
+      <button className="--remove" onClick={() => removeIngredientRow(rowKey)}>Remove</button>
     </div>
   );
 }

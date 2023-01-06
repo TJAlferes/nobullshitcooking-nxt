@@ -95,11 +95,11 @@ export function NewRecipeView({
 }: Props): JSX.Element {
   return (
     <div className={`new-recipe one-col-a ${theme}`}>
-      <h1 className="new-recipe__h1">New Recipe</h1>
+      <h1>New Recipe</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2 className="new-recipe__h2">Ownership</h2>
+      <h2>Ownership</h2>
       <ExpandCollapse>
         <div>
           <p>Once submitted, a recipe's ownership can't be changed.</p><br />
@@ -121,52 +121,51 @@ export function NewRecipeView({
       </ExpandCollapse>
       <div className="new-recipe-ownerships">
         <span className="new-recipe-ownership">
-          <input checked={ownership === "private"} className="new-recipe-ownership__input" disabled={true} name="private" type="radio" value="private" />
-          <label className="new-recipe-ownership__label">Private</label>
+          <input checked={ownership === "private"} disabled={true} name="private" type="radio" value="private" />
+          <label>Private</label>
         </span>
         <span className="new-recipe-ownership">
-          <input checked={ownership === "public"} className="new-recipe-ownership__input" disabled={true} name="public" type="radio" value="public" />
-          <label className="new-recipe-ownership__label">Public</label>
+          <input checked={ownership === "public"} disabled={true} name="public" type="radio" value="public" />
+          <label>Public</label>
         </span>
       </div>
 
-      <h2 className="new-recipe__h2">Type of Recipe</h2>
+      <h2>Type of Recipe</h2>
       <select id="recipe_type_id" name="recipeType" onChange={changeRecipeType} required value={recipeTypeId}>
         <option value=""></option>
         {recipeTypes.map(({ id, name }) => (<option key={id} data-test={name} value={id}>{name}</option>))}
       </select>
 
-      <h2 className="new-recipe__h2">Cuisine</h2>
+      <h2>Cuisine</h2>
       <select id="cuisine_id" name="cuisine" onChange={changeCuisine} required value={cuisineId}>
         <option value=""></option>
         {cuisines.map(({ id, name }) => (<option key={id} value={id} data-test={name}>{name}</option>))}
       </select>
 
-      <h2 className="new-recipe__h2">Title</h2>
+      <h2>Title</h2>
       <input className="new-recipe-title" id="recipe_title" name="title" onChange={changeTitle} type="text" value={title} />
 
-      <h2 className="new-recipe__h2">Description / Author Note</h2>
+      <h2>Description / Author Note</h2>
       <input className="new-recipe-description" id="recipe_description" name="description" onChange={changeDescription} type="text" value={description} />
 
-      <h2 className="new-recipe__h2">Methods</h2>
+      <h2>Methods</h2>
       <div className="new-recipe-methods">
         {methods.map(({ id, name }) => (
           <span className="new-recipe-method" key={id}>
             <input
               checked={usedMethods[id] === true ? true : false}
-              className="new-recipe-method__input"
               data-test={`${id}-${name}`}
               id={`${id}`}
               onChange={e => changeMethods(e)}
               type="checkbox"
             />
-            <label className="new-recipe-method__label" data-test={name}>{name}</label>
+            <label data-test={name}>{name}</label>
           </span>
         ))}
       </div>
 
       <div className="new-recipe-required-equipment">
-        <h2 className="new-recipe__h2">Equipment</h2>
+        <h2>Equipment</h2>
         <div className="new-recipe-equipment-rows">
           {equipmentRows.map(({ amount, id, key, type }) => (
             <EquipmentRow
@@ -182,11 +181,11 @@ export function NewRecipeView({
             />
           ))}
         </div>
-        <button className="new-recipe__button--add-row" onClick={addEquipmentRow}>Add Equipment</button>
+        <button className="--add-row" onClick={addEquipmentRow}>Add Equipment</button>
       </div>
 
       <div className="new-recipe-required-ingredients">
-        <h2 className="new-recipe__h2">Ingredients</h2>
+        <h2>Ingredients</h2>
         <div className="new-recipe-ingredient-rows">
           {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
             <IngredientRow
@@ -205,11 +204,11 @@ export function NewRecipeView({
             />
           ))}
         </div>
-        <button className="new-recipe__button--add-row" onClick={addIngredientRow}>Add Ingredient</button>
+        <button className="--add-row" onClick={addIngredientRow}>Add Ingredient</button>
       </div>
 
       <div className="new-recipe-required-subrecipes">
-        <h2 className="new-recipe__h2">Subrecipes</h2>
+        <h2>Subrecipes</h2>
         <div className="new-recipe-subrecipe-rows">
           {subrecipeRows.map(s => (
             <SubrecipeRow
@@ -235,10 +234,10 @@ export function NewRecipeView({
             />
           ))}
         </div>
-        <button className="new-recipe__button--add-row" onClick={addSubrecipeRow}>Add Subrecipe</button>
+        <button className="--add-row" onClick={addSubrecipeRow}>Add Subrecipe</button>
       </div>
 
-      <h2 className="new-recipe__h2">Directions</h2>
+      <h2>Directions</h2>
       <textarea className="new-recipe-directions" id="recipe_directions" name="directions" onChange={changeDirections} value={directions} />
 
       <ImageUploads

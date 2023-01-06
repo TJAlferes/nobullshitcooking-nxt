@@ -5,8 +5,8 @@ export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, change
   
   return (
     <div className="recipe-row">
-      <label className="recipe-row__label">Amount:</label>
-      <select className="recipe-row__select" name="amount" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={amount}>
+      <label>Amount:</label>
+      <select name="amount" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={amount}>
         <option value=""></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -15,22 +15,22 @@ export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, change
         <option value="5">5</option>
       </select>
 
-      <label className="recipe-row__label">Type:</label>
-      <select className="recipe-row__select" name="type" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={type}>
+      <label>Type:</label>
+      <select name="type" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={type}>
         <option value=""></option>
         <option value="2">Preparing</option>
         <option value="3">Cooking</option>
       </select>
 
-      <label className="recipe-row__label">Equipment:</label>
-      <select className="recipe-row__select" name="equipment" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={id}>
+      <label>Equipment:</label>
+      <select name="equipment" onChange={(e) => changeEquipmentRow(e, rowKey)} required value={id}>
         <option value=""></option>
         {availableEquipment
           .filter(e => e.equipment_type_id == type)
           .map((e, index) => (<option key={index} value={e.id}>{e.name}</option>))}
       </select>
 
-      <button className="recipe-row__button--remove" onClick={() => removeEquipmentRow(rowKey)}>Remove</button>
+      <button className="--remove" onClick={() => removeEquipmentRow(rowKey)}>Remove</button>
     </div>
   );
 }

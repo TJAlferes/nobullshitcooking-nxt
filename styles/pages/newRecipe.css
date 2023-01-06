@@ -10,11 +10,15 @@
   padding-top: 18px;
 }
 
-.new-recipe__h2 {
+/*.new-recipe h1 {}*/
+
+.new-recipe h2 {
   display: block;
   font-size: 1.7rem;
   padding-top: 18px;
 }
+
+.new-recipe h4 {padding-bottom: 3px;}
 
 /* ? */
 .new-recipe select:required {box-shadow: none;}
@@ -37,7 +41,7 @@
   width: 90px;
 }
 
-.new-recipe-ownership__input {
+.new-recipe-ownership input {
   display: block;
   height: 13px;
   margin: 9px 0 10px 0;
@@ -49,7 +53,7 @@
   width: 13px;
 }
 
-.new-recipe-ownership__label {
+.new-recipe-ownership label {
   display: block;
   font-size: 1.3rem;
   font-weight: 700;
@@ -80,7 +84,7 @@
   width: 90px;
 }
 
-.new-recipe-method__input {
+.new-recipe-method input {
   display: block;
   height: 13px;
   margin: 9px 0 10px 0;
@@ -92,7 +96,7 @@
   width: 13px;
 }
 
-.new-recipe-method__label {
+.new-recipe-method label {
   display: block;
   font-size: 1.3rem;
   font-weight: 700;
@@ -123,7 +127,7 @@
   margin-bottom: 6px;
 }
 
-.recipe-row__label {
+.recipe-row label {
   font-size: 1.3rem;
   font-weight: 700;
   height: 23px;
@@ -131,9 +135,9 @@
   padding-top: 3px;
 }
 
-.recipe-row__select {height: 23px;}
+.recipe-row select {height: 23px;}
 
-.recipe-row__input {
+.recipe-row input {
   border: 1px solid;
   border-radius: 1px;
   height: 25px;
@@ -142,15 +146,15 @@
   width: 70px;
 }
 
-.recipe-row__select {height: 23px;}
+.recipe-row select {height: 23px;}
 
-.recipe-row__select--subrecipe {
+.recipe-row select.--subrecipe {
   max-width: 233px;
   min-width: 233px;
   width: 233px;
 }
 
-.recipe-row__button--remove {
+.recipe-row button.--remove {
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
   border: 1px solid #aaa;
   border-radius: 2px;
@@ -160,7 +164,7 @@
   padding: 1px 2px;
 }
 
-.new-recipe__button--add-row {
+.new-recipe button.--add-row {
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
   border: 1px solid #aaa;
   border-radius: 2px;
@@ -172,8 +176,6 @@
   height: 102px;
   width: 100%;
 }
-
-.new-recipe__h4 {padding-bottom: 3px;}
 
 .new-recipe-finish {
   display: flex;
@@ -187,12 +189,12 @@
     width: fit-content;
   }
 
-  .recipe-row__button--remove {
+  .recipe-row button.--remove {
     margin-top: 6px;
     width: fit-content;
   }
 
-  .new-recipe__button--add-row {margin-top: 12px;}
+  .new-recipe button.--add-row {margin-top: 12px;}
 }
 
 @media (max-width: 899px) {

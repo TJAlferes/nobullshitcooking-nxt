@@ -1,6 +1,8 @@
+// use superstruct here too?
 import { IRequiredEquipment, IRequiredIngredient, IRequiredMethod, IRequiredSubrecipe } from '../../../store/staff/recipe/types';
 //import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
 
+// finish
 export function validRecipeInfo({
   ownership,
   recipeTypeId,
@@ -13,7 +15,6 @@ export function validRecipeInfo({
   ingredients,
   subrecipes,
   setFeedback
-  
 }: RecipeInfo): boolean {
   function feedback(message: string) {
     window.scrollTo(0,0);
