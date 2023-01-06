@@ -1,17 +1,19 @@
-import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
+import { IRequiredEquipment, IRequiredIngredient, IRequiredMethod, IRequiredSubrecipe } from '../../../store/staff/recipe/types';
+//import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
 
 export function validRecipeInfo({
-  cuisineId,
-  description,
-  directions,
-  equipmentRows,
-  ingredientRows,
-  usedMethods,
   ownership,
   recipeTypeId,
-  setFeedback,
-  subrecipeRows,
-  title
+  cuisineId,
+  title,
+  description,
+  directions,
+  methods,
+  equipment,
+  ingredients,
+  subrecipes,
+  setFeedback
+  
 }: RecipeInfo): boolean {
   function feedback(message: string) {
     window.scrollTo(0,0);
@@ -38,47 +40,50 @@ export function validRecipeInfo({
   const validDirections = directions.trim() !== "";
   if (!validDirections) return feedback("Enter directions.");
 
-  const validMethods = Object.values(usedMethods).filter(m => m === true);
+  const validMethods = Object.values(methods).filter(m => m === true);
   //validMethods.length < 1
   if (!validMethods) return feedback("Select method(s).");
 
-  let validEquipmentRows = true;
-  if (equipmentRows.length) {
-    equipmentRows.map(r => {
-      if (r.amount === "" || r.equipment === "") validEquipmentRows = false;
+  let validEquipment = true;
+  if (equipment.length) {
+    equipment.map(r => {
+      // not sufficient?
+      if (r.amount === "" || r.equipment === "") validEquipment = false;
     });
-    if (!validEquipmentRows) return feedback("Review equipment.");
+    if (!validEquipment) return feedback("Review equipment.");
   }
 
-  let validIngredientRows = true;
-  if (ingredientRows.length) {
-    ingredientRows.map(r => {
-      if (r.amount === "" || r.unit === "" || r.ingredient === "") validIngredientRows = false;  // TO DO: change to measurementId or measurementName? 
+  let validIngredients = true;
+  if (ingredients.length) {
+    ingredients.map(r => {
+      // not sufficient?
+      if (r.amount === "" || r.measurementId === "" || r.type === "" || r.id === "") validIngredients = false;
     });
-    if (!validIngredientRows) return feedback("Review ingredients.");
+    if (!validIngredients) return feedback("Review ingredients.");
   }
 
-  let validSubrecipeRows = true;
-  if (subrecipeRows.length) {
-    subrecipeRows.map(r => {
-      if (r.amount === "" || r.unit === "" || r.subrecipe === "") validSubrecipeRows = false;  // TO DO: change to measurementId or measurementName?
+  let validSubrecipes = true;
+  if (subrecipes.length) {
+    subrecipes.map(r => {
+      // not sufficient?
+      if (r.amount === "" || r.measurementId === "" || r.type === "" || r.cuisine === "" || r.id === "") validSubrecipes = false;
     });
-    if (!validSubrecipeRows) return feedback("Review subrecipes.");
+    if (!validSubrecipes) return feedback("Review subrecipes.");
   }
 
   return true;
 }
 
 type RecipeInfo = {
-  cuisineId:                     number;
-  description:                   string;
-  directions:                    string;
-  equipmentRows:                 IEquipmentRow[];
-  ingredientRows:                IIngredientRow[];
-  usedMethods:                   IMethods;
   ownership:                     string;
   recipeTypeId:                  number;
-  setFeedback(feedback: string): void;
-  subrecipeRows:                 ISubrecipeRow[];
+  cuisineId:                     number;
   title:                         string;
+  description:                   string;
+  directions:                    string;
+  methods:                       IRequiredMethod[];
+  equipment:                     IRequiredEquipment[];
+  ingredients:                   IRequiredIngredient[];
+  subrecipes:                    IRequiredSubrecipe[];
+  setFeedback(feedback: string): void;
 };

@@ -16,7 +16,7 @@ import { NewRecipeView } from './view';
 
 export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const id = Number(router.query.id);  // not reliable?
 
   const dispatch = useDispatch();
   const staffMessage = useSelector(state => state.staff.message);
@@ -56,6 +56,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   ]);
   const [ subrecipeRows, setSubrecipeRows ] = useState<ISubrecipeRow[]>([]);
 
+  // this is insane. do better.
   const [ recipePrevImage,      setRecipePrevImage ] =      useState("nobsc-recipe-default");
   const [ recipeImage,          setRecipeImage ] =          useState<IImage>(null);
   const [ recipeFullImage,      setRecipeFullImage ] =      useState<File | null>(null);
@@ -121,7 +122,8 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       setDescription(description);
       setDirections(directions);
 
-      let methodsToSet: number[] = [];
+      // double check this!!!
+      const methodsToSet: number[] = [];
       methods.length && methods.map(m => methodsToSet.push(m.method_id));
       setUsedMethods(prevState => {
         const nextState = {...prevState};
@@ -134,6 +136,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       setRequiredEquipment(equipment);
       setRequiredIngredients(ingredients);
       setRequiredSubrecipes(subrecipes);
+
       setRecipePrevImage(recipe_image);
       setEquipmentPrevImage(equipment_image);
       setIngredientsPrevImage(ingredients_image);
@@ -205,37 +208,53 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     setRecipeTinyImage(null);
   };
 
+  const getCheckedMethods = () => {
+    const checkedMethods: IRequiredMethod[] = [];
+    Object.entries(usedMethods).forEach(([key, value]) => {
+      if (value === true) checkedMethods.push({id: Number(key)});
+    });
+    return checkedMethods;
+    //return Object.entries(usedMethods).map(([key, value]) => (value === true) && ({id: Number(key)}));
+  };
+
   const getRequiredEquipment = () => {
     //if (!equipmentRows.length) return [];
-    return equipmentRows.map(e => ({amount: Number(e.amount), equipment: Number(e.equipment)}));
+    return equipmentRows.map(e => ({
+      amount: Number(e.amount),
+      id:     Number(e.id)
+    }));
   };
 
   const getRequiredIngredients = () => {
     //if (!ingredientRows.length) return [];
-    return ingredientRows.map(i => ({amount: Number(i.amount), unit: Number(i.unit), ingredient: Number(i.ingredient)}));
-  };
-
-  const getCheckedMethods = () => {
-    let checkedMethods: IRequiredMethod[] = [];
-    Object.entries(usedMethods)
-      .forEach(([key, value]) => {
-        if (value === true) checkedMethods.push({id: Number(key)});
-      });
-    return checkedMethods;
+    return ingredientRows.map(i => ({
+      amount:        Number(i.amount),
+      measurementId: Number(i.measurementId),
+      id:            Number(i.id)
+    }));
   };
 
   const getRequiredSubrecipes = () => {
     //if (subrecipeRows.length) return [];
-    return subrecipeRows.map(s => ({amount: Number(s.amount), unit: Number(s.unit), subrecipe: Number(s.subrecipe)}));
+    return subrecipeRows.map(s => ({
+      amount:        Number(s.amount),
+      measurementId: Number(s.measurementId),
+      id:            Number(s.id)
+    }));
   };
 
-  const changeRecipeType =  (e: React.SyntheticEvent<EventTarget>) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
-  const changeCuisine =     (e: React.SyntheticEvent<EventTarget>) => setCuisineId(Number((e.target as HTMLInputElement).value));
-  const changeTitle =       (e: React.SyntheticEvent<EventTarget>) => setTitle((e.target as HTMLInputElement).value);
-  const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
-  const changeDirections =  (e: React.SyntheticEvent<EventTarget>) => setDirections((e.target as HTMLInputElement).value);
+  const changeRecipeType =  (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
+  const changeCuisine =     (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
+  const changeTitle =       (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
+  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
+  const changeDirections =  (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
 
-  const changeEquipmentRow = (e: React.SyntheticEvent<EventTarget>, rowKey: string) => {
+  const changeMethods = (e: SyntheticEvent) => {
+    const id = (e.target as HTMLInputElement).id;
+    setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
+  };
+
+  const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
     const newEquipmentRows = Array.from(equipmentRows);
     const elToUpdate = newEquipmentRows.findIndex(el => el.key === rowKey);
     const targetName = (e.target as HTMLInputElement).name;
@@ -244,7 +263,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     setEquipmentRows(newEquipmentRows);
   };
 
-  const changeIngredientRow = (e: React.SyntheticEvent<EventTarget>, rowKey: string) => {
+  const changeIngredientRow = (e: SyntheticEvent, rowKey: string) => {
     const newIngredientRows = Array.from(ingredientRows);
     const elToUpdate = newIngredientRows.findIndex(el => el.key === rowKey);
     const targetName = (e.target as HTMLInputElement).name;
@@ -253,53 +272,65 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     setIngredientRows(newIngredientRows);
   };
 
-  const changeMethods = (e: React.SyntheticEvent<EventTarget>) => {
-    const id = (e.target as HTMLInputElement).id;
-    setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
+  const changeSubrecipeRow = (e: SyntheticEvent, rowKey: string) => {
+    const newSubrecipeRows = Array.from(subrecipeRows);
+    const elToUpdate = newSubrecipeRows.findIndex(el => el.key === rowKey);
+    const targetName = (e.target as HTMLInputElement).name;
+    const targetValue = (e.target as HTMLInputElement).value;
+    newSubrecipeRows[elToUpdate][targetName] = targetValue;
+    setSubrecipeRows(newSubrecipeRows);
   };
 
-  const handleSubmit = () => {
-    if (!validRecipeInfo({cuisineId, description, directions, equipmentRows, ingredientRows, usedMethods, ownership, recipeTypeId, setFeedback, subrecipeRows, title})) return;
+  const submit = () => {
+    const recipeInfo = {
+      ownership,
+      recipeTypeId,
+      cuisineId,
+      title,
+      description,
+      directions,
+      methods: getCheckedMethods(),
+      equipment: getRequiredEquipment(),
+      ingredients: getRequiredIngredients(),
+      subrecipes: getRequiredSubrecipes(),
+      recipeImage,
+      recipeFullImage,
+      recipeThumbImage,
+      recipeTinyImage,
+      equipmentImage,
+      equipmentFullImage,
+      ingredientsImage,
+      ingredientsFullImage,
+      cookingImage,
+      cookingFullImage
+    };
+
+    if (!validRecipeInfo({
+      ownership,
+      recipeTypeId,
+      cuisineId,
+      title,
+      description,
+      directions,
+      methods: recipeInfo.methods,
+      equipment: recipeInfo.equipment,
+      ingredients: recipeInfo.ingredients,
+      subrecipes: recipeInfo.subrecipes,
+      setFeedback
+    })) return;
 
     setLoading(true);
 
     if (editing && editingId) {
+      const recipeEditInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
 
-      const recipeInfo = {
-        id: editingId,  // change?
-        ownership,
-        recipeTypeId, cuisineId,
-        title, description, directions,
-        methods: getCheckedMethods(),
-        equipment: getRequiredEquipment(),
-        ingredients: getRequiredIngredients(),
-        subrecipes: getRequiredSubrecipes(),
-        recipeImage, recipeFullImage, recipePrevImage, recipeThumbImage, recipeTinyImage,
-        equipmentImage, equipmentFullImage, equipmentPrevImage,
-        ingredientsImage, ingredientsFullImage, ingredientsPrevImage,
-        cookingImage, cookingFullImage, cookingPrevImage
-      };
-      if (staffIsAuthenticated) dispatch(staffEditRecipe(recipeInfo));
+      if (staffIsAuthenticated) dispatch(staffEditRecipe(recipeEditInfo));
       else {
-        if      (ownership === "private") dispatch(userEditPrivateRecipe(recipeInfo));
-        else if (ownership === "public")  dispatch(userEditPublicRecipe(recipeInfo));
+        if      (ownership === "private") dispatch(userEditPrivateRecipe(recipeEditInfo));
+        else if (ownership === "public")  dispatch(userEditPublicRecipe(recipeEditInfo));
       }
-
-    } else {
-
-      const recipeInfo = {
-        ownership,
-        recipeTypeId, cuisineId,
-        title, description, directions,
-        methods: getCheckedMethods(),
-        equipment: getRequiredEquipment(),
-        ingredients: getRequiredIngredients(),
-        subrecipes: getRequiredSubrecipes(),
-        recipeImage, recipeFullImage, recipeThumbImage, recipeTinyImage,
-        equipmentImage, equipmentFullImage,
-        ingredientsImage, ingredientsFullImage,
-        cookingImage, cookingFullImage
-      };
+    }
+    else {
       if (staffIsAuthenticated) dispatch(staffCreateNewRecipe(recipeInfo));
       else {
         if      (ownership === "private") dispatch(userCreateNewPrivateRecipe(recipeInfo));
@@ -307,15 +338,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       }
       
     }
-  };
-
-  const changeSubrecipeRow = (e: React.SyntheticEvent<EventTarget>, rowKey: string) => {
-    const newSubrecipeRows = Array.from(subrecipeRows);
-    const elToUpdate = newSubrecipeRows.findIndex(el => el.key === rowKey);
-    const targetName = (e.target as HTMLInputElement).name;
-    const targetValue = (e.target as HTMLInputElement).value;
-    newSubrecipeRows[elToUpdate][targetName] = targetValue;
-    setSubrecipeRows(newSubrecipeRows);
   };
 
   const makeCookingCrops = async (crop: Crop) => {
@@ -483,8 +505,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       changeIngredientRow={changeIngredientRow}
       changeMethods={changeMethods}
       changeRecipeType={changeRecipeType}
-      change
-      handleSubmit={handleSubmit}
+      submit={submit}
       changeSubrecipeRow={changeSubrecipeRow}
       changeTitle={changeTitle}
       id={id}
@@ -530,6 +551,8 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   );
 };
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type IImage = string | ArrayBuffer | null;
 
 export interface IExistingRecipeToEdit {
@@ -549,6 +572,8 @@ export interface IExistingRecipeToEdit {
   ingredients_image: string;
   cooking_image:     string;
 }
+
+// change these too?
 
 export interface IExistingRequiredMethod {
   method_id: number;
@@ -603,12 +628,11 @@ export interface IMethods {
   24: boolean;
 }
 
-// fix these?
 export interface IEquipmentRow {
   [index: string]: any;
   key:             string;
   amount:          string | number;
-  type:            string | number;
+  type:            string | number;  // equipmentTypeId?
   id:              string | number;
 }
 
@@ -617,7 +641,7 @@ export interface IIngredientRow {
   key:             string;
   amount:          string | number;
   measurementId:   string | number;
-  type:            string | number;
+  type:            string | number;  // ingredientTypeId?
   id:              string | number;
 }
 
@@ -626,8 +650,8 @@ export interface ISubrecipeRow {
   key:             string;
   amount:          string | number;
   measurementId:   string | number;
-  type:            string | number;
-  cuisine:         string | number;
+  type:            string | number;  // recipeTypeId?
+  cuisine:         string | number;  // cuisineId?
   id:              string | number;
 }
 

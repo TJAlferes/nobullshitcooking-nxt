@@ -188,12 +188,12 @@ export function NewRecipeView({
       <div className="new-recipe-required-ingredients">
         <h2 className="new-recipe__h2">Ingredients</h2>
         <div className="new-recipe-ingredient-rows">
-          {ingredientRows.map(({ amount, unit, id, key, type }) => (
+          {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
             <IngredientRow
               amount={amount}
               ingredients={ingredients}
               ingredientTypes={ingredientTypes}
-              measurementId={unit}
+              measurementId={measurementId}
               measurements={measurements}
               myPrivateIngredients={ownership === "private" ? myPrivateIngredients : []}
               changeIngredientRow={changeIngredientRow}
@@ -216,7 +216,7 @@ export function NewRecipeView({
               amount={s.amount}
               cuisine={s.cuisine}
               cuisines={cuisines}
-              measurementId={s.unit}
+              measurementId={s.measurementId}
               measurements={measurements}
               myFavoriteRecipes={myFavoriteRecipes}
               myPrivateRecipes={ownership === "private" ? myPrivateRecipes : []}

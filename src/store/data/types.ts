@@ -16,7 +16,7 @@ State
 
 export interface IDataState extends IInitialData, IInitialUserData {};
 
-export interface     IInitialData {
+export interface IInitialData {
   cuisines:          ICuisine[];
   equipment:         IEquipment[];
   equipmentTypes:    IEquipmentType[];
