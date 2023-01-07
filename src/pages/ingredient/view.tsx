@@ -6,20 +6,20 @@ export function IngredientView({ ingredient: { id, full_name, image, ingredient_
   return (
     <div className={`ingredient two-col-b ${theme}`} data-test="ingredient">
       <div className="two-col-b-left">
-        <h1 className="ingredient-fullname">{full_name}</h1>
+        <h1>{full_name}</h1>
 
-        <div className="ingredient-image">
+        <div className="image">
           {myPrivateIngredients.find(ing => ing.id === id)
             ? <img src={`${url}user-ingredients/${image}`} />
             : <img src={`${url}images-01/ingredients/${image}.jpg`} />}
         </div>
 
-        <div className="ingredient-type-outer">
-          <b>Ingredient Type:</b>{' '}<span className="ingredient-type">{ingredient_type_name}</span>
+        <div className="type">
+          <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>
         </div>
 
-        <div className="equipment-description-outer">
-          <b>Ingredient Description:</b>{' '}<div className="ingredient-description">{description}</div>
+        <div className="description">
+          <b>Ingredient Description:</b>{' '}<div>{description}</div>
         </div>
       </div>
 

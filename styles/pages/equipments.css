@@ -106,7 +106,7 @@
   padding: 10px;
 }
 
-.equipments__link {
+.equipments a {
   align-items: flex-start;
   display: flex;
   flex-direction: row;
@@ -117,28 +117,28 @@
   width: 100%;
 }
 
-.equipments__link:active,
-.equipments__link:hover {
+.equipments a:active,
+.equipments a:hover {
   background-color: #eee;
 }
 
-.equipments__text__name {
+.equipments .name {
   font-size: 1.6rem;
   font-weight: 900;
   text-decoration: none;
 }
 
-.equipments__link:hover .equipments__text .equipments__name,
-.equipments__link:active .equipments__text .equipments__name {
+.equipments a:hover .equipments .text .equipments .name,
+.equipments a:active .equipments .text .equipments .name {
   color: #c10006;
 }
 
-.equipments__type {
+.equipments .type {
   display: inline-block;
   margin-right: 5px;
 }
 
-.equipments__image {
+.equipments img {
   height: 62px;
   width: 100px;
 }

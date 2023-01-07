@@ -26,16 +26,15 @@ export function RegisterView({
   validateRegistrationInfo
 }: Props): JSX.Element {
   const registerForm = () => (
-    <form className="register__form">
-      <h1 className="register__heading">Create Account</h1>
+    <form>
+      <h1>Create Account</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <label className="register__label">Username</label>
+      <label>Username</label>
       <input
         autoComplete="username"
         autoFocus
-        className="register__input"
         disabled={loading}
         id="username"
         maxLength={20}
@@ -46,10 +45,9 @@ export function RegisterView({
         value={username}
       />
 
-      <label className="register-label">Email</label>
+      <label>Email</label>
       <input
         autoComplete="email"
-        className="register__input"
         disabled={loading}
         id="email"
         maxLength={60}
@@ -60,10 +58,9 @@ export function RegisterView({
         value={email}
       />
 
-      <label className="register-label">Password</label>
+      <label>Password</label>
       <input
         autoComplete="current-password"
-        className="register__input"
         disabled={loading}
         id="password"
         maxLength={20}
@@ -74,10 +71,9 @@ export function RegisterView({
         value={password}
       />
 
-      <label className="register-label">Password Again</label>
+      <label>Password Again</label>
       <input
         autoComplete="current-password"
-        className="register__input"
         disabled={loading}
         id="passwordAgain"
         maxLength={20}
@@ -89,9 +85,9 @@ export function RegisterView({
       />
 
       <LoaderButton
-        className="create-account-button"
+        className="create-account"
         disabled={!validateRegistrationInfo()}
-        id="create_account_button"
+        id="create_account"
         isLoading={loading}
         loadingText="Creating Account..."
         name="submit"
@@ -103,16 +99,15 @@ export function RegisterView({
   );
 
   const verifyForm = () => (
-    <form className="register-confirm-form">
-      <h1 className="register__heading">Verify</h1>
+    <form>
+      <h1>Verify</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <label className="register__label">Code</label>
+      <label>Code</label>
       <input
         autoComplete="confirmation-code"
         autoFocus
-        className="register__input"
         disabled={loading}
         id="confirmationCode"
         maxLength={20}
@@ -126,9 +121,9 @@ export function RegisterView({
       <p>Please check your email for the confirmation code.</p>
 
       <LoaderButton
-        className="verify-confirmation-code-button"
+        className="verify-confirmation-code"
         disabled={!validateConfirmationCode()}
-        id="verify_confirmation_code_button"
+        id="verify_confirmation_code"
         isLoading={loading}
         loadingText="Verifying..."
         name="submit"
@@ -142,21 +137,21 @@ export function RegisterView({
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
       <Link href="/">
-        <a className="register__home-links">
-          <img className="home-link--desktop" src={`${url}logo-large-white.png`} />
-          <img className="home-link--mobile" src={`${url}logo-small-white.png`} />
+        <a className="home-links">
+          <img className="--desktop" src={`${url}logo-large-white.png`} />
+          <img className="--mobile" src={`${url}logo-small-white.png`} />
         </a>
       </Link>
 
       {confirmingUser === true ? verifyForm() : registerForm()}
 
-      <div className="register__links">
-        <Link href="/page/site/terms"><a className="register__link">Terms of Use</a></Link>
-        <Link href="/page/site/privacy"><a className="register__link">Privacy Policy</a></Link>
-        <Link href="/page/site/help"><a className="register__link">Help</a></Link>
+      <div className="links">
+        <Link href="/page/site/terms"><a>Terms of Use</a></Link>
+        <Link href="/page/site/privacy"><a>Privacy Policy</a></Link>
+        <Link href="/page/site/help"><a>Help</a></Link>
       </div>
 
-      <p className="register__copyright">Copyright 2015-2023 NoBullshitCooking. All Rights Reserved.</p>
+      <p className="copyright">Copyright 2015-2023 NoBullshitCooking. All Rights Reserved.</p>
     </div>
   );
 }

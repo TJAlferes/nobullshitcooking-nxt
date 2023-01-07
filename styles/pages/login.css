@@ -2,23 +2,23 @@
   font-size: 13px;
 }
 
-.login__home-links {
+.login a {
   display: block;
   margin: 0 auto;
   max-width: content;
 }
 
-.login__home-link--desktop {
+.login img.--desktop {
   display: block;
   margin: 0 auto;
 }
 
-.login__home-link--mobile {
+.login img.--mobile {
   display: none;
   margin: 0 auto;
 }
 
-.login__form {
+.login form {
   border: 1px solid #ddd;
   border-radius: 4px;
   display: block;
@@ -27,7 +27,7 @@
   width: 320px;
 }
 
-.login__heading {
+.login h1 {
   display: block;
   font-size: 28px;
   font-weight: 400;
@@ -35,14 +35,14 @@
   margin-bottom: 14px;
 }
 
-.login__label {
+.login label {
   display: block;
   margin: 14px auto 4px auto;
   font-size: 13px;
   font-weight: 700;
 }
 
-.login__input {
+.login input {
   border: 1px solid #aaa;
   border-radius: 2px;
   display: block;
@@ -56,9 +56,7 @@
   border-top: 1px solid #ccc;
 }*/
 
-.login__button,
-.login__button--facebook,
-.login__button--google {
+.login__button {
   border: 1px solid;
   border-color: #999 #777 #555 #777;
   border-radius: 2px;
@@ -82,42 +80,18 @@
   background-image: linear-gradient(to bottom, #8cbeec, #4493d8);
 }
 
-/*.login__button--facebook {
-  background-image: linear-gradient(#4e69a2, #3b5998 50%);
-  color: #fff;
-  font-family: Arial;
-  font-size: 12px;
-}
-
-.login__button--facebook:hover,
-.login__button--facebook:active {
-  background-image: linear-gradient(#425886, #314879 50%);
-}
-
-.login__button--google {
-  background: #dd5347;
-  color: #fff;
-  font-family: Arial;
-  font-size: 12px;
-}
-
-.login__button--google:hover,
-.login__button--google:active {
-  background: #bd453b;
-}*/
-
 @media (max-width: 899px) {
-  .home-link--desktop {
+  .login img.--desktop {
     display: none;
     margin: 0 auto;
   }
 
-  .home-link--mobile {
+  .login img.--mobile {
     display: block;
     margin: 0 auto;
   }
 
-  .login__form {
+  .login form {
     width: 280px;
   }
 }
