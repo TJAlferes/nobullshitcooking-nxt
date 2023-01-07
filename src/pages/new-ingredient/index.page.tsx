@@ -95,14 +95,18 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
+
+    const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
+
     if (editing && editingId) {
-      const ingredientInfo = {id: editingId, ingredientTypeId: typeId, name, description, image, fullImage, tinyImage, prevImage};
-      if (staffIsAuthenticated) dispatch(staffEditIngredient(ingredientInfo));
-      else dispatch(userEditPrivateIngredient(ingredientInfo));
-    } else {
-      const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage,};
+      const ingredientEditInfo = {id: editingId, prevImage, ...ingredientInfo};
+      
+      if (staffIsAuthenticated) dispatch(staffEditIngredient(ingredientEditInfo));
+      else                      dispatch(userEditPrivateIngredient(ingredientEditInfo));
+    }
+    else {
       if (staffIsAuthenticated) dispatch(staffCreateNewIngredient(ingredientInfo));
-      else dispatch(userCreateNewPrivateIngredient(ingredientInfo));
+      else                      dispatch(userCreateNewPrivateIngredient(ingredientInfo));
     }
   };
 

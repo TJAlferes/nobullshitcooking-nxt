@@ -15,14 +15,14 @@ export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDay
       <div className="plan__calendar-container">
         <div className="plan__monthly-plan">
           <div className="monthly-plan">
-            <div className="monthly-plan__header">
-              <span className="monthly-plan__header-day">Sunday</span>
-              <span className="monthly-plan__header-day">Monday</span>
-              <span className="monthly-plan__header-day">Tuesday</span>
-              <span className="monthly-plan__header-day">Wednesday</span>
-              <span className="monthly-plan__header-day">Thursday</span>
-              <span className="monthly-plan__header-day">Friday</span>
-              <span className="monthly-plan__header-day">Saturday</span>
+            <div className="header">
+              <span>Sunday</span>
+              <span>Monday</span>
+              <span>Tuesday</span>
+              <span>Wednesday</span>
+              <span>Thursday</span>
+              <span>Friday</span>
+              <span>Saturday</span>
             </div>
 
             <div className="monthly-plan__body">

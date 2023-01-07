@@ -40,28 +40,28 @@ export function NewIngredientView({
 
       <p className="feedback">{feedback}</p>
 
-      <h2 className="new-ingredient__h2">Type of Ingredient</h2>
+      <h2>Type of Ingredient</h2>
       <select name="ingredientType" onChange={changeType} required value={typeId}>
         <option value=""></option>
         {ingredientTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
       </select>
 
-      <h2 className="new-ingredient__h2">Name</h2>
-      <input className="new-ingredient-name" onChange={changeName} type="text" value={name} />
+      <h2>Name</h2>
+      <input className="name" onChange={changeName} type="text" value={name} />
 
-      <h2 className="new-ingredient__h2">Description</h2>
-      <textarea className="new-ingredient-description" onChange={changeDescription} value={description} />
+      <h2>Description</h2>
+      <textarea className="description" onChange={changeDescription} value={description} />
 
       <div className="new-ingredient-image">
-        <h2 className="new-ingredient__h2">Image of Ingredient</h2>
+        <h2>Image of Ingredient</h2>
         {!image && (
           <div>
             {!editing
               ? <img src={`${dir}/nobsc-ingredient-default`} />
               : prevImage && <img src={`${dir}/${prevImage}`} />
             }
-            <h4 className="new-ingredient__h4">Change</h4>
-            <input accept="image/*" className="new-ingredient-image__input" onChange={onSelectFile} type="file" />
+            <h4>Change</h4>
+            <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
         )}
         {image && (
@@ -81,7 +81,7 @@ export function NewIngredientView({
         )}
       </div>
 
-      <div className="new-ingredient-finish">
+      <div className="finish">
         <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
         <LoaderButton
           className="submit-button"

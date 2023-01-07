@@ -1,11 +1,11 @@
 /*.new-equipment {}*/
 
-.new-equipment__h2 {
+.new-equipment h2 {
   font-size: 1.7rem;
   padding-top: 18px;
 }
 
-.new-equipment-name {
+.new-equipment .name {
   border: 1px solid;
   border-radius: 1px;
   display: block;
@@ -15,16 +15,16 @@
   width: 100%;
 }
 
-.new-equipment-description {width: 100%;}
+.new-equipment .description {width: 100%;}
 
-.new-equipment__h4 {padding-bottom: 3px;}
+.new-equipment h4 {padding-bottom: 3px;}
 
-.new-equipment-finish {
+.new-equipment .finish {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
 }
 
 @media (max-width: 899px) {
-  .new-equipment-finish {flex-direction: column;}
+  .new-equipment .finish {flex-direction: column;}
 }

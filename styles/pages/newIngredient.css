@@ -1,11 +1,11 @@
 /*.new-ingredient {}*/
 
-.new-ingredient__h2 {
+.new-ingredient h2 {
   font-size: 1.7rem;
   padding-top: 18px;
 }
 
-.new-ingredient-name {
+.new-ingredient .name {
   border: 1px solid;
   border-radius: 1px;
   display: block;
@@ -15,16 +15,16 @@
   width: 100%;
 }
 
-.new-ingredient-description {width: 100%;}
+.new-ingredient .description {width: 100%;}
 
-.new-ingredient__h4 {padding-bottom: 3px;}
+.new-ingredient h4 {padding-bottom: 3px;}
 
-.new-ingredient-finish {
+.new-ingredient .finish {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
 }
 
 @media (max-width: 899px) {
-  .new-ingredient-finish {flex-direction: column;}
+  .new-ingredient .finish {flex-direction: column;}
 }

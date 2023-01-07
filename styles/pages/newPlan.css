@@ -46,13 +46,13 @@
   margin: 6px 1px;
 }
 
-.planner__recipes-tabs {
+.new-plan .recipes-tabs {
   border-bottom: 2px solid #6cabe4;
   margin-top: 10px;
   width: 755px;
 }
 
-.planner__recipes-tab {
+.new-plan .recipes-tabs button {
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border-color: #ddd #666 #666 #ddd;
   border-radius: 1px;
@@ -67,7 +67,7 @@
   width: 151px;
 }
 
-.planner__recipes-tab--active {
+.new-plan .recipes-tabs button.--active {
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
 }
 

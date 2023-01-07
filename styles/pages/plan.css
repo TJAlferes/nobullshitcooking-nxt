@@ -45,23 +45,23 @@
   width: 756px;
 }
 
-.monthly-plan__body,
-.monthly-plan__header {
+.monthly-plan .body,
+.monthly-plan .header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 1px;
   width: 100%;
 }
 
-.monthly-plan__header {height: 20px;}
+.monthly-plan .header {height: 20px;}
 
-.monthly-plan__header-day {
+.monthly-plan .header span {
   height: 20px;
   line-height: 20px;
   text-align: center;
 }
 
-.monthly-plan__body {
+.monthly-plan .body {
   border-style: solid;
   border-width: 1px;
   height: 300px;
@@ -172,13 +172,13 @@
 
 
 
-.light .monthly-plan__header,
-.light .monthly-plan__header-day {
+.light .monthly-plan .header,
+.light .monthly-plan .header span {
   background-color: #b1d7f9;
   color: #000;
 }
 
-.light .monthly-plan__body {
+.light .monthly-plan .body {
   background-color: #b1d7f9;
   border-color: #b1d7f9;
 }
@@ -195,13 +195,13 @@
 
 
 
-.dark .monthly-plan__header,
-.dark .monthly-plan__header-day {
+.dark .monthly-plan .header,
+.dark .monthly-plan .header span {
   background-color: #507ea7;
   color: #bbb;
 }
 
-.dark .monthly-plan__body {
+.dark .monthly-plan .body {
   background-color: #507ea7;
   border-color: #507ea7;
 }

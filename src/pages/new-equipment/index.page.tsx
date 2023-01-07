@@ -89,25 +89,26 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
-  const changeType =        (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
-  const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
+  const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
+  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
 
+    const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
+
     if (editing && editingId) {
-      const equipmentInfo = {id: editingId, equipmentTypeId: typeId, name, description, image, fullImage, tinyImage, prevImage};
-
-      if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentInfo));
-      else dispatch(userEditPrivateEquipment(equipmentInfo));
-    } else {
-      const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
-
+      const equipmentEditInfo = {id: editingId, prevImage, ...equipmentInfo};
+      
+      if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentEditInfo));
+      else                      dispatch(userEditPrivateEquipment(equipmentEditInfo));
+    }
+    else {
       if (staffIsAuthenticated) dispatch(staffCreateNewEquipment(equipmentInfo));
-      else dispatch(userCreateNewPrivateEquipment(equipmentInfo));
+      else                      dispatch(userCreateNewPrivateEquipment(equipmentInfo));
     }
   };
 
@@ -191,6 +192,8 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     />
   );
 };
+
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Props = {
   editing: boolean;

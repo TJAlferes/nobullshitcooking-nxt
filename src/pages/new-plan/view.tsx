@@ -31,30 +31,29 @@ export function NewPlanView({
   tab,
   theme
 }: Props): JSX.Element {
+  // move out?
   const memoizedMonthlyPlan = useMemo(() => {
     return (
       <div className="plan__monthly-plan">
         <div className="monthly-plan">
-          <div className="monthly-plan__header">
-            <span className="monthly-plan__header-day">Sunday</span>
-            <span className="monthly-plan__header-day">Monday</span>
-            <span className="monthly-plan__header-day">Tuesday</span>
-            <span className="monthly-plan__header-day">Wednesday</span>
-            <span className="monthly-plan__header-day">Thursday</span>
-            <span className="monthly-plan__header-day">Friday</span>
-            <span className="monthly-plan__header-day">Saturday</span>
+          <div className="header">
+            <span>Sunday</span>
+            <span>Monday</span>
+            <span>Tuesday</span>
+            <span>Wednesday</span>
+            <span>Thursday</span>
+            <span>Friday</span>
+            <span>Saturday</span>
           </div>
 
-          <div className="monthly-plan__body">
-            {Object.keys(recipeListsInsideDays)
-              .map((recipeList, i) => (
-                <div className="monthly-plan__body-day" key={i} >
-                  <div className="body-day__content">
-                    <Day day={i + 1} expanded={expanded} expandedDay={expandedDay} recipes={recipeListsInsideDays[Number(recipeList)]} />
-                  </div>
+          <div className="body">
+            {Object.keys(recipeListsInsideDays).map((recipeList, i) => (
+              <div className="monthly-plan__body-day" key={i} >
+                <div className="body-day__content">
+                  <Day day={i + 1} expanded={expanded} expandedDay={expandedDay} recipes={recipeListsInsideDays[Number(recipeList)]} />
                 </div>
-              ))
-            }
+              </div>
+            ))}
           </div>
         </div>
 
@@ -65,6 +64,7 @@ export function NewPlanView({
     );
   }, [recipeListsInsideDays, expanded, expandedDay]);
 
+  // move out?
   const memoizedRecipes = useMemo(() => {
     const tabToList: ITabToList = {
       "official": officialRecipes,
@@ -75,7 +75,7 @@ export function NewPlanView({
     };
     const recipes: IWorkRecipe[] = tabToList[tab];
 
-    // Note: even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
+    // Even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
     // they are set at this stage because they are used when viewing a plan (Plan-)
     return (
       <Recipes
@@ -101,11 +101,11 @@ export function NewPlanView({
       <div className="new-plan__calendar-container">
         {memoizedMonthlyPlan}
         <div className="planner__recipes-tabs">
-          <button className={(tab === "official") ? "planner__recipes-tab--active" : "planner__recipes-tab"} name="official" onClick={e => clickTab(e)}>"All Official"</button>
-          <button className={(tab === "private") ? "planner__recipes-tab--active" : "planner__recipes-tab"}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
-          <button className={(tab === "public") ? "planner__recipes-tab--active" : "planner__recipes-tab"}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
-          <button className={(tab === "favorite") ? "planner__recipes-tab--active" : "planner__recipes-tab"} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
-          <button className={(tab === "saved") ? "planner__recipes-tab--active" : "planner__recipes-tab"}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
+          <button className={(tab === "official") ? "--active" : undefined} name="official" onClick={e => clickTab(e)}>"All Official"</button>
+          <button className={(tab === "private") ? "--active" : undefined}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
+          <button className={(tab === "public") ? "--active" : undefined}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
+          <button className={(tab === "favorite") ? "--active" : undefined} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
+          <button className={(tab === "saved") ? "--active" : undefined}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
         </div>
         {memoizedRecipes}
       </div>

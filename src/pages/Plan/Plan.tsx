@@ -28,7 +28,15 @@ export default function Plan({ twoColumnATheme }: Props): JSX.Element {
     else router.push('/home');
   }, []);
 
-  return (<PlanView expanded={expanded} expandedDay={expandedDay} planName={planName} recipeListsInsideDays={recipeListsInsideDays} twoColumnATheme={twoColumnATheme} />);
+  return (
+    <PlanView
+      expanded={expanded}
+      expandedDay={expandedDay}
+      planName={planName}
+      recipeListsInsideDays={recipeListsInsideDays}
+      twoColumnATheme={twoColumnATheme}
+    />
+  );
 }
 
 type Props = {
