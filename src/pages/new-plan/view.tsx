@@ -50,7 +50,12 @@ export function NewPlanView({
             {Object.keys(recipeListsInsideDays).map((recipeList, i) => (
               <div className="monthly-plan__body-day" key={i} >
                 <div className="body-day__content">
-                  <Day day={i + 1} expanded={expanded} expandedDay={expandedDay} recipes={recipeListsInsideDays[Number(recipeList)]} />
+                  <Day
+                    day={i + 1}
+                    expanded={expanded}
+                    expandedDay={expandedDay}
+                    recipes={recipeListsInsideDays[Number(recipeList)]}
+                  />
                 </div>
               </div>
             ))}
@@ -58,7 +63,14 @@ export function NewPlanView({
         </div>
 
         <div className="expanded-day-container">
-          {expandedDay && <ExpandedDay day={expandedDay} expanded={expanded} expandedDay={expandedDay} recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []} />}
+          {expandedDay && (
+            <ExpandedDay
+              day={expandedDay}
+              expanded={expanded}
+              expandedDay={expandedDay}
+              recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []}
+            />
+          )}
         </div>
       </div>
     );
@@ -82,25 +94,28 @@ export function NewPlanView({
         day={0}
         expanded={expanded}
         expandedDay={expandedDay}
-        recipes={recipes.map(({ id, title, recipe_image, owner_id }) => ({key: uuidv4(), id, title, recipe_image, owner_id}))}
+        recipes={
+          recipes.map(({ id, title, recipe_image, owner_id }) =>
+            ({key: uuidv4(), id, title, recipe_image, owner_id})
+          )
+        }
       />
     );
   }, [tab]);
 
   return (
     <div className={`new-plan two-col-a ${theme}`}>
-      <div className="new-plan__heading">
+      <div className="heading">
         <h1>New Plan</h1>
         <p className="feedback">{feedback}</p>
-        <div className="plan__name">
-          <label className="new-plan-name__label">Plan Name:</label>
-          <input className="new-plan-name__input" onChange={changePlanName} type="text" value={planName} />
+        <div className="name">
+          <label>Plan Name:</label><input onChange={changePlanName} type="text" value={planName} />
         </div>
       </div>
 
-      <div className="new-plan__calendar-container">
+      <div className="calendar">
         {memoizedMonthlyPlan}
-        <div className="planner__recipes-tabs">
+        <div className="recipes-tabs">
           <button className={(tab === "official") ? "--active" : undefined} name="official" onClick={e => clickTab(e)}>"All Official"</button>
           <button className={(tab === "private") ? "--active" : undefined}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
           <button className={(tab === "public") ? "--active" : undefined}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
@@ -110,31 +125,15 @@ export function NewPlanView({
         {memoizedRecipes}
       </div>
 
-      <div>
-        <ExpandCollapse>
-          <div>
-            <p>- To add a recipe to your plan, drag it from the recipe list and drop it on a day</p>
-            <p>- To use the same recipe more than once, simply drag from the recipe list again</p>
-            <p>- To remove a recipe from your plan, drag and drop it back into the recipe list</p><br />
+      <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
 
-            <p>Tip: Remember that you can make multiple plans.</p><br />
-
-            <p>- To move a recipe to a different day, drag it from its current day and drop it on your desired day</p>
-            <p>- Click on a day to expand it</p>
-            <p>- While a day is expanded, you may reorder its recipes by dragging them up or down</p><br />
-
-            <p>Tip: You don't have to cook every day, especially when just starting out. It's best to make a plan you can follow through on.</p><br />
-          </div>
-        </ExpandCollapse>
-      </div>
-
-      <div className="planner__finish-area">
+      <div className="finish">
         <button className="cancel-button" onClick={activateModal}>Cancel</button>
 
         {modalActive
           ? (
             <AriaModal
-              dialogClass="planner__cancel-modal"
+              dialogClass="cancel"
               focusDialog={true}
               focusTrapOptions={{returnFocusOnDeactivate: false}}
               getApplicationNode={getApplicationNode}
@@ -142,8 +141,8 @@ export function NewPlanView({
               titleText="Cancel?"
               underlayClickExits={false}
             >
-              <p className="planner__cancel-prompt">Cancel new plan? Changes will not be saved.</p>
-              <button className="planner__cancel-cancel-button" onClick={deactivateModal}>No, Keep Working</button>
+              <p>Cancel new plan? Changes will not be saved.</p>
+              <button className="cancel-cancel" onClick={deactivateModal}>No, Keep Working</button>
               <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
             </AriaModal>
           )
@@ -164,6 +163,23 @@ export function NewPlanView({
   );
 }
 
+function ToolTip() {
+  return (
+    <div>
+      <p>- To add a recipe to your plan, drag it from the recipe list and drop it on a day</p>
+      <p>- To use the same recipe more than once, simply drag from the recipe list again</p>
+      <p>- To remove a recipe from your plan, drag and drop it back into the recipe list</p><br />
+
+      <p>Tip: Remember that you can make multiple plans.</p><br />
+
+      <p>- To move a recipe to a different day, drag it from its current day and drop it on your desired day</p>
+      <p>- Click on a day to expand it</p>
+      <p>- While a day is expanded, you may reorder its recipes by dragging them up or down</p><br />
+
+      <p>Tip: You don't have to cook every day, especially when just starting out. It's best to make a plan you can follow through on.</p><br />
+    </div>
+  );
+}
 interface ITabToList {
   [index: string]: any;
   "official": IWorkRecipe[];

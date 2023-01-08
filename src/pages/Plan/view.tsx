@@ -5,14 +5,14 @@ import ExpandedDay from './components/ExpandedDay';
 export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDays, twoColumnATheme }: Props): JSX.Element {
   return (
     <div className={`plan two-column-a ${twoColumnATheme}`}>
-      <div className="plan__header">
+      <div className="heading">
         <h1>Plan</h1>
-        <div className="plan__name">
-          <label className="plan__name-label">Plan Name:</label><span className="plan__name-value">{planName}</span>
+        <div className="name">
+          <label>Plan Name:</label><span>{planName}</span>
         </div>
       </div>
 
-      <div className="plan__calendar-container">
+      <div className="calendar">
         <div className="plan__monthly-plan">
           <div className="monthly-plan">
             <div className="header">

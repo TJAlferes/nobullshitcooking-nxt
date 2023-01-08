@@ -26,10 +26,19 @@ export function Day({ canDrop, day, expanded, expandedDay, isOver, recipes, plan
   const handleClickDay = () => plannerClickDay(day);
 
   return (expanded || (day === expandedDay)) ? null : (
-    <div className={`plan__day${color}`} onClick={handleClickDay}>
-      <span className="plan__date">{day}</span>
+    <div className={`day${color}`} onClick={handleClickDay}>
+      <span className="date">{day}</span>
       {recipes.map((recipe, i) => (
-        <Recipe day={day} expanded={expanded} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
+        <Recipe
+          day={day}
+          expanded={expanded}
+          expandedDay={expandedDay}
+          id={recipe.key}
+          index={i}
+          key={recipe.key}
+          listId={day}
+          recipe={recipe}
+        />
       ))}
     </div>
   );

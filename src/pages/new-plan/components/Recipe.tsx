@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 import { plannerRemoveRecipeFromDay, plannerReorderRecipeInDay } from '../../../store/planner/actions';
 import { IPlannerRecipe } from '../../../store/planner/types';
 
+const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }: Props) => {
@@ -64,9 +66,9 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
   drag(drop(ref));
 
   return (
-    <div className="plan__recipe" key={key} ref={ref}>
-      <div className="plan__recipe-image"><img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe.recipe_image}-tiny`} /></div>
-      <div className="plan__recipe-text">{recipe.title}</div>
+    <div className="new-plan-recipe" key={key} ref={ref}>
+      <div className="new-plan-recipe-image"><img src={`${url}/${recipe.recipe_image}-tiny`} /></div>
+      <div className="new-plan-recipe-text">{recipe.title}</div>
     </div>
   );
 };

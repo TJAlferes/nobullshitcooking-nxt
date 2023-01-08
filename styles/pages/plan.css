@@ -2,7 +2,7 @@
 
 }*/
 
-.plan__name {
+.plan .name {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -10,22 +10,22 @@
   width: 100%;
 }
 
-.plan__name-label,
-.plan__name-value {
+.plan .name label,
+.plan .name span {
   display: block;
   font-size: 1.3rem;
   font-weight: 900;
   line-height: 30px;
 }
 
-.plan__name-label {
+.plan .name label {
   margin-right: 5px;
   order: 1;
 }
 
-.plan__name-value {order: 2;}
+.plan .name span {order: 2;}
 
-.plan__calendar-container {
+.plan .calendar {
   height: 328px;
   margin: 0 auto;
   width: 100%;
@@ -105,7 +105,7 @@
   width: 150px;
 }
 
-.plan__date {
+.plan .date {
   color: #afafaf;
   height: content;
   padding: 1px 3px 0 0;
@@ -116,8 +116,8 @@
   width: content;
 }
 
-.plan__day,
-.plan__expanded-day {
+.plan .day,
+.plan .expanded-day {
   border-style: solid;
   border-width: 1px;
   cursor: hand;
@@ -132,18 +132,18 @@
   transform: none;
 }
 
-.plan__day {
+.plan .day {
   padding-left: 3px;
   transform: none;
 }
 
-.plan__expanded-day {
+.plan .expanded-day {
   border-style: solid;
   border-width: 1px;
   padding-left: 6px;
 }
 
-.plan__recipe {
+.plan-recipe {
   align-content: center;
   background-color: #FFF3CC;
   border: 1px solid #FFDEC3;
@@ -162,9 +162,9 @@
   width: 90%;
 }
 
-.plan__recipe-image {margin: 1px 0 0 1px;}
+.plan-recipe-image {margin: 1px 0 0 1px;}
 
-.plan__recipe-text {
+.plan-recipe-text {
   font-size: 1.1rem;
   text-align: center;
   width: 100%;
@@ -185,9 +185,9 @@
 
 .light .expanded-day-container {border-color: #fff;}
 
-.light .plan__date {color: #afafaf;}
+.light .plan .date {color: #afafaf;}
 
-.light .plan__expanded-day {
+.light .plan .expanded-day {
   background-color: #fff;
   border-color: #bfbfbf;
   box-shadow: 1px 1px 1px #555;
@@ -208,9 +208,9 @@
 
 .dark .expanded-day-container {border-color: #222;}
 
-.dark .plan__date {color: #666;}
+.dark .plan .date {color: #666;}
 
-.dark .plan__expanded-day {
+.dark .plan .expanded-day {
   background-color: #222;
   border-color: #5a5a5a;
   box-shadow: 1px 1px 1px #131313;

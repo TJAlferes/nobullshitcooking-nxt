@@ -10,8 +10,8 @@ export default function Day({ day, expanded, expandedDay, recipes }: Props): JSX
   const handleClickDay = () => dispatch(plannerViewClickDay(day));
 
   return (expanded || (day === expandedDay)) ? null: (
-    <div className="plan__day" onClick={handleClickDay}>
-      <span className="plan__date">{day}</span>
+    <div className="day" onClick={handleClickDay}>
+      <span className="date">{day}</span>
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
   );

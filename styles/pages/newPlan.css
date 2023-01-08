@@ -1,6 +1,6 @@
 /*.new-plan {}*/
 
-.new-plan-name__label {
+.new-plan .name label {
   display: block;
   font-size: 1.3rem;
   font-weight: 900;
@@ -9,7 +9,7 @@
   order: 1;
 }
 
-.new-plan-name__input {
+.new-plan .name input {
   border-style: solid;
   border-width: 1px;
   border-radius: 1px;
@@ -20,13 +20,13 @@
   width: 685px;
 }
 
-.new-plan__calendar-container {
+.new-plan .calendar {
   height: 480px;
   margin: 0 auto;
   width: 100%;
 }
 
-.planner__recipes {
+.new-plan-recipes {
   border-style: solid;
   border-width: 1px;
   display: flex;
@@ -39,12 +39,41 @@
   width: 756px;
 }
 
-.planner__recipes .planner__recipe {
+.new-plan-recipe {
   border-style: solid;
   border-width: 1px;
   display: inline-block;
   margin: 6px 1px;
 }
+
+/*
+.new-plan-recipe {
+  align-content: center;
+  background-color: #FFF3CC;
+  border: 1px solid #FFDEC3;
+  box-shadow: 1px 1px 1px #999;
+  cursor: move;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font-size: 1.1rem;
+  height: 27px;
+  margin: 6px 1px;
+  max-width: 200px;
+  min-width: 100px;
+  overflow: hidden;
+  text-align: center;
+  width: 90%;
+}
+
+.new-plan-recipe-image {margin: 1px 0 0 1px;}
+
+.new-plan-recipe-text {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+}
+*/
 
 .new-plan .recipes-tabs {
   border-bottom: 2px solid #6cabe4;
@@ -71,13 +100,13 @@
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
 }
 
-.planner__finish-area {
+.new-plan .finish {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.planner__cancel-modal {
+.new-plan .cancel {
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -87,33 +116,33 @@
   width: 280px;
 }
 
-.planner__cancel-modal .planner__cancel-cancel-button,
-.planner__cancel-modal .planner__cancel-button {margin: 0 auto;}
+.new-plan .cancel .cancel-cancel,
+.new-plan .cancel .cancel-button {margin: 0 auto;}
 
-.planner__cancel-prompt {
+.new-plan .cancel p {
   margin-bottom: 10px;
   text-align: center;
 }
 
 
 
-.light .new-plan__name-label {color: #777;}
+.light .new-plan .name label {color: #777;}
 
-.light .new-plan__name-input {
+.light .new-plan .name input {
   background-color: #fff;
   border-color: #bbb;
   color: #000;
 }
 
-.light .plan__day--white,
-.light .plan__expanded-day--white {background-color: #fff;}
+.light .new-plan .day--white,
+.light .new-plan .expanded-day--white {background-color: #fff;}
 
-.light .plan__day--green,
-.light .plan__expanded-day--green {background-color: #d6ffd6;}
+.light .new-plan .day--green,
+.light .new-plan .expanded-day--green {background-color: #d6ffd6;}
 
-.light .planner__recipes {border-color: #bfbfbf;}
+.light .new-plan-recipes {border-color: #bfbfbf;}
 
-.light .planner__recipe {
+.light .new-plan-recipe {
   background-color: #fff3cc;
   border-color: #ffdec3;
   box-shadow: 1px 1px 1px #999;
@@ -122,23 +151,23 @@
 
 
 
-.dark .new-plan__name-label {color: #999;}
+.dark .new-plan .name label {color: #999;}
 
-.dark .new-plan__name-input {
+.dark .new-plan .name input {
   background-color: #1e1e1e;
   border-color: #666;
   color: #bbb;
 }
 
-.dark .plan__day--white,
-.dark .plan__expanded-day--white {background-color: #222;}
+.dark .new-plan .day--white,
+.dark .new-plan .expanded-day--white {background-color: #222;}
 
-.dark .plan__day--green,
-.dark .plan__expanded-day--green {background-color: #3d6d3d;}
+.dark .new-plan .day--green,
+.dark .new-plan .expanded-day--green {background-color: #3d6d3d;}
 
-.dark .planner__recipes {border-color: #5a5a5a;}
+.dark .new-plan-recipes {border-color: #5a5a5a;}
 
-.dark .planner__recipe {
+.dark .new-plan-recipe {
   background-color: #afae8f;
   border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
@@ -148,5 +177,5 @@
 
 
 @media (max-width: 1209px) {
-  .planner__finish-area {padding: 10px 0;}
+  .new-plan .finish {padding: 10px 0;}
 }

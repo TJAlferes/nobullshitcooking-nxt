@@ -18,7 +18,7 @@ function collect(connect: DropTargetConnector, monitor: DropTargetMonitor) {
 // id={recipe.id}
 function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
   return (
-    <div className="new-plan__recipes">
+    <div className="new-plan-recipes">
       {recipes.map((recipe, i) => (
         <Recipe day={day} expanded={expanded} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
       ))}
