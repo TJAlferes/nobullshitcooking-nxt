@@ -1,22 +1,13 @@
-export const actionTypes = {OPEN_LEFT_NAV: 'OPEN_LEFT_NAV', CLOSE_LEFT_NAV: 'CLOSE_LEFT_NAV'} as const;
+export const actionTypes = {
+  OPEN_LEFT_NAV:  'OPEN_LEFT_NAV',
+  CLOSE_LEFT_NAV: 'CLOSE_LEFT_NAV'
+} as const;
 
-/*
-
-State
-
-*/
-
-export interface IMenuState {
+export interface IState {
   leftNav: boolean;
 }
 
-/*
-
-Actions
-
-*/
-
-export type MenuActions = IOpenLeftNav | ICloseLeftNav;
+export type Actions = IOpenLeftNav | ICloseLeftNav;
 
 interface IOpenLeftNav {
   type: typeof actionTypes.OPEN_LEFT_NAV;

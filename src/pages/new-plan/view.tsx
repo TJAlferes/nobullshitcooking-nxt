@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ExpandCollapse, LoaderButton } from '../../components';
 import { IWorkRecipe } from '../../store/data/types';
-import { IPlannerData } from '../../store/planner/types';
+import { IData } from '../../store/planner/types';
 import { Day, ExpandedDay, Recipes } from './components';
 
 export function NewPlanView({
@@ -211,7 +211,7 @@ type Props = {
   loading:                           boolean;
   modalActive:                       boolean;
   planName:                          string;
-  recipeListsInsideDays:             IPlannerData;
+  recipeListsInsideDays:             IData;
   tab:                               string;
   theme:                             string;
 };

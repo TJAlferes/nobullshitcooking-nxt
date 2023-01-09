@@ -1,4 +1,7 @@
-export const actionTypes = {PLANNER_VIEW_CLICK_DAY: 'PLANNER_VIEW_CLICK_DAY', PLANNER_VIEW_LOAD: 'PLANNER_VIEW_LOAD'} as const;
+export const actionTypes = {
+  CLICK_DAY: 'CLICK_DAY',
+  LOAD:      'LOAD'
+} as const;
 
 /*
 
@@ -6,52 +9,52 @@ State
 
 */
 
-export interface IPlannerViewState {
-  isLoading: boolean;
-  expanded: boolean;
+export interface IState {
+  isLoading:   boolean;
+  expanded:    boolean;
   expandedDay: number | null;
-  planName: string;
-  recipeListsInsideDays: IPlannerViewData;
+  planName:    string;
+  recipeListsInsideDays: IData;
 }
 
-export interface IPlannerViewData {
+export interface IData {
   [index: number]: any;
-  1: IPlannerViewRecipe[];
-  2: IPlannerViewRecipe[];
-  3: IPlannerViewRecipe[];
-  4: IPlannerViewRecipe[];
-  5: IPlannerViewRecipe[];
-  6: IPlannerViewRecipe[];
-  7: IPlannerViewRecipe[];
-  8: IPlannerViewRecipe[];
-  9: IPlannerViewRecipe[];
-  10: IPlannerViewRecipe[];
-  11: IPlannerViewRecipe[];
-  12: IPlannerViewRecipe[];
-  13: IPlannerViewRecipe[];
-  14: IPlannerViewRecipe[];
-  15: IPlannerViewRecipe[];
-  16: IPlannerViewRecipe[];
-  17: IPlannerViewRecipe[];
-  18: IPlannerViewRecipe[];
-  19: IPlannerViewRecipe[];
-  20: IPlannerViewRecipe[];
-  21: IPlannerViewRecipe[];
-  22: IPlannerViewRecipe[];
-  23: IPlannerViewRecipe[];
-  24: IPlannerViewRecipe[];
-  25: IPlannerViewRecipe[];
-  26: IPlannerViewRecipe[];
-  27: IPlannerViewRecipe[];
-  28: IPlannerViewRecipe[];
+  1: IRecipe[];
+  2: IRecipe[];
+  3: IRecipe[];
+  4: IRecipe[];
+  5: IRecipe[];
+  6: IRecipe[];
+  7: IRecipe[];
+  8: IRecipe[];
+  9: IRecipe[];
+  10: IRecipe[];
+  11: IRecipe[];
+  12: IRecipe[];
+  13: IRecipe[];
+  14: IRecipe[];
+  15: IRecipe[];
+  16: IRecipe[];
+  17: IRecipe[];
+  18: IRecipe[];
+  19: IRecipe[];
+  20: IRecipe[];
+  21: IRecipe[];
+  22: IRecipe[];
+  23: IRecipe[];
+  24: IRecipe[];
+  25: IRecipe[];
+  26: IRecipe[];
+  27: IRecipe[];
+  28: IRecipe[];
 }
 
 // url
-export interface IPlannerViewRecipe {
-  key: string;
-  id: number;
-  owner_id: number;
-  title: string;
+export interface IRecipe {
+  key:          string;
+  id:           number;
+  owner_id:     number;
+  title:        string;
   recipe_image: string;
 }
 
@@ -61,15 +64,15 @@ Actions
 
 */
 
-export type PlannerViewActions = IPlannerViewClickDay | IPlannerViewLoad;
+export type Actions = IClickDay | ILoad;
 
-export interface IPlannerViewClickDay {
-  type: typeof actionTypes.PLANNER_VIEW_CLICK_DAY;
-  day: number;
+export interface IClickDay {
+  type: typeof actionTypes.CLICK_DAY;
+  day:  number;
 }
 
-interface IPlannerViewLoad {
-  type: typeof actionTypes.PLANNER_VIEW_LOAD;
+interface ILoad {
+  type:     typeof actionTypes.LOAD;
   planName: string;
-  planData: IPlannerViewData;
+  planData: IData;
 }

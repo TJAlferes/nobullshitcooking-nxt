@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { plannerViewLoad } from '../../store/plannerView/actions';
+import { load } from '../../store/plannerView/actions';
 import { PlanView } from './view';
 
 export default function Plan({ twoColumnATheme }: Props): JSX.Element {
@@ -21,7 +21,7 @@ export default function Plan({ twoColumnATheme }: Props): JSX.Element {
     const getPlan = () => {
       window.scrollTo(0, 0);
       const [ prev ] = myPlans.filter(p => p.id === Number(id));
-      dispatch(plannerViewLoad(prev.name, prev.data));
+      dispatch(load(prev.name, prev.data));
     };
 
     if (id) getPlan();

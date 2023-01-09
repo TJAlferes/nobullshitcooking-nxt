@@ -1,7 +1,7 @@
 import { actionTypes as authActionTypes } from '../auth/types';
-import { actionTypes, IChatState, PUBLIC, PRIVATE, ChatActions } from './types';
+import { actionTypes, IState, PUBLIC, PRIVATE, Actions } from './types';
 
-const { AUTH_USER_LOGOUT } = authActionTypes;
+const { USER_LOGOUT } = authActionTypes;
 const {
   CONNECTED,
   DISCONNECTED,
@@ -25,14 +25,15 @@ const {
 // remember Nir Kofman's actions patterns (maybe)
 
 // TO DO: reserve/disable the username "messengerstatus"!
+// TO DO: STAFF_LOGOUT ?
 
-const initialState: IChatState = {room: "", messages: [], users: [], friends: [], status: "disconnected"};
+const initialState: IState = {room: "", messages: [], users: [], friends: [], status: "disconnected"};
 
-export const chatReducer = (state = initialState, action: ChatActions): IChatState => {
+export const chatReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
     case CONNECTED: return {...state, ...{status: "connected"}};
     case DISCONNECTED:
-    case AUTH_USER_LOGOUT:
+    case USER_LOGOUT:
       return {...state, ...{status: "disconnected"}};
     
     case ONLINE_FRIENDS:      return {...state, ...{friends: action.friends}};

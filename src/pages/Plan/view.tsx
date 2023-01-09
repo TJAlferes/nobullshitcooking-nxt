@@ -1,4 +1,4 @@
-import { IPlannerViewData } from '../../store/plannerView/types';
+import { IData } from '../../store/plannerView/types';
 import Day from './components/Day';
 import ExpandedDay from './components/ExpandedDay';
 
@@ -51,6 +51,6 @@ type Props = {
   expanded:              boolean;
   expandedDay:           number | null;
   planName:              string;
-  recipeListsInsideDays: IPlannerViewData;
+  recipeListsInsideDays: IData;
   twoColumnATheme:       string;
 };

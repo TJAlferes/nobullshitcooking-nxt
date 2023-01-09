@@ -1,13 +1,13 @@
 import { useDispatch } from 'react-redux';
 
-import { plannerViewClickDay } from '../../../store/plannerView/actions';
-import { IPlannerViewRecipe } from '../../../store/plannerView/types';
+import { clickDay } from '../../../store/plannerView/actions';
+import { IRecipe } from '../../../store/plannerView/types';
 import { Recipe } from './Recipe';
 
 export default function ExpandedDay({ day, expanded, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
 
-  const handleClickDay = () => dispatch(plannerViewClickDay(day));
+  const handleClickDay = () => dispatch(clickDay(day));
 
   return expanded
   ? (
@@ -22,5 +22,5 @@ export default function ExpandedDay({ day, expanded, recipes }: Props): JSX.Elem
 type Props = {
   day:      number;
   expanded: boolean;
-  recipes:  IPlannerViewRecipe[];
+  recipes:  IRecipe[];
 };

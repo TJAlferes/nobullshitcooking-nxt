@@ -1,15 +1,15 @@
-import { actionTypes, IGeoState, GeoActions } from './types';
+import { actionTypes, IState, Actions } from './types';
 
-const { GEO_LATITUDE, GEO_LONGITUDE, GEO_ADDRESS, GEO_NEARBY_STORES_CLICKED } = actionTypes;
+const { LATITUDE, LONGITUDE, ADDRESS, NEARBY_STORES_CLICKED } = actionTypes;
 
-const initialState: IGeoState = {latitude: "", longitude: "", address: "", nearbyStoresClicked: false};
+const initialState: IState = {latitude: "", longitude: "", address: "", nearbyStoresClicked: false};
 
-export const geolocationReducer = (state = initialState, action: GeoActions): IGeoState => {
+export const geolocationReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case GEO_LATITUDE:              return {...state, ...{latitude: action.latitude}};
-    case GEO_LONGITUDE:             return {...state, ...{longitude: action.longitude}};
-    case GEO_ADDRESS:               return {...state, ...{address: action.address}};
-    case GEO_NEARBY_STORES_CLICKED: return {...state, ...{nearbyStoresClicked: action.clicked}};
-    default:                        return state;
+    case LATITUDE:              return {...state, ...{latitude: action.latitude}};
+    case LONGITUDE:             return {...state, ...{longitude: action.longitude}};
+    case ADDRESS:               return {...state, ...{address: action.address}};
+    case NEARBY_STORES_CLICKED: return {...state, ...{nearbyStoresClicked: action.clicked}};
+    default:                    return state;
   }
 };

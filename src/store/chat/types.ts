@@ -1,4 +1,4 @@
-import { IAuthUserLogout } from '../auth/types';
+import { IUserLogout } from '../auth/types';
 
 export const actionTypes = {
   CONNECT:      'CONNECT',
@@ -33,7 +33,7 @@ State
 
 // TO DO: double-check times
 
-export interface IChatState {
+export interface IState {
   status:   string;
   room:     string;
   messages: IMessageWithClientTimestamp[];
@@ -62,8 +62,8 @@ Actions
 
 */
 
-export type ChatActions =
-IAuthUserLogout |
+export type Actions =
+IUserLogout |
 IConnect |
 IConnected |
 IDisconnect |

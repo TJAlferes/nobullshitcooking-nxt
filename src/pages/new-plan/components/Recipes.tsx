@@ -1,6 +1,6 @@
 import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
 
-import { IPlannerRecipe } from '../../../store/planner/types';
+import { IRecipe } from '../../../store/planner/types';
 import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
@@ -30,7 +30,7 @@ type Props = {
   day:         number;
   expanded:    boolean;
   expandedDay: number | null;
-  recipes:     IPlannerRecipe[];
+  recipes:     IRecipe[];
 };
 
 export default DropTarget(Types.PLANNER_RECIPE, recipesTarget, collect)(Recipes);

@@ -1,24 +1,12 @@
-export const actionTypes = {SEARCH_SET_INDEX: 'SEARCH_SET_INDEX'} as const;
+export const actionTypes = {SET_INDEX: 'SET_INDEX'} as const;
 
-/*
-
-State
-
-*/
-
-export interface ISearchState {
-  currentIndex: string;
+export interface IState {
+  index: string;
 }
 
-/*
+export type IActions = ISetIndex;
 
-Actions
-
-*/
-
-export type ISearchActions = ISetSearchIndex;
-
-interface ISetSearchIndex {
-  type: typeof actionTypes.SEARCH_SET_INDEX;
+interface ISetIndex {
+  type:  typeof actionTypes.SET_INDEX;
   index: string;
 }

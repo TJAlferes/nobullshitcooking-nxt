@@ -3,8 +3,8 @@ import { FC, useRef } from 'react';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
-import { plannerRemoveRecipeFromDay, plannerReorderRecipeInDay } from '../../../store/planner/actions';
-import { IPlannerRecipe } from '../../../store/planner/types';
+import { removeRecipeFromDay, reorderRecipeInDay } from '../../../store/planner/actions';
+import { IRecipe } from '../../../store/planner/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
@@ -21,7 +21,7 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
     end: (dropResult: any, monitor: DragSourceMonitor) => {
       const item: Props = monitor.getItem();
       if (item.day === 0) return;
-      if (dropResult && (dropResult.listId !== item.day)) dispatch(plannerRemoveRecipeFromDay(item.day, item.index));
+      if (dropResult && (dropResult.listId !== item.day)) dispatch(removeRecipeFromDay(item.day, item.index));
     },
 
     item: {day, id, index, key: recipe.key, listId, recipe, type: Types.PLANNER_RECIPE},
@@ -58,7 +58,7 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
       if (draggingDown && aboveCenter) return;
       if (draggingUp && belowCenter) return;
 
-      dispatch(plannerReorderRecipeInDay(dragIndex, hoverIndex));  // reorder/swap/move recipes
+      dispatch(reorderRecipeInDay(dragIndex, hoverIndex));  // reorder/swap/move recipes
       item.index = hoverIndex;  // We mutate the monitor item here. Generally we avoid mutations, but here we mutate to avoid expensive index searches.
     }
   });
@@ -87,7 +87,7 @@ type Props = {
   index:       number;
   key:         string;
   listId:      number;
-  recipe:      IPlannerRecipe;
+  recipe:      IRecipe;
 };
 
 export default Recipe;

@@ -1,8 +1,8 @@
-import { actionTypes, IDataState, DataActions } from './types';
+import { actionTypes, IState, Actions } from './types';
 
-const { DATA_GET_INITIAL_DATA, DATA_GET_DATA, DATA_GET_INITIAL_USER_DATA, DATA_GET_USER_DATA } = actionTypes;
+const { GET_INITIAL_DATA, GET_DATA, GET_INITIAL_USER_DATA, GET_USER_DATA } = actionTypes;
 
-const initialState: IDataState = {
+const initialState: IState = {
   cuisines: [],
   equipment: [],
   equipmentTypes: [],
@@ -26,9 +26,9 @@ const initialState: IDataState = {
   mySavedRecipes: []
 };
 
-export const dataReducer = (state = initialState, action: DataActions): IDataState => {
+export const dataReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case DATA_GET_INITIAL_DATA:
+    case GET_INITIAL_DATA:
       return {
         ...state,
         ...{
@@ -46,8 +46,8 @@ export const dataReducer = (state = initialState, action: DataActions): IDataSta
           productTypes: action.initialData.productTypes
         }
       };
-    case DATA_GET_DATA: return {...state, ...{[action.data.key]: action.data.value}};
-    case DATA_GET_INITIAL_USER_DATA:
+    case GET_DATA: return {...state, ...{[action.data.key]: action.data.value}};
+    case GET_INITIAL_USER_DATA:
       return {
         ...state,
         ...{
@@ -61,7 +61,7 @@ export const dataReducer = (state = initialState, action: DataActions): IDataSta
           myFriendships: action.initialUserData.myFriendships
         }
       };
-    case DATA_GET_USER_DATA: return {...state, ...{[action.userData.key]: action.userData.value}};
+    case GET_USER_DATA: return {...state, ...{[action.userData.key]: action.userData.value}};
     default: return state;
   }
 };

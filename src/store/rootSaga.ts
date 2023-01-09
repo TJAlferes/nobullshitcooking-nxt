@@ -4,7 +4,6 @@ import {
   watchAuth,
   watchAvatar,
   watchChat,
-  watchContent,
   //watchData,
   watchEquipment,
   watchFavorite,
@@ -18,7 +17,6 @@ import {
 export function* rootSaga() {
   yield fork(watchAuth);
   yield fork(watchAvatar);
-  yield fork(watchContent);
   yield fork(watchChat);
   //yield fork(watchData);
   yield fork(watchEquipment);

@@ -1,17 +1,17 @@
 import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { plannerAddRecipeToDay, plannerClickDay } from '../../../store/planner/actions';
-import { IPlannerRecipe } from '../../../store/planner/types';
+import { addRecipeToDay, clickDay } from '../../../store/planner/actions';
+import { IRecipe } from '../../../store/planner/types';
 import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 const expandedDayTarget = {
   // TO DO: improve "any, any"
-  drop({ day, expandedDay, plannerAddRecipeToDay }: Props, monitor: DropTargetMonitor<any, any>) {
+  drop({ day, expandedDay, addRecipeToDay }: Props, monitor: DropTargetMonitor<any, any>) {
     const draggedRecipe = monitor.getItem();
-    if (expandedDay !== draggedRecipe.day) plannerAddRecipeToDay(day, draggedRecipe.recipe);
+    if (expandedDay !== draggedRecipe.day) addRecipeToDay(day, draggedRecipe.recipe);
     return {listId: day};  // WTF is this?
   }
 };
@@ -20,10 +20,10 @@ function collect(connect: DropTargetConnector, monitor: DropTargetMonitor) {
   return {canDrop: monitor.canDrop(), connectDropTarget: connect.dropTarget(), isOver: monitor.isOver()};
 }
 
-const ExpandedDay = ({ canDrop, day, expanded, expandedDay, isOver, recipes, plannerClickDay }: Props): JSX.Element | null => {
+const ExpandedDay = ({ canDrop, day, expanded, expandedDay, isOver, recipes, clickDay }: Props): JSX.Element | null => {
   const color = (isOver && canDrop) ? "--green" : "--white";
 
-  const handleClickDay = () => plannerClickDay(day);
+  const handleClickDay = () => clickDay(day);
 
   return !expanded ? null : (
     <div className={`expanded-day${color}`} onClick={handleClickDay}>
@@ -43,12 +43,12 @@ type Props = PropsFromRedux & {
   expanded:    boolean;
   expandedDay: number | null;
   isOver:      boolean;
-  recipes:     IPlannerRecipe[];
+  recipes:     IRecipe[];
 };
 
 const mapDispatchToProps = {
-  plannerAddRecipeToDay: (day: number, recipe: IPlannerRecipe) => plannerAddRecipeToDay(day, recipe),
-  plannerClickDay:       (day: number) =>                         plannerClickDay(day)
+  addRecipeToDay: (day: number, recipe: IRecipe) => addRecipeToDay(day, recipe),
+  clickDay:       (day: number) =>                         clickDay(day)
 };
 
 const connector = connect(null, mapDispatchToProps);

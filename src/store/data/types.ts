@@ -1,11 +1,11 @@
 import { IPlannerData } from '../planner/types';
 
 export const actionTypes = {
-  DATA_INIT:                  'DATA_INIT',
-  DATA_GET_INITIAL_DATA:      'DATA_GET_INITIAL_DATA',
-  DATA_GET_DATA:              'DATA_GET_DATA',
-  DATA_GET_INITIAL_USER_DATA: 'DATA_GET_INITIAL_USER_DATA',
-  DATA_GET_USER_DATA:         'DATA_GET_USER_DATA'
+  INIT:                  'INIT',
+  GET_INITIAL_DATA:      'GET_INITIAL_DATA',
+  GET_DATA:              'GET_DATA',
+  GET_INITIAL_USER_DATA: 'GET_INITIAL_USER_DATA',
+  GET_USER_DATA:         'GET_USER_DATA'
 } as const;
 
 /*
@@ -14,7 +14,7 @@ State
 
 */
 
-export interface IDataState extends IInitialData, IInitialUserData {};
+export interface IState extends IInitialData, IInitialUserData {};
 
 export interface IInitialData {
   cuisines:          ICuisine[];
@@ -143,37 +143,37 @@ Actions
 
 */
 
-export type DataActions =
-  IDataInit |
-  IDataGetInitialData |
-  IDataGetData |
-  IDataGetInitialUserData |
-  IDataGetUserData;
+export type Actions =
+  IInit |
+  IGetInitialData |
+  IGetData |
+  IGetInitialUserData |
+  IGetUserData;
 
-export interface IDataInit {
-  type: typeof actionTypes.DATA_INIT;
+export interface IInit {
+  type: typeof actionTypes.INIT;
 }
 
-export interface IDataGetInitialData {         
-  type:        typeof actionTypes.DATA_GET_INITIAL_DATA;
+export interface IGetInitialData {         
+  type:        typeof actionTypes.GET_INITIAL_DATA;
   initialData: IInitialData;
 }
 
-export interface IDataGetData {
-  type: typeof actionTypes.DATA_GET_DATA;
+export interface IGetData {
+  type: typeof actionTypes.GET_DATA;
   data: {
     key:   keyof IInitialData;
     value: Partial<IInitialData>;
   };
 }
 
-export interface IDataGetInitialUserData {
-  type:            typeof actionTypes.DATA_GET_INITIAL_USER_DATA;
+export interface IGetInitialUserData {
+  type:            typeof actionTypes.GET_INITIAL_USER_DATA;
   initialUserData: IInitialUserData;
 }
 
-export interface IDataGetUserData {
-  type: typeof actionTypes.DATA_GET_USER_DATA;
+export interface IGetUserData {
+  type: typeof actionTypes.GET_USER_DATA;
   userData: {
     key:   keyof IInitialUserData;
     value: Partial<IInitialUserData>;

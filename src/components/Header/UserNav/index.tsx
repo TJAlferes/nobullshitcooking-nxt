@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
 import { staffLogout, userLogout } from '../../../store/auth/actions';
-import { themeDarkTrigger, themeLightTrigger } from '../../../store/theme/actions';
+import { dark, light } from '../../../store/theme/actions';
 
 export function UserNav(): JSX.Element {
   const router = useRouter();
@@ -24,8 +24,8 @@ export function UserNav(): JSX.Element {
   return (
     <div className="user-nav">
       {theme === 'light'
-        ? <span className="mode" onClick={() => dispatch(themeDarkTrigger())}><i className="moon">☾</i> Night</span>
-        : <span className="mode" onClick={() => dispatch(themeLightTrigger())}><i className="sun">☀︎</i> Day</span>
+        ? <span className="mode" onClick={() => dispatch(dark())}><i className="moon">☾</i> Night</span>
+        : <span className="mode" onClick={() => dispatch(light())}><i className="sun">☀︎</i> Day</span>
       }
 
       <Link href="/help"><a data-test="help">Help</a></Link>

@@ -1,15 +1,15 @@
 export const actionTypes = {
-  PLANNER_CLICK_DAY: 'PLANNER_CLICK_DAY',
-  PLANNER_ADD_RECIPE_TO_DAY: 'PLANNER_ADD_RECIPE_TO_DAY',
-  PLANNER_REMOVE_RECIPE_FROM_DAY: 'PLANNER_REMOVE_RECIPE_FROM_DAY',
-  PLANNER_REORDER_RECIPE_IN_DAY: 'PLANNER_REORDER_RECIPE_IN_DAY',
-  //PLANNER_PUBLIC_SAVE_TO_URL: 'PLANNER_PUBLIC_SAVE_TO_URL',
-  //PLANNER_PUBLIC_LOAD_FROM_URL: 'PLANNER_PUBLIC_LOAD_FROM_URL',
-  PLANNER_CLEAR_WORK: 'PLANNER_CLEAR_WORK',
-  PLANNER_SET_CREATING: 'PLANNER_SET_CREATING',
-  PLANNER_SET_EDITING_ID: 'PLANNER_SET_EDITING_ID',
-  PLANNER_SET_PLAN_NAME: 'PLANNER_SET_PLAN_NAME',
-  PLANNER_SET_PLAN_DATA: 'PLANNER_SET_PLAN_DATA'
+  CLICK_DAY:              'CLICK_DAY',
+  ADD_RECIPE_TO_DAY:      'ADD_RECIPE_TO_DAY',
+  REMOVE_RECIPE_FROM_DAY: 'REMOVE_RECIPE_FROM_DAY',
+  REORDER_RECIPE_IN_DAY:  'REORDER_RECIPE_IN_DAY',
+  //PUBLIC_SAVE_TO_URL: 'PUBLIC_SAVE_TO_URL',
+  //PUBLIC_LOAD_FROM_URL: 'PUBLIC_LOAD_FROM_URL',
+  CLEAR_WORK:     'CLEAR_WORK',
+  SET_CREATING:   'SET_CREATING',
+  SET_EDITING_ID: 'SET_EDITING_ID',
+  SET_PLAN_NAME:  'SET_PLAN_NAME',
+  SET_PLAN_DATA:  'SET_PLAN_DATA'
 } as const;
 
 /*
@@ -18,7 +18,7 @@ State
 
 */
 
-export interface IPlannerState {
+export interface IState {
   isLoading:   boolean;
   creating:    boolean;
   editingId:   number | null;
@@ -26,47 +26,47 @@ export interface IPlannerState {
   expanded:    boolean;
   expandedDay: number | null;
   planName:    string;
-  recipeListsInsideDays: IPlannerData;
+  recipeListsInsideDays: IData;
 }
 
-export interface IPlannerData {
+export interface IData {
   [index: number]: any;
-  1: IPlannerRecipe[];
-  2: IPlannerRecipe[];
-  3: IPlannerRecipe[];
-  4: IPlannerRecipe[];
-  5: IPlannerRecipe[];
-  6: IPlannerRecipe[];
-  7: IPlannerRecipe[];
-  8: IPlannerRecipe[];
-  9: IPlannerRecipe[];
-  10: IPlannerRecipe[];
-  11: IPlannerRecipe[];
-  12: IPlannerRecipe[];
-  13: IPlannerRecipe[];
-  14: IPlannerRecipe[];
-  15: IPlannerRecipe[];
-  16: IPlannerRecipe[];
-  17: IPlannerRecipe[];
-  18: IPlannerRecipe[];
-  19: IPlannerRecipe[];
-  20: IPlannerRecipe[];
-  21: IPlannerRecipe[];
-  22: IPlannerRecipe[];
-  23: IPlannerRecipe[];
-  24: IPlannerRecipe[];
-  25: IPlannerRecipe[];
-  26: IPlannerRecipe[];
-  27: IPlannerRecipe[];
-  28: IPlannerRecipe[];
+  1: IRecipe[];
+  2: IRecipe[];
+  3: IRecipe[];
+  4: IRecipe[];
+  5: IRecipe[];
+  6: IRecipe[];
+  7: IRecipe[];
+  8: IRecipe[];
+  9: IRecipe[];
+  10: IRecipe[];
+  11: IRecipe[];
+  12: IRecipe[];
+  13: IRecipe[];
+  14: IRecipe[];
+  15: IRecipe[];
+  16: IRecipe[];
+  17: IRecipe[];
+  18: IRecipe[];
+  19: IRecipe[];
+  20: IRecipe[];
+  21: IRecipe[];
+  22: IRecipe[];
+  23: IRecipe[];
+  24: IRecipe[];
+  25: IRecipe[];
+  26: IRecipe[];
+  27: IRecipe[];
+  28: IRecipe[];
 }
 
-export interface IPlannerRecipe {
-  key: string;
-  id: number;
-  title: string;
+export interface IRecipe {
+  key:          string;
+  id:           number;
+  title:        string;
   recipe_image: string;
-  owner_id: number;
+  owner_id:     number;
 }
 
 /*
@@ -75,67 +75,67 @@ Actions
 
 */
 
-export type PlannerActions =
-IPlannerClickDay |
-IPlannerAddRecipeToDay |
-IPlannerRemoveRecipeFromDay |
-IPlannerReorderRecipeInDay |
-IPlannerClearWork |
-IPlannerSetCreating |
-IPlannerSetEditingId |
-IPlannerSetPlanName |
-IPlannerSetPlanData;
+export type Actions =
+IClickDay |
+IAddRecipeToDay |
+IRemoveRecipeFromDay |
+IReorderRecipeInDay |
+IClearWork |
+ISetCreating |
+ISetEditingId |
+ISetPlanName |
+ISetPlanData;
 
-export interface IPlannerClickDay {
-  type: typeof actionTypes.PLANNER_CLICK_DAY;
-  day: number;
+export interface IClickDay {
+  type: typeof actionTypes.CLICK_DAY;
+  day:  number;
 }
 
-export interface IPlannerAddRecipeToDay {
-  type: typeof actionTypes.PLANNER_ADD_RECIPE_TO_DAY;
-  day: number;
-  recipe: IPlannerRecipe;
+export interface IAddRecipeToDay {
+  type:   typeof actionTypes.ADD_RECIPE_TO_DAY;
+  day:    number;
+  recipe: IRecipe;
 }
 
-export interface IPlannerRemoveRecipeFromDay {
-  type: typeof actionTypes.PLANNER_REMOVE_RECIPE_FROM_DAY;
-  day: number;
+export interface IRemoveRecipeFromDay {
+  type:  typeof actionTypes.REMOVE_RECIPE_FROM_DAY;
+  day:   number;
   index: number;
 }
 
-export interface IPlannerReorderRecipeInDay {
-  type: typeof actionTypes.PLANNER_REORDER_RECIPE_IN_DAY;
-  dragIndex: number;
+export interface IReorderRecipeInDay {
+  type:       typeof actionTypes.REORDER_RECIPE_IN_DAY;
+  dragIndex:  number;
   hoverIndex: number;
 }
 
-/*interface IPlanner {
-  type: typeof actionTypes.PLANNER_
+/*interface I {
+  type: typeof actionTypes.
 }*/
 
-/*interface IPlanner {
-  type: typeof actionTypes.PLANNER_
+/*interface I {
+  type: typeof actionTypes.
 }*/
 
-interface IPlannerClearWork {
-  type: typeof actionTypes.PLANNER_CLEAR_WORK;
+interface IClearWork {
+  type: typeof actionTypes.CLEAR_WORK;
 }
 
-interface IPlannerSetCreating {
-  type: typeof actionTypes.PLANNER_SET_CREATING;
+interface ISetCreating {
+  type: typeof actionTypes.SET_CREATING;
 }
 
-interface IPlannerSetEditingId {
-  type: typeof actionTypes.PLANNER_SET_EDITING_ID;
-  id: number | null;
+interface ISetEditingId {
+  type: typeof actionTypes.SET_EDITING_ID;
+  id:   number | null;
 }
 
-interface IPlannerSetPlanName {
-  type: typeof actionTypes.PLANNER_SET_PLAN_NAME;
+interface ISetPlanName {
+  type: typeof actionTypes.SET_PLAN_NAME;
   name: string;
 }
 
-interface IPlannerSetPlanData {
-  type: typeof actionTypes.PLANNER_SET_PLAN_DATA;
-  data: IPlannerData;
+interface ISetPlanData {
+  type: typeof actionTypes.SET_PLAN_DATA;
+  data: IData;
 }

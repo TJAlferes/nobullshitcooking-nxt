@@ -1,51 +1,39 @@
 export const actionTypes = {
-  GEO_LATITUDE: 'GEO_LATITUDE',
-  GEO_LONGITUDE: 'GEO_LONGITUDE',
-  GEO_ADDRESS: 'GEO_ADDRESS',
-  GEO_NEARBY_STORES_CLICKED: 'GEO_NEARBY_STORES_CLICKED'
+  LATITUDE:  'LATITUDE',
+  LONGITUDE: 'LONGITUDE',
+  ADDRESS:   'ADDRESS',
+  NEARBY_STORES_CLICKED: 'NEARBY_STORES_CLICKED'
 } as const;
 
-/*
-
-State
-
-*/
-
-export interface IGeoState {
-  latitude: string;
+export interface IState {
+  latitude:  string;
   longitude: string;
-  address: string;
+  address:   string;
   nearbyStoresClicked: boolean;
 }
 
-/*
+export type Actions =
+  IAddress |
+  ILatitude |
+  ILongitude |
+  INearbyStoresClicked;
 
-Actions
-
-*/
-
-export type GeoActions =
-  IGeoAddress |
-  IGeoLatitude |
-  IGeoLongitude |
-  IGeoNearbyStoresClicked;
-
-interface IGeoAddress {
-  type: typeof actionTypes.GEO_ADDRESS;
+interface IAddress {
+  type: typeof actionTypes.ADDRESS;
   address: string;
 }
 
-interface IGeoLatitude {
-  type: typeof actionTypes.GEO_LATITUDE;
+interface ILatitude {
+  type: typeof actionTypes.LATITUDE;
   latitude: string;
 }
 
-interface IGeoLongitude {
-  type: typeof actionTypes.GEO_LONGITUDE;
+interface ILongitude {
+  type: typeof actionTypes.LONGITUDE;
   longitude: string;
 }
 
-interface IGeoNearbyStoresClicked {
-  type: typeof actionTypes.GEO_NEARBY_STORES_CLICKED;
+interface INearbyStoresClicked {
+  type: typeof actionTypes.NEARBY_STORES_CLICKED;
   clicked: boolean;
 }

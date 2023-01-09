@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { plannerClearWork, plannerSetCreating, plannerSetEditingId, plannerSetPlanName, plannerSetPlanData } from '../../store/planner/actions';
+import { clearWork, setCreating, setEditingId, setPlanName, setPlanData } from '../../store/planner/actions';
 import { userCreateNewPlan, userEditPlan } from '../../store/user/plan/actions';
 import { NewPlanView } from './view';
 
@@ -32,18 +32,18 @@ export function NewPlan({ editing }: Props): JSX.Element {
       setLoading(true);
       const [ prev ] = myPlans.filter(p => p.id === Number(id));
       // batch these three?
-      dispatch(plannerSetEditingId(Number(prev.id)));
-      dispatch(plannerSetPlanName(prev.name));
-      dispatch(plannerSetPlanData(prev.data));
+      dispatch(setEditingId(Number(prev.id)));
+      dispatch(setPlanName(prev.name));
+      dispatch(setPlanData(prev.data));
       setLoading(false);
     };
 
     if (editing) {
-      dispatch(plannerClearWork());
+      dispatch(clearWork());
       getExistingPlanToEdit();
     } else {
-      dispatch(plannerClearWork());
-      dispatch(plannerSetCreating());
+      dispatch(clearWork());
+      dispatch(setCreating());
     }
   }, []);
 
@@ -55,7 +55,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       setFeedback(message);
       if (message === "Plan created." || message === "Plan updated.") {
         setTimeout(() => {
-          dispatch(plannerClearWork());
+          dispatch(clearWork());
           router.push('/dashboard');
         }, 3000);
       }
@@ -72,7 +72,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
 
   const discardChanges = () => {
     setModalActive(false);
-    dispatch(plannerClearWork());
+    dispatch(clearWork());
     router.push('/dashboard');
   };
 
@@ -88,7 +88,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       setTimeout(() => setFeedback(""), 3000);
       return;
     }
-    dispatch(plannerSetPlanName(nextName));
+    dispatch(setPlanName(nextName));
   };
 
   const clickTab = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLButtonElement).name);

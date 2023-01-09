@@ -1,6 +1,5 @@
 export { watchAuth } from './auth';
 export { watchAvatar } from './avatar';
-export { watchContent } from './content';
 export { watchChat } from './chat';
 //export { watchData } from './data';
 export { watchEquipment } from './equipment';

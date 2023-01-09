@@ -1,12 +1,12 @@
-import { actionTypes, IPlannerViewState, PlannerViewActions, IPlannerViewClickDay } from './types';
+import { actionTypes, IState, Actions, IClickDay } from './types';
 
-const { PLANNER_VIEW_CLICK_DAY, PLANNER_VIEW_LOAD } = actionTypes;
+const { CLICK_DAY, LOAD } = actionTypes;
 
-const initialState: IPlannerViewState = {
-  isLoading: false,
-  expanded: false,
+const initialState: IState = {
+  isLoading:   false,
+  expanded:    false,
   expandedDay: null,
-  planName: "",
+  planName:    "",
   recipeListsInsideDays: {
      1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
      8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
@@ -15,17 +15,17 @@ const initialState: IPlannerViewState = {
   }
 };
 
-const clickDay = (state: IPlannerViewState, action: IPlannerViewClickDay): IPlannerViewState => {
+const clickDay = (state: IState, action: IClickDay): IState => {
   const { expandedDay } = state;
   const { day } = action;
   if (day === expandedDay) return {...state, ...{expanded: false, expandedDay: null}};
   return {...state, ...{expanded: true, expandedDay: action.day}};
 };
 
-export const plannerViewReducer = (state = initialState, action: PlannerViewActions): IPlannerViewState => {
+export const plannerViewReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case PLANNER_VIEW_CLICK_DAY: return clickDay(state, action);
-    case PLANNER_VIEW_LOAD:      return {...state, ...{planName: action.planName, recipeListsInsideDays: action.planData}};
-    default:                     return state;
+    case CLICK_DAY: return clickDay(state, action);
+    case LOAD:      return {...state, ...{planName: action.planName, recipeListsInsideDays: action.planData}};
+    default:        return state;
   }
 };

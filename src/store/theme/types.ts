@@ -1,43 +1,18 @@
 export const actionTypes = {
-  THEME_DARK_TRIGGER: 'THEME_DARK_TRIGGER',
-  THEME_LIGHT_TRIGGER: 'THEME_LIGHT_TRIGGER'
+  DARK:  'DARK',
+  LIGHT: 'LIGHT'
 } as const;
 
-/*
-
-State
-
-*/
-
-export interface IThemeState {
+export interface IState {
   theme: string;
-  headerTheme: string
-  mainTheme: string
-  footerTheme: string
-  dropDownMenuTheme: string
-  navGridATheme: string
-  oneColumnATheme: string
-  twoColumnATheme: string
-  twoColumnBTheme: string
-  tableATheme: string
-  breadCrumbsTheme: string
-  leftNavTheme: string
-  suggestionsTheme: string
-  feedTheme: string
 }
 
-/*
+export type Actions = IDark | ILight;
 
-Actions
-
-*/
-
-export type ThemeActions = IThemeDarkTrigger | IThemeLightTrigger;
-
-interface IThemeDarkTrigger {
-  type: typeof actionTypes.THEME_DARK_TRIGGER
+interface IDark {
+  type: typeof actionTypes.DARK
 }
 
-interface IThemeLightTrigger {
-  type: typeof actionTypes.THEME_LIGHT_TRIGGER
+interface ILight {
+  type: typeof actionTypes.LIGHT
 }

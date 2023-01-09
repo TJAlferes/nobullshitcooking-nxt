@@ -1,17 +1,22 @@
 import update from 'immutability-helper';  // is this really needed?
 
-import { actionTypes, IPlannerState, PlannerActions, IPlannerClickDay, IPlannerAddRecipeToDay, IPlannerRemoveRecipeFromDay, IPlannerReorderRecipeInDay } from './types';
+import { actionTypes, IState, Actions, IClickDay, IAddRecipeToDay, IRemoveRecipeFromDay, IReorderRecipeInDay } from './types';
 
 const {
-  PLANNER_CLICK_DAY,
-  PLANNER_ADD_RECIPE_TO_DAY, PLANNER_REMOVE_RECIPE_FROM_DAY,
-  PLANNER_REORDER_RECIPE_IN_DAY,
-  //PLANNER_PUBLIC_LOAD_FROM_URL, //PLANNER_PUBLIC_SAVE_TO_URL,
-  PLANNER_CLEAR_WORK,
-  PLANNER_SET_CREATING, PLANNER_SET_PLAN_NAME, PLANNER_SET_EDITING_ID, PLANNER_SET_PLAN_DATA,
+  CLICK_DAY,
+  ADD_RECIPE_TO_DAY,
+  REMOVE_RECIPE_FROM_DAY,
+  REORDER_RECIPE_IN_DAY,
+  //PUBLIC_LOAD_FROM_URL,
+  //PUBLIC_SAVE_TO_URL,
+  CLEAR_WORK,
+  SET_CREATING,
+  SET_PLAN_NAME,
+  SET_EDITING_ID,
+  SET_PLAN_DATA
 } = actionTypes;
 
-const initialState: IPlannerState = {
+const initialState: IState = {
   isLoading: false,
   creating: false,
   editingId: null,
@@ -27,14 +32,14 @@ const initialState: IPlannerState = {
  }
 };
 
-const clickDay = (state: IPlannerState, action: IPlannerClickDay): IPlannerState => {
+const clickDay = (state: IState, action: IClickDay): IState => {
   const { expandedDay } = state;
   const { day } = action;
   if (day === expandedDay) return {...state, ...{expanded: false, expandedDay: null}};
   return {...state, ...{expanded: true, expandedDay: day}};
 };
 
-const addRecipeToDay = (state: IPlannerState, action: IPlannerAddRecipeToDay): IPlannerState => {
+const addRecipeToDay = (state: IState, action: IAddRecipeToDay): IState => {
   const { day, recipe } = action;
   return update(state, {
     recipeListsInsideDays: {
@@ -45,7 +50,7 @@ const addRecipeToDay = (state: IPlannerState, action: IPlannerAddRecipeToDay): I
   });
 };
 
-const removeRecipeFromDay = (state: IPlannerState, action: IPlannerRemoveRecipeFromDay): IPlannerState => {
+const removeRecipeFromDay = (state: IState, action: IRemoveRecipeFromDay): IState => {
   const { day, index } = action;
   return update(state, {
     recipeListsInsideDays: {
@@ -56,7 +61,7 @@ const removeRecipeFromDay = (state: IPlannerState, action: IPlannerRemoveRecipeF
   });
 };
 
-const reorderRecipeInDay = (state: IPlannerState, action: IPlannerReorderRecipeInDay): IPlannerState => {
+const reorderRecipeInDay = (state: IState, action: IReorderRecipeInDay): IState => {
   const { expandedDay, recipeListsInsideDays } = state;
   const { dragIndex, hoverIndex } = action;
   if (!expandedDay) return state;
@@ -81,19 +86,19 @@ const reorderRecipeInDay = (state: IPlannerState, action: IPlannerReorderRecipeI
   return {...state, ...{publicUrl: newPublicUrl}}
 };*/
 
-export const plannerReducer = (state = initialState, action: PlannerActions): IPlannerState => {
+export const plannerReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case PLANNER_CLICK_DAY:              return clickDay(state, action);
-    case PLANNER_ADD_RECIPE_TO_DAY:      return addRecipeToDay(state, action);
-    case PLANNER_REMOVE_RECIPE_FROM_DAY: return removeRecipeFromDay(state, action);
-    case PLANNER_REORDER_RECIPE_IN_DAY:  return reorderRecipeInDay(state, action);
-    //case PLANNER_PUBLIC_LOAD_FROM_URL: return publicLoadFromUrl(state, action);
-    //case PLANNER_PUBLIC_SAVE_TO_URL:   return publicSaveToUrl(state, action);
-    case PLANNER_CLEAR_WORK:             return {...state, ...initialState};
-    case PLANNER_SET_CREATING:           return {...state, ...{creating: true}};
-    case PLANNER_SET_PLAN_NAME:          return {...state, ...{planName: action.name}};
-    case PLANNER_SET_EDITING_ID:         return {...state, ...{editingId: action.id}};
-    case PLANNER_SET_PLAN_DATA:          return {...state, ...{recipeListsInsideDays: action.data}};
-    default:                             return state;
+    case CLICK_DAY:              return clickDay(state, action);
+    case ADD_RECIPE_TO_DAY:      return addRecipeToDay(state, action);
+    case REMOVE_RECIPE_FROM_DAY: return removeRecipeFromDay(state, action);
+    case REORDER_RECIPE_IN_DAY:  return reorderRecipeInDay(state, action);
+    //case PUBLIC_LOAD_FROM_URL: return publicLoadFromUrl(state, action);
+    //case PUBLIC_SAVE_TO_URL:   return publicSaveToUrl(state, action);
+    case CLEAR_WORK:             return {...state, ...initialState};
+    case SET_CREATING:           return {...state, ...{creating: true}};
+    case SET_PLAN_NAME:          return {...state, ...{planName: action.name}};
+    case SET_EDITING_ID:         return {...state, ...{editingId: action.id}};
+    case SET_PLAN_DATA:          return {...state, ...{recipeListsInsideDays: action.data}};
+    default:                     return state;
   }
 };

@@ -1,11 +1,11 @@
 import { actionTypes, IInitialData, IInitialUserData } from './types';
 
-const { DATA_INIT, DATA_GET_INITIAL_DATA, DATA_GET_DATA, DATA_GET_INITIAL_USER_DATA, DATA_GET_USER_DATA } = actionTypes;
+const { INIT, GET_INITIAL_DATA, GET_DATA, GET_INITIAL_USER_DATA, GET_USER_DATA } = actionTypes;
 
-export const dataInit = () => ({type: DATA_INIT});
+export const init = () => ({type: INIT});
 
-export const dataGetInitialData = (initialData: IInitialData) =>                             ({type: DATA_GET_INITIAL_DATA, initialData});
-export const dataGetData =        (key: keyof IInitialData, value: Partial<IInitialData>) => ({type: DATA_GET_DATA, data: {key, value}});
+export const getInitialData = (initialData: IInitialData) =>                             ({type: GET_INITIAL_DATA, initialData});
+export const getData =        (key: keyof IInitialData, value: Partial<IInitialData>) => ({type: GET_DATA, data: {key, value}});
 
-export const dataGetInitialUserData = (initialUserData: IInitialUserData) =>                             ({type: DATA_GET_INITIAL_USER_DATA, initialUserData});
-export const dataGetUserData =        (key: keyof IInitialUserData, value: Partial<IInitialUserData>) => ({type: DATA_GET_USER_DATA, data: {key, value}});
+export const getInitialUserData = (initialUserData: IInitialUserData) =>                             ({type: GET_INITIAL_USER_DATA, initialUserData});
+export const getUserData =        (key: keyof IInitialUserData, value: Partial<IInitialUserData>) => ({type: GET_USER_DATA, data: {key, value}});

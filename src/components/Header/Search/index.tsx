@@ -3,26 +3,25 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import { searchSetIndex } from '../../../store/search/actions';
+import { setIndex } from '../../../store/search/actions';
 import { AutocompleteView } from './view';
 
 export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const currentIndex = useSelector(state => state.search.currentIndex);
+  const index = useSelector(state => state.search.index);
   const theme = useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sInsert = document
-      .getElementsByClassName("sui-search-box__wrapper")[0].firstChild as HTMLElement;
-    dispatch(searchSetIndex(e.target.value));
+    const sInsert = document.getElementsByClassName("sui-search-box__wrapper")[0].firstChild as HTMLElement;
+    dispatch(setIndex(e.target.value));
     sInsert.focus();
   }
 
   const selectAutocomplete = (selection: any) => {
     setSearchTerm(selection[field as string].raw);
-    router.push(`/${currentIndex}`);
+    router.push(`/${index}`);
   };
 
   const submit = () => {
@@ -30,15 +29,15 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
     redirectToSearchPage();
   };
 
-  const redirectToSearchPage = () => router.push(`/${currentIndex}`);
+  const redirectToSearchPage = () => router.push(`/${index}`);
 
-  const facadeText = currentIndex.charAt(0).toUpperCase() + currentIndex.slice(1);
+  const facadeText = index.charAt(0).toUpperCase() + index.slice(1);
 
   let field: string | undefined;
-  if (currentIndex === "recipes")     field = "title";
-  if (currentIndex === "ingredients") field = "fullname";
-  if (currentIndex === "equipment")   field = "name";
-  if (currentIndex === "products")    field = "fullname";
+  if (index === "recipes")     field = "title";
+  if (index === "ingredients") field = "fullname";
+  if (index === "equipment")   field = "name";
+  if (index === "products")    field = "fullname";
 
   return (
     <div className={`search ${theme}`}>
