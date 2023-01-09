@@ -16,7 +16,7 @@ function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
   const style = (to === pathname) ? {backgroundColor} : {};
 
-  return <Link href={to}><a style={style} className="left-nav__a" data-test={dataTest}>{`${text}`}</a></Link>;
+  return <Link href={to}><a style={style} data-test={dataTest}>{`${text}`}</a></Link>;
 }
 
 export function LeftNav(): JSX.Element {
@@ -48,29 +48,29 @@ export function LeftNav(): JSX.Element {
 
       <div className="left-nav-main">
         <NavLink dataTest="home" text="Home" to="/" />
-        <hr className="left-nav__hr" />
+        <hr />
 
         {userIsAuthenticated && <NavLink dataTest="dashboard" text={authname} to="/dashboard" />}
         {userIsAuthenticated && <NavLink dataTest="chat" text="Chat" to="/chat" />}
         {userIsAuthenticated && <NavLink dataTest="friends" text="Friends" to="/friends" />}
-        {userIsAuthenticated && <hr className="left-nav__hr" />}
+        {userIsAuthenticated && <hr />}
 
         <NavLink dataTest="supplements" text="Supplements" to="/page/guide/food/nutrition/supplements" />
         <NavLink dataTest="equipment" text="Equipment" to="/supply/kitchen-equipment" />
-        <hr className="left-nav__hr" />
+        <hr />
 
         <NavLink dataTest="filtration" text="Water Filtration" to="/page/promo/water-filtration" />
         <NavLink dataTest="tea" text="Tea" to="/page/promo/tea" />
         <NavLink dataTest="coffee" text="Coffee" to="/page/promo/coffee" />
-        <hr className="left-nav__hr" />
+        <hr />
 
         <NavLink dataTest="outdoors" text="Outdoors" to="/page/promo/outdoors" />
         <NavLink dataTest="garden" text="Garden" to="/page/promo/garden" />
         <NavLink dataTest="tools" text="Tools" to="/page/promo/tools" />
-        <hr className="left-nav__hr" />
+        <hr />
 
         <NavLink dataTest="seasonal" text="Seasonal" to="/page/promo/seasonal" />
-        <hr className="left-nav__hr" />
+        <hr />
 
         <NavLink dataTest="charity" text="Charity" to="/page/site/charity" />
       </div>

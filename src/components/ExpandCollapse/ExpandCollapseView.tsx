@@ -4,10 +4,10 @@ export const ExpandCollapseView: FC<Props> = ({ children, expanded, headingWhile
   return (
     <div className="expand-collapse">
       {!expanded
-        ? <div className="expand-collapse-heading" data-test="expand" onClick={toggle}>{headingWhileCollapsed}</div>
+        ? <div data-test="expand" onClick={toggle}>{headingWhileCollapsed}</div>
         : (
           <>
-            <div className="expand-collapse-heading" data-test="collapse" onClick={toggle}>{headingWhileExpanded}</div>
+            <div data-test="collapse" onClick={toggle}>{headingWhileExpanded}</div>
             <br />
             {children}
           </>

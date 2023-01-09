@@ -52,7 +52,7 @@ export function NewIngredientView({
       <h2>Description</h2>
       <textarea className="description" onChange={changeDescription} value={description} />
 
-      <div className="new-ingredient-image">
+      <div>
         <h2>Image of Ingredient</h2>
         {!image && (
           <div>

@@ -1,17 +1,17 @@
-import { SearchProvider } from '@elastic/react-search-ui';
-import { AppContext, AppProps } from 'next/app';
-import { useRef } from 'react';
-import { DndProvider } from 'react-dnd-multi-backend';
-import { HTML5toTouch } from 'rdndmb-html5-to-touch';
-import { END } from 'redux-saga';
+import { SearchProvider }                   from '@elastic/react-search-ui';
+import { AppContext, AppProps }             from 'next/app';
+import { useRef }                           from 'react';
+import { DndProvider }                      from 'react-dnd-multi-backend';
+import { HTML5toTouch }                     from 'rdndmb-html5-to-touch';
+import { END }                              from 'redux-saga';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
+import { Hydrate }                          from 'react-query/hydration';
 
 import '../../styles/styles.css';
-import { Header, Main, Footer, LeftNav } from '../components';
-import { makeSearchConfig } from '../config/search';
+import { Header, Main, Footer, LeftNav }                       from '../components';
+import { makeSearchConfig }                                    from '../config/search';
 import { SagaStore, wrapper, useTypedSelector as useSelector } from '../store';
-import { chatInit } from '../store/chat/sagas';
+import { chatInit }                                            from '../store/chat/sagas';
 
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 

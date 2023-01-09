@@ -4,7 +4,7 @@
   padding: 5px;
 }
 
-.expand-collapse-heading {
+.expand-collapse div {
   cursor: pointer;
   font-size: 1.1rem;
 }
@@ -13,7 +13,7 @@
 
 .light .expand-collapse {background-color: #d5fdd5;}
 
-.light .expand-collapse-heading {color: #777;}
+.light .expand-collapse div {color: #777;}
 
 
 
@@ -22,4 +22,4 @@
   color: #000;
 }
 
-.dark .expand-collapse-heading {color: #ccc;}
+.dark .expand-collapse div {color: #ccc;}

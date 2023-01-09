@@ -66,9 +66,9 @@
   width: 90%;
 }
 
-.new-plan-recipe-image {margin: 1px 0 0 1px;}
+.new-plan-recipe .image {margin: 1px 0 0 1px;}
 
-.new-plan-recipe-text {
+.new-plan-recipe .text {
   font-size: 1.1rem;
   text-align: center;
   width: 100%;

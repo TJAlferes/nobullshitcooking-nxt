@@ -5,16 +5,15 @@ import { IWorkRecipe } from '../../../store/data/types';
 
 export function Recipes({ activateModal, deactivateModal, deleteName, getApplicationNode, handleDeleteRecipe, modalActive, recipes }: Props): JSX.Element {
   return (
-    <div className="staff-dashboard-content">
+    <div className="dashboard-content">
+      <h2>Recipes</h2>
 
-      <h2 className="staff-dashboard-content-heading">Recipes</h2>
-
-      <Link className="create-new-entity" to="/recipes/private/submit">Create New Recipe</Link>
+      <Link className="new-entity" to="/recipes/private/submit">Create New Recipe</Link>
 
       {modalActive
         ? (
           <AriaModal
-            dialogClass="recipe-delete-modal"
+            dialogClass="dashboard-modal"
             focusDialog={true}
             focusTrapOptions={{returnFocusOnDeactivate: false}}
             getApplicationNode={getApplicationNode}
@@ -22,22 +21,21 @@ export function Recipes({ activateModal, deactivateModal, deleteName, getApplica
             titleText="Cancel?"
             underlayClickExits={false}
           >
-            <p className="recipe-delete-prompt">{'Delete Recipe: '}{deleteName}{' ?'}</p>
-            <button className="recipe-delete-cancel-button" onClick={deactivateModal}>No</button>
-            <button className="recipe-delete-button" onClick={handleDeleteRecipe}>Yes, Delete Recipe</button>
+            <p>{'Delete Recipe: '}{deleteName}{' ?'}</p>
+            <button className="--cancel" onClick={deactivateModal}>No</button>
+            <button className="action" onClick={handleDeleteRecipe}>Yes, Delete Recipe</button>
           </AriaModal>
         )
         : false
       }
 
       {recipes.map(r => (
-        <div className="staff-dashboard-content-item" key={r.id}>
-          <span className="staff-dashboard-content-item-name"><Link to={`/user-recipe/${r.id}`}>{r.title}</Link></span>
-          <span className="staff-dashboard-content-item-action"><Link to={`/user-recipe/private/edit/${r.id}`}>Edit</Link></span>
-          <span className="staff-dashboard-content-item-delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
+        <div className="dashboard-item" key={r.id}>
+          <span className="name"><Link to={`/user-recipe/${r.id}`}>{r.title}</Link></span>
+          <span className="action"><Link to={`/user-recipe/private/edit/${r.id}`}>Edit</Link></span>
+          <span className="delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
         </div>
       ))}
-
     </div>
   );
 }

@@ -13,7 +13,7 @@
   width: 100%;
 }
 
-.search-category {
+.search .category {
   display: block;
   height: 30px;
   max-width: 100%;
@@ -22,7 +22,7 @@
   width: auto;
 }
 
-.search-facade {
+.search .facade {
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
@@ -32,20 +32,20 @@
   position: relative;
 }
 
-.search-facade-text {
+.search .facade span {
   color: #666;
   font-size: 1.4rem;
   line-height: 28px;
   margin: 0 21px 0 8px;
 }
 
-.search-facade-arrow {
+.search .facade img {
   position: absolute;
   right: 7px;
   top: 12px;
 }
 
-.search-filters {
+.search .filters {
   border: 0;
   cursor: pointer;
   height: 30px;
@@ -57,9 +57,9 @@
   width: 100%;
 }
 
-.search-filter {font-size: 1.4rem;}
+.search .filters option {font-size: 1.4rem;}
 
-.search-insert {
+.search .insert {
   flex: 1;
   height: 30px;
   position: relative;
@@ -67,14 +67,14 @@
   width: 100%;
 }
 
-.magnifying-glass-holder {
+.magnifying-glass {
   position: absolute;
   top: 8px;
   right: 11px;
   cursor: pointer;
 }
 
-.magnifying-glass {
+.magnifying-glass span {
   position: relative;
   display: block;
   height: 12px;
@@ -86,7 +86,7 @@
   cursor: pointer;
 }
 
-.magnifying-glass:after {
+.magnifying-glass span:after {
   position: absolute;
   top: 8px;
   left: 6px;
@@ -119,6 +119,7 @@ We're overriding default values / setting new values to get the look we desire.
   height: 30px;
 }
 
+/* TO DO: don't use non-standard property */
 .sui-search-box__text-input {
   -webkit-appearance: none;
   border: 0;

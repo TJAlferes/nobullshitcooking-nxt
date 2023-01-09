@@ -23,10 +23,10 @@ export function DashboardView({
   tab
 }: Props): JSX.Element {
   return (
-    <div className={`staff-dashboard one-column-a ${oneColumnATheme}`}>
-      <h1 className="staff-dashboard__h1">COOK EAT WIN REPEAT</h1>
+    <div className={`dashboard one-column-a ${oneColumnATheme}`}>
+      <h1>COOK EAT WIN REPEAT</h1>
 
-      <p className="staff-dashboard__feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
       <Tabs tab={tab} handleTabClick={handleTabClick} />
 

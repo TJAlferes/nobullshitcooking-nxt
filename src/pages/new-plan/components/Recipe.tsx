@@ -67,8 +67,8 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
 
   return (
     <div className="new-plan-recipe" key={key} ref={ref}>
-      <div className="new-plan-recipe-image"><img src={`${url}/${recipe.recipe_image}-tiny`} /></div>
-      <div className="new-plan-recipe-text">{recipe.title}</div>
+      <div className="image"><img src={`${url}/${recipe.recipe_image}-tiny`} /></div>
+      <div className="text">{recipe.title}</div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { geoAddress, geoLatitude, geoLongitude, geoNearbyStoresClicked } from '.
 import { SuggestionsView } from './SuggestionsView';
 
 const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
+const url =                 'https://maps.googleapis.com/maps/api/geocode/json';
 
 export function Suggestions(): JSX.Element {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export function Suggestions(): JSX.Element {
     const getAddress = async () => {
       if (latitude === "") return;
       if (longitude === "") return;
-      const res = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleMapsAPIKeyTwo}`);
+      const res = await axios.get(`${url}?latlng=${latitude},${longitude}&key=${googleMapsAPIKeyTwo}`);
       if (res.data) dispatch(geoAddress(res.data.results[3].formatted_address));
     };
     getAddress();

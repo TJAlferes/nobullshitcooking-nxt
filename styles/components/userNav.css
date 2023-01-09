@@ -11,20 +11,20 @@
   width: 300px;
 }
 
-.sun-symbol {
+.sun {
   color: #fffdb1;
   font-style: normal;
 }
 
-.moon-symbol {
+.moon {
   color: #183a39;
   font-style: normal;
 }
 
-.mode {line-height: 16px;}
+.user-nav .mode {line-height: 16px;}
 
-.mode,
-.user-nav__a {
+.user-nav .mode,
+.user-nav a {
   color: #fff;
   cursor: pointer;
   display: block;
@@ -34,7 +34,7 @@
   text-decoration: none;
 }
 
-.user-nav__a:hover,
-.user-nav__a:active {
+.user-nav a:hover,
+.user-nav a:active {
   text-decoration: underline;
 }

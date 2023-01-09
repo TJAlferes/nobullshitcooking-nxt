@@ -24,22 +24,22 @@ export function UserNav(): JSX.Element {
   return (
     <div className="user-nav">
       {theme === 'light'
-        ? <span className="mode" onClick={() => dispatch(themeDarkTrigger())}><i className="moon-symbol">☾</i> Night</span>
-        : <span className="mode" onClick={() => dispatch(themeLightTrigger())}><i className="sun-symbol">☀︎</i> Day</span>
+        ? <span className="mode" onClick={() => dispatch(themeDarkTrigger())}><i className="moon">☾</i> Night</span>
+        : <span className="mode" onClick={() => dispatch(themeLightTrigger())}><i className="sun">☀︎</i> Day</span>
       }
 
-      <Link href="/help"><a className="user-nav__a" data-test="help">Help</a></Link>
+      <Link href="/help"><a data-test="help">Help</a></Link>
 
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/register"><a className="user-nav__a" data-test="register">Create Account</a></Link>}
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login"><a className="user-nav__a" data-test="login">Sign In</a></Link>}
+      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/register"><a data-test="register">Create Account</a></Link>}
+      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login"><a data-test="login">Sign In</a></Link>}
 
-      {staffIsAuthenticated && <Link href="/staff-dashboard"><a className="user-nav__a" data-test="staff-dashboard">{`Hello, ${authname}`}</a></Link>}
-      {staffIsAuthenticated && <span className="user-nav__a" onClick={handleLogout}>Sign Out</span>}
+      {staffIsAuthenticated && <Link href="/staff-dashboard"><a data-test="staff-dashboard">{`Hello, ${authname}`}</a></Link>}
+      {staffIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
 
-      {userIsAuthenticated && <Link href="/dashboard"><a className="user-nav__a" data-test="dashboard">{`Hello, ${authname}`}</a></Link>}
-      {userIsAuthenticated && <span className="user-nav__a"onClick={handleLogout}>Sign Out</span>}
+      {userIsAuthenticated && <Link href="/dashboard"><a data-test="dashboard">{`Hello, ${authname}`}</a></Link>}
+      {userIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
 
-      {/*<Link href="/cart"><a className="user-nav__a" data-test="cart">Cart</a></Link>*/}
+      {/*<Link href="/cart"><a  data-test="cart">Cart</a></Link>*/}
     </div>
   );
 }

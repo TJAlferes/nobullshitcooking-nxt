@@ -10,20 +10,24 @@ function listResults(results: any) {
     return results.map((r: any) => (
       <div className="recipes" key={r.id.raw}>
         <Link href={`/recipe/${r.id.raw}`}>
-          <a className="recipes__link">
-            <div className="recipes__text">
-              <div className="recipes__title">{r.title.raw}</div>
+          <a className="recipes-link">
+            <div className="text">
+              <div className="title">{r.title.raw}</div>
 
-              <div className="recipes__author">{r.author.raw}</div>
+              <div className="author">{r.author.raw}</div>
 
-              <div className="recipes__types">
-                <div className="recipes__cuisine">{r.cuisine_name.raw}</div>
-                <div className="recipes__type">{r.recipe_type_name.raw}</div>
+              <div>
+                <div className="cuisine">{r.cuisine_name.raw}</div>
+                <div className="type">{r.recipe_type_name.raw}</div>
               </div>
 
-              <div className="recipes__tags">
-                <div className="recipes__methods">{r.method_names.raw.map((m: any) => <span className="recipes__method" key={m}>{m}</span>)}</div>
-                <div className="recipes__ingredients">{r.ingredient_names.raw.map((i: any) => <span className="recipes__ingredient" key={i}>{i}</span>)}</div>
+              <div className="tags">
+                <div className="methods">
+                  {r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}
+                </div>
+                <div className="ingredients">
+                  {r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}
+                </div>
               </div>
             </div>
             

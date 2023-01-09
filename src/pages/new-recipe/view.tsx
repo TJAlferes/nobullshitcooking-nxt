@@ -119,12 +119,12 @@ export function NewRecipeView({
           <p>Tip: If you're still improving your recipe, make it private for now, then make a public version later.</p><br />
         </div>
       </ExpandCollapse>
-      <div className="new-recipe-ownerships">
-        <span className="new-recipe-ownership">
+      <div className="ownership">
+        <span>
           <input checked={ownership === "private"} disabled={true} name="private" type="radio" value="private" />
           <label>Private</label>
         </span>
-        <span className="new-recipe-ownership">
+        <span>
           <input checked={ownership === "public"} disabled={true} name="public" type="radio" value="public" />
           <label>Public</label>
         </span>
@@ -143,15 +143,15 @@ export function NewRecipeView({
       </select>
 
       <h2>Title</h2>
-      <input className="new-recipe-title" id="recipe_title" max={100} min={2} name="title" onChange={changeTitle} type="text" value={title} />
+      <input className="title" id="recipe_title" max={100} min={2} name="title" onChange={changeTitle} type="text" value={title} />
 
       <h2>Description / Author Note</h2>
-      <input className="new-recipe-description" id="recipe_description" max={150} min={2} name="description" onChange={changeDescription} type="text" value={description} />
+      <input className="description" id="recipe_description" max={150} min={2} name="description" onChange={changeDescription} type="text" value={description} />
 
       <h2>Methods</h2>
-      <div className="new-recipe-methods">
+      <div className="methods">
         {methods.map(({ id, name }) => (
-          <span className="new-recipe-method" key={id}>
+          <span className="method" key={id}>
             <input
               checked={usedMethods[id] === true ? true : false}
               data-test={`${id}-${name}`}
@@ -238,7 +238,7 @@ export function NewRecipeView({
       </div>
 
       <h2>Directions</h2>
-      <textarea className="new-recipe-directions" id="recipe_directions" name="directions" onChange={changeDirections} value={directions} />
+      <textarea className="directions" id="recipe_directions" name="directions" onChange={changeDirections} value={directions} />
 
       <ImageUploads
         cancelCookingImage={cancelCookingImage}
@@ -283,7 +283,7 @@ export function NewRecipeView({
         recipeTinyCrop={recipeTinyCrop}
       />
 
-      <div className="new-recipe-finish">
+      <div className="finish">
         <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
         <LoaderButton
           className="submit-button"

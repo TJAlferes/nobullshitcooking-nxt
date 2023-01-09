@@ -75,6 +75,7 @@
   width: 100%;
 }
 
+/* is this really needed? */
 /* :after? */
 .monthly-plan__body-day:before {
   content: "";
@@ -105,6 +106,10 @@
   width: 150px;
 }
 
+/*
+is absolute really needed? change span to div?
+copy to .new-plan .date
+*/
 .plan .date {
   color: #afafaf;
   height: content;
@@ -162,9 +167,9 @@
   width: 90%;
 }
 
-.plan-recipe-image {margin: 1px 0 0 1px;}
+.plan-recipe .image {margin: 1px 0 0 1px;}
 
-.plan-recipe-text {
+.plan-recipe .text {
   font-size: 1.1rem;
   text-align: center;
   width: 100%;

@@ -11,14 +11,14 @@
   width: 260px;
 }
 
-.nearby-stores__iframe,
-.nearby-stores__button {
+.nearby-stores iframe,
+.nearby-stores button {
   height: 100%;
   margin-bottom: 5px;
   width: 100%;
 }
 
-.nearby-stores__button {
+.nearby-stores button {
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
@@ -26,9 +26,11 @@
   cursor: pointer;
 }
 
+
+
 .suggestions-light {background-color: #fff;}
 
-.suggestions-light .suggestions__header {
+.suggestions-light .suggestions hr {
   display: block;
   color: #000;
   margin-bottom: 5px;
@@ -41,9 +43,11 @@
   margin-bottom: 5px;
 }
 
+
+
 .suggestions-dark {background-color: #222;}
 
-.suggestions-dark .suggestions__header {
+.suggestions-dark .suggestions hr {
   color: #aaa;
   display: block;
   margin-bottom: 5px;

@@ -25,7 +25,7 @@ export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDay
               <span>Saturday</span>
             </div>
 
-            <div className="monthly-plan__body">
+            <div className="body">
               {Object.keys(recipeListsInsideDays)
                 .map((recipeList, i) => (
                   <div className="monthly-plan__body-day" key={i}>

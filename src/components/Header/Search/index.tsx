@@ -14,7 +14,8 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const theme = useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sInsert = document.getElementsByClassName("sui-search-box__wrapper")[0].firstChild as HTMLElement;
+    const sInsert = document
+      .getElementsByClassName("sui-search-box__wrapper")[0].firstChild as HTMLElement;
     dispatch(searchSetIndex(e.target.value));
     sInsert.focus();
   }
@@ -41,29 +42,34 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
 
   return (
     <div className={`search ${theme}`}>
-      <div className="search-category">
-        <div className="search-facade">
-          <span className="search-facade-text">{facadeText}</span>
-          <img className="search-facade-arrow" src="/images/header/down-arrow-gray.png" width="8" height="6" />
+      <div className="category">
+        <div className="facade">
+          <span>{facadeText}</span>
+          <img src="/images/header/down-arrow-gray.png" width="8" height="6" />
         </div>
-        <select className="search-filters" onChange={changeSearchIndex}>
-          <option className="search-filter" value="recipes">Recipes</option>
-          <option className="search-filter" value="ingredients">Ingredients</option>
-          <option className="search-filter" value="equipment">Equipment</option>
-          <option className="search-filter" value="products">Products</option>
+        <select className="filters" onChange={changeSearchIndex}>
+          <option value="recipes">Recipes</option>
+          <option value="ingredients">Ingredients</option>
+          <option value="equipment">Equipment</option>
+          <option value="products">Products</option>
         </select>
       </div>
 
-      <div className="search-insert">
+      <div className="insert">
         <SearchBox
           autocompleteMinimumCharacters={2}
-          autocompleteResults={{shouldTrackClickThrough: true, titleField: field as string, urlField: field as string}}
+          autocompleteResults={{
+            shouldTrackClickThrough: true,
+            titleField: field as string,
+            urlField: field as string
+          }}
           autocompleteView={AutocompleteView}
           inputProps={{placeholder: ""}}
           onSelectAutocomplete={selectAutocomplete}
           onSubmit={submit}
         />
-        <div className="magnifying-glass-holder" onClick={submit}><span className="magnifying-glass"></span></div>
+
+        <div className="magnifying-glass" onClick={submit}><span></span></div>
       </div>
     </div>
   );

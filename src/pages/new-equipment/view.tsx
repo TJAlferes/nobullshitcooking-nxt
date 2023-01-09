@@ -52,7 +52,7 @@ export function NewEquipmentView({
       <h2>Description</h2>
       <textarea className="description" onChange={changeDescription} value={description} />
 
-      <div className="new-equipment-image">
+      <div>
         <h2>Image of Equipment</h2>
 
         {!image && (

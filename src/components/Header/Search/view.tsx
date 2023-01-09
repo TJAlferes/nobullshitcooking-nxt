@@ -18,7 +18,7 @@ export function AutocompleteView({ autocompleteResults, autocompletedResults, cl
         (
           <ul className="sui-search-box__results-list">
             {autocompletedResults.map(r => {
-              const titleRaw = getRaw(r, autocompleteResults.titleField);
+              const titleRaw =     getRaw(r, autocompleteResults.titleField);
               const titleSnippet = getSnippet(r, autocompleteResults.titleField);
               
               index++;

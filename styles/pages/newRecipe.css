@@ -23,13 +23,13 @@
 /* ? */
 .new-recipe select:required {box-shadow: none;}
 
-.new-recipe-ownerships {
+.new-recipe .ownership {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
 
-.new-recipe-ownership {
+.new-recipe .ownership span {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -41,7 +41,7 @@
   width: 90px;
 }
 
-.new-recipe-ownership input {
+.new-recipe .ownership input {
   display: block;
   height: 13px;
   margin: 9px 0 10px 0;
@@ -53,7 +53,7 @@
   width: 13px;
 }
 
-.new-recipe-ownership label {
+.new-recipe .ownership label {
   display: block;
   font-size: 1.3rem;
   font-weight: 700;
@@ -65,14 +65,14 @@
   width: fit-content;
 }
 
-.new-recipe-methods {
+.new-recipe .methods {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   max-width: 540px;
 }
 
-.new-recipe-method {
+.new-recipe .method {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -84,7 +84,7 @@
   width: 90px;
 }
 
-.new-recipe-method input {
+.new-recipe .method input {
   display: block;
   height: 13px;
   margin: 9px 0 10px 0;
@@ -96,7 +96,7 @@
   width: 13px;
 }
 
-.new-recipe-method label {
+.new-recipe .method label {
   display: block;
   font-size: 1.3rem;
   font-weight: 700;
@@ -108,8 +108,8 @@
   width: fit-content;
 }
 
-.new-recipe-title,
-.new-recipe-description {
+.new-recipe .title,
+.new-recipe .description {
   border: 1px solid;
   border-radius: 1px;
   display: block;
@@ -172,12 +172,12 @@
   padding: 1px 2px;
 }
 
-.new-recipe-directions {
+.new-recipe .directions {
   height: 102px;
   width: 100%;
 }
 
-.new-recipe-finish {
+.new-recipe .finish {
   display: flex;
   flex-direction: row;
   padding: 10px 0;
@@ -198,5 +198,5 @@
 }
 
 @media (max-width: 899px) {
-  .new-recipe-finish {flex-direction: column;}
+  .new-recipe .finish {flex-direction: column;}
 }
