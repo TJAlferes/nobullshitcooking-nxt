@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { authStaffLogin, authUserLogin } from '../../store/auth/actions';
+import { staffLogin, userLogin } from '../../store/auth/actions';
 import { LoginView } from './view';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
@@ -35,8 +35,8 @@ export default function Login(): JSX.Element {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
-    if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
-    if (pathname === "/login")       dispatch(authUserLogin(email, password));
+    if (pathname === "/staff-login") dispatch(staffLogin(email, password));
+    if (pathname === "/login")       dispatch(userLogin(email, password));
   }
 
   const loginKeyUp = (e: React.KeyboardEvent) => {
@@ -44,8 +44,8 @@ export default function Login(): JSX.Element {
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    if (pathname === "/staff-login") dispatch(authStaffLogin(email, password));
-    if (pathname === "/login")       dispatch(authUserLogin(email, password));
+    if (pathname === "/staff-login") dispatch(staffLogin(email, password));
+    if (pathname === "/login")       dispatch(userLogin(email, password));
   }
 
   const validateLoginInfo = () => ((email.length > 4) && (password.length > 5));

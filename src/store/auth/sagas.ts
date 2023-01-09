@@ -3,25 +3,25 @@ import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { removeStorageItem } from '../../utils/storageHelpers';
-import { authMessage, authMessageClear, authStaffDisplay, authUserDisplay } from './actions';
-import { IAuthUserRegister, IAuthUserVerify, IAuthUserLogin, IAuthUserLogout, IAuthStaffLogin, IAuthStaffLogout } from './types';
+import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
+import { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
 
-export function* authStaffLoginSaga(action: IAuthStaffLogin) {
+export function* staffLoginSaga(action: IStaffLogin) {
   try {
     const { data: { message, staffname } } =
       yield call([axios, axios.post], `${endpoint}/staff/auth/login`, {staffInfo: {email: action.email, password: action.password}}, {withCredentials: true});
 
-    if (message == 'Signed in.') yield put(authStaffDisplay(staffname));
+    if (message == 'Signed in.') yield put(staffDisplay(staffname));
     else yield put(authMessage(message));
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(authMessageClear());
+  yield put(messageClear());
 }
 
-export function* authStaffLogoutSaga(action: IAuthStaffLogout) {
+export function* staffLogoutSaga(action: IStaffLogout) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/staff/auth/logout`, {}, {withCredentials: true});
 
@@ -35,25 +35,25 @@ export function* authStaffLogoutSaga(action: IAuthStaffLogout) {
   }
 
   yield delay(4000);
-  yield put(authMessageClear());
+  yield put(messageClear());
 }
 
-export function* authUserLoginSaga(action: IAuthUserLogin) {
+export function* userLoginSaga(action: IUserLogin) {
   try {
     const { data: { message, username } } =
       yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, password: action.password}}, {withCredentials: true});
 
-    if (message == 'Signed in.') yield put(authUserDisplay(username));
+    if (message == 'Signed in.') yield put(userDisplay(username));
     else yield put(authMessage(message));
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(authMessageClear());
+  yield put(messageClear());
 }
 
-export function* authUserLogoutSaga(action: IAuthUserLogout) {
+export function* userLogoutSaga(action: IUserLogout) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/logout`, {}, {withCredentials: true});
 
@@ -67,106 +67,47 @@ export function* authUserLogoutSaga(action: IAuthUserLogout) {
   }
 
   yield delay(4000);
-  yield put(authMessageClear());
+  yield put(messageClear());
 }
 
-export function* authUserRegisterSaga(action: IAuthUserRegister) {
+export function* userRegisterSaga(action: IUserRegister) {
   try {
     const { email, password, username, router } = action;
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/register`, {userInfo: {email, password, username}});
 
     if (message == 'User account created.') {
       yield delay(2000);
-      yield put(authMessageClear());
+      yield put(messageClear());
       yield call(() => router.push('/verify'));
     } else {
       yield put(authMessage(message));
       yield delay(4000);
-      yield put(authMessageClear());
+      yield put(messageClear());
     }
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
     yield delay(4000);
-    yield put(authMessageClear());
+    yield put(messageClear());
   }
 }
 
-export function* authUserVerifySaga(action: IAuthUserVerify) {
+export function* userVerifySaga(action: IUserVerify) {
   try {
     const { email, password, confirmationCode, router } = action;
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/verify`, {userInfo: {email, password, confirmationCode}});
     
     if (message === "User account verified.") {
       yield delay(2000);
-      yield put(authMessageClear());
+      yield put(messageClear());
       yield call(() => router.push('/login'));
     } else {
       yield put(authMessage(message));
       yield delay(4000);
-      yield put(authMessageClear());
+      yield put(messageClear());
     }
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
     yield delay(4000);
-    yield put(authMessageClear());
+    yield put(messageClear());
   }
 }
-
-/*
-
-Facebook OAuth
-
-*/
-
-/*export function* authFacebookCheckStateSaga() {  // before authFacebookLoginSaga
-  yield put(authFacebookCheckState());
-  window.FB && window.FB.getLoginStatus(
-    function(response) {
-      //statusChangeCallback(response);
-      if (response.status === 'connected') {
-        // already logged in, continue to allow access
-      } else {
-        // not, continue to deny access, so execute authFacebookLoginSaga if trying to FBLogin
-      }
-    }
-  );
-}
-
-export function* authFacebookLoginSaga() {
-  yield put(authFacebookLogin());
-  window.FB && window.FB.login(
-    function(response) {
-      //loginCallback(response);
-      if (response.status === 'connected') {
-        // just logged in, allow access
-      } else {
-        // still not
-      }
-    },
-    {scope: 'email'}
-  );
-  yield put(authLoginSucceeded());
-}
-
-export function* authFacebookLogoutSaga() {
-  yield put(authFacebookLogout());
-  window.FB && window.FB.logout();
-  // just logged out, deny access
-  yield put(authLogoutSucceeded());
-}*/
-
-/*
-
-Google OAuth
-
-*/
-
-// TO DO: Google OAuth
-
-/*
-
-Twitter OAuth
-
-*/
-
-// TO DO: Twitter OAuth

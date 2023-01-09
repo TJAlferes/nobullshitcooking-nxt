@@ -37,16 +37,16 @@ export function LeftNav(): JSX.Element {
 
   return (
     <nav className={`left-nav ${theme}`}>
-      <div className="left-nav-heading">
-        <svg className="left-nav-toggle" onClick={click}><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path></g></svg>
+      <div className="heading">
+        <svg className="toggle" onClick={click}><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path></g></svg>
         <Logo />
       </div>
 
-      <div className="left-nav-anchor" onMouseLeave={closeMenus}>
+      <div className="anchor" onMouseLeave={closeMenus}>
         <Menu closeMenus={closeMenus} expanded={expanded} level={0} menuItems={menuItems} openMenu={openMenu} />
       </div>
 
-      <div className="left-nav-main">
+      <div className="main">
         <NavLink dataTest="home" text="Home" to="/" />
         <hr />
 

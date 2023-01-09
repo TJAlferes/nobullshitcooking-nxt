@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { authUserRegister, authUserVerify } from '../../store/auth/actions';
+import { userRegister, userVerify } from '../../store/auth/actions';
 import { RegisterView } from './view';
 
 export default function Register({ confirmingUser }: Props): JSX.Element {
@@ -39,7 +39,7 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     setLoading(true);
-    dispatch(authUserRegister(email, password, username, router));
+    dispatch(userRegister(email, password, username, router));
   };
 
   const registerKeyUp = (e: React.KeyboardEvent) => {
@@ -47,14 +47,14 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     if (!validateRegistrationInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(authUserRegister(email, password, username, router));
+    dispatch(userRegister(email, password, username, router));
   };
 
   const verifyClick = () => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     setLoading(true);
-    dispatch(authUserVerify(email, password, confirmationCode, router));
+    dispatch(userVerify(email, password, confirmationCode, router));
   };
 
   const verifyKeyUp = (e: React.KeyboardEvent) => {
@@ -62,7 +62,7 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(authUserVerify(email, password, confirmationCode, router));
+    dispatch(userVerify(email, password, confirmationCode, router));
   };
 
   const validateConfirmationCode = () => confirmationCode.length > 1;

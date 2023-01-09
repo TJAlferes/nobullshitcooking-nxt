@@ -33,7 +33,7 @@ export function MenuView({ activeMenuRow, clearActiveMenuRow, closeMenus, enterR
     if (!activeMenuRow) return;
     const img = menuItems[activeMenuRow].image;
     if (!img) return;
-    return <img className="menu__img" src={theme === "light" ? light[img] : dark[img]} />;
+    return <img className="menu-image" src={theme === "light" ? light[img] : dark[img]} />;
   };
 
   const mouseEnter = (name: string, index: number) => {
@@ -55,18 +55,33 @@ export function MenuView({ activeMenuRow, clearActiveMenuRow, closeMenus, enterR
       <ul className="menu-items">
         {menuItems.map((item, index) => (
           <li
-            className={`menu-item ${( (activeMenuRow !== undefined) && (index === activeMenuRow) ) && 'active'}`}
+            className={`menu-item ${
+              ( (activeMenuRow !== undefined) && (index === activeMenuRow) ) && 'active'
+            }`}
             data-test="menu-item"
             key={index}
             onMouseEnter={() => mouseEnter(item.name, index)}
           >
-            <Link href={item.link}><a className={`menu-item__a ${theme}`}>{item.name}</a></Link>
+            <Link href={item.link}><a>{item.name}</a></Link>
           </li>
         ))}
       </ul>
 
-      {( (activeMenuRow !== undefined) && (menuItems[activeMenuRow]) && (menuItems[activeMenuRow].children[0]) && (expanded !== "none") )
-        ? <Menu closeMenus={closeMenus} expanded={expanded} level={240} menuItems={menuItems[activeMenuRow].children} openMenu={openMenu} />
+      {(
+        (activeMenuRow !== undefined) &&
+        (menuItems[activeMenuRow]) &&
+        (menuItems[activeMenuRow].children[0]) &&
+        (expanded !== "none")
+        )
+        ? (
+          <Menu
+            closeMenus={closeMenus}
+            expanded={expanded}
+            level={240}
+            menuItems={menuItems[activeMenuRow].children}
+            openMenu={openMenu}
+          />
+        )
         : false
       }
     </div>

@@ -1,119 +1,107 @@
 import { NextRouter } from 'next/router';
 
 export const actionTypes = {
-  AUTH_CHECK_STATE: 'AUTH_CHECK_STATE',
-  AUTH_MESSAGE: 'AUTH_MESSAGE',
-  AUTH_MESSAGE_CLEAR: 'AUTH_MESSAGE_CLEAR',
-  AUTH_RESET: 'AUTH_RESET',
-  AUTH_UPDATE_LOCAL_AVATAR: 'AUTH_UPDATE_LOCAL_AVATAR',
-  AUTH_STAFF_DISPLAY: 'AUTH_STAFF_DISPLAY',
-  AUTH_STAFF_LOGIN: 'AUTH_STAFF_LOGIN',
-  AUTH_STAFF_LOGOUT: 'AUTH_STAFF_LOGOUT',
-  AUTH_USER_DISPLAY: 'AUTH_USER_DISPLAY',
-  AUTH_USER_LOGIN: 'AUTH_USER_LOGIN',
-  AUTH_USER_LOGOUT: 'AUTH_USER_LOGOUT',
-  AUTH_USER_REGISTER: 'AUTH_USER_REGISTER',
-  AUTH_USER_VERIFY: 'AUTH_USER_VERIFY'
+  CHECK_STATE:   'CHECK_STATE',
+  MESSAGE:       'MESSAGE',
+  MESSAGE_CLEAR: 'MESSAGE_CLEAR',
+  RESET:         'RESET',
+  UPDATE_LOCAL_AVATAR: 'UPDATE_LOCAL_AVATAR',
+  STAFF_DISPLAY: 'STAFF_DISPLAY',
+  STAFF_LOGIN:   'STAFF_LOGIN',
+  STAFF_LOGOUT:  'STAFF_LOGOUT',
+  USER_DISPLAY:  'USER_DISPLAY',
+  USER_LOGIN:    'USER_LOGIN',
+  USER_LOGOUT:   'USER_LOGOUT',
+  USER_REGISTER: 'USER_REGISTER',
+  USER_VERIFY:   'USER_VERIFY'
 } as const;
 
-/*
-
-State
-
-*/
-
-export interface IAuthState {
-  authname: string;
-  message: string;
+export interface IState {
+  authname:             string;
+  message:              string;
   staffIsAuthenticated: boolean;
-  userIsAuthenticated: boolean;
+  userIsAuthenticated:  boolean;
 }
 
-/*
+export type Actions =
+ICheckState |
+IMessage |
+IMessageClear |
+IReset |
+IUpdateLocalAvatar |
+IStaffDisplay |
+IStaffLogin |
+IStaffLogout |
+IUserDisplay | 
+IUserRegister |
+IUserVerify |
+IUserLogin |
+IUserLogout;
 
-Actions
-
-*/
-
-export type AuthActions =
-IAuthCheckState |
-IAuthMessage |
-IAuthMessageClear |
-IAuthReset |
-IAuthUpdateLocalAvatar |
-IAuthStaffDisplay |
-IAuthStaffLogin |
-IAuthStaffLogout |
-IAuthUserDisplay | 
-IAuthUserRegister |
-IAuthUserVerify |
-IAuthUserLogin |
-IAuthUserLogout;
-
-export interface IAuthCheckState {
-  type: typeof actionTypes.AUTH_CHECK_STATE;
+export interface ICheckState {
+  type: typeof actionTypes.CHECK_STATE;
 }
 
-export interface IAuthMessage {
-  type: typeof actionTypes.AUTH_MESSAGE;
+export interface IMessage {
+  type:    typeof actionTypes.MESSAGE;
   message: string;
 }
 
-export interface IAuthMessageClear {
-  type: typeof actionTypes.AUTH_MESSAGE_CLEAR;
+export interface IMessageClear {
+  type: typeof actionTypes.MESSAGE_CLEAR;
 }
 
-export interface IAuthReset {
-  type: typeof actionTypes.AUTH_RESET;
+export interface IReset {
+  type: typeof actionTypes.RESET;
 }
 
-export interface IAuthUpdateLocalAvatar {
-  type: typeof actionTypes.AUTH_UPDATE_LOCAL_AVATAR;
+export interface IUpdateLocalAvatar {
+  type:   typeof actionTypes.UPDATE_LOCAL_AVATAR;
   avatar: string
 }
 
-export interface IAuthStaffDisplay {
-  type: typeof actionTypes.AUTH_STAFF_DISPLAY;
+export interface IStaffDisplay {
+  type: typeof actionTypes.STAFF_DISPLAY;
   authname: string;
 }
 
-export interface IAuthStaffLogin {
-  type: typeof actionTypes.AUTH_STAFF_LOGIN;
-  email: string;
+export interface IStaffLogin {
+  type:     typeof actionTypes.STAFF_LOGIN;
+  email:    string;
   password: string;
 }
 
-export interface IAuthStaffLogout {
-  type: typeof actionTypes.AUTH_STAFF_LOGOUT;
+export interface IStaffLogout {
+  type: typeof actionTypes.STAFF_LOGOUT;
 }
 
-export interface IAuthUserDisplay {
-  type: typeof actionTypes.AUTH_USER_DISPLAY;
+export interface IUserDisplay {
+  type:     typeof actionTypes.USER_DISPLAY;
   authname: string;
 }
 
-export interface IAuthUserLogin {
-  type: typeof actionTypes.AUTH_USER_LOGIN;
-  email: string;
+export interface IUserLogin {
+  type:     typeof actionTypes.USER_LOGIN;
+  email:    string;
   password: string;
 }
 
-export interface IAuthUserLogout {
-  type: typeof actionTypes.AUTH_USER_LOGOUT;
+export interface IUserLogout {
+  type: typeof actionTypes.USER_LOGOUT;
 }
 
-export interface IAuthUserRegister {
-  type: typeof actionTypes.AUTH_USER_REGISTER;
-  email: string;
+export interface IUserRegister {
+  type:     typeof actionTypes.USER_REGISTER;
+  email:    string;
   password: string;
   username: string;
-  router: NextRouter;
+  router:   NextRouter;
 }
 
-export interface IAuthUserVerify {
-  type: typeof actionTypes.AUTH_USER_VERIFY;
-  email: string;
-  password: string;
+export interface IUserVerify {
+  type:             typeof actionTypes.USER_VERIFY;
+  email:            string;
+  password:         string;
   confirmationCode: string;
-  router: NextRouter;
+  router:           NextRouter;
 }

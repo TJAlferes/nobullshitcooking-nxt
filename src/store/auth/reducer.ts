@@ -1,28 +1,28 @@
-import { actionTypes, IAuthState, AuthActions } from './types';
+import { actionTypes, IState, Actions } from './types';
 
 const {
-  AUTH_MESSAGE,
-  AUTH_MESSAGE_CLEAR,
-  AUTH_RESET,
-  AUTH_UPDATE_LOCAL_AVATAR,
-  AUTH_STAFF_DISPLAY,
-  AUTH_STAFF_LOGOUT,
-  AUTH_USER_DISPLAY,
-  AUTH_USER_LOGOUT
+  MESSAGE,
+  MESSAGE_CLEAR,
+  RESET,
+  UPDATE_LOCAL_AVATAR,
+  STAFF_DISPLAY,
+  STAFF_LOGOUT,
+  USER_DISPLAY,
+  USER_LOGOUT
 } = actionTypes;
 
-const initialState: IAuthState = {authname: '', message: '', staffIsAuthenticated: false, userIsAuthenticated: false};
+const initialState: IState = {authname: '', message: '', staffIsAuthenticated: false, userIsAuthenticated: false};
 
-export const authReducer = (state = initialState, action: AuthActions): IAuthState => {
+export const authReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case AUTH_MESSAGE:             return {...state, ...{message: action.message}};
-    case AUTH_MESSAGE_CLEAR:       return {...state, ...{message: ''}};
-    case AUTH_UPDATE_LOCAL_AVATAR: return {...state, ...{avatar: action.avatar}};
-    case AUTH_STAFF_DISPLAY:       return {...state, ...{staffIsAuthenticated: true, authname: action.authname}};
-    case AUTH_USER_DISPLAY:        return {...state, ...{userIsAuthenticated: true, authname: action.authname}};
-    case AUTH_RESET:
-    case AUTH_USER_LOGOUT:
-    case AUTH_STAFF_LOGOUT:
+    case MESSAGE:             return {...state, ...{message: action.message}};
+    case MESSAGE_CLEAR:       return {...state, ...{message: ''}};
+    case UPDATE_LOCAL_AVATAR: return {...state, ...{avatar: action.avatar}};
+    case STAFF_DISPLAY:       return {...state, ...{staffIsAuthenticated: true, authname: action.authname}};
+    case USER_DISPLAY:        return {...state, ...{userIsAuthenticated: true, authname: action.authname}};
+    case RESET:
+    case USER_LOGOUT:
+    case STAFF_LOGOUT:
       return {...state, ...initialState};
     default: return state;
   }

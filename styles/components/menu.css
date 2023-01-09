@@ -17,7 +17,7 @@
   display: block;
 }
 
-.menu-item__a {
+.menu-item a {
   align-items: center;
   display: flex;
   font-size: 1.4rem;
@@ -27,12 +27,12 @@
 
 .menu-items,
 .menu-item,
-.menu-item__a {
+.menu-item a {
   color: #000;
   text-decoration: none;
 }
 
-/*.menu__img {
+/*.menu-image {
   bottom: 0px;
   position: absolute;
   right: 0px;
@@ -42,10 +42,10 @@
 
 .menu.light {background-color: #fff;}
 
-.light .menu-item.active .menu-item__a {color: #c10006;}
+.light .menu-item.active .menu-item a {color: #c10006;}
 
 
 
 .menu.dark {background-color: #999;}
 
-.dark .menu-item.active .menu-item__a {color: #690004;}
+.dark .menu-item.active .menu-item a {color: #690004;}

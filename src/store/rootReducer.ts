@@ -4,7 +4,6 @@ import { authReducer } from './auth/reducer';
 import { cartReducer } from './cart/reducer';
 import { chatReducer } from './chat/reducer';
 import { dataReducer } from './data/reducer';
-import { editorReducer } from './editor/reducer';
 import { geolocationReducer } from './geolocation/reducer';
 import { menuReducer } from './menu/reducer';
 import { nobscappReducer } from './nobscapp/reducer';
@@ -20,7 +19,6 @@ export const rootReducer = combineReducers({
   cart: cartReducer,
   chat: chatReducer,
   data: dataReducer,
-  editor: editorReducer,
   geolocation: geolocationReducer,
   menu: menuReducer,
   nobscapp: nobscappReducer,

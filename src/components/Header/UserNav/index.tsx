@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import { authStaffLogout, authUserLogout } from '../../../store/auth/actions';
+import { staffLogout, userLogout } from '../../../store/auth/actions';
 import { themeDarkTrigger, themeLightTrigger } from '../../../store/theme/actions';
 
 export function UserNav(): JSX.Element {
@@ -16,8 +16,8 @@ export function UserNav(): JSX.Element {
   const theme = useSelector(state => state.theme.theme);
 
   const handleLogout = () => {
-    if (staffIsAuthenticated) dispatch(authStaffLogout());
-    if (userIsAuthenticated) dispatch(authUserLogout());
+    if (staffIsAuthenticated) dispatch(staffLogout());
+    if (userIsAuthenticated)  dispatch(userLogout());
     router.push('/home');
   };
 
