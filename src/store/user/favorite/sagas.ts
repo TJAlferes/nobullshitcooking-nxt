@@ -2,16 +2,16 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { dataGetMyFavoriteRecipesSaga } from '../../data/sagas';
+import { getMyFavoriteRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { IUserFavoriteRecipe, IUserUnfavoriteRecipe } from './types';
+import { IFavoriteRecipe, IUnfavoriteRecipe } from './types';
 
-export function* userFavoriteRecipeSaga({ recipeId }: IUserFavoriteRecipe) {
+export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/favorite-recipe/create`, {recipeId}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFavoriteRecipesSaga);
+    yield call(getMyFavoriteRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -20,12 +20,12 @@ export function* userFavoriteRecipeSaga({ recipeId }: IUserFavoriteRecipe) {
   yield put(userMessageClear());
 }
 
-export function* userUnfavoriteRecipeSaga({ recipeId }: IUserUnfavoriteRecipe) {
+export function* unfavoriteRecipeSaga({ recipeId }: IUnfavoriteRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/favorite-recipe/delete`, {withCredentials: true, data: {recipeId}});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFavoriteRecipesSaga);
+    yield call(getMyFavoriteRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

@@ -2,11 +2,11 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { dataGetMyPrivateEquipmentsSaga } from '../../data/sagas';
+import { getMyPrivateEquipmentsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { IUserCreateNewPrivateEquipment, IUserEditPrivateEquipment, IUserDeletePrivateEquipment } from './types';
+import { ICreateNewPrivateEquipment, IEditPrivateEquipment, IDeletePrivateEquipment } from './types';
 
-export function* userCreateNewPrivateEquipmentSaga(action: IUserCreateNewPrivateEquipment) {
+export function* createNewPrivateEquipmentSaga(action: ICreateNewPrivateEquipment) {
   let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -25,7 +25,7 @@ export function* userCreateNewPrivateEquipmentSaga(action: IUserCreateNewPrivate
       yield call([axios, axios.post], `${endpoint}/user/equipment/create`, {equipmentInfo: {equipmentTypeId, name, description, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateEquipmentsSaga);
+    yield call(getMyPrivateEquipmentsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -34,7 +34,7 @@ export function* userCreateNewPrivateEquipmentSaga(action: IUserCreateNewPrivate
   yield put(userMessageClear());
 }
 
-export function* userEditPrivateEquipmentSaga(action: IUserEditPrivateEquipment) {
+export function* editPrivateEquipmentSaga(action: IEditPrivateEquipment) {
   let { id, equipmentTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -53,7 +53,7 @@ export function* userEditPrivateEquipmentSaga(action: IUserEditPrivateEquipment)
       yield call([axios, axios.put], `${endpoint}/user/equipment/update`, {equipmentInfo: {id, equipmentTypeId, name, description, prevImage, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateEquipmentsSaga);
+    yield call(getMyPrivateEquipmentsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -62,12 +62,12 @@ export function* userEditPrivateEquipmentSaga(action: IUserEditPrivateEquipment)
   yield put(userMessageClear());
 }
 
-export function* userDeletePrivateEquipmentSaga(action: IUserDeletePrivateEquipment) {
+export function* deletePrivateEquipmentSaga(action: IDeletePrivateEquipment) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
 
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateEquipmentsSaga);
+    yield call(getMyPrivateEquipmentsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

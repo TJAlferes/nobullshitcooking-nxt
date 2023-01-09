@@ -1,11 +1,11 @@
 import { actionTypes } from './types';
 
-const { USER_REQUEST_FRIENDSHIP, USER_ACCEPT_FRIENDSHIP, USER_REJECT_FRIENDSHIP, USER_DELETE_FRIENDSHIP, USER_BLOCK_USER, USER_UNBLOCK_USER } = actionTypes;
+const { REQUEST_FRIENDSHIP, ACCEPT_FRIENDSHIP, REJECT_FRIENDSHIP, DELETE_FRIENDSHIP, BLOCK_USER, UNBLOCK_USER } = actionTypes;
 
-export const userRequestFriendship = (friend: string) =>                 ({type: USER_REQUEST_FRIENDSHIP, friend});
-export const userAcceptFriendship =  (friend: string, status: string) => ({type: USER_ACCEPT_FRIENDSHIP, friend, status});
-export const userRejectFriendship =  (friend: string) =>                 ({type: USER_REJECT_FRIENDSHIP, friend});
-export const userDeleteFriendship =  (friend: string, status: string) => ({type: USER_DELETE_FRIENDSHIP, friend, status});
+export const requestFriendship = (friend: string) =>                 ({type: REQUEST_FRIENDSHIP, friend});
+export const acceptFriendship =  (friend: string, status: string) => ({type: ACCEPT_FRIENDSHIP, friend, status});
+export const rejectFriendship =  (friend: string) =>                 ({type: REJECT_FRIENDSHIP, friend});
+export const deleteFriendship =  (friend: string, status: string) => ({type: DELETE_FRIENDSHIP, friend, status});
 
-export const userBlockUser =   (friend: string, status: string) => ({type: USER_BLOCK_USER, friend, status});
-export const userUnblockUser = (friend: string) =>                 ({type: USER_UNBLOCK_USER, friend});
+export const blockUser =   (friend: string, status: string) => ({type: BLOCK_USER, friend, status});
+export const unblockUser = (friend: string) =>                 ({type: UNBLOCK_USER, friend});

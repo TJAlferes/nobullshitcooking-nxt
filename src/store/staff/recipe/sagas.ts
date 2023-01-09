@@ -2,11 +2,11 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { dataGetRecipesSaga } from '../../data/sagas';
+import { getRecipesSaga } from '../../data/sagas';
 import { staffMessage, staffMessageClear } from '../actions';
-import { IStaffCreateNewRecipe, IStaffEditRecipe, IStaffDeleteRecipe } from './types';
+import { ICreateNewRecipe, IEditRecipe, IDeleteRecipe } from './types';
 
-export function* staffCreateNewRecipeSaga(action: IStaffCreateNewRecipe) {
+export function* createNewRecipeSaga(action: ICreateNewRecipe) {
   let {
     ownership,
     recipeTypeId,
@@ -98,7 +98,7 @@ export function* staffCreateNewRecipeSaga(action: IStaffCreateNewRecipe) {
     );
 
     yield put(staffMessage(message));
-    yield call(dataGetRecipesSaga);
+    yield call(getRecipesSaga);
   } catch(err) {
     yield put(staffMessage('An error occurred. Please try again.'));
   }
@@ -107,7 +107,7 @@ export function* staffCreateNewRecipeSaga(action: IStaffCreateNewRecipe) {
   yield put(staffMessageClear());
 }
 
-export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
+export function* editRecipeSaga(action: IEditRecipe) {
   let {
     id,
     ownership,
@@ -209,7 +209,7 @@ export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
     );
 
     yield put(staffMessage(message));
-    yield call(dataGetRecipesSaga);
+    yield call(getRecipesSaga);
   } catch(err) {
     yield put(staffMessage('An error occurred. Please try again.'));
   }
@@ -218,12 +218,12 @@ export function* staffEditRecipeSaga(action: IStaffEditRecipe) {
   yield put(staffMessageClear());
 }
 
-export function* staffDeleteRecipeSaga(action: IStaffDeleteRecipe) {
+export function* deleteRecipeSaga(action: IDeleteRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/staff/recipe/delete`, {withCredentials: true, data: {id: action.id}});
 
     yield put(staffMessage(message));
-    yield call(dataGetRecipesSaga);
+    yield call(getRecipesSaga);
   } catch(err) {
     yield put(staffMessage('An error occurred. Please try again.'));
   }

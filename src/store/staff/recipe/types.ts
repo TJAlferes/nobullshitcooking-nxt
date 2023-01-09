@@ -1,21 +1,21 @@
 export const actionTypes = {
-  STAFF_CREATE_NEW_RECIPE: 'STAFF_CREATE_NEW_RECIPE',
-  STAFF_EDIT_RECIPE:       'STAFF_EDIT_RECIPE',
-  STAFF_DELETE_RECIPE:     'STAFF_DELETE_RECIPE'
+  CREATE_NEW_RECIPE: 'CREATE_NEW_RECIPE',
+  EDIT_RECIPE:       'EDIT_RECIPE',
+  DELETE_RECIPE:     'DELETE_RECIPE'
 } as const;
 
-export interface IStaffCreateNewRecipe {
-  type:       typeof actionTypes.STAFF_CREATE_NEW_RECIPE;
+export interface ICreateNewRecipe {
+  type:       typeof actionTypes.CREATE_NEW_RECIPE;
   recipeInfo: ICreatingRecipeInfo;
 }
 
-export interface IStaffEditRecipe {
-  type:       typeof actionTypes.STAFF_EDIT_RECIPE;
+export interface IEditRecipe {
+  type:       typeof actionTypes.EDIT_RECIPE;
   recipeInfo: IEditingRecipeInfo;
 }
 
-export interface IStaffDeleteRecipe {
-  type: typeof actionTypes.STAFF_DELETE_RECIPE;
+export interface IDeleteRecipe {
+  type: typeof actionTypes.DELETE_RECIPE;
   id:   number;
 }
 

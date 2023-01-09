@@ -1,6 +1,6 @@
 import { actionTypes } from './types';
 
-const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
+const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
 
-export const userSaveRecipe =   (recipeId: number) => ({type: USER_SAVE_RECIPE, recipeId});
-export const userUnsaveRecipe = (recipeId: number) => ({type: USER_UNSAVE_RECIPE, recipeId});
+export const saveRecipe =   (recipeId: number) => ({type: SAVE_RECIPE, recipeId});
+export const unsaveRecipe = (recipeId: number) => ({type: UNSAVE_RECIPE, recipeId});

@@ -2,14 +2,14 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { dataGetMyPrivateRecipesSaga, dataGetMyPublicRecipesSaga } from '../../data/sagas';
+import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import {
-  IUserCreateNewPrivateRecipe, IUserEditPrivateRecipe, IUserDeletePrivateRecipe,
-  IUserCreateNewPublicRecipe, IUserEditPublicRecipe, IUserDisownPublicRecipe
+  ICreateNewPrivateRecipe, IEditPrivateRecipe, IDeletePrivateRecipe,
+  ICreateNewPublicRecipe, IEditPublicRecipe, IDisownPublicRecipe
 } from './types';
 
-export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | IUserCreateNewPublicRecipe)) {
+export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateNewPublicRecipe)) {
   let {
     ownership, recipeTypeId, cuisineId,
     title, description, directions,
@@ -81,8 +81,8 @@ export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | 
       {withCredentials: true}
     );
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateRecipesSaga);
-    yield call(dataGetMyPublicRecipesSaga);
+    yield call(getMyPrivateRecipesSaga);
+    yield call(getMyPublicRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -90,13 +90,13 @@ export function* userCreateNewRecipeSaga(action: (IUserCreateNewPrivateRecipe | 
   yield put(userMessageClear());
 }
 
-export function* userDeletePrivateRecipeSaga(action: IUserDeletePrivateRecipe) {
+export function* deletePrivateRecipeSaga(action: IDeletePrivateRecipe) {
   try {
     const { data: { message } } =
       yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {id: action.id}});
 
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateRecipesSaga);
+    yield call(getMyPrivateRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -104,13 +104,13 @@ export function* userDeletePrivateRecipeSaga(action: IUserDeletePrivateRecipe) {
   yield put(userMessageClear());
 }
 
-export function* userDisownPublicRecipeSaga(action: IUserDisownPublicRecipe) {
+export function* disownPublicRecipeSaga(action: IDisownPublicRecipe) {
   try {
     const { data: { message } } =
       yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {id: action.id}});
       
     yield put(userMessage(message));
-    yield call(dataGetMyPublicRecipesSaga);
+    yield call(getMyPublicRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -118,7 +118,7 @@ export function* userDisownPublicRecipeSaga(action: IUserDisownPublicRecipe) {
   yield put(userMessageClear());
 }
 
-export function* userEditRecipeSaga(action: (IUserEditPrivateRecipe | IUserEditPublicRecipe)) {
+export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)) {
   let {
     id, ownership, recipeTypeId, cuisineId,
     title, description, directions,
@@ -193,8 +193,8 @@ export function* userEditRecipeSaga(action: (IUserEditPrivateRecipe | IUserEditP
       {withCredentials: true}
     );
     yield put(userMessage(message));
-    yield call(dataGetMyPrivateRecipesSaga);
-    yield call(dataGetMyPublicRecipesSaga);
+    yield call(getMyPrivateRecipesSaga);
+    yield call(getMyPublicRecipesSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

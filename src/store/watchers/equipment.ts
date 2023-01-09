@@ -1,21 +1,21 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { staffCreateNewEquipmentSaga, staffEditEquipmentSaga, staffDeleteEquipmentSaga } from '../staff/equipment/sagas';
+import { createNewEquipmentSaga, editEquipmentSaga, deleteEquipmentSaga } from '../staff/equipment/sagas';
 import { actionTypes as staffEquipmentActionTypes } from '../staff/equipment/types';
-import { userCreateNewPrivateEquipmentSaga, userEditPrivateEquipmentSaga, userDeletePrivateEquipmentSaga } from '../user/equipment/sagas';
+import { createNewPrivateEquipmentSaga, editPrivateEquipmentSaga, deletePrivateEquipmentSaga } from '../user/equipment/sagas';
 import { actionTypes as userEquipmentActionTypes } from '../user/equipment/types';
 
-const { STAFF_CREATE_NEW_EQUIPMENT, STAFF_EDIT_EQUIPMENT, STAFF_DELETE_EQUIPMENT } =                      staffEquipmentActionTypes;
-const { USER_CREATE_NEW_PRIVATE_EQUIPMENT, USER_EDIT_PRIVATE_EQUIPMENT, USER_DELETE_PRIVATE_EQUIPMENT } = userEquipmentActionTypes;
+const { CREATE_NEW_EQUIPMENT, EDIT_EQUIPMENT, DELETE_EQUIPMENT } =                         staffEquipmentActionTypes;
+const { CREATE_NEW_PRIVATE_EQUIPMENT, EDIT_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = userEquipmentActionTypes;
 
 export function* watchEquipment() {
   yield all([
-    takeEvery(STAFF_CREATE_NEW_EQUIPMENT,        staffCreateNewEquipmentSaga),
-    takeEvery(STAFF_EDIT_EQUIPMENT,              staffEditEquipmentSaga),
-    takeEvery(STAFF_DELETE_EQUIPMENT,            staffDeleteEquipmentSaga),
+    takeEvery(CREATE_NEW_EQUIPMENT, createNewEquipmentSaga),
+    takeEvery(EDIT_EQUIPMENT,       editEquipmentSaga),
+    takeEvery(DELETE_EQUIPMENT,     deleteEquipmentSaga),
     
-    takeEvery(USER_CREATE_NEW_PRIVATE_EQUIPMENT, userCreateNewPrivateEquipmentSaga),
-    takeEvery(USER_EDIT_PRIVATE_EQUIPMENT,       userEditPrivateEquipmentSaga),
-    takeEvery(USER_DELETE_PRIVATE_EQUIPMENT,     userDeletePrivateEquipmentSaga)
+    takeEvery(CREATE_NEW_PRIVATE_EQUIPMENT, createNewPrivateEquipmentSaga),
+    takeEvery(EDIT_PRIVATE_EQUIPMENT,       editPrivateEquipmentSaga),
+    takeEvery(DELETE_PRIVATE_EQUIPMENT,     deletePrivateEquipmentSaga)
   ]);
 }

@@ -1,41 +1,41 @@
 export const actionTypes = {
-  USER_REQUEST_FRIENDSHIP: 'USER_REQUEST_FRIENDSHIP',
-  USER_ACCEPT_FRIENDSHIP: 'USER_ACCEPT_FRIENDSHIP',
-  USER_REJECT_FRIENDSHIP: 'USER_REJECT_FRIENDSHIP',
-  USER_DELETE_FRIENDSHIP: 'USER_DELETE_FRIENDSHIP',
-  USER_BLOCK_USER: 'USER_BLOCK_USER',
-  USER_UNBLOCK_USER: 'USER_UNBLOCK_USER'
+  REQUEST_FRIENDSHIP: 'REQUEST_FRIENDSHIP',
+  ACCEPT_FRIENDSHIP:  'ACCEPT_FRIENDSHIP',
+  REJECT_FRIENDSHIP:  'REJECT_FRIENDSHIP',
+  DELETE_FRIENDSHIP:  'DELETE_FRIENDSHIP',
+  BLOCK_USER:         'BLOCK_USER',
+  UNBLOCK_USER:       'UNBLOCK_USER'
 } as const;
 
-export interface IUserRequestFriendship {
-  type: typeof actionTypes.USER_REQUEST_FRIENDSHIP;
+export interface IRequestFriendship {
+  type:   typeof actionTypes.REQUEST_FRIENDSHIP;
   friend: string;
 }
 
-export interface IUserAcceptFriendship {
-  type: typeof actionTypes.USER_ACCEPT_FRIENDSHIP;
-  friend: string;
-  status: string;
-}
-
-export interface IUserRejectFriendship {
-  type: typeof actionTypes.USER_REJECT_FRIENDSHIP;
-  friend: string;
-}
-
-export interface IUserDeleteFriendship {
-  type: typeof actionTypes.USER_DELETE_FRIENDSHIP;
+export interface IAcceptFriendship {
+  type:   typeof actionTypes.ACCEPT_FRIENDSHIP;
   friend: string;
   status: string;
 }
 
-export interface IUserBlockUser {
-  type: typeof actionTypes.USER_BLOCK_USER;
+export interface IRejectFriendship {
+  type:   typeof actionTypes.REJECT_FRIENDSHIP;
+  friend: string;
+}
+
+export interface IDeleteFriendship {
+  type:   typeof actionTypes.DELETE_FRIENDSHIP;
   friend: string;
   status: string;
 }
 
-export interface IUserUnblockUser {
-  type: typeof actionTypes.USER_UNBLOCK_USER;
+export interface IBlockUser {
+  type:   typeof actionTypes.BLOCK_USER;
+  friend: string;
+  status: string;
+}
+
+export interface IUnblockUser {
+  type:   typeof actionTypes.UNBLOCK_USER;
   friend: string;
 }

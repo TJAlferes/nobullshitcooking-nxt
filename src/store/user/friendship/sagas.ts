@@ -2,12 +2,12 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { chatUpdateOnlineSaga } from '../../chat/sagas';
-import { dataGetMyFriendshipsSaga } from '../../data/sagas';
+import { updateOnlineSaga } from '../../chat/sagas';
+import { getMyFriendshipsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { IUserRequestFriendship, IUserAcceptFriendship, IUserRejectFriendship, IUserDeleteFriendship, IUserBlockUser, IUserUnblockUser } from './types';
+import { IRequestFriendship, IAcceptFriendship, IRejectFriendship, IDeleteFriendship, IBlockUser, IUnblockUser } from './types';
 
-export function* userRequestFriendshipSaga({ friend }: IUserRequestFriendship) {
+export function* requestFriendshipSaga({ friend }: IRequestFriendship) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/friendship/create`, {friend}, {withCredentials: true});
 
@@ -20,13 +20,13 @@ export function* userRequestFriendshipSaga({ friend }: IUserRequestFriendship) {
   yield put(userMessageClear());
 }
 
-export function* userAcceptFriendshipSaga({ friend, status }: IUserAcceptFriendship) {
+export function* acceptFriendshipSaga({ friend, status }: IAcceptFriendship) {
   try {
     const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/friendship/accept`, {friend}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFriendshipsSaga);
-    yield call(() => chatUpdateOnlineSaga(status));
+    yield call(getMyFriendshipsSaga);
+    yield call(() => updateOnlineSaga(status));
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -35,12 +35,12 @@ export function* userAcceptFriendshipSaga({ friend, status }: IUserAcceptFriends
   yield put(userMessageClear());
 }
 
-export function* userRejectFriendshipSaga({ friend }: IUserRejectFriendship) {
+export function* rejectFriendshipSaga({ friend }: IRejectFriendship) {
   try {
     const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/friendship/reject`, {friend}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFriendshipsSaga);
+    yield call(getMyFriendshipsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -49,13 +49,13 @@ export function* userRejectFriendshipSaga({ friend }: IUserRejectFriendship) {
   yield put(userMessageClear());
 }
 
-export function* userDeleteFriendshipSaga({ friend, status }: IUserDeleteFriendship) {
+export function* deleteFriendshipSaga({ friend, status }: IDeleteFriendship) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/friendship/delete`, {withCredentials: true, data: {friend}});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFriendshipsSaga);
-    yield call(() => chatUpdateOnlineSaga(status));
+    yield call(getMyFriendshipsSaga);
+    yield call(() => updateOnlineSaga(status));
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -64,13 +64,13 @@ export function* userDeleteFriendshipSaga({ friend, status }: IUserDeleteFriends
   yield put(userMessageClear());
 }
 
-export function* userBlockUserSaga({ friend, status }: IUserBlockUser) {
+export function* blockUserSaga({ friend, status }: IBlockUser) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/friendship/block`, {friend}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFriendshipsSaga);
-    yield call(() => chatUpdateOnlineSaga(status));
+    yield call(getMyFriendshipsSaga);
+    yield call(() => updateOnlineSaga(status));
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -79,12 +79,12 @@ export function* userBlockUserSaga({ friend, status }: IUserBlockUser) {
   yield put(userMessageClear());
 }
 
-export function* userUnblockUserSaga({ friend }: IUserUnblockUser) {
+export function* unblockUserSaga({ friend }: IUnblockUser) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/friendship/unblock`, {withCredentials: true, data: {friend}});
 
     yield put(userMessage(message));
-    yield call(dataGetMyFriendshipsSaga);
+    yield call(getMyFriendshipsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

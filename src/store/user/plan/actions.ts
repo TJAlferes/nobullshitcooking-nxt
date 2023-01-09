@@ -1,7 +1,7 @@
 import { actionTypes, ICreatingPlanInfo, IEditingPlanInfo } from './types';
 
-const { USER_CREATE_NEW_PLAN, USER_EDIT_PLAN, USER_DELETE_PLAN } = actionTypes;
+const { CREATE_NEW_PLAN, EDIT_PLAN, DELETE_PLAN } = actionTypes;
 
-export const userCreateNewPlan = (planInfo: ICreatingPlanInfo) => ({type: USER_CREATE_NEW_PLAN, planInfo});
-export const userEditPlan =      (planInfo: IEditingPlanInfo) =>  ({type: USER_EDIT_PLAN, planInfo});
-export const userDeletePlan =    (id: number) =>                  ({type: USER_DELETE_PLAN, id});
+export const createNewPlan = (planInfo: ICreatingPlanInfo) => ({type: CREATE_NEW_PLAN, planInfo});
+export const editPlan =      (planInfo: IEditingPlanInfo) =>  ({type: EDIT_PLAN, planInfo});
+export const deletePlan =    (id: number) =>                  ({type: DELETE_PLAN, id});

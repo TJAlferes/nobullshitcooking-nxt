@@ -1,34 +1,34 @@
 export const actionTypes = {
-  STAFF_CREATE_NEW_INGREDIENT: 'STAFF_CREATE_NEW_INGREDIENT',
-  STAFF_EDIT_INGREDIENT: 'STAFF_EDIT_INGREDIENT',
-  STAFF_DELETE_INGREDIENT: 'STAFF_DELETE_INGREDIENT'
+  CREATE_NEW_INGREDIENT: 'CREATE_NEW_INGREDIENT',
+  EDIT_INGREDIENT:       'EDIT_INGREDIENT',
+  DELETE_INGREDIENT:     'DELETE_INGREDIENT'
 } as const;
 
-export interface IStaffCreateNewIngredient {
-  type: typeof actionTypes.STAFF_CREATE_NEW_INGREDIENT;
+export interface ICreateNewIngredient {
+  type:           typeof actionTypes.CREATE_NEW_INGREDIENT;
   ingredientInfo: ICreatingIngredientInfo;
 }
 
-export interface IStaffEditIngredient {
-  type: typeof actionTypes.STAFF_EDIT_INGREDIENT;
+export interface IEditIngredient {
+  type:           typeof actionTypes.EDIT_INGREDIENT;
   ingredientInfo: IEditingIngredientInfo;
 }
 
-export interface IStaffDeleteIngredient {
-  type: typeof actionTypes.STAFF_DELETE_INGREDIENT;
-  id: number;
+export interface IDeleteIngredient {
+  type: typeof actionTypes.DELETE_INGREDIENT;
+  id:   number;
 }
 
 export interface ICreatingIngredientInfo {
   ingredientTypeId: number;
-  name: string;
-  description: string;
-  image: string | ArrayBuffer | null;
-  fullImage: File | null;
-  tinyImage: File | null;
+  name:             string;
+  description:      string;
+  image:            string | ArrayBuffer | null;
+  fullImage:        File | null;
+  tinyImage:        File | null;
 }
 
 export interface IEditingIngredientInfo extends ICreatingIngredientInfo {
-  id: number;
+  id:        number;
   prevImage: string;
 }

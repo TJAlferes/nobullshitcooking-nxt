@@ -3,22 +3,22 @@ import { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ing
 export type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
 
 export const actionTypes = {
-  USER_CREATE_NEW_PRIVATE_INGREDIENT: 'USER_CREATE_NEW_PRIVATE_INGREDIENT',
-  USER_EDIT_PRIVATE_INGREDIENT: 'USER_EDIT_PRIVATE_INGREDIENT',
-  USER_DELETE_PRIVATE_INGREDIENT: 'USER_DELETE_PRIVATE_INGREDIENT'
+  CREATE_NEW_PRIVATE_INGREDIENT: 'CREATE_NEW_PRIVATE_INGREDIENT',
+  EDIT_PRIVATE_INGREDIENT:       'EDIT_PRIVATE_INGREDIENT',
+  DELETE_PRIVATE_INGREDIENT:     'DELETE_PRIVATE_INGREDIENT'
 } as const;
 
-export interface IUserCreateNewPrivateIngredient {
-  type: typeof actionTypes.USER_CREATE_NEW_PRIVATE_INGREDIENT;
+export interface ICreateNewPrivateIngredient {
+  type:           typeof actionTypes.CREATE_NEW_PRIVATE_INGREDIENT;
   ingredientInfo: ICreatingIngredientInfo;
 }
 
-export interface IUserEditPrivateIngredient {
-  type: typeof actionTypes.USER_EDIT_PRIVATE_INGREDIENT;
+export interface IEditPrivateIngredient {
+  type:           typeof actionTypes.EDIT_PRIVATE_INGREDIENT;
   ingredientInfo: IEditingIngredientInfo;
 }
 
-export interface IUserDeletePrivateIngredient {
-  type: typeof actionTypes.USER_DELETE_PRIVATE_INGREDIENT;
-  id: number;
+export interface IDeletePrivateIngredient {
+  type: typeof actionTypes.DELETE_PRIVATE_INGREDIENT;
+  id:   number;
 }

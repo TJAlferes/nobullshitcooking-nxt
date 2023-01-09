@@ -1,14 +1,14 @@
 export const actionTypes = {
-  USER_SAVE_RECIPE: 'USER_SAVE_RECIPE',
-  USER_UNSAVE_RECIPE: 'USER_UNSAVE_RECIPE'
+  SAVE_RECIPE:   'SAVE_RECIPE',
+  UNSAVE_RECIPE: 'UNSAVE_RECIPE'
 } as const;
 
-export interface IUserSaveRecipe {
-  type: typeof actionTypes.USER_SAVE_RECIPE;
+export interface ISaveRecipe {
+  type:     typeof actionTypes.SAVE_RECIPE;
   recipeId: number;
 }
 
-export interface IUserUnsaveRecipe {
-  type: typeof actionTypes.USER_UNSAVE_RECIPE;
+export interface IUnsaveRecipe {
+  type:     typeof actionTypes.UNSAVE_RECIPE;
   recipeId: number;
 }
