@@ -1,95 +1,65 @@
-import {
-  staffCreateNewRecipe,
-  staffEditRecipe,
-  staffDeleteRecipe
-} from '../../../../src/store/staff/recipe/actions';
+import { createNewRecipe, editRecipe, deleteRecipe } from '../../../../src/store/staff/recipe/actions';
 import { actionTypes } from '../../../../src/store/staff/recipe/types';
 
-const {
-  STAFF_CREATE_NEW_RECIPE,
-  STAFF_EDIT_RECIPE,
-  STAFF_DELETE_RECIPE
-} = actionTypes;
+const { CREATE_NEW_RECIPE, EDIT_RECIPE, DELETE_RECIPE } = actionTypes;
 
-const creatingRecipeInfo = {
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{id: 1}, {id: 3}],
-  requiredEquipment: [{amount: 1, id: 1}],
-  requiredIngredients: [{amount: 1, measurementId: 1, id: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
-  recipeFullImage: null,
-  recipeThumbImage: null,
-  recipeTinyImage: null,
-  equipmentImage: null,
-  equipmentFullImage: null,
-  ingredientsImage: null,
+const creatingInfo = {
+  ownership:            "private",
+  recipeTypeId:         1,
+  cuisineId:            1,
+  title:                "My Secret Recipe",
+  description:          "Don't worry about it.",
+  directions:           "Do nothing.",
+  methods:              [{id: 1}, {id: 3}],
+  equipment:            [{amount: 1, id: 1}],
+  ingredients:          [{amount: 1, measurementId: 1, id: 1}],
+  subrecipes:           [],
+  recipeImage:          null,
+  recipeFullImage:      null,
+  recipeThumbImage:     null,
+  recipeTinyImage:      null,
+  equipmentImage:       null,
+  equipmentFullImage:   null,
+  ingredientsImage:     null,
   ingredientsFullImage: null,
-  cookingImage: null,
-  cookingFullImage: null
+  cookingImage:         null,
+  cookingFullImage:     null
 };
-const editingRecipeInfo = {
-  id: 888,
-  recipePrevImage: "nobsc-recipe-default",
-  equipmentPrevImage: "nobsc-recipe-equipment-default",
+const editInfo = {
+  id:                   888,
+  recipePrevImage:      "nobsc-recipe-default",
+  equipmentPrevImage:   "nobsc-recipe-equipment-default",
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
-  cookingPrevImage: "nobsc-recipe-cooking-default",
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{id: 1}, {id: 3}],
-  requiredEquipment: [{amount: 1, id: 1}],
-  requiredIngredients: [{amount: 1, measurementId: 1, id: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
-  recipeFullImage: null,
-  recipeThumbImage: null,
-  recipeTinyImage: null,
-  equipmentImage: null,
-  equipmentFullImage: null,
-  ingredientsImage: null,
-  ingredientsFullImage: null,
-  cookingImage: null,
-  cookingFullImage: null
+  cookingPrevImage:     "nobsc-recipe-cooking-default",
+  ...creatingInfo
 };
 
-describe('staffCreateNewRecipe action creator', () => {
+describe('createNewRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffCreateNewRecipe(creatingRecipeInfo).type)
-      .toEqual(STAFF_CREATE_NEW_RECIPE);
+    expect(createNewRecipe(creatingInfo).type).toEqual(CREATE_NEW_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(staffCreateNewRecipe(creatingRecipeInfo).recipeInfo)
-      .toEqual(creatingRecipeInfo);
+    expect(createNewRecipe(creatingInfo).recipeInfo).toEqual(creatingInfo);
   });
 });
 
-describe('staffEditRecipe action creator', () => {
+describe('editRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffEditRecipe(editingRecipeInfo).type).toEqual(STAFF_EDIT_RECIPE);
+    expect(editRecipe(editInfo).type).toEqual(EDIT_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(staffEditRecipe(editingRecipeInfo).recipeInfo)
-      .toEqual(editingRecipeInfo);
+    expect(editRecipe(editInfo).recipeInfo).toEqual(editInfo);
   });
 });
 
-describe('staffDeleteRecipe action creator', () => {
+describe('deleteRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffDeleteRecipe(7).type).toEqual(STAFF_DELETE_RECIPE);
+    expect(deleteRecipe(7).type).toEqual(DELETE_RECIPE);
   });
 
   it('returns the correct id', () => {
-    expect(staffDeleteRecipe(7).id).toEqual(7);
+    expect(deleteRecipe(7).id).toEqual(7);
   });
 });

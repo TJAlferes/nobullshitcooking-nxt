@@ -1,78 +1,78 @@
 import {
-  userRequestFriendship,
-  userAcceptFriendship,
-  userRejectFriendship,
-  userDeleteFriendship,
-  userBlockUser,
-  userUnblockUser
+  requestFriendship,
+  acceptFriendship,
+  rejectFriendship,
+  deleteFriendship,
+  blockUser,
+  unblockUser
 } from '../../../../src/store/user/friendship/actions';
 import { actionTypes } from '../../../../src/store/user/friendship/types';
 
 const {
-  USER_REQUEST_FRIENDSHIP,
-  USER_ACCEPT_FRIENDSHIP,
-  USER_REJECT_FRIENDSHIP,
-  USER_DELETE_FRIENDSHIP,
-  USER_BLOCK_USER,
-  USER_UNBLOCK_USER
+  REQUEST_FRIENDSHIP,
+  ACCEPT_FRIENDSHIP,
+  REJECT_FRIENDSHIP,
+  DELETE_FRIENDSHIP,
+  BLOCK_USER,
+  UNBLOCK_USER
 } = actionTypes;
 
-describe('userRequestFriendship action creator', () => {
+describe('requestFriendship action creator', () => {
   it('returns the correct action type', () => {
-    expect(userRequestFriendship('Juan').type).toEqual(USER_REQUEST_FRIENDSHIP);
+    expect(requestFriendship('Juan').type).toEqual(REQUEST_FRIENDSHIP);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userRequestFriendship('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(requestFriendship('Juan').friend).toEqual('Juan');
   });
 });
 
-describe('userAcceptFriendship action creator', () => {
+describe('acceptFriendship action creator', () => {
   it('returns the correct action type', () => {
-    expect(userAcceptFriendship('Juan').type).toEqual(USER_ACCEPT_FRIENDSHIP);
+    expect(acceptFriendship('Juan').type).toEqual(ACCEPT_FRIENDSHIP);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userAcceptFriendship('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(acceptFriendship('Juan').friend).toEqual('Juan');
   });
 });
 
-describe('userRejectFriendship action creator', () => {
+describe('rejectFriendship action creator', () => {
   it('returns the correct action type', () => {
-    expect(userRejectFriendship('Juan').type).toEqual(USER_REJECT_FRIENDSHIP);
+    expect(rejectFriendship('Juan').type).toEqual(REJECT_FRIENDSHIP);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userRejectFriendship('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(rejectFriendship('Juan').friend).toEqual('Juan');
   });
 });
 
-describe('userDeleteFriendship action creator', () => {
+describe('deleteFriendship action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDeleteFriendship('Juan').type).toEqual(USER_DELETE_FRIENDSHIP);
+    expect(deleteFriendship('Juan').type).toEqual(DELETE_FRIENDSHIP);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userDeleteFriendship('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(deleteFriendship('Juan').friend).toEqual('Juan');
   });
 });
 
-describe('userBlockUser action creator', () => {
+describe('blockUser action creator', () => {
   it('returns the correct action type', () => {
-    expect(userBlockUser('Juan').type).toEqual(USER_BLOCK_USER);
+    expect(blockUser('Juan').type).toEqual(BLOCK_USER);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userBlockUser('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(blockUser('Juan').friend).toEqual('Juan');
   });
 });
 
-describe('userUnblockUser action creator', () => {
+describe('unblockUser action creator', () => {
   it('returns the correct action type', () => {
-    expect(userUnblockUser('Juan').type).toEqual(USER_UNBLOCK_USER);
+    expect(unblockUser('Juan').type).toEqual(UNBLOCK_USER);
   });
 
-  it('returns the correct friendName', () => {
-    expect(userUnblockUser('Juan').friendName).toEqual('Juan');
+  it('returns the correct friend', () => {
+    expect(unblockUser('Juan').friend).toEqual('Juan');
   });
 });

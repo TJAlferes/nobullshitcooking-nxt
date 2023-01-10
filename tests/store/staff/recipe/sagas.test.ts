@@ -2,92 +2,52 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
-import {
-  staffMessage,
-  staffMessageClear
-} from '../../../../src/store/staff/actions';
-import {
-  staffCreateNewRecipeSaga,
-  staffDeleteRecipeSaga,
-  staffEditRecipeSaga
-} from '../../../../src/store/staff/recipe/sagas';
+import { staffMessage, staffMessageClear } from '../../../../src/store/staff/actions';
+import { createNewRecipeSaga, deleteRecipeSaga, editRecipeSaga } from '../../../../src/store/staff/recipe/sagas';
 import { actionTypes } from '../../../../src/store/staff/recipe/types';
 
-const {
-  STAFF_CREATE_NEW_RECIPE,
-  STAFF_DELETE_RECIPE,
-  STAFF_EDIT_RECIPE
-} = actionTypes;
+const { CREATE_NEW_RECIPE, DELETE_RECIPE, EDIT_RECIPE } = actionTypes;
 
-const recipeFullImage =
-  new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const recipeThumbImage =
-  new File([(new Blob)], "resizedThumb", {type: "image/jpeg"});
-const recipeTinyImage =
-  new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
-const equipmentFullImage =
-  new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const ingredientsFullImage =
-  new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const cookingFullImage =
-  new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
+const recipeFullImage =      new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
+const recipeThumbImage =     new File([(new Blob)], "resizedThumb", {type: "image/jpeg"});
+const recipeTinyImage =      new File([(new Blob)], "resizedTiny",  {type: "image/jpeg"});
+const equipmentFullImage =   new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
+const ingredientsFullImage = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
+const cookingFullImage =     new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
 
-const creatingRecipeInfo = {
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, unit: 1, ingredient: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
+const creatingInfo = {
+  ownership:        "private",
+  recipeTypeId:     1,
+  cuisineId:        1,
+  title:            "My Secret Recipe",
+  description:      "Don't worry about it.",
+  directions:       "Do nothing.",
+  methods:          [{id: 1}, {id: 3}],
+  equipment:        [{amount: 1, id: 1}],
+  ingredients:      [{amount: 1, measurementId: 1, id: 1}],
+  subrecipes:       [],
+  recipeImage:      null,
   recipeFullImage,
   recipeThumbImage,
   recipeTinyImage,
-  equipmentImage: null,
+  equipmentImage:   null,
   equipmentFullImage,
   ingredientsImage: null,
   ingredientsFullImage,
-  cookingImage: null,
+  cookingImage:     null,
   cookingFullImage
 };
-
-const editingRecipeInfo = {
-  id: 888,
-  recipePrevImage: "nobsc-recipe-default",
-  equipmentPrevImage: "nobsc-recipe-equipment-default",
+const editInfo = {
+  id:                   888,
+  recipePrevImage:      "nobsc-recipe-default",
+  equipmentPrevImage:   "nobsc-recipe-equipment-default",
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
-  cookingPrevImage: "nobsc-recipe-cooking-default",
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, unit: 1, ingredient: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
-  recipeFullImage,
-  recipeThumbImage,
-  recipeTinyImage,
-  equipmentImage: null,
-  equipmentFullImage,
-  ingredientsImage: null,
-  ingredientsFullImage,
-  cookingImage: null,
-  cookingFullImage
+  cookingPrevImage:     "nobsc-recipe-cooking-default",
+  ...creatingInfo
 };
 
-describe('staffCreateNewRecipeSaga', () => {
-  const action = {
-    type: STAFF_CREATE_NEW_RECIPE,
-    recipeInfo: creatingRecipeInfo
-  };
+describe('createNewRecipeSaga', () => {
+  const action = {type: CREATE_NEW_RECIPE, recipeInfo: creatingInfo};
 
   const res1 = {
     data: {
@@ -108,10 +68,10 @@ describe('staffCreateNewRecipeSaga', () => {
     title,
     description,
     directions,
-    requiredMethods,
-    requiredEquipment,
-    requiredIngredients,
-    requiredSubrecipes,
+    methods,
+    equipment,
+    ingredients,
+    subrecipes,
     recipeFullImage,
     recipeThumbImage,
     recipeTinyImage,
@@ -121,12 +81,12 @@ describe('staffCreateNewRecipeSaga', () => {
   } = action.recipeInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = staffCreateNewRecipeSaga(action);
+    const iter = createNewRecipeSaga(action);
     const res = {data: {message: 'Recipe created.'}};
 
     // 1
     
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe`,
@@ -134,7 +94,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.fullSignature,
@@ -142,7 +102,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {headers: {'Content-Type': recipeFullImage.type}}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.thumbSignature,
@@ -150,7 +110,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {headers: {'Content-Type': recipeThumbImage.type}}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.tinySignature,
@@ -165,7 +125,7 @@ describe('staffCreateNewRecipeSaga', () => {
       See https://github.com/facebook/jest/issues/8475 for more info.
       Why it was only doing this here, only the gods know.
     */
-    expect(JSON.stringify(iterator.next().value))
+    expect(JSON.stringify(iter.next().value))
     .toEqual(JSON.stringify(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-equipment`,
@@ -173,7 +133,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {withCredentials: true}
     )));
 
-    expect(iterator.next(res2).value)
+    expect(iter.next(res2).value)
     .toEqual(call(
       [axios, axios.put],
       res2.data.fullSignature,
@@ -183,7 +143,7 @@ describe('staffCreateNewRecipeSaga', () => {
 
     // 3
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-ingredients`,
@@ -191,7 +151,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res3).value)
+    expect(iter.next(res3).value)
     .toEqual(call(
       [axios, axios.put],
       res3.data.fullSignature,
@@ -201,7 +161,7 @@ describe('staffCreateNewRecipeSaga', () => {
 
     // 4
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-cooking`,
@@ -209,7 +169,7 @@ describe('staffCreateNewRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res4).value)
+    expect(iter.next(res4).value)
     .toEqual(call(
       [axios, axios.put],
       res4.data.fullSignature,
@@ -219,7 +179,7 @@ describe('staffCreateNewRecipeSaga', () => {
 
     //
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/recipe/create`,
@@ -231,10 +191,10 @@ describe('staffCreateNewRecipeSaga', () => {
           title,
           description,
           directions,
-          requiredMethods,
-          requiredEquipment,
-          requiredIngredients,
-          requiredSubrecipes,
+          methods,
+          equipment,
+          ingredients,
+          subrecipes,
           recipeImage: "recipeUrlString",
           equipmentImage: "recipeUrlString",
           ingredientsImage: "recipeUrlString",
@@ -244,104 +204,95 @@ describe('staffCreateNewRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffCreateNewRecipeSaga(action);
+    const iter = createNewRecipeSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next(res1);
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next(res1);
 
-    iterator.next();
-    iterator.next(res2);
+    iter.next();
+    iter.next(res2);
 
-    iterator.next();
-    iterator.next(res3);
+    iter.next();
+    iter.next(res3);
 
-    iterator.next();
-    iterator.next(res4);
+    iter.next();
+    iter.next(res4);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffCreateNewRecipeSaga(action);
+    const iter = createNewRecipeSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('staffDeleteRecipeSaga', () => {
-  const action = {type: STAFF_DELETE_RECIPE, id: 4};
+describe('deleteRecipeSaga', () => {
+  const action = {type: DELETE_RECIPE, id: 4};
 
   it('should dispatch succeeded', () => {
-    const iterator = staffDeleteRecipeSaga(action);
+    const iter = deleteRecipeSaga(action);
     const res = {data: {message: 'Recipe deleted.'}};
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.delete],
       `${endpoint}/staff/recipe/delete`,
       {withCredentials: true, data: {id: action.id}}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffDeleteRecipeSaga(action);
+    const iter = deleteRecipeSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffDeleteRecipeSaga(action);
+    const iter = deleteRecipeSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('the staffEditRecipeSaga', () => {
-  const action = {
-    type: STAFF_EDIT_RECIPE,
-    recipeInfo: editingRecipeInfo
-  };
+describe('the editRecipeSaga', () => {
+  const action = {type: EDIT_RECIPE, recipeInfo: editInfo};
   
   const res1 = {
     data: {
@@ -363,10 +314,10 @@ describe('the staffEditRecipeSaga', () => {
     title,
     description,
     directions,
-    requiredMethods,
-    requiredEquipment,
-    requiredIngredients,
-    requiredSubrecipes,
+    methods,
+    equipment,
+    ingredients,
+    subrecipes,
     recipeFullImage,
     recipePrevImage,
     recipeThumbImage,
@@ -380,12 +331,12 @@ describe('the staffEditRecipeSaga', () => {
   } = action.recipeInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = staffEditRecipeSaga(action);
+    const iter = editRecipeSaga(action);
     const res = {data: {message: 'Recipe updated.'}};
 
     // 1
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe`,
@@ -393,7 +344,7 @@ describe('the staffEditRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.fullSignature,
@@ -401,7 +352,7 @@ describe('the staffEditRecipeSaga', () => {
       {headers: {'Content-Type': recipeFullImage.type}}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.thumbSignature,
@@ -409,7 +360,7 @@ describe('the staffEditRecipeSaga', () => {
       {headers: {'Content-Type': recipeThumbImage.type}}
     ));
 
-    expect(iterator.next(res1).value)
+    expect(iter.next(res1).value)
     .toEqual(call(
       [axios, axios.put],
       res1.data.tinySignature,
@@ -419,7 +370,7 @@ describe('the staffEditRecipeSaga', () => {
 
     // 2
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-equipment`,
@@ -427,7 +378,7 @@ describe('the staffEditRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res2).value)
+    expect(iter.next(res2).value)
     .toEqual(call(
       [axios, axios.put],
       res2.data.fullSignature,
@@ -437,7 +388,7 @@ describe('the staffEditRecipeSaga', () => {
 
     // 3
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-ingredients`,
@@ -445,7 +396,7 @@ describe('the staffEditRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res3).value)
+    expect(iter.next(res3).value)
     .toEqual(call(
       [axios, axios.put],
       res3.data.fullSignature,
@@ -455,7 +406,7 @@ describe('the staffEditRecipeSaga', () => {
 
     // 4
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/get-signed-url/recipe-cooking`,
@@ -463,7 +414,7 @@ describe('the staffEditRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res4).value)
+    expect(iter.next(res4).value)
     .toEqual(call(
       [axios, axios.put],
       res4.data.fullSignature,
@@ -473,7 +424,7 @@ describe('the staffEditRecipeSaga', () => {
 
     //
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.put],
       `${endpoint}/staff/recipe/update`,
@@ -486,10 +437,10 @@ describe('the staffEditRecipeSaga', () => {
           title,
           description,
           directions,
-          requiredMethods,
-          requiredEquipment,
-          requiredIngredients,
-          requiredSubrecipes,
+          methods,
+          equipment,
+          ingredients,
+          subrecipes,
           recipeImage: "recipeUrlString",
           recipePrevImage,
           equipmentImage: "recipeUrlString",
@@ -503,49 +454,46 @@ describe('the staffEditRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffEditRecipeSaga(action);
+    const iter = editRecipeSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next(res1);
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next(res1);
 
-    iterator.next();
-    iterator.next(res2);
+    iter.next();
+    iter.next(res2);
 
-    iterator.next();
-    iterator.next(res3);
+    iter.next();
+    iter.next(res3);
 
-    iterator.next();
-    iterator.next(res4);
+    iter.next();
+    iter.next(res4);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffEditRecipeSaga(action);
+    const iter = editRecipeSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

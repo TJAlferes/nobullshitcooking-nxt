@@ -1,27 +1,24 @@
-import {
-  userFavoriteRecipe,
-  userUnfavoriteRecipe
-} from '../../../../src/store/user/favorite/actions';
+import { favoriteRecipe, unfavoriteRecipe } from '../../../../src/store/user/favorite/actions';
 import { actionTypes } from '../../../../src/store/user/favorite/types';
 
-const { USER_FAVORITE_RECIPE, USER_UNFAVORITE_RECIPE } = actionTypes;
+const { FAVORITE_RECIPE, UNFAVORITE_RECIPE } = actionTypes;
 
-describe('userFavoriteRecipe action creator', () => {
+describe('favoriteRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userFavoriteRecipe(4).type).toEqual(USER_FAVORITE_RECIPE);
+    expect(favoriteRecipe(4).type).toEqual(FAVORITE_RECIPE);
   });
 
   it('returns the correct recipeId', () => {
-    expect(userFavoriteRecipe(4).recipeId).toEqual(4);
+    expect(favoriteRecipe(4).recipeId).toEqual(4);
   });
 });
 
-describe('userUnfavoriteRecipe action creator', () => {
+describe('unfavoriteRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userUnfavoriteRecipe(4).type).toEqual(USER_UNFAVORITE_RECIPE);
+    expect(unfavoriteRecipe(4).type).toEqual(UNFAVORITE_RECIPE);
   });
 
   it('returns the correct recipeId', () => {
-    expect(userUnfavoriteRecipe(4).recipeId).toEqual(4);
+    expect(unfavoriteRecipe(4).recipeId).toEqual(4);
   });
 });

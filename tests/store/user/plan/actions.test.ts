@@ -1,43 +1,37 @@
-import {
-  userCreateNewPlan,
-  userEditPlan,
-  userDeletePlan
-} from '../../../../src/store/user/plan/actions';
+import { createNewPlan, editPlan, deletePlan } from '../../../../src/store/user/plan/actions';
 import { actionTypes } from '../../../../src/store/user/plan/types';
 
-const { USER_CREATE_NEW_PLAN, USER_EDIT_PLAN, USER_DELETE_PLAN } = actionTypes;
+const { CREATE_NEW_PLAN, EDIT_PLAN, DELETE_PLAN } = actionTypes;
 
-const creatingPlanInfo = {name: "Plan B", data: ""};
-const editingPlanInfo = {id: 2, name: "Plan B", data: ""};
+const creatingInfo = {name: "Plan B", data: ""};
+const editInfo =     {id: 2, ...creatingInfo};
 
-describe('userCreateNewPlan action creator', () => {
+describe('createNewPlan action creator', () => {
   it('returns the correct action type', () => {
-    expect(userCreateNewPlan(creatingPlanInfo).type)
-      .toEqual(USER_CREATE_NEW_PLAN);
+    expect(createNewPlan(creatingInfo).type).toEqual(CREATE_NEW_PLAN);
   });
 
   it('returns the correct planInfo', () => {
-    expect(userCreateNewPlan(creatingPlanInfo).planInfo)
-      .toEqual(creatingPlanInfo);
+    expect(createNewPlan(creatingInfo).planInfo).toEqual(creatingInfo);
   });
 });
 
-describe('userEditPlan action creator', () => {
+describe('editPlan action creator', () => {
   it('returns the correct action type', () => {
-    expect(userEditPlan(editingPlanInfo).type).toEqual(USER_EDIT_PLAN);
+    expect(editPlan(editInfo).type).toEqual(EDIT_PLAN);
   });
 
   it('returns the correct planInfo', () => {
-    expect(userEditPlan(editingPlanInfo).planInfo).toEqual(editingPlanInfo);
+    expect(editPlan(editInfo).planInfo).toEqual(editInfo);
   });
 });
 
-describe('userDeletePlan action creator', () => {
+describe('deletePlan action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDeletePlan(7).type).toEqual(USER_DELETE_PLAN);
+    expect(deletePlan(7).type).toEqual(DELETE_PLAN);
   });
 
   it('returns the correct id', () => {
-    expect(userDeletePlan(7).id).toEqual(7);
+    expect(deletePlan(7).id).toEqual(7);
   });
 });

@@ -1,137 +1,111 @@
 import {
-  userCreateNewPrivateRecipe,
-  userEditPrivateRecipe,
-  userDeletePrivateRecipe,
-  userCreateNewPublicRecipe,
-  userEditPublicRecipe,
-  userDisownPublicRecipe
+  createNewPrivateRecipe,
+  editPrivateRecipe,
+  deletePrivateRecipe,
+  createNewPublicRecipe,
+  editPublicRecipe,
+  disownPublicRecipe
 } from '../../../../src/store/user/recipe/actions';
 import { actionTypes } from '../../../../src/store/user/recipe/types';
 
 const {
-  USER_CREATE_NEW_PRIVATE_RECIPE,
-  USER_EDIT_PRIVATE_RECIPE,
-  USER_DELETE_PRIVATE_RECIPE,
-  USER_CREATE_NEW_PUBLIC_RECIPE,
-  USER_EDIT_PUBLIC_RECIPE,
-  USER_DISOWN_PUBLIC_RECIPE
+  CREATE_NEW_PRIVATE_RECIPE,
+  EDIT_PRIVATE_RECIPE,
+  DELETE_PRIVATE_RECIPE,
+  CREATE_NEW_PUBLIC_RECIPE,
+  EDIT_PUBLIC_RECIPE,
+  DISOWN_PUBLIC_RECIPE
 } = actionTypes;
 
-const creatingRecipeInfo = {
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, measurementId: 1, ingredient: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
-  recipeFullImage: null,
-  recipeThumbImage: null,
-  recipeTinyImage: null,
-  equipmentImage: null,
-  equipmentFullImage: null,
-  ingredientsImage: null,
+const creatingInfo = {
+  ownership:            "private",
+  recipeTypeId:         1,
+  cuisineId:            1,
+  title:                "My Secret Recipe",
+  description:          "Don't worry about it.",
+  directions:           "Do nothing.",
+  methods:              [{id: 1}, {id: 3}],
+  equipment:            [{amount: 1, id: 1}],
+  ingredients:          [{amount: 1, measurementId: 1, id: 1}],
+  subrecipes:           [],
+  recipeImage:          null,
+  recipeFullImage:      null,
+  recipeThumbImage:     null,
+  recipeTinyImage:      null,
+  equipmentImage:       null,
+  equipmentFullImage:   null,
+  ingredientsImage:     null,
   ingredientsFullImage: null,
-  cookingImage: null,
-  cookingFullImage: null
+  cookingImage:         null,
+  cookingFullImage:     null
 };
-const editingRecipeInfo = {
-  id: 888,
-  recipePrevImage: "nobsc-recipe-default",
-  equipmentPrevImage: "nobsc-recipe-equipment-default",
+const editInfo = {
+  id:                   888,
+  recipePrevImage:      "nobsc-recipe-default",
+  equipmentPrevImage:   "nobsc-recipe-equipment-default",
   ingredientsPrevImage: "nobsc-recipe-ingredients-default",
-  cookingPrevImage: "nobsc-recipe-cooking-default",
-  ownership: "private",
-  recipeTypeId: 1,
-  cuisineId: 1,
-  title: "My Secret Recipe",
-  description: "Don't worry about it.",
-  directions: "Do nothing.",
-  requiredMethods: [{methodId: 1}, {methodId: 3}],
-  requiredEquipment: [{amount: 1, equipment: 1}],
-  requiredIngredients: [{amount: 1, measurementId: 1, ingredient: 1}],
-  requiredSubrecipes: [],
-  recipeImage: null,
-  recipeFullImage: null,
-  recipeThumbImage: null,
-  recipeTinyImage: null,
-  equipmentImage: null,
-  equipmentFullImage: null,
-  ingredientsImage: null,
-  ingredientsFullImage: null,
-  cookingImage: null,
-  cookingFullImage: null
+  cookingPrevImage:     "nobsc-recipe-cooking-default",
+  ...creatingInfo
 };
 
-describe('userCreateNewPrivateRecipe action creator', () => {
+describe('createNewPrivateRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userCreateNewPrivateRecipe(creatingRecipeInfo).type)
-      .toEqual(USER_CREATE_NEW_PRIVATE_RECIPE);
+    expect(createNewPrivateRecipe(creatingInfo).type).toEqual(CREATE_NEW_PRIVATE_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(userCreateNewPrivateRecipe(creatingRecipeInfo).recipeInfo).toEqual(creatingRecipeInfo);
+    expect(createNewPrivateRecipe(creatingInfo).recipeInfo).toEqual(creatingInfo);
   });
 });
 
-describe('userEditPrivateRecipe action creator', () => {
+describe('editPrivateRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userEditPrivateRecipe(editingRecipeInfo).type)
-      .toEqual(USER_EDIT_PRIVATE_RECIPE);
+    expect(editPrivateRecipe(editInfo).type).toEqual(EDIT_PRIVATE_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(userEditPrivateRecipe(editingRecipeInfo).recipeInfo)
-      .toEqual(editingRecipeInfo);
+    expect(editPrivateRecipe(editInfo).recipeInfo).toEqual(editInfo);
   });
 });
 
-describe('userDeletePrivateRecipe action creator', () => {
+describe('deletePrivateRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDeletePrivateRecipe(7).type).toEqual(USER_DELETE_PRIVATE_RECIPE);
+    expect(deletePrivateRecipe(7).type).toEqual(DELETE_PRIVATE_RECIPE);
   });
 
   it('returns the correct id', () => {
-    expect(userDeletePrivateRecipe(7).id).toEqual(7);
+    expect(deletePrivateRecipe(7).id).toEqual(7);
   });
 });
 
 
 
-describe('userCreateNewPublicRecipe action creator', () => {
+describe('createNewPublicRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userCreateNewPublicRecipe(creatingRecipeInfo).type)
-      .toEqual(USER_CREATE_NEW_PUBLIC_RECIPE);
+    expect(createNewPublicRecipe(creatingInfo).type).toEqual(CREATE_NEW_PUBLIC_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(userCreateNewPublicRecipe(creatingRecipeInfo).recipeInfo)
-      .toEqual(creatingRecipeInfo);
+    expect(createNewPublicRecipe(creatingInfo).recipeInfo).toEqual(creatingInfo);
   });
 });
 
-describe('userEditPublicRecipe action creator', () => {
+describe('editPublicRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userEditPublicRecipe(editingRecipeInfo).type)
-      .toEqual(USER_EDIT_PUBLIC_RECIPE);
+    expect(editPublicRecipe(editInfo).type).toEqual(EDIT_PUBLIC_RECIPE);
   });
 
   it('returns the correct recipeInfo', () => {
-    expect(userEditPublicRecipe(editingRecipeInfo).recipeInfo)
-      .toEqual(editingRecipeInfo);
+    expect(editPublicRecipe(editInfo).recipeInfo).toEqual(editInfo);
   });
 });
 
-describe('userDisownPublicRecipe action creator', () => {
+describe('disownPublicRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDisownPublicRecipe(7).type).toEqual(USER_DISOWN_PUBLIC_RECIPE);
+    expect(disownPublicRecipe(7).type).toEqual(DISOWN_PUBLIC_RECIPE);
   });
 
   it('returns the correct id', () => {
-    expect(userDisownPublicRecipe(7).id).toEqual(7);
+    expect(disownPublicRecipe(7).id).toEqual(7);
   });
 });

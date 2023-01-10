@@ -2,26 +2,20 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
-import {
-  userMessage,
-  userMessageClear
-} from '../../../../src/store/user/actions';
-import {
-  userSaveRecipeSaga,
-  userUnsaveRecipeSaga
-} from '../../../../src/store/user/save/sagas';
+import { userMessage, userMessageClear } from '../../../../src/store/user/actions';
+import { saveRecipeSaga, unsaveRecipeSaga } from '../../../../src/store/user/save/sagas';
 import { actionTypes } from '../../../../src/store/user/save/types';
 
-const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
+const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
 
-describe('userSaveRecipeSaga', () => {
-  const action = {type: USER_SAVE_RECIPE, recipeId: 99};
+describe('saveRecipeSaga', () => {
+  const action = {type: SAVE_RECIPE, recipeId: 99};
 
   it ('should dispatch succeeded', () => {
-    const iterator = userSaveRecipeSaga(action);
+    const iter = saveRecipeSaga(action);
     const res = {data: {message: 'Saved.'}};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/saved-recipe/create`,
@@ -29,84 +23,78 @@ describe('userSaveRecipeSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it ('should dispatch failed', () => {
-    const iterator = userSaveRecipeSaga(action);
+    const iter = saveRecipeSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it ('should dispatch failed if thrown', () => {
-    const iterator = userSaveRecipeSaga(action);
+    const iter = saveRecipeSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
 
 
-describe('userUnsaveRecipeSaga', () => {
-  const action = {type: USER_UNSAVE_RECIPE, recipeId: 99};
+describe('unsaveRecipeSaga', () => {
+  const action = {type: UNSAVE_RECIPE, recipeId: 99};
 
   it ('should dispatch succeeded', () => {
-    const iterator = userUnsaveRecipeSaga(action);
+    const iter = unsaveRecipeSaga(action);
     const res = {data: {message: 'Unsaved.'}};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.delete],
       `${endpoint}/user/saved-recipe/delete`,
       {withCredentials: true, data: {recipeId: action.recipeId}}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it ('should dispatch failed', () => {
-    const iterator = userUnsaveRecipeSaga(action);
+    const iter = unsaveRecipeSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it ('should dispatch failed if thrown', () => {
-    const iterator = userUnsaveRecipeSaga(action);
+    const iter = unsaveRecipeSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

@@ -1,27 +1,24 @@
-import {
-  userSaveRecipe,
-  userUnsaveRecipe
-} from '../../../../src/store/user/save/actions';
+import { saveRecipe, unsaveRecipe } from '../../../../src/store/user/save/actions';
 import { actionTypes } from '../../../../src/store/user/save/types';
 
-const { USER_SAVE_RECIPE, USER_UNSAVE_RECIPE } = actionTypes;
+const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
 
-describe('userSaveRecipe action creator', () => {
+describe('saveRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userSaveRecipe(4).type).toEqual(USER_SAVE_RECIPE);
+    expect(saveRecipe(4).type).toEqual(SAVE_RECIPE);
   });
 
   it('returns the correct recipeId', () => {
-    expect(userSaveRecipe(4).recipeId).toEqual(4);
+    expect(saveRecipe(4).recipeId).toEqual(4);
   });
 });
 
-describe('userUnsaveRecipe action creator', () => {
+describe('unsaveRecipe action creator', () => {
   it('returns the correct action type', () => {
-    expect(userUnsaveRecipe(4).type).toEqual(USER_UNSAVE_RECIPE);
+    expect(unsaveRecipe(4).type).toEqual(UNSAVE_RECIPE);
   });
 
   it('returns the correct recipeId', () => {
-    expect(userUnsaveRecipe(4).recipeId).toEqual(4);
+    expect(unsaveRecipe(4).recipeId).toEqual(4);
   });
 });
