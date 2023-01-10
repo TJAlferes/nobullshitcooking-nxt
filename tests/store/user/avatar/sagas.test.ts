@@ -2,100 +2,67 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
-import {
-  userMessage,
-  userMessageClear
-} from '../../../../src/store/user/actions';
-import { userSubmitAvatarSaga } from '../../../../src/store/user/avatar/sagas';
+import { userMessage, userMessageClear } from '../../../../src/store/user/actions';
+import { submitAvatarSaga } from '../../../../src/store/user/avatar/sagas';
 import { actionTypes} from '../../../../src/store/user/avatar/types';
 
-const { USER_SUBMIT_AVATAR } = actionTypes;
+const { SUBMIT_AVATAR } = actionTypes;
 
 const fullAvatar = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const tinyAvatar = new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
+const tinyAvatar = new File([(new Blob)], "resizedTiny",  {type: "image/jpeg"});
 
-describe('userSubmitAvatarSaga', () => {
-  const action = {type: USER_SUBMIT_AVATAR, fullAvatar, tinyAvatar};
-  const res1 = {
-    data: {
-      fullSignature: "signedUrlString",
-      tinySignature: "signedUrlString-tiny",
-      fullName: "avatarUrlString"
-    }
-  };
+describe('submitAvatarSaga', () => {
+  const action = {type: SUBMIT_AVATAR, fullAvatar, tinyAvatar};
+  const res1 = {data: {fullSignature: "signedUrlString", tinySignature: "signedUrlString-tiny", fullName: "avatarUrlString"}};
 
   it('should dispatch succeeded, then reload', () => {
-    const iterator = userSubmitAvatarSaga(action);
+    const iter = submitAvatarSaga(action);
     const res = {data: {message: 'Avatar set.'}};
     const avatarUrl = res1.data.fullName;
 
-    expect(iterator.next().value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/user/get-signed-url/avatar`,
-      {fileType: action.fullAvatar.type},
-      {withCredentials: true}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.post], `${endpoint}/user/get-signed-url/avatar`, {fileType: action.fullAvatar.type}, {withCredentials: true}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.fullSignature,
-      action.fullAvatar,
-      {headers: {'Content-Type': action.fullAvatar.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.fullSignature, action.fullAvatar, {headers: {'Content-Type': action.fullAvatar.type}}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.tinySignature,
-      action.tinyAvatar,
-      {headers: {'Content-Type': action.tinyAvatar.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.tinySignature, action.tinyAvatar, {headers: {'Content-Type': action.tinyAvatar.type}}));
 
-    expect(iterator.next(avatarUrl).value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/user/auth/set-avatar`,
-      {avatar: avatarUrl},
-      {withCredentials: true}
-    ));
+    expect(iter.next(avatarUrl).value)
+      .toEqual(call([axios, axios.post], `${endpoint}/user/auth/set-avatar`, {avatar: avatarUrl}, {withCredentials: true}));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(2000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(JSON.stringify(iterator.next(res).value))
-      .toEqual(JSON.stringify(call(() => location.reload())));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(2000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(JSON.stringify(iter.next(res).value)).toEqual(JSON.stringify(call(() => location.reload())));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = userSubmitAvatarSaga(action);
+    const iter = submitAvatarSaga(action);
     const res = {data: {message: 'Oops.'}};
     const avatarUrl = res1.data.fullName;
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next(avatarUrl);  //iterator.next(res);
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next(avatarUrl);  //iter.next(res);
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = userSubmitAvatarSaga(action);
+    const iter = submitAvatarSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

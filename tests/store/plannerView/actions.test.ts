@@ -1,7 +1,7 @@
-import { plannerViewClickDay, plannerViewLoad } from '../../../src/store/plannerView/actions'
+import { clickDay, load } from '../../../src/store/plannerView/actions'
 import { actionTypes} from '../../../src/store/plannerView/types';
 
-const { PLANNER_VIEW_CLICK_DAY, PLANNER_VIEW_LOAD } = actionTypes;
+const { CLICK_DAY, LOAD } = actionTypes;
 
 const recipeOne = {key: "ABC", id: 503, owner_id: 1, title: "Pho",         recipe_image: "nobsc-pho"};
 const recipeTwo = {key: "XYZ", id: 821, owner_id: 1, title: "Coffee Cake", recipe_image: "nobsc-coffee-cake"};
@@ -13,26 +13,26 @@ const planData =  {
  22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []
 };
 
-describe('plannerViewClickDay action creator', () => {
+describe('clickDay action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerViewClickDay(4).type).toEqual(PLANNER_VIEW_CLICK_DAY);
+    expect(clickDay(4).type).toEqual(CLICK_DAY);
   });
 
   it('returns the correct day', () => {
-    expect(plannerViewClickDay(4).day).toEqual(4);
+    expect(clickDay(4).day).toEqual(4);
   });
 });
 
-describe('plannerViewLoad action creator', () => {
+describe('load action creator', () => {
   it('returns the correct action type', () => {
-    expect(plannerViewLoad(planName, planData).type).toEqual(PLANNER_VIEW_LOAD);
+    expect(load(planName, planData).type).toEqual(LOAD);
   });
 
   it('returns the correct planName', () => {
-    expect(plannerViewLoad(planName, planData).planName).toEqual(planName);
+    expect(load(planName, planData).planName).toEqual(planName);
   });
 
   it('returns the correct planData', () => {
-    expect(plannerViewLoad(planName, planData).planData).toEqual(planData);
+    expect(load(planName, planData).planData).toEqual(planData);
   });
 });

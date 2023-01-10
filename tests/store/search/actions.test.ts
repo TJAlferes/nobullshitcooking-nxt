@@ -1,14 +1,14 @@
-import { searchSetIndex } from '../../../src/store/search/actions';
+import { setIndex } from '../../../src/store/search/actions';
 import { actionTypes } from '../../../src/store/search/types';
 
-const { SEARCH_SET_INDEX } = actionTypes;
+const { SET_INDEX } = actionTypes;
 
-describe('searchSetIndex action creator', () => {
+describe('setIndex action creator', () => {
   it('returns the correct action type', () => {
-    expect(searchSetIndex("Ingredients").type).toEqual(SEARCH_SET_INDEX);
+    expect(setIndex("ingredients").type).toEqual(SET_INDEX);
   });
   
   it('returns the correct index', () => {
-    expect(searchSetIndex("Ingredients").index).toEqual("Ingredients");
+    expect(setIndex("ingredients").index).toEqual("ingredients");
   });
 });

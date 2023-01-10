@@ -1,19 +1,16 @@
-import {
-  themeDarkTrigger,
-  themeLightTrigger
-} from '../../../src/store/theme/actions';
+import { dark, light } from '../../../src/store/theme/actions';
 import { actionTypes } from '../../../src/store/theme/types';
 
-const { THEME_DARK_TRIGGER, THEME_LIGHT_TRIGGER } = actionTypes;
+const { DARK, LIGHT } = actionTypes;
 
-describe('themeDarkTrigger action creator', () => {
+describe('dark action creator', () => {
   it('returns the correct action type', () => {
-    expect(themeDarkTrigger().type).toEqual(THEME_DARK_TRIGGER);
+    expect(dark().type).toEqual(DARK);
   });
 });
 
-describe('themeLightTrigger action creator', () => {
+describe('light action creator', () => {
   it('returns the correct action type', () => {
-    expect(themeLightTrigger().type).toEqual(THEME_LIGHT_TRIGGER);
+    expect(light().type).toEqual(LIGHT);
   });
 });

@@ -1,20 +1,20 @@
 import { useRouter } from 'next/router';
 
-import { authUpdateLocalAvatar, authStaffDisplay, authStaffLogin, authUserDisplay, authUserLogin, authUserRegister, authUserVerify } from '../../../src/store/auth/actions';
+import { updateLocalAvatar, staffDisplay, staffLogin, userDisplay, userLogin, userRegister, userVerify } from '../../../src/store/auth/actions';
 import { actionTypes } from '../../../src/store/auth/types';
 
-const { AUTH_UPDATE_LOCAL_AVATAR, AUTH_STAFF_DISPLAY, AUTH_STAFF_LOGIN, AUTH_USER_DISPLAY, AUTH_USER_LOGIN, AUTH_USER_REGISTER, AUTH_USER_VERIFY } = actionTypes;
+const { UPDATE_LOCAL_AVATAR, STAFF_DISPLAY, STAFF_LOGIN, USER_DISPLAY, USER_LOGIN, USER_REGISTER, USER_VERIFY } = actionTypes;
 
 const email =    'coolperson@coolplace.com';
 const password = 'supersecret';
 const router =   useRouter();
 
-describe('authUpdateLocalAvatar action creator', () => {
+describe('updateLocalAvatar action creator', () => {
   const avatar = 'Leeroy';
-  const creator = authUpdateLocalAvatar(avatar);
+  const creator = updateLocalAvatar(avatar);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_UPDATE_LOCAL_AVATAR);
+    expect(creator.type).toEqual(UPDATE_LOCAL_AVATAR);
   });
 
   it('returns the correct avatar', () => {
@@ -22,12 +22,12 @@ describe('authUpdateLocalAvatar action creator', () => {
   });
 });
 
-describe('authStaffDisplay action creator', () => {
+describe('staffDisplay action creator', () => {
   const authname = 'Allison';
-  const creator = authStaffDisplay(authname);
+  const creator = staffDisplay(authname);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_STAFF_DISPLAY);
+    expect(creator.type).toEqual(STAFF_DISPLAY);
   });
 
   it('returns the correct authname', () => {
@@ -35,11 +35,11 @@ describe('authStaffDisplay action creator', () => {
   });
 });
 
-describe('authStaffLogin action creator', () => {
-  const creator = authStaffLogin(email, password);
+describe('staffLogin action creator', () => {
+  const creator = staffLogin(email, password);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_STAFF_LOGIN);
+    expect(creator.type).toEqual(STAFF_LOGIN);
   });
 
   it('returns the correct email', () => {
@@ -51,12 +51,12 @@ describe('authStaffLogin action creator', () => {
   });
 });
 
-describe('authUserDisplay action creator', () => {
+describe('userDisplay action creator', () => {
   const authname = 'Allison';
-  const creator = authUserDisplay(authname);
+  const creator = userDisplay(authname);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_USER_DISPLAY);
+    expect(creator.type).toEqual(USER_DISPLAY);
   });
 
   it('returns the correct authname', () => {
@@ -64,11 +64,11 @@ describe('authUserDisplay action creator', () => {
   });
 });
 
-describe('authUserLogin action creator', () => {
-  const creator = authUserLogin(email, password);
+describe('userLogin action creator', () => {
+  const creator = userLogin(email, password);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_USER_LOGIN);
+    expect(creator.type).toEqual(USER_LOGIN);
   });
 
   it('returns the correct email', () => {
@@ -80,12 +80,12 @@ describe('authUserLogin action creator', () => {
   });
 });
 
-describe('authUserRegister action creator', () => {
+describe('userRegister action creator', () => {
   const username = 'CoolPerson';
-  const creator = authUserRegister(email, password, username, router);
+  const creator = userRegister(email, password, username, router);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_USER_REGISTER);
+    expect(creator.type).toEqual(USER_REGISTER);
   });
 
   it('returns the correct email', () => {
@@ -101,12 +101,12 @@ describe('authUserRegister action creator', () => {
   });
 });
 
-describe('authUserVerify action creator', () => {
+describe('userVerify action creator', () => {
   const confirmationCode = 'SOMERANDOMCODE';
-  const creator = authUserVerify(email, password, confirmationCode, router);
+  const creator = userVerify(email, password, confirmationCode, router);
 
   it('returns the correct action type', () => {
-    expect(creator.type).toEqual(AUTH_USER_VERIFY);
+    expect(creator.type).toEqual(USER_VERIFY);
   });
 
   it('returns the correct email', () => {

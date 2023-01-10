@@ -1,23 +1,23 @@
 import { menuReducer } from '../../../src/store/menu/reducer';
 import { actionTypes } from '../../../src/store/menu/types';
 
-const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
+const { OPEN_LEFT_NAV, CLOSE_LEFT_NAV } = actionTypes;
 
-const initialState = {shadow: false};
+const initialState = {leftNav: false};
 
 describe('menu reducer', () => {
   it('returns initial state', () => {
-    expect(menuReducer(undefined, {type: MENU_SHADOW_SHOW}))
-      .toEqual({shadow: true});
+    const reducer = menuReducer(undefined, {type: CLOSE_LEFT_NAV});
+    expect(reducer).toEqual(initialState);
   });
 
-  it('handles actions of type MENU_SHADOW_SHOW', () => {
-    expect(menuReducer(initialState, {type: MENU_SHADOW_SHOW}))
-      .toEqual({shadow: true});
+  it('handles actions of type OPEN_LEFT_NAV', () => {
+    const reducer = menuReducer({leftNav: false}, {type: OPEN_LEFT_NAV});
+    expect(reducer.leftNav).toEqual(true);
   });
 
-  it('handles actions of type MENU_SHADOW_HIDE', () => {
-    expect(menuReducer({shadow: true}, {type: MENU_SHADOW_HIDE}))
-      .toEqual({shadow: false});
+  it('handles actions of type CLOSE_LEFT_NAV', () => {
+    const reducer = menuReducer({leftNav: true}, {type: CLOSE_LEFT_NAV});
+    expect(reducer.leftNav).toEqual(false);
   });
 });

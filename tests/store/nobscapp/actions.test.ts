@@ -1,14 +1,14 @@
-import { nobscappWindowFocused } from '../../../src/store/nobscapp/actions';
+import { windowFocused } from '../../../src/store/nobscapp/actions';
 import { actionTypes } from '../../../src/store/nobscapp/types';
 
-const { NOBSCAPP_WINDOW_FOCUSED } = actionTypes;
+const { WINDOW_FOCUSED } = actionTypes;
 
-describe('nobscappWindowFocused action creator', () => {
+describe('windowFocused action creator', () => {
   it('returns the correct action type', () => {
-    expect(nobscappWindowFocused(false).type).toEqual(NOBSCAPP_WINDOW_FOCUSED);
+    expect(windowFocused(false).type).toEqual(WINDOW_FOCUSED);
   });
 
   it('returns the correct condition', () => {
-    expect(nobscappWindowFocused(false).condition).toEqual(false);
+    expect(windowFocused(false).condition).toEqual(false);
   });
 });

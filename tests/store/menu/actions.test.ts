@@ -1,19 +1,16 @@
-import {
-  menuShadowShow,
-  menuShadowHide
-} from '../../../src/store/menu/actions';
+import { closeLeftNav, openLeftNav } from '../../../src/store/menu/actions';
 import { actionTypes } from '../../../src/store/menu/types';
 
-const { MENU_SHADOW_SHOW, MENU_SHADOW_HIDE } = actionTypes;
+const { CLOSE_LEFT_NAV, OPEN_LEFT_NAV } = actionTypes;
 
-describe('menuShadowShow action creator', () => {
+describe('openLeftNav action creator', () => {
   it('returns the correct action type', () => {
-    expect(menuShadowShow().type).toEqual(MENU_SHADOW_SHOW);
+    expect(openLeftNav().type).toEqual(OPEN_LEFT_NAV);
   });
 });
 
-describe('menuShadowHide action creator', () => {
+describe('closeLeftNav action creator', () => {
   it('returns the correct action type', () => {
-    expect(menuShadowHide().type).toEqual(MENU_SHADOW_HIDE);
+    expect(closeLeftNav().type).toEqual(CLOSE_LEFT_NAV);
   });
 });

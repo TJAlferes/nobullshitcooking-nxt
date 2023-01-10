@@ -7,19 +7,19 @@ import {
 import { actionTypes } from '../../../src/store/geolocation/types';
 
 const {
-  GEO_LATITUDE,
-  GEO_LONGITUDE,
-  GEO_ADDRESS,
-  GEO_NEARBY_STORES_CLICKED
+  LATITUDE,
+  LONGITUDE,
+  ADDRESS,
+  NEARBY_STORES_CLICKED
 } = actionTypes;
 
-const latitude = "48.51";
+const latitude =  "48.51";
 const longitude = "115.43";
-const address = "123 Pleasant Street, Pleasantville, NP";
+const address =   "123 Pleasant Street, Pleasantville, NP";
 
 describe('geoLatitude action creator', () => {
   it('returns the correct action type', () => {
-    expect(geoLatitude(latitude).type).toEqual(GEO_LATITUDE);
+    expect(geoLatitude(latitude).type).toEqual(LATITUDE);
   });
 
   it('returns the correct latitude', () => {
@@ -29,7 +29,7 @@ describe('geoLatitude action creator', () => {
 
 describe('geoLongitude action creator', () => {
   it('returns the correct action type', () => {
-    expect(geoLongitude(longitude).type).toEqual(GEO_LONGITUDE);
+    expect(geoLongitude(longitude).type).toEqual(LONGITUDE);
   });
 
   it('returns the correct longitude', () => {
@@ -39,7 +39,7 @@ describe('geoLongitude action creator', () => {
 
 describe('geoAddress action creator', () => {
   it('returns the correct action type', () => {
-    expect(geoAddress(address).type).toEqual(GEO_ADDRESS);
+    expect(geoAddress(address).type).toEqual(ADDRESS);
   });
 
   it('returns the correct address', () => {
@@ -49,8 +49,7 @@ describe('geoAddress action creator', () => {
 
 describe('geoNearbyStoresClicked action creator', () => {
   it('returns the correct action type', () => {
-    expect(geoNearbyStoresClicked(true).type)
-      .toEqual(GEO_NEARBY_STORES_CLICKED);
+    expect(geoNearbyStoresClicked(true).type).toEqual(NEARBY_STORES_CLICKED);
   });
 
   it('returns the correct clicked', () => {

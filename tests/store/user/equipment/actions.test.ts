@@ -1,66 +1,48 @@
-import {
-  userCreateNewPrivateEquipment,
-  userEditPrivateEquipment,
-  userDeletePrivateEquipment
-} from '../../../../src/store/user/equipment/actions';
+import { createNewPrivateEquipment, editPrivateEquipment, deletePrivateEquipment } from '../../../../src/store/user/equipment/actions';
 import { actionTypes } from '../../../../src/store/user/equipment/types';
 
-const {
-  USER_CREATE_NEW_PRIVATE_EQUIPMENT,
-  USER_EDIT_PRIVATE_EQUIPMENT,
-  USER_DELETE_PRIVATE_EQUIPMENT
-} = actionTypes;
+const { CREATE_NEW_PRIVATE_EQUIPMENT, EDIT_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = actionTypes;
 
-const creatingEquipmentInfo = {
+const creatingInfo = {
   equipmentTypeId: 3,
-  name: "Metal Spatula",
-  description: "It works.",
-  image: "nobsc-metal-spatula",
-  fullImage: null,
-  tinyImage: null
+  name:            "Metal Spatula",
+  description:     "It works.",
+  image:           "nobsc-metal-spatula",
+  fullImage:       null,
+  tinyImage:       null
 };
-const editingEquipmentInfo = {
-  id: 1,
-  equipmentTypeId: 3,
-  name: "Metal Spatula",
-  description: "It works.",
+const editInfo = {
+  id:        1,
   prevImage: "nobsc-metal-spatula",
-  image: "nobsc-metal-spatula",
-  fullImage: null,
-  tinyImage: null
+  ...creatingInfo
 };
 
-describe('userCreateNewPrivateEquipment action creator', () => {
+describe('createNewPrivateEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(userCreateNewPrivateEquipment(creatingEquipmentInfo).type)
-      .toEqual(USER_CREATE_NEW_PRIVATE_EQUIPMENT);
+    expect(createNewPrivateEquipment(creatingInfo).type).toEqual(CREATE_NEW_PRIVATE_EQUIPMENT);
   });
 
   it('returns the correct equipmentInfo', () => {
-    expect(userCreateNewPrivateEquipment(creatingEquipmentInfo).equipmentInfo)
-      .toEqual(creatingEquipmentInfo);
+    expect(createNewPrivateEquipment(creatingInfo).equipmentInfo).toEqual(creatingInfo);
   });
 });
 
-describe('userEditPrivateEquipment action creator', () => {
+describe('editPrivateEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(userEditPrivateEquipment(editingEquipmentInfo).type)
-      .toEqual(USER_EDIT_PRIVATE_EQUIPMENT);
+    expect(editPrivateEquipment(editInfo).type).toEqual(EDIT_PRIVATE_EQUIPMENT);
   });
 
   it('returns the correct equipmentInfo', () => {
-    expect(userEditPrivateEquipment(editingEquipmentInfo).equipmentInfo)
-      .toEqual(editingEquipmentInfo);
+    expect(editPrivateEquipment(editInfo).equipmentInfo).toEqual(editInfo);
   });
 });
 
-describe('userDeletePrivateEquipment action creator', () => {
+describe('deletePrivateEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDeletePrivateEquipment(7).type)
-      .toEqual(USER_DELETE_PRIVATE_EQUIPMENT);
+    expect(deletePrivateEquipment(7).type).toEqual(DELETE_PRIVATE_EQUIPMENT);
   });
 
   it('returns the correct id', () => {
-    expect(userDeletePrivateEquipment(7).id).toEqual(7);
+    expect(deletePrivateEquipment(7).id).toEqual(7);
   });
 });
