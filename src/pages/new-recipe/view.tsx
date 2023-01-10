@@ -72,10 +72,7 @@ export function NewRecipeView({
   onRecipeCropChange,
   onRecipeCropComplete,
   onRecipeImageLoaded,
-  onSelectCookingFile,
-  onSelectEquipmentFile,
-  onSelectIngredientsFile,
-  onSelectRecipeFile,
+  onSelectFile,
   ownership,
   recipeCrop,
   recipeFullCrop,
@@ -271,10 +268,7 @@ export function NewRecipeView({
         onRecipeCropChange={onRecipeCropChange}
         onRecipeCropComplete={onRecipeCropComplete}
         onRecipeImageLoaded={onRecipeImageLoaded}
-        onSelectCookingFile={onSelectCookingFile}
-        onSelectEquipmentFile={onSelectEquipmentFile}
-        onSelectIngredientsFile={onSelectIngredientsFile}
-        onSelectRecipeFile={onSelectRecipeFile}
+        onSelectFile={onSelectFile}
         recipeCrop={recipeCrop}
         recipeFullCrop={recipeFullCrop}
         recipeImage={recipeImage}
@@ -368,10 +362,7 @@ type Props = {
   onRecipeCropChange(crop: Crop):                         void;
   onRecipeCropComplete(crop: Crop):                       void;
   onRecipeImageLoaded(image: HTMLImageElement):           void;
-  onSelectCookingFile(e: ChangeEvent):                    void;
-  onSelectEquipmentFile(e: ChangeEvent):                  void;
-  onSelectIngredientsFile(e: ChangeEvent):                void;
-  onSelectRecipeFile(e: ChangeEvent):                     void;
+  onSelectFile(e: ChangeEvent, type: string):             void;
   ownership:                                              string;
   recipeCrop:                                             Crop;
   recipeFullCrop:                                         string;

@@ -38,10 +38,7 @@ export function ImageUploads({
   onRecipeCropChange,
   onRecipeCropComplete,
   onRecipeImageLoaded,
-  onSelectCookingFile,
-  onSelectEquipmentFile,
-  onSelectIngredientsFile,
-  onSelectRecipeFile,
+  onSelectFile,
   recipeCrop,
   recipeFullCrop,
   recipeImage,
@@ -71,7 +68,7 @@ export function ImageUploads({
           <div>
             {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />}
             <h4>Change</h4>
-            <input accept="image/*" name="image-input" onChange={onSelectRecipeFile} type="file" />
+            <input accept="image/*" name="image-input" onChange={(e) => onSelectFile(e, "recipe")} type="file" />
           </div>
         )}
 
@@ -115,7 +112,7 @@ export function ImageUploads({
           <div>
             {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />}
             <h4>Change</h4>
-            <input accept="image/*" name="equipment-image-input" onChange={onSelectEquipmentFile} type="file" />
+            <input accept="image/*" name="equipment-image-input" onChange={(e) => onSelectFile(e, "equipment")} type="file" />
           </div>
         )}
 
@@ -153,7 +150,7 @@ export function ImageUploads({
           <div>
             {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />}
             <h4>Change</h4>
-            <input accept="image/*" name="ingredients-image-input" onChange={onSelectIngredientsFile} type="file" />
+            <input accept="image/*" name="ingredients-image-input" onChange={(e) => onSelectFile(e, "ingredients")} type="file" />
           </div>
         )}
 
@@ -191,7 +188,7 @@ export function ImageUploads({
           <div>
             {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />}
             <h4>Change</h4>
-            <input accept="image/*" name="cooking-image-input" onChange={onSelectCookingFile} type="file" />
+            <input accept="image/*" name="cooking-image-input" onChange={(e) => onSelectFile(e, "cooking")} type="file" />
           </div>
         )}
 
@@ -256,10 +253,7 @@ type Props = {
   onRecipeCropChange(crop: Crop):                    void;
   onRecipeCropComplete(crop: Crop):                  void;
   onRecipeImageLoaded(image: HTMLImageElement):      void;
-  onSelectCookingFile(e: ChangeEvent):               void;
-  onSelectEquipmentFile(e: ChangeEvent):             void;
-  onSelectIngredientsFile(e: ChangeEvent):           void;
-  onSelectRecipeFile(e: ChangeEvent):                void;
+  onSelectFile(e: ChangeEvent, type: string):        void;
   recipeCrop:                                        Crop;
   recipeFullCrop:                                    string;
   recipeImage:                                       string | ArrayBuffer | null;

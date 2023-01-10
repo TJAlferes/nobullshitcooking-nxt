@@ -7,8 +7,8 @@ import { v4 as uuid } from 'uuid';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
-import { staffCreateNewRecipe, staffEditRecipe } from '../../store/staff/recipe/actions';
-import { userCreateNewPrivateRecipe, userCreateNewPublicRecipe, userEditPrivateRecipe, userEditPublicRecipe } from '../../store/user/recipe/actions';
+import { createNewRecipe, editRecipe } from '../../store/staff/recipe/actions';
+import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
 import { IRequiredMethod } from '../../store/user/recipe/types';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
@@ -265,30 +265,30 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   };
 
   const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
-    const newEquipmentRows = Array.from(equipmentRows);
-    const elToUpdate = newEquipmentRows.findIndex(el => el.key === rowKey);
-    const targetName = (e.target as HTMLInputElement).name;
-    const targetValue = (e.target as HTMLInputElement).value;
-    newEquipmentRows[elToUpdate][targetName] = targetValue;
-    setEquipmentRows(newEquipmentRows);
+    const newRows =    Array.from(equipmentRows);
+    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
+    const name =       (e.target as HTMLInputElement).name;
+    const value =      (e.target as HTMLInputElement).value;
+    newRows[elToUpdate][name] = value;
+    setEquipmentRows(newRows);
   };
 
   const changeIngredientRow = (e: SyntheticEvent, rowKey: string) => {
-    const newIngredientRows = Array.from(ingredientRows);
-    const elToUpdate = newIngredientRows.findIndex(el => el.key === rowKey);
-    const targetName = (e.target as HTMLInputElement).name;
-    const targetValue = (e.target as HTMLInputElement).value;
-    newIngredientRows[elToUpdate][targetName] = targetValue;
-    setIngredientRows(newIngredientRows);
+    const newRows =     Array.from(ingredientRows);
+    const elToUpdate =  newRows.findIndex(el => el.key === rowKey);
+    const name =        (e.target as HTMLInputElement).name;
+    const value =       (e.target as HTMLInputElement).value;
+    newRows[elToUpdate][name] = value;
+    setIngredientRows(newRows);
   };
 
   const changeSubrecipeRow = (e: SyntheticEvent, rowKey: string) => {
-    const newSubrecipeRows = Array.from(subrecipeRows);
-    const elToUpdate = newSubrecipeRows.findIndex(el => el.key === rowKey);
-    const targetName = (e.target as HTMLInputElement).name;
-    const targetValue = (e.target as HTMLInputElement).value;
-    newSubrecipeRows[elToUpdate][targetName] = targetValue;
-    setSubrecipeRows(newSubrecipeRows);
+    const newRows =    Array.from(subrecipeRows);
+    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
+    const name =       (e.target as HTMLInputElement).name;
+    const value =      (e.target as HTMLInputElement).value;
+    newRows[elToUpdate][name] = value;
+    setSubrecipeRows(newRows);
   };
 
   const submit = () => {
@@ -334,17 +334,17 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     if (editing && editingId) {
       const recipeEditInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
 
-      if (staffIsAuthenticated) dispatch(staffEditRecipe(recipeEditInfo));
+      if (staffIsAuthenticated) dispatch(editRecipe(recipeEditInfo));
       else {
-        if      (ownership === "private") dispatch(userEditPrivateRecipe(recipeEditInfo));
-        else if (ownership === "public")  dispatch(userEditPublicRecipe(recipeEditInfo));
+        if      (ownership === "private") dispatch(editPrivateRecipe(recipeEditInfo));
+        else if (ownership === "public")  dispatch(editPublicRecipe(recipeEditInfo));
       }
     }
     else {
-      if (staffIsAuthenticated) dispatch(staffCreateNewRecipe(recipeInfo));
+      if (staffIsAuthenticated) dispatch(createNewRecipe(recipeInfo));
       else {
-        if      (ownership === "private") dispatch(userCreateNewPrivateRecipe(recipeInfo));
-        else if (ownership === "public")  dispatch(userCreateNewPublicRecipe(recipeInfo));
+        if      (ownership === "private") dispatch(createNewPrivateRecipe(recipeInfo));
+        else if (ownership === "public")  dispatch(createNewPublicRecipe(recipeInfo));
       }
       
     }
@@ -408,35 +408,16 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const onRecipeCropComplete = (crop: Crop)              => makeRecipeCrops(crop);
   const onRecipeImageLoaded =  (image: HTMLImageElement) => recipeImageRef.current = image;
   
-  const onSelectCookingFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSelectFile = (e: ChangeEvent, type: string) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
     const reader = new FileReader();
-    reader.addEventListener("load", () => setCookingImage(reader.result));
-    reader.readAsDataURL(target.files[0]);
-  };
-
-  const onSelectEquipmentFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (!(target.files && target.files.length > 0)) return;
-    const reader = new FileReader();
-    reader.addEventListener("load", () => setEquipmentImage(reader.result));
-    reader.readAsDataURL(target.files[0]);
-  };
-
-  const onSelectIngredientsFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (!(target.files && target.files.length > 0)) return;
-    const reader = new FileReader();
-    reader.addEventListener("load", () => setIngredientsImage(reader.result));
-    reader.readAsDataURL(target.files[0]);
-  };
-
-  const onSelectRecipeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (!(target.files && target.files.length > 0)) return;
-    const reader = new FileReader();
-    reader.addEventListener("load", () => setRecipeImage(reader.result));
+    reader.addEventListener("load", () => {
+      if (type === "cooking")     setCookingImage(reader.result);
+      if (type === "equipment")   setEquipmentImage(reader.result);
+      if (type === "ingredients") setIngredientsImage(reader.result);
+      if (type === "recipe")      setRecipeImage(reader.result);
+    });
     reader.readAsDataURL(target.files[0]);
   };
 
@@ -538,10 +519,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       onRecipeCropChange={onRecipeCropChange}
       onRecipeCropComplete={onRecipeCropComplete}
       onRecipeImageLoaded={onRecipeImageLoaded}
-      onSelectCookingFile={onSelectCookingFile}
-      onSelectEquipmentFile={onSelectEquipmentFile}
-      onSelectIngredientsFile={onSelectIngredientsFile}
-      onSelectRecipeFile={onSelectRecipeFile}
+      onSelectFile={onSelectFile}
       ownership={ownership}
       recipeCrop={recipeCrop}
       recipeFullCrop={recipeFullCrop}
@@ -561,6 +539,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   );
 };
 
+type ChangeEvent =    React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type IImage = string | ArrayBuffer | null;
