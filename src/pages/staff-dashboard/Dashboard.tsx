@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
-import { staffDeleteEquipment } from '../../store/staff/equipment/actions';
-import { staffDeleteIngredient } from '../../store/staff/ingredient/actions';
-import { staffDeleteRecipe } from '../../store/staff/recipe/actions';
+import { deleteEquipment as staffDeleteEquipment } from '../../store/staff/equipment/actions';
+import { deleteIngredient as staffDeleteIngredient } from '../../store/staff/ingredient/actions';
+import { deleteRecipe as staffDeleteRecipe } from '../../store/staff/recipe/actions';
 import { DashboardView } from './DashboardView';
 import './dashboard.css';
 
