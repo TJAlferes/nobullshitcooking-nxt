@@ -3,14 +3,14 @@ import { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { authUpdateLocalAvatar } from '../../store/auth/actions';
-import { userSubmitAvatar } from '../../store/user/avatar/actions';
-import { userUnfavoriteRecipe } from '../../store/user/favorite/actions';
-import { userDeletePrivateEquipment } from '../../store/user/equipment/actions';
-import { userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
-import { userDeletePlan } from '../../store/user/plan/actions';
-import { userDeletePrivateRecipe, userDisownPublicRecipe } from '../../store/user/recipe/actions';
-import { userUnsaveRecipe } from '../../store/user/save/actions';
+import { updateLocalAvatar } from '../../store/auth/actions';
+import { submitAvatar as userSubmitAvatar } from '../../store/user/avatar/actions';
+import { unfavoriteRecipe as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
+import { deletePrivateEquipment as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
+import { deletePrivateIngredient as userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
+import { deletePlan as userDeletePlan } from '../../store/user/plan/actions';
+import { deletePrivateRecipe as userDeletePrivateRecipe, disownPublicRecipe as userDisownPublicRecipe } from '../../store/user/recipe/actions';
+import { unsaveRecipe as userUnsaveRecipe } from '../../store/user/save/actions';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { DashboardView } from './view';
 
@@ -136,7 +136,7 @@ export default function Dashboard(): JSX.Element {
   const submitAvatar = () => {
     setLoading(true);
     dispatch(userSubmitAvatar(fullAvatar, tinyAvatar));
-    dispatch(authUpdateLocalAvatar(authname));
+    dispatch(updateLocalAvatar(authname));
   };
 
   const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);

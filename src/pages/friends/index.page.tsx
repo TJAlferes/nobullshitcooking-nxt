@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { userAcceptFriendship, userBlockUser, userDeleteFriendship, userRejectFriendship, userRequestFriendship, userUnblockUser } from '../../store/user/friendship/actions';
+import {
+  acceptFriendship as userAcceptFriendship,
+  blockUser as userBlockUser,
+  deleteFriendship as userDeleteFriendship,
+  rejectFriendship as userRejectFriendship,
+  requestFriendship as userRequestFriendship,
+  unblockUser as userUnblockUser
+} from '../../store/user/friendship/actions';
 import { FriendsView } from './view';
 
 export default function Friends(): JSX.Element {
@@ -29,9 +36,9 @@ export default function Friends(): JSX.Element {
     };
   }, [message]);
 
-  const acceptFriendship = (e: React.SyntheticEvent<EventTarget>) => {
+  const acceptFriendship = (name: string) => {
     setLoading(true);
-    dispatch(userAcceptFriendship((e.target as HTMLInputElement).value));
+    dispatch(userAcceptFriendship(name));
   };
 
   const blockUser = () => {
@@ -44,16 +51,16 @@ export default function Friends(): JSX.Element {
     setUsertoFind("");
   };
 
-  const deleteFriendship = (e: React.SyntheticEvent<EventTarget>) => {
+  const deleteFriendship = (name: string) => {
     setLoading(true);
-    dispatch(userDeleteFriendship((e.target as HTMLInputElement).value));
+    dispatch(userDeleteFriendship(name));
   };
 
-  const inputChange = (e: React.SyntheticEvent<EventTarget>) => setUsertoFind((e.target as HTMLInputElement).value);
+  const inputChange = (e: SyntheticEvent) => setUsertoFind((e.target as HTMLInputElement).value);
 
-  const rejectFriendship = (e: React.SyntheticEvent<EventTarget>) => {
+  const rejectFriendship = (name: string) => {
     setLoading(true);
-    dispatch(userRejectFriendship((e.target as HTMLInputElement).value));
+    dispatch(userRejectFriendship(name));
   };
 
   const requestFriendship = () => {
@@ -68,9 +75,9 @@ export default function Friends(): JSX.Element {
 
   const tabChange = (value: string) => setTab(value);
 
-  const unblockUser = (e: React.SyntheticEvent<EventTarget>) => {
+  const unblockUser = (name: string) => {
     setLoading(true);
-    dispatch(userUnblockUser((e.target as HTMLInputElement).value));
+    dispatch(userUnblockUser(name));
   };
 
   const validateUserToFind = () => (userToFind.trim()).length > 1;
@@ -94,3 +101,5 @@ export default function Friends(): JSX.Element {
     />
   );
 };
+
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;

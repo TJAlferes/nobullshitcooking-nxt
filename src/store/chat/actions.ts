@@ -26,7 +26,7 @@ const {
 } = actionTypes;
 
 function getTime() {
-  return `${(new Date).toLocaleTimeString()}`
+  return `${(new Date).toLocaleTimeString()}`;
 }
 
 export const connect =      () => ({type: CONNECT});
@@ -35,8 +35,8 @@ export const disconnect =   () => ({type: DISCONNECT});
 export const disconnected = () => ({type: DISCONNECTED});
 
 export const onlineFriends =     (friends: string[]) => ({type: ONLINE_FRIENDS, friends});
-export const friendCameOnline =  (friend: string) =>          ({type: FRIEND_CAME_ONLINE, friend});
-export const friendWentOffline = (friend: string) =>          ({type: FRIEND_WENT_OFFLINE, friend});
+export const friendCameOnline =  (friend: string) =>    ({type: FRIEND_CAME_ONLINE, friend});
+export const friendWentOffline = (friend: string) =>    ({type: FRIEND_WENT_OFFLINE, friend});
 
 export const joinRoom =     (room: string) =>                  ({type: JOIN_ROOM, room});
 export const joinedRoom =   (users: string[], room: string) => ({type: JOINED_ROOM, users, room});

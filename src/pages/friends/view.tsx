@@ -46,10 +46,10 @@ export function FriendsView({
 
             <span className="username"><Link href={`/profile/${f.username}`}><a>{f.username}</a></Link></span>
 
-            {f.status === "pending-received" && <button className="action" disabled={loading} name="accept"   onClick={acceptFriendship} value={f.username}>Accept</button>}
-            {f.status === "pending-received" && <button className="delete" disabled={loading} name="reject"   onClick={rejectFriendship} value={f.username}>Reject</button>}
-            {f.status === "accepted" &&         <button className="delete" disabled={loading} name="unfriend" onClick={deleteFriendship} value={f.username}>Unfriend</button>}
-            {f.status === "blocked" &&          <button className="delete" disabled={loading} name="unblock"  onClick={unblockUser}      value={f.username}>Unblock</button>}
+            {f.status === "pending-received" && <button className="action" disabled={loading} name="accept"   onClick={() => acceptFriendship(f.username)}>Accept</button>}
+            {f.status === "pending-received" && <button className="delete" disabled={loading} name="reject"   onClick={() => rejectFriendship(f.username)}>Reject</button>}
+            {f.status === "accepted" &&         <button className="delete" disabled={loading} name="unfriend" onClick={() => deleteFriendship(f.username)}>Unfriend</button>}
+            {f.status === "blocked" &&          <button className="delete" disabled={loading} name="unblock"  onClick={() => unblockUser(f.username)}     >Unblock</button>}
           </div>
         ))}
       </div>
@@ -60,18 +60,18 @@ export function FriendsView({
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Props = {
-  acceptFriendship(e: SyntheticEvent): void;
-  blockUser():                         void;
-  deleteFriendship(e: SyntheticEvent): void;
-  feedback:                            string;
-  inputChange(e: SyntheticEvent):      void;
-  loading:                             boolean;
-  myFriendships:                       IFriendship[];
-  rejectFriendship(e: SyntheticEvent): void;
-  requestFriendship():                 void;
-  tab:                                 string;
-  tabChange(value: string):            void;
-  theme:                               string;
-  unblockUser(e: SyntheticEvent):      void;
-  userToFind:                          string;
+  acceptFriendship(name: string): void;
+  blockUser():                    void;
+  deleteFriendship(name: string): void;
+  feedback:                       string;
+  inputChange(e: SyntheticEvent): void;
+  loading:                        boolean;
+  myFriendships:                  IFriendship[];
+  rejectFriendship(name: string): void;
+  requestFriendship():            void;
+  tab:                            string;
+  tabChange(value: string):       void;
+  theme:                          string;
+  unblockUser(name: string):      void;
+  userToFind:                     string;
 };

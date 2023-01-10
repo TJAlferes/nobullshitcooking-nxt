@@ -77,6 +77,7 @@ export function* sendPrivateMessageSaga({ text, to }: ISendPrivateMessage) {
 
 export function* updateOnlineSaga(status: string) {  // TO DO: give this an action?
   if (status === "connected") socket.emit('GetOnlineFriends');
+  //TO DO: if (status === "disconnected") socket.emit('AppearOfflineTo');  // or in separate function?
 }
 
 interface IClientToServerEvents {

@@ -15,7 +15,6 @@ export interface IRequestFriendship {
 export interface IAcceptFriendship {
   type:   typeof actionTypes.ACCEPT_FRIENDSHIP;
   friend: string;
-  status: string;
 }
 
 export interface IRejectFriendship {
@@ -26,13 +25,11 @@ export interface IRejectFriendship {
 export interface IDeleteFriendship {
   type:   typeof actionTypes.DELETE_FRIENDSHIP;
   friend: string;
-  status: string;
 }
 
 export interface IBlockUser {
   type:   typeof actionTypes.BLOCK_USER;
   friend: string;
-  status: string;
 }
 
 export interface IUnblockUser {
