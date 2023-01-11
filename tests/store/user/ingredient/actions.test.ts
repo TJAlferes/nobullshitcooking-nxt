@@ -1,67 +1,48 @@
-import {
-  userCreateNewPrivateIngredient,
-  userEditPrivateIngredient,
-  userDeletePrivateIngredient
-} from '../../../../src/store/user/ingredient/actions';
+import { createNewPrivateIngredient, editPrivateIngredient, deletePrivateIngredient } from '../../../../src/store/user/ingredient/actions';
 import { actionTypes } from '../../../../src/store/user/ingredient/types';
 
-const {
-  USER_CREATE_NEW_PRIVATE_INGREDIENT,
-  USER_EDIT_PRIVATE_INGREDIENT,
-  USER_DELETE_PRIVATE_INGREDIENT
-} = actionTypes;
+const { CREATE_NEW_PRIVATE_INGREDIENT, EDIT_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = actionTypes;
 
-const creatingIngredientInfo = {
+const creatingInfo = {
   ingredientTypeId: 3,
-  name: "HOT Sauce",
-  description: "From Uncle Bob.",
-  image: "hot-sauce",
-  fullImage: null,
-  tinyImage: null
+  name:             "HOT Sauce",
+  description:      "From Uncle Bob.",
+  image:            "hot-sauce",
+  fullImage:        null,
+  tinyImage:        null
 };
-const editingIngredientInfo = {
-  ingredientTypeId: 3,
-  name: "HOT Sauce",
-  description: "From Uncle Bob.",
-  image: "hot-sauce",
-  fullImage: null,
-  tinyImage: null,
-  id: 377,
-  prevImage: "hot-sauce"
+const editingInfo = {
+  id:        377,
+  prevImage: "hot-sauce",
+  ...creatingInfo
 };
 
-describe('userCreateNewPrivateIngredient action creator', () => {
+describe('createNewPrivateIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(userCreateNewPrivateIngredient(creatingIngredientInfo).type)
-      .toEqual(USER_CREATE_NEW_PRIVATE_INGREDIENT);
+    expect(createNewPrivateIngredient(creatingInfo).type).toEqual(CREATE_NEW_PRIVATE_INGREDIENT);
   });
 
   it('returns the correct ingredientInfo', () => {
-    expect(
-      userCreateNewPrivateIngredient(creatingIngredientInfo).ingredientInfo
-    ).toEqual(creatingIngredientInfo);
+    expect(createNewPrivateIngredient(creatingInfo).ingredientInfo).toEqual(creatingInfo);
   });
 });
 
-describe('userEditPrivateIngredient action creator', () => {
+describe('editPrivateIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(userEditPrivateIngredient(editingIngredientInfo).type)
-      .toEqual(USER_EDIT_PRIVATE_INGREDIENT);
+    expect(editPrivateIngredient(editingInfo).type).toEqual(EDIT_PRIVATE_INGREDIENT);
   });
 
   it('returns the correct ingredientInfo', () => {
-    expect(userEditPrivateIngredient(editingIngredientInfo).ingredientInfo)
-      .toEqual(editingIngredientInfo);
+    expect(editPrivateIngredient(editingInfo).ingredientInfo).toEqual(editingInfo);
   });
 });
 
-describe('userDeletePrivateIngredient action creator', () => {
+describe('deletePrivateIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(userDeletePrivateIngredient(7).type)
-      .toEqual(USER_DELETE_PRIVATE_INGREDIENT);
+    expect(deletePrivateIngredient(7).type).toEqual(DELETE_PRIVATE_INGREDIENT);
   });
 
   it('returns the correct id', () => {
-    expect(userDeletePrivateIngredient(7).id).toEqual(7);
+    expect(deletePrivateIngredient(7).id).toEqual(7);
   });
 });

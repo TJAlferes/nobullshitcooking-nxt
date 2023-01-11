@@ -1,17 +1,9 @@
-import {
-  staffCreateNewEquipment,
-  staffEditEquipment,
-  staffDeleteEquipment
-} from '../../../../src/store/staff/equipment/actions';
+import { createNewEquipment, editEquipment, deleteEquipment } from '../../../../src/store/staff/equipment/actions';
 import { actionTypes } from '../../../../src/store/staff/equipment/types';
 
-const {
-  STAFF_CREATE_NEW_EQUIPMENT,
-  STAFF_EDIT_EQUIPMENT,
-  STAFF_DELETE_EQUIPMENT
-} = actionTypes;
+const { CREATE_NEW_EQUIPMENT, EDIT_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
-const creatingEquipmentInfo = {
+const creatingInfo = {
   equipmentTypeId: 3,
   name: "Metal Spatula",
   description: "It works.",
@@ -19,47 +11,38 @@ const creatingEquipmentInfo = {
   fullImage: null,
   tinyImage: null
 };
-const editingEquipmentInfo = {
+const editInfo = {
   id: 1,
-  equipmentTypeId: 3,
-  name: "Metal Spatula",
-  description: "It works.",
   prevImage: "nobsc-metal-spatula",
-  image: "nobsc-metal-spatula",
-  fullImage: null,
-  tinyImage: null
+  ...creatingInfo
 };
 
-describe('staffCreateNewEquipment action creator', () => {
+describe('createNewEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffCreateNewEquipment(creatingEquipmentInfo).type)
-      .toEqual(STAFF_CREATE_NEW_EQUIPMENT);
+    expect(createNewEquipment(creatingInfo).type).toEqual(CREATE_NEW_EQUIPMENT);
   });
 
   it('returns the correct equipmentInfo', () => {
-    expect(staffCreateNewEquipment(creatingEquipmentInfo).equipmentInfo)
-      .toEqual(creatingEquipmentInfo);
+    expect(createNewEquipment(creatingInfo).equipmentInfo).toEqual(creatingInfo);
   });
 });
 
-describe('staffEditEquipment action creator', () => {
+describe('editEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffEditEquipment(editingEquipmentInfo).type)
-      .toEqual(STAFF_EDIT_EQUIPMENT);
+    expect(editEquipment(editInfo).type).toEqual(EDIT_EQUIPMENT);
   });
 
   it('returns the correct equipmentInfo', () => {
-    expect(staffEditEquipment(editingEquipmentInfo).equipmentInfo)
-      .toEqual(editingEquipmentInfo);
+    expect(editEquipment(editInfo).equipmentInfo).toEqual(editInfo);
   });
 });
 
-describe('staffDeleteEquipment action creator', () => {
+describe('deleteEquipment action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffDeleteEquipment(7).type).toEqual(STAFF_DELETE_EQUIPMENT);
+    expect(deleteEquipment(7).type).toEqual(DELETE_EQUIPMENT);
   });
 
   it('returns the correct equipmentId', () => {
-    expect(staffDeleteEquipment(7).id).toEqual(7);
+    expect(deleteEquipment(7).id).toEqual(7);
   });
 });

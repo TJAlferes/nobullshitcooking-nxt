@@ -2,27 +2,16 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
-import {
-  userMessage,
-  userMessageClear
-} from '../../../../src/store/user/actions';
-import {
-  userCreateNewPrivateIngredientSaga,
-  userEditPrivateIngredientSaga,
-  userDeletePrivateIngredientSaga,
-} from '../../../../src/store/user/ingredient/sagas';
+import { userMessage, userMessageClear } from '../../../../src/store/user/actions';
+import { createNewPrivateIngredientSaga, editPrivateIngredientSaga, deletePrivateIngredientSaga } from '../../../../src/store/user/ingredient/sagas';
 import { actionTypes } from '../../../../src/store/user/ingredient/types';
 
-const {
-  USER_CREATE_NEW_PRIVATE_INGREDIENT,
-  USER_EDIT_PRIVATE_INGREDIENT,
-  USER_DELETE_PRIVATE_INGREDIENT
-} = actionTypes;
+const { CREATE_NEW_PRIVATE_INGREDIENT, EDIT_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = actionTypes;
 
 const fullImage = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const tinyImage = new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
+const tinyImage = new File([(new Blob)], "resizedTiny",  {type: "image/jpeg"});
 
-const creatingIngredientInfo = {
+const creatingInfo = {
   ingredientTypeId: 3,
   name: "HOT Sauce",
   description: "From Uncle Bob.",
@@ -30,23 +19,14 @@ const creatingIngredientInfo = {
   fullImage,
   tinyImage
 };
-
-const editingIngredientInfo = {
-  ingredientTypeId: 3,
-  name: "HOT Sauce",
-  description: "From Uncle Bob.",
-  image: "hot-sauce",
-  fullImage,
-  tinyImage,
+const editInfo = {
   id: 377,
-  prevImage: "hot-sauce"
+  prevImage: "hot-sauce",
+  ...creatingInfo
 };
 
-describe('userCreateNewPrivateIngredientSaga', () => {
-  const action = {
-    type: USER_CREATE_NEW_PRIVATE_INGREDIENT,
-    ingredientInfo: creatingIngredientInfo
-  };
+describe('createNewPrivateIngredientSaga', () => {
+  const action = {type: CREATE_NEW_PRIVATE_INGREDIENT, ingredientInfo: creatingInfo};
   const res1 = {
     data: {
       fullSignature: "signedUrlString",
@@ -63,34 +43,19 @@ describe('userCreateNewPrivateIngredientSaga', () => {
   } = action.ingredientInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = userCreateNewPrivateIngredientSaga(action);
+    const iter = createNewPrivateIngredientSaga(action);
     const res = {data: {message: 'Ingredient created.'}};
 
-    expect(iterator.next().value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/user/get-signed-url/ingredient`,
-      {fileType: fullImage.type},
-      {withCredentials: true}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.post], `${endpoint}/user/get-signed-url/ingredient`, {fileType: fullImage.type}, {withCredentials: true}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.fullSignature,
-      fullImage,
-      {headers: {'Content-Type': fullImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.tinySignature,
-      tinyImage,
-      {headers: {'Content-Type': tinyImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}}));
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/ingredient/create`,
@@ -105,49 +70,43 @@ describe('userCreateNewPrivateIngredientSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = userCreateNewPrivateIngredientSaga(action);
+    const iter = createNewPrivateIngredientSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next();
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = userCreateNewPrivateIngredientSaga(action);
+    const iter = createNewPrivateIngredientSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
 
 
-describe('userEditPrivateIngredientSaga', () => {
-  const action = {
-    type: USER_EDIT_PRIVATE_INGREDIENT,
-    ingredientInfo: editingIngredientInfo
-  };
+describe('editPrivateIngredientSaga', () => {
+  const action = {type: EDIT_PRIVATE_INGREDIENT, ingredientInfo: editInfo};
   const res1 = {
     data: {
       fullSignature: "signedUrlString",
@@ -166,34 +125,19 @@ describe('userEditPrivateIngredientSaga', () => {
   } = action.ingredientInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = userEditPrivateIngredientSaga(action);
+    const iter = editPrivateIngredientSaga(action);
     const res = {data: {message: 'Ingredient updated.'}};
 
-    expect(iterator.next().value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/user/get-signed-url/ingredient`,
-      {fileType: fullImage.type},
-      {withCredentials: true}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.post], `${endpoint}/user/get-signed-url/ingredient`, {fileType: fullImage.type}, {withCredentials: true}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.fullSignature,
-      fullImage,
-      {headers: {'Content-Type': fullImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.tinySignature,
-      tinyImage,
-      {headers: {'Content-Type': tinyImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}}));
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
     .toEqual(call(
       [axios, axios.put],
       `${endpoint}/user/ingredient/update`,
@@ -210,86 +154,77 @@ describe('userEditPrivateIngredientSaga', () => {
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = userEditPrivateIngredientSaga(action);
+    const iter = editPrivateIngredientSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next();
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = userEditPrivateIngredientSaga(action);
+    const iter = editPrivateIngredientSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
 
 
-describe('userDeletePrivateIngredientSaga', () => {
-  const action = {type: USER_DELETE_PRIVATE_INGREDIENT, id: 4};
+describe('deletePrivateIngredientSaga', () => {
+  const action = {type: DELETE_PRIVATE_INGREDIENT, id: 4};
 
   it('should dispatch succeeded', () => {
-    const iterator = userDeletePrivateIngredientSaga(action);
+    const iter = deletePrivateIngredientSaga(action);
     const res = {data: {message: 'Ingredient deleted.'}};
 
-    expect(iterator.next().value).toEqual(call(
-      [axios, axios.delete],
-      `${endpoint}/user/ingredient/delete`,
-      {withCredentials: true, data: {id: action.id}}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.delete], `${endpoint}/user/ingredient/delete`, {withCredentials: true, data: {id: action.id}}));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = userDeletePrivateIngredientSaga(action);
+    const iter = deletePrivateIngredientSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(userMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(userMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = userDeletePrivateIngredientSaga(action);
+    const iter = deletePrivateIngredientSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(userMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(userMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(userMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(userMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

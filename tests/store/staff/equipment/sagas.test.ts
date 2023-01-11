@@ -2,51 +2,31 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../../src/config/NOBSCAPI';
-import {
-  staffMessage,
-  staffMessageClear
-} from '../../../../src/store/staff/actions';
-import {
-  staffCreateNewEquipmentSaga,
-  staffEditEquipmentSaga,
-  staffDeleteEquipmentSaga
-} from '../../../../src/store/staff/equipment/sagas';
+import { staffMessage, staffMessageClear } from '../../../../src/store/staff/actions';
+import { createNewEquipmentSaga, editEquipmentSaga, deleteEquipmentSaga } from '../../../../src/store/staff/equipment/sagas';
 import { actionTypes } from '../../../../src/store/staff/equipment/types';
 
-const {
-  STAFF_CREATE_NEW_EQUIPMENT,
-  STAFF_EDIT_EQUIPMENT,
-  STAFF_DELETE_EQUIPMENT
-} = actionTypes;
+const { CREATE_NEW_EQUIPMENT, EDIT_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
 const fullImage = new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
-const tinyImage = new File([(new Blob)], "resizedTiny", {type: "image/jpeg"});
+const tinyImage = new File([(new Blob)], "resizedTiny",  {type: "image/jpeg"});
 
-const creatingEquipmentInfo = {
+const creatingInfo = {
   equipmentTypeId: 3,
-  name: "Metal Spatula",
-  description: "It works.",
-  image: "nobsc-metal-spatula",
+  name:            "Metal Spatula",
+  description:     "It works.",
+  image:           "nobsc-metal-spatula",
   fullImage,
   tinyImage
 };
-
-const editingEquipmentInfo = {
-  id: 1,
-  equipmentTypeId: 3,
-  name: "Metal Spatula",
-  description: "It works.",
+const editInfo = {
+  id:        1,
   prevImage: "nobsc-metal-spatula",
-  image: "nobsc-metal-spatula",
-  fullImage,
-  tinyImage
+  ...creatingInfo
 };
 
 describe('userCreateNewEquipmentSaga', () => {
-  const action = {
-    type: STAFF_CREATE_NEW_EQUIPMENT,
-    equipmentInfo: creatingEquipmentInfo
-  };
+  const action = {type: CREATE_NEW_EQUIPMENT, equipmentInfo: creatingInfo};
   const res1 = {
     data: {
       fullSignature: "signedUrlString",
@@ -58,94 +38,71 @@ describe('userCreateNewEquipmentSaga', () => {
     equipmentTypeId,
     name,
     description,
+    image,
     fullImage,
     tinyImage
   } = action.equipmentInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = staffCreateNewEquipmentSaga(action);
+    const iter = createNewEquipmentSaga(action);
     const res = {data: {message: 'Equipment created.'}};
 
-    expect(iterator.next().value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/staff/get-signed-url/equipment`,
-      {fileType: fullImage.type},
-      {withCredentials: true}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.post], `${endpoint}/staff/get-signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.fullSignature,
-      fullImage,
-      {headers: {'Content-Type': fullImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.tinySignature,
-      tinyImage,
-      {headers: {'Content-Type': tinyImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}}));
 
-    expect(iterator.next().value)
-    .toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/staff/equipment/create`,
-      {
-        equipmentInfo: {
-          equipmentTypeId,
-          name,
-          description,
-          image: "equipmentUrlString"
-        }
-      },
+      {equipmentInfo: {
+        equipmentTypeId,
+        name,
+        description,
+        image: "equipmentUrlString"
+      }},
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffCreateNewEquipmentSaga(action);
+    const iter = createNewEquipmentSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next();
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffCreateNewEquipmentSaga(action);
+    const iter = createNewEquipmentSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('staffEditEquipmentSaga', () => {
-  const action = {
-    type: STAFF_EDIT_EQUIPMENT,
-    equipmentInfo: editingEquipmentInfo
-  };
+describe('editEquipmentSaga', () => {
+  const action = {type: EDIT_EQUIPMENT, equipmentInfo: editInfo};
   const res1 = {
     data: {
       fullSignature: "signedUrlString",
@@ -164,128 +121,104 @@ describe('staffEditEquipmentSaga', () => {
   } = action.equipmentInfo;
 
   it('should dispatch succeeded', () => {
-    const iterator = staffEditEquipmentSaga(action);
+    const iter = editEquipmentSaga(action);
     const res = {data: {message: 'Equipment updated.'}};
 
-    expect(iterator.next().value)
-    .toEqual(call(
-      [axios, axios.post],
-      `${endpoint}/staff/get-signed-url/equipment`,
-      {fileType: fullImage.type},
-      {withCredentials: true}
-    ));
+    expect(iter.next().value)
+      .toEqual(call([axios, axios.post], `${endpoint}/staff/get-signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.fullSignature,
-      fullImage,
-      {headers: {'Content-Type': fullImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}}));
 
-    expect(iterator.next(res1).value)
-    .toEqual(call(
-      [axios, axios.put],
-      res1.data.tinySignature,
-      tinyImage,
-      {headers: {'Content-Type': tinyImage.type}}
-    ));
+    expect(iter.next(res1).value)
+      .toEqual(call([axios, axios.put], res1.data.tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}}));
 
-    expect(iterator.next().value)
-    .toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.put],
       `${endpoint}/staff/equipment/update`,
-      {
-        equipmentInfo: {
-          id,
-          equipmentTypeId,
-          name,
-          description,
-          prevImage,
-          image: "equipmentUrlString"
-        }
-      },
+      {equipmentInfo: {
+        id,
+        equipmentTypeId,
+        name,
+        description,
+        prevImage,
+        image: "equipmentUrlString"
+      }},
       {withCredentials: true}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffEditEquipmentSaga(action);
+    const iter = editEquipmentSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
-    iterator.next(res1);
-    iterator.next(res1);
-    iterator.next();
+    iter.next();
+    iter.next(res1);
+    iter.next(res1);
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffEditEquipmentSaga(action);
+    const iter = editEquipmentSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('staffDeleteEquipmentSaga', () => {
-  const action = {type: STAFF_DELETE_EQUIPMENT, id: 4};
+describe('deleteEquipmentSaga', () => {
+  const action = {type: DELETE_EQUIPMENT, id: 4};
 
   it('should dispatch succeeded', () => {
-    const iterator = staffDeleteEquipmentSaga(action);
+    const iter = deleteEquipmentSaga(action);
     const res = {data: {message: 'Equipment deleted.'}};
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.delete],
       `${endpoint}/staff/equipment/delete`,
       {withCredentials: true, data: {id: action.id}}
     ));
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed', () => {
-    const iterator = staffDeleteEquipmentSaga(action);
+    const iter = deleteEquipmentSaga(action);
     const res = {data: {message: 'Oops.'}};
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.next(res).value)
-      .toEqual(put(staffMessage(res.data.message)));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(staffMessage(res.data.message)));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if thrown', () => {
-    const iterator = staffDeleteEquipmentSaga(action);
+    const iter = deleteEquipmentSaga(action);
 
-    iterator.next();
+    iter.next();
 
-    expect(iterator.throw('error').value)
-      .toEqual(put(staffMessage('An error occurred. Please try again.')));
-    expect(iterator.next().value).toEqual(delay(4000));
-    expect(iterator.next().value).toEqual(put(staffMessageClear()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(staffMessage('An error occurred. Please try again.')));
+    expect(iter.next().value).toEqual(delay(4000));
+    expect(iter.next().value).toEqual(put(staffMessageClear()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

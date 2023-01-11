@@ -8,7 +8,7 @@ import { actionTypes } from '../../../../src/store/staff/recipe/types';
 
 const { CREATE_NEW_RECIPE, DELETE_RECIPE, EDIT_RECIPE } = actionTypes;
 
-const recipeFullImage =      new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});
+const recipeFullImage =      new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});  // TO DO: IMPORTANT: Securely set type across system
 const recipeThumbImage =     new File([(new Blob)], "resizedThumb", {type: "image/jpeg"});
 const recipeTinyImage =      new File([(new Blob)], "resizedTiny",  {type: "image/jpeg"});
 const equipmentFullImage =   new File([(new Blob)], "resizedFinal", {type: "image/jpeg"});

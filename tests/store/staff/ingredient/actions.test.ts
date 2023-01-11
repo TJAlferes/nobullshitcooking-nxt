@@ -1,65 +1,48 @@
-import {
-  staffCreateNewIngredient,
-  staffEditIngredient,
-  staffDeleteIngredient
-} from '../../../../src/store/staff/ingredient/actions';
+import { createNewIngredient, editIngredient, deleteIngredient } from '../../../../src/store/staff/ingredient/actions';
 import { actionTypes } from '../../../../src/store/staff/ingredient/types';
 
-const {
-  STAFF_CREATE_NEW_INGREDIENT,
-  STAFF_EDIT_INGREDIENT,
-  STAFF_DELETE_INGREDIENT
-} = actionTypes;
+const { CREATE_NEW_INGREDIENT, EDIT_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
-const creatingIngredientInfo = {
+const creatingInfo = {
   ingredientTypeId: 3,
-  name: "HOT Sauce",
-  description: "From Uncle Bob.",
-  image: "hot-sauce",
-  fullImage: null,
-  tinyImage: null
+  name:             "HOT Sauce",
+  description:      "From Uncle Bob.",
+  image:            "hot-sauce",
+  fullImage:        null,
+  tinyImage:        null
 };
-const editingIngredientInfo = {
-  ingredientTypeId: 3,
-  name: "HOT Sauce",
-  description: "From Uncle Bob.",
-  image: "hot-sauce",
-  fullImage: null,
-  tinyImage: null,
-  id: 377,
-  prevImage: "hot-sauce"
+const editInfo = {
+  id:        377,
+  prevImage: "hot-sauce",
+  ...creatingInfo
 };
 
-describe('staffCreateNewIngredient action creator', () => {
+describe('createNewIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffCreateNewIngredient(creatingIngredientInfo).type)
-      .toEqual(STAFF_CREATE_NEW_INGREDIENT);
+    expect(createNewIngredient(creatingInfo).type).toEqual(CREATE_NEW_INGREDIENT);
   });
 
   it('returns the correct ingredientInfo', () => {
-    expect(staffCreateNewIngredient(creatingIngredientInfo).ingredientInfo)
-      .toEqual(creatingIngredientInfo);
+    expect(createNewIngredient(creatingInfo).ingredientInfo).toEqual(creatingInfo);
   });
 });
 
-describe('staffEditIngredient action creator', () => {
+describe('editIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffEditIngredient(editingIngredientInfo).type)
-      .toEqual(STAFF_EDIT_INGREDIENT);
+    expect(editIngredient(editInfo).type).toEqual(EDIT_INGREDIENT);
   });
 
   it('returns the correct ingredientInfo', () => {
-    expect(staffEditIngredient(editingIngredientInfo).ingredientInfo)
-      .toEqual(editingIngredientInfo);
+    expect(editIngredient(editInfo).ingredientInfo).toEqual(editInfo);
   });
 });
 
-describe('staffDeleteIngredient action creator', () => {
+describe('deleteIngredient action creator', () => {
   it('returns the correct action type', () => {
-    expect(staffDeleteIngredient(7).type).toEqual(STAFF_DELETE_INGREDIENT);
+    expect(deleteIngredient(7).type).toEqual(DELETE_INGREDIENT);
   });
 
   it('returns the correct ingredientId', () => {
-    expect(staffDeleteIngredient(7).id).toEqual(7);
+    expect(deleteIngredient(7).id).toEqual(7);
   });
 });
