@@ -1,49 +1,44 @@
 import axios from 'axios';
 import { call, put } from 'redux-saga/effects';
 
+import { NOBSCAPI } from '../../../src/config/NOBSCAPI';
 import {
-  NOBSCBackendAPIEndpointOne
-} from '../../../src/config/NOBSCBackendAPIEndpointOne';
-import {
-  dataGetInitialData,
-  dataGetData,
-  dataGetInitialUserData,
-  dataGetUserData
+  getInitialData,
+  getData,
+  getInitialUserData,
+  getUserData
 } from '../../../src/store/data/actions';
 import {
-  dataGetInitialDataSaga,
-  dataGetContentSaga,
-  dataGetContentTypesSaga,
-  dataGetCuisinesSaga,
-  dataGetEquipmentsSaga,
-  dataGetEquipmentTypesSaga,
-  dataGetIngredientsSaga,
-  dataGetIngredientTypesSaga,
-  dataGetMeasurementsSaga,
-  dataGetMethodsSaga,
-  dataGetProductsSaga,
-  dataGetProductCategoriesSaga,
-  dataGetProductTypesSaga,
-  dataGetRecipesSaga,
-  dataGetRecipeTypesSaga,
+  getInitialDataSaga,
+  getCuisinesSaga,
+  getEquipmentsSaga,
+  getEquipmentTypesSaga,
+  getIngredientsSaga,
+  getIngredientTypesSaga,
+  getMeasurementsSaga,
+  getMethodsSaga,
+  getProductsSaga,
+  getProductCategoriesSaga,
+  getProductTypesSaga,
+  getRecipesSaga,
+  getRecipeTypesSaga,
 
-  dataGetInitialUserDataSaga,
-  dataGetMyContentSaga,
-  dataGetMyFavoriteRecipesSaga,
-  dataGetMyFriendshipsSaga,
-  dataGetMyPlansSaga,
-  dataGetMyPrivateEquipmentsSaga,
-  dataGetMyPrivateIngredientsSaga,
-  dataGetMyPrivateRecipesSaga,
-  dataGetMyPublicRecipesSaga,
-  dataGetMySavedRecipesSaga
+  getInitialUserDataSaga,
+  getMyFavoriteRecipesSaga,
+  getMyFriendshipsSaga,
+  getMyPlansSaga,
+  getMyPrivateEquipmentsSaga,
+  getMyPrivateIngredientsSaga,
+  getMyPrivateRecipesSaga,
+  getMyPublicRecipesSaga,
+  getMySavedRecipesSaga
 } from '../../../src/store/data/sagas';
 
-const endpoint = NOBSCBackendAPIEndpointOne;
+const endpoint = NOBSCAPI;
 
-describe('dataGetInitialDataSaga', () => {
+describe('getInitialDataSaga', () => {
   it('should dispatch initialData and succeeded if data found', () => {
-    const iterator = dataGetInitialDataSaga();
+    const iter = getInitialDataSaga();
     const res = {
       data: {
         officialContent: [],
@@ -94,28 +89,28 @@ describe('dataGetInitialDataSaga', () => {
       }
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/data-init`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetInitialData(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetInitialDataSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getInitialData(res.data)));
+    expect(iter.next().value).toEqual(put(getInitialDataSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetInitialDataSaga();
+    const iter = getInitialDataSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/data-init`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetInitialDataFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getInitialDataFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetContentSaga', () => {
+describe('getContentSaga', () => {
   it('should dispatch content and succeeded if data found', () => {
-    const iterator = dataGetContentSaga();
+    const iter = getContentSaga();
     const res = {
       data: [
         {
@@ -128,27 +123,27 @@ describe('dataGetContentSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/content`));
-    expect(iterator.next(res).value).toEqual(put(dataGetContent(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetContentSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getContent(res.data)));
+    expect(iter.next().value).toEqual(put(getContentSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetContentSaga();
+    const iter = getContentSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/content`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetContentFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getContentFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetContentTypesSaga', () => {
+describe('getContentTypesSaga', () => {
   it('should dispatch contentTypes and succeeded if data found', () => {
-    const iterator = dataGetContentTypesSaga();
+    const iter = getContentTypesSaga();
     const res = {
       data: [
         {id: 1, parent_id: 0, name: "Page", path: "/page"},
@@ -156,51 +151,51 @@ describe('dataGetContentTypesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/content-type`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetContentTypes(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetContentTypesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getContentTypes(res.data)));
+    expect(iter.next().value).toEqual(put(getContentTypesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetContentTypesSaga();
+    const iter = getContentTypesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/content-type`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetContentTypesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getContentTypesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetCuisinesSaga', () => {
+describe('getCuisinesSaga', () => {
   it('should dispatch cuisines and succeeded if data found', () => {
-    const iterator = dataGetCuisinesSaga();
+    const iter = getCuisinesSaga();
     const res = {data: [{id: 1, name: "Russian", nation: "Russia"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/cuisine`));
-    expect(iterator.next(res).value).toEqual(put(dataGetCuisines(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetCuisinesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getCuisines(res.data)));
+    expect(iter.next().value).toEqual(put(getCuisinesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetCuisinesSaga();
+    const iter = getCuisinesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/cuisine`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetCuisinesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getCuisinesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetEquipmentsSaga', () => {
+describe('getEquipmentsSaga', () => {
   it('should dispatch equipments and succeeded if data found', () => {
-    const iterator = dataGetEquipmentsSaga();
+    const iter = getEquipmentsSaga();
     const res = {
       data: [
         {
@@ -215,52 +210,52 @@ describe('dataGetEquipmentsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/equipment/official/all`));
-    expect(iterator.next(res).value).toEqual(put(dataGetEquipments(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetEquipmentsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getEquipments(res.data)));
+    expect(iter.next().value).toEqual(put(getEquipmentsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetEquipmentsSaga();
+    const iter = getEquipmentsSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/equipment/official/all`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetEquipmentsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getEquipmentsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetEquipmentTypesSaga', () => {
+describe('getEquipmentTypesSaga', () => {
   it('should dispatch equipment types and succeeded if data found', () => {
-    const iterator = dataGetEquipmentTypesSaga();
+    const iter = getEquipmentTypesSaga();
     const res = {data: [{"id": 1, "name": "Cleaning"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/equipment-type`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetEquipmentTypes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetEquipmentTypesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getEquipmentTypes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getEquipmentTypesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetEquipmentTypesSaga();
+    const iter = getEquipmentTypesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/equipment-type`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetEquipmentTypesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getEquipmentTypesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetIngredientsSaga', () => {
+describe('getIngredientsSaga', () => {
   it('should dispatch ingredients and succeeded if data found', () => {
-    const iterator = dataGetIngredientsSaga();
+    const iter = getIngredientsSaga();
     const res = {
       data: [
         {
@@ -277,101 +272,101 @@ describe('dataGetIngredientsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/ingredient/official/all`));
-    expect(iterator.next(res).value).toEqual(put(dataGetIngredients(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetIngredientsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getIngredients(res.data)));
+    expect(iter.next().value).toEqual(put(getIngredientsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetIngredientsSaga();
+    const iter = getIngredientsSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/ingredient/official/all`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetIngredientsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getIngredientsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetIngredientTypesSaga', () => {
+describe('getIngredientTypesSaga', () => {
   it('should dispatch ingredient types and succeeded if data found', () => {
-    const iterator = dataGetIngredientTypesSaga();
+    const iter = getIngredientTypesSaga();
     const res = {data: [{"id": 1, "name": "Fish"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/ingredient-type`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetIngredientTypes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetIngredientTypesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getIngredientTypes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getIngredientTypesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetIngredientTypesSaga();
+    const iter = getIngredientTypesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/ingredient-type`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetIngredientTypesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getIngredientTypesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMeasurementsSaga', () => {
+describe('getMeasurementsSaga', () => {
   it('should dispatch measurements and succeeded if data found', () => {
-    const iterator = dataGetMeasurementsSaga();
+    const iter = getMeasurementsSaga();
     const res = {data: [{id: 1, name: "teaspoon"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/measurement`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMeasurements(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetMeasurementsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMeasurements(res.data)));
+    expect(iter.next().value).toEqual(put(getMeasurementsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMeasurementsSaga();
+    const iter = getMeasurementsSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/measurement`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMeasurementsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMeasurementsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMethodsSaga', () => {
+describe('getMethodsSaga', () => {
   it('should dispatch methods and succeeded if data found', () => {
-    const iterator = dataGetMethodsSaga();
+    const iter = getMethodsSaga();
     const res = {data: [{"id": 1, "name": "No-Cook"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/method`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMethods(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMethodsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMethods(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMethodsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMethodsSaga();
+    const iter = getMethodsSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/method`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMethodsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMethodsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetProductsSaga', () => {
+describe('getProductsSaga', () => {
   it('should dispatch products and succeeded if data found', () => {
-    const iterator = dataGetProductsSaga();
+    const iter = getProductsSaga();
     const res = {
       data: [
         {
@@ -389,76 +384,76 @@ describe('dataGetProductsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product`));
-    expect(iterator.next(res).value).toEqual(put(dataGetProducts(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetProductsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getProducts(res.data)));
+    expect(iter.next().value).toEqual(put(getProductsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetProductsSaga();
+    const iter = getProductsSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product`));
-    expect(iterator.throw('error').value).toEqual(put(dataGetProductsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(getProductsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetProductCategoriesSaga', () => {
+describe('getProductCategoriesSaga', () => {
   it('should dispatch product categories and succeeded if data found', () => {
-    const iterator = dataGetProductCategoriesSaga();
+    const iter = getProductCategoriesSaga();
     const res = {data: [{"id": 1, "name": "Fish"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product-category`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetProductCategories(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetProductCategoriesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getProductCategories(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getProductCategoriesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetProductCategoriesSaga();
+    const iter = getProductCategoriesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product-category`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetProductCategoriesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getProductCategoriesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetProductTypesSaga', () => {
+describe('getProductTypesSaga', () => {
   it('should dispatch product types and succeeded if data found', () => {
-    const iterator = dataGetProductTypesSaga();
+    const iter = getProductTypesSaga();
     const res = {data: [{"id": 1, "name": "Fish"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product-type`));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetProductTypes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetProductTypesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getProductTypes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getProductTypesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetProductTypesSaga();
+    const iter = getProductTypesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/product-type`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetProductTypesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getProductTypesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetRecipesSaga', () => {
+describe('getRecipesSaga', () => {
   it('should dispatch recipes and succeeded if data found', () => {
-    const iterator = dataGetRecipesSaga();
+    const iter = getRecipesSaga();
     const res = {
       data: [
         {
@@ -472,52 +467,52 @@ describe('dataGetRecipesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/recipe/official/all`));
-    expect(iterator.next(res).value).toEqual(put(dataGetRecipes(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetRecipesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getRecipes(res.data)));
+    expect(iter.next().value).toEqual(put(getRecipesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetRecipesSaga();
+    const iter = getRecipesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/recipe/official/all`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetRecipesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getRecipesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetRecipeTypesSaga', () => {
+describe('getRecipeTypesSaga', () => {
   it('should dispatch recipe types and succeeded if data found', () => {
-    const iterator = dataGetRecipeTypesSaga();
+    const iter = getRecipeTypesSaga();
     const res = {data: [{"id": 1, "name": "Drink"}]};
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/recipe-type`));
-    expect(iterator.next(res).value).toEqual(put(dataGetRecipeTypes(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetRecipeTypesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getRecipeTypes(res.data)));
+    expect(iter.next().value).toEqual(put(getRecipeTypesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetRecipeTypesSaga();
+    const iter = getRecipeTypesSaga();
 
-    expect(iterator.next().value)
+    expect(iter.next().value)
       .toEqual(call([axios, axios.get], `${endpoint}/recipe-type`));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetRecipeTypesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getRecipeTypesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
 
 
-describe('dataGetInitialUserDataSaga', () => {
+describe('getInitialUserDataSaga', () => {
   it('should dispatch initialUserData and succeeded if data found', () => {
-    const iterator = dataGetInitialUserDataSaga();
+    const iter = getInitialUserDataSaga();
     const res = {
       data: {
         myContent: [],
@@ -572,37 +567,37 @@ describe('dataGetInitialUserDataSaga', () => {
       }
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/data-init`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetInitialUserData(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetInitialUserDataSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getInitialUserData(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getInitialUserDataSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetInitialUserDataSaga();
+    const iter = getInitialUserDataSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/data-init`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetInitialUserDataFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getInitialUserDataFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyContentSaga', () => {
+describe('getMyContentSaga', () => {
   it('should dispatch content and succeeded if data found', () => {
-    const iterator = dataGetMyContentSaga();
+    const iter = getMyContentSaga();
     const res = {
       data: [
         {
@@ -615,35 +610,35 @@ describe('dataGetMyContentSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/content/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value).toEqual(put(dataGetMyContent(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetMyContentSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getMyContent(res.data)));
+    expect(iter.next().value).toEqual(put(getMyContentSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyContentSaga();
+    const iter = getMyContentSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/content/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyContentFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyContentFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyFavoriteRecipesSaga', () => {
+describe('getMyFavoriteRecipesSaga', () => {
   it('should dispatch recipes and succeeded if data found', () => {
-    const iterator = dataGetMyFavoriteRecipesSaga();
+    const iter = getMyFavoriteRecipesSaga();
     const res = {
       data: [
         {
@@ -657,37 +652,37 @@ describe('dataGetMyFavoriteRecipesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/favorite-recipe`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyFavoriteRecipes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMyFavoriteRecipesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyFavoriteRecipes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMyFavoriteRecipesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyFavoriteRecipesSaga();
+    const iter = getMyFavoriteRecipesSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/favorite-recipe`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyFavoriteRecipesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyFavoriteRecipesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyFriendshipsSaga', () => {
+describe('getMyFriendshipsSaga', () => {
   it('should dispatch friendships and succeeded if data found', () => {
-    const iterator = dataGetMyFriendshipsSaga();
+    const iter = getMyFriendshipsSaga();
     const res = {
       data: [
         {
@@ -699,36 +694,36 @@ describe('dataGetMyFriendshipsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/friendship`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyFriendships(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetMyFriendshipsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyFriendships(res.data)));
+    expect(iter.next().value).toEqual(put(getMyFriendshipsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyFriendshipsSaga();
+    const iter = getMyFriendshipsSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/friendship`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyFriendshipsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyFriendshipsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyPlansSaga', () => {
+describe('getMyPlansSaga', () => {
   it('should dispatch plans and succeeded if data found', () => {
-    const iterator = dataGetMyPlansSaga();
+    const iter = getMyPlansSaga();
     const res = {
       data: [
         {
@@ -744,34 +739,34 @@ describe('dataGetMyPlansSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/plan/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value).toEqual(put(dataGetMyPlans(res.data)));
-    expect(iterator.next().value).toEqual(put(dataGetMyPlansSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value).toEqual(put(getMyPlans(res.data)));
+    expect(iter.next().value).toEqual(put(getMyPlansSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyPlansSaga();
+    const iter = getMyPlansSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/plan/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value).toEqual(put(dataGetMyPlansFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value).toEqual(put(getMyPlansFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyPrivateEquipmentsSaga', () => {
+describe('getMyPrivateEquipmentsSaga', () => {
   it('should dispatch equipments and succeeded if data found', () => {
-    const iterator = dataGetMyPrivateEquipmentsSaga();
+    const iter = getMyPrivateEquipmentsSaga();
     const res = {
       data: [
         {
@@ -786,37 +781,37 @@ describe('dataGetMyPrivateEquipmentsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/equipment/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyPrivateEquipments(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMyPrivateEquipmentsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyPrivateEquipments(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMyPrivateEquipmentsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyPrivateEquipmentsSaga();
+    const iter = getMyPrivateEquipmentsSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/equipment/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyPrivateEquipmentsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyPrivateEquipmentsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyPrivateIngredientsSaga', () => {
+describe('getMyPrivateIngredientsSaga', () => {
   it('should dispatch ingredients and succeeded if data found', () => {
-    const iterator = dataGetMyPrivateIngredientsSaga();
+    const iter = getMyPrivateIngredientsSaga();
     const res = {
       data: [
         {
@@ -833,37 +828,37 @@ describe('dataGetMyPrivateIngredientsSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/ingredient/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyPrivateIngredients(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMyPrivateIngredientsSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyPrivateIngredients(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMyPrivateIngredientsSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyPrivateIngredientsSaga();
+    const iter = getMyPrivateIngredientsSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/ingredient/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyPrivateIngredientsFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyPrivateIngredientsFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyPrivateRecipesSaga', () => {
+describe('getMyPrivateRecipesSaga', () => {
   it('should dispatch recipes and succeeded if data found', () => {
-    const iterator = dataGetMyPrivateRecipesSaga();
+    const iter = getMyPrivateRecipesSaga();
     const res = {
       data: [
         {
@@ -877,37 +872,37 @@ describe('dataGetMyPrivateRecipesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/recipe/private/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyPrivateRecipes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMyPrivateRecipesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyPrivateRecipes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMyPrivateRecipesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyPrivateRecipesSaga();
+    const iter = getMyPrivateRecipesSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/recipe/private/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyPrivateRecipesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyPrivateRecipesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMyPublicRecipesSaga', () => {
+describe('getMyPublicRecipesSaga', () => {
   it('should dispatch recipes and succeeded if data found', () => {
-    const iterator = dataGetMyPublicRecipesSaga();
+    const iter = getMyPublicRecipesSaga();
     const res = {
       data: [
         {
@@ -921,37 +916,37 @@ describe('dataGetMyPublicRecipesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/recipe/public/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMyPublicRecipes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMyPublicRecipesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMyPublicRecipes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMyPublicRecipesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMyPublicRecipesSaga();
+    const iter = getMyPublicRecipesSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/recipe/public/all`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMyPublicRecipesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMyPublicRecipesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });
 
-describe('dataGetMySavedRecipesSaga', () => {
+describe('getMySavedRecipesSaga', () => {
   it('should dispatch recipes and succeeded if data found', () => {
-    const iterator = dataGetMySavedRecipesSaga();
+    const iter = getMySavedRecipesSaga();
     const res = {
       data: [
         {
@@ -965,30 +960,30 @@ describe('dataGetMySavedRecipesSaga', () => {
       ]
     };
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/saved-recipe`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.next(res).value)
-      .toEqual(put(dataGetMySavedRecipes(res.data)));
-    expect(iterator.next().value)
-      .toEqual(put(dataGetMySavedRecipesSucceeded()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.next(res).value)
+      .toEqual(put(getMySavedRecipes(res.data)));
+    expect(iter.next().value)
+      .toEqual(put(getMySavedRecipesSucceeded()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 
   it('should dispatch failed if data not found', () => {
-    const iterator = dataGetMySavedRecipesSaga();
+    const iter = getMySavedRecipesSaga();
 
-    expect(iterator.next().value).toEqual(call(
+    expect(iter.next().value).toEqual(call(
       [axios, axios.post],
       `${endpoint}/user/saved-recipe`,
       {},
       {withCredentials: true}
     ));
-    expect(iterator.throw('error').value)
-      .toEqual(put(dataGetMySavedRecipesFailed()));
-    expect(iterator.next()).toEqual({done: true, value: undefined});
+    expect(iter.throw('error').value)
+      .toEqual(put(getMySavedRecipesFailed()));
+    expect(iter.next()).toEqual({done: true, value: undefined});
   });
 });

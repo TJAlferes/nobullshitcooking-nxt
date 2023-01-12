@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { ReactNode } from 'react';
 
 import { Breadcrumbs } from '..';
 import { useTypedSelector as useSelector } from '../../store';
 
-export const Main: FC = ({ children }): JSX.Element => {
+export function Main({ children }: Props): JSX.Element {
   const { pathname } = useRouter();
   //const shadow = useSelector(state => state.menu.shadow);
   const theme = useSelector(state => state.theme.theme);
@@ -18,4 +18,8 @@ export const Main: FC = ({ children }): JSX.Element => {
       {children}
     </main>
   );
+};
+
+type Props = {
+  children?: ReactNode;
 };
