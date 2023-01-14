@@ -19,7 +19,7 @@ export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavo
               {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img--28-18"></div>}
             </span>
 
-            <span className="name"><Link href={`/recipe/${r.id}`}><a>{r.title}</a></Link></span>
+            <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
 
             <span className="unfavorite" onClick={() => unfavoriteRecipe(r.id)}>Unfavorite</span>
           </div>

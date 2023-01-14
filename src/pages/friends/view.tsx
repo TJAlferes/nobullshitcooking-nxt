@@ -44,7 +44,7 @@ export function FriendsView({
           <div className="friends-item" key={f.username}>
             <span className="avatar"><img src={`${url}/${f.avatar}-tiny`} /></span>
 
-            <span className="username"><Link href={`/profile/${f.username}`}><a>{f.username}</a></Link></span>
+            <span className="username"><Link href={`/profile/${f.username}`}>{f.username}</Link></span>
 
             {f.status === "pending-received" && <button className="action" disabled={loading} name="accept"   onClick={() => acceptFriendship(f.username)}>Accept</button>}
             {f.status === "pending-received" && <button className="delete" disabled={loading} name="reject"   onClick={() => rejectFriendship(f.username)}>Reject</button>}

@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { ReactNode } from 'react';
 
-export const ExpandCollapseView: FC<Props> = ({ children, expanded, headingWhileCollapsed, headingWhileExpanded, toggle }): JSX.Element => {
+export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, headingWhileExpanded, toggle }: Props): JSX.Element {
   return (
     <div className="expand-collapse">
       {!expanded
@@ -18,6 +18,7 @@ export const ExpandCollapseView: FC<Props> = ({ children, expanded, headingWhile
 };
 
 type Props = {
+  children:              ReactNode;
   expanded:              boolean;
   headingWhileCollapsed: string;
   headingWhileExpanded:  string;

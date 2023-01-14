@@ -8,10 +8,8 @@ export function LoginView({ email, feedback, emailChange, loginClick, loginKeyUp
   return (
     <div className="login" onKeyUp={e => loginKeyUp(e)}>
       <Link href="/">
-        <a>
-          <img className="--desktop" src={`${url}logo-large-white.png`} />
-          <img className="--mobile"  src={`${url}logo-small-white.png`} />
-        </a>
+        <img className="--desktop" src={`${url}logo-large-white.png`} />
+        <img className="--mobile"  src={`${url}logo-small-white.png`} />
       </Link>
 
       <form>

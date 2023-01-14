@@ -28,18 +28,18 @@ export function UserNav(): JSX.Element {
         : <span className="mode" onClick={() => dispatch(light())}><i className="sun">☀︎</i> Day</span>
       }
 
-      <Link href="/help"><a data-test="help">Help</a></Link>
+      <Link href="/help">Help</Link>
 
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/register"><a data-test="register">Create Account</a></Link>}
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login"><a data-test="login">Sign In</a></Link>}
+      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/register">Create Account</Link>}
+      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login">Sign In</Link>}
 
-      {staffIsAuthenticated && <Link href="/staff-dashboard"><a data-test="staff-dashboard">{`Hello, ${authname}`}</a></Link>}
+      {staffIsAuthenticated && <Link href="/staff-dashboard">{`Hello, ${authname}`}</Link>}
       {staffIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
 
-      {userIsAuthenticated && <Link href="/dashboard"><a data-test="dashboard">{`Hello, ${authname}`}</a></Link>}
+      {userIsAuthenticated && <Link href="/dashboard">{`Hello, ${authname}`}</Link>}
       {userIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
 
-      {/*<Link href="/cart"><a  data-test="cart">Cart</a></Link>*/}
+      {/*<Link href="/cart"><a  data-test="cart">Cart</Link>*/}
     </div>
   );
 }

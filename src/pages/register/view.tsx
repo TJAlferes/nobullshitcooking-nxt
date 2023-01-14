@@ -136,19 +136,17 @@ export function RegisterView({
 
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
-      <Link href="/">
-        <a className="home-links">
-          <img className="--desktop" src={`${url}logo-large-white.png`} />
-          <img className="--mobile" src={`${url}logo-small-white.png`} />
-        </a>
+      <Link href="/" className="home-links">
+        <img className="--desktop" src={`${url}logo-large-white.png`} />
+        <img className="--mobile" src={`${url}logo-small-white.png`} />
       </Link>
 
       {confirmingUser === true ? verifyForm() : registerForm()}
 
       <div className="links">
-        <Link href="/page/site/terms"><a>Terms of Use</a></Link>
-        <Link href="/page/site/privacy"><a>Privacy Policy</a></Link>
-        <Link href="/page/site/help"><a>Help</a></Link>
+        <Link href="/page/site/terms">Terms of Use</Link>
+        <Link href="/page/site/privacy">Privacy Policy</Link>
+        <Link href="/page/site/help">Help</Link>
       </div>
 
       <p className="copyright">Copyright 2015-2023 NoBullshitCooking. All Rights Reserved.</p>

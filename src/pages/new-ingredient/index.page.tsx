@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { staffCreateNewIngredient, staffEditIngredient } from '../../store/staff/ingredient/actions';
-import { userCreateNewPrivateIngredient, userEditPrivateIngredient } from '../../store/user/ingredient/actions';
+import { createNewIngredient, editIngredient } from '../../store/staff/ingredient/actions';
+import { createNewPrivateIngredient, editPrivateIngredient } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './view';
 
 export function NewIngredient({ editing }: Props): JSX.Element {
@@ -101,12 +101,12 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     if (editing && editingId) {
       const ingredientEditInfo = {id: editingId, prevImage, ...ingredientInfo};
       
-      if (staffIsAuthenticated) dispatch(staffEditIngredient(ingredientEditInfo));
-      else                      dispatch(userEditPrivateIngredient(ingredientEditInfo));
+      if (staffIsAuthenticated) dispatch(editIngredient(ingredientEditInfo));
+      else                      dispatch(editPrivateIngredient(ingredientEditInfo));
     }
     else {
-      if (staffIsAuthenticated) dispatch(staffCreateNewIngredient(ingredientInfo));
-      else                      dispatch(userCreateNewPrivateIngredient(ingredientInfo));
+      if (staffIsAuthenticated) dispatch(createNewIngredient(ingredientInfo));
+      else                      dispatch(createNewPrivateIngredient(ingredientInfo));
     }
   };
 

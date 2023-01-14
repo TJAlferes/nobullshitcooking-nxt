@@ -7,7 +7,7 @@ const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 function recipeBy(author: string) {
   if (author === "Unknown") return "Unknown";
-  return <Link href={`/profile/${author}`}><a>{author}</a></Link>;
+  return <Link href={`/profile/${author}`}>{author}</Link>;
 };
 
 export function RecipeView({

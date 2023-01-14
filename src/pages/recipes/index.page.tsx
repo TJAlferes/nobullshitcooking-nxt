@@ -9,33 +9,31 @@ function listResults(results: any) {
   if (results && results[0] && results[0].id) {
     return results.map((r: any) => (
       <div className="recipes" key={r.id.raw}>
-        <Link href={`/recipe/${r.id.raw}`}>
-          <a className="recipes-link">
-            <div className="text">
-              <div className="title">{r.title.raw}</div>
+        <Link href={`/recipe/${r.id.raw}`} className="recipes-link">
+          <div className="text">
+            <div className="title">{r.title.raw}</div>
 
-              <div className="author">{r.author.raw}</div>
+            <div className="author">{r.author.raw}</div>
 
-              <div>
-                <div className="cuisine">{r.cuisine_name.raw}</div>
-                <div className="type">{r.recipe_type_name.raw}</div>
+            <div>
+              <div className="cuisine">{r.cuisine_name.raw}</div>
+              <div className="type">{r.recipe_type_name.raw}</div>
+            </div>
+
+            <div className="tags">
+              <div className="methods">
+                {r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}
               </div>
-
-              <div className="tags">
-                <div className="methods">
-                  {r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}
-                </div>
-                <div className="ingredients">
-                  {r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}
-                </div>
+              <div className="ingredients">
+                {r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}
               </div>
             </div>
+          </div>
             
-            {r.recipe_image.raw !== "nobsc-recipe-default"
-              ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
-              : <div className="image-default-100-62"></div>
-            }
-          </a>
+          {r.recipe_image.raw !== "nobsc-recipe-default"
+            ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
+            : <div className="image-default-100-62"></div>
+          }
         </Link>
       </div>
     ));

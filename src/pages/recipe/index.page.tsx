@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux';
 import { LoaderSpinner } from '../../components';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
-import { userFavoriteRecipe } from '../../store/user/favorite/actions';
-import { userSaveRecipe } from '../../store/user/save/actions';
+import { favoriteRecipe } from '../../store/user/favorite/actions';
+import { saveRecipe } from '../../store/user/save/actions';
 import { RecipeView } from './view';
 
 export default function Recipe(): JSX.Element {
@@ -70,7 +70,7 @@ export default function Recipe(): JSX.Element {
     if (favorited) return;
     setFavorited(true);
     setLoading(true);
-    dispatch(userFavoriteRecipe(Number(id)));
+    dispatch(favoriteRecipe(Number(id)));
   };
 
   const save = () => {
@@ -78,7 +78,7 @@ export default function Recipe(): JSX.Element {
     if (saved) return;
     setSaved(true);
     setLoading(true);
-    dispatch(userSaveRecipe(Number(id)));
+    dispatch(saveRecipe(Number(id)));
   };
 
   return !recipe

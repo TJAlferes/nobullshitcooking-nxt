@@ -1,4 +1,4 @@
-import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
+import { DropTarget, DropTargetConnector, DropTargetMonitor, useDrop } from 'react-dnd';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { IRecipe } from '../../../store/planner/types';

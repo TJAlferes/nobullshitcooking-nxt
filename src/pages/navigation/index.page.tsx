@@ -25,10 +25,8 @@ export default function Navigation({ links, name, navGridATheme, oneColumnATheme
         {links && links.map((link: any) => (
           <div className="nav-grid-a-item" key={link.path}>
             <Link href={`${link.path}`}>
-              <a>
-                <span className="nav-grid-a-item-text">{link.name}</span>
-                {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
-              </a>
+              <span className="nav-grid-a-item-text">{link.name}</span>
+              {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
             </Link>
           </div>
         ))}
@@ -36,10 +34,8 @@ export default function Navigation({ links, name, navGridATheme, oneColumnATheme
         {contentLinks && contentLinks.map((link: any) => (
           <div className="nav-grid-a-item" key={link.path}>
             <Link href={`${link.path}`}>
-              <a>
-                <span className="nav-grid-a-item-text">{link.name}</span>
-                {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
-              </a>
+              <span className="nav-grid-a-item-text">{link.name}</span>
+              {/*<img className="nav-grid-a-item-image" src={`${s3Path}/${link.category}/${link.image}`} />*/}
             </Link>
           </div>
         ))}

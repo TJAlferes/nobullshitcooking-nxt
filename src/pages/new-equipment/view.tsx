@@ -81,7 +81,7 @@ export function NewEquipmentView({
       </div>
 
       <div className="finish">
-        <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
+        <Link href="/dashboard" className="cancel-button">Cancel</Link>
 
         <LoaderButton
           className="submit-button"

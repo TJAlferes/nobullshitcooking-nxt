@@ -8,7 +8,7 @@ export function Recipes({ activateModal, deactivateModal, deleteName, getApplica
     <div className="dashboard-content">
       <h2>Recipes</h2>
 
-      <Link className="new-entity" to="/recipes/private/submit">Create New Recipe</Link>
+      <Link className="new-entity" href="/recipes/private/submit">Create New Recipe</Link>
 
       {modalActive
         ? (
@@ -31,8 +31,8 @@ export function Recipes({ activateModal, deactivateModal, deleteName, getApplica
 
       {recipes.map(r => (
         <div className="dashboard-item" key={r.id}>
-          <span className="name"><Link to={`/user-recipe/${r.id}`}>{r.title}</Link></span>
-          <span className="action"><Link to={`/user-recipe/private/edit/${r.id}`}>Edit</Link></span>
+          <span className="name"><Link href={`/user-recipe/${r.id}`}>{r.title}</Link></span>
+          <span className="action"><Link href={`/user-recipe/private/edit/${r.id}`}>Edit</Link></span>
           <span className="delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
         </div>
       ))}

@@ -1,12 +1,12 @@
 import { Store } from 'redux';
 
-import { nobscappWindowFocused } from '../store/nobscapp/actions';
+import { windowFocused } from '../store/nobscapp/actions';
 
 export function initWindowBlurHandler(store: Store) {
   if (typeof window === 'undefined') return;
 
   window.onblur = function() {
-    store.dispatch(nobscappWindowFocused(false));
+    store.dispatch(windowFocused(false));
   };
 }
 
@@ -14,9 +14,9 @@ export function initWindowFocusHandler(store: Store) {
   if (typeof window === 'undefined') return;
   
   window.onfocus = function() {
-    const nobscFavicon = document.getElementById('nobsc-favicon') as HTMLLinkElement | null;
-    if (!nobscFavicon) return;
-    nobscFavicon.href = "/nobsc-normal-favicon.png";
-    store.dispatch(nobscappWindowFocused(true));
+    const favicon = document.getElementById('nobsc-favicon') as HTMLLinkElement | null;
+    if (!favicon) return;
+    favicon.href = "/nobsc-normal-favicon.png";
+    store.dispatch(windowFocused(true));
   };
 }

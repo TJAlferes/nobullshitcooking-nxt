@@ -5,7 +5,7 @@ const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 export function Avatar({ authname, onSelectFile }: Props): JSX.Element {
   return (
     <div className="dashboard-avatar">
-      <Link href={`/profile/${authname}`}><a>View Profile</a></Link>
+      <Link href={`/profile/${authname}`}>View Profile</Link>
 
       <h2>Profile Picture</h2>
 

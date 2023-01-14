@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { staffCreateNewEquipment, staffEditEquipment } from '../../store/staff/equipment/actions';
-import { userCreateNewPrivateEquipment, userEditPrivateEquipment } from '../../store/user/equipment/actions';
+import { createNewEquipment, editEquipment } from '../../store/staff/equipment/actions';
+import { createNewPrivateEquipment, editPrivateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
 export function NewEquipment({ editing }: Props): JSX.Element {
@@ -103,12 +103,12 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     if (editing && editingId) {
       const equipmentEditInfo = {id: editingId, prevImage, ...equipmentInfo};
       
-      if (staffIsAuthenticated) dispatch(staffEditEquipment(equipmentEditInfo));
-      else                      dispatch(userEditPrivateEquipment(equipmentEditInfo));
+      if (staffIsAuthenticated) dispatch(editEquipment(equipmentEditInfo));
+      else                      dispatch(editPrivateEquipment(equipmentEditInfo));
     }
     else {
-      if (staffIsAuthenticated) dispatch(staffCreateNewEquipment(equipmentInfo));
-      else                      dispatch(userCreateNewPrivateEquipment(equipmentInfo));
+      if (staffIsAuthenticated) dispatch(createNewEquipment(equipmentInfo));
+      else                      dispatch(createNewPrivateEquipment(equipmentInfo));
     }
   };
 

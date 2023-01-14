@@ -16,7 +16,7 @@ export function Suggestions(): JSX.Element {
   const latitude =            useSelector(state => state.geolocation.latitude);
   const longitude =           useSelector(state => state.geolocation.longitude);
   const nearbyStoresClicked = useSelector(state => state.geolocation.nearbyStoresClicked);
-  const theme = useSelector(state => state.theme.suggestionsTheme);
+  const theme =               useSelector(state => state.theme.theme);
 
   useEffect(() => {
     const getAddress = async () => {

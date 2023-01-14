@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { ExpandCollapseView } from './ExpandCollapseView';
 
-export const ExpandCollapse: FC<Props> = ({ children, headingWhileCollapsed = "More info (Click here to expand)", headingWhileExpanded = "(Click here to collapse)" }) => {
+export function ExpandCollapse({ children, headingWhileCollapsed = "More info (Click here to expand)", headingWhileExpanded = "(Click here to collapse)" }: Props): JSX.Element {
   const [ expanded, setExpanded ] = useState(false);
 
   const toggle = () => setExpanded(prevState => !prevState);
@@ -15,6 +15,7 @@ export const ExpandCollapse: FC<Props> = ({ children, headingWhileCollapsed = "M
 };
 
 type Props = {
+  children: ReactNode;
   headingWhileCollapsed?: string;
   headingWhileExpanded?:  string;
 };

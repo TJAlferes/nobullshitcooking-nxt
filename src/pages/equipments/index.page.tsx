@@ -12,13 +12,11 @@ function listResults(results: any) {
   return results.map((e: any) => (
     <div className="equipments" key={e.id.raw}>
       <Link href={`/equipment/${e.id.raw}`}>
-        <a>
-          <div className="text">
-            <div className="name">{e.name.raw}</div>
-            <div className="type">{e.equipment_type_name.raw}</div>
-          </div>
-          <img src={`${url}/${e.image.raw}.jpg`} />
-        </a>
+        <div className="text">
+          <div className="name">{e.name.raw}</div>
+          <div className="type">{e.equipment_type_name.raw}</div>
+        </div>
+        <img src={`${url}/${e.image.raw}.jpg`} />
       </Link>
     </div>
   ));

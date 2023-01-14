@@ -2,11 +2,11 @@ import { IIngredient } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function IngredientView({ ingredient: { id, full_name, image, ingredient_type_name, description }, myPrivateIngredients, theme }: Props): JSX.Element {
+export function IngredientView({ ingredient: { id, fullname, image, ingredient_type_name, description }, myPrivateIngredients, theme }: Props): JSX.Element {
   return (
     <div className={`ingredient two-col-b ${theme}`} data-test="ingredient">
       <div className="two-col-b-left">
-        <h1>{full_name}</h1>
+        <h1>{fullname}</h1>
 
         <div className="image">
           {myPrivateIngredients.find(ing => ing.id === id)

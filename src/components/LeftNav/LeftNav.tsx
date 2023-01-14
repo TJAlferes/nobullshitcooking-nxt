@@ -11,12 +11,12 @@ import { Menu } from './Menu/Menu';
 
 function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
   const { pathname } = useRouter();
-  const theme = useSelector(state => state.theme.theme);
+  const theme =        useSelector(state => state.theme.theme);
 
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
-  const style = (to === pathname) ? {backgroundColor} : {};
+  const style =           (to === pathname) ? {backgroundColor} : {};
 
-  return <Link href={to}><a style={style} data-test={dataTest}>{`${text}`}</a></Link>;
+  return <Link href={to} data-test={dataTest} style={style}>{`${text}`}</Link>;
 }
 
 export function LeftNav(): JSX.Element {

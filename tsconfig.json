@@ -12,13 +12,17 @@
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "typeRoots": ["./types/", "./node_modules/@types/"],
+    "typeRoots": [
+      "./types/",
+      "./node_modules/@types/"
+    ],
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

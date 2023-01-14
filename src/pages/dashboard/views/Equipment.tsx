@@ -9,16 +9,16 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
     <div className="dashboard-content">
       <h2>Private Equipment</h2>
 
-      <Link href="/user-equipment/submit"><a className="new-entity">Create New Equipment</a></Link>
+      <Link href="/user-equipment/submit" className="new-entity">Create New Equipment</Link>
 
       {myPrivateEquipment.length
         ? myPrivateEquipment.map(e => (
           <div className="dashboard-item" key={e.id}>
             <span className="tiny">{e.image !== "nobsc-equipment-default" ? <img src={`${url}/${e.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
 
-            <span className="name"><Link href={`/user-equipment/${e.id}`}><a>{e.name}</a></Link></span>
+            <span className="name"><Link href={`/user-equipment/${e.id}`}>{e.name}</Link></span>
 
-            <span className="action"><Link href={`/user-equipment/edit/${e.id}`}><a>Edit</a></Link></span>
+            <span className="action"><Link href={`/user-equipment/edit/${e.id}`}>Edit</Link></span>
 
             <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
           </div>

@@ -29,8 +29,8 @@ export function Breadcrumbs() {
 
   return (
     <nav aria-label="breadcrumbs">
-      <span><Link href="/"><a>Home</a></Link><i>{`&gt;`}</i></span>
-      {breadcrumbs.map(({ name, href }) => <span key={href}><Link href={href}><a>{convertBreadcrumb(name)}</a></Link><i>{`&gt;`}</i></span>)}
+      <span><Link href="/">Home</Link><i>{`&gt;`}</i></span>
+      {breadcrumbs.map(({ name, href }) => <span key={href}><Link href={href}>{convertBreadcrumb(name)}</Link><i>{`&gt;`}</i></span>)}
     </nav>
   );
 };

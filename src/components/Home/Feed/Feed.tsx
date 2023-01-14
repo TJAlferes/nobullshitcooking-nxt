@@ -1,13 +1,16 @@
 import { useTypedSelector as useSelector } from '../../../store';
 
 export function Feed(): JSX.Element {
-  const myContent = useSelector(state => state.data.myContent);
-  const officialContent  = useSelector(state => state.data.officialContent);
-  const theme = useSelector(state => state.theme.feedTheme);
+  const officialContent = [
+    {id: 1, image: "image1", title: "Title1", author: "Author1"},
+    {id: 2, image: "image2", title: "Title2", author: "Author2"},
+    {id: 3, image: "image3", title: "Title3", author: "Author3"},
+  ];
+  const theme = useSelector(state => state.theme.theme);
 
   return (
     <div className={`feed ${theme}`}>
-      {[...(myContent && myContent), ...(officialContent && officialContent)]
+      {[...(officialContent && officialContent)]
         .map(c => (
           <div className="feed-item" key={c.id}>
             <h1 className="feed-item__title">{c.title}</h1>

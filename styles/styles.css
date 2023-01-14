@@ -186,7 +186,6 @@ h4 {font-size: 1.4rem;}
 @import './pages/cart.css';
 @import './pages/chat.css';
 @import './pages/checkout.css';
-@import './pages/content.css';
 @import './pages/dashboard.css';
 @import './pages/equipment.css';
 @import './pages/equipments.css';
@@ -195,7 +194,6 @@ h4 {font-size: 1.4rem;}
 @import './pages/ingredients.css';
 @import './pages/login.css';
 @import './pages/navigation.css';
-/*@import './NewContent/components/';*/
 @import './pages/newEquipment.css';
 @import './pages/newIngredient.css';
 @import './pages/newPlan.css';

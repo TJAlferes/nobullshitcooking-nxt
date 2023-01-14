@@ -13,7 +13,7 @@ export function ProfileView({
   changeTab,
   userIsAuthenticated,
   loading,
-  oneColumnATheme,
+  theme,
   tab,
   userAvatar,
   username,
@@ -21,7 +21,7 @@ export function ProfileView({
   userFavoriteRecipes,
 }: Props): JSX.Element {
   return (
-    <div className={`profile one-column-a ${oneColumnATheme}`}>
+    <div className={`profile one-column-a ${theme}`}>
       <h1>{username}</h1>
 
       <p className="feedback">{feedback}</p>
@@ -59,7 +59,7 @@ export function ProfileView({
                 }
               </span>
               <span className="name">
-                <Link href={`/recipes/${r.id}`}><a>{r.title}</a></Link>
+                <Link href={`/recipes/${r.id}`}>{r.title}</Link>
               </span>
             </div>
           )))
@@ -78,7 +78,7 @@ export function ProfileView({
                 }
               </span>
               <span className="name">
-                <Link href={`/recipes/${r.id}`}><a>{r.title}</a></Link>
+                <Link href={`/recipes/${r.id}`}>{r.title}</Link>
               </span>
               </div>
           )))
@@ -99,7 +99,7 @@ type Props = {
   changeTab(value: string): void;
   userIsAuthenticated:      boolean;
   loading:                  boolean;
-  oneColumnATheme:          string;
+  theme:                    string;
   tab:                      string;
   userAvatar:               string;
   username:                 string;

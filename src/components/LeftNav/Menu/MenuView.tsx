@@ -62,7 +62,7 @@ export function MenuView({ activeMenuRow, clearActiveMenuRow, closeMenus, enterR
             key={index}
             onMouseEnter={() => mouseEnter(item.name, index)}
           >
-            <Link href={item.link}><a>{item.name}</a></Link>
+            <Link href={item.link}>{item.name}</Link>
           </li>
         ))}
       </ul>

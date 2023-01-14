@@ -82,7 +82,7 @@ export function NewIngredientView({
       </div>
 
       <div className="finish">
-        <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
+        <Link href="/dashboard" className="cancel-button">Cancel</Link>
         <LoaderButton
           className="submit-button"
           id="create_new_private_user_ingredient_button"

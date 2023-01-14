@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { clearWork, setCreating, setEditingId, setPlanName, setPlanData } from '../../store/planner/actions';
-import { userCreateNewPlan, userEditPlan } from '../../store/user/plan/actions';
+import { createNewPlan, editPlan } from '../../store/user/plan/actions';
 import { NewPlanView } from './view';
 
 export function NewPlan({ editing }: Props): JSX.Element {
@@ -18,8 +18,8 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const editingId =   useSelector(state => state.planner.editingId);
   const planName =    useSelector(state => state.planner.planName);
   const recipeListsInsideDays = useSelector(state => state.planner.recipeListsInsideDays);  // shorten name
-  const message =         useSelector(state => state.user.message);
-  const twoColumnATheme = useSelector(state => state.theme.twoColumnATheme);  // rename all these to just `theme`
+  const message = useSelector(state => state.user.message);
+  const theme =   useSelector(state => state.theme.theme);  // rename all these to just `theme`
 
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);
@@ -116,10 +116,10 @@ export function NewPlan({ editing }: Props): JSX.Element {
     setLoading(true);
     if (editing) {
       const planInfo = {id: editingId as number, name: planName, data: getPlanData()};
-      dispatch(userEditPlan(planInfo));
+      dispatch(editPlan(planInfo));
     } else {
       const planInfo = {name: planName, data: getPlanData()};
-      dispatch(userCreateNewPlan(planInfo));
+      dispatch(createNewPlan(planInfo));
     }
   }
 
@@ -146,7 +146,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       planName={planName}
       recipeListsInsideDays={recipeListsInsideDays}
       tab={tab}
-      twoColumnATheme={twoColumnATheme}
+      theme={theme}
     />
   );
 }

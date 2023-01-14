@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { LoaderSpinner } from '../../components';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
-import { userRequestFriendship } from '../../store/user/friendship/actions';
+import { requestFriendship as userRequestFriendship } from '../../store/user/friendship/actions';
 import { ProfileView } from './view';
 
 export default function Profile(): JSX.Element {
@@ -16,7 +16,7 @@ export default function Profile(): JSX.Element {
   const dispatch = useDispatch();
   const authname =            useSelector(state => state.auth.authname);
   const myFriendships =       useSelector(state => state.data.myFriendships);
-  const oneColumnATheme =     useSelector(state => state.theme.oneColumnATheme);
+  const theme =     useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message =             useSelector(state => state.user.message);
 
@@ -87,7 +87,7 @@ export default function Profile(): JSX.Element {
         changeTab={changeTab}
         userIsAuthenticated={userIsAuthenticated}
         loading={loading}
-        oneColumnATheme={oneColumnATheme}
+        theme={theme}
         tab={tab}
         userAvatar={userAvatar}
         username={username}

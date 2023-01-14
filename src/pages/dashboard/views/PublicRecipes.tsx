@@ -11,7 +11,7 @@ export function PublicRecipes({ activateModal, deactivateModal, deleteName, diso
     <div className="dashboard-content">
       <h2>Public Recipes</h2>
 
-      <Link href="/user-recipes/public/submit"><a className="new-entity">Create New Public Recipe</a></Link>
+      <Link href="/user-recipes/public/submit" className="new-entity">Create New Public Recipe</Link>
 
       {modalActive
         ? (
@@ -41,9 +41,9 @@ export function PublicRecipes({ activateModal, deactivateModal, deleteName, diso
               {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
             </span>
 
-            <span className="name"><Link href={`/recipe/${r.id}`}><a>{r.title}</a></Link></span>
+            <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
 
-            <span className="action"><Link href={`/user-recipe/public/edit/${r.id}`}><a>Edit</a></Link></span>
+            <span className="action"><Link href={`/user-recipe/public/edit/${r.id}`}>Edit</Link></span>
 
             <span className="delete" onClick={() => activateModal(r.id, r.title)}>Disown</span>
           </div>

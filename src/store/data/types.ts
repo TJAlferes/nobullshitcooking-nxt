@@ -1,4 +1,4 @@
-import { IPlannerData } from '../planner/types';
+import { IData as IPlannerData } from '../planner/types';
 
 export const actionTypes = {
   INIT:                  'INIT',
@@ -77,6 +77,7 @@ export interface IIngredient {
   ingredient_type_name: string;
   brand:                string | null;
   variety:              string | null;
+  fullname:             string;
   name:                 string;
   description:          string;
   image:                string;
