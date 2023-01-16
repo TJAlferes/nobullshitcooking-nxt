@@ -1,4 +1,3 @@
-import { SearchProvider }                   from '@elastic/react-search-ui';
 import { AppContext, AppProps }             from 'next/app';
 import { useRef }                           from 'react';
 import { DndProvider }                      from 'react-dnd-multi-backend';
@@ -27,28 +26,26 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <Hydrate state={pageProps ? pageProps.dehydratedState: {}}>
-        <SearchProvider config={pageProps.searchConfig}>
-          <DndProvider options={HTML5toTouch}>
-            {atAuthPage
-              ? <Component {...pageProps} />
-              : (
-                <div id="app">
-                  {leftNav && <LeftNav />}
+        <DndProvider options={HTML5toTouch}>
+          {atAuthPage
+            ? <Component {...pageProps} />
+            : (
+              <div id="app">
+                {leftNav && <LeftNav />}
 
-                  <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
+                <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
 
-                  <div id="layout">
-                    <Header />
-                    <Main>
-                      <Component {...pageProps} />
-                    </Main>
-                    <Footer />
-                  </div>
+                <div id="layout">
+                  <Header />
+                  <Main>
+                    <Component {...pageProps} />
+                  </Main>
+                  <Footer />
                 </div>
-              )
-            }
-          </DndProvider>
-        </SearchProvider>
+              </div>
+            )
+          }
+        </DndProvider>
       </Hydrate>
     </QueryClientProvider>
   );
