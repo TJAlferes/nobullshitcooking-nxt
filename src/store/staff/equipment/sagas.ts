@@ -19,7 +19,7 @@ export function* createNewEquipmentSaga(action: ICreateNewEquipment) {
   try {
     if (fullImage && tinyImage) {
       const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/staff/get-signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/staff/signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}});
       yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}});
@@ -67,7 +67,7 @@ export function* editEquipmentSaga(action: IEditEquipment) {
   try {
     if (fullImage && tinyImage) {
       const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/staff/get-signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/staff/signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}});
       yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}});

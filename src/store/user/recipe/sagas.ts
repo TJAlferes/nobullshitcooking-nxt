@@ -23,7 +23,7 @@ export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateN
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
       const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
       
       yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': recipeFullImage.type}});
       yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': recipeThumbImage.type}});
@@ -36,7 +36,7 @@ export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateN
 
     if (equipmentFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.put], `${endpoint}/user/get-signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.put], `${endpoint}/user/signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': equipmentFullImage.type}});
 
@@ -47,7 +47,7 @@ export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateN
 
     if (ingredientsFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': ingredientsFullImage.type}});
 
@@ -58,7 +58,7 @@ export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateN
 
     if (cookingFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': cookingFullImage.type}});
 
@@ -132,7 +132,7 @@ export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
       const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe`, {fileType: recipeFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': recipeFullImage.type}});
       yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': recipeThumbImage.type}});
@@ -145,7 +145,7 @@ export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)
 
     if (equipmentFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe-equipment`, {fileType: equipmentFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': equipmentFullImage.type}});
 
@@ -156,7 +156,7 @@ export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)
 
     if (ingredientsFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe-ingredients`, {fileType: ingredientsFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': ingredientsFullImage.type}});
 
@@ -167,7 +167,7 @@ export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)
 
     if (cookingFullImage) {
       const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/get-signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url/recipe-cooking`, {fileType: cookingFullImage.type}, {withCredentials: true});
 
       yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': cookingFullImage.type}});
 
