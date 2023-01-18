@@ -1,4 +1,4 @@
-import { ICuisine, IMeasurement, IRecipeType, IWorkRecipe } from '../../../store/data/types';
+import type { ICuisine, IMeasurement, IRecipeType, IWorkRecipe } from '../../../store/data/types';
 
 export function SubrecipeRow({
   amount,

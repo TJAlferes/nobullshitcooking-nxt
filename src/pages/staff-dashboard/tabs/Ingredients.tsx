@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IIngredient } from '../../../store/data/types';
+import type { IIngredient } from '../../../store/data/types';
 
 export function Ingredients({ handleDeleteIngredient, ingredients }: Props): JSX.Element {
   return (

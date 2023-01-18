@@ -1,4 +1,4 @@
-import { AppContext, AppProps }             from 'next/app';
+import type { AppContext, AppProps }        from 'next/app';
 import { useRef }                           from 'react';
 import { DndProvider }                      from 'react-dnd-multi-backend';
 import { HTML5toTouch }                     from 'rdndmb-html5-to-touch';
@@ -52,7 +52,7 @@ function NOBSCApp({ Component, pageProps }: AppProps) {
 }
 
 NOBSCApp.getInitialProps = wrapper.getInitialAppProps(store =>
-  async ({ Component, AppTree, ctx, router }: AppContext) => {
+  async ({ Component, ctx, router }: AppContext) => {
     const pageProps = {
       router,
       searchConfig: makeSearchConfig(store),

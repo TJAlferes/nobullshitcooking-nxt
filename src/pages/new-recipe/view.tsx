@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 
 import { ExpandCollapse, LoaderButton } from '../../components';
-import { ICuisine, IEquipment, IIngredient, IIngredientType, IMeasurement, IMethod, IRecipeType, IWorkRecipe } from '../../store/data/types';
+import type { ICuisine, IEquipment, IIngredient, IIngredientType, IMeasurement, IMethod, IRecipeType, IWorkRecipe } from '../../store/data/types';
 import { EquipmentRow, IngredientRow, SubrecipeRow, ImageUploads } from './components';
-import { IMethods, IEquipmentRow, IIngredientRow, ISubrecipeRow } from './index.page';
+import type { IMethods, IEquipmentRow, IIngredientRow, ISubrecipeRow } from './index.page';
 
 export function NewRecipeView({
   addEquipmentRow,

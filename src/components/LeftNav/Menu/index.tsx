@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import { MenuView } from './MenuView';
+import { MenuView } from './view';
 
 // This Menu component heavily borrows from    react-menu-aim   https://github.com/jasonslyvia/react-menu-aim
 // which is a React mixin heavily inspired by  jQuery-menu-aim  https://github.com/kamens/jQuery-menu-aim

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
@@ -9,7 +9,7 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { createNewRecipe, editRecipe } from '../../store/staff/recipe/actions';
 import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
-import { IRequiredMethod } from '../../store/user/recipe/types';
+import type { IRequiredMethod } from '../../store/user/recipe/types';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './view';

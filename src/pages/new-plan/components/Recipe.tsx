@@ -1,10 +1,10 @@
-import { XYCoord } from 'dnd-core';
+import type { XYCoord } from 'dnd-core';
 import { FC, useRef } from 'react';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
 import { removeRecipeFromDay, reorderRecipeInDay } from '../../../store/planner/actions';
-import { IRecipe } from '../../../store/planner/types';
+import type { IRecipe } from '../../../store/planner/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 

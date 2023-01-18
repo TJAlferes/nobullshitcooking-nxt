@@ -19,7 +19,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const planName =    useSelector(state => state.planner.planName);
   const recipeListsInsideDays = useSelector(state => state.planner.recipeListsInsideDays);  // shorten name
   const message = useSelector(state => state.user.message);
-  const theme =   useSelector(state => state.theme.theme);  // rename all these to just `theme`
+  const theme =   useSelector(state => state.theme.theme);
 
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IWorkRecipe } from '../../../store/data/types';
+import type { IWorkRecipe } from '../../../store/data/types';
 import { Subtabs } from '.';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";

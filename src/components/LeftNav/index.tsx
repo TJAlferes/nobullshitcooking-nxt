@@ -7,7 +7,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { closeLeftNav } from '../../store/menu/actions';
 import { Logo } from '..';
 import menuItems from './Menu/items';
-import { Menu } from './Menu/Menu';
+import { Menu } from './Menu';
 
 function NavLink({ dataTest, text, to }: NavLinkProps): JSX.Element {
   const { pathname } = useRouter();

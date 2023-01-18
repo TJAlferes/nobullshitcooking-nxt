@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';

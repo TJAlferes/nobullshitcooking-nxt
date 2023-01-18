@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';

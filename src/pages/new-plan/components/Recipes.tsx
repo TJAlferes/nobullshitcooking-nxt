@@ -1,10 +1,6 @@
-import {
-  DropTarget,
-  DropTargetConnector,
-  DropTargetMonitor
-} from 'react-dnd';
+import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd';
 
-import { IRecipe } from '../../../store/planner/types';
+import type { IRecipe } from '../../../store/planner/types';
 import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};

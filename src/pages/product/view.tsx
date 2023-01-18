@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { IWorkProduct } from '../../store/data/types';
+import type { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton';
-import { IProduct } from './index.page';
+import type { IProduct } from './index.page';
 
 export function ProductView({ products, feedback, loading, product, theme, userIsAuthenticated }: Props): JSX.Element {
   const { id, product_type_id, supplier_id, fullname } = product;

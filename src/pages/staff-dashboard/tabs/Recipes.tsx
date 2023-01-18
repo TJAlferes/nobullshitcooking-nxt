@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AriaModal from 'react-aria-modal';
 
-import { IWorkRecipe } from '../../../store/data/types';
+import type { IWorkRecipe } from '../../../store/data/types';
 
 export function Recipes({ activateModal, deactivateModal, deleteName, getApplicationNode, handleDeleteRecipe, modalActive, recipes }: Props): JSX.Element {
   return (

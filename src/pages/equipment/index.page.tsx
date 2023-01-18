@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { LoaderSpinner } from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { IEquipment } from '../../store/data/types';
+import type { IEquipment } from '../../store/data/types';
 import { EquipmentView } from './view';
 
 export default function Equipment(): JSX.Element {

@@ -1,7 +1,7 @@
 import { DropTarget, DropTargetConnector, DropTargetMonitor, useDrop } from 'react-dnd';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { IRecipe } from '../../../store/planner/types';
+import type { IRecipe } from '../../../store/planner/types';
 import { clickDay, addRecipeToDay } from '../../../store/planner/actions';
 import Recipe from './Recipe';
 

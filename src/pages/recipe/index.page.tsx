@@ -18,7 +18,7 @@ export default function Recipe(): JSX.Element {
   const dispatch = useDispatch();
   const { myFavoriteRecipes, myPrivateRecipes, myPublicRecipes, mySavedRecipes } = useSelector(state => state.data);  // don't destructure useSelector?
   const message = useSelector(state => state.user.message);
-  const theme = useSelector(state => state.theme.theme);
+  const theme =   useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ favorited, setFavorited ] = useState(false);

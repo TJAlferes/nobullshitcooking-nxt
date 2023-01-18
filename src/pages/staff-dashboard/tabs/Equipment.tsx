@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IEquipment } from '../../../store/data/types';
+import type { IEquipment } from '../../../store/data/types';
 
 export function Equipment({ equipment, handleDeleteEquipment }: Props): JSX.Element {
   return (

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
 import { geoAddress, geoLatitude, geoLongitude, geoNearbyStoresClicked } from '../../../store/geolocation/actions';
-import { SuggestionsView } from './SuggestionsView';
+import { SuggestionsView } from './view';
 
 const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
 const url =                 'https://maps.googleapis.com/maps/api/geocode/json';

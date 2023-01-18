@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { IWorkRecipe } from '../../store/data/types';
-import { IRecipe } from './index.page';
+import type { IWorkRecipe } from '../../store/data/types';
+import type { IRecipe } from './index.page';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 

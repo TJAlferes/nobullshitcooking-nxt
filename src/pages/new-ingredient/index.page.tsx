@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
@@ -17,7 +17,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage =         useSelector(state => state.staff.message);
   const userMessage =          useSelector(state => state.user.message);
-  const ingredients =  useSelector(state => state.data.ingredients);
+  const ingredients =          useSelector(state => state.data.ingredients);
   const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
   const theme =                useSelector(state => state.theme.theme);

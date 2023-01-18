@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { Breadcrumbs } from '..';
 import { useTypedSelector as useSelector } from '../../store';

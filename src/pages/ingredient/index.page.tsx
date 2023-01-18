@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { LoaderSpinner } from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { IIngredient } from '../../store/data/types';
+import type { IIngredient } from '../../store/data/types';
 import { IngredientView } from './view';
 
 export default function Ingredient(): JSX.Element {

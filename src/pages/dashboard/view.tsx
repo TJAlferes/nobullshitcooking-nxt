@@ -1,6 +1,6 @@
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 
-import { IEquipment, IIngredient, IPlan, IWorkRecipe } from '../../store/data/types';
+import type { IEquipment, IIngredient, IPlan, IWorkRecipe } from '../../store/data/types';
 import { Avatar, AvatarEdit, Equipment, FavoriteRecipes, Ingredients, Plans, PrivateRecipes, PublicRecipes, SavedRecipes, Tabs } from './views';
 
 export function DashboardView({

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IFriendship, IWorkRecipe } from '../../store/data/types';
+import type { IFriendship, IWorkRecipe } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com";
 

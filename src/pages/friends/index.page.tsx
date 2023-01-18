@@ -3,21 +3,21 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import {
-  acceptFriendship as userAcceptFriendship,
-  blockUser as userBlockUser,
-  deleteFriendship as userDeleteFriendship,
-  rejectFriendship as userRejectFriendship,
+  acceptFriendship  as userAcceptFriendship,
+  blockUser         as userBlockUser,
+  deleteFriendship  as userDeleteFriendship,
+  rejectFriendship  as userRejectFriendship,
   requestFriendship as userRequestFriendship,
-  unblockUser as userUnblockUser
+  unblockUser       as userUnblockUser
 } from '../../store/user/friendship/actions';
 import { FriendsView } from './view';
 
 export default function Friends(): JSX.Element {
   const dispatch = useDispatch();
-  const authname = useSelector(state => state.auth.authname);
+  const authname =      useSelector(state => state.auth.authname);
   const myFriendships = useSelector(state => state.data.myFriendships);
-  const theme = useSelector(state => state.theme.theme);
-  const message = useSelector(state => state.user.message);
+  const theme =         useSelector(state => state.theme.theme);
+  const message =       useSelector(state => state.user.message);
 
   const [ feedback,   setFeedback ] =   useState("");
   const [ loading,    setLoading ] =    useState(false);

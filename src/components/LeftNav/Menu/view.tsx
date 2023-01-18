@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Menu, IMenuItem } from './Menu';
+import { Menu, IMenuItem } from './index';
 
 const url = 'https://s3.amazonaws.com/nobsc-images-01/header/dropdowns/';
 // TO DO: shorten file names

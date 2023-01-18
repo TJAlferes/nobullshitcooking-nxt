@@ -1,4 +1,4 @@
-import { IIngredient } from '../../store/data/types';
+import type { IIngredient } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 

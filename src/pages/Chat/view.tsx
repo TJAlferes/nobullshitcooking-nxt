@@ -1,4 +1,4 @@
-import { IMessageWithClientTimestamp } from '../../store/chat/types';
+import type { IMessageWithClientTimestamp } from '../../store/chat/types';
 import { MessagesView } from './MessagesView';
 import { OptionsView } from './OptionsView';
 import { PeopleView } from './PeopleView';

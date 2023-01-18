@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
+import type { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
 import { deleteEquipment as staffDeleteEquipment } from '../../store/staff/equipment/actions';
 import { deleteIngredient as staffDeleteIngredient } from '../../store/staff/ingredient/actions';
 import { deleteRecipe as staffDeleteRecipe } from '../../store/staff/recipe/actions';
-import { DashboardView } from './DashboardView';
-import './dashboard.css';
+import { DashboardView } from './view';
 
 export function StaffDashboard({
   equipment,
   ingredients,
   message,
-  oneColumnATheme,
   recipes,
   staffDeleteEquipment,
   staffDeleteIngredient,
-  staffDeleteRecipe
+  staffDeleteRecipe,
+  theme
 }: Props): JSX.Element {
   const [ deleteId,    setDeleteId ] =    useState<number | undefined>();
   const [ deleteName,  setDeleteName ] =  useState("");
@@ -85,7 +84,7 @@ export function StaffDashboard({
       ingredients={ingredients}
       loading={loading}
       modalActive={modalActive}
-      oneColumnATheme={oneColumnATheme}
+      theme={theme}
       recipes={recipes}
       tab={tab}
     />
@@ -106,7 +105,7 @@ interface RootState {
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type Props = PropsFromRedux & {
-  oneColumnATheme: string;
+  theme: string;
 };
 
 const mapStateToProps = (state: RootState) => ({

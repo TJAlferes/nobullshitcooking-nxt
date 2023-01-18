@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IFriendship } from '../../store/data/types';
+import type { IFriendship } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 

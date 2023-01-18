@@ -1,4 +1,4 @@
-import { IMessageWithClientTimestamp } from '../../store/chat/types';
+import type { IMessageWithClientTimestamp } from '../../store/chat/types';
 
 function formattedMessage(authname: string, { kind, from, to, text }: IMessageWithClientTimestamp) {
   if (kind === "public") {

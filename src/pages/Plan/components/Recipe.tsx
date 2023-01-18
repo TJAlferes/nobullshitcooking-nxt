@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { IRecipe } from '../../../store/plannerView/types';
+import type { IRecipe } from '../../../store/plannerView/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 

@@ -1,4 +1,4 @@
-import { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
+import type { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
 
 export function validRecipeInfo({
   ownership,
@@ -45,7 +45,7 @@ export function validRecipeInfo({
   let validEquipment = true;
   if (equipment.length) {
     equipment.map(r => {
-      if (r.amount === "" || r.equipment === "") validEquipment = false;
+      if (r.amount === "" || r.id === "") validEquipment = false;
     });
     if (!validEquipment) return feedback("Review equipment.");
   }

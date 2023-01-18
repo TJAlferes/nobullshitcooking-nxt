@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AriaModal from 'react-aria-modal';
 
-import { IPlan } from '../../../store/data/types';
+import type { IPlan } from '../../../store/data/types';
 
 export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName, deletePlan, editingId, getApplicationNode, modalActive, myPlans }: Props): JSX.Element {
   return (

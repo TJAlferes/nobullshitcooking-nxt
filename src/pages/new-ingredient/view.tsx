@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ReactCrop, { Crop } from "react-image-crop";
 
 import { CropPreview, LoaderButton } from '../../components';
-import { IIngredientType } from '../../store/data/types';
+import type { IIngredientType } from '../../store/data/types';
 
 export function NewIngredientView({
   cancelImage,

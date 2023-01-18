@@ -1,4 +1,4 @@
-import { IEquipment } from '../../store/data/types';
+import type { IEquipment } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 

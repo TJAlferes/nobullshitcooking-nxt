@@ -11,7 +11,7 @@ import { ProfileView } from './view';
 
 export default function Profile(): JSX.Element {
   const router = useRouter();
-  const username = router.query.username as string;
+  const username = router.query['username'] as string;
 
   const dispatch = useDispatch();
   const authname =            useSelector(state => state.auth.authname);

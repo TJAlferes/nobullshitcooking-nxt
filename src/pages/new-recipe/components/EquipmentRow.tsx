@@ -1,4 +1,4 @@
-import { IEquipment } from '../../../store/data/types';
+import type { IEquipment } from '../../../store/data/types';
 
 export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props): JSX.Element {
   const availableEquipment = [...equipment, ...(myPrivateEquipment.length ? myPrivateEquipment : [])];

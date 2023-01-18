@@ -1,4 +1,4 @@
-import { IIngredient, IIngredientType, IMeasurement } from '../../../store/data/types';
+import type { IIngredient, IIngredientType, IMeasurement } from '../../../store/data/types';
 
 // TO DO: Add brand and variety
 

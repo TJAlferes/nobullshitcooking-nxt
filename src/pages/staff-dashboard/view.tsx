@@ -1,4 +1,4 @@
-import { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
+import type { IEquipment, IIngredient, IWorkRecipe } from '../../store/data/types';
 import { Equipment } from './tabs/Equipment';
 import { Ingredients } from './tabs/Ingredients';
 import { Recipes } from './tabs/Recipes';
@@ -18,12 +18,12 @@ export function DashboardView({
   ingredients,
   loading,
   modalActive,
-  oneColumnATheme,
   recipes,
-  tab
+  tab,
+  theme
 }: Props): JSX.Element {
   return (
-    <div className={`dashboard one-column-a ${oneColumnATheme}`}>
+    <div className={`dashboard one-column-a ${theme}`}>
       <h1>COOK EAT WIN REPEAT</h1>
 
       <p className="feedback">{feedback}</p>
@@ -65,7 +65,7 @@ type Props = {
   ingredients:                             IIngredient[];
   loading:                                 boolean;
   modalActive:                             boolean;
-  oneColumnATheme:                         string;
   recipes:                                 IWorkRecipe[];
   tab:                                     string;
+  theme:                                   string;
 };

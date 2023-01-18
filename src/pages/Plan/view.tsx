@@ -1,4 +1,4 @@
-import { IData } from '../../store/plannerView/types';
+import type { IData } from '../../store/plannerView/types';
 import Day from './components/Day';
 import ExpandedDay from './components/ExpandedDay';
 
