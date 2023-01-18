@@ -628,7 +628,7 @@ export interface IEquipmentRow {
   [index: string]: any;
   key:             string;
   amount:          string | number;
-  type:            string | number;  // equipmentTypeId?
+  type:            string | number;  // equipmentTypeId? (just a filter for nicer UX)
   id:              string | number;
 }
 
@@ -637,7 +637,7 @@ export interface IIngredientRow {
   key:             string;
   amount:          string | number;
   measurementId:   string | number;
-  type:            string | number;  // ingredientTypeId?
+  type:            string | number;  // ingredientTypeId? (just a filter for nicer UX)
   id:              string | number;
 }
 
@@ -646,8 +646,8 @@ export interface ISubrecipeRow {
   key:             string;
   amount:          string | number;
   measurementId:   string | number;
-  type:            string | number;  // recipeTypeId?
-  cuisine:         string | number;  // cuisineId?
+  type:            string | number;  // recipeTypeId? (just a filter for nicer UX)
+  cuisine:         string | number;  // cuisineId?    (just a filter for nicer UX)
   id:              string | number;
 }
 

@@ -79,9 +79,9 @@ export function ChatView({
         <p className="feedback">{feedback}</p>
 
         <div className="chat-mobile-tabs">
-          <button className={mobileTab === "Messages" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("Messages")}>Messages</button>
-          <button className={mobileTab === "People" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("People")}>People</button>
-          <button className={mobileTab === "Options" ? "chat-mobile-tab--current" : "chat-mobile-tab"} onClick={() => changeMobileTab("Options")}>Options</button>
+          <button className={mobileTab === "Messages" ? "--current" : ""} onClick={() => changeMobileTab("Messages")}>Messages</button>
+          <button className={mobileTab === "People" ? "--current" : ""}   onClick={() => changeMobileTab("People")}>People</button>
+          <button className={mobileTab === "Options" ? "--current" : ""}  onClick={() => changeMobileTab("Options")}>Options</button>
         </div>
 
         {mobileTab === "Options" && (

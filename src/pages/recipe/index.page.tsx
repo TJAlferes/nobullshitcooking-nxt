@@ -103,28 +103,28 @@ export default function Recipe(): JSX.Element {
 }
 
 export interface IRecipe {
-  id:                   number;
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  author_id:            number;
-  owner_id:             number;
-  title:                string;
-  recipe_type_name:     string;
-  cuisine_name:         string;
-  author:               string;
-  author_avatar:        string;
-  description:          string;
-  active_time:          string;
-  total_time:           string;
-  directions:           string;
-  recipe_image:         string;
-  equipment_image:      string;
-  ingredients_image:    string;
-  cooking_image:        string;
-  methods:     IRequiredMethod[];
-  equipment:   IRequiredEquipment[];
-  ingredients: IRequiredIngredient[];
-  subrecipes:  IRequiredSubrecipe[];
+  id:                number;
+  recipe_type_id:    number;
+  cuisine_id:        number;
+  author_id:         number;
+  owner_id:          number;
+  title:             string;
+  recipe_type_name:  string;
+  cuisine_name:      string;
+  author:            string;
+  author_avatar:     string;
+  description:       string;
+  active_time:       string;
+  total_time:        string;
+  directions:        string;
+  recipe_image:      string;
+  equipment_image:   string;
+  ingredients_image: string;
+  cooking_image:     string;
+  methods:           IRequiredMethod[];
+  equipment:         IRequiredEquipment[];
+  ingredients:       IRequiredIngredient[];
+  subrecipes:        IRequiredSubrecipe[];
 }
 
 interface IRequiredMethod {

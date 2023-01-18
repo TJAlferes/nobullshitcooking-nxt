@@ -34,9 +34,9 @@ export function FriendsView({
       </div>
 
       <div className="friends-tabs">
-        <button className={tab === "accepted" ? "--active" : undefined}         name="current" onClick={() => tabChange("accepted")}>Current</button>
-        <button className={tab === "pending-received" ? "--active" : undefined} name="pending" onClick={() => tabChange("pending-received")}>Pending</button>
-        <button className={tab === "blocked" ? "--active" : undefined}          name="blocked" onClick={() => tabChange("blocked")}>Blocked</button>
+        <button className={tab === "accepted" ? "--active" : ""}         name="current" onClick={() => tabChange("accepted")}>Current</button>
+        <button className={tab === "pending-received" ? "--active" : ""} name="pending" onClick={() => tabChange("pending-received")}>Pending</button>
+        <button className={tab === "blocked" ? "--active" : ""}          name="blocked" onClick={() => tabChange("blocked")}>Blocked</button>
       </div>
 
       <div className="friends-list">
