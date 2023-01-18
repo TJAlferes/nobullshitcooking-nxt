@@ -126,7 +126,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
     const full = await getCroppedImage(280, 172, imageRef.current, crop);
-    const tiny = await getCroppedImage(28, 18, imageRef.current, crop);
+    const tiny = await getCroppedImage(28,  18,  imageRef.current, crop);
     if (!full || !tiny) return;
     setFullCrop(full.preview);
     setTinyCrop(tiny.preview);
@@ -134,9 +134,11 @@ export function NewEquipment({ editing }: Props): JSX.Element {
     setTinyImage(tiny.final);
   };
 
-  const onCropChange =   (crop: Crop) =>              setCrop(crop);
-  const onCropComplete = (crop: Crop) =>              makeCrops(crop);
-  const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
+  const onCropChange = (crop: Crop) => setCrop(crop);
+
+  const onCropComplete = (crop: Crop) => makeCrops(crop);
+  
+  const onImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;

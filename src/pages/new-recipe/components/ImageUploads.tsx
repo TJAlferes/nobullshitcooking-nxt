@@ -47,6 +47,7 @@ export function ImageUploads({
   recipeTinyCrop
 }: Props): JSX.Element {
   const commonReactCropProps = {
+    aspect:    1,
     className: "crop-tool",
     disabled:  true,
     locked:    true,
@@ -76,13 +77,12 @@ export function ImageUploads({
           <div>
             <ReactCrop
               crop={recipeCrop}
-              imageStyle={{minHeight: "300px"}}
               onChange={onRecipeCropChange}
               onComplete={onRecipeCropComplete}
-              onImageLoaded={onRecipeImageLoaded}
-              src={recipeImage as string}
               {...commonReactCropProps}
-            />
+            >
+              <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
+            </ReactCrop>
 
             <ToolTip />
 
@@ -120,13 +120,12 @@ export function ImageUploads({
           <div>
             <ReactCrop
               crop={equipmentCrop}
-              imageStyle={{minHeight: "300px"}}
               onChange={onEquipmentCropChange}
               onComplete={onEquipmentCropComplete}
-              onImageLoaded={onEquipmentImageLoaded}
-              src={equipmentImage as string}
               {...commonReactCropProps}
-            />
+            >
+              <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
+            </ReactCrop>
             
             <ToolTip />
 
@@ -158,13 +157,12 @@ export function ImageUploads({
           <div>
             <ReactCrop
               crop={ingredientsCrop}
-              imageStyle={{minHeight: "300px"}}
               onChange={onIngredientsCropChange}
               onComplete={onIngredientsCropComplete}
-              onImageLoaded={onIngredientsImageLoaded}
-              src={ingredientsImage as string}
               {...commonReactCropProps}
-            />
+            >
+              <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
+            </ReactCrop>
             
             <ToolTip />
 
@@ -196,13 +194,12 @@ export function ImageUploads({
           <div>
             <ReactCrop
               crop={cookingCrop}
-              imageStyle={{minHeight: "300px"}}
               onChange={onCookingCropChange}
               onComplete={onCookingCropComplete}
-              onImageLoaded={onCookingImageLoaded}
-              src={cookingImage as string}
               {...commonReactCropProps}
-            />
+            >
+              <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
+            </ReactCrop>
             
             <ToolTip />
 
@@ -222,42 +219,44 @@ export function ImageUploads({
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
+type SyntheticEvent = React.SyntheticEvent<HTMLImageElement>;
+
 type Props = {
-  cancelCookingImage():                              void;
-  cancelEquipmentImage():                            void;
-  cancelIngredientsImage():                          void;
-  cancelRecipeImage():                               void;
-  cookingCrop:                                       Crop;
-  cookingFullCrop:                                   string;
-  cookingImage:                                      string | ArrayBuffer | null;
-  cookingPrevImage:                                  string;
-  editing:                                           boolean;
-  equipmentCrop:                                     Crop;
-  equipmentFullCrop:                                 string;
-  equipmentImage:                                    string | ArrayBuffer | null;
-  equipmentPrevImage:                                string;
-  ingredientsCrop:                                   Crop;
-  ingredientsFullCrop:                               string;
-  ingredientsImage:                                  string | ArrayBuffer | null;
-  ingredientsPrevImage:                              string;
-  loading:                                           boolean;
-  onCookingCropChange(crop: Crop):                   void;
-  onCookingCropComplete(crop: Crop):                 void;
-  onCookingImageLoaded(image: HTMLImageElement):     void;
-  onEquipmentCropChange(crop: Crop):                 void;
-  onEquipmentCropComplete(crop: Crop):               void;
-  onEquipmentImageLoaded(image: HTMLImageElement):   void;
-  onIngredientsCropChange(crop: Crop):               void;
-  onIngredientsCropComplete(crop: Crop):             void;
-  onIngredientsImageLoaded(image: HTMLImageElement): void;
-  onRecipeCropChange(crop: Crop):                    void;
-  onRecipeCropComplete(crop: Crop):                  void;
-  onRecipeImageLoaded(image: HTMLImageElement):      void;
-  onSelectFile(e: ChangeEvent, type: string):        void;
-  recipeCrop:                                        Crop;
-  recipeFullCrop:                                    string;
-  recipeImage:                                       string | ArrayBuffer | null;
-  recipePrevImage:                                   string;
-  recipeThumbCrop:                                   string;
-  recipeTinyCrop:                                    string;
+  cancelCookingImage():                        void;
+  cancelEquipmentImage():                      void;
+  cancelIngredientsImage():                    void;
+  cancelRecipeImage():                         void;
+  cookingCrop:                                 Crop;
+  cookingFullCrop:                             string;
+  cookingImage:                                string | ArrayBuffer | null;
+  cookingPrevImage:                            string;
+  editing:                                     boolean;
+  equipmentCrop:                               Crop;
+  equipmentFullCrop:                           string;
+  equipmentImage:                              string | ArrayBuffer | null;
+  equipmentPrevImage:                          string;
+  ingredientsCrop:                             Crop;
+  ingredientsFullCrop:                         string;
+  ingredientsImage:                            string | ArrayBuffer | null;
+  ingredientsPrevImage:                        string;
+  loading:                                     boolean;
+  onCookingCropChange(crop: Crop):             void;
+  onCookingCropComplete(crop: Crop):           void;
+  onCookingImageLoaded(e: SyntheticEvent):     void;
+  onEquipmentCropChange(crop: Crop):           void;
+  onEquipmentCropComplete(crop: Crop):         void;
+  onEquipmentImageLoaded(e: SyntheticEvent):   void;
+  onIngredientsCropChange(crop: Crop):         void;
+  onIngredientsCropComplete(crop: Crop):       void;
+  onIngredientsImageLoaded(e: SyntheticEvent): void;
+  onRecipeCropChange(crop: Crop):              void;
+  onRecipeCropComplete(crop: Crop):            void;
+  onRecipeImageLoaded(e: SyntheticEvent):      void;
+  onSelectFile(e: ChangeEvent, type: string):  void;
+  recipeCrop:                                  Crop;
+  recipeFullCrop:                              string;
+  recipeImage:                                 string | ArrayBuffer | null;
+  recipePrevImage:                             string;
+  recipeThumbCrop:                             string;
+  recipeTinyCrop:                              string;
 };

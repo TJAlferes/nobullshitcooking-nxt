@@ -388,8 +388,8 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     if (!recipeImageRef || !recipeImageRef.current) return;
     if (!crop.width) return;
     const full =  await getCroppedImage(280, 172, recipeImageRef.current, crop);
-    const thumb = await getCroppedImage(100, 62, recipeImageRef.current, crop);
-    const tiny =  await getCroppedImage(28, 18, recipeImageRef.current, crop);
+    const thumb = await getCroppedImage(100, 62,  recipeImageRef.current, crop);
+    const tiny =  await getCroppedImage(28,  18,  recipeImageRef.current, crop);
     if (!full || !thumb || !tiny) return;
     setRecipeFullCrop(full.preview);
     setRecipeThumbCrop(thumb.preview);
@@ -399,21 +399,20 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     setRecipeTinyImage(tiny.final);
   };
 
-  const onCookingCropChange =   (crop: PixelCrop)         => setCookingCrop(crop);
-  const onCookingCropComplete = (crop: Crop)              => makeCookingCrops(crop);
-  const onCookingImageLoaded =  (image: HTMLImageElement) => cookingImageRef.current = image;
+  const onCookingCropChange =     (crop: PixelCrop) => setCookingCrop(crop);
+  const onEquipmentCropChange =   (crop: PixelCrop) => setEquipmentCrop(crop);
+  const onIngredientsCropChange = (crop: PixelCrop) => setIngredientsCrop(crop);
+  const onRecipeCropChange =      (crop: PixelCrop) => setRecipeCrop(crop);
 
-  const onEquipmentCropChange =   (crop: PixelCrop)         => setEquipmentCrop(crop);
-  const onEquipmentCropComplete = (crop: Crop)              => makeEquipmentCrops(crop);
-  const onEquipmentImageLoaded =  (image: HTMLImageElement) => equipmentImageRef.current = image;
+  const onCookingCropComplete =     (crop: Crop) => makeCookingCrops(crop);
+  const onEquipmentCropComplete =   (crop: Crop) => makeEquipmentCrops(crop);
+  const onIngredientsCropComplete = (crop: Crop) => makeIngredientsCrops(crop);
+  const onRecipeCropComplete =      (crop: Crop) => makeRecipeCrops(crop);
 
-  const onIngredientsCropChange =   (crop: PixelCrop)         => setIngredientsCrop(crop);
-  const onIngredientsCropComplete = (crop: Crop)              => makeIngredientsCrops(crop);
-  const onIngredientsImageLoaded =  (image: HTMLImageElement) => ingredientsImageRef.current = image;
-
-  const onRecipeCropChange =   (crop: PixelCrop)         => setRecipeCrop(crop);
-  const onRecipeCropComplete = (crop: Crop)              => makeRecipeCrops(crop);
-  const onRecipeImageLoaded =  (image: HTMLImageElement) => recipeImageRef.current = image;
+  const onCookingImageLoaded =     (e: SyntheticImageEvent) => cookingImageRef.current = e.currentTarget;
+  const onEquipmentImageLoaded =   (e: SyntheticImageEvent) => equipmentImageRef.current = e.currentTarget;
+  const onIngredientsImageLoaded = (e: SyntheticImageEvent) => ingredientsImageRef.current = e.currentTarget;
+  const onRecipeImageLoaded =      (e: SyntheticImageEvent) => recipeImageRef.current = e.currentTarget;
   
   const onSelectFile = (e: ChangeEvent, type: string) => {
     const target = e.target as HTMLInputElement;
@@ -546,8 +545,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   );
 };
 
-type ChangeEvent =    React.ChangeEvent<HTMLInputElement>;
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
+type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
+type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type IImage = string | ArrayBuffer | null;
 

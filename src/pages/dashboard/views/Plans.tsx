@@ -8,8 +8,8 @@ export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName
     <div className="dashboard-content">
       <h2>Plans</h2>
 
-      {(!creatingPlan && !editingId) && <Link href="/user-plan/submit" className="new-entity">Create New Plan</Link>}
-      {( creatingPlan && !editingId) && <Link href="/user-plan/submit" className="new-entity">Finish Creating Plan</Link>}
+      {(!creatingPlan && !editingId) && <Link href="/user-plan/submit"              className="new-entity">Create New Plan</Link>}
+      {( creatingPlan && !editingId) && <Link href="/user-plan/submit"              className="new-entity">Finish Creating Plan</Link>}
       {(!creatingPlan &&  editingId) && <Link href={`/user-plan/edit/${editingId}`} className="new-entity">Finish Updating Plan</Link>}
 
       {modalActive

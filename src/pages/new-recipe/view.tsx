@@ -292,9 +292,9 @@ export function NewRecipeView({
     </div>
   );
 }
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-type ChangeEvent =    React.ChangeEvent<HTMLInputElement>;
+type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
+type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
+type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type Props = {
   addEquipmentRow():                                      void;
@@ -352,16 +352,16 @@ type Props = {
   usedMethods:                                            IMethods;
   onCookingCropChange(crop: Crop):                        void;
   onCookingCropComplete(crop: Crop):                      void;
-  onCookingImageLoaded(image: HTMLImageElement):          void;
+  onCookingImageLoaded(e: SyntheticImageEvent):           void;
   onEquipmentCropChange(crop: Crop):                      void;
   onEquipmentCropComplete(crop: Crop):                    void;
-  onEquipmentImageLoaded(image: HTMLImageElement):        void;
+  onEquipmentImageLoaded(e: SyntheticImageEvent):         void;
   onIngredientsCropChange(crop: Crop):                    void;
   onIngredientsCropComplete(crop: Crop):                  void;
-  onIngredientsImageLoaded(image: HTMLImageElement):      void;
+  onIngredientsImageLoaded(e: SyntheticImageEvent):       void;
   onRecipeCropChange(crop: Crop):                         void;
   onRecipeCropComplete(crop: Crop):                       void;
-  onRecipeImageLoaded(image: HTMLImageElement):           void;
+  onRecipeImageLoaded(e: SyntheticImageEvent):            void;
   onSelectFile(e: ChangeEvent, type: string):             void;
   ownership:                                              string;
   recipeCrop:                                             Crop;

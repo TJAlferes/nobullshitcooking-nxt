@@ -128,9 +128,11 @@ export default function Dashboard(): JSX.Element {
     setTinyAvatar(tiny.final);
   };
 
-  const onCropChange =   (crop: PixelCrop) =>         setCrop(crop);
-  const onCropComplete = (crop: Crop) =>              makeCrops(crop);
-  const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
+  const onCropChange = (crop: PixelCrop) => setCrop(crop);
+
+  const onCropComplete = (crop: Crop) => makeCrops(crop);
+  
+  const onImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;

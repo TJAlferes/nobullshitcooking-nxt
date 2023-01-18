@@ -66,15 +66,15 @@ export function NewEquipmentView({
         {image && (
           <div>
             <ReactCrop
+              aspect={1}
               className="crop-tool"
               crop={crop}
-              imageStyle={{minHeight: "300px"}}
               onChange={onCropChange}
               onComplete={onCropComplete}
-              onImageLoaded={onImageLoaded}
-              src={image as string}
               style={{minHeight: "300px"}}
-            />
+            >
+              <img onLoad={onImageLoaded} src={image as string} />
+            </ReactCrop>
             <CropPreview cancelImage={cancelImage} fullCrop={fullCrop} loading={loading} tinyCrop={tinyCrop} />
           </div>
         )}
@@ -98,27 +98,27 @@ export function NewEquipmentView({
 }
 
 type Props = {
-  cancelImage():                                           void;
-  crop:                                                    Crop;
-  equipmentTypes:                                          IEquipmentType[];
-  description:                                             string;
-  editing:                                                 boolean;
-  feedback:                                                string;
-  fullCrop:                                                string;
-  changeDescription(e: React.SyntheticEvent<EventTarget>): void;
-  changeName(e: React.SyntheticEvent<EventTarget>):        void;
-  changeType(e: React.SyntheticEvent<EventTarget>):        void;
-  image:                                                   string | ArrayBuffer | null;
-  loading:                                                 boolean;
-  name:                                                    string;
-  onCropChange(crop: Crop):                                void;
-  onCropComplete(crop: Crop):                              void;
-  onImageLoaded(image: HTMLImageElement):                  void;
-  onSelectFile(e: React.ChangeEvent<HTMLInputElement>):    void;
-  prevImage:                                               string;
-  staffIsAuthenticated?:                                   boolean;
-  submit():                                                void;
-  theme:                                                   string;
-  tinyCrop:                                                string;
-  typeId:                                                  number;
+  cancelImage():                                            void;
+  crop:                                                     Crop;
+  equipmentTypes:                                           IEquipmentType[];
+  description:                                              string;
+  editing:                                                  boolean;
+  feedback:                                                 string;
+  fullCrop:                                                 string;
+  changeDescription(e: React.SyntheticEvent<EventTarget>):  void;
+  changeName(e: React.SyntheticEvent<EventTarget>):         void;
+  changeType(e: React.SyntheticEvent<EventTarget>):         void;
+  image:                                                    string | ArrayBuffer | null;
+  loading:                                                  boolean;
+  name:                                                     string;
+  onCropChange(crop: Crop):                                 void;
+  onCropComplete(crop: Crop):                               void;
+  onImageLoaded(e: React.SyntheticEvent<HTMLImageElement>): void;
+  onSelectFile(e: React.ChangeEvent<HTMLInputElement>):     void;
+  prevImage:                                                string;
+  staffIsAuthenticated?:                                    boolean;
+  submit():                                                 void;
+  theme:                                                    string;
+  tinyCrop:                                                 string;
+  typeId:                                                   number;
 };
