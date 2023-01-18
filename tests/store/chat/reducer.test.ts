@@ -1,8 +1,8 @@
 import { actionTypes as authActionTypes } from '../../../src/store/auth/types';
 import { chatReducer } from '../../../src/store/chat/reducer';
-import { actionTypes as chatActionTypes, IChatState, PRIVATE, PUBLIC } from '../../../src/store/chat/types';
+import { actionTypes as chatActionTypes, IState, PRIVATE, PUBLIC } from '../../../src/store/chat/types';
 
-const { AUTH_USER_LOGOUT } = authActionTypes;
+const { USER_LOGOUT } = authActionTypes;
 const {
   CONNECT,
   CONNECTED,
@@ -35,7 +35,7 @@ const message2 = {kind: PUBLIC, id: 8 + time, to: "GrillNChill", from: jill, tex
 //const whisper1 = 
 const whisper2 = {kind: PRIVATE, id: 8 + time, to: "Jack", from: jill, text: "Are you still moving next year?", ts: `${time}`};
 
-const initialState: IChatState = {
+const initialState: IState = {
   status:   "disconnected",
   room:     "",
   messages: [],
