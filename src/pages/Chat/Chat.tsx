@@ -133,26 +133,27 @@ export default function Chat(): JSX.Element {
       return;
     }
 
-    const trimmedMessage = messageToSend.trim();
-    if (trimmedMessage.length < 1 || trimmedMessage === "") return;
-    if (trimmedMessage.length > 4000) {
+    const trim = messageToSend.trim();
+    if (trim.length < 1 || trim === "") return;
+    if (trim.length > 4000) {
       setFeedback("Please limit message length to 4,000 characters.");
       setTimeout(() => setFeedback(""), 4000);
       return;
     }
 
     setLoading(true);
-    const whispering = trimmedMessage.slice(0, 3) === "/w ";
+    const whispering = trim.slice(0, 3) === "/w ";
     if (whispering) {
       // TO DO: MESS AROUND AGAIN WITH "WRONG" WHITESPACES, if return here, or clean
-      const trimmedWhisper = trimmedMessage.replace(/^([\S]+\s){2}/, '');
-      const userToWhisper = trimmedMessage.match(/^(\S+? \S+?) ([\s\S]+?)$/);
-      if (!userToWhisper) return;
-      const trimmedUserToWhisper = userToWhisper[1].substring(3);
-      dispatch(sendPrivateMessage(trimmedWhisper, trimmedUserToWhisper));
+      const whisper = trim.replace(/^([\S]+\s){2}/, '');
+      const to =      trim.match(/^(\S+? \S+?) ([\s\S]+?)$/);
+      if (!(to && to[1])) return;
+
+      const trimmedTo = to[1].substring(3);
+      dispatch(sendPrivateMessage(whisper, trimmedTo));
     }
-    else dispatch(sendMessage(trimmedMessage));
-    /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trimmedMessage, trimmedFriend);}*/
+    else dispatch(sendMessage(trim));
+    /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trim, trimmedFriend);}*/
     setMessageToSend("");
     preventSpam();
     setLoading(false);

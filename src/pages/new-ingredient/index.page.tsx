@@ -35,7 +35,13 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const [ fullImage,   setFullImage ] =   useState<File | null>(null);
   const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({aspect: 280 / 172});
+  const [ crop,     setCrop ] =     useState<Crop>({
+    unit: 'px', // Can be 'px' or '%'
+    x: 25,
+    y: 25,
+    width: 50,
+    height: 50
+  });
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -48,9 +54,16 @@ export function NewIngredient({ editing }: Props): JSX.Element {
         router.push(redirectPath);
         return;
       }
+
       setLoading(true);
       window.scrollTo(0,0);
+
       const [ prev ] = staffIsAuthenticated ? ingredients.filter(i => i.id === Number(id)) : myPrivateIngredients.filter(i => i.id === Number(id));
+      
+      if (!prev) {
+        setLoading(false);
+        return;
+      }
       setEditingId(prev.id);
       setTypeId(prev.ingredient_type_id);
       setName(prev.name);
@@ -113,13 +126,13 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-    const full = await getCroppedImage(280, 172, imageRef.current, crop, "newFile.jpeg");
-    const tiny = await getCroppedImage(28, 18, imageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(280, 172, imageRef.current, crop);
+    const tiny = await getCroppedImage(28, 18, imageRef.current, crop);
     if (!full || !tiny) return;
-    setFullCrop(full.resizedPreview);
-    setTinyCrop(tiny.resizedPreview);
-    setFullImage(full.resizedFinal);
-    setTinyImage(tiny.resizedFinal);
+    setFullCrop(full.preview);
+    setTinyCrop(tiny.preview);
+    setFullImage(full.final);
+    setTinyImage(tiny.final);
   };
 
   const onCropChange =   (crop: Crop) =>              setCrop(crop);
@@ -131,7 +144,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
     if (!(target.files && target.files.length > 0)) return;
     const reader = new FileReader();
     reader.addEventListener("load", () => setImage(reader.result));
-    reader.readAsDataURL(target.files[0]);
+    reader.readAsDataURL(target.files[0] as Blob);
   };
 
   const valid = () => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import type { Crop } from 'react-image-crop';
+import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
@@ -16,7 +16,7 @@ import { NewRecipeView } from './view';
 
 export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const router = useRouter();
-  const id = Number(router.query.id);  // not reliable?
+  const id = Number(router.query['id']);  // not reliable?
 
   const dispatch = useDispatch();
   const staffMessage = useSelector(state => state.staff.message);
@@ -84,15 +84,16 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const [ cookingImage,         setCookingImage ] =         useState<IImage>(null);
   const [ cookingFullImage,     setCookingFullImage ] =     useState<File | null>(null);
 
-  const [ recipeCrop,          setRecipeCrop ] =          useState<Crop>({aspect: 280 / 172});
+  const initialCropState: Crop = {unit: 'px', x: 25, y: 25, width: 50, height: 50};
+  const [ recipeCrop,          setRecipeCrop ] =          useState<Crop>(initialCropState);
   const [ recipeFullCrop,      setRecipeFullCrop ] =      useState("");
   const [ recipeThumbCrop,     setRecipeThumbCrop ] =     useState("");
   const [ recipeTinyCrop,      setRecipeTinyCrop ] =      useState("");
-  const [ equipmentCrop,       setEquipmentCrop ] =       useState<Crop>({aspect: 280 / 172});
+  const [ equipmentCrop,       setEquipmentCrop ] =       useState<Crop>(initialCropState);
   const [ equipmentFullCrop,   setEquipmentFullCrop ] =   useState("");
-  const [ ingredientsCrop,     setIngredientsCrop ] =     useState<Crop>({aspect: 280 / 172});
+  const [ ingredientsCrop,     setIngredientsCrop ] =     useState<Crop>(initialCropState);
   const [ ingredientsFullCrop, setIngredientsFullCrop ] = useState("");
-  const [ cookingCrop,         setCookingCrop ] =         useState<Crop>({aspect: 280 / 172});
+  const [ cookingCrop,         setCookingCrop ] =         useState<Crop>(initialCropState);
   const [ cookingFullCrop,     setCookingFullCrop ] =     useState("");
 
   const recipeImageRef = useRef<HTMLImageElement>();
@@ -268,8 +269,10 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     const newRows =    Array.from(equipmentRows);
     const elToUpdate = newRows.findIndex(el => el.key === rowKey);
     const name =       (e.target as HTMLInputElement).name;
-    const value =      (e.target as HTMLInputElement).value;
-    newRows[elToUpdate][name] = value;
+    const value =      (e.target as HTMLInputElement).value as string;
+    const obj =        newRows[elToUpdate];
+    if (!obj) return;
+    obj[name] = value;
     setEquipmentRows(newRows);
   };
 
@@ -278,7 +281,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     const elToUpdate =  newRows.findIndex(el => el.key === rowKey);
     const name =        (e.target as HTMLInputElement).name;
     const value =       (e.target as HTMLInputElement).value;
-    newRows[elToUpdate][name] = value;
+    const obj =        newRows[elToUpdate];
+    if (!obj) return;
+    obj[name] = value;
     setIngredientRows(newRows);
   };
 
@@ -287,7 +292,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     const elToUpdate = newRows.findIndex(el => el.key === rowKey);
     const name =       (e.target as HTMLInputElement).name;
     const value =      (e.target as HTMLInputElement).value;
-    newRows[elToUpdate][name] = value;
+    const obj =        newRows[elToUpdate];
+    if (!obj) return;
+    obj[name] = value;
     setSubrecipeRows(newRows);
   };
 
@@ -353,58 +360,58 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const makeCookingCrops = async (crop: Crop) => {
     if (!cookingImageRef || !cookingImageRef.current) return;
     if (!crop.width) return;
-    const full = await getCroppedImage(280, 172, cookingImageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(280, 172, cookingImageRef.current, crop);
     if (!full) return;
-    setCookingFullCrop(full.resizedPreview);
-    setCookingFullImage(full.resizedFinal);
+    setCookingFullCrop(full.preview);
+    setCookingFullImage(full.final);
   };
 
   const makeEquipmentCrops = async (crop: Crop) => {
     if (!equipmentImageRef || !equipmentImageRef.current) return;
     if (!crop.width) return;
-    const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop);
     if (!full) return;
-    setEquipmentFullCrop(full.resizedPreview);
-    setEquipmentFullImage(full.resizedFinal);
+    setEquipmentFullCrop(full.preview);
+    setEquipmentFullImage(full.final);
   };
 
   const makeIngredientsCrops = async (crop: Crop) => {
     if (!ingredientsImageRef || !ingredientsImageRef.current) return;
     if (!crop.width) return;
-    const full = await getCroppedImage(280, 172, ingredientsImageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(280, 172, ingredientsImageRef.current, crop);
     if (!full) return;
-    setIngredientsFullCrop(full.resizedPreview);
-    setIngredientsFullImage(full.resizedFinal);
+    setIngredientsFullCrop(full.preview);
+    setIngredientsFullImage(full.final);
   };
 
   const makeRecipeCrops = async (crop: Crop) => {
     if (!recipeImageRef || !recipeImageRef.current) return;
     if (!crop.width) return;
-    const full =  await getCroppedImage(280, 172, recipeImageRef.current, crop, "newFile.jpeg");
-    const thumb = await getCroppedImage(100, 62, recipeImageRef.current, crop, "newFile.jpeg");
-    const tiny =  await getCroppedImage(28, 18, recipeImageRef.current, crop, "newFile.jpeg");
+    const full =  await getCroppedImage(280, 172, recipeImageRef.current, crop);
+    const thumb = await getCroppedImage(100, 62, recipeImageRef.current, crop);
+    const tiny =  await getCroppedImage(28, 18, recipeImageRef.current, crop);
     if (!full || !thumb || !tiny) return;
-    setRecipeFullCrop(full.resizedPreview);
-    setRecipeThumbCrop(thumb.resizedPreview);
-    setRecipeTinyCrop(tiny.resizedPreview);
-    setRecipeFullImage(full.resizedFinal);
-    setRecipeThumbImage(thumb.resizedFinal);
-    setRecipeTinyImage(tiny.resizedFinal);
+    setRecipeFullCrop(full.preview);
+    setRecipeThumbCrop(thumb.preview);
+    setRecipeTinyCrop(tiny.preview);
+    setRecipeFullImage(full.final);
+    setRecipeThumbImage(thumb.final);
+    setRecipeTinyImage(tiny.final);
   };
 
-  const onCookingCropChange =   (crop: Crop)              => setCookingCrop(crop);
+  const onCookingCropChange =   (crop: PixelCrop)         => setCookingCrop(crop);
   const onCookingCropComplete = (crop: Crop)              => makeCookingCrops(crop);
   const onCookingImageLoaded =  (image: HTMLImageElement) => cookingImageRef.current = image;
 
-  const onEquipmentCropChange =   (crop: Crop)              => setEquipmentCrop(crop);
+  const onEquipmentCropChange =   (crop: PixelCrop)         => setEquipmentCrop(crop);
   const onEquipmentCropComplete = (crop: Crop)              => makeEquipmentCrops(crop);
   const onEquipmentImageLoaded =  (image: HTMLImageElement) => equipmentImageRef.current = image;
 
-  const onIngredientsCropChange =   (crop: Crop)              => setIngredientsCrop(crop);
+  const onIngredientsCropChange =   (crop: PixelCrop)         => setIngredientsCrop(crop);
   const onIngredientsCropComplete = (crop: Crop)              => makeIngredientsCrops(crop);
   const onIngredientsImageLoaded =  (image: HTMLImageElement) => ingredientsImageRef.current = image;
 
-  const onRecipeCropChange =   (crop: Crop)              => setRecipeCrop(crop);
+  const onRecipeCropChange =   (crop: PixelCrop)         => setRecipeCrop(crop);
   const onRecipeCropComplete = (crop: Crop)              => makeRecipeCrops(crop);
   const onRecipeImageLoaded =  (image: HTMLImageElement) => recipeImageRef.current = image;
   
@@ -418,7 +425,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       if (type === "ingredients") setIngredientsImage(reader.result);
       if (type === "recipe")      setRecipeImage(reader.result);
     });
-    reader.readAsDataURL(target.files[0]);
+    reader.readAsDataURL(target.files[0] as Blob);
   };
 
   const removeEquipmentRow = (rowKey: string) => {

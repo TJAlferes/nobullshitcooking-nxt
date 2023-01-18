@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Crop } from 'react-image-crop';
+import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { updateLocalAvatar } from '../../store/auth/actions';
-import { submitAvatar as userSubmitAvatar } from '../../store/user/avatar/actions';
-import { unfavoriteRecipe as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
-import { deletePrivateEquipment as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
+import { submitAvatar            as userSubmitAvatar } from '../../store/user/avatar/actions';
+import { unfavoriteRecipe        as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
+import { deletePrivateEquipment  as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
 import { deletePrivateIngredient as userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
-import { deletePlan as userDeletePlan } from '../../store/user/plan/actions';
-import { deletePrivateRecipe as userDeletePrivateRecipe, disownPublicRecipe as userDisownPublicRecipe } from '../../store/user/recipe/actions';
-import { unsaveRecipe as userUnsaveRecipe } from '../../store/user/save/actions';
+import { deletePlan              as userDeletePlan } from '../../store/user/plan/actions';
+import { deletePrivateRecipe     as userDeletePrivateRecipe,
+         disownPublicRecipe      as userDisownPublicRecipe } from '../../store/user/recipe/actions';
+import { unsaveRecipe            as userUnsaveRecipe } from '../../store/user/save/actions';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { DashboardView } from './view';
 
@@ -37,7 +38,13 @@ export default function Dashboard(): JSX.Element {
   const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
   const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({aspect: 1 / 1});
+  const [ crop,     setCrop ] =     useState<Crop>({
+    unit: 'px', // Can be 'px' or '%'
+    x: 25,
+    y: 25,
+    width: 50,
+    height: 50
+  });
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -112,16 +119,16 @@ export default function Dashboard(): JSX.Element {
   const makeCrops = async (crop: Crop) => {
     if (!imageRef || !imageRef.current) return;
     if (!crop.width) return;
-    const full = await getCroppedImage(250, 250, imageRef.current, crop, "newFile.jpeg");
-    const tiny = await getCroppedImage(25, 25, imageRef.current, crop, "newFile.jpeg");
+    const full = await getCroppedImage(250, 250, imageRef.current, crop);
+    const tiny = await getCroppedImage(25,  25,  imageRef.current, crop);
     if (!full || !tiny) return;
-    setFullCrop(full.resizedPreview);
-    setTinyCrop(tiny.resizedPreview);
-    setFullAvatar(full.resizedFinal);
-    setTinyAvatar(tiny.resizedFinal);
+    setFullCrop(full.preview);
+    setTinyCrop(tiny.preview);
+    setFullAvatar(full.final);
+    setTinyAvatar(tiny.final);
   };
 
-  const onCropChange =   (crop: Crop) =>              setCrop(crop);
+  const onCropChange =   (crop: PixelCrop) =>         setCrop(crop);
   const onCropComplete = (crop: Crop) =>              makeCrops(crop);
   const onImageLoaded =  (image: HTMLImageElement) => imageRef.current = image;
 
@@ -130,7 +137,7 @@ export default function Dashboard(): JSX.Element {
     if (!(target.files && target.files.length > 0)) return;
     const reader = new FileReader();
     reader.addEventListener("load", () => setAvatar(reader.result));
-    reader.readAsDataURL(target.files[0]);
+    reader.readAsDataURL(target.files[0] as Blob);
   };
 
   const submitAvatar = () => {

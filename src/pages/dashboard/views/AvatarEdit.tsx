@@ -4,15 +4,15 @@ export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCr
   return (
     <div className="dashboard-avatar-edit">
       <ReactCrop
+        aspect={1}
         className="avatar-edit-tool"
         crop={crop}
-        imageStyle={{minHeight: "300px"}}
         onChange={onCropChange}
         onComplete={onCropComplete}
-        onImageLoaded={onImageLoaded}
-        src={avatar as string}
         style={{minHeight: "300px"}}
-      />
+      >
+        <img onLoad={onImageLoaded} src={avatar as string} />
+      </ReactCrop>
 
       <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
 
@@ -27,15 +27,17 @@ export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCr
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<HTMLImageElement>;
+
 type Props = {
-  avatar:                                 string | ArrayBuffer | null;
-  cancelAvatar():                         void;
-  crop:                                   Crop;
-  fullCrop:                               string;
-  loading:                                boolean;
-  onCropChange(crop: Crop):               void;
-  onCropComplete(crop: Crop):             void;
-  onImageLoaded(image: HTMLImageElement): void;
-  submitAvatar():                         void;
-  tinyCrop:                               string;
+  avatar:                           string | ArrayBuffer | null;
+  cancelAvatar():                   void;
+  crop:                             Crop;
+  fullCrop:                         string;
+  loading:                          boolean;
+  onCropChange(crop: Crop):         void;
+  onCropComplete(crop: Crop):       void;
+  onImageLoaded(e: SyntheticEvent): void;
+  submitAvatar():                   void;
+  tinyCrop:                         string;
 };

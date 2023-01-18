@@ -1,6 +1,6 @@
-import { Crop } from 'react-image-crop';
+import type { Crop } from 'react-image-crop';
 
-export async function getCroppedImage(imageWidth: number, imageHeight: number, image: HTMLImageElement, crop: Crop, fileName: string) {
+export async function getCroppedImage(imageWidth: number, imageHeight: number, image: HTMLImageElement, crop: Crop) {
   if (!crop.x || !crop.y || !crop.width || !crop.height) return;
 
   const canvas =  document.createElement("canvas");
@@ -14,7 +14,7 @@ export async function getCroppedImage(imageWidth: number, imageHeight: number, i
 
   ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, imageWidth, imageHeight);
 
-  const resizedPreview: string = await new Promise((resolve, reject) => {
+  const preview: string = await new Promise(resolve => {
     canvas.toBlob(blob => {
       if (!blob) return;
       const fileUrl = window.URL.createObjectURL(blob);
@@ -22,13 +22,13 @@ export async function getCroppedImage(imageWidth: number, imageHeight: number, i
     }, 'image/jpeg', 1);
   });
 
-  const resizedFinal: File = await new Promise((resolve, reject) => {
+  const final: File = await new Promise(resolve => {
     canvas.toBlob(blob => {
       if (!blob) return;
-      const image = new File([blob], "resizedFinal", {type: "image/jpeg"});
+      const image = new File([blob], "final", {type: "image/jpeg"});
       resolve(image);
     }, 'image/jpeg', 1);
   });
 
-  return {resizedPreview, resizedFinal};
+  return {preview, final};
 }
