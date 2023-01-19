@@ -7,7 +7,7 @@ function combineAggsFromResponses(responses: any) {
   return responses.reduce((acc: any, response: any) => ({...acc, ...response.aggregations}), {});
 }
 
-// To calculate a disjunctive facet correctly, calculate the facet counts as if the filter was not applied.
+// To calculate a disjunctive (sticky) facet correctly, calculate the facet counts as if the filter was not applied.
 // Otherwise the list of facet values would collapse to one value: whatever you have filtered on in that facet.
 function removeFilterByName(state: any, facetName: string) {
   return {...state, filters: state.filters.filter((f: any) => f.field !== facetName)};

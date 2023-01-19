@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import {
+import type {
   ICreateNewPrivateRecipe, IEditPrivateRecipe, IDeletePrivateRecipe,
   ICreateNewPublicRecipe, IEditPublicRecipe, IDisownPublicRecipe
 } from './types';

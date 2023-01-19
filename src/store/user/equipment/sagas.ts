@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPrivateEquipmentsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { ICreateNewPrivateEquipment, IEditPrivateEquipment, IDeletePrivateEquipment } from './types';
+import type { ICreateNewPrivateEquipment, IEditPrivateEquipment, IDeletePrivateEquipment } from './types';
 
 export function* createNewPrivateEquipmentSaga(action: ICreateNewPrivateEquipment) {
   let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;

@@ -1,4 +1,4 @@
-import { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
+import type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
 
 export type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Store } from 'redux';
+import type { Store } from 'redux';
 
 import { applyDisjunctiveFaceting, buildAutocompleteState, buildSearchRequest, buildSearchState } from '../utils/search';
 import { NOBSCAPI as endpoint } from './NOBSCAPI';

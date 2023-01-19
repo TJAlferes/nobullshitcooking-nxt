@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getEquipmentsSaga } from '../../data/sagas';
 import { staffMessage, staffMessageClear } from '../actions';
-import { ICreateNewEquipment, IEditEquipment, IDeleteEquipment } from './types';
+import type { ICreateNewEquipment, IEditEquipment, IDeleteEquipment } from './types';
 
 export function* createNewEquipmentSaga(action: ICreateNewEquipment) {
   let {

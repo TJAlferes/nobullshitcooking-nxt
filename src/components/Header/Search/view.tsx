@@ -1,11 +1,11 @@
 function getRaw(result: IResult, value: string) {
-  if (!result[value] || !result[value].raw) return "";
-  return result[value].raw;
+  if (!result[value] || !result[value]?.raw) return "";
+  return result[value]!.raw;
 }
 
 function getSnippet(result: IResult, value: string) {
-  if (!result[value] || !result[value].snippet) return "";
-  return result[value].snippet;
+  if (!result[value] || !result[value]?.snippet) return "";
+  return result[value]!.snippet;
 }
 
 // why use dangerouslySetInnerHTML?

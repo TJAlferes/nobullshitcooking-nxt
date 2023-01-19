@@ -14,7 +14,7 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const theme = useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sInsert = document.getElementsByClassName("sui-search-box__wrapper")[0].firstChild as HTMLElement;
+    const sInsert = document.getElementsByClassName("sui-search-box__wrapper")[0]?.firstChild as HTMLElement;
     dispatch(setIndex(e.target.value));
     sInsert.focus();
   }

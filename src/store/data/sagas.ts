@@ -3,7 +3,7 @@ import { call, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { getInitialData, getData, getInitialUserData, getUserData } from './actions';
-import { IInitialData, IInitialUserData } from './types';
+import type { IInitialData, IInitialUserData } from './types';
 
 // TO DO: do on ssr server now
 

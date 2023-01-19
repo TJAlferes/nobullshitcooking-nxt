@@ -1,4 +1,4 @@
-import { IUserLogout } from '../auth/types';
+import type { IUserLogout } from '../auth/types';
 
 export const actionTypes = {
   CONNECT:      'CONNECT',

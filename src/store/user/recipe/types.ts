@@ -1,4 +1,4 @@
-import { ICreatingRecipeInfo, IEditingRecipeInfo } from '../../staff/recipe/types';
+import type { ICreatingRecipeInfo, IEditingRecipeInfo } from '../../staff/recipe/types';
 
 export type { ICreatingRecipeInfo, IEditingRecipeInfo, IRequiredMethod, IRequiredEquipment, IRequiredIngredient, IRequiredSubrecipe } from '../../staff/recipe/types';
 

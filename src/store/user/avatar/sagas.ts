@@ -3,7 +3,7 @@ import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { userMessage, userMessageClear } from '../actions';
-import { ISubmitAvatar } from './types';
+import type { ISubmitAvatar } from './types';
 
 export function* submitAvatarSaga(action: ISubmitAvatar) {
   try {

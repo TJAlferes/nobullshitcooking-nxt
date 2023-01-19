@@ -1,4 +1,4 @@
-import { IData as IPlannerData } from '../planner/types';
+import type { IData as IPlannerData } from '../planner/types';
 
 export const actionTypes = {
   INIT:                  'INIT',

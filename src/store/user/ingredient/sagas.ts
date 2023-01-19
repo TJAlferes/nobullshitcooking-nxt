@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPrivateIngredientsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { ICreateNewPrivateIngredient, IEditPrivateIngredient, IDeletePrivateIngredient } from './types';
+import type { ICreateNewPrivateIngredient, IEditPrivateIngredient, IDeletePrivateIngredient } from './types';
 
 export function* createNewPrivateIngredientSaga(action: ICreateNewPrivateIngredient) {
   let { ingredientTypeId, name, description, image, fullImage, tinyImage } = action.ingredientInfo;

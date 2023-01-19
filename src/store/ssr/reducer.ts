@@ -4,7 +4,7 @@ const { HYDRATE, SERVER_ACTION, CLIENT_ACTION, APP, PAGE } = actionTypes;
 
 const initialState = {server: 'init', client: 'init', app: 'init', page: 'init' /*tick: 'init'*/};
 
-const reducer = (state: ISSRState = initialState, action: any) => {
+export const ssrReducer = (state: ISSRState = initialState, action: any) => {
   switch (action.type) {
     case HYDRATE:
       if (action.payload.app === 'init')  delete action.payload.app;

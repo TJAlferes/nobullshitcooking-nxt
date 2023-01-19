@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMySavedRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { ISaveRecipe, IUnsaveRecipe } from './types';
+import type { ISaveRecipe, IUnsaveRecipe } from './types';
 
 export function* saveRecipeSaga({ recipeId }: ISaveRecipe) {
   try {

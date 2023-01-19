@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { removeStorageItem } from '../../utils/storageHelpers';
 import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
-import { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
+import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
 
 export function* staffLoginSaga(action: IStaffLogin) {
   try {

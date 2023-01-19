@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyFavoriteRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { IFavoriteRecipe, IUnfavoriteRecipe } from './types';
+import type { IFavoriteRecipe, IUnfavoriteRecipe } from './types';
 
 export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {
   try {

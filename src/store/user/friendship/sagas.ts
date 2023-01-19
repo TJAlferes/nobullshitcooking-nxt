@@ -5,7 +5,7 @@ import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { updateOnlineSaga } from '../../chat/sagas';
 import { getMyFriendshipsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { IRequestFriendship, IAcceptFriendship, IRejectFriendship, IDeleteFriendship, IBlockUser, IUnblockUser } from './types';
+import type { IRequestFriendship, IAcceptFriendship, IRejectFriendship, IDeleteFriendship, IBlockUser, IUnblockUser } from './types';
 
 const error = 'An error occurred. Please try again.';
 

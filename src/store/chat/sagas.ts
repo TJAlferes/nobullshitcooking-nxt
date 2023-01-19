@@ -1,4 +1,4 @@
-import { Store } from 'redux';
+import type { Store } from 'redux';
 import { io, Socket } from 'socket.io-client';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
@@ -16,7 +16,7 @@ import {
   receivedPrivateMessage,
   failedPrivateMessage
 } from './actions';
-import { IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
+import type { IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
 
 const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false});  //withCredentials: true
 

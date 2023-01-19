@@ -1,4 +1,4 @@
-import { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
+import type { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
 
 export type { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
 

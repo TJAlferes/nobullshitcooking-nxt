@@ -9,6 +9,7 @@ export async function getCroppedImage(imageWidth: number, imageHeight: number, i
 
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
+  
   const ctx =    canvas.getContext("2d");
   if (!ctx) return;
 

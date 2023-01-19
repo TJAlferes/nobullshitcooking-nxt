@@ -1,4 +1,4 @@
-import { Store } from 'redux';
+import type { Store } from 'redux';
 
 import { windowFocused } from '../store/nobscapp/actions';
 

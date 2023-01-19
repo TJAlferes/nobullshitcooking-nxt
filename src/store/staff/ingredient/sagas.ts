@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getIngredientsSaga } from '../../data/sagas';
 import { staffMessage, staffMessageClear } from '../actions';
-import { ICreateNewIngredient, IEditIngredient, IDeleteIngredient } from './types';
+import type { ICreateNewIngredient, IEditIngredient, IDeleteIngredient } from './types';
 
 export function* createNewIngredientSaga(action: ICreateNewIngredient) {
   let {

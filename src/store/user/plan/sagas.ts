@@ -4,7 +4,7 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPlansSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { ICreatePlan, IEditPlan, IDeletePlan } from './types';
+import type { ICreatePlan, IEditPlan, IDeletePlan } from './types';
 
 export function* createNewPlanSaga(action: ICreatePlan) {
   try {
