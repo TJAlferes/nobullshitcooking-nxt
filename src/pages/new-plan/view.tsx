@@ -3,8 +3,8 @@ import AriaModal from 'react-aria-modal';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ExpandCollapse, LoaderButton } from '../../components';
-import { IWorkRecipe } from '../../store/data/types';
-import { IData } from '../../store/planner/types';
+import type { IWorkRecipe } from '../../store/data/types';
+import type { IData } from '../../store/planner/types';
 import { Day, ExpandedDay, Recipes } from './components';
 
 export function NewPlanView({

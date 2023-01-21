@@ -1,32 +1,38 @@
-import { DropTarget, DropTargetConnector, DropTargetMonitor, useDrop } from 'react-dnd';
-import { connect, ConnectedProps } from 'react-redux';
+import { DropTargetMonitor, useDrop } from 'react-dnd';  // DropTarget, DropTargetConnector, 
+import { useDispatch } from 'react-redux';  //connect, ConnectedProps
 
-import type { IRecipe } from '../../../store/planner/types';
 import { clickDay, addRecipeToDay } from '../../../store/planner/actions';
+import type { IRecipe } from '../../../store/planner/types';
 import Recipe from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-const dayTarget = {
-  // TO DO: improve "any, any"
-  drop({ day, addRecipeToDay }: Props, monitor: DropTargetMonitor<any, any>) {
-    const draggedRecipe = monitor.getItem();
-    if (day !== draggedRecipe.day) addRecipeToDay(day, draggedRecipe.recipe);
-    return {listId: day};  // WTF is this?
-  }
-};
+// TO DO: check your ref usage
+// TO DO: limit the max number of recipes per day
+export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element | null {
+  const dispatch = useDispatch();
 
-function collect(connect: DropTargetConnector, monitor: DropTargetMonitor) {
-  return {canDrop: monitor.canDrop(), connectDropTarget: connect.dropTarget(), isOver: monitor.isOver()};
-}
+  const [ { canDrop, isOver }, drop ] = useDrop(() => ({
+    accept: Types.PLANNER_RECIPE,
+    
+    collect: (monitor: DropTargetMonitor) => ({canDrop: monitor.canDrop(), isOver: monitor.isOver()}),
+    
+    drop: ({ day }: Props, monitor: DropTargetMonitor<any, any>) => {  // TO DO: improve "any, any"
+      const draggedRecipe = monitor.getItem();
 
-export function Day({ canDrop, day, expanded, expandedDay, isOver, recipes, clickDay }: Props): JSX.Element | null {
+      if (day !== draggedRecipe.day)
+        dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+
+      return {listId: day};  // WTF is this?
+    }
+  }));
+
   const color = (isOver && canDrop) ? "--green" : "--white";
 
-  const handleClickDay = () => clickDay(day);
+  const handleClickDay = () => dispatch(clickDay(day));
 
   return (expanded || (day === expandedDay)) ? null : (
-    <div className={`day${color}`} onClick={handleClickDay}>
+    <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
       {recipes.map((recipe, i) => (
         <Recipe
@@ -44,22 +50,11 @@ export function Day({ canDrop, day, expanded, expandedDay, isOver, recipes, clic
   );
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
-  canDrop:     boolean;
+type Props = {
   day:         number;
   expanded:    boolean;
   expandedDay: number | null;
-  isOver:      boolean;
   recipes:     IRecipe[];
 };
 
-const mapDispatchToProps = {
-  addRecipeToDay: (day: number, recipe: IRecipe) => addRecipeToDay(day, recipe),
-  clickDay:       (day: number)                  => clickDay(day)
-};
-
-const connector = connect(null, mapDispatchToProps);
-
-export default connector(DropTarget(Types.PLANNER_RECIPE, dayTarget, collect)(Day));
+export default Day;

@@ -23,6 +23,11 @@ const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }:
       if (item.day === 0) return;
       if (dropResult && (dropResult.listId !== item.day)) dispatch(removeRecipeFromDay(item.day, item.index));
     },
+    //end: (item: any, monitor: DragSourceMonitor) => {
+    //  const item: Props = monitor.getItem();
+    //  if (item.day === 0) return;
+    //  if (dropResult && (dropResult.listId !== item.day)) dispatch(removeRecipeFromDay(item.day, item.index));
+    //},
 
     item: {day, id, index, key: recipe.key, listId, recipe, type: Types.PLANNER_RECIPE},
 
