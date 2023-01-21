@@ -1,6 +1,4 @@
-import Day         from './Day';
-import ExpandedDay from './ExpandedDay';
-import Recipe      from './Recipe';
-import Recipes     from './Recipes';
-
-export {Day, ExpandedDay, Recipe, Recipes};
+export { Day }         from './Day';
+export { ExpandedDay } from './ExpandedDay';
+export { Recipe }      from './Recipe';
+export { Recipes }     from './Recipes';

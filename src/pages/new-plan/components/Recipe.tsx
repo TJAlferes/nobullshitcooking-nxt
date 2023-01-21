@@ -10,7 +10,7 @@ const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }: Props) => {
+export const Recipe: FC<Props> = ({ day, expandedDay, id, index, key, listId, recipe }: Props) => {
   const dispatch = useDispatch();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -94,5 +94,3 @@ type Props = {
   listId:      number;
   recipe:      IRecipe;
 };
-
-export default Recipe;

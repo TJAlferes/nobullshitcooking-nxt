@@ -1,22 +1,15 @@
+//import { useRef } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';  //DropTarget, DropTargetConnector,
 
 import type { IRecipe } from '../../../store/planner/types';
-import Recipe from './Recipe';
+import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-//const recipesTarget = {
-//  drop({ day }: Props) {
-//    return {listId: day};
-//  }
-//};
-
-//function collect(monitor: DropTargetMonitor, props) {
-//  return {canDrop: monitor.canDrop(), connectDropTarget: connect.dropTarget(), isOver: monitor.isOver()};
-//}
-
 // id={recipe.id}
-function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
+export function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
+  //const ref = useRef<HTMLDivElement>(null);
+
   const [ , drop ] = useDrop(() => ({
     accept: Types.PLANNER_RECIPE,
     collect: (monitor: DropTargetMonitor) => ({
@@ -28,6 +21,8 @@ function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
       listId: day
     })
   }));
+
+  //drop(ref);
 
   return (
     <div className="new-plan-recipes" ref={drop}>
@@ -44,6 +39,3 @@ type Props = {
   expandedDay: number | null;
   recipes:     IRecipe[];
 };
-
-//export default DropTarget(Types.PLANNER_RECIPE, recipesTarget, collect)(Recipes);
-export default Recipes;

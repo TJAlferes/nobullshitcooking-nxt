@@ -1,14 +1,17 @@
+//import { useRef } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
 import { addRecipeToDay, clickDay } from '../../../store/planner/actions';
 import type { IRecipe } from '../../../store/planner/types';
-import Recipe from './Recipe';
+import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 export function ExpandedDay({ day, expanded, expandedDay, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
+
+  //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: Types.PLANNER_RECIPE,
@@ -29,6 +32,8 @@ export function ExpandedDay({ day, expanded, expandedDay, recipes }: Props): JSX
 
   const handleClickDay = () => dispatch(clickDay(day));
 
+  //drop(ref);
+
   return !expanded ? null : (
     <div className={`expanded-day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
@@ -45,5 +50,3 @@ type Props = {
   expandedDay: number | null;
   recipes:     IRecipe[];
 };
-
-export default ExpandedDay;

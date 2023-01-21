@@ -1,9 +1,10 @@
 import { DropTargetMonitor, useDrop } from 'react-dnd';  // DropTarget, DropTargetConnector, 
 import { useDispatch } from 'react-redux';  //connect, ConnectedProps
 
+//import { useRef } from 'react';
 import { clickDay, addRecipeToDay } from '../../../store/planner/actions';
 import type { IRecipe } from '../../../store/planner/types';
-import Recipe from './Recipe';
+import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
@@ -11,6 +12,8 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 // TO DO: limit the max number of recipes per day
 export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
+
+  //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: Types.PLANNER_RECIPE,
@@ -30,6 +33,8 @@ export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element
   const color = (isOver && canDrop) ? "--green" : "--white";
 
   const handleClickDay = () => dispatch(clickDay(day));
+
+  //drop(ref);
 
   return (expanded || (day === expandedDay)) ? null : (
     <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
@@ -56,5 +61,3 @@ type Props = {
   expandedDay: number | null;
   recipes:     IRecipe[];
 };
-
-export default Day;
