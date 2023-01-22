@@ -8,7 +8,7 @@ import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-export function ExpandedDay({ day, expanded, expandedDay, recipes }: Props): JSX.Element | null {
+export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
 
   //const ref = useRef<HTMLDivElement>(null);
@@ -34,11 +34,11 @@ export function ExpandedDay({ day, expanded, expandedDay, recipes }: Props): JSX
 
   //drop(ref);
 
-  return !expanded ? null : (
+  return !expandedDay ? null : (
     <div className={`expanded-day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
-      {recipes.map((recipe, i) => (
-        <Recipe day={day} expanded={expanded} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
+      {recipes && recipes.map((recipe, i) => (
+        <Recipe day={day} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
       ))}
     </div>
   );
@@ -46,7 +46,6 @@ export function ExpandedDay({ day, expanded, expandedDay, recipes }: Props): JSX
 
 type Props = {
   day:         number;
-  expanded:    boolean;
   expandedDay: number | null;
-  recipes:     IRecipe[];
+  recipes:     IRecipe[] | undefined;
 };

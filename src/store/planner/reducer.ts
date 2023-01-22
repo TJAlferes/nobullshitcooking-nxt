@@ -21,10 +21,9 @@ const initialState: IState = {
   creating: false,
   editingId: null,
   publicUrl: "",
-  expanded: false,
   expandedDay: null,
   planName: "",
-  recipeListsInsideDays: {
+  planData: {
     1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
     8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
    15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
@@ -35,14 +34,16 @@ const initialState: IState = {
 const clickDay = (state: IState, action: IClickDay): IState => {
   const { expandedDay } = state;
   const { day } = action;
+
   if (day === expandedDay) return {...state, ...{expanded: false, expandedDay: null}};
   return {...state, ...{expanded: true, expandedDay: day}};
 };
 
 const addRecipeToDay = (state: IState, action: IAddRecipeToDay): IState => {
   const { day, recipe } = action;
+
   return update(state, {
-    recipeListsInsideDays: {
+    planData: {
       [day]: {
         $push: [recipe]
       }
@@ -52,8 +53,9 @@ const addRecipeToDay = (state: IState, action: IAddRecipeToDay): IState => {
 
 const removeRecipeFromDay = (state: IState, action: IRemoveRecipeFromDay): IState => {
   const { day, index } = action;
+
   return update(state, {
-    recipeListsInsideDays: {
+    planData: {
       [day]: {
         $splice: [[index, 1]]
       }
@@ -62,12 +64,12 @@ const removeRecipeFromDay = (state: IState, action: IRemoveRecipeFromDay): IStat
 };
 
 const reorderRecipeInDay = (state: IState, action: IReorderRecipeInDay): IState => {
-  const { expandedDay, recipeListsInsideDays } = state;
+  const { expandedDay, planData } = state;
   const { dragIndex, hoverIndex } = action;
   if (!expandedDay) return state;
-  const draggedRecipe = recipeListsInsideDays[expandedDay][dragIndex];
+  const draggedRecipe = planData[expandedDay][dragIndex];
   return update(state, {
-    recipeListsInsideDays: {
+    planData: {
       [expandedDay]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
@@ -77,12 +79,12 @@ const reorderRecipeInDay = (state: IState, action: IReorderRecipeInDay): IState 
 
 /*const publicLoadFromUrl = (state, action) => {
   const { preLoadedPlan } = action;
-  return {...state, ...{recipeListsInsideDays: preLoadedPlan}};
+  return {...state, ...{planData: preLoadedPlan}};
 };*/
 
 /*const publicSaveToUrl = (state, action) => {
-  const { recipeListsInsideDays } = state;
-  const newPublicUrl = convertPlannerToUrl(recipeListsInsideDays);
+  const { planData } = state;
+  const newPublicUrl = convertPlannerToUrl(planData);
   return {...state, ...{publicUrl: newPublicUrl}}
 };*/
 
@@ -98,7 +100,7 @@ export const plannerReducer = (state = initialState, action: Actions): IState =>
     case SET_CREATING:           return {...state, ...{creating: true}};
     case SET_PLAN_NAME:          return {...state, ...{planName: action.name}};
     case SET_EDITING_ID:         return {...state, ...{editingId: action.id}};
-    case SET_PLAN_DATA:          return {...state, ...{recipeListsInsideDays: action.data}};
+    case SET_PLAN_DATA:          return {...state, ...{planData: action.data}};
     default:                     return state;
   }
 };

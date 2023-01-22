@@ -1,22 +1,20 @@
-/*import { IPlannerData } from '../../store/planner/types';
+import type { IData } from '../../store/planner/types';
 
-export function convertPlannerToUrl(recipeListsInsideDays: IPlannerData) {
-  // TO DO: validate here too
-  let plannerString = '';
+export function convertPlannerToUrl(planData: IData) {  // TO DO: validate here too
+  let string = '';
 
-  Object.keys(recipeListsInsideDays).map(list => {
-    let plannerSubString = `d${list}_`;
+  Object.keys(planData).forEach(key => {
+    let substring = `d${key}_`;
 
-    recipeListsInsideDays[[list]].map(recipe => {
-      plannerSubString += `${recipe.id}-`;
+    planData[key]?.map(recipe => {
+      substring += `${recipe.id}-`;
     });
 
-    plannerSubString = plannerSubString.slice(0, -1);  // This removes the last '-'
-    plannerSubString += '!';
-    plannerString += plannerSubString;
-  });
+    substring = substring.slice(0, -1);  // removes the last '-'
+    substring += '!';
 
-  plannerString = plannerString.slice(0, -1);  // This removes the last '!'
+    string += substring;
+  });
   
-  return plannerString;
-}*/
+  return string.slice(0, -1);  // removes the last '!'
+}

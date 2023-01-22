@@ -10,7 +10,7 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 // TO DO: check your ref usage
 // TO DO: limit the max number of recipes per day
-export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element | null {
+export function Day({ day, expandedDay, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
 
   //const ref = useRef<HTMLDivElement>(null);
@@ -36,13 +36,12 @@ export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element
 
   //drop(ref);
 
-  return (expanded || (day === expandedDay)) ? null : (
+  return (day === expandedDay) ? null : (
     <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
-      {recipes.map((recipe, i) => (
+      {recipes && recipes.map((recipe, i) => (
         <Recipe
           day={day}
-          expanded={expanded}
           expandedDay={expandedDay}
           id={recipe.key}
           index={i}
@@ -57,7 +56,6 @@ export function Day({ day, expanded, expandedDay, recipes }: Props): JSX.Element
 
 type Props = {
   day:         number;
-  expanded:    boolean;
   expandedDay: number | null;
-  recipes:     IRecipe[];
+  recipes:     IRecipe[] | undefined;
 };

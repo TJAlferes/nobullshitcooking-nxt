@@ -86,7 +86,6 @@ interface IDragItem {
 
 type Props = {
   day:         number;
-  expanded:    boolean;
   expandedDay: number | null;
   id:          string;
   index:       number;

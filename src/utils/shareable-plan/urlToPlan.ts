@@ -1,55 +1,14 @@
-/*import axios from 'axios';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  NOBSCBackendAPIEndpointOne
-} from '../../config/NOBSCBackendAPIEndpointOne';
+import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 
-const endpoint = NOBSCBackendAPIEndpointOne;*/
+// We could have done the following with one large regex, but have for now decided to use a few smaller regexes in combination with some string splitting.
+// The urlString is split up into its parts, and those parts are tested against the respective regex.
 
-/*
-We could have done the following with one large regex,
-but have for now decided to use a few smaller regexes
-in combination with some string splitting.
-
-The urlString is split up into its parts,
-and those parts are tested against the respective regex.
-*/
-
-/*export async function convertUrlToPlanner(urlString) {
-  // 1. Check if the provided url is okay
-  if (typeof urlString !== 'string') return 'not a string';
-
-  if (urlString.length < 4 || urlString.length > 1502) return 'invalid length';
-
-  const allowedCharactersInUrl = /[d][0-9_\-\!]/;
-  if (!allowedCharactersInUrl.test(urlString)) return 'invalid character(s)';
-
-  const urlStringSplitOnDay = urlString.split('!', 28);
-  if (!urlStringSplitOnDay) return 'not splittable on !s';
-
-  const allowedCharactersInDay = /^[d]([1-9]|1[0-9]|2[0-8])$/;
-  const allowedCharactersInRecipes = /[0-9\-]/;
-  let dayStrings = [];
-  let recipesStrings = [];
-  let notOkay = false;
-  urlStringSplitOnDay.map(substring => {
-    let toAdd = substring.split('_');
-    dayStrings.push(toAdd[0]);
-    if (typeof toAdd[1] !== "undefined") recipesStrings.push(toAdd[1]);
-    else recipesStrings.push("none");
-  });
-  dayStrings.map(dayString => {
-    if (!allowedCharactersInDay.test(dayString)) notOkay = true;
-  });
-  recipesStrings.map(recipesString => {
-    if (recipesString !== "none") {
-      if (!allowedCharactersInRecipes.test(recipesString)) notOkay = true;
-    }
-  });
-  if (notOkay) return 'not okay';
-
-  // 2. The provided url is okay, so let's turn it into a plan
+export async function convertUrlToPlanner(string: string) {
+  const [ valid, dayStrings, recipesStrings ] = sanitizeAndValidateAndFormatUrlString(string);
+  
   let toMerge = {};
 
   let dayStringsCleaned = [];
@@ -60,34 +19,27 @@ and those parts are tested against the respective regex.
     toMerge[[str]] = [];
   });
 
-  // This would turn
-  // ['2-44-345', '33', '543-1-10']
-  // into
-  // [[2, 44, 345], [33], [543, 1, 10]]
+
+  // Would transform ['2-44-345', '33', '543-1-10']
+  // into            [[2, 44, 345], [33], [543, 1, 10]]
   let recipesStringsSplitToNum = [];
   recipesStrings.map(str => {
-    let toNum = [];
+    const toNum = [];
+
     if (str !== "none") {
-      if (str.includes('-')) {
-        let split = str.split('-');
-        split.map(str => {
-          toNum.push(Number(str));
-        });
-      } else {
-        toNum.push(Number(str));
-      }
+      if ( str.includes('-') ) str.split('-').map(str => toNum.push(Number(str)));
+      else                     toNum.push(Number(str));
     }
+
     recipesStringsSplitToNum.push(toNum);
   });
+
 
   recipesStringsSplitToNum.flat();
   const theValues = recipesStringsSplitToNum.values();
   //console.log("recipesStringsSplitToNum: ", recipesStringsSplitToNum);
   //console.log("theValues: ", theValues);
-  const res = await axios.post(
-    `${endpoint}/recipe/titles`,
-    {recipeIds: [1, 2, 3]}
-  );  // change
+  const res = await axios.post(`${endpoint}/recipe/titles`, {recipeIds: [1, 2, 3]});  // TO DO: change
 
   Object.keys(toMerge).map((key, i) => {
     if (recipesStrings[i] === "none") {
@@ -102,4 +54,38 @@ and those parts are tested against the respective regex.
   });
 
   return toMerge;
-}*/
+}
+
+function sanitizeAndValidateAndFormatUrlString(url: string) {
+  const allowedCharsInUrl =     /[d][0-9_\-\!]/;
+  const allowedCharsInDay =     /^[d]([1-9]|1[0-9]|2[0-8])$/;
+  const allowedCharsInRecipes = /[0-9\-]/;
+  const urlSplitOnDay =         url.split('!', 28);
+  const dayStrings =            [];
+  const recipesStrings =        [];
+
+  if (typeof url !== 'string')               return false;
+  if ( url.length < 4 || url.length > 1502 ) return false;
+  if (!allowedCharsInUrl.test(url))          return false;
+  if (!urlSplitOnDay)                        return false;
+
+  urlSplitOnDay.map(substring => {
+    const [ dayString, recipesString ] = substring.split('_');
+
+    dayStrings.push(dayString);
+    recipesStrings.push(typeof recipesString === "undefined" ? "none" : recipesString);
+  });
+
+  let valid = true;
+
+  dayStrings.map(dayString => {
+    if (!allowedCharsInDay.test(dayString)) valid = false;
+  });
+
+  recipesStrings.map(recipesString => {
+    if (recipesString === "none") return;
+    if (!allowedCharsInRecipes.test(recipesString)) valid = false;
+  });
+  
+  return [valid, dayStrings, recipesStrings];
+}

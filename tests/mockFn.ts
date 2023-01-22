@@ -1,10 +1,8 @@
 /*
-This is used in unit test files (like Login.test.tsx)
-of connected React components (like Login.tsx)
+Used in unit test files (like Login.test.tsx) of connected React components (like Login.tsx)
 that use react-redux's useDispatch with our redux action creators.
 
-Instead of using jest.fn() to make a test double of an action creator,
-we use this.
+Instead of using jest.fn() to make a test double of an action creator, we use this.
 
 Previously, we simply used jest.fn(),
 because the TypeScript static type of action creators

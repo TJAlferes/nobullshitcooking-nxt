@@ -17,7 +17,6 @@ export function NewPlanView({
   mySavedRecipes,
   officialRecipes,
   editing,
-  expanded,
   expandedDay,
   feedback,
   getApplicationNode,
@@ -27,7 +26,7 @@ export function NewPlanView({
   loading,
   modalActive,
   planName,
-  recipeListsInsideDays,
+  planData,
   tab,
   theme
 }: Props): JSX.Element {
@@ -47,15 +46,10 @@ export function NewPlanView({
           </div>
 
           <div className="body">
-            {Object.keys(recipeListsInsideDays).map((recipeList, i) => (
+            {Object.keys(planData).map((recipeList, i) => (
               <div className="monthly-plan__body-day" key={i} >
                 <div className="body-day__content">
-                  <Day
-                    day={i + 1}
-                    expanded={expanded}
-                    expandedDay={expandedDay}
-                    recipes={recipeListsInsideDays[Number(recipeList)]}
-                  />
+                  <Day day={i + 1} expandedDay={expandedDay} recipes={planData[Number(recipeList)]} />
                 </div>
               </div>
             ))}
@@ -63,18 +57,11 @@ export function NewPlanView({
         </div>
 
         <div className="expanded-day-container">
-          {expandedDay && (
-            <ExpandedDay
-              day={expandedDay}
-              expanded={expanded}
-              expandedDay={expandedDay}
-              recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []}
-            />
-          )}
+          {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={planData[expandedDay]} />}
         </div>
       </div>
     );
-  }, [recipeListsInsideDays, expanded, expandedDay]);
+  }, [planData, expandedDay]);
 
   // move out?
   const memoizedRecipes = useMemo(() => {
@@ -92,7 +79,6 @@ export function NewPlanView({
     return (
       <Recipes
         day={0}
-        expanded={expanded}
         expandedDay={expandedDay}
         recipes={
           recipes.map(({ id, title, recipe_image, owner_id }) =>
@@ -116,11 +102,11 @@ export function NewPlanView({
       <div className="calendar">
         {memoizedMonthlyPlan}
         <div className="recipes-tabs">
-          <button className={(tab === "official") ? "--active" : undefined} name="official" onClick={e => clickTab(e)}>"All Official"</button>
-          <button className={(tab === "private") ? "--active" : undefined}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
-          <button className={(tab === "public") ? "--active" : undefined}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
-          <button className={(tab === "favorite") ? "--active" : undefined} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
-          <button className={(tab === "saved") ? "--active" : undefined}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
+          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>"All Official"</button>
+          <button className={(tab === "private") ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
+          <button className={(tab === "public") ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
+          <button className={(tab === "favorite") ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
+          <button className={(tab === "saved") ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
         </div>
         {memoizedRecipes}
       </div>
@@ -201,7 +187,6 @@ type Props = {
   mySavedRecipes:                    IWorkRecipe[];
   officialRecipes:                   IWorkRecipe[];
   editing:                           boolean;
-  expanded:                          boolean;
   expandedDay:                       number | null;
   feedback:                          string;
   getApplicationNode():              Element | Node;
@@ -211,7 +196,7 @@ type Props = {
   loading:                           boolean;
   modalActive:                       boolean;
   planName:                          string;
-  recipeListsInsideDays:             IData;
+  planData:             IData;
   tab:                               string;
   theme:                             string;
 };

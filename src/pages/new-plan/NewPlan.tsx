@@ -13,13 +13,12 @@ export function NewPlan({ editing }: Props): JSX.Element {
 
   const dispatch = useDispatch();
   const { myFavoriteRecipes, myPlans, myPrivateRecipes, myPublicRecipes, mySavedRecipes, recipes } = useSelector(state => state.data);  // don't destructure useSelector?
-  const expanded =    useSelector(state => state.planner.expanded);
   const expandedDay = useSelector(state => state.planner.expandedDay);
   const editingId =   useSelector(state => state.planner.editingId);
   const planName =    useSelector(state => state.planner.planName);
-  const recipeListsInsideDays = useSelector(state => state.planner.recipeListsInsideDays);  // shorten name
-  const message = useSelector(state => state.user.message);
-  const theme =   useSelector(state => state.theme.theme);
+  const planData =    useSelector(state => state.planner.planData);
+  const message =     useSelector(state => state.user.message);
+  const theme =       useSelector(state => state.theme.theme);
 
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);
@@ -51,7 +50,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
     let isSubscribed = true;
 
     if (isSubscribed) {
-      if (message !== "") window.scrollTo(0,0);
+      if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
       if (message === "Plan created." || message === "Plan updated.") {
         setTimeout(() => {
@@ -78,12 +77,12 @@ export function NewPlan({ editing }: Props): JSX.Element {
 
   const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
 
-  const getPlanData = () => JSON.stringify(recipeListsInsideDays);  // clean/format? *** keys???
+  const getPlanData = () => JSON.stringify(planData);  // clean/format? *** keys???
 
   const changePlanName = (e: React.SyntheticEvent<EventTarget>) => {
     const nextName = (e.target as HTMLInputElement).value.trim();
     if (nextName.length > 20) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Please keep your plan name under 20 characters");
       setTimeout(() => setFeedback(""), 3000);
       return;
@@ -94,31 +93,44 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const clickTab = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLButtonElement).name);
 
   const valid = () => {
-    const validPlanName = planName.trim() !== "";
-    const validPlanNameLength = planName.trim().length < 21;
-    if (!validPlanName) {
-      window.scrollTo(0,0);
+    const validName =       planName.trim() !== "";
+    const validNameLength = planName.trim().length < 21;
+
+    if (!validName) {
+      window.scrollTo(0, 0);
       setFeedback("You forgot to name your plan...");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
-    if (!validPlanNameLength) {
-      window.scrollTo(0,0);
+
+    if (!validNameLength) {
+      window.scrollTo(0, 0);
       setFeedback("Please keep your plan name under 20 characters");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
-    return validPlanName && validPlanNameLength;
+
+    return validName && validNameLength;
   };
 
   const handleSubmit = () => {
     if (!valid()) return;
+
     setLoading(true);
+
+    const planInfo = {
+      name: planName,
+      data: getPlanData()
+    };
+
     if (editing) {
-      const planInfo = {id: editingId as number, name: planName, data: getPlanData()};
-      dispatch(editPlan(planInfo));
+      const planEditInfo = {
+        id: editingId as number,
+        ...planInfo
+      };
+
+      dispatch(editPlan(planEditInfo));
     } else {
-      const planInfo = {name: planName, data: getPlanData()};
       dispatch(createNewPlan(planInfo));
     }
   }
@@ -134,7 +146,6 @@ export function NewPlan({ editing }: Props): JSX.Element {
       mySavedRecipes={mySavedRecipes}
       officialRecipes={recipes}
       editing={editing}
-      expanded={expanded}
       expandedDay={expandedDay}
       feedback={feedback}
       getApplicationNode={getApplicationNode}
@@ -144,7 +155,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       loading={loading}
       modalActive={modalActive}
       planName={planName}
-      recipeListsInsideDays={recipeListsInsideDays}
+      planData={planData}
       tab={tab}
       theme={theme}
     />

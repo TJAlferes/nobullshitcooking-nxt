@@ -7,27 +7,23 @@ import { Recipe } from './Recipe';
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 // id={recipe.id}
-export function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Element {
+export function Recipes({ day, expandedDay, recipes }: Props): JSX.Element {
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ , drop ] = useDrop(() => ({
     accept: Types.PLANNER_RECIPE,
-    collect: (monitor: DropTargetMonitor) => ({
-      //connectDropTarget: connect.dropTarget(),
-      canDrop: monitor.canDrop(),
-      isOver:  monitor.isOver()
-    }),
-    drop: ({ day }: Props) => ({
-      listId: day
-    })
+
+    collect: (monitor: DropTargetMonitor) => ({canDrop: monitor.canDrop(), isOver:  monitor.isOver()}),
+
+    drop: ({ day }: Props) => ({listId: day})
   }));
 
   //drop(ref);
 
   return (
     <div className="new-plan-recipes" ref={drop}>
-      {recipes.map((recipe, i) => (
-        <Recipe day={day} expanded={expanded} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
+      {recipes && recipes.map((recipe, i) => (
+        <Recipe day={day} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
       ))}
     </div>
   );
@@ -35,7 +31,6 @@ export function Recipes({ day, expanded, expandedDay, recipes }: Props): JSX.Ele
 
 type Props = {
   day:         number;
-  expanded:    boolean;
   expandedDay: number | null;
-  recipes:     IRecipe[];
+  recipes:     IRecipe[] | undefined;
 };

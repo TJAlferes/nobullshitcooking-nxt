@@ -23,42 +23,17 @@ export interface IState {
   creating:    boolean;
   editingId:   number | null;
   publicUrl:   string;
-  expanded:    boolean;
   expandedDay: number | null;
   planName:    string;
-  recipeListsInsideDays: IData;
+  planData:    IData;
 }
 
 export interface IData {
-  [index: number]: any;
-  1: IRecipe[];
-  2: IRecipe[];
-  3: IRecipe[];
-  4: IRecipe[];
-  5: IRecipe[];
-  6: IRecipe[];
-  7: IRecipe[];
-  8: IRecipe[];
-  9: IRecipe[];
-  10: IRecipe[];
-  11: IRecipe[];
-  12: IRecipe[];
-  13: IRecipe[];
-  14: IRecipe[];
-  15: IRecipe[];
-  16: IRecipe[];
-  17: IRecipe[];
-  18: IRecipe[];
-  19: IRecipe[];
-  20: IRecipe[];
-  21: IRecipe[];
-  22: IRecipe[];
-  23: IRecipe[];
-  24: IRecipe[];
-  25: IRecipe[];
-  26: IRecipe[];
-  27: IRecipe[];
-  28: IRecipe[];
+  [index: number|string]: IRecipe[];
+   1: IRecipe[];  2: IRecipe[];  3: IRecipe[];  4: IRecipe[];  5: IRecipe[];  6: IRecipe[];  7: IRecipe[];
+   8: IRecipe[];  9: IRecipe[]; 10: IRecipe[]; 11: IRecipe[]; 12: IRecipe[]; 13: IRecipe[]; 14: IRecipe[];
+  15: IRecipe[]; 16: IRecipe[]; 17: IRecipe[]; 18: IRecipe[]; 19: IRecipe[]; 20: IRecipe[]; 21: IRecipe[];
+  22: IRecipe[]; 23: IRecipe[]; 24: IRecipe[]; 25: IRecipe[]; 26: IRecipe[]; 27: IRecipe[]; 28: IRecipe[];
 }
 
 export interface IRecipe {
@@ -76,15 +51,15 @@ Actions
 */
 
 export type Actions =
-IClickDay |
-IAddRecipeToDay |
-IRemoveRecipeFromDay |
-IReorderRecipeInDay |
-IClearWork |
-ISetCreating |
-ISetEditingId |
-ISetPlanName |
-ISetPlanData;
+  | IClickDay
+  | IAddRecipeToDay
+  | IRemoveRecipeFromDay
+  | IReorderRecipeInDay
+  | IClearWork
+  | ISetCreating
+  | ISetEditingId
+  | ISetPlanName
+  | ISetPlanData;
 
 export interface IClickDay {
   type: typeof actionTypes.CLICK_DAY;
@@ -108,14 +83,6 @@ export interface IReorderRecipeInDay {
   dragIndex:  number;
   hoverIndex: number;
 }
-
-/*interface I {
-  type: typeof actionTypes.
-}*/
-
-/*interface I {
-  type: typeof actionTypes.
-}*/
 
 interface IClearWork {
   type: typeof actionTypes.CLEAR_WORK;
