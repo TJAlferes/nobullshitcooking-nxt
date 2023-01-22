@@ -55,7 +55,7 @@ function buildStateFacets(aggs: any, index: string) {
     if (Object.keys(facets).length > 0) return facets;
   }
   
-  if (index === "equipment") {
+  if (index === "equipments") {
     const equipment_type_name = getValueFacet(aggs, "equipment_type_name");
     const facets = {...(equipment_type_name && {equipment_type_name})};
 
@@ -83,6 +83,6 @@ export function buildSearchState(response: any, resultsPerPage: number, currentI
 }
 
 type Default = {
-  raw: any;
+  raw:     any;
   snippet: any;
 };

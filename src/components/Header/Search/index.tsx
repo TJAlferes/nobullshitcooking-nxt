@@ -31,12 +31,13 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
 
   const redirectToSearchPage = () => router.push(`/${index}`);
 
-  const facadeText = index.charAt(0).toUpperCase() + index.slice(1);
+  let facadeText = index.charAt(0).toUpperCase() + index.slice(1);
+  if (facadeText === "Equipments") facadeText = "Equipment";
 
   let field: string | undefined;
   if (index === "recipes")     field = "title";
   if (index === "ingredients") field = "fullname";
-  if (index === "equipment")   field = "name";
+  if (index === "equipments")  field = "name";
   if (index === "products")    field = "fullname";
 
   return (
@@ -49,7 +50,7 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
         <select className="filters" onChange={changeSearchIndex}>
           <option value="recipes">Recipes</option>
           <option value="ingredients">Ingredients</option>
-          <option value="equipment">Equipment</option>
+          <option value="equipments">Equipment</option>
           <option value="products">Products</option>
         </select>
       </div>

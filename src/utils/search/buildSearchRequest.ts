@@ -2,7 +2,7 @@ function buildMatch(term: string, index: string) {
   let match;
   if (index === "recipes")     match = {title: {query: term}};
   if (index === "ingredients") match = {fullname: {query: term}};
-  if (index === "equipment")   match = {name: {query: term}};
+  if (index === "equipments")  match = {name: {query: term}};
 
   return term ? {match} : {match_all: {}};
 }
@@ -60,7 +60,7 @@ function buildRequestFilter(filters: any, index: string) {
     if (index === "ingredients" && ["ingredient_type_name"].includes(filter.field))
       return [...acc, getTermFilter(filter)];
     
-    if (index === "equipment" && ["equipment_type_name"].includes(filter.field))
+    if (index === "equipments" && ["equipment_type_name"].includes(filter.field))
       return [...acc, getTermFilter(filter)];
 
     return acc;
@@ -99,8 +99,8 @@ export function buildSearchRequest(state: any, index: string) {
 
   if (index === "recipes") {
     aggs = {
-      cuisine_name: {terms: {field: "cuisine_name"}},
-      method_name: {terms: {fields: "method_name"}},
+      cuisine_name:     {terms: {field: "cuisine_name"}},
+      method_name:      {terms: {fields: "method_name"}},
       recipe_type_name: {terms: {field: "recipe_type_name"}}
     };
     highlightFields = {title: {}};
@@ -111,7 +111,7 @@ export function buildSearchRequest(state: any, index: string) {
     highlightFields = {fullname: {}};
   }
 
-  if (index === "equipment") {
+  if (index === "equipments") {
     aggs = {equipment_type_name: {terms: {field: "equipment_type_name"}}};
     highlightFields = {name: {}};
   }

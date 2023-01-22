@@ -34,11 +34,7 @@ async function getDisjunctiveFacetCounts(state: any, disjunctiveFacetNames: any,
     body = changeSizeToZero(body);
     body = removeAllFacetsExcept(body, facetName);
 
-    const { data: { found } } = await axios.post(
-      `${endpoint}/search/find/${index}`,
-      {body},
-      {withCredentials: true}
-    );
+    const { data: { found } } = await axios.post(`${endpoint}/search/find/${index}`, {body}, {withCredentials: true});
 
     responses.push(found);
   });

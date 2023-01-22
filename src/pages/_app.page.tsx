@@ -2,6 +2,7 @@ import { SearchProvider }                   from '@elastic/react-search-ui';
 import type { AppContext, AppProps }        from 'next/app';
 import { useRef }                           from 'react';
 import { DndProvider }                      from 'react-dnd-multi-backend';
+import { Provider }                         from 'react-redux';
 import { HTML5toTouch }                     from 'rdndmb-html5-to-touch';
 import { END }                              from 'redux-saga';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -15,37 +16,43 @@ import { chatInit }                                            from '../store/ch
 
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
-function NOBSCApp({ Component, pageProps }: AppProps) {
-  const leftNav = useSelector(state => state.menu.leftNav);
+export default function NOBSCApp({ Component, ...rest }: AppProps) {
+  const leftNav = false;  //useSelector(state => state.menu.leftNav); // can't use here
+
+  const { store, props } = wrapper.useWrappedStore(rest);
 
   const queryClientRef = useRef<QueryClient>();
   if (!queryClientRef.current) queryClientRef.current = new QueryClient();
 
-  const { pathname } = pageProps.router;
+  const { pathname } = props.pageProps.router;
   const atAuthPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);
 
   return (
-    <QueryClientProvider client={queryClientRef.current}>
-      <Hydrate state={pageProps ? pageProps.dehydratedState: {}}>
-        <SearchProvider config={pageProps.searchConfig}>
-          <DndProvider options={HTML5toTouch}>
-            {atAuthPage ? <Component {...pageProps} /> : (
-              <div id="app">
-                {leftNav && <LeftNav />}
-                <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
-                <div id="layout">
-                  <Header />
-                  <Main>
-                    <Component {...pageProps} />
-                  </Main>
-                  <Footer />
+    <Provider store={store}>
+      <QueryClientProvider client={queryClientRef.current}>
+        <Hydrate state={props.pageProps ? props.pageProps.dehydratedState: {}}>
+          <SearchProvider config={props.pageProps.searchConfig}>
+            <DndProvider options={HTML5toTouch}>
+
+              {atAuthPage ? <Component {...props.pageProps} /> : (
+                <div id="app">
+                  {leftNav && <LeftNav />}
+                  <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
+                  <div id="layout">
+                    <Header />
+                    <Main>
+                      <Component {...props.pageProps} />
+                    </Main>
+                    <Footer />
+                  </div>
                 </div>
-              </div>
-            )}
-          </DndProvider>
-        </SearchProvider>
-      </Hydrate>
-    </QueryClientProvider>
+              )}
+
+            </DndProvider>
+          </SearchProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </Provider>
   );
 }
 
@@ -66,5 +73,3 @@ NOBSCApp.getInitialProps = wrapper.getInitialAppProps(store =>
     return {pageProps};
   }
 );
-
-export default wrapper.withRedux(NOBSCApp);
