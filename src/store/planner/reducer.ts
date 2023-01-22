@@ -1,4 +1,4 @@
-import update from 'immutability-helper';  // is this really needed?
+import update from 'immutability-helper';
 
 import { actionTypes, IState, Actions, IClickDay, IAddRecipeToDay, IRemoveRecipeFromDay, IReorderRecipeInDay } from './types';
 
@@ -17,12 +17,12 @@ const {
 } = actionTypes;
 
 const initialState: IState = {
-  isLoading: false,
-  creating: false,
-  editingId: null,
-  publicUrl: "",
+  isLoading:   false,
+  creating:    false,
+  editingId:   null,
+  publicUrl:   "",
   expandedDay: null,
-  planName: "",
+  planName:    "",
   planData: {
     1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
     8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
@@ -35,8 +35,8 @@ const clickDay = (state: IState, action: IClickDay): IState => {
   const { expandedDay } = state;
   const { day } = action;
 
-  if (day === expandedDay) return {...state, ...{expanded: false, expandedDay: null}};
-  return {...state, ...{expanded: true, expandedDay: day}};
+  if (day === expandedDay) return {...state, ...{expandedDay: null}};
+  return {...state, ...{expandedDay: day}};
 };
 
 const addRecipeToDay = (state: IState, action: IAddRecipeToDay): IState => {
@@ -66,8 +66,10 @@ const removeRecipeFromDay = (state: IState, action: IRemoveRecipeFromDay): IStat
 const reorderRecipeInDay = (state: IState, action: IReorderRecipeInDay): IState => {
   const { expandedDay, planData } = state;
   const { dragIndex, hoverIndex } = action;
-  if (!expandedDay) return state;
+  if (!expandedDay ) return state;
+
   const draggedRecipe = planData[expandedDay][dragIndex];
+
   return update(state, {
     planData: {
       [expandedDay]: {

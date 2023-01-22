@@ -12,13 +12,18 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const { myFavoriteRecipes, myPlans, myPrivateRecipes, myPublicRecipes, mySavedRecipes, recipes } = useSelector(state => state.data);  // don't destructure useSelector?
+  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
+  const myPlans =           useSelector(state => state.data.myPlans);
+  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
+  const recipes =           useSelector(state => state.data.recipes);
   const expandedDay = useSelector(state => state.planner.expandedDay);
   const editingId =   useSelector(state => state.planner.editingId);
   const planName =    useSelector(state => state.planner.planName);
   const planData =    useSelector(state => state.planner.planData);
-  const message =     useSelector(state => state.user.message);
-  const theme =       useSelector(state => state.theme.theme);
+  const message = useSelector(state => state.user.message);
+  const theme = useSelector(state => state.theme.theme);
 
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);

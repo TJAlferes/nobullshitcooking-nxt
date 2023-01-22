@@ -29,7 +29,7 @@ export interface IState {
 }
 
 export interface IData {
-  [index: number|string]: IRecipe[];
+  [index: number|string]: any;
    1: IRecipe[];  2: IRecipe[];  3: IRecipe[];  4: IRecipe[];  5: IRecipe[];  6: IRecipe[];  7: IRecipe[];
    8: IRecipe[];  9: IRecipe[]; 10: IRecipe[]; 11: IRecipe[]; 12: IRecipe[]; 13: IRecipe[]; 14: IRecipe[];
   15: IRecipe[]; 16: IRecipe[]; 17: IRecipe[]; 18: IRecipe[]; 19: IRecipe[]; 20: IRecipe[]; 21: IRecipe[];
