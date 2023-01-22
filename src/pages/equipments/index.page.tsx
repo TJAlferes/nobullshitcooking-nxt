@@ -36,7 +36,7 @@ export function Equipments({ results, wasSearched }: PropsFromContext) {
             <span className="search-results__filter-title">Filter equipment by:</span>
 
             <Facet
-              facets={{
+              /*facets={{
                 equipment_type_name: [
                   {
                     data: [
@@ -50,7 +50,7 @@ export function Equipments({ results, wasSearched }: PropsFromContext) {
                     type: "value"
                   }
                 ]
-              }}
+              }}*/
               field="equipment_type_name"
               filterType="any"
               label="Equipment Types"
@@ -79,10 +79,10 @@ export function Equipments({ results, wasSearched }: PropsFromContext) {
 
 type PropsFromContext = {
   facets:      any;
-  filters:     any;
+  filters?:    any;
   results:     any;
   wasSearched: boolean;
-}
+};
 
 const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 

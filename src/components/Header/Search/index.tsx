@@ -75,7 +75,7 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
 }
 
 interface RootContext {
-  searchTerm:    string;
+  searchTerm?:   string;
   setSearchTerm: any;
 }
 

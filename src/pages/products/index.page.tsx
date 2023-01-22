@@ -1,6 +1,8 @@
 import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
 import Link from 'next/link';
 
+import { useTypedSelector as useSelector } from '../../store';
+
 const url = "https://s3.amazonaws.com/images-01/products/";
 
 function listResults(results: any) {
@@ -24,9 +26,11 @@ function listResults(results: any) {
   else return <div>Loading...</div>;
 }
 
-export function Products({ results, twoColumnBTheme, wasSearched }: Props) {  // facets, filters
+export function Products({ results, wasSearched }: PropsFromContext) {  // facets, filters
+  const theme = useSelector(state => state.theme.theme);
+
   return (
-    <div className={`search-results two-column-b ${twoColumnBTheme}`}>
+    <div className={`search-results two-column-b ${theme}`}>
       <div className="left-column">
         <h1>Products</h1>
         
@@ -47,14 +51,10 @@ export function Products({ results, twoColumnBTheme, wasSearched }: Props) {  //
 
 type PropsFromContext = {
   facets:      any;
-  filters:     any;
+  filters?:    any;
   results:     any;
   wasSearched: boolean;
 }
-
-type Props = PropsFromContext & {
-  twoColumnBTheme: string;
-};
 
 const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 

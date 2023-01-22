@@ -26,7 +26,7 @@ export function Day({ day, expandedDay, recipes }: Props): JSX.Element | null {
       if (day !== draggedRecipe.day)
         dispatch(addRecipeToDay(day, draggedRecipe.recipe));
 
-      return {listId: day};  // WTF is this?
+      return {listId: day};  // WTF is this? Perhaps the Recipe component doesn't need explicit listId prop
     }
   }));
 

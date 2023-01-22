@@ -2,6 +2,7 @@ import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
+import { useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
@@ -43,9 +44,11 @@ function listResults(results: any) {
 }
 
 // facets, filters ?
-export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
+export function Recipes({ results, wasSearched }: PropsFromContext) {
+  const theme = useSelector(state => state.theme.theme);
+
   return (
-    <div className={`search-results two-column-b ${twoColumnBTheme}`}>
+    <div className={`search-results two-column-b ${theme}`}>
       <div className="left-column">
         <h1>Recipes</h1>
 
@@ -57,7 +60,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
             <span className="search-results__filter-title">Filter recipes by:</span>
 
             <Facet
-              facets={{
+              /*facets={{
                 recipe_type_name: [
                   {
                     data: [
@@ -78,7 +81,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
                     type: "value"
                   }
                 ]
-              }}
+              }}*/
               field="recipe_type_name"
               filterType="any"
               label="Recipe Types"
@@ -86,7 +89,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
             />
 
             <Facet
-              facets={{
+              /*facets={{
                 cuisine_name: [
                   {
                     data: [
@@ -119,7 +122,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
                     type: "value"
                   },
                 ]
-              }}
+              }}*/
               field="cuisine_name"
               filterType="any"
               label="Cuisines"
@@ -127,7 +130,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
             />
 
             <Facet
-              facets={{
+              /*facets={{
                 method_names: [
                   {
                     data: [
@@ -160,7 +163,7 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
                     type: "value"
                   },
                 ]
-              }}
+              }}*/
               field="method_names"
               filterType="any"
               label="Methods"
@@ -186,14 +189,10 @@ export function Recipes({ results, twoColumnBTheme, wasSearched }: Props) {
 
 type PropsFromContext = {
   facets:      any;
-  filters:     any;
+  filters?:    any;
   results:     any;
   wasSearched: boolean;
 }
-
-type Props = PropsFromContext & {
-  twoColumnBTheme: string;
-};
 
 const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 

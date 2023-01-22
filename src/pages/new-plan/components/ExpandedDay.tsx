@@ -24,7 +24,7 @@ export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element |
       if (expandedDay !== draggedRecipe.day)
         dispatch(addRecipeToDay(day, draggedRecipe.recipe));
 
-      return {listId: day};  // WTF is this?
+      return {listId: day};  // WTF is this? Perhaps the Recipe component doesn't need explicit listId prop
     }
   }));
   
@@ -34,7 +34,7 @@ export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element |
 
   //drop(ref);
 
-  return !expandedDay ? null : (
+  return (
     <div className={`expanded-day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
       {recipes && recipes.map((recipe, i) => (
@@ -46,6 +46,6 @@ export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element |
 
 type Props = {
   day:         number;
-  expandedDay: number | null;
+  expandedDay: number;
   recipes:     IRecipe[] | undefined;
 };

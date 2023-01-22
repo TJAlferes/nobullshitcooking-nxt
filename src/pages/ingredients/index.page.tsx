@@ -2,6 +2,7 @@ import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
+import { useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
@@ -24,9 +25,11 @@ function listResults(results: any) {
 }
 
 // facets, filters
-export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
+export function Ingredients({ results, wasSearched }: PropsFromContext) {
+  const theme = useSelector(state => state.theme.theme);
+
   return (
-    <div className={`search-results two-column-b ${twoColumnBTheme}`}>
+    <div className={`search-results two-column-b ${theme}`}>
       <div className="left-column">
         <h1>Ingredients</h1>
 
@@ -35,7 +38,7 @@ export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
             <span className="search-results__filter-title">Filter ingredients by:</span>
 
             <Facet
-              facets={{
+              /*facets={{
                 ingredient_type_name: [
                   {
                     data: [
@@ -62,7 +65,7 @@ export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
                     type: "value"
                   }
                 ]
-              }}
+              }}*/
               field="ingredient_type_name"
               filterType="any"
               label="Ingredient Types"
@@ -92,14 +95,10 @@ export function Ingredients({ results, twoColumnBTheme, wasSearched }: Props) {
 
 type PropsFromContext = {
   facets:      any;
-  filters:     any;
+  filters?:    any;
   results:     any;
   wasSearched: boolean;
 }
-
-type Props = PropsFromContext & {
-  twoColumnBTheme: string;
-};
 
 const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
 

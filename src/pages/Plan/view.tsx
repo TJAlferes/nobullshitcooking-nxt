@@ -1,10 +1,9 @@
 import type { IData } from '../../store/plannerView/types';
-import Day from './components/Day';
-import ExpandedDay from './components/ExpandedDay';
+import { Day, ExpandedDay } from './components';
 
-export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDays, twoColumnATheme }: Props): JSX.Element {
+export function PlanView({ expandedDay, planName, planData, theme }: Props): JSX.Element {
   return (
-    <div className={`plan two-column-a ${twoColumnATheme}`}>
+    <div className={`plan two-column-a ${theme}`}>
       <div className="heading">
         <h1>Plan</h1>
         <div className="name">
@@ -26,20 +25,18 @@ export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDay
             </div>
 
             <div className="body">
-              {Object.keys(recipeListsInsideDays)
-                .map((recipeList, i) => (
-                  <div className="monthly-plan__body-day" key={i}>
-                    <div className="body-day__content">
-                      <Day day={i + 1} expanded={expanded} expandedDay={expandedDay} recipes={recipeListsInsideDays[Number(recipeList)]} />
-                    </div>
+              {Object.keys(planData).map((recipeList, index) => (
+                <div className="monthly-plan__body-day" key={index}>
+                  <div className="body-day__content">
+                    {expandedDay && (index + 1) === expandedDay && <Day day={index + 1} recipes={planData[Number(recipeList)]} />}
                   </div>
-                ))
-              }
+                </div>
+              ))}
             </div>
           </div>
           
           <div className="expanded-day-container">
-            {expandedDay && <ExpandedDay day={expandedDay} expanded={expanded} recipes={(expanded) ? recipeListsInsideDays[expandedDay] : []} />}
+            {expandedDay && <ExpandedDay day={expandedDay} recipes={planData[expandedDay]} />}
           </div>
         </div>
       </div>
@@ -48,9 +45,8 @@ export function PlanView({ expanded, expandedDay, planName, recipeListsInsideDay
 }
 
 type Props = {
-  expanded:              boolean;
-  expandedDay:           number | null;
-  planName:              string;
-  recipeListsInsideDays: IData;
-  twoColumnATheme:       string;
+  expandedDay: number | null;
+  planName:    string;
+  planData:    IData;
+  theme:       string;
 };

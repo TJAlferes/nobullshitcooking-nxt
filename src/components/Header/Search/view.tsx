@@ -1,3 +1,5 @@
+import type { SearchBoxAutocompleteViewProps } from "@elastic/react-search-ui-views";
+
 function getRaw(result: IResult, value: string) {
   if (!result[value] || !result[value]?.raw) return "";
   return result[value]!.raw;
@@ -9,7 +11,7 @@ function getSnippet(result: IResult, value: string) {
 }
 
 // why use dangerouslySetInnerHTML?
-export function AutocompleteView({ autocompleteResults, autocompletedResults, className, getItemProps, getMenuProps }: Props) {
+export function AutocompleteView({ autocompleteResults, autocompletedResults, className, getItemProps, getMenuProps }: SearchBoxAutocompleteViewProps) {
   let index = 0;
 
   return (
@@ -18,8 +20,8 @@ export function AutocompleteView({ autocompleteResults, autocompletedResults, cl
         (
           <ul className="sui-search-box__results-list">
             {autocompletedResults.map(r => {
-              const titleRaw =     getRaw(r, autocompleteResults.titleField);
-              const titleSnippet = getSnippet(r, autocompleteResults.titleField);
+              const titleRaw =     getRaw(r, r.titleField);
+              const titleSnippet = getSnippet(r, r.titleField);
               
               index++;
 
@@ -45,8 +47,8 @@ interface IResultValue {
   snippet: string;
 }
 
-type Props = {
-  allAutoCompletedItemsCount: number;
+/*type Props = {
+  allAutocompletedItemsCount: number;
   autocompleteResults: {
     titleField:   string;
     urlField:     string;
@@ -57,4 +59,4 @@ type Props = {
   className:                string;
   getItemProps(props: any): any;
   getMenuProps(props: any): any;
-};
+};*/

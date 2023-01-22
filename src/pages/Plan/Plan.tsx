@@ -6,16 +6,15 @@ import { useTypedSelector as useSelector } from '../../store';
 import { load } from '../../store/plannerView/actions';
 import { PlanView } from './view';
 
-export default function Plan({ twoColumnATheme }: Props): JSX.Element {
+export default function Plan({ theme }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
   const myPlans = useSelector(state => state.data.myPlans);
-  const expanded =    useSelector(state => state.plannerView.expanded);
   const expandedDay = useSelector(state => state.plannerView.expandedDay);
   const planName =    useSelector(state => state.plannerView.planName);
-  const recipeListsInsideDays = useSelector(state => state.plannerView.recipeListsInsideDays);
+  const planData =    useSelector(state => state.plannerView.planData);
 
   useEffect(() => {
     const getPlan = () => {
@@ -28,17 +27,9 @@ export default function Plan({ twoColumnATheme }: Props): JSX.Element {
     else router.push('/home');
   }, []);
 
-  return (
-    <PlanView
-      expanded={expanded}
-      expandedDay={expandedDay}
-      planName={planName}
-      recipeListsInsideDays={recipeListsInsideDays}
-      twoColumnATheme={twoColumnATheme}
-    />
-  );
+  return <PlanView expandedDay={expandedDay} planName={planName} planData={planData} theme={theme} />;
 }
 
 type Props = {
-  twoColumnATheme: string;
+  theme: string;
 };

@@ -4,10 +4,9 @@ const { CLICK_DAY, LOAD } = actionTypes;
 
 const initialState: IState = {
   isLoading:   false,
-  expanded:    false,
   expandedDay: null,
   planName:    "",
-  recipeListsInsideDays: {
+  planData: {
      1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
      8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
     15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
@@ -18,14 +17,14 @@ const initialState: IState = {
 const clickDay = (state: IState, action: IClickDay): IState => {
   const { expandedDay } = state;
   const { day } = action;
-  if (day === expandedDay) return {...state, ...{expanded: false, expandedDay: null}};
-  return {...state, ...{expanded: true, expandedDay: action.day}};
+  if (day === expandedDay) return {...state, ...{expandedDay: null}};
+  return {...state, ...{expandedDay: action.day}};
 };
 
 export const plannerViewReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
     case CLICK_DAY: return clickDay(state, action);
-    case LOAD:      return {...state, ...{planName: action.planName, recipeListsInsideDays: action.planData}};
+    case LOAD:      return {...state, ...{planName: action.planName, planData: action.planData}};
     default:        return state;
   }
 };

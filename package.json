@@ -10,6 +10,7 @@
     "test":  "jest --color --detectOpenHandles"
   },
   "dependencies": {
+    "@elastic/react-search-ui": "^1.18.3",
     "@reduxjs/toolkit": "^1.9.1",
     "@stripe/react-stripe-js": "^1.16.3",
     "@stripe/stripe-js": "^1.46.0",

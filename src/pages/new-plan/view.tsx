@@ -196,7 +196,7 @@ type Props = {
   loading:                           boolean;
   modalActive:                       boolean;
   planName:                          string;
-  planData:             IData;
+  planData:                          IData;
   tab:                               string;
   theme:                             string;
 };
