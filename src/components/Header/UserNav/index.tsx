@@ -13,7 +13,7 @@ export function UserNav(): JSX.Element {
   const authname =             useSelector(state => state.auth.authname);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const userIsAuthenticated =  useSelector(state => state.auth.userIsAuthenticated);
-  const theme = useSelector(state => state.theme.theme);
+  const theme =                useSelector(state => state.theme.theme);
 
   const handleLogout = () => {
     if (staffIsAuthenticated) dispatch(staffLogout());

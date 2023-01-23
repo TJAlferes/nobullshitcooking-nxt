@@ -19,26 +19,26 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const id = Number(router.query['id']);  // not reliable?
 
   const dispatch = useDispatch();
-  const staffMessage = useSelector(state => state.staff.message);
-  const userMessage =  useSelector(state => state.user.message);
-  const theme =        useSelector(state => state.theme.theme);
-  const { authname, staffIsAuthenticated } = useSelector(state => state.auth);  // don't destructure useSelector?
-  const {
-    cuisines,
-    equipment,
-    ingredients,
-    ingredientTypes,
-    measurements,
-    methods,
-    myFavoriteRecipes,
-    myPrivateEquipment,
-    myPrivateIngredients,
-    myPrivateRecipes,
-    myPublicRecipes,
-    mySavedRecipes,
-    recipes,
-    recipeTypes
-  } = useSelector(state => state.data);
+
+  const staffMessage =         useSelector(state => state.staff.message);
+  const userMessage =          useSelector(state => state.user.message);
+  const theme =                useSelector(state => state.theme.theme);
+  const authname =             useSelector(state => state.auth.authname);
+  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
+  const cuisines =             useSelector(state => state.data.cuisines);
+  const equipment =            useSelector(state => state.data.equipment);
+  const ingredients =          useSelector(state => state.data.ingredients);
+  const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
+  const measurements =         useSelector(state => state.data.measurements);
+  const methods =              useSelector(state => state.data.methods);
+  const myFavoriteRecipes =    useSelector(state => state.data.myFavoriteRecipes);
+  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
+  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
+  const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
+  const recipes =              useSelector(state => state.data.recipes);
+  const recipeTypes =          useSelector(state => state.data.recipeTypes);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -96,10 +96,10 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const [ cookingCrop,         setCookingCrop ] =         useState<Crop>(initialCropState);
   const [ cookingFullCrop,     setCookingFullCrop ] =     useState("");
 
-  const recipeImageRef = useRef<HTMLImageElement>();
-  const equipmentImageRef = useRef<HTMLImageElement>();
+  const recipeImageRef =      useRef<HTMLImageElement>();
+  const equipmentImageRef =   useRef<HTMLImageElement>();
   const ingredientsImageRef = useRef<HTMLImageElement>();
-  const cookingImageRef = useRef<HTMLImageElement>();
+  const cookingImageRef =     useRef<HTMLImageElement>();
 
   useEffect(() => {
     const getExistingRecipeToEdit = async () => {

@@ -17,9 +17,16 @@ import { DashboardView } from './view';
 
 export default function Dashboard(): JSX.Element {
   const dispatch = useDispatch();
-  const authname = useSelector(state => state.auth.authname);
-  // don't destructure useSelector?
-  const { myFavoriteRecipes, myPlans, myPrivateEquipment, myPrivateIngredients, myPrivateRecipes, myPublicRecipes, mySavedRecipes } = useSelector(state => state.data);
+
+  const myFavoriteRecipes =    useSelector(state => state.data.myFavoriteRecipes);
+  const myPlans =              useSelector(state => state.data.myPlans);
+  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
+  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
+  const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
+
+  const authname =     useSelector(state => state.auth.authname);
   const creatingPlan = useSelector(state => state.planner.creating);
   const editingId =    useSelector(state => state.planner.editingId);
   const message =      useSelector(state => state.user.message);

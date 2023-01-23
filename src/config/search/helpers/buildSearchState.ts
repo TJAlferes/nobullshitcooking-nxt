@@ -15,7 +15,7 @@ function buildResults(hits: any) {
   );
 }
 
-function buildTotalPages(resultsPerPage: number, totalResults: number) {
+function buildTotalPages(resultsPerPage: number | undefined, totalResults: number) {
   if (!resultsPerPage) return 0;
   if (totalResults === 0) return 1;
   return Math.ceil(totalResults / resultsPerPage);
@@ -73,7 +73,7 @@ buildSearchState iterates through "hits" and reformats them to "results".
 
 Similar for totals and facets.
 */
-export function buildSearchState(response: any, resultsPerPage: number, currentIndex: string) {
+export function buildSearchState(response: any, resultsPerPage: number | undefined, currentIndex: string) {
   const results = buildResults(response.hits.hits);
   const totalResults = response.hits.total.value;
   const totalPages = buildTotalPages(resultsPerPage, totalResults);

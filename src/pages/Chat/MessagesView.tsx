@@ -3,11 +3,13 @@ import type { IMessageWithClientTimestamp } from '../../store/chat/types';
 function formattedMessage(authname: string, { kind, from, to, text }: IMessageWithClientTimestamp) {
   if (kind === "public") {
     if (from === "messengerstatus") return <span className="--admin">{text}</span>;                  // status
-    if (authname === from)          return <><span className="--self">{from}:{' '}</span>{text}</>;  // sent
+
+    if (from === authname)          return <><span className="--self">{from}:{' '}</span>{text}</>;  // sent
+    
     return <><span className="--other">{from}:{' '}</span>{text}</>;                                 // received
   }
 
-  if (authname === from)
+  if (from === authname)
     return <><span className="--self">You whisper to{' '}{to}:{' '}</span><span className="--private">{text}</span></>;    // sent
 
   return <><span className="--other">{from}{' '}whispers to you:{' '}</span><span className="--private">{text}</span></>;  // received
@@ -22,17 +24,19 @@ export function MessagesView({ authname, changeMessageInput, messages, messagesR
         )}
       </ul>
 
-      <input disabled={status !== "connected"} name="chat-input" onChange={changeMessageInput} onKeyUp={(e) => send(e)} type="text" value={messageToSend} />
+      <input disabled={status !== "connected"} name="chat-input" onChange={changeMessageInput} onKeyUp={e => send(e)} type="text" value={messageToSend} />
     </div>
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type Props = {
-  authname:                                                 string;
-  changeMessageInput(e: React.SyntheticEvent<EventTarget>): void;
-  messages:                                                 IMessageWithClientTimestamp[];
-  messagesRef:                                              React.RefObject<HTMLUListElement>;
-  messageToSend:                                            string;
-  send(e: React.KeyboardEvent):                             void;
-  status:                                                   string;
+  authname:                              string;
+  changeMessageInput(e: SyntheticEvent): void;
+  messages:                              IMessageWithClientTimestamp[];
+  messagesRef:                           React.RefObject<HTMLUListElement>;
+  messageToSend:                         string;
+  send(e: React.KeyboardEvent):          void;
+  status:                                string;
 };

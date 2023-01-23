@@ -15,8 +15,8 @@ export function LoaderButton({
       disabled={disabled || isLoading}
       id={id}
       name={name}
-      onClick={(e) => onClick(e)}
-      onKeyUp={(e) => onKeyUp(e)}
+      onClick={e => onClick(e)}
+      onKeyUp={e => onKeyUp(e)}
       type="button"
     >
       {!isLoading ? text : loadingText}

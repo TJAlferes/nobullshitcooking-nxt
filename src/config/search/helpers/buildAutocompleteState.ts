@@ -4,7 +4,7 @@ function getHighlight(hit: any, fieldName: string) {
 }
 
 function buildResults(hits: any, index: string) {  // TO DO: clean this shit up
-  const addEachKeyValueToObject = (acc: any, [key, value]: (Default|string)[]) => ({...acc, [key as string]: value});
+  const addEachKeyValueToObject = (acc: any, [ key, value ]: (Default|string)[]) => ({...acc, [key as string]: value});
 
   const toObject = (value: any, snippet: any) => ({raw: value, ...(snippet && {snippet})});
 
@@ -14,7 +14,7 @@ function buildResults(hits: any, index: string) {  // TO DO: clean this shit up
     id: {raw: record._source["id"]},
     ...(
       Object.entries(record._source)
-      .map(([fieldName, fieldValue]) => [fieldName, toObject(fieldValue, getHighlight(record, fieldName))])
+      .map(([ fieldName, fieldValue ]) => [fieldName, toObject(fieldValue, getHighlight(record, fieldName))])
       .reduce(addEachKeyValueToObject, {})
     )
   }));

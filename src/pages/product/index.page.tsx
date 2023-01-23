@@ -11,9 +11,9 @@ export default function Product(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
-  const products = useSelector(state => state.data.products);
-  const message =  useSelector(state => state.user.message);
-  const theme =    useSelector(state => state.theme.theme);
+  const products =            useSelector(state => state.data.products);
+  const message =             useSelector(state => state.user.message);
+  const theme =               useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ feedback, setFeedback ] = useState("");

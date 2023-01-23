@@ -75,12 +75,7 @@ export function ImageUploads({
 
         {recipeImage && (
           <div>
-            <ReactCrop
-              crop={recipeCrop}
-              onChange={onRecipeCropChange}
-              onComplete={onRecipeCropComplete}
-              {...commonReactCropProps}
-            >
+            <ReactCrop crop={recipeCrop} onChange={onRecipeCropChange} onComplete={onRecipeCropComplete} {...commonReactCropProps}>
               <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
             </ReactCrop>
 
@@ -118,12 +113,7 @@ export function ImageUploads({
 
         {equipmentImage && (
           <div>
-            <ReactCrop
-              crop={equipmentCrop}
-              onChange={onEquipmentCropChange}
-              onComplete={onEquipmentCropComplete}
-              {...commonReactCropProps}
-            >
+            <ReactCrop crop={equipmentCrop} onChange={onEquipmentCropChange} onComplete={onEquipmentCropComplete} {...commonReactCropProps}>
               <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
             </ReactCrop>
             
@@ -155,12 +145,7 @@ export function ImageUploads({
 
         {ingredientsImage && (
           <div>
-            <ReactCrop
-              crop={ingredientsCrop}
-              onChange={onIngredientsCropChange}
-              onComplete={onIngredientsCropComplete}
-              {...commonReactCropProps}
-            >
+            <ReactCrop crop={ingredientsCrop} onChange={onIngredientsCropChange} onComplete={onIngredientsCropComplete} {...commonReactCropProps}>
               <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
             </ReactCrop>
             
@@ -192,12 +177,7 @@ export function ImageUploads({
 
         {cookingImage && (
           <div>
-            <ReactCrop
-              crop={cookingCrop}
-              onChange={onCookingCropChange}
-              onComplete={onCookingCropComplete}
-              {...commonReactCropProps}
-            >
+            <ReactCrop crop={cookingCrop} onChange={onCookingCropChange} onComplete={onCookingCropComplete} {...commonReactCropProps}>
               <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
             </ReactCrop>
             

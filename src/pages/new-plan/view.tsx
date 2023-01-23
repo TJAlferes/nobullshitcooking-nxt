@@ -76,17 +76,7 @@ export function NewPlanView({
 
     // Even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
     // they are set at this stage because they are used when viewing a plan (Plan-)
-    return (
-      <Recipes
-        day={0}
-        expandedDay={expandedDay}
-        recipes={
-          recipes.map(({ id, title, recipe_image, owner_id }) =>
-            ({key: uuidv4(), id, title, recipe_image, owner_id})
-          )
-        }
-      />
-    );
+    return <Recipes day={0} expandedDay={expandedDay} recipes={recipes.map(({ id, title, recipe_image, owner_id }) => ({key: uuidv4(), id, title, recipe_image, owner_id}))} />;
   }, [tab]);
 
   return (

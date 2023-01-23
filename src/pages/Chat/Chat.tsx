@@ -9,14 +9,15 @@ import { ChatView } from './view';
 export default function Chat(): JSX.Element {
   const dispatch = useDispatch();
   // move some of this down in the component tree?
+  const room =     useSelector(state => state.chat.room);
+  const messages = useSelector(state => state.chat.messages);
+  const friends =  useSelector(state => state.chat.friends);
+  const status =   useSelector(state => state.chat.status);
+  const users =    useSelector(state => state.chat.users);
+
   const authname =      useSelector(state => state.auth.authname);
-  const room =          useSelector(state => state.chat.room);
   const message =       useSelector(state => state.user.message);
-  const messages =      useSelector(state => state.chat.messages);
-  const friends =       useSelector(state => state.chat.friends);
-  const status =        useSelector(state => state.chat.status);
   const theme =         useSelector(state => state.theme.theme);
-  const users =         useSelector(state => state.chat.users);
   const windowFocused = useSelector(state => state.nobscapp.windowFocused);
 
   const [ debounced,     setDebounced ] =     useState(false);

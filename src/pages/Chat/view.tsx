@@ -1,7 +1,7 @@
 import type { IMessageWithClientTimestamp } from '../../store/chat/types';
 import { MessagesView } from './MessagesView';
-import { OptionsView } from './OptionsView';
-import { PeopleView } from './PeopleView';
+import { OptionsView }  from './OptionsView';
+import { PeopleView }   from './PeopleView';
 
 export function ChatView({
   authname,

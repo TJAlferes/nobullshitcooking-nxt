@@ -16,9 +16,12 @@ export default function Recipe(): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const { myFavoriteRecipes, myPrivateRecipes, myPublicRecipes, mySavedRecipes } = useSelector(state => state.data);  // don't destructure useSelector?
-  const message = useSelector(state => state.user.message);
-  const theme =   useSelector(state => state.theme.theme);
+  const myFavoriteRecipes =   useSelector(state => state.data.myFavoriteRecipes);
+  const myPrivateRecipes =    useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =     useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =      useSelector(state => state.data.mySavedRecipes);
+  const message =             useSelector(state => state.user.message);
+  const theme =               useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ favorited, setFavorited ] = useState(false);

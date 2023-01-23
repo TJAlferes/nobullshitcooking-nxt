@@ -1,11 +1,11 @@
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
-export function PeopleView({changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, friends, peopleTab, startPrivateMessage, users}: Props): JSX.Element {
+export function PeopleView({ changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, friends, peopleTab, startPrivateMessage, users }: Props): JSX.Element {
   return (
     <div className="chat-people">
       <div className="people-tabs">
-        <button className={peopleTab === "Room" ? "--current" : undefined}    onClick={() => changePeopleTab("Room")}>Room</button>
-        <button className={peopleTab === "Friends" ? "--current" : undefined} onClick={() => changePeopleTab("Friends")}>Friends</button>
+        <button className={peopleTab === "Room" ? "--current" : ""}    onClick={() => changePeopleTab("Room")}>Room</button>
+        <button className={peopleTab === "Friends" ? "--current" : ""} onClick={() => changePeopleTab("Friends")}>Friends</button>
       </div>
 
       {peopleTab === "Room" && (

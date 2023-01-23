@@ -6,15 +6,16 @@ import { useTypedSelector as useSelector } from '../../store';
 import { load } from '../../store/plannerView/actions';
 import { PlanView } from './view';
 
-export default function Plan({ theme }: Props): JSX.Element {
+export default function Plan(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const myPlans = useSelector(state => state.data.myPlans);
+  const myPlans =     useSelector(state => state.data.myPlans);
   const expandedDay = useSelector(state => state.plannerView.expandedDay);
   const planName =    useSelector(state => state.plannerView.planName);
   const planData =    useSelector(state => state.plannerView.planData);
+  const theme =       useSelector(state => state.theme.theme);
 
   useEffect(() => {
     const getPlan = () => {
@@ -29,7 +30,3 @@ export default function Plan({ theme }: Props): JSX.Element {
 
   return <PlanView expandedDay={expandedDay} planName={planName} planData={planData} theme={theme} />;
 }
-
-type Props = {
-  theme: string;
-};

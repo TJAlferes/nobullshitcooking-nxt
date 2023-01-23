@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
+import { NOBSCAPI as endpoint } from '../../NOBSCAPI';
 import { buildSearchRequest } from '.';
 
 function combineAggsFromResponses(responses: any) {
@@ -17,26 +17,19 @@ function removeAllFacetsExcept(body: any, facetName: string) {
   return {...body, aggs: {[facetName]: body.aggs[facetName]}};
 }
 
-function changeSizeToZero(body: any) {
-  return {...body, size: 0};
-}
-
 async function getDisjunctiveFacetCounts(state: any, disjunctiveFacetNames: any, index: string) {
-  let responses: any = [];
+  const responses: any = [];
 
-  // TO DO: don't make request if "not" filter is currently applied
-  // TO DO: await Promise.all([])
-  // TO DO: optimize this by *not* executing a request if "not" filter is applied for that field.
-  disjunctiveFacetNames.map(async (facetName: string) => {
+  disjunctiveFacetNames.map(async (facetName: string) => {  // TO DO: Don't make request if "not" filter is applied for that field.  Perhaps use await Promise.all([])
     const newState = removeFilterByName(state, facetName);
 
     let body = buildSearchRequest(newState, index);
-    body = changeSizeToZero(body);
+    body.size = 0;
     body = removeAllFacetsExcept(body, facetName);
 
-    const { data: { found } } = await axios.post(`${endpoint}/search/find/${index}`, {body}, {withCredentials: true});
+    const response = await axios.post(`${endpoint}/search/find/${index}`, {body}, {withCredentials: true});
 
-    responses.push(found);
+    responses.push(response.data.found);
   });
 
   return combineAggsFromResponses(responses);

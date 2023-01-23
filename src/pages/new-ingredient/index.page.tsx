@@ -22,7 +22,6 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
   const theme =                useSelector(state => state.theme.theme);
 
-
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
