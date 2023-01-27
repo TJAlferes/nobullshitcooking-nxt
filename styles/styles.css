@@ -1,7 +1,17 @@
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+* {
   padding: 0;
   margin: 0;
+  font: inherit;
+}
+
+:root {
+  color-scheme: dark light;
 }
 
 body, html, #root {
@@ -13,8 +23,14 @@ html {font-size: 10px;}
 
 body {
   font-family: Helvetica, sans-serif;
+  min-height: 100vh;
   /*overflow-y: hidden;*/
   overflow-x: hidden;  /* kind of a hack job IMHO... */
+}
+
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
 }
 
 a, li, p, span, td, th {font-size: 1.3rem;}

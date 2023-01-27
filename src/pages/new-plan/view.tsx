@@ -92,7 +92,7 @@ export function NewPlanView({
       <div className="calendar">
         {memoizedMonthlyPlan}
         <div className="recipes-tabs">
-          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>"All Official"</button>
+          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>"Official"</button>
           <button className={(tab === "private") ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
           <button className={(tab === "public") ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
           <button className={(tab === "favorite") ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>

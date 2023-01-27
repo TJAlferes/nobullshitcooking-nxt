@@ -1,4 +1,4 @@
-//import { useRef } from 'react';
+//import { memo, useRef } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 
@@ -8,6 +8,7 @@ import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
+// TO DO: wrap this in memo?
 export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element | null {
   const dispatch = useDispatch();
 

@@ -22,7 +22,26 @@ function buildTotalPages(resultsPerPage: number | undefined, totalResults: numbe
 }
 
 function getValueFacet(aggs: any, fieldName: string) {
-  if (aggs[fieldName]?.buckets?.length > 0) {
+  console.log("hello");
+  return [{
+    field: fieldName,
+    type: "value",
+    data: [
+      {count: 1, value: "Drink"},
+      {count: 1, value: "Appetizer"},
+      {count: 1, value: "Main"},
+      {count: 1, value: "Side"},
+      {count: 1, value: "Dessert"},
+      {count: 1, value: "Soup"},
+      {count: 1, value: "Salad"},
+      {count: 1, value: "Stew"},
+      {count: 1, value: "Casserole"},
+      {count: 1, value: "Sauce"},
+      {count: 1, value: "Dressing"},
+      {count: 1, value: "Condiment"}
+    ]
+  }];
+  /*if (aggs[fieldName]?.buckets?.length > 0) {
     return [{
       field: fieldName,
       type: "value",
@@ -31,7 +50,7 @@ function getValueFacet(aggs: any, fieldName: string) {
         count: bucket.doc_count
       }))
     }];
-  }
+  }*/
 }
 
 function buildStateFacets(aggs: any, index: string) {

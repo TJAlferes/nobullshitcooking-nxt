@@ -1,13 +1,14 @@
-import { DropTargetMonitor, useDrop } from 'react-dnd';  // DropTarget, DropTargetConnector, 
-import { useDispatch } from 'react-redux';  //connect, ConnectedProps
+//import { memo, useRef } from 'react';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
+import { useDispatch } from 'react-redux';
 
-//import { useRef } from 'react';
 import { clickDay, addRecipeToDay } from '../../../store/planner/actions';
 import type { IRecipe } from '../../../store/planner/types';
 import { Recipe } from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
+// TO DO: wrap this in memo?
 // TO DO: check your ref usage
 // TO DO: limit the max number of recipes per day
 export function Day({ day, expandedDay, recipes }: Props): JSX.Element | null {

@@ -1,22 +1,23 @@
+import { useRef }                from 'react';
 import { SearchBox, withSearch } from '@elastic/react-search-ui';
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useRouter }             from 'next/router';
+import { useDispatch }           from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../store';
-import { setIndex } from '../../../store/search/actions';
-import { AutocompleteView } from './view';
+import { setIndex }                        from '../../../store/search/actions';
+import { AutocompleteView }                from './view';
 
 export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
-  const router = useRouter();
-
+  const router =   useRouter();
+  const sInsert =  useRef<HTMLElement>();
   const dispatch = useDispatch();
-  const index = useSelector(state => state.search.index);
-  const theme = useSelector(state => state.theme.theme);
+  const index =    useSelector(state => state.search.index);
+  const theme =    useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const sInsert = document.getElementsByClassName("sui-search-box__wrapper")[0]?.firstChild as HTMLElement;
+    sInsert.current = document.getElementsByClassName("sui-search-box__wrapper")[0]?.firstChild as HTMLElement;
     dispatch(setIndex(e.target.value));
-    sInsert.focus();
+    sInsert.current.focus();
   }
 
   const selectAutocomplete = (selection: any) => {

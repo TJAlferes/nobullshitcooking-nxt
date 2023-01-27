@@ -1,4 +1,5 @@
 import { SearchProvider }                   from '@elastic/react-search-ui';
+import type { SearchDriverOptions, APIConnector }                   from '@elastic/search-ui';
 import type { AppContext, AppProps }        from 'next/app';
 import { DndProvider }                      from 'react-dnd-multi-backend';
 import { Provider }                         from 'react-redux';
@@ -7,7 +8,7 @@ import { END }                              from 'redux-saga';
 
 import '../../styles/styles.css';
 import { Header, Main, Footer, LeftNav } from '../components';
-import { makeSearchConfig }              from '../config/search';
+import { makeSearchConfig, SearchConnector }              from '../config/search';
 import { SagaStore, wrapper }            from '../store';
 import { chatInit }                      from '../store/chat/sagas';
 
@@ -21,10 +22,13 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { pathname } = props.pageProps.router;
   const atAuthPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);
 
+  const searchConnector = new SearchConnector(store);
+  const searchConfig = props.pageProps.searchConfig;
+
   // TO DO: Move everything inside the providers to Main. Reorganize everything.
   return (
     <Provider store={store}>
-      <SearchProvider config={props.pageProps.searchConfig}>
+      <SearchProvider config={{apiConnector: searchConnector, ...searchConfig}}>
         <DndProvider options={HTML5toTouch}>
 
           {atAuthPage ? <Component {...props.pageProps} /> : (
