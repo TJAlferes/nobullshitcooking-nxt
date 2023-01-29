@@ -2,6 +2,7 @@ import type { IData as IPlannerData } from '../planner/types';
 
 export const actionTypes = {
   INIT:                  'INIT',
+  INIT_USER:             'INIT_USER',
   GET_INITIAL_DATA:      'GET_INITIAL_DATA',
   GET_DATA:              'GET_DATA',
   GET_INITIAL_USER_DATA: 'GET_INITIAL_USER_DATA',
@@ -146,6 +147,7 @@ Actions
 
 export type Actions =
   IInit |
+  IInitUser |
   IGetInitialData |
   IGetData |
   IGetInitialUserData |
@@ -153,6 +155,10 @@ export type Actions =
 
 export interface IInit {
   type: typeof actionTypes.INIT;
+}
+
+export interface IInitUser {
+  type: typeof actionTypes.INIT_USER;
 }
 
 export interface IGetInitialData {         

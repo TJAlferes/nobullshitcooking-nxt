@@ -3,15 +3,15 @@ import { all, takeEvery } from 'redux-saga/effects';
 import {getInitialDataSaga, getInitialUserDataSaga} from '../data/sagas';
 import { actionTypes } from '../data/types';
 
-const {INIT, GET_INITIAL_USER_DATA} = actionTypes;
+const { INIT, INIT_USER } = actionTypes;
 
-// TO DO: finish / let Next.js handle now
-/*export function* watchData() {
+// TO DO: finish / let Next.js/RTKQ handle now
+export function* watchData() {
   yield all([
-    takeEvery(DATA_INIT, dataGetInitialDataSaga),
-    takeEvery(DATA_GET_INITIAL_USER_DATA, dataGetInitialUserDataSaga),
+    takeEvery(INIT, getInitialDataSaga),
+    takeEvery(INIT_USER, getInitialUserDataSaga),
 
-    takeEvery(DATA_GET__SAGA, dataGetSaga),
-    takeEvery(DATA_GET__SAGA, dataGetSaga)
+    //takeEvery(, dataGetSaga),
+    //takeEvery(, dataGetSaga)
   ]);
-}*/
+}

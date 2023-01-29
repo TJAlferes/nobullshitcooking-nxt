@@ -5,8 +5,6 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { getInitialData, getData, getInitialUserData, getUserData } from './actions';
 import type { IInitialData, IInitialUserData } from './types';
 
-// TO DO: do on ssr server now
-
 export function* getInitialDataSaga() {
   try {
     const { data } = yield call([axios, axios.get], `${endpoint}/data-init`);
@@ -31,7 +29,9 @@ export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",            
 
 export function* getInitialUserDataSaga() {
   try {
+    console.log('~~~FLAG~~~');
     const { data } = yield call([axios, axios.post], `${endpoint}/user/data-init`, {}, {withCredentials: true});
+    console.log(data);
     yield put(getInitialUserData(data));
   } catch (err) {
     //yield put(getInitialUserDataFailed());

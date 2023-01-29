@@ -44,9 +44,9 @@ NOBSCApp.getInitialProps = wrapper.getInitialAppProps(store =>
       ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
     };
 
-    if (ctx.req) {  // if server-side, stop saga
-      ctx.store?.dispatch(END);
-      await (ctx.store as SagaStore)?.sagaTask?.toPromise();
+    if (ctx.req) {  // if server-side, stop saga  (why?)
+      //ctx.store?.dispatch(END);
+      //await (ctx.store as SagaStore)?.sagaTask?.toPromise();
     }
     else chatInit(store);
 
