@@ -11,7 +11,7 @@ export function PrivateRecipes({ activateModal, deactivateModal, deleteName, del
     <div className="dashboard-content">
       <h2>Private Recipes</h2>
 
-      <Link href="/user-recipes/private/submit" className="new-entity">Create New Private Recipe</Link>
+      <Link href="/new-recipe" className="new-entity">Create New Private Recipe</Link>
 
       {modalActive
         ? (
@@ -43,7 +43,7 @@ export function PrivateRecipes({ activateModal, deactivateModal, deleteName, del
 
             <span className="name"><Link href={`/user-recipe/${r.id}`}>{r.title}</Link></span>
 
-            <span className="action"><Link href={`/user-recipe/private/edit/${r.id}`}>Edit</Link></span>
+            <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
 
             <span className="delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
           </div>

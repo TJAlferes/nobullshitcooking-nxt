@@ -2,7 +2,6 @@ import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
@@ -24,10 +23,8 @@ function listResults(results: any) {
 
 // facets, filters
 export function Equipments({ results, wasSearched }: PropsFromContext) {
-  const theme = useSelector(state => state.theme.theme);
-
   return (
-    <div className={`search-results two-col-b ${theme}`}>
+    <div className="search-results two-col-b">
       <div className="two-col-b-left">
         <h1>Equipment</h1>
 

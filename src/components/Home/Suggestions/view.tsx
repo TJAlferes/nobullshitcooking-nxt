@@ -1,9 +1,9 @@
 const googleMapsAPIKeyOne = 'AIzaSyCULKDLxoF9O413jjvF5Ot2xXXMdgz0Eag';
 const url = 'https://www.google.com/maps/embed/v1/search';
 
-export function SuggestionsView({ address, latitude, longitude, handleShowNearbyStoresClick, nearbyStoresClicked, theme }: Props): JSX.Element {
+export function SuggestionsView({ address, latitude, longitude, handleShowNearbyStoresClick, nearbyStoresClicked }: Props): JSX.Element {
   return (
-    <div className={`suggestions ${theme}`}>
+    <div className="suggestions">
       <span>Stores near you</span>
       <div className="nearby-stores">
         {nearbyStoresClicked
@@ -38,5 +38,4 @@ type Props = {
   longitude: string;
   handleShowNearbyStoresClick(): void;
   nearbyStoresClicked: boolean;
-  theme: string;
 };

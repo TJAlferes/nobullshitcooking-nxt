@@ -39,13 +39,12 @@ export function DashboardView({
   subTabClick,
   tab,
   tabClick,
-  theme,
   tinyCrop,
   unfavoriteRecipe,
   unsaveRecipe,
 }: Props): JSX.Element {
   return (
-    <div className={`dashboard two-col-a ${theme}`}>
+    <div className="dashboard one-col-a">
       <h1>{authname}</h1>
 
       <p className="feedback">{feedback}</p>
@@ -72,7 +71,7 @@ export function DashboardView({
         </>
       )}
 
-      {(!avatar && tab == "plans") && (
+      {(tab === "plans") && (
         <Plans
           activateModal={activateModal}
           creatingPlan={creatingPlan}
@@ -86,7 +85,7 @@ export function DashboardView({
         />
       )}
 
-      {(!avatar && tab == "recipes" && subTab == "private") && (
+      {(tab === "recipes" && subTab === "private") && (
         <PrivateRecipes
           activateModal={activateModal}
           deactivateModal={deactivateModal}
@@ -100,7 +99,7 @@ export function DashboardView({
         />
       )}
 
-      {(!avatar && tab == "recipes" && subTab == "public") && (
+      {(tab === "recipes" && subTab === "public") && (
         <PublicRecipes
           activateModal={activateModal}
           deactivateModal={deactivateModal}
@@ -114,19 +113,19 @@ export function DashboardView({
         />
       )}
 
-      {(!avatar && tab == "recipes" && subTab == "favorite") && (
+      {(tab === "recipes" && subTab === "favorite") && (
         <FavoriteRecipes myFavoriteRecipes={myFavoriteRecipes} subTab={subTab} subTabClick={subTabClick} unfavoriteRecipe={unfavoriteRecipe} />
       )}
 
-      {(!avatar && tab == "recipes" && subTab == "saved") && (
+      {(tab === "recipes" && subTab === "saved") && (
         <SavedRecipes mySavedRecipes={mySavedRecipes} subTab={subTab} subTabClick={subTabClick} unsaveRecipe={unsaveRecipe} />
       )}
 
-      {!avatar && tab == "ingredients" && (
+      {tab === "ingredients" && (
         <Ingredients deletePrivateIngredient={deletePrivateIngredient} myPrivateIngredients={myPrivateIngredients} />
       )}
 
-      {!avatar && tab == "equipment" && (
+      {tab === "equipment" && (
         <Equipment deletePrivateEquipment={deletePrivateEquipment} myPrivateEquipment={myPrivateEquipment} />
       )}
     </div>
@@ -169,7 +168,6 @@ type Props = {
   subTabClick(e: React.SyntheticEvent<EventTarget>):        void;
   tab:                                                      string;
   tabClick(e: React.SyntheticEvent<EventTarget>):           void;
-  theme:                                                    string;
   tinyCrop:                                                 string;
   unfavoriteRecipe(id: number):                             void;
   unsaveRecipe(id: number):                                 void;

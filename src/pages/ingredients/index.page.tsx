@@ -2,7 +2,6 @@ import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/
 import Link from 'next/link';
 
 import { ExpandCollapse } from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
@@ -26,11 +25,9 @@ function listResults(results: any) {
 
 // facets, filters
 export function Ingredients({ results, wasSearched }: PropsFromContext) {
-  const theme = useSelector(state => state.theme.theme);
-
   return (
-    <div className={`search-results two-column-b ${theme}`}>
-      <div className="left-column">
+    <div className="search-results two-col-b">
+      <div className="two-col-b-left">
         <h1>Ingredients</h1>
 
         <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
@@ -87,7 +84,7 @@ export function Ingredients({ results, wasSearched }: PropsFromContext) {
         <Paging />
       </div>
 
-      <div className="right-column">
+      <div className="two-col-b-right">
       </div>
     </div>
   );

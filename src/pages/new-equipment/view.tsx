@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ReactCrop, { Crop } from "react-image-crop";
+import 'react-image-crop/dist/ReactCrop.css';
 
 import { CropPreview, LoaderButton } from '../../components';
 import type { IEquipmentType } from '../../store/data/types';

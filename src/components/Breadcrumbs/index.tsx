@@ -9,25 +9,43 @@ export function Breadcrumbs() {
   const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
 
   // TO DO: make this logic more clear
+  // TO DO: is this effect even needed?
   useEffect(() => {
-    if (router && router.isReady) {
+    if (router.isReady) {
+      if (router.pathname === "/profile/:username") {
+        setBreadcrumbs([]);
+        return;
+      }
+      if (router.pathname === "/new-equipment") {
+        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
+        return;
+      }
+      if (router.pathname === "/new-ingredient") {
+        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
+        return;
+      }
+      if (router.pathname === "/new-plan") {
+        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
+        return;
+      }
+      if (router.pathname === "/new-recipe") {
+        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
+        return;
+      }
+      
       const linkPath = router.asPath.split('/');
       linkPath.shift();
       const pathArray = linkPath.map((path, i) => ({name: convert(path), href: '/' + linkPath.slice(0, i + 1).join('/')}));
       setBreadcrumbs(pathArray);
     }
-  }, [router]);
+  }, [router.isReady]);
 
   if (!breadcrumbs) return null;
 
   if ( router.pathname === "/home" || router.pathname.match(/^\/$/) ) return null;
 
-  if (router.pathname === "/profile/:username") setBreadcrumbs([]);
-  // TO DO: use nextjs nested routes instead?
-  if (router.pathname === "/new-equipment")     setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
-  if (router.pathname === "/new-ingredient")    setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
-  if (router.pathname === "/new-plan")          setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
-  if (router.pathname === "/new-recipe")        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
+  console.log(router.pathname);
+  console.log(breadcrumbs);
 
   return (
     <nav aria-label="breadcrumbs" className="crumbs">
@@ -47,12 +65,18 @@ export function Breadcrumbs() {
 };
 
 function convert(string: string) {
-  return string
+  const converted = string
     .replace(/-/g, ' ')
     .replace(/oe/g, 'ö')
     .replace(/ae/g, 'ä')
-    .replace(/ue/g, 'ü')
-    .toUpperCase();
+    .replace(/ue/g, 'ü');
+
+  const capitalized = converted
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1) + ' ')
+    .join();
+
+  return capitalized;
 };
 
 type Breadcrumb = {

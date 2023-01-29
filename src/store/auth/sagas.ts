@@ -41,7 +41,7 @@ export function* staffLogoutSaga(action: IStaffLogout) {
 export function* userLoginSaga(action: IUserLogin) {
   try {
     const { data: { message, username } } =
-      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, password: action.password}}, {withCredentials: true});
+      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, pass: action.password}}, {withCredentials: true});
 
     if (message == 'Signed in.') yield put(userDisplay(username));
     else yield put(authMessage(message));

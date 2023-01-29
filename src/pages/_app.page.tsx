@@ -6,7 +6,7 @@ import { HTML5toTouch }                 from 'rdndmb-html5-to-touch';
 import { END }                          from 'redux-saga';
 
 import '../../styles/styles.css';
-import { Theme, Header, Main, Footer, LeftNav } from '../components';
+import { Theme, Layout, LeftNav } from '../components';
 import { makeSearchConfig, SearchConnector }              from '../config/search';
 import { SagaStore, wrapper }            from '../store';
 import { chatInit }                      from '../store/chat/sagas';
@@ -15,11 +15,9 @@ import { chatInit }                      from '../store/chat/sagas';
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
+  const searchConfig =     props.pageProps.searchConfig;
+  const searchConnector =  new SearchConnector(store);
 
-  const searchConnector = new SearchConnector(store);
-  const searchConfig = props.pageProps.searchConfig;
-
-  // TO DO: Move everything inside the providers to Main. Reorganize everything.
   return (
     <Provider store={store}>
       <SearchProvider config={{apiConnector: searchConnector, ...searchConfig}}>
@@ -27,14 +25,9 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
           <Theme>
             <div id="app">
               <LeftNav />
-
-              <div id="layout">
-                <Header />
-                <Main>
-                  <Component {...props.pageProps} />
-                </Main>
-                <Footer />
-              </div>
+              <Layout>
+                <Component {...props.pageProps} />
+              </Layout>
             </div>
           </Theme>
         </DndProvider>

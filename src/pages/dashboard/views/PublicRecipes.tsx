@@ -11,7 +11,7 @@ export function PublicRecipes({ activateModal, deactivateModal, deleteName, diso
     <div className="dashboard-content">
       <h2>Public Recipes</h2>
 
-      <Link href="/user-recipes/public/submit" className="new-entity">Create New Public Recipe</Link>
+      <Link href="/new-recipe" className="new-entity">Create New Public Recipe</Link>
 
       {modalActive
         ? (
@@ -43,7 +43,7 @@ export function PublicRecipes({ activateModal, deactivateModal, deleteName, diso
 
             <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
 
-            <span className="action"><Link href={`/user-recipe/public/edit/${r.id}`}>Edit</Link></span>
+            <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
 
             <span className="delete" onClick={() => activateModal(r.id, r.title)}>Disown</span>
           </div>

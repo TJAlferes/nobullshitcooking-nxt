@@ -1,12 +1,8 @@
 import Link from 'next/link';
 
-import { useTypedSelector as useSelector } from '../../store';
-
 export function Footer(): JSX.Element {
-  const theme = useSelector(state => state.theme.theme);
-
   return (
-    <footer className={`footer ${theme}`}>
+    <footer className="footer">
       <div className="footer-links">
         <Link href="/page/site/sitemap">Sitemap</Link>
         <Link href="/page/site/disclaimer">Disclaimer</Link>

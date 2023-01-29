@@ -24,7 +24,6 @@ export function LeftNav(): JSX.Element | null {
   const authname =            useSelector(state => state.auth.authname);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const leftNav =             useSelector(state => state.menu.leftNav);
-  const theme =               useSelector(state => state.theme.theme);
   const [ expanded, setExpanded ] = useState("none");
   
   const click = () => dispatch(closeLeftNav());
@@ -42,7 +41,7 @@ export function LeftNav(): JSX.Element | null {
     </>
   ) : (
     <>
-      <nav className={`left-nav ${theme}`}>
+      <nav className="left-nav">
         <div className="heading">
           <svg className="toggle" onClick={click}><g><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path></g></svg>
           <Logo />

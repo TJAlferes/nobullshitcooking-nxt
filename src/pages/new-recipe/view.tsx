@@ -278,7 +278,7 @@ export function NewRecipeView({
       />
 
       <div className="finish">
-        <Link href="/dashboard"><a className="cancel-button">Cancel</a></Link>
+        <Link className="cancel-button" href="/dashboard">Cancel</Link>
         <LoaderButton
           className="submit-button"
           id="user_submit_recipe_button"

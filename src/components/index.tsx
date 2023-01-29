@@ -4,6 +4,7 @@ export { ExpandCollapse } from './ExpandCollapse';
 export { Footer }         from './Footer';
 export { Header }         from './Header';
 export { Home }           from './Home';
+export { Layout }         from './Layout';
 export { LeftNav }        from './LeftNav';
 export { LoaderButton }   from './LoaderButton';
 export { LoaderSpinner }  from './LoaderSpinner';

@@ -25,12 +25,10 @@ export default function Dashboard(): JSX.Element {
   const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
   const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
   const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
-
-  const authname =     useSelector(state => state.auth.authname);
-  const creatingPlan = useSelector(state => state.planner.creating);
-  const editingId =    useSelector(state => state.planner.editingId);
-  const message =      useSelector(state => state.user.message);
-  const theme =        useSelector(state => state.theme.theme);
+  const authname =             useSelector(state => state.auth.authname);
+  const creatingPlan =         useSelector(state => state.planner.creating);
+  const editingId =            useSelector(state => state.planner.editingId);
+  const message =              useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -205,7 +203,6 @@ export default function Dashboard(): JSX.Element {
       subTabClick={subTabClick}
       tab={tab}
       tabClick={tabClick}
-      theme={theme}
       tinyCrop={tinyCrop}
       unfavoriteRecipe={unfavoriteRecipe}
       unsaveRecipe={unsaveRecipe}

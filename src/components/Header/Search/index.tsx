@@ -12,7 +12,6 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   const sInsert =  useRef<HTMLElement>();
   const dispatch = useDispatch();
   const index =    useSelector(state => state.search.index);
-  const theme =    useSelector(state => state.theme.theme);
 
   const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
     sInsert.current = document.getElementsByClassName("sui-search-box__wrapper")[0]?.firstChild as HTMLElement;
@@ -42,7 +41,7 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   if (index === "products")    field = "fullname";
 
   return (
-    <div className={`search ${theme}`}>
+    <div className="search">
       <div className="category">
         <div className="facade">
           <span>{facadeText}</span>

@@ -1,4 +1,5 @@
 import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 

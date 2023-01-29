@@ -9,7 +9,7 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
     <div className="dashboard-content">
       <h2>Private Equipment</h2>
 
-      <Link href="/user-equipment/submit" className="new-entity">Create New Equipment</Link>
+      <Link href="/new-equipment" className="new-entity">Create New Equipment</Link>
 
       {myPrivateEquipment.length
         ? myPrivateEquipment.map(e => (
@@ -18,7 +18,7 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
 
             <span className="name"><Link href={`/user-equipment/${e.id}`}>{e.name}</Link></span>
 
-            <span className="action"><Link href={`/user-equipment/edit/${e.id}`}>Edit</Link></span>
+            <span className="action"><Link href={`/new-equipment/${e.id}`}>Edit</Link></span>
 
             <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
           </div>
