@@ -1,13 +1,13 @@
 {
-  "name":        "nobullshitcooking-nxt",
-  "version":     "1.0.0",
+  "name": "nobullshitcooking-nxt",
+  "version": "1.0.0",
   "description": "Next.js-based UI for No Bullshit Cooking",
-  "author":      "Timothy James Alferes",
+  "author": "Timothy James Alferes",
   "scripts": {
-    "dev":   "next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test":  "jest --color --detectOpenHandles"
+    "test": "jest --color --detectOpenHandles"
   },
   "dependencies": {
     "@elastic/react-search-ui": "^1.18.3",
@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@redux-devtools/extension": "^3.2.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.2.6",
     "@types/node": "^18.11.8",
@@ -53,6 +54,7 @@
     "babel-jest": "^29.3.1",
     "jest": "^29.3.1",
     "jest-cli": "^29.3.1",
+    "jest-environment-jsdom": "^29.4.1",
     "react-dnd-test-backend": "^16.0.1",
     "react-dnd-test-utils": "^16.0.1",
     "react-test-renderer": "^18.2.0",

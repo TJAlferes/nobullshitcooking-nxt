@@ -2,40 +2,51 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../store';
+// Adapted from https://github.com/NiklasMencke/nextjs-breadcrumbs
 
-// CREDIT: Adapted from: https://github.com/NiklasMencke/nextjs-breadcrumbs
 export function Breadcrumbs() {
   const router = useRouter();
-  const theme = useSelector(state => state.theme.theme);
   const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
 
+  // TO DO: make this logic more clear
   useEffect(() => {
-    if (router) {
+    if (router && router.isReady) {
       const linkPath = router.asPath.split('/');
       linkPath.shift();
-      const pathArray = linkPath.map((path, i) => ({name: path, href: '/' + linkPath.slice(0, i + 1).join('/')}));
+      const pathArray = linkPath.map((path, i) => ({name: convert(path), href: '/' + linkPath.slice(0, i + 1).join('/')}));
       setBreadcrumbs(pathArray);
     }
   }, [router]);
 
   if (!breadcrumbs) return null;
 
+  if ( router.pathname === "/home" || router.pathname.match(/^\/$/) ) return null;
+
   if (router.pathname === "/profile/:username") setBreadcrumbs([]);
+  // TO DO: use nextjs nested routes instead?
   if (router.pathname === "/new-equipment")     setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
   if (router.pathname === "/new-ingredient")    setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
   if (router.pathname === "/new-plan")          setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
   if (router.pathname === "/new-recipe")        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
 
   return (
-    <nav aria-label="breadcrumbs">
-      <span><Link href="/">Home</Link><i>{`&gt;`}</i></span>
-      {breadcrumbs.map(({ name, href }) => <span key={href}><Link href={href}>{convertBreadcrumb(name)}</Link><i>{`&gt;`}</i></span>)}
+    <nav aria-label="breadcrumbs" className="crumbs">
+      <span>
+        <Link href="/">Home</Link>
+        <i className="crumb-pointer">&gt;</i>
+      </span>
+
+      {breadcrumbs.map(({ name, href }, index) => (
+        <span key={href}>
+          <Link href={href}>{name}</Link>
+          {index < breadcrumbs.length - 1 && <i className="crumb-pointer">&gt;</i>}
+        </span>
+      ))}
     </nav>
   );
 };
 
-function convertBreadcrumb(string: string) {
+function convert(string: string) {
   return string
     .replace(/-/g, ' ')
     .replace(/oe/g, 'ö')
@@ -91,43 +102,4 @@ const page = staffIsAuthenticated
     : ownership === "private"
       ? 'Submit New Private Recipe' : 'Submit New Public Recipe';
 const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-
-
-
-export function Breadcrumbs({ id, name, page }: Props): JSX.Element {
-  const theme = useSelector(state => state.theme.breadCrumbsTheme);
-
-  const Breadcrumbs = withBreadcrumbs()(({ breadcrumbs }: any): JSX.Element => {
-      if (page) breadcrumbs.pop();
-      return (
-        <>
-          {breadcrumbs.map(({ breadcrumb, match }: any, index: number) => (
-            <span className="crumb" key={match.url}>
-              <Link href={match.url}>
-                <a className="crumb-link">{breadcrumb}</a>
-              </Link>
-
-              {(index < breadcrumbs.length) &&
-                <i className="crumb-pointer">{`&gt;`}</i>}
-            </span>
-          ))}
-
-          {page && (
-            <Link href={`${page}${id}`}>
-              <a className="crumb-link">{name}</a>
-            </Link>
-          )}
-        </>
-      );
-    }
-  );
-
-  return <div className={`crumbs ${theme}`}><Breadcrumbs /></div>;
-}
-
-type Props = {
-  id: number;
-  name: string;
-  page?: string | null;
-};
 */

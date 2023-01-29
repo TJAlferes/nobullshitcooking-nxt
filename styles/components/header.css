@@ -24,12 +24,12 @@
 
 
 
-.header.light,
+.light .header,
 .light .header-l {background-color: #c10006;}
 
 
 
-.header.dark,
+.dark .header,
 .dark .header-l {background-color: #690004;}
 
 

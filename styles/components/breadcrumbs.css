@@ -1,4 +1,4 @@
-.crumb,
+.crumbs span,
 .crumbs {
   display: flex;
   flex-direction: row;
@@ -16,10 +16,14 @@
 
 .crumb-pointer {padding: 0 12px;}
 
-.bread-crumbs-light a:hover {color: #c10006;}
 
-.bread-crumbs-light .crumb-pointer {color: #000;}
 
-.bread-crumbs-dark a:hover {color: #690004;}
+.light .crumbs a:hover {color: #c10006;}
 
-.bread-crumbs-dark .crumb-pointer {color: #aaa;}
+.light .crumbs .crumb-pointer {color: #000;}
+
+
+
+.dark .crumbs a:hover {color: #690004;}
+
+.dark .crumbs .crumb-pointer {color: #aaa;}

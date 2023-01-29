@@ -1,13 +1,12 @@
-import { SearchProvider }                   from '@elastic/react-search-ui';
-import type { SearchDriverOptions, APIConnector }                   from '@elastic/search-ui';
-import type { AppContext, AppProps }        from 'next/app';
-import { DndProvider }                      from 'react-dnd-multi-backend';
-import { Provider }                         from 'react-redux';
-import { HTML5toTouch }                     from 'rdndmb-html5-to-touch';
-import { END }                              from 'redux-saga';
+import { SearchProvider }               from '@elastic/react-search-ui';
+import type { AppContext, AppProps }    from 'next/app';
+import { DndProvider }                  from 'react-dnd-multi-backend';
+import { Provider }                     from 'react-redux';
+import { HTML5toTouch }                 from 'rdndmb-html5-to-touch';
+import { END }                          from 'redux-saga';
 
 import '../../styles/styles.css';
-import { Header, Main, Footer, LeftNav } from '../components';
+import { Theme, Header, Main, Footer, LeftNav } from '../components';
 import { makeSearchConfig, SearchConnector }              from '../config/search';
 import { SagaStore, wrapper }            from '../store';
 import { chatInit }                      from '../store/chat/sagas';
@@ -15,12 +14,7 @@ import { chatInit }                      from '../store/chat/sagas';
 /* -------------------------- COOK EAT WIN REPEAT -------------------------- */
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
-  const leftNav = false;  //useSelector(state => state.menu.leftNav);  // Can't use here. See TO DO below.
-
   const { store, props } = wrapper.useWrappedStore(rest);
-
-  const { pathname } = props.pageProps.router;
-  const atAuthPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);
 
   const searchConnector = new SearchConnector(store);
   const searchConfig = props.pageProps.searchConfig;
@@ -30,11 +24,10 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
     <Provider store={store}>
       <SearchProvider config={{apiConnector: searchConnector, ...searchConfig}}>
         <DndProvider options={HTML5toTouch}>
-
-          {atAuthPage ? <Component {...props.pageProps} /> : (
+          <Theme>
             <div id="app">
-              {leftNav && <LeftNav />}
-              <div className={leftNav ? 'shadow--show' : 'shadow--hide'}></div>
+              <LeftNav />
+
               <div id="layout">
                 <Header />
                 <Main>
@@ -43,8 +36,7 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
                 <Footer />
               </div>
             </div>
-          )}
-
+          </Theme>
         </DndProvider>
       </SearchProvider>
     </Provider>

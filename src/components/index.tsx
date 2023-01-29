@@ -10,3 +10,4 @@ export { LoaderSpinner }  from './LoaderSpinner';
 export { Logo }           from './Logo';
 export { Main }           from './Main';
 export { StarRating }     from './StarRating';
+export { Theme }          from './Theme';

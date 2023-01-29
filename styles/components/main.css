@@ -6,9 +6,9 @@
   padding-bottom: 25px;
 }
 
-.main-light {background-color: #eee;}
+.light .main {background-color: #eee;}
 
-.main-dark {background-color: #111;}
+.dark .main {background-color: #111;}
 
 /* ? */
 @media (max-width: 899px) {
