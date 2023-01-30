@@ -7,7 +7,7 @@ import { END }                          from 'redux-saga';
 
 import '../../styles/styles.css';
 import { Theme, Layout, LeftNav } from '../components';
-import { makeSearchConfig, SearchConnector }              from '../config/search';
+import { makeSearchConfig }              from '../config/search';
 import { SagaStore, wrapper }            from '../store';
 import { chatInit }                      from '../store/chat/sagas';
 
@@ -15,12 +15,11 @@ import { chatInit }                      from '../store/chat/sagas';
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
-  const searchConfig =     props.pageProps.searchConfig;
-  const searchConnector =  new SearchConnector(store);
+  const searchConfig =     makeSearchConfig(store);
 
   return (
     <Provider store={store}>
-      <SearchProvider config={{apiConnector: searchConnector, ...searchConfig}}>
+      <SearchProvider config={searchConfig}>
         <DndProvider options={HTML5toTouch}>
           <Theme>
             <div id="app">
@@ -40,15 +39,14 @@ NOBSCApp.getInitialProps = wrapper.getInitialAppProps(store =>
   async ({ Component, ctx, router }: AppContext) => {
     const pageProps = {
       router,
-      searchConfig: makeSearchConfig(store),
       ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
     };
 
     if (ctx.req) {  // if server-side, stop saga  (why?)
-      //ctx.store?.dispatch(END);
-      //await (ctx.store as SagaStore)?.sagaTask?.toPromise();
+      ctx.store?.dispatch(END);
+      await (ctx.store as SagaStore)?.sagaTask?.toPromise();
     }
-    else chatInit(store);
+    else chatInit(store);  // if client-side, start socket.io
 
     return {pageProps};
   }

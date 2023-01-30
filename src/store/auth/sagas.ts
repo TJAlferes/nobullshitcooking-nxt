@@ -26,11 +26,8 @@ export function* staffLogoutSaga(action: IStaffLogout) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/staff/auth/logout`, {}, {withCredentials: true});
 
-    if (message == 'Signed out.') yield call(removeStorageItem, 'appState');
-    else {
-      yield call(removeStorageItem, 'appState');  // clear their browser anyway
-      yield put(authMessage(message));
-    }
+    yield call(removeStorageItem, 'appState');
+    yield put(authMessage(message));
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
   }
@@ -45,7 +42,7 @@ export function* userLoginSaga(action: IUserLogin) {
       yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, pass: action.password}}, {withCredentials: true});
 
     if (message == 'Signed in.') {
-      yield(put(initUser()));
+      yield put(initUser());
       yield put(userDisplay(username));
     }
     else yield put(authMessage(message));

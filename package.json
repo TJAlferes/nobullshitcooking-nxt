@@ -40,7 +40,6 @@
     "uuid-with-v6": "^2.0.0"
   },
   "devDependencies": {
-    "@redux-devtools/extension": "^3.2.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.2.6",

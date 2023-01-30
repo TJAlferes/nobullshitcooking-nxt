@@ -1,9 +1,6 @@
-//import type { GetStaticProps } from 'next';
-//import { useDispatch } from 'react-redux';
-
-import { Home } from '../components';
+import { Home }    from '../components';
 import { wrapper } from '../store';
-import { init } from '../store/data/actions';
+import { init }    from '../store/data/actions';
 
 export default function IndexPage() {
   return <Home />;
