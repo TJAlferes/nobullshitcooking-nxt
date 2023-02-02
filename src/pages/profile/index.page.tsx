@@ -16,7 +16,6 @@ export default function Profile(): JSX.Element {
   const dispatch = useDispatch();
   const authname =            useSelector(state => state.auth.authname);
   const myFriendships =       useSelector(state => state.data.myFriendships);
-  const theme =     useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message =             useSelector(state => state.user.message);
 
@@ -87,7 +86,6 @@ export default function Profile(): JSX.Element {
         changeTab={changeTab}
         userIsAuthenticated={userIsAuthenticated}
         loading={loading}
-        theme={theme}
         tab={tab}
         userAvatar={userAvatar}
         username={username}

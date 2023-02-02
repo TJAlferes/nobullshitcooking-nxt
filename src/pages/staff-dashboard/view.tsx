@@ -19,11 +19,10 @@ export function DashboardView({
   loading,
   modalActive,
   recipes,
-  tab,
-  theme
+  tab
 }: Props): JSX.Element {
   return (
-    <div className={`dashboard one-column-a ${theme}`}>
+    <div className="dashboard one-col-a">
       <h1>COOK EAT WIN REPEAT</h1>
 
       <p className="feedback">{feedback}</p>
@@ -67,5 +66,4 @@ type Props = {
   modalActive:                             boolean;
   recipes:                                 IWorkRecipe[];
   tab:                                     string;
-  theme:                                   string;
 };

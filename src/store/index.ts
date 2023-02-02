@@ -55,7 +55,6 @@ function makeStore(context: Context) {
     chatInit(store);  // start socket.io (is this being called on EVERY re-route???)
     initWindowBlurHandler(store);
     initWindowFocusHandler(store);
-    console.log('makeStore browser')
   }
 
   return store;
@@ -92,8 +91,9 @@ export function* rootSaga() {
   yield fork(watchSave);
 }
 
-export const wrapper = createWrapper<SagaStore>(makeStore, {debug: true});
+export const wrapper = createWrapper<SagaStore>(makeStore, {debug: false});
 
+// ideally only called once, but for now in every non-authenticated page
 export function initialProps() {
   return wrapper.getInitialPageProps(
     store => async (context) => {
@@ -105,6 +105,7 @@ export function initialProps() {
   );
 }
 
+// only called once, in Dashboard, when they are redirected there upon being authenticated
 export function initialUserProps() {
   return wrapper.getInitialPageProps(
     store => async (context) => {

@@ -3,22 +3,18 @@ import RemoveFromCartButton from './RemoveFromCartButton';
 
 const endpoint = '';
 
-export default function Cart({ oneColumnATheme }: Props) {
-  const cartItems = useSelector(state => state.cart.items);
+export default function Cart() {
+  const items = useSelector(state => state.cart.items);
   
   return (
-    <div className={`cart one-column-a ${oneColumnATheme}`}>
-      {!cartItems ? 'Your cart is empty.' : cartItems.map(i => (
+    <div className="cart one-col-a">
+      {!items ? 'Your cart is empty.' : items.map(item => (
         <div className="cart-item">
-          <span><img src={`${endpoint}/${i.name}`} /></span>
-          <span>{i.name}</span>
-          <span><RemoveFromCartButton item={i}/></span>
+          <span><img src={`${endpoint}/${item.name}`} /></span>
+          <span>{item.name}</span>
+          <span><RemoveFromCartButton item={item}/></span>
         </div>
       ))}
     </div>
   );
 }
-
-type Props = {
-  oneColumnATheme: string;
-};

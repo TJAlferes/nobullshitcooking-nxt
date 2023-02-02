@@ -22,7 +22,6 @@ export function RecipeView({
   recipe,
   save,
   saved,
-  theme,
   userIsAuthenticated
 }: Props): JSX.Element {
   const {
@@ -44,7 +43,7 @@ export function RecipeView({
   } = recipe;
 
   return (
-    <div className={`recipe two-col-b ${theme}`}>
+    <div className="recipe two-col-b">
       <div className="two-col-b-left">
         <h1>{title}</h1>
 
@@ -142,6 +141,5 @@ type Props = {
   recipe:              IRecipe;
   save():              void;
   saved:               boolean;
-  theme:               string;
   userIsAuthenticated: boolean;
 };

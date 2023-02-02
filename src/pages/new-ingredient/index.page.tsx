@@ -14,6 +14,7 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
+  const authname =             useSelector(state => state.auth.authname);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage =         useSelector(state => state.staff.message);
   const userMessage =          useSelector(state => state.user.message);
@@ -45,6 +46,10 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const [ tinyCrop, setTinyCrop ] = useState("");
 
   const imageRef = useRef<HTMLImageElement>();
+
+  useEffect(() => {
+    if (!authname) router.push("/");
+  }, [authname]);
 
   useEffect(() => {
     const getExistingIngredientToEdit = () => {

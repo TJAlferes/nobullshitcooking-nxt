@@ -16,7 +16,6 @@ export default function Friends(): JSX.Element {
   const dispatch = useDispatch();
   const authname =      useSelector(state => state.auth.authname);
   const myFriendships = useSelector(state => state.data.myFriendships);
-  const theme =         useSelector(state => state.theme.theme);
   const message =       useSelector(state => state.user.message);
 
   const [ feedback,   setFeedback ] =   useState("");
@@ -95,7 +94,6 @@ export default function Friends(): JSX.Element {
       requestFriendship={requestFriendship}
       tab={tab}
       tabChange={tabChange}
-      theme={theme}
       unblockUser={unblockUser}
       userToFind={userToFind}
     />

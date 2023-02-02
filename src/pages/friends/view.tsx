@@ -16,12 +16,11 @@ export function FriendsView({
   requestFriendship,
   tab,
   tabChange,
-  theme,
   unblockUser,
   userToFind
 }: Props): JSX.Element {
   return (
-    <div className={`friends two-col-a ${theme}`}>
+    <div className="friends two-col-a">
       <h1>Friends</h1>
 
       <p className="feedback">{feedback}</p>
@@ -71,7 +70,6 @@ type Props = {
   requestFriendship():            void;
   tab:                            string;
   tabChange(value: string):       void;
-  theme:                          string;
   unblockUser(name: string):      void;
   userToFind:                     string;
 };

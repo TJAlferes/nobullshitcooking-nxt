@@ -7,7 +7,7 @@ export function Ingredients({ handleDeleteIngredient, ingredients }: Props): JSX
     <div className="dashboard-content">
       <h2>Ingredients</h2>
 
-      <Link className="new-entity" href="/ingredient/submit">Create New Ingredient</Link>
+      <Link className="new-entity" href="/new-ingredient">Create New Ingredient</Link>
 
       {ingredients.map(i => (
         <div className="dashboard-item" key={i.id}>

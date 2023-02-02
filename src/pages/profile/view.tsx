@@ -13,7 +13,6 @@ export function ProfileView({
   changeTab,
   userIsAuthenticated,
   loading,
-  theme,
   tab,
   userAvatar,
   username,
@@ -21,7 +20,7 @@ export function ProfileView({
   userFavoriteRecipes,
 }: Props): JSX.Element {
   return (
-    <div className={`profile one-column-a ${theme}`}>
+    <div className="profile one-col-a">
       <h1>{username}</h1>
 
       <p className="feedback">{feedback}</p>
@@ -44,8 +43,8 @@ export function ProfileView({
       <h2>Recipes</h2>
       
       <div className="tabs">
-        <button className={(tab === "public") ? "--active" : undefined} onClick={() => changeTab("public")}>Public</button>
-        <button className={(tab === "public") ? "--active" : undefined} onClick={() => changeTab("favorite")}>Favorite</button>
+        <button className={(tab === "public") ? "--active" : ""}   onClick={() => changeTab("public")}>Public</button>
+        <button className={(tab === "favorite") ? "--active" : ""} onClick={() => changeTab("favorite")}>Favorite</button>
       </div>
 
       {tab === "favorite" && (
@@ -59,7 +58,7 @@ export function ProfileView({
                 }
               </span>
               <span className="name">
-                <Link href={`/recipes/${r.id}`}>{r.title}</Link>
+                <Link href={`/recipe/${r.id}`}>{r.title}</Link>
               </span>
             </div>
           )))
@@ -78,7 +77,7 @@ export function ProfileView({
                 }
               </span>
               <span className="name">
-                <Link href={`/recipes/${r.id}`}>{r.title}</Link>
+                <Link href={`/recipe/${r.id}`}>{r.title}</Link>
               </span>
               </div>
           )))
@@ -99,7 +98,6 @@ type Props = {
   changeTab(value: string): void;
   userIsAuthenticated:      boolean;
   loading:                  boolean;
-  theme:                    string;
   tab:                      string;
   userAvatar:               string;
   username:                 string;

@@ -15,7 +15,6 @@ export default function Plan(): JSX.Element {
   const expandedDay = useSelector(state => state.plannerView.expandedDay);
   const planName =    useSelector(state => state.plannerView.planName);
   const planData =    useSelector(state => state.plannerView.planData);
-  const theme =       useSelector(state => state.theme.theme);
 
   useEffect(() => {
     const getPlan = () => {
@@ -25,8 +24,8 @@ export default function Plan(): JSX.Element {
     };
 
     if (id) getPlan();
-    else router.push('/home');
+    else router.push('/');
   }, []);
 
-  return <PlanView expandedDay={expandedDay} planName={planName} planData={planData} theme={theme} />;
+  return <PlanView expandedDay={expandedDay} planName={planName} planData={planData} />;
 }

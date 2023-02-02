@@ -2,9 +2,9 @@ import type { IEquipment } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myPrivateEquipment, theme }: Props): JSX.Element {
+export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myPrivateEquipment }: Props): JSX.Element {
   return (
-    <div className={`equipment two-col-b ${theme}`} data-test="equipment">
+    <div className="equipment two-col-b">
       <div className="two-col-b-left">
         <h1>{name}</h1>
 
@@ -31,5 +31,4 @@ export function EquipmentView({ equipment: { id, name, image, equipment_type_nam
 type Props = {
   equipment:          IEquipment;
   myPrivateEquipment: IEquipment[];
-  theme:              string;
 }

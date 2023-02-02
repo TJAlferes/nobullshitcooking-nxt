@@ -29,11 +29,10 @@ export function ChatView({
   send,
   startPrivateMessage,
   status,
-  theme,
   users
 }: Props): JSX.Element {
   return (
-    <div className={`chat two-col-a ${theme}`}>
+    <div className="chat two-col-a">
       <div className="chat-desktop">
         <h1>Chat</h1>
 
@@ -155,6 +154,5 @@ type Props = {
   send(e: React.KeyboardEvent):          void;
   startPrivateMessage(username: string): void;
   status:                                string;
-  theme:                                 string;
   users:                                 string[];
 };

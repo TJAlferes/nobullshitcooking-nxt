@@ -23,7 +23,6 @@ export function NewPlan({ editing }: Props): JSX.Element {
   const planName =          useSelector(state => state.planner.planName);
   const planData =          useSelector(state => state.planner.planData);
   const message =           useSelector(state => state.user.message);
-  const theme =             useSelector(state => state.theme.theme);
 
   const [ feedback,    setFeedback ] =    useState("");
   const [ loading,     setLoading ] =     useState(false);
@@ -120,24 +119,13 @@ export function NewPlan({ editing }: Props): JSX.Element {
 
   const handleSubmit = () => {
     if (!valid()) return;
-
     setLoading(true);
-
-    const planInfo = {
-      name: planName,
-      data: getPlanData()
-    };
-
+    const planInfo = {name: planName, data: getPlanData()};
     if (editing) {
-      const planEditInfo = {
-        id: editingId as number,
-        ...planInfo
-      };
-
+      const planEditInfo = {id: editingId as number, ...planInfo};
       dispatch(editPlan(planEditInfo));
-    } else {
-      dispatch(createNewPlan(planInfo));
     }
+    else dispatch(createNewPlan(planInfo));
   }
 
   return (

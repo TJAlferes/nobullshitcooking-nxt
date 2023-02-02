@@ -27,8 +27,7 @@ export function NewPlanView({
   modalActive,
   planName,
   planData,
-  tab,
-  theme
+  tab
 }: Props): JSX.Element {
   const tabToList: ITabToList = {
     "official": officialRecipes,
@@ -40,7 +39,7 @@ export function NewPlanView({
   const recipes: IWorkRecipe[] = tabToList[tab];
 
   return (
-    <div className={`new-plan two-col-a ${theme}`}>
+    <div className="new-plan two-col-a">
       <div className="heading">
         <h1>New Plan</h1>
         <p className="feedback">{feedback}</p>
@@ -194,7 +193,6 @@ type Props = {
   planName:                          string;
   planData:                          IData;
   tab:                               string;
-  theme:                             string;
 };
 
 type MonthlyPlanProps = {

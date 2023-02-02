@@ -12,7 +12,6 @@ export default function Equipment(): JSX.Element {
 
   const officialEquipment =  useSelector(state => state.data.equipment);
   const myPrivateEquipment = useSelector(state => state.data.myPrivateEquipment);
-  const theme = useSelector(state => state.theme.theme);
 
   const [ equipment, setEquipment ] = useState<IEquipment>();
 
@@ -32,5 +31,5 @@ export default function Equipment(): JSX.Element {
     setEquipment(localEquipment);
   }, []);
 
-  return !equipment ? <LoaderSpinner /> : <EquipmentView equipment={equipment} myPrivateEquipment={myPrivateEquipment} theme={theme} />;
+  return !equipment ? <LoaderSpinner /> : <EquipmentView equipment={equipment} myPrivateEquipment={myPrivateEquipment} />;
 }

@@ -18,7 +18,7 @@ export function UserNav(): JSX.Element {
   const handleLogout = () => {
     if (staffIsAuthenticated) dispatch(staffLogout());
     if (userIsAuthenticated)  dispatch(userLogout());
-    router.push('/home');
+    router.push('/');
   };
 
   return (

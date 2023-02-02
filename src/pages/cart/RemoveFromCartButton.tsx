@@ -5,7 +5,9 @@ import type { ICartItem } from '../../store/cart/types';
 
 export default function RemoveFromCartButton({ item }: Props): JSX.Element {
   const dispatch = useDispatch();
+
   const handleClick = () => dispatch(cartRemoveItem(item));
+  
   return (<button className="remove-from-cart-button" onClick={handleClick}>Remove</button>);
 }
 

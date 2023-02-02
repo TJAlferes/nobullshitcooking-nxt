@@ -8,7 +8,7 @@ export function Recipes({ activateModal, deactivateModal, deleteName, getApplica
     <div className="dashboard-content">
       <h2>Recipes</h2>
 
-      <Link className="new-entity" href="/recipes/private/submit">Create New Recipe</Link>
+      <Link className="new-entity" href="/new-recipe">Create New Recipe</Link>
 
       {modalActive
         ? (

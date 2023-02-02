@@ -9,7 +9,7 @@ export function Ingredients({ deletePrivateIngredient, myPrivateIngredients }: P
     <div className="dashboard-content">
       <h2>Private Ingredients</h2>
 
-      <Link href="/user-ingredients/submit" className="new-entity">Create New Ingredient</Link>
+      <Link href="/new-ingredient" className="new-entity">Create New Ingredient</Link>
 
       {myPrivateIngredients.length
         ? myPrivateIngredients.map(i => (

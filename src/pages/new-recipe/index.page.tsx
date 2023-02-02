@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { initialUserProps, useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector } from '../../store';
 import { createNewRecipe, editRecipe } from '../../store/staff/recipe/actions';
 import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
 import type { IRequiredMethod } from '../../store/user/recipe/types';
@@ -56,17 +56,9 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
     19: false, 20: false, 21: false, 22: false, 23: false, 24: false
   });
 
-  const [ equipmentRows, setEquipmentRows ] = useState<IEquipmentRow[]>([
-    {key: uuid(), amount: "", type: "", id: ""},
-    {key: uuid(), amount: "", type: "", id: ""},
-    {key: uuid(), amount: "", type: "", id: ""},
-  ]);
-  const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
-    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
-    {key: uuid(), amount: "", measurementId: "", type: "", id: ""},
-  ]);
-  const [ subrecipeRows, setSubrecipeRows ] = useState<ISubrecipeRow[]>([]);
+  const [ equipmentRows, setEquipmentRows ] =   useState<IEquipmentRow[]>([{key: uuid(), amount: "", type: "", id: ""}]);
+  const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([{key: uuid(), amount: "", measurementId: "", type: "", id: ""}]);
+  const [ subrecipeRows, setSubrecipeRows ] =   useState<ISubrecipeRow[]>([]);
 
   // this is insane. do better.
   const [ recipePrevImage,      setRecipePrevImage ] =      useState("nobsc-recipe-default");
@@ -186,6 +178,10 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       isSubscribed = false;
     };
   }, [staffMessage, userMessage]);
+
+  useEffect(() => {
+    if (!authname) router.push("/");
+  }, [authname]);
 
   const addEquipmentRow = () => {
     const newEquipmentRows = equipmentRows.concat({key: uuid(), amount: "", type: "", id: ""});
@@ -655,5 +651,3 @@ type Props = {
   editing:   boolean;
   ownership: string;
 };
-
-export const getInitialProps = initialUserProps();  // getServerSideProps ?

@@ -14,6 +14,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
   const { id } = router.query;
 
   const dispatch = useDispatch();
+  const authname =             useSelector(state => state.auth.authname);
   const equipment =            useSelector(state => state.data.equipment);
   const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
@@ -90,6 +91,10 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       isSubscribed = false;
     };
   }, [staffMessage, userMessage]);
+
+  useEffect(() => {
+    if (!authname) router.push("/");
+  }, [authname]);
 
   const cancelImage = () => {
     setFullCrop("");

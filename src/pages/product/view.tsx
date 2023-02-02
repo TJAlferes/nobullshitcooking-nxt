@@ -4,11 +4,11 @@ import type { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton';
 import type { IProduct } from './index.page';
 
-export function ProductView({ products, feedback, loading, product, theme, userIsAuthenticated }: Props): JSX.Element {
+export function ProductView({ products, feedback, loading, product, userIsAuthenticated }: Props): JSX.Element {
   const { id, product_type_id, supplier_id, fullname } = product;
 
   return (
-    <div className={`product one-col-a ${theme}`}>
+    <div className="product one-col-a">
       <div className="product-top">
         <div className="product-top-left">
           <div></div>
@@ -26,6 +26,5 @@ type Props = {
   feedback:            string;
   loading:             boolean;
   product:             IProduct;
-  theme:               string;
   userIsAuthenticated: boolean;
 };

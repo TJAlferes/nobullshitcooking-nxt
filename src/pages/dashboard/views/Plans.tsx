@@ -8,9 +8,9 @@ export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName
     <div className="dashboard-content">
       <h2>Plans</h2>
 
-      {(!creatingPlan && !editingId) && <Link href="/user-plan/submit"              className="new-entity">Create New Plan</Link>}
-      {( creatingPlan && !editingId) && <Link href="/user-plan/submit"              className="new-entity">Finish Creating Plan</Link>}
-      {(!creatingPlan &&  editingId) && <Link href={`/user-plan/edit/${editingId}`} className="new-entity">Finish Updating Plan</Link>}
+      {(!creatingPlan && !editingId) && <Link href="/new-plan"              className="new-entity">Create New Plan</Link>}
+      {( creatingPlan && !editingId) && <Link href="/new-plan"              className="new-entity">Finish Creating Plan</Link>}
+      {(!creatingPlan &&  editingId) && <Link href={`/new-plan/${editingId}`} className="new-entity">Finish Updating Plan</Link>}
 
       {modalActive
         ? (
@@ -36,9 +36,7 @@ export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName
           <div className="dashboard-item" key={p.id}>
             <span className="name"><Link href={`/user-plan/${p.id}`}>{p.name}</Link></span>
 
-            {(!creatingPlan && !editingId) &&
-              <span className="action"><Link href={`/user-plan/edit/${p.id}`}>Edit</Link></span>
-            }
+            {(!creatingPlan && !editingId) && <span className="action"><Link href={`/new-plan/${p.id}`}>Edit</Link></span>}
 
             {(!creatingPlan && !editingId) && <span className="delete" onClick={() => activateModal(p.id, p.name)}>Delete</span>}
           </div>

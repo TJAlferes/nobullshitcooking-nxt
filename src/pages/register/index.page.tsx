@@ -9,6 +9,7 @@ import { RegisterView } from './view';
 export default function Register({ confirmingUser }: Props): JSX.Element {
   const router = useRouter();
   const dispatch = useDispatch();
+  const authname = useSelector(state => state.auth.authname);
   const message = useSelector(state => state.auth.message);
   const [ confirmationCode, setConfirmationCode ] = useState("");
   const [ email,            setEmail ] =            useState("");
@@ -29,6 +30,10 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     };
   }, [message]);
 
+  useEffect(() => {
+    if (authname) router.push("/dashboard");
+  }, [authname]);
+
   const confirmationCodeChange = (e: SyntheticEvent) => setConfirmationCode((e.target as HTMLInputElement).value);
   const emailChange =            (e: SyntheticEvent) => setEmail((e.target as HTMLInputElement).value);
   const usernameChange =         (e: SyntheticEvent) => setUsername((e.target as HTMLInputElement).value);
@@ -39,7 +44,7 @@ export default function Register({ confirmingUser }: Props): JSX.Element {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     setLoading(true);
-    dispatch(userRegister(email, password, username, router));
+    dispatch(userRegister(email, password, username, router));  // do you really need to pass the router here?
   };
 
   const registerKeyUp = (e: React.KeyboardEvent) => {

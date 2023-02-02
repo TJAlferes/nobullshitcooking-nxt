@@ -12,7 +12,6 @@ export default function Ingredient(): JSX.Element {
 
   const officialIngredients =  useSelector(state => state.data.ingredients);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
-  const theme = useSelector(state => state.theme.theme);
 
   const [ ingredient, setIngredient ] = useState<IIngredient>();
 
@@ -34,5 +33,5 @@ export default function Ingredient(): JSX.Element {
 
   return !ingredient
     ? <LoaderSpinner />
-    : <IngredientView ingredient={ingredient} myPrivateIngredients={myPrivateIngredients} theme={theme} />;
+    : <IngredientView ingredient={ingredient} myPrivateIngredients={myPrivateIngredients} />;
 }

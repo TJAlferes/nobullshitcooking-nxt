@@ -14,9 +14,8 @@ export function StaffDashboard({
   recipes,
   staffDeleteEquipment,
   staffDeleteIngredient,
-  staffDeleteRecipe,
-  theme
-}: Props): JSX.Element {
+  staffDeleteRecipe
+}: PropsFromRedux): JSX.Element {
   const [ deleteId,    setDeleteId ] =    useState<number | undefined>();
   const [ deleteName,  setDeleteName ] =  useState("");
   const [ feedback,    setFeedback ] =    useState("");
@@ -84,7 +83,6 @@ export function StaffDashboard({
       ingredients={ingredients}
       loading={loading}
       modalActive={modalActive}
-      theme={theme}
       recipes={recipes}
       tab={tab}
     />
@@ -103,10 +101,6 @@ interface RootState {
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-
-type Props = PropsFromRedux & {
-  theme: string;
-};
 
 const mapStateToProps = (state: RootState) => ({
   equipment:   state.data.officialEquipment,

@@ -14,6 +14,17 @@ export function* getInitialDataSaga() {
   }
 }
 
+export function* getInitialUserDataSaga() {
+  try {
+    const { data } = yield call([axios, axios.post], `${endpoint}/user/data-init`, {}, {withCredentials: true});
+    yield put(getInitialUserData(data));
+  } catch (err) {
+    //yield put(getInitialUserDataFailed());
+  }
+}
+
+// refetches
+
 export const getCuisinesSaga =          makeDataSaga("/cuisine",                 "cuisines");
 export const getEquipmentsSaga =        makeDataSaga("/equipment/official/all",  "equipment");
 export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",          "equipmentTypes");
@@ -26,17 +37,6 @@ export const getProductCategoriesSaga = makeDataSaga("/product-category",       
 export const getProductTypesSaga =      makeDataSaga("/product-type",            "productTypes");
 export const getRecipesSaga =           makeDataSaga("/recipe/official/all",     "recipes");
 export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",             "recipeTypes");
-
-export function* getInitialUserDataSaga() {
-  try {
-    console.log('~~~FLAG~~~');
-    const { data } = yield call([axios, axios.post], `${endpoint}/user/data-init`, {}, {withCredentials: true});
-    console.log(data);
-    yield put(getInitialUserData(data));
-  } catch (err) {
-    //yield put(getInitialUserDataFailed());
-  }
-}
 
 export const getMyFavoriteRecipesSaga =    makeUserDataSaga("/favorite-recipe",    "myFavoriteRecipes");
 export const getMyFriendshipsSaga =        makeUserDataSaga("/friendship",         "myFriendships");

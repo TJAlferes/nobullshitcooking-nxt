@@ -17,7 +17,6 @@ export default function Chat(): JSX.Element {
 
   const authname =      useSelector(state => state.auth.authname);
   const message =       useSelector(state => state.user.message);
-  const theme =         useSelector(state => state.theme.theme);
   const windowFocused = useSelector(state => state.nobscapp.windowFocused);
 
   const [ debounced,     setDebounced ] =     useState(false);
@@ -200,7 +199,6 @@ export default function Chat(): JSX.Element {
       send={send}
       startPrivateMessage={startPrivateMessage}
       status={status}
-      theme={theme}
       users={sortedUsers}
     />
   );

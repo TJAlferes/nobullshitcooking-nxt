@@ -21,7 +21,6 @@ export default function Recipe(): JSX.Element {
   const myPublicRecipes =     useSelector(state => state.data.myPublicRecipes);
   const mySavedRecipes =      useSelector(state => state.data.mySavedRecipes);
   const message =             useSelector(state => state.user.message);
-  const theme =               useSelector(state => state.theme.theme);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
   const [ favorited, setFavorited ] = useState(false);
@@ -99,7 +98,6 @@ export default function Recipe(): JSX.Element {
         recipe={recipe}
         save={save}
         saved={saved}
-        theme={theme}
         userIsAuthenticated={userIsAuthenticated}
       />
     );

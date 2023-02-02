@@ -3,7 +3,7 @@ import { Day, ExpandedDay } from './components';
 
 export function PlanView({ expandedDay, planName, planData }: Props): JSX.Element {
   return (
-    <div className="plan two-column-a">
+    <div className="plan two-col-a">
       <div className="heading">
         <h1>Plan</h1>
         <div className="name">

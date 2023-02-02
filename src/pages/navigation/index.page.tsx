@@ -6,7 +6,7 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 
 const s3Path = 'https://s3.amazonaws.com/nobsc-images-01/content';
 
-export default function Navigation({ links, name, theme, path }: Props): JSX.Element {
+export default function Navigation({ links, name, path }: Props): JSX.Element {
   const [ contentLinks, setContentLinks ] = useState<IContentLink[] | null>(null);
 
   useEffect(() => {
@@ -18,10 +18,10 @@ export default function Navigation({ links, name, theme, path }: Props): JSX.Ele
   }, []);
 
   return (
-    <div className={`cms-navigation one-column-a ${theme}`}>
+    <div className="cms-navigation one-col-a">
       <h1>{name}</h1>
 
-      <div className={`nav-grid-a ${theme}`}>
+      <div className="nav-grid-a">
         {links && links.map((link: any) => (
           <div className="nav-grid-a-item" key={link.path}>
             <Link href={`${link.path}`}>
@@ -49,7 +49,6 @@ export default function Navigation({ links, name, theme, path }: Props): JSX.Ele
 type Props = {
   links: any[];
   name:  string;
-  theme: string;
   path:  string;
 };
 
