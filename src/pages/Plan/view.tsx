@@ -1,9 +1,9 @@
 import type { IData } from '../../store/plannerView/types';
 import { Day, ExpandedDay } from './components';
 
-export function PlanView({ expandedDay, planName, planData, theme }: Props): JSX.Element {
+export function PlanView({ expandedDay, planName, planData }: Props): JSX.Element {
   return (
-    <div className={`plan two-column-a ${theme}`}>
+    <div className="plan two-column-a">
       <div className="heading">
         <h1>Plan</h1>
         <div className="name">
@@ -48,5 +48,4 @@ type Props = {
   expandedDay: number | null;
   planName:    string;
   planData:    IData;
-  theme:       string;
 };

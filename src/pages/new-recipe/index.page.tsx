@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { useTypedSelector as useSelector } from '../../store';
+import { initialUserProps, useTypedSelector as useSelector } from '../../store';
 import { createNewRecipe, editRecipe } from '../../store/staff/recipe/actions';
 import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
 import type { IRequiredMethod } from '../../store/user/recipe/types';
@@ -655,3 +655,5 @@ type Props = {
   editing:   boolean;
   ownership: string;
 };
+
+export const getInitialProps = initialUserProps();  // getServerSideProps ?

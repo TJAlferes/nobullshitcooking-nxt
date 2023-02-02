@@ -34,10 +34,10 @@ export function UserNav(): JSX.Element {
       {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login">Sign In</Link>}
 
       {staffIsAuthenticated && <Link href="/staff-dashboard">{`Hello, ${authname}`}</Link>}
-      {staffIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
+      {staffIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>}
 
       {userIsAuthenticated && <Link href="/dashboard">{`Hello, ${authname}`}</Link>}
-      {userIsAuthenticated && <span onClick={handleLogout}>Sign Out</span>}
+      {userIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>}
 
       {/*<Link href="/cart"><a  data-test="cart">Cart</Link>*/}
     </div>

@@ -1,17 +1,20 @@
-function buildMatch(term: string, index: string) {
-  let match;
-  if (index === "recipes")     match = {title: {query: term}};
-  if (index === "ingredients") match = {fullname: {query: term}};
-  if (index === "equipments")  match = {name: {query: term}};
+import type { RequestState, QueryConfig, ResponseState, AutocompleteResponseState } from '@elastic/search-ui';
 
-  return term ? {match} : {match_all: {}};
+function buildMatch(searchTerm: string | undefined, index: string) {
+  let match;
+  if (index === "recipes")     match = {title: {query: searchTerm}};
+  if (index === "ingredients") match = {fullname: {query: searchTerm}};
+  if (index === "equipments")  match = {name: {query: searchTerm}};
+
+  return searchTerm ? {match} : {match_all: {}};
 }
 
-function buildFrom(current: number, resultsPerPage: number) {
+function buildFrom(current: number | undefined, resultsPerPage: number | undefined) {
+  if (!current || !resultsPerPage) return;
   return (current - 1) * resultsPerPage;
 }
 
-function buildSort(sortDirection: string, sortField: string) {
+function buildSort(sortDirection: string | undefined, sortField: string | undefined) {
   if (!sortDirection || !sortField) return;
   return [{[`${sortField}.keyword`]: sortDirection}];
 }
@@ -84,12 +87,12 @@ buildSearchRequest does that conversion.
 
 And similar things for filters, searchTerm, sort, etc.
 */
-export function buildSearchRequest(state: any, index: string) {
+export function buildSearchRequest(state: RequestState, index: string) {
   const { current, filters, resultsPerPage, searchTerm, sortDirection, sortField } = state;
 
-  const match = buildMatch(searchTerm, index);
+  const match =  buildMatch(searchTerm, index);
   const filter = buildRequestFilter(filters, index);
-  const sort = buildSort(sortDirection, sortField);
+  const sort =   buildSort(sortDirection, sortField);
 
   const from = buildFrom(current, resultsPerPage);  // starting
   const size = resultsPerPage;                      // limit

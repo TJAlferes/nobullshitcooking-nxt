@@ -33,6 +33,7 @@
     "react-image-crop": "^10.0.9",
     "react-redux": "^8.0.5",
     "redux": "^4.2.0",
+    "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.2",
     "socket.io-client": "^4.5.4",
     "tslib": "^2.4.1",

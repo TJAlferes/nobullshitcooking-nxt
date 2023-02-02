@@ -1,16 +1,24 @@
+function toObject(value: any, snippet: any) {
+  return {raw: value, ...(snippet && {snippet})};
+}
+
 function getHighlight(hit: any, fieldName: string) {
   if (hit.highlight[fieldName]?.length < 1) return;
   return hit.highlight[fieldName][0];
 }
 
 function buildResults(hits: any) {
-  const addEachKeyValueToObject = (acc: any, [key, value]: (Default|string)[]) => ({...acc, [key as string]: value});
-
-  const toObject = (value: any, snippet: any) => ({raw: value, ...(snippet && {snippet})});
+  const addEachKeyValueToObject = (
+    acc: any,
+    [ key, value ]: (Default|string)[]
+  ) => ({
+    ...acc,
+    [key as string]: value
+  });
 
   return hits.map((record: any) =>
     Object.entries(record._source)
-    .map(([fieldName, fieldValue]) => [fieldName, toObject(fieldValue, getHighlight(record, fieldName))])
+    .map(([ fieldName, fieldValue ]) => [fieldName, toObject(fieldValue, getHighlight(record, fieldName))])
     .reduce(addEachKeyValueToObject, {})
   );
 }
@@ -63,21 +71,18 @@ function buildStateFacets(aggs: any, index: string) {
       ...(method_name && {method_name}),
       ...(recipe_type_name && {recipe_type_name})
     };
-
     if (Object.keys(facets).length > 0) return facets;
   }
   
   if (index === "ingredients") {
     const ingredient_type_name = getValueFacet(aggs, "ingredient_type_name");
     const facets = {...(ingredient_type_name && {ingredient_type_name})};
-
     if (Object.keys(facets).length > 0) return facets;
   }
   
   if (index === "equipments") {
     const equipment_type_name = getValueFacet(aggs, "equipment_type_name");
     const facets = {...(equipment_type_name && {equipment_type_name})};
-
     if (Object.keys(facets).length > 0) return facets;
   }
 }
@@ -92,11 +97,11 @@ buildSearchState iterates through "hits" and reformats them to "results".
 
 Similar for totals and facets.
 */
-export function buildSearchState(response: any, resultsPerPage: number | undefined, currentIndex: string) {
-  const results = buildResults(response.hits.hits);
+export function buildSearchState(response: any, resultsPerPage: number | undefined, index: string) {
+  const results =      buildResults(response.hits.hits);
   const totalResults = response.hits.total.value;
-  const totalPages = buildTotalPages(resultsPerPage, totalResults);
-  const facets = buildStateFacets(response.aggregations, currentIndex);
+  const totalPages =   buildTotalPages(resultsPerPage, totalResults);
+  const facets =       buildStateFacets(response.aggregations, index);
   
   return {results, totalPages, totalResults, ...(facets && {facets})};
 }

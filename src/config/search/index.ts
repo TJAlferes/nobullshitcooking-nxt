@@ -28,11 +28,11 @@ export class SearchConnector implements APIConnector {
   async onAutocomplete(state: RequestState, queryConfig: AutocompleteQueryConfig): Promise<any> {
     const index = this.store.getState().search.index;
 
-      const response = await axios.post(`${endpoint}/search/autocomplete/${index}`, {searchTerm: state.searchTerm}, {withCredentials: true});
+    const response = await axios.post(`${endpoint}/search/autocomplete/${index}`, {searchTerm: state.searchTerm}, {withCredentials: true});
 
-      const { results } = buildAutocompleteState(response.data.found, index);
+    const { results } = buildAutocompleteState(response.data.found, index);
 
-      return {autocompletedResults: results};
+    return {autocompletedResults: results};
   }
 
   async onAutocompleteResultClick(params: any) {

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../store';
+import { initialUserProps, useTypedSelector as useSelector } from '../../store';
 import { updateLocalAvatar } from '../../store/auth/actions';
 import { submitAvatar            as userSubmitAvatar } from '../../store/user/avatar/actions';
 import { unfavoriteRecipe        as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
@@ -209,3 +209,5 @@ export default function Dashboard(): JSX.Element {
     />
   );
 }
+
+export const getInitialProps = initialUserProps();  // getServerSideProps ?

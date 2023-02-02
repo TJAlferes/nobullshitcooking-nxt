@@ -4,11 +4,11 @@
   flex-flow: row;
   flex-wrap: nowrap;
   justify-content: center;
-  max-width: 300px;
-  min-width: 300px;
+  max-width: 320px;
+  min-width: 320px;
   order: 3;
   padding: 17px 15px 0 0;
-  width: 300px;
+  width: 320px;
 }
 
 .sun {
@@ -24,7 +24,8 @@
 .user-nav .mode {line-height: 16px;}
 
 .user-nav .mode,
-.user-nav a {
+.user-nav a,
+.user-nav .logout {
   color: #fff;
   cursor: pointer;
   display: block;
@@ -35,6 +36,8 @@
 }
 
 .user-nav a:hover,
-.user-nav a:active {
+.user-nav a:active,
+.user-nav .logout:hover,
+.user-nav .logout:active {
   text-decoration: underline;
 }

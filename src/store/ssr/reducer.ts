@@ -9,7 +9,8 @@ export const ssrReducer = (state: ISSRState = initialState, action: any) => {
     case HYDRATE:
       if (action.payload.app === 'init')  delete action.payload.app;
       if (action.payload.page === 'init') delete action.payload.page;
-      return {...state, ...action.payload};  // which one ??? //return {...state, server: {...state.server, ...action.payload.server}};
+      //return {...state, server: {...state.server, ...action.payload.server}};  // which one ???
+      return {...state, ...action.payload};                                      // which one ???
     
     case SERVER_ACTION: return {...state, server: {...state.server, tick: action.payload.server}};
     case CLIENT_ACTION: return {...state, client: {...state.client, tick: action.payload.server}};

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo } from 'react';
 import AriaModal from 'react-aria-modal';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -30,54 +30,14 @@ export function NewPlanView({
   tab,
   theme
 }: Props): JSX.Element {
-  // move out?
-  const memoizedMonthlyPlan = useMemo(() => {
-    return (
-      <div className="plan__monthly-plan">
-        <div className="monthly-plan">
-          <div className="header">
-            <span>Sunday</span>
-            <span>Monday</span>
-            <span>Tuesday</span>
-            <span>Wednesday</span>
-            <span>Thursday</span>
-            <span>Friday</span>
-            <span>Saturday</span>
-          </div>
-
-          <div className="body">
-            {Object.keys(planData).map((recipeList, i) => (
-              <div className="monthly-plan__body-day" key={i} >
-                <div className="body-day__content">
-                  <Day day={i + 1} expandedDay={expandedDay} recipes={planData[Number(recipeList)]} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="expanded-day-container">
-          {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={planData[expandedDay]} />}
-        </div>
-      </div>
-    );
-  }, [planData, expandedDay]);
-
-  // move out?
-  const memoizedRecipes = useMemo(() => {
-    const tabToList: ITabToList = {
-      "official": officialRecipes,
-      "private":  myPrivateRecipes,
-      "public":   myPublicRecipes,
-      "favorite": myFavoriteRecipes,
-      "saved":    mySavedRecipes
-    };
-    const recipes: IWorkRecipe[] = tabToList[tab];
-
-    // Even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
-    // they are set at this stage because they are used when viewing a plan (Plan-)
-    return <Recipes day={0} expandedDay={expandedDay} recipes={recipes.map(({ id, title, recipe_image, owner_id }) => ({key: uuidv4(), id, title, recipe_image, owner_id}))} />;
-  }, [tab]);
+  const tabToList: ITabToList = {
+    "official": officialRecipes,
+    "private":  myPrivateRecipes,
+    "public":   myPublicRecipes,
+    "favorite": myFavoriteRecipes,
+    "saved":    mySavedRecipes
+  };
+  const recipes: IWorkRecipe[] = tabToList[tab];
 
   return (
     <div className={`new-plan two-col-a ${theme}`}>
@@ -90,15 +50,16 @@ export function NewPlanView({
       </div>
 
       <div className="calendar">
-        {memoizedMonthlyPlan}
+        <MonthlyPlan expandedDay={expandedDay} planData={planData} />
+        
         <div className="recipes-tabs">
-          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>"Official"</button>
-          <button className={(tab === "private") ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>"My Private"</button>
-          <button className={(tab === "public") ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>"My Public"</button>
-          <button className={(tab === "favorite") ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>"My Favorite"</button>
-          <button className={(tab === "saved") ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>"My Saved"</button>
+          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>Official</button>
+          <button className={(tab === "private") ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>My Private</button>
+          <button className={(tab === "public") ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>My Public</button>
+          <button className={(tab === "favorite") ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
+          <button className={(tab === "saved") ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
         </div>
-        {memoizedRecipes}
+        <MemoizedRecipes expandedDay={expandedDay} recipes={recipes} />
       </div>
 
       <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
@@ -139,6 +100,50 @@ export function NewPlanView({
   );
 }
 
+const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, planData }: MonthlyPlanProps) {
+  return (
+    <div className="plan__monthly-plan">
+      <div className="monthly-plan">
+        <div className="header">
+          <span>Sunday</span>
+          <span>Monday</span>
+          <span>Tuesday</span>
+          <span>Wednesday</span>
+          <span>Thursday</span>
+          <span>Friday</span>
+          <span>Saturday</span>
+        </div>
+
+        <div className="body">
+          {Object.keys(planData).map((recipeList, i) => (
+            <div className="monthly-plan__body-day" key={i} >
+              <div className="body-day__content">
+                <Day day={i + 1} expandedDay={expandedDay} recipes={planData[Number(recipeList)]} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="expanded-day-container">
+        {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={planData[expandedDay]} />}
+      </div>
+    </div>
+  );
+});
+
+const MemoizedRecipes = memo(function MemoizedRecipes({ expandedDay, recipes }: MemoizedRecipesProps) {
+  // Even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
+  // they are set at this stage because they are used when viewing a plan (Plan-)
+  return (
+    <Recipes
+      day={0}
+      expandedDay={expandedDay}
+      recipes={recipes.map(({ id, title, recipe_image, owner_id }) => ({key: uuidv4(), id, title, recipe_image, owner_id}))}
+    />
+  );
+});
+
 function ToolTip() {
   return (
     <div>
@@ -156,6 +161,7 @@ function ToolTip() {
     </div>
   );
 }
+
 interface ITabToList {
   [index: string]: any;
   "official": IWorkRecipe[];
@@ -190,3 +196,13 @@ type Props = {
   tab:                               string;
   theme:                             string;
 };
+
+type MonthlyPlanProps = {
+  expandedDay: number | null;
+  planData:    IData;
+}
+
+type MemoizedRecipesProps = {
+  expandedDay: number | null;
+  recipes:     IWorkRecipe[];
+}

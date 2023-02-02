@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../store';
+import { initialProps, useTypedSelector as useSelector } from '../../store';
 import { staffLogin, userLogin } from '../../store/auth/actions';
 import { LoginView } from './view';
 
@@ -69,3 +69,5 @@ export default function Login(): JSX.Element {
     />
   );
 }
+
+export const getInitialProps = initialProps();  // getServerSideProps ?
