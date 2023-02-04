@@ -3,7 +3,7 @@ import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { removeStorageItem } from '../../utils/storageHelpers';
-import { initUser } from '../data/actions';
+//import { initUser } from '../data/actions';
 import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
 import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
 
@@ -38,12 +38,15 @@ export function* staffLogoutSaga(action: IStaffLogout) {
 
 export function* userLoginSaga(action: IUserLogin) {
   try {
+    const { email, password, router } = action;
     const { data: { message, username } } =
-      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email: action.email, pass: action.password}}, {withCredentials: true});
+      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email, pass: password}}, {withCredentials: true});
 
     if (message == 'Signed in.') {
-      yield put(initUser());
       yield put(userDisplay(username));
+      //yield put(initUser());
+      yield call([router, router.push], '/');  // '/dashboard'
+      //yield call(() => router.push('/dashboard'));
     }
     else yield put(authMessage(message));
   } catch(err) {

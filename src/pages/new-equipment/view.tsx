@@ -10,7 +10,7 @@ export function NewEquipmentView({
   crop,
   equipmentTypes,
   description,
-  editing,
+  editingId,
   feedback,
   fullCrop,
   changeDescription,
@@ -26,7 +26,6 @@ export function NewEquipmentView({
   prevImage,
   staffIsAuthenticated,
   submit,
-  theme,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
@@ -36,7 +35,7 @@ export function NewEquipmentView({
     : 'https://s3.amazonaws.com/nobsc-user-equipment';
 
   return (
-    <div className={`new-equipment one-col-a ${theme}`}>
+    <div className="new-equipment one-col-a">
       <h1>New Equipment</h1>
 
       <p className="feedback">{feedback}</p>
@@ -58,7 +57,7 @@ export function NewEquipmentView({
 
         {!image && (
           <div>
-            {!editing ? <img src={`${dir}/nobsc-equipment-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
+            {!editingId ? <img src={`${dir}/nobsc-equipment-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
@@ -103,7 +102,7 @@ type Props = {
   crop:                                                     Crop;
   equipmentTypes:                                           IEquipmentType[];
   description:                                              string;
-  editing:                                                  boolean;
+  editingId:                                                number | null;
   feedback:                                                 string;
   fullCrop:                                                 string;
   changeDescription(e: React.SyntheticEvent<EventTarget>):  void;
@@ -119,7 +118,6 @@ type Props = {
   prevImage:                                                string;
   staffIsAuthenticated?:                                    boolean;
   submit():                                                 void;
-  theme:                                                    string;
   tinyCrop:                                                 string;
   typeId:                                                   number;
 };

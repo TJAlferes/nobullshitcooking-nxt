@@ -9,19 +9,17 @@ import { createNewIngredient, editIngredient } from '../../store/staff/ingredien
 import { createNewPrivateIngredient, editPrivateIngredient } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './view';
 
-export function NewIngredient({ editing }: Props): JSX.Element {
+export default function NewIngredient({ editing }: Props): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const authname =             useSelector(state => state.auth.authname);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage =         useSelector(state => state.staff.message);
   const userMessage =          useSelector(state => state.user.message);
   const ingredients =          useSelector(state => state.data.ingredients);
   const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
-  const theme =                useSelector(state => state.theme.theme);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -46,10 +44,6 @@ export function NewIngredient({ editing }: Props): JSX.Element {
   const [ tinyCrop, setTinyCrop ] = useState("");
 
   const imageRef = useRef<HTMLImageElement>();
-
-  useEffect(() => {
-    if (!authname) router.push("/");
-  }, [authname]);
 
   useEffect(() => {
     const getExistingIngredientToEdit = () => {
@@ -203,7 +197,6 @@ export function NewIngredient({ editing }: Props): JSX.Element {
       prevImage={prevImage}
       staffIsAuthenticated={staffIsAuthenticated}
       submit={submit}
-      theme={theme}
       tinyCrop={tinyCrop}
       typeId={typeId}
     />
@@ -213,5 +206,3 @@ export function NewIngredient({ editing }: Props): JSX.Element {
 type Props = {
   editing: boolean;
 };
-
-export default NewIngredient;

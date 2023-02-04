@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -9,7 +9,7 @@ import { NewPlanView } from './view';
 
 export function NewPlan({ editing }: Props): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = useSearchParams();
 
   const dispatch = useDispatch();
   const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
@@ -150,7 +150,6 @@ export function NewPlan({ editing }: Props): JSX.Element {
       planName={planName}
       planData={planData}
       tab={tab}
-      theme={theme}
     />
   );
 }

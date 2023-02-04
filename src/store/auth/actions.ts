@@ -1,4 +1,4 @@
-import type { NextRouter } from 'next/router';
+import type { useRouter } from 'next/navigation';
 
 import { actionTypes } from './types';
 
@@ -21,12 +21,12 @@ export const staffDisplay = (authname: string) =>                ({type: STAFF_D
 export const staffLogin =   (email: string, password: string) => ({type: STAFF_LOGIN, email, password});
 export const staffLogout =  () =>                                ({type: STAFF_LOGOUT});
 
-export const userDisplay = (authname: string) =>                ({type: USER_DISPLAY, authname});
-export const userLogin =   (email: string, password: string) => ({type: USER_LOGIN, email, password});
-export const userLogout =  () =>                                ({type: USER_LOGOUT});
+export const userDisplay = (authname: string) =>                                    ({type: USER_DISPLAY, authname});
+export const userLogin =   (email: string, password: string, router: ReturnType<typeof useRouter>) => ({type: USER_LOGIN, email, password, router});
+export const userLogout =  () =>                                                    ({type: USER_LOGOUT});
 
-export const userRegister = (email: string, password: string, username: string, router: NextRouter) =>
+export const userRegister = (email: string, password: string, username: string, router: ReturnType<typeof useRouter>) =>
   ({type: USER_REGISTER, email, password, username, router});
 
-export const userVerify = (email: string, password: string, confirmationCode: string, router: NextRouter) =>
+export const userVerify = (email: string, password: string, confirmationCode: string, router: ReturnType<typeof useRouter>) =>
   ({type: USER_VERIFY, email, password, confirmationCode, router});

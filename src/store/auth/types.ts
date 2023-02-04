@@ -1,4 +1,4 @@
-import type { NextRouter } from 'next/router';
+import type { useRouter } from 'next/navigation';
 
 export const actionTypes = {
   CHECK_STATE:   'CHECK_STATE',
@@ -84,6 +84,7 @@ export interface IUserLogin {
   type:     typeof actionTypes.USER_LOGIN;
   email:    string;
   password: string;
+  router:   ReturnType<typeof useRouter>;
 }
 
 export interface IUserLogout {
@@ -95,7 +96,7 @@ export interface IUserRegister {
   email:    string;
   password: string;
   username: string;
-  router:   NextRouter;
+  router:   ReturnType<typeof useRouter>;
 }
 
 export interface IUserVerify {
@@ -103,5 +104,5 @@ export interface IUserVerify {
   email:            string;
   password:         string;
   confirmationCode: string;
-  router:           NextRouter;
+  router:           ReturnType<typeof useRouter>;
 }

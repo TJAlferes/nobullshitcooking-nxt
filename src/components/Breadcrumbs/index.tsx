@@ -1,50 +1,47 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 // Adapted from https://github.com/NiklasMencke/nextjs-breadcrumbs
 
 export function Breadcrumbs() {
-  const router = useRouter();
+  const pathname = usePathname();
   const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>();
 
   // TO DO: make this logic more clear
   // TO DO: is this effect even needed?
   useEffect(() => {
-    if (router.isReady) {
-      if (router.pathname === "/profile/:username") {
-        setBreadcrumbs([]);
-        return;
-      }
-      if (router.pathname === "/new-equipment") {
-        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
-        return;
-      }
-      if (router.pathname === "/new-ingredient") {
-        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
-        return;
-      }
-      if (router.pathname === "/new-plan") {
-        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
-        return;
-      }
-      if (router.pathname === "/new-recipe") {
-        setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
-        return;
-      }
-      
-      const linkPath = router.asPath.split('/');
-      linkPath.shift();
-      const pathArray = linkPath.map((path, i) => ({name: convert(path), href: '/' + linkPath.slice(0, i + 1).join('/')}));
-      setBreadcrumbs(pathArray);
+    if (pathname === "/profile/:username") {
+      setBreadcrumbs([]);
+      return;
     }
-  }, [router.isReady]);
+    if (pathname === "/new-equipment") {
+      setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Equipment", href: "#"}]);
+      return;
+    }
+    if (pathname === "/new-ingredient") {
+      setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Ingredient", href: "#"}]);
+      return;
+    }
+    if (pathname === "/new-plan") {
+      setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Plan", href: "#"}]);
+      return;
+    }
+    if (pathname === "/new-recipe") {
+      setBreadcrumbs([{name: "Dashboard", href: "/dashboard"}, {name: "New Recipe", href: "#"}]);
+      return;
+    }
+    const linkPath = pathname?.split('/');
+    linkPath?.shift();
+    const pathArray = linkPath?.map((path, i) => ({name: convert(path), href: '/' + linkPath.slice(0, i + 1).join('/')}));
+    setBreadcrumbs(pathArray);
+  }, []);
 
   if (!breadcrumbs) return null;
 
-  if ( router.pathname === "/home" || router.pathname.match(/^\/$/) ) return null;
+  if ( pathname === "/home" || pathname?.match(/^\/$/) ) return null;
 
-  console.log(router.pathname);
+  console.log(pathname);
   console.log(breadcrumbs);
 
   return (

@@ -87,11 +87,10 @@ export function NewRecipeView({
   staffIsAuthenticated,
   submit,
   subrecipeRows,
-  theme,
   title
 }: Props): JSX.Element {
   return (
-    <div className={`new-recipe one-col-a ${theme}`}>
+    <div className="new-recipe one-col-a">
       <h1>New Recipe</h1>
 
       <p className="feedback">{feedback}</p>
@@ -292,6 +291,7 @@ export function NewRecipeView({
     </div>
   );
 }
+
 type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
@@ -377,6 +377,5 @@ type Props = {
   staffIsAuthenticated?:                                  boolean;
   submit():                                               void;
   subrecipeRows:                                          ISubrecipeRow[];
-  theme:                                                  string;
   title:                                                  string;
 };

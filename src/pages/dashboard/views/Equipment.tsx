@@ -18,7 +18,7 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
 
             <span className="name"><Link href={`/user-equipment/${e.id}`}>{e.name}</Link></span>
 
-            <span className="action"><Link href={`/new-equipment/${e.id}`}>Edit</Link></span>
+            <span className="action"><Link href={{pathname: '/new-equipment', query: {id: e.id}}}>Edit</Link></span>
 
             <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
           </div>

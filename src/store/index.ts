@@ -109,7 +109,18 @@ export function initialProps() {
 export function initialUserProps() {
   return wrapper.getInitialPageProps(
     store => async (context) => {
-      store.dispatch(init());
+      store.dispatch(initUser());
+      store.dispatch(END);
+      await (store as SagaStore).sagaTask?.toPromise();
+      return {props: {}};
+    }
+  );
+}
+
+export function serverUserProps() {
+  return wrapper.getServerSideProps(
+    store => async (context) => {
+      console.log("hi");
       store.dispatch(initUser());
       store.dispatch(END);
       await (store as SagaStore).sagaTask?.toPromise();

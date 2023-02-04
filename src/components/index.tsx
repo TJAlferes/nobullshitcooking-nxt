@@ -10,5 +10,6 @@ export { LoaderButton }   from './LoaderButton';
 export { LoaderSpinner }  from './LoaderSpinner';
 export { Logo }           from './Logo';
 export { Main }           from './Main';
+export { AuthenticatedRoute, Guard, UnauthenticatedRoute } from './Routes';
 export { StarRating }     from './StarRating';
 export { Theme }          from './Theme';

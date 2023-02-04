@@ -6,8 +6,10 @@ import { getInitialData, getData, getInitialUserData, getUserData } from './acti
 import type { IInitialData, IInitialUserData } from './types';
 
 export function* getInitialDataSaga() {
+  console.log('0getInitialDataSaga');
   try {
     const { data } = yield call([axios, axios.get], `${endpoint}/data-init`);
+    console.log('1getInitialDataSaga');
     yield put(getInitialData(data));
   } catch (err) {
     //yield put(getInitialDataFailed());
@@ -15,11 +17,38 @@ export function* getInitialDataSaga() {
 }
 
 export function* getInitialUserDataSaga() {
+  console.log('0getInitialUserDataSaga');
   try {
-    const { data } = yield call([axios, axios.post], `${endpoint}/user/data-init`, {}, {withCredentials: true});
-    yield put(getInitialUserData(data));
-  } catch (err) {
-    //yield put(getInitialUserDataFailed());
+    const { data } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/data-init`,
+      {something: "anything"},
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      }
+    );
+    console.log('1getInitialUserDataSaga');
+    if (data.message) console.log(data.message);
+    else              yield put(getInitialUserData(data));
+  } catch (err: any) {
+    console.log('ERRgetInitialUserDataSaga');
+    if (err.response) {
+      // Server responded with a status code outside of 2xx
+      console.log(err.response.data);
+      console.log(err.response.status);
+      console.log(err.response.headers);
+    } else if (err.request) {
+      // No response was received
+      // `err.request` is: an instance of XMLHttpRequest in the browser, an instance of http.ClientRequest in node.js
+      console.log(err.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', err.message);
+    }
+    console.log(err.config);
   }
 }
 

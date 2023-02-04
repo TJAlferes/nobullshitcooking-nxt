@@ -7,7 +7,7 @@ export function Logo(): JSX.Element {
 
   return (
     <div className={`logo ${theme}`}>
-      <Link href="/">
+      <Link href={{pathname: "/"}}>
         <img
           className="home-link"
           src={theme === "light"

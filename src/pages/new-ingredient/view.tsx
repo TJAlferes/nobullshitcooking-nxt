@@ -26,7 +26,6 @@ export function NewIngredientView({
   prevImage,
   staffIsAuthenticated,
   submit,
-  theme,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
@@ -36,7 +35,7 @@ export function NewIngredientView({
     : 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
   return (
-    <div className={`new-ingredient one-col-a ${theme}`}>
+    <div className="new-ingredient one-col-a">
       <h1>New Ingredient</h1>
 
       <p className="feedback">{feedback}</p>
@@ -119,7 +118,6 @@ type Props = {
   prevImage:                                                string;
   staffIsAuthenticated?:                                    boolean;
   submit():                                                 void;
-  theme:                                                    string;
   tinyCrop:                                                 string;
   typeId:                                                   number;
 };

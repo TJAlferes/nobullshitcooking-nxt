@@ -5,4 +5,4 @@ export default function IndexPage() {
   return <Home />;
 }
 
-export const getInitialProps = initialProps();
+IndexPage.getInitialProps = initialProps();

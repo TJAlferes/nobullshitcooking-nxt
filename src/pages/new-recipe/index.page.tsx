@@ -22,7 +22,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 
   const staffMessage =         useSelector(state => state.staff.message);
   const userMessage =          useSelector(state => state.user.message);
-  const theme =                useSelector(state => state.theme.theme);
   const authname =             useSelector(state => state.auth.authname);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const cuisines =             useSelector(state => state.data.cuisines);
@@ -178,10 +177,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       isSubscribed = false;
     };
   }, [staffMessage, userMessage]);
-
-  useEffect(() => {
-    if (!authname) router.push("/");
-  }, [authname]);
 
   const addEquipmentRow = () => {
     const newEquipmentRows = equipmentRows.concat({key: uuid(), amount: "", type: "", id: ""});
@@ -535,7 +530,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       removeSubrecipeRow={removeSubrecipeRow}
       staffIsAuthenticated={staffIsAuthenticated}
       subrecipeRows={subrecipeRows}
-      theme={theme}
       title={title}
     />
   );

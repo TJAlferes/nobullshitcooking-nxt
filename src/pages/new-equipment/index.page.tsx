@@ -9,24 +9,22 @@ import { createNewEquipment, editEquipment } from '../../store/staff/equipment/a
 import { createNewPrivateEquipment, editPrivateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
-export function NewEquipment({ editing }: Props): JSX.Element {
+export default function NewEquipment(): JSX.Element {
   const router = useRouter();
   const { id } = router.query;
 
   const dispatch = useDispatch();
-  const authname =             useSelector(state => state.auth.authname);
   const equipment =            useSelector(state => state.data.equipment);
   const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
   const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const staffMessage =         useSelector(state => state.staff.message);
-  const theme =                useSelector(state => state.theme.theme);
   const userMessage =          useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,   setEditingId ] =   useState<number>(0);  // null?
+  const [ editingId,   setEditingId ] =   useState<number | null>(null);
   const [ typeId,      setTypeId ] =      useState<number>(0);  // null?
   const [ name,        setName ] =        useState("");
   const [ description, setDescription ] = useState("");
@@ -55,7 +53,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
         return;
       }
       
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setLoading(true);
 
       const [ prev ] = staffIsAuthenticated ? equipment.filter(e => e.id === Number(id)) : myPrivateEquipment.filter(e => e.id === Number(id));
@@ -64,15 +62,17 @@ export function NewEquipment({ editing }: Props): JSX.Element {
         setLoading(false);
         return;
       }
+      
       setEditingId(prev.id);
       setTypeId(prev.equipment_type_id);
       setName(prev.name);
       setDescription(prev.description);
       setPrevImage(prev.image);
+
       setLoading(false);
     };
 
-    if (editing) getExistingEquipmentToEdit();
+    if (id) getExistingEquipmentToEdit();
   }, []);
 
   useEffect(() => {
@@ -91,10 +91,6 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       isSubscribed = false;
     };
   }, [staffMessage, userMessage]);
-
-  useEffect(() => {
-    if (!authname) router.push("/");
-  }, [authname]);
 
   const cancelImage = () => {
     setFullCrop("");
@@ -115,7 +111,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
 
     const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
 
-    if (editing && editingId) {
+    if (editingId) {
       const equipmentEditInfo = {id: editingId, prevImage, ...equipmentInfo};
       
       if (staffIsAuthenticated) dispatch(editEquipment(equipmentEditInfo));
@@ -187,7 +183,7 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       crop={crop}
       equipmentTypes={equipmentTypes}
       description={description}
-      editing={editing}
+      editingId={editingId}
       feedback={feedback}
       fullCrop={fullCrop}
       changeDescription={changeDescription}
@@ -203,7 +199,6 @@ export function NewEquipment({ editing }: Props): JSX.Element {
       prevImage={prevImage}
       staffIsAuthenticated={staffIsAuthenticated}
       submit={submit}
-      theme={theme}
       tinyCrop={tinyCrop}
       typeId={typeId}
     />
@@ -211,9 +206,3 @@ export function NewEquipment({ editing }: Props): JSX.Element {
 };
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
-type Props = {
-  editing: boolean;
-};
-
-export default NewEquipment;

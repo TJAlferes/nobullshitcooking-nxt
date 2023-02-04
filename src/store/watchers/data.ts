@@ -5,7 +5,6 @@ import { actionTypes } from '../data/types';
 
 const { INIT, INIT_USER } = actionTypes;
 
-// TO DO: finish / let Next.js/RTKQ handle now
 export function* watchData() {
   yield all([
     takeEvery(INIT, getInitialDataSaga),
