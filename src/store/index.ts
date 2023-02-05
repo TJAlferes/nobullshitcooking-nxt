@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { combineReducers, configureStore, ConfigureStoreOptions, ThunkAction } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook }                      from 'react-redux';
 import { Context, createWrapper }                                              from 'next-redux-wrapper';
@@ -5,10 +6,11 @@ import type { Action, Store }                                                  f
 import createSagaMiddleware, { END, Task }                                     from 'redux-saga';
 import { fork }                                                                from 'redux-saga/effects';
 
+import { NOBSCAPI as endpoint } from '../config/NOBSCAPI';
 import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/nobscappWindow';
 import { loadFromLocalStorage, saveToLocalStorage }      from '../utils/storageHelpers';
 import { chatInit }           from './chat/sagas';
-import { init, initUser }     from './data/actions';
+import { init, initUser, getInitialUserData }     from './data/actions';
 import { authReducer }        from './auth/reducer';
 import { cartReducer }        from './cart/reducer';
 import { chatReducer }        from './chat/reducer';
@@ -44,7 +46,8 @@ function makeStore(context: Context) {
   const options: ConfigureStoreOptions = {
     reducer:        rootReducer,
     preloadedState: persistedState,
-    middleware:     [sagaMiddleware]
+    middleware:     [sagaMiddleware],
+    devTools:       false
   };
   const store = configureStore(options);
 
@@ -121,9 +124,18 @@ export function serverUserProps() {
   return wrapper.getServerSideProps(
     store => async (context) => {
       console.log("hi");
-      store.dispatch(initUser());
-      store.dispatch(END);
-      await (store as SagaStore).sagaTask?.toPromise();
+
+      const { data } = await axios.get(`${endpoint}/equipment-type`);
+      console.log(data.equipmentTypes);
+
+      //const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
+      //console.log(data.myPlans);
+      //store.dispatch(getInitialUserData(data));
+
+      //store.dispatch(initUser());
+      //store.dispatch(END);
+      //await (store as SagaStore).sagaTask?.toPromise();
+
       return {props: {}};
     }
   );

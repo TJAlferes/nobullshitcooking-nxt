@@ -11,12 +11,12 @@ export function UserNav(): JSX.Element {
 
   const dispatch = useDispatch();
   const authname =             useSelector(state => state.auth.authname);
-  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
+  //const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const userIsAuthenticated =  useSelector(state => state.auth.userIsAuthenticated);
   const theme =                useSelector(state => state.theme.theme);
 
   const handleLogout = () => {
-    if (staffIsAuthenticated) dispatch(staffLogout());
+    //if (staffIsAuthenticated) dispatch(staffLogout());
     if (userIsAuthenticated)  dispatch(userLogout());
     router.push('/');
   };
@@ -30,11 +30,11 @@ export function UserNav(): JSX.Element {
 
       <Link href="/help">Help</Link>
 
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/register">Create Account</Link>}
-      {(!staffIsAuthenticated && !userIsAuthenticated) && <Link href="/login">Sign In</Link>}
+      {!userIsAuthenticated && <Link href="/register">Create Account</Link>}
+      {!userIsAuthenticated && <Link href="/login">Sign In</Link>}
 
-      {staffIsAuthenticated && <Link href="/staff-dashboard">{`Hello, ${authname}`}</Link>}
-      {staffIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>}
+      {/*staffIsAuthenticated && <Link href="/staff-dashboard">{`Hello, ${authname}`}</Link>*/}
+      {/*staffIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>*/}
 
       {userIsAuthenticated && <Link href="/dashboard">{`Hello, ${authname}`}</Link>}
       {userIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>}
