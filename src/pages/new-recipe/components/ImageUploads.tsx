@@ -17,7 +17,7 @@ export function ImageUploads({
   cookingFullCrop,
   cookingImage,
   cookingPrevImage,
-  editing,
+  editingId,
   equipmentCrop,
   equipmentFullCrop,
   equipmentImage,
@@ -68,7 +68,7 @@ export function ImageUploads({
 
         {!recipeImage && (
           <div>
-            {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />}
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" name="image-input" onChange={(e) => onSelectFile(e, "recipe")} type="file" />
           </div>
@@ -106,7 +106,7 @@ export function ImageUploads({
 
         {!equipmentImage && (
           <div>
-            {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />}
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" name="equipment-image-input" onChange={(e) => onSelectFile(e, "equipment")} type="file" />
           </div>
@@ -138,7 +138,7 @@ export function ImageUploads({
 
         {!ingredientsImage && (
           <div>
-            {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />}
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" name="ingredients-image-input" onChange={(e) => onSelectFile(e, "ingredients")} type="file" />
           </div>
@@ -170,7 +170,7 @@ export function ImageUploads({
 
         {!cookingImage && (
           <div>
-            {!editing ? <img src={`${url}/nobsc-recipe-default`} /> : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />}
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" name="cooking-image-input" onChange={(e) => onSelectFile(e, "cooking")} type="file" />
           </div>
@@ -211,7 +211,7 @@ type Props = {
   cookingFullCrop:                             string;
   cookingImage:                                string | ArrayBuffer | null;
   cookingPrevImage:                            string;
-  editing:                                     boolean;
+  editingId:                                   number | null;
   equipmentCrop:                               Crop;
   equipmentFullCrop:                           string;
   equipmentImage:                              string | ArrayBuffer | null;

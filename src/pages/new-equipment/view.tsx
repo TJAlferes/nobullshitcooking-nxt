@@ -24,15 +24,12 @@ export function NewEquipmentView({
   onImageLoaded,
   onSelectFile,
   prevImage,
-  staffIsAuthenticated,
   submit,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
   // move up into parent container NewEquipment component?
-  const dir = staffIsAuthenticated
-    ? 'https://s3.amazonaws.com/nobsc-images-01/equipment'
-    : 'https://s3.amazonaws.com/nobsc-user-equipment';
+  const dir = 'https://s3.amazonaws.com/nobsc-user-equipment';
 
   return (
     <div className="new-equipment one-col-a">
@@ -116,7 +113,6 @@ type Props = {
   onImageLoaded(e: React.SyntheticEvent<HTMLImageElement>): void;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>):     void;
   prevImage:                                                string;
-  staffIsAuthenticated?:                                    boolean;
   submit():                                                 void;
   tinyCrop:                                                 string;
   typeId:                                                   number;

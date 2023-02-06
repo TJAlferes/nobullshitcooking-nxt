@@ -11,7 +11,7 @@ export function SubrecipeRow({
   mySavedRecipes,
   recipes,
   recipeTypes,
-  editing,
+  editingId,
   changeSubrecipeRow,
   removeSubrecipeRow,
   rowKey,
@@ -23,14 +23,14 @@ export function SubrecipeRow({
   const availableRecipes = [
     ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),
     ...(myPrivateRecipes.length
-      ? (editing && selfId !== 0
+      ? (editingId && selfId !== 0
         ? myPrivateRecipes.filter(r => r.id != selfId)
         : myPrivateRecipes
       )
       : []
     ),
     ...(myPublicRecipes.length
-      ? (editing && selfId !== 0
+      ? (editingId && selfId !== 0
         ? myPublicRecipes.filter(r => r.id != selfId)
         : myPublicRecipes
       )
@@ -91,7 +91,7 @@ type Props = {
   mySavedRecipes:                                        IWorkRecipe[];
   recipes:                                               IWorkRecipe[];
   recipeTypes:                                           IRecipeType[];
-  editing:                                               boolean;
+  editingId:                                             number | null;
   removeSubrecipeRow(rowKey: string):                    void;
   rowKey:                                                string;
   selfId:                                                number;

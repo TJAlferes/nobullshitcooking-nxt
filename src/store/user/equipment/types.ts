@@ -1,7 +1,3 @@
-import type { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
-
-export type { ICreatingEquipmentInfo, IEditingEquipmentInfo } from '../../staff/equipment/types';
-
 export const actionTypes = {
   CREATE_NEW_PRIVATE_EQUIPMENT: 'CREATE_NEW_PRIVATE_EQUIPMENT',
   EDIT_PRIVATE_EQUIPMENT:       'EDIT_PRIVATE_EQUIPMENT',
@@ -21,4 +17,18 @@ export interface IEditPrivateEquipment {
 export interface IDeletePrivateEquipment {
   type: typeof actionTypes.DELETE_PRIVATE_EQUIPMENT;
   id:   number;
+}
+
+export interface ICreatingEquipmentInfo {
+  equipmentTypeId: number;
+  name:            string;
+  description:     string;
+  image:           string | ArrayBuffer | null;
+  fullImage:       File | null;
+  tinyImage:       File | null;
+}
+
+export interface IEditingEquipmentInfo extends ICreatingEquipmentInfo {
+  id:        number;
+  prevImage: string;
 }

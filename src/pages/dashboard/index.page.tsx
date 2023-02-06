@@ -1,13 +1,11 @@
-"use client";
-
-import axios from 'axios';
-import type { GetServerSideProps } from 'next';
+//import axios from 'axios';
+//import type { GetServerSideProps } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { initialUserProps, serverUserProps, useTypedSelector as useSelector } from '../../store';
+//import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
+import { /*initialUserProps, serverUserProps,*/ useTypedSelector as useSelector } from '../../store';
 import { updateLocalAvatar } from '../../store/auth/actions';
 import { submitAvatar            as userSubmitAvatar } from '../../store/user/avatar/actions';
 import { unfavoriteRecipe        as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
@@ -48,26 +46,18 @@ export default function Dashboard(): JSX.Element {
   const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
   const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({
-    unit: 'px', // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50
-  });
+  const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
   const imageRef = useRef<HTMLImageElement | null>();
 
-  useEffect(() => {
-    async function getShit() {
-      const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
-      console.log("data: ", data);
-    }
-    
-    getShit();
-  }, []);
+  //useEffect(() => {
+  //  async function getShit() {
+  //    const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
+  //  }  
+  //  getShit();
+  //}, []);
 
   useEffect(() => {
     let isSubscribed = true;

@@ -10,7 +10,7 @@ export function NewIngredientView({
   crop,
   ingredientTypes,
   description,
-  editing,
+  editingId,
   feedback,
   fullCrop,
   changeDescription,
@@ -24,15 +24,12 @@ export function NewIngredientView({
   onImageLoaded,
   onSelectFile,
   prevImage,
-  staffIsAuthenticated,
   submit,
   tinyCrop,
   typeId
 }: Props): JSX.Element {
   // move up into parent container NewIngredient component?
-  const dir = staffIsAuthenticated
-    ? 'https://s3.amazonaws.com/nobsc-images-01/ingredients'
-    : 'https://s3.amazonaws.com/nobsc-user-ingredients';
+  const dir = 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
   return (
     <div className="new-ingredient one-col-a">
@@ -56,10 +53,7 @@ export function NewIngredientView({
         <h2>Image of Ingredient</h2>
         {!image && (
           <div>
-            {!editing
-              ? <img src={`${dir}/nobsc-ingredient-default`} />
-              : prevImage && <img src={`${dir}/${prevImage}`} />
-            }
+            {!editingId ? <img src={`${dir}/nobsc-ingredient-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
@@ -102,7 +96,7 @@ type Props = {
   crop:                                                     Crop;
   ingredientTypes:                                          IIngredientType[];
   description:                                              string;
-  editing:                                                  boolean;
+  editingId:                                                number | null;
   feedback:                                                 string;
   fullCrop:                                                 string;
   changeDescription(e: React.SyntheticEvent<EventTarget>):  void;
@@ -116,7 +110,6 @@ type Props = {
   onImageLoaded(e: React.SyntheticEvent<HTMLImageElement>): void;
   onSelectFile(e: React.ChangeEvent<HTMLInputElement>):     void;
   prevImage:                                                string;
-  staffIsAuthenticated?:                                    boolean;
   submit():                                                 void;
   tinyCrop:                                                 string;
   typeId:                                                   number;

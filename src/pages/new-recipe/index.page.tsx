@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
@@ -7,23 +7,26 @@ import { v4 as uuid } from 'uuid';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewRecipe, editRecipe } from '../../store/staff/recipe/actions';
 import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
 import type { IRequiredMethod } from '../../store/user/recipe/types';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './view';
 
-export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
+export default function NewRecipe(): JSX.Element | null {
   const router = useRouter();
-  const id = Number(router.query['id']);  // not reliable?
+  const params = useSearchParams();
+  const ownership = params.get('ownership');
+  const id = Number(params.get('id'));
+  if (!id || !ownership) {
+    router.push('/dashboard');
+    return null;
+  }
 
   const dispatch = useDispatch();
-
-  const staffMessage =         useSelector(state => state.staff.message);
-  const userMessage =          useSelector(state => state.user.message);
+  
+  const message =          useSelector(state => state.user.message);
   const authname =             useSelector(state => state.auth.authname);
-  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
   const cuisines =             useSelector(state => state.data.cuisines);
   const equipment =            useSelector(state => state.data.equipment);
   const ingredients =          useSelector(state => state.data.ingredients);
@@ -42,7 +45,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,    setEditingId ] =    useState<number>(0);  // |null ?
+  const [ editingId,    setEditingId ] =    useState<number|null>(null);
   const [ recipeTypeId, setRecipeTypeId ] = useState<number>(0);
   const [ cuisineId,    setCuisineId ] =    useState<number>(0);
   const [ title,        setTitle ] =        useState("");
@@ -94,21 +97,17 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 
   useEffect(() => {
     const getExistingRecipeToEdit = async () => {
-      if (!id || (!staffIsAuthenticated && !ownership)) {
-        const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-        router.push(redirectPath);
+      if (!id || !ownership) {
+        router.push('/dashboard');
         return;
       }
 
       setLoading(true);
-      window.scrollTo(0,0);
-
-      const url = staffIsAuthenticated ? `${endpoint}/staff/recipe/edit` : `${endpoint}/user/recipe/edit/${ownership}`;
-      const res = await axios.post(url, {id}, {withCredentials: true});
+      window.scrollTo(0, 0);
+      const res = await axios.post(`${endpoint}/user/recipe/edit/${ownership}`, {id}, {withCredentials: true});
       const recipe: IExistingRecipeToEdit = res.data.recipe;
       if (!recipe) {
-        const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-        router.push(redirectPath);
+        router.push('/dashboard');
         return;
       }
 
@@ -158,25 +157,25 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       setLoading(false);
     };
     
-    if (editing) getExistingRecipeToEdit();
+    if (id) getExistingRecipeToEdit();
   }, []);
 
   useEffect(() => {
     let isSubscribed = true;
 
     if (isSubscribed) {
-      const message =      staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-      if (message !== "") window.scrollTo(0,0);
+      if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
-      if (message === "Recipe created." || message === "Recipe updated.") setTimeout(() => router.push(redirectPath), 3000);
+      if (message === "Recipe created." || message === "Recipe updated.") {
+        setTimeout(() => router.push('/dashboard'), 3000);
+      }
       setLoading(false);  // move?
     }
 
     return () => {
       isSubscribed = false;
     };
-  }, [staffMessage, userMessage]);
+  }, [message]);
 
   const addEquipmentRow = () => {
     const newEquipmentRows = equipmentRows.concat({key: uuid(), amount: "", type: "", id: ""});
@@ -329,22 +328,13 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
 
     setLoading(true);
 
-    if (editing && editingId) {
+    if (editingId) {
       const recipeEditInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
-
-      if (staffIsAuthenticated) dispatch(editRecipe(recipeEditInfo));
-      else {
-        if      (ownership === "private") dispatch(editPrivateRecipe(recipeEditInfo));
-        else if (ownership === "public")  dispatch(editPublicRecipe(recipeEditInfo));
-      }
-    }
-    else {
-      if (staffIsAuthenticated) dispatch(createNewRecipe(recipeInfo));
-      else {
-        if      (ownership === "private") dispatch(createNewPrivateRecipe(recipeInfo));
-        else if (ownership === "public")  dispatch(createNewPublicRecipe(recipeInfo));
-      }
-      
+      if      (ownership === "private") dispatch(editPrivateRecipe(recipeEditInfo));
+      else if (ownership === "public")  dispatch(editPublicRecipe(recipeEditInfo));
+    } else {
+      if      (ownership === "private") dispatch(createNewPrivateRecipe(recipeInfo));
+      else if (ownership === "public")  dispatch(createNewPublicRecipe(recipeInfo));
     }
   };
 
@@ -479,7 +469,7 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       recipeTypes={recipeTypes}
       description={description}
       directions={directions}
-      editing={editing}
+      editingId={editingId}
       equipmentCrop={equipmentCrop}
       equipmentFullCrop={equipmentFullCrop}
       equipmentImage={equipmentImage}
@@ -528,7 +518,6 @@ export default function NewRecipe({ editing, ownership }: Props): JSX.Element {
       removeEquipmentRow={removeEquipmentRow}
       removeIngredientRow={removeIngredientRow}
       removeSubrecipeRow={removeSubrecipeRow}
-      staffIsAuthenticated={staffIsAuthenticated}
       subrecipeRows={subrecipeRows}
       title={title}
     />
@@ -640,8 +629,3 @@ export interface ISubrecipeRow {
   cuisine:         string | number;  // cuisineId?    (just a filter for nicer UX)
   id:              string | number;
 }
-
-type Props = {
-  editing:   boolean;
-  ownership: string;
-};

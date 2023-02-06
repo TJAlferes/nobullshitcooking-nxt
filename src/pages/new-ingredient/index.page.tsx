@@ -1,30 +1,28 @@
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewIngredient, editIngredient } from '../../store/staff/ingredient/actions';
 import { createNewPrivateIngredient, editPrivateIngredient } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './view';
 
-export default function NewIngredient({ editing }: Props): JSX.Element {
+export default function NewIngredient(): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useSearchParams();
+  const id = params.get('id');
 
   const dispatch = useDispatch();
-  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
-  const staffMessage =         useSelector(state => state.staff.message);
-  const userMessage =          useSelector(state => state.user.message);
-  const ingredients =          useSelector(state => state.data.ingredients);
+  //const ingredients =          useSelector(state => state.data.ingredients);
   const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
   const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
+  const message =              useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,   setEditingId ] =   useState(0);
+  const [ editingId,   setEditingId ] =   useState<number|null>(null);
   const [ typeId,      setTypeId ] =      useState(0);
   const [ name,        setName ] =        useState("");
   const [ description, setDescription ] = useState("");
@@ -33,13 +31,7 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
   const [ fullImage,   setFullImage ] =   useState<File | null>(null);
   const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({
-    unit: 'px', // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50
-  });
+  const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -48,47 +40,46 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
   useEffect(() => {
     const getExistingIngredientToEdit = () => {
       if (!id) {
-        const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-        router.push(redirectPath);
+        router.push('/dashboard');
         return;
       }
 
       setLoading(true);
-      window.scrollTo(0,0);
-
-      const [ prev ] = staffIsAuthenticated ? ingredients.filter(i => i.id === Number(id)) : myPrivateIngredients.filter(i => i.id === Number(id));
-      
+      window.scrollTo(0, 0);
+      const [ prev ] = myPrivateIngredients.filter(i => i.id === Number(id));
       if (!prev) {
         setLoading(false);
         return;
       }
+
       setEditingId(prev.id);
       setTypeId(prev.ingredient_type_id);
       setName(prev.name);
       setDescription(prev.description);
       setPrevImage(prev.image);
+      
       setLoading(false);
     };
 
-    if (editing) getExistingIngredientToEdit();
+    if (id) getExistingIngredientToEdit();
   }, []);
 
   useEffect(() => {
     let isSubscribed = true;
 
     if (isSubscribed) {
-      const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-      if (message !== "") window.scrollTo(0,0);
+      if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
-      if (message === "Ingredient created." || message === "Ingredient updated.") setTimeout(() => router.push(redirectPath), 3000);
+      if (message === "Ingredient created." || message === "Ingredient updated.") {
+        setTimeout(() => router.push('/dashboard'), 3000);
+      }
       setLoading(false);
     }
 
     return () => {
       isSubscribed = false;
     };
-  }, [staffMessage, userMessage]);
+  }, [message]);
 
   const cancelImage = () => {
     setFullCrop("");
@@ -98,26 +89,20 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
     setTinyImage(null);
   };
 
-  const changeType =        (e: React.SyntheticEvent<EventTarget>) => setTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: React.SyntheticEvent<EventTarget>) => setName((e.target as HTMLInputElement).value);
-  const changeDescription = (e: React.SyntheticEvent<EventTarget>) => setDescription((e.target as HTMLInputElement).value);
+  const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
+  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
 
   // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
-
     const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
-
-    if (editing && editingId) {
+    if (editingId) {
       const ingredientEditInfo = {id: editingId, prevImage, ...ingredientInfo};
-      
-      if (staffIsAuthenticated) dispatch(editIngredient(ingredientEditInfo));
-      else                      dispatch(editPrivateIngredient(ingredientEditInfo));
-    }
-    else {
-      if (staffIsAuthenticated) dispatch(createNewIngredient(ingredientInfo));
-      else                      dispatch(createNewPrivateIngredient(ingredientInfo));
+      dispatch(editPrivateIngredient(ingredientEditInfo));
+    } else {
+      dispatch(createNewPrivateIngredient(ingredientInfo));
     }
   };
 
@@ -181,7 +166,7 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
       crop={crop}
       ingredientTypes={ingredientTypes}
       description={description}
-      editing={editing}
+      editingId={editingId}
       feedback={feedback}
       fullCrop={fullCrop}
       changeDescription={changeDescription}
@@ -195,7 +180,6 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
       onImageLoaded={onImageLoaded}
       onSelectFile={onSelectFile}
       prevImage={prevImage}
-      staffIsAuthenticated={staffIsAuthenticated}
       submit={submit}
       tinyCrop={tinyCrop}
       typeId={typeId}
@@ -203,6 +187,4 @@ export default function NewIngredient({ editing }: Props): JSX.Element {
   );
 };
 
-type Props = {
-  editing: boolean;
-};
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;

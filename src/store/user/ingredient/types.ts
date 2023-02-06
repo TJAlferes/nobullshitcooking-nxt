@@ -1,7 +1,3 @@
-import type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
-
-export type { ICreatingIngredientInfo, IEditingIngredientInfo } from '../../staff/ingredient/types';
-
 export const actionTypes = {
   CREATE_NEW_PRIVATE_INGREDIENT: 'CREATE_NEW_PRIVATE_INGREDIENT',
   EDIT_PRIVATE_INGREDIENT:       'EDIT_PRIVATE_INGREDIENT',
@@ -21,4 +17,18 @@ export interface IEditPrivateIngredient {
 export interface IDeletePrivateIngredient {
   type: typeof actionTypes.DELETE_PRIVATE_INGREDIENT;
   id:   number;
+}
+
+export interface ICreatingIngredientInfo {
+  ingredientTypeId: number;
+  name:             string;
+  description:      string;
+  image:            string | ArrayBuffer | null;
+  fullImage:        File | null;
+  tinyImage:        File | null;
+}
+
+export interface IEditingIngredientInfo extends ICreatingIngredientInfo {
+  id:        number;
+  prevImage: string;
 }

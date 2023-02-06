@@ -1,11 +1,8 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { createNewRecipeSaga as staffCreateNewRecipeSaga, editRecipeSaga as staffEditRecipeSaga, deleteRecipeSaga } from '../staff/recipe/sagas';
-import { actionTypes as staffRecipeActionTypes } from '../staff/recipe/types';
 import { createNewRecipeSaga, deletePrivateRecipeSaga, disownPublicRecipeSaga, editRecipeSaga } from '../user/recipe/sagas';
 import { actionTypes as userRecipeActionTypes } from '../user/recipe/types';
 
-const { CREATE_NEW_RECIPE, EDIT_RECIPE, DELETE_RECIPE } = staffRecipeActionTypes;
 const {
   CREATE_NEW_PRIVATE_RECIPE, EDIT_PRIVATE_RECIPE, DELETE_PRIVATE_RECIPE,
   CREATE_NEW_PUBLIC_RECIPE, EDIT_PUBLIC_RECIPE, DISOWN_PUBLIC_RECIPE
@@ -13,10 +10,6 @@ const {
 
 export function* watchRecipe() {
   yield all([
-    takeEvery(CREATE_NEW_RECIPE, staffCreateNewRecipeSaga),
-    takeEvery(EDIT_RECIPE,       staffEditRecipeSaga),
-    takeEvery(DELETE_RECIPE,     deleteRecipeSaga),
-
     takeEvery(CREATE_NEW_PRIVATE_RECIPE, createNewRecipeSaga),
     takeEvery(EDIT_PRIVATE_RECIPE,       editRecipeSaga),
     takeEvery(DELETE_PRIVATE_RECIPE,     deletePrivateRecipeSaga),

@@ -37,14 +37,16 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
   return (
     <Provider store={store}>
       <DndProvider options={HTML5toTouch}>
-        <Theme>
-          <div id="app">
-            <LeftNav />
-            <Layout>
-              <Component {...props.pageProps} />
-            </Layout>
-          </div>
-        </Theme>
+        <Guard>
+          <Theme>
+            <div id="app">
+              <LeftNav />
+              <Layout>
+                <Component {...props.pageProps} />
+              </Layout>
+            </div>
+          </Theme>
+        </Guard>
       </DndProvider>
     </Provider>
   );

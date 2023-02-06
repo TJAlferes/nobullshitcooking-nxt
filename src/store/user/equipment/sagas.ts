@@ -12,10 +12,10 @@ export function* createNewPrivateEquipmentSaga(action: ICreateNewPrivateEquipmen
   try {
     if (fullImage && tinyImage) {
       const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'equipment'}, {withCredentials: true});
 
-      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}});
-      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}});
+      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': 'image/jpeg'}});
 
       image = fullName;
     }
@@ -40,10 +40,10 @@ export function* editPrivateEquipmentSaga(action: IEditPrivateEquipment) {
   try {
     if (fullImage && tinyImage) {
       const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url/equipment`, {fileType: fullImage.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'equipment'}, {withCredentials: true});
 
-      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': fullImage.type}});
-      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': tinyImage.type}});
+      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': 'image/jpeg'}});
 
       image = fullName;
     }

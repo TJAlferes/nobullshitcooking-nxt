@@ -45,7 +45,7 @@ export function NewRecipeView({
   recipeTypes,
   description,
   directions,
-  editing,
+  editingId,
   equipmentCrop,
   equipmentFullCrop,
   equipmentImage,
@@ -84,7 +84,6 @@ export function NewRecipeView({
   removeEquipmentRow,
   removeIngredientRow,
   removeSubrecipeRow,
-  staffIsAuthenticated,
   submit,
   subrecipeRows,
   title
@@ -219,7 +218,7 @@ export function NewRecipeView({
               mySavedRecipes={mySavedRecipes}
               recipes={recipes}
               recipeTypes={recipeTypes}
-              editing={editing}
+              editingId={editingId}
               changeSubrecipeRow={changeSubrecipeRow}
               key={s.key}
               removeSubrecipeRow={removeSubrecipeRow}
@@ -245,7 +244,7 @@ export function NewRecipeView({
         cookingFullCrop={cookingFullCrop}
         cookingImage={cookingImage}
         cookingPrevImage={cookingPrevImage}
-        editing={editing}
+        editingId={editingId}
         equipmentCrop={equipmentCrop}
         equipmentFullCrop={equipmentFullCrop}
         equipmentImage={equipmentImage}
@@ -335,7 +334,7 @@ type Props = {
   recipeTypes:                                            IRecipeType[];
   description:                                            string;
   directions:                                             string;
-  editing:                                                boolean;
+  editingId:                                              number | null;
   equipmentCrop:                                          Crop;
   equipmentFullCrop:                                      string;
   equipmentImage:                                         string | ArrayBuffer | null;
@@ -374,7 +373,6 @@ type Props = {
   removeEquipmentRow(rowKey: string):                     void;
   removeIngredientRow(rowKey: string):                    void;
   removeSubrecipeRow(rowKey: string):                     void;
-  staffIsAuthenticated?:                                  boolean;
   submit():                                               void;
   subrecipeRows:                                          ISubrecipeRow[];
   title:                                                  string;

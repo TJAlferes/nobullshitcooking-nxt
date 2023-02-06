@@ -3,7 +3,7 @@ import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { removeStorageItem } from '../../utils/storageHelpers';
-//import { initUser } from '../data/actions';
+import { initUser } from '../data/actions';
 import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
 import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
 
@@ -12,7 +12,7 @@ export function* staffLoginSaga(action: IStaffLogin) {
     const { data: { message, staffname } } =
       yield call([axios, axios.post], `${endpoint}/staff/auth/login`, {staffInfo: {email: action.email, password: action.password}}, {withCredentials: true});
 
-    if (message == 'Signed in.') yield put(staffDisplay(staffname));
+    if (message === 'Signed in.') yield put(staffDisplay(staffname));
     else yield put(authMessage(message));
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
@@ -42,11 +42,10 @@ export function* userLoginSaga(action: IUserLogin) {
     const { data: { message, username } } =
       yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email, pass: password}}, {withCredentials: true});
 
-    if (message == 'Signed in.') {
+    if (message === 'Signed in.') {
       yield put(userDisplay(username));
-      //yield put(initUser());
-      yield call([router, router.push], '/');  // '/dashboard'
-      //yield call(() => router.push('/dashboard'));
+      yield put(initUser());
+      yield call([router, router.push], '/dashboard');  //yield call(() => router.push('/dashboard'));
     }
     else yield put(authMessage(message));
   } catch(err) {
@@ -77,7 +76,7 @@ export function* userRegisterSaga(action: IUserRegister) {
     const { email, password, username, router } = action;
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/register`, {userInfo: {email, password, username}});
 
-    if (message == 'User account created.') {
+    if (message === 'User account created.') {
       yield delay(2000);
       yield put(messageClear());
       yield call(() => router.push('/verify'));

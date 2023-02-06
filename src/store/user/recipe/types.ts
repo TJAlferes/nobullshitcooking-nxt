@@ -1,7 +1,3 @@
-import type { ICreatingRecipeInfo, IEditingRecipeInfo } from '../../staff/recipe/types';
-
-export type { ICreatingRecipeInfo, IEditingRecipeInfo, IRequiredMethod, IRequiredEquipment, IRequiredIngredient, IRequiredSubrecipe } from '../../staff/recipe/types';
-
 export const actionTypes = {
   CREATE_NEW_PRIVATE_RECIPE: 'CREATE_NEW_PRIVATE_RECIPE',
   EDIT_PRIVATE_RECIPE:       'EDIT_PRIVATE_RECIPE',
@@ -40,4 +36,61 @@ export interface IEditPublicRecipe {
 export interface IDisownPublicRecipe {
   type: typeof actionTypes.DISOWN_PUBLIC_RECIPE;
   id:   number;
+}
+
+export interface ICreatingRecipeInfo {
+  ownership:    string;
+  recipeTypeId: number;
+  cuisineId:    number;
+  title:        string;
+  description:  string;
+  directions:   string;
+
+  methods:      IRequiredMethod[];
+  equipment:    IRequiredEquipment[];
+  ingredients:  IRequiredIngredient[];
+  subrecipes:   IRequiredSubrecipe[];
+
+  recipeImage:          string | ArrayBuffer | null;
+  recipeFullImage:      File | null;
+  recipeThumbImage:     File | null;
+  recipeTinyImage:      File | null;
+  equipmentImage:       string | ArrayBuffer | null;
+  equipmentFullImage:   File | null;
+  ingredientsImage:     string | ArrayBuffer | null;
+  ingredientsFullImage: File | null;
+  cookingImage:         string | ArrayBuffer | null;
+  cookingFullImage:     File | null;
+
+  //video
+}
+
+export interface IEditingRecipeInfo extends ICreatingRecipeInfo {
+  id:                   number
+  recipePrevImage:      string;
+  equipmentPrevImage:   string;
+  ingredientsPrevImage: string;
+  cookingPrevImage:     string;
+  //prevVideo
+}
+
+export interface IRequiredMethod {
+  id: number;
+}
+
+export interface IRequiredEquipment {
+  amount: number;
+  id:     number;
+}
+
+export interface IRequiredIngredient {
+  amount:        number;
+  measurementId: number;
+  id:            number;
+}
+
+export interface IRequiredSubrecipe {
+  amount:        number;
+  measurementId: number;
+  id:            number;
 }

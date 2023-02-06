@@ -16,7 +16,7 @@ export function NewPlanView({
   myPublicRecipes,
   mySavedRecipes,
   officialRecipes,
-  editing,
+  editingId,
   expandedDay,
   feedback,
   getApplicationNode,
@@ -181,7 +181,7 @@ type Props = {
   myPublicRecipes:                   IWorkRecipe[];
   mySavedRecipes:                    IWorkRecipe[];
   officialRecipes:                   IWorkRecipe[];
-  editing:                           boolean;
+  editingId:                         number | null;
   expandedDay:                       number | null;
   feedback:                          string;
   getApplicationNode():              Element | Node;

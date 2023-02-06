@@ -7,9 +7,10 @@ import { clearWork, setCreating, setEditingId, setPlanName, setPlanData } from '
 import { createNewPlan, editPlan } from '../../store/user/plan/actions';
 import { NewPlanView } from './view';
 
-export function NewPlan({ editing }: Props): JSX.Element {
+export default function NewPlan(): JSX.Element {
   const router = useRouter();
-  const { id } = useSearchParams();
+  const params = useSearchParams();
+  const id = params.get('id');
 
   const dispatch = useDispatch();
   const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
@@ -41,7 +42,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       setLoading(false);
     };
 
-    if (editing) {
+    if (id) {
       dispatch(clearWork());
       getExistingPlanToEdit();
     } else {
@@ -121,7 +122,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
     if (!valid()) return;
     setLoading(true);
     const planInfo = {name: planName, data: getPlanData()};
-    if (editing) {
+    if (editingId) {
       const planEditInfo = {id: editingId as number, ...planInfo};
       dispatch(editPlan(planEditInfo));
     }
@@ -138,7 +139,7 @@ export function NewPlan({ editing }: Props): JSX.Element {
       myPublicRecipes={myPublicRecipes}
       mySavedRecipes={mySavedRecipes}
       officialRecipes={recipes}
-      editing={editing}
+      editingId={editingId}
       expandedDay={expandedDay}
       feedback={feedback}
       getApplicationNode={getApplicationNode}
@@ -153,9 +154,3 @@ export function NewPlan({ editing }: Props): JSX.Element {
     />
   );
 }
-
-type Props = {
-  editing: boolean;
-};
-
-export default NewPlan;

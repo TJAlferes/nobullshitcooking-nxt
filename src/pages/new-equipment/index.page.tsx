@@ -1,25 +1,23 @@
-import { useRouter } from 'next/router';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { Crop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewEquipment, editEquipment } from '../../store/staff/equipment/actions';
 import { createNewPrivateEquipment, editPrivateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
 export default function NewEquipment(): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useSearchParams();
+  const id = params.get('id');
 
   const dispatch = useDispatch();
-  const equipment =            useSelector(state => state.data.equipment);
+  //const equipment =            useSelector(state => state.data.equipment);
   const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
   const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
-  const staffIsAuthenticated = useSelector(state => state.auth.staffIsAuthenticated);
-  const staffMessage =         useSelector(state => state.staff.message);
-  const userMessage =          useSelector(state => state.user.message);
+  const message =              useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -33,13 +31,7 @@ export default function NewEquipment(): JSX.Element {
   const [ fullImage,   setFullImage ] =   useState<File | null>(null);
   const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({
-    unit: 'px', // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50
-  });
+  const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -48,16 +40,13 @@ export default function NewEquipment(): JSX.Element {
   useEffect(() => {
     const getExistingEquipmentToEdit = () => {
       if (!id) {
-        const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-        router.push(redirectPath);
+        router.push('/dashboard');
         return;
       }
       
       window.scrollTo(0, 0);
       setLoading(true);
-
-      const [ prev ] = staffIsAuthenticated ? equipment.filter(e => e.id === Number(id)) : myPrivateEquipment.filter(e => e.id === Number(id));
-
+      const [ prev ] = myPrivateEquipment.filter(e => e.id === Number(id));
       if (!prev) {
         setLoading(false);
         return;
@@ -79,18 +68,18 @@ export default function NewEquipment(): JSX.Element {
     let isSubscribed = true;
 
     if (isSubscribed) {
-      const message = staffIsAuthenticated ? staffMessage : userMessage;
-      const redirectPath = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
-      if (message !== "") window.scrollTo(0,0);
+      if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
-      if (message === "Equipment created." || message === "Equipment updated.") setTimeout(() => router.push(redirectPath), 3000);
+      if (message === "Equipment created." || message === "Equipment updated.") {
+        setTimeout(() => router.push('/dashboard'), 3000);
+      }
       setLoading(false);
     }
     
     return () => {
       isSubscribed = false;
     };
-  }, [staffMessage, userMessage]);
+  }, [message]);
 
   const cancelImage = () => {
     setFullCrop("");
@@ -108,18 +97,12 @@ export default function NewEquipment(): JSX.Element {
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
-
     const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
-
     if (editingId) {
       const equipmentEditInfo = {id: editingId, prevImage, ...equipmentInfo};
-      
-      if (staffIsAuthenticated) dispatch(editEquipment(equipmentEditInfo));
-      else                      dispatch(editPrivateEquipment(equipmentEditInfo));
-    }
-    else {
-      if (staffIsAuthenticated) dispatch(createNewEquipment(equipmentInfo));
-      else                      dispatch(createNewPrivateEquipment(equipmentInfo));
+      dispatch(editPrivateEquipment(equipmentEditInfo));
+    } else {
+      dispatch(createNewPrivateEquipment(equipmentInfo));
     }
   };
 
@@ -153,7 +136,7 @@ export default function NewEquipment(): JSX.Element {
     const validTypeId = typeId !== 0;
     if (!validTypeId) {
       window.scrollTo(0,0);
-      setFeedback("You forgot to select the equipment type...");
+      setFeedback("Select equipment type.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -161,7 +144,7 @@ export default function NewEquipment(): JSX.Element {
     const validName = name.trim() !== "";
     if (!validName) {
       window.scrollTo(0,0);
-      setFeedback("Umm, double check your name...");
+      setFeedback("Check your name.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -169,7 +152,7 @@ export default function NewEquipment(): JSX.Element {
     const validDescription = description.trim() !== "";
     if (!validDescription) {
       window.scrollTo(0,0);
-      setFeedback("Umm, double check your description...");
+      setFeedback("Check description.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -197,7 +180,6 @@ export default function NewEquipment(): JSX.Element {
       onImageLoaded={onImageLoaded}
       onSelectFile={onSelectFile}
       prevImage={prevImage}
-      staffIsAuthenticated={staffIsAuthenticated}
       submit={submit}
       tinyCrop={tinyCrop}
       typeId={typeId}

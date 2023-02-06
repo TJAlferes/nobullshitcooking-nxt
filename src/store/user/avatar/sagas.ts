@@ -11,10 +11,10 @@ export function* submitAvatarSaga(action: ISubmitAvatar) {
 
     if (action.fullAvatar && action.tinyAvatar) {
       const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url/avatar`, {fileType: action.fullAvatar.type}, {withCredentials: true});
+        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'avatar'}, {withCredentials: true});
 
-      yield call([axios, axios.put], fullSignature, action.fullAvatar, {headers: {'Content-Type': action.fullAvatar.type}});
-      yield call([axios, axios.put], tinySignature, action.tinyAvatar, {headers: {'Content-Type': action.tinyAvatar.type}});
+      yield call([axios, axios.put], fullSignature, action.fullAvatar, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature, action.tinyAvatar, {headers: {'Content-Type': 'image/jpeg'}});
 
       avatarUrl = fullName;
     }
