@@ -4,9 +4,9 @@ import { call, delay, put } from 'redux-saga/effects';
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPrivateEquipmentsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type { ICreateNewPrivateEquipment, IEditPrivateEquipment, IDeletePrivateEquipment } from './types';
+import type { ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';
 
-export function* createNewPrivateEquipmentSaga(action: ICreateNewPrivateEquipment) {
+export function* createEquipmentSaga(action: ICreateEquipment) {
   let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -34,7 +34,7 @@ export function* createNewPrivateEquipmentSaga(action: ICreateNewPrivateEquipmen
   yield put(userMessageClear());
 }
 
-export function* editPrivateEquipmentSaga(action: IEditPrivateEquipment) {
+export function* updateEquipmentSaga(action: IUpdateEquipment) {
   let { id, equipmentTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -62,7 +62,7 @@ export function* editPrivateEquipmentSaga(action: IEditPrivateEquipment) {
   yield put(userMessageClear());
 }
 
-export function* deletePrivateEquipmentSaga(action: IDeletePrivateEquipment) {
+export function* deleteEquipmentSaga(action: IDeleteEquipment) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
 

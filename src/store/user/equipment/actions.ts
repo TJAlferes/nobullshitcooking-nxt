@@ -1,7 +1,7 @@
-import { actionTypes, ICreatingEquipmentInfo, IEditingEquipmentInfo } from './types';
+import { actionTypes, IEquipmentInfo, IEquipmentUpdateInfo } from './types';
 
-const { CREATE_NEW_PRIVATE_EQUIPMENT, EDIT_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = actionTypes;
+const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
-export const createNewPrivateEquipment = (equipmentInfo: ICreatingEquipmentInfo) => ({type: CREATE_NEW_PRIVATE_EQUIPMENT, equipmentInfo});
-export const editPrivateEquipment =      (equipmentInfo: IEditingEquipmentInfo) =>  ({type: EDIT_PRIVATE_EQUIPMENT, equipmentInfo});
-export const deletePrivateEquipment =    (id: number) =>                            ({type: DELETE_PRIVATE_EQUIPMENT, id});
+export const createEquipment = (equipmentInfo: IEquipmentInfo) =>       ({type: CREATE_EQUIPMENT, equipmentInfo});
+export const updateEquipment = (equipmentInfo: IEquipmentUpdateInfo) => ({type: UPDATE_EQUIPMENT, equipmentInfo});
+export const deleteEquipment = (id: number) =>                          ({type: DELETE_EQUIPMENT, id});

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewPrivateEquipment, editPrivateEquipment } from '../../store/user/equipment/actions';
+import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
 export default function NewEquipment(): JSX.Element {
@@ -22,7 +22,7 @@ export default function NewEquipment(): JSX.Element {
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,   setEditingId ] =   useState<number | null>(null);
+  const [ editingId,   setEditingId ] =   useState<number | null>(null);  // is this even needed?
   const [ typeId,      setTypeId ] =      useState<number>(0);  // null?
   const [ name,        setName ] =        useState("");
   const [ description, setDescription ] = useState("");
@@ -52,7 +52,7 @@ export default function NewEquipment(): JSX.Element {
         return;
       }
       
-      setEditingId(prev.id);
+      setEditingId(prev.id);  // is this even needed?
       setTypeId(prev.equipment_type_id);
       setName(prev.name);
       setDescription(prev.description);
@@ -99,10 +99,10 @@ export default function NewEquipment(): JSX.Element {
     setLoading(true);
     const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
     if (editingId) {
-      const equipmentEditInfo = {id: editingId, prevImage, ...equipmentInfo};
-      dispatch(editPrivateEquipment(equipmentEditInfo));
+      const equipmentUpdateInfo = {id: editingId, prevImage, ...equipmentInfo};
+      dispatch(updateEquipment(equipmentUpdateInfo));
     } else {
-      dispatch(createNewPrivateEquipment(equipmentInfo));
+      dispatch(createEquipment(equipmentInfo));
     }
   };
 

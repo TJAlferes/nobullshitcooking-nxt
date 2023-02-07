@@ -29,7 +29,7 @@ export function NewEquipmentView({
   typeId
 }: Props): JSX.Element {
   // move up into parent container NewEquipment component?
-  const dir = 'https://s3.amazonaws.com/nobsc-user-equipment';
+  const dir = 'https://s3.amazonaws.com/nobsc-user-equipment';  // .com/nobsc-user/equipment instead?
 
   return (
     <div className="new-equipment one-col-a">
@@ -82,7 +82,7 @@ export function NewEquipmentView({
 
         <LoaderButton
           className="submit-button"
-          id="create_new_private_user_equipment_button"
+          id="create_equipment_button"
           isLoading={loading}
           loadingText="Creating..."
           name="submit"

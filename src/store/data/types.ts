@@ -2,9 +2,10 @@ import type { IData as IPlannerData } from '../planner/types';
 
 export const actionTypes = {
   INIT:                  'INIT',
-  INIT_USER:             'INIT_USER',
   GET_INITIAL_DATA:      'GET_INITIAL_DATA',
   GET_DATA:              'GET_DATA',
+
+  INIT_USER:             'INIT_USER',
   GET_INITIAL_USER_DATA: 'GET_INITIAL_USER_DATA',
   GET_USER_DATA:         'GET_USER_DATA'
 } as const;
@@ -33,14 +34,15 @@ export interface IInitialData {
 }
 
 export interface IInitialUserData {
-  myFavoriteRecipes:    IWorkRecipe[];
-  myFriendships:        IFriendship[];
-  myPlans:              IPlan[];
-  myPrivateEquipment:   IEquipment[];
-  myPrivateIngredients: IIngredient[];
-  myPrivateRecipes:     IWorkRecipe[];
-  myPublicRecipes:      IWorkRecipe[];
-  mySavedRecipes:       IWorkRecipe[];
+  myFavoriteRecipes: IWorkRecipe[];
+  myFriendships:     IFriendship[];
+  myPlans:           IPlan[];
+  myEquipment:       IEquipment[];
+  myIngredients:     IIngredient[];
+  //myOrders: IOrder[];
+  myPrivateRecipes:  IWorkRecipe[];
+  myPublicRecipes:   IWorkRecipe[];
+  mySavedRecipes:    IWorkRecipe[];
 }
 
 export interface ICuisine {

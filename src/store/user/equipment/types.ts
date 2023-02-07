@@ -1,25 +1,25 @@
 export const actionTypes = {
-  CREATE_NEW_PRIVATE_EQUIPMENT: 'CREATE_NEW_PRIVATE_EQUIPMENT',
-  EDIT_PRIVATE_EQUIPMENT:       'EDIT_PRIVATE_EQUIPMENT',
-  DELETE_PRIVATE_EQUIPMENT:     'DELETE_PRIVATE_EQUIPMENT'
+  CREATE_EQUIPMENT: 'CREATE_EQUIPMENT',
+  UPDATE_EQUIPMENT: 'UPDATE_EQUIPMENT',
+  DELETE_EQUIPMENT: 'DELETE_EQUIPMENT'
 } as const;
 
-export interface ICreateNewPrivateEquipment {
-  type:          typeof actionTypes.CREATE_NEW_PRIVATE_EQUIPMENT;
-  equipmentInfo: ICreatingEquipmentInfo;
+export interface ICreateEquipment {
+  type:          typeof actionTypes.CREATE_EQUIPMENT;
+  equipmentInfo: IEquipmentInfo;
 }
 
-export interface IEditPrivateEquipment {
-  type:          typeof actionTypes.EDIT_PRIVATE_EQUIPMENT;
-  equipmentInfo: IEditingEquipmentInfo;
+export interface IUpdateEquipment {
+  type:          typeof actionTypes.UPDATE_EQUIPMENT;
+  equipmentInfo: IEquipmentUpdateInfo;
 }
 
-export interface IDeletePrivateEquipment {
-  type: typeof actionTypes.DELETE_PRIVATE_EQUIPMENT;
+export interface IDeleteEquipment {
+  type: typeof actionTypes.DELETE_EQUIPMENT;
   id:   number;
 }
 
-export interface ICreatingEquipmentInfo {
+export interface IEquipmentInfo {
   equipmentTypeId: number;
   name:            string;
   description:     string;
@@ -28,7 +28,7 @@ export interface ICreatingEquipmentInfo {
   tinyImage:       File | null;
 }
 
-export interface IEditingEquipmentInfo extends ICreatingEquipmentInfo {
+export interface IEquipmentUpdateInfo extends IEquipmentInfo {
   id:        number;
   prevImage: string;
 }
