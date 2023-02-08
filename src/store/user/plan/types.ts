@@ -1,17 +1,17 @@
 export const actionTypes = {
-  CREATE_NEW_PLAN: 'CREATE_NEW_PLAN',
-  EDIT_PLAN:       'EDIT_PLAN',
-  DELETE_PLAN:     'DELETE_PLAN'
+  CREATE_PLAN: 'CREATE_PLAN',
+  UPDATE_PLAN: 'UPDATE_PLAN',
+  DELETE_PLAN: 'DELETE_PLAN'
 } as const;
 
 export interface ICreatePlan {
-  type:     typeof actionTypes.CREATE_NEW_PLAN;
-  planInfo: ICreatingPlanInfo;
+  type:     typeof actionTypes.CREATE_PLAN;
+  planInfo: IPlanInfo;
 }
 
-export interface IEditPlan {
-  type:     typeof actionTypes.EDIT_PLAN;
-  planInfo: IEditingPlanInfo;
+export interface IUpdatePlan {
+  type:     typeof actionTypes.UPDATE_PLAN;
+  planInfo: IPlanUpdateInfo;
 }
 
 export interface IDeletePlan {
@@ -19,11 +19,11 @@ export interface IDeletePlan {
   id:   number;
 }
 
-export interface ICreatingPlanInfo {
+export interface IPlanInfo {
   name: string;
   data: string;
 }
 
-export interface IEditingPlanInfo extends ICreatingPlanInfo {
+export interface IPlanUpdateInfo extends IPlanInfo {
   id: number;
 }

@@ -14,10 +14,10 @@ export default function NewEquipment(): JSX.Element {
   const id = params.get('id');
 
   const dispatch = useDispatch();
-  //const equipment =            useSelector(state => state.data.equipment);
-  const equipmentTypes =       useSelector(state => state.data.equipmentTypes);
-  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
-  const message =              useSelector(state => state.user.message);
+  //const equipment =      useSelector(state => state.data.equipment);
+  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
+  const myEquipment =    useSelector(state => state.data.myEquipment);
+  const message =        useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -46,8 +46,9 @@ export default function NewEquipment(): JSX.Element {
       
       window.scrollTo(0, 0);
       setLoading(true);
-      const [ prev ] = myPrivateEquipment.filter(e => e.id === Number(id));
+      const [ prev ] = myEquipment.filter(e => e.id === Number(id));
       if (!prev) {
+        router.push('/dashboard');
         setLoading(false);
         return;
       }
@@ -135,7 +136,7 @@ export default function NewEquipment(): JSX.Element {
   const valid = () => {
     const validTypeId = typeId !== 0;
     if (!validTypeId) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Select equipment type.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
@@ -143,7 +144,7 @@ export default function NewEquipment(): JSX.Element {
 
     const validName = name.trim() !== "";
     if (!validName) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Check your name.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
@@ -151,7 +152,7 @@ export default function NewEquipment(): JSX.Element {
 
     const validDescription = description.trim() !== "";
     if (!validDescription) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Check description.");
       setTimeout(() => setFeedback(""), 3000);
       return false;

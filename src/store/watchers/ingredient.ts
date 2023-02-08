@@ -1,14 +1,14 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { createNewPrivateIngredientSaga, editPrivateIngredientSaga, deletePrivateIngredientSaga } from '../user/ingredient/sagas';
-import { actionTypes as userIngredientActionTypes } from '../user/ingredient/types';
+import { createIngredientSaga, updateIngredientSaga, deleteIngredientSaga } from '../user/ingredient/sagas';
+import { actionTypes } from '../user/ingredient/types';
 
-const { CREATE_NEW_PRIVATE_INGREDIENT, EDIT_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = userIngredientActionTypes;
+const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
 export function* watchIngredient() {
   yield all([
-    takeEvery(CREATE_NEW_PRIVATE_INGREDIENT, createNewPrivateIngredientSaga),
-    takeEvery(EDIT_PRIVATE_INGREDIENT,       editPrivateIngredientSaga),
-    takeEvery(DELETE_PRIVATE_INGREDIENT,     deletePrivateIngredientSaga)
+    takeEvery(CREATE_INGREDIENT, createIngredientSaga),
+    takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),
+    takeEvery(DELETE_INGREDIENT, deleteIngredientSaga)
   ]);
 }

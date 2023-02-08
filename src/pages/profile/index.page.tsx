@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -11,7 +11,8 @@ import { ProfileView } from './view';
 
 export default function Profile(): JSX.Element {
   const router = useRouter();
-  const username = router.query['username'] as string;
+  const params = useSearchParams();
+  const username = params.get('username');
 
   const dispatch = useDispatch();
   const authname =            useSelector(state => state.auth.authname);
@@ -41,13 +42,8 @@ export default function Profile(): JSX.Element {
   }, [message]);
 
   useEffect(() => {
-    if (!username) {
-      router.push('/home');
-      return;
-    }
-
-    if ((username.length < 6) || (username.length > 20)) {
-      router.push('/home');
+    if (!username || (username.length < 6) || (username.length > 20)) {
+      router.push('/');
       return;
     }
 

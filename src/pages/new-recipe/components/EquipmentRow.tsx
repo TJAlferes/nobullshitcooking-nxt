@@ -1,7 +1,7 @@
 import type { IEquipment } from '../../../store/data/types';
 
-export function EquipmentRow({ amount, equipment, myPrivateEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props): JSX.Element {
-  const availableEquipment = [...equipment, ...(myPrivateEquipment.length ? myPrivateEquipment : [])];
+export function EquipmentRow({ amount, equipment, myEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props): JSX.Element {
+  const availableEquipment = [...equipment, ...myEquipment];
   
   return (
     <div className="recipe-row">
@@ -41,7 +41,7 @@ type Props = {
   amount:                                                string | number;
   changeEquipmentRow(e: SyntheticEvent, rowKey: string): void;
   equipment:                                             IEquipment[];
-  myPrivateEquipment:                                    IEquipment[];
+  myEquipment:                                           IEquipment[];
   id:                                                    string | number;
   removeEquipmentRow(rowKey: string):                    void;
   rowKey:                                                string;

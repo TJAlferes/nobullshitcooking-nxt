@@ -1,7 +1,7 @@
-import { actionTypes, ICreatingIngredientInfo, IEditingIngredientInfo } from './types';
+import { actionTypes, IIngredientInfo, IIngredientUpdateInfo } from './types';
 
-const { CREATE_NEW_PRIVATE_INGREDIENT, EDIT_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = actionTypes;
+const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
-export const createNewPrivateIngredient = (ingredientInfo: ICreatingIngredientInfo) => ({type: CREATE_NEW_PRIVATE_INGREDIENT, ingredientInfo});
-export const editPrivateIngredient =      (ingredientInfo: IEditingIngredientInfo) =>  ({type: EDIT_PRIVATE_INGREDIENT, ingredientInfo});
-export const deletePrivateIngredient =    (id: number) =>                              ({type: DELETE_PRIVATE_INGREDIENT, id});
+export const createIngredient = (ingredientInfo: IIngredientInfo) =>       ({type: CREATE_INGREDIENT, ingredientInfo});
+export const updateIngredient = (ingredientInfo: IIngredientUpdateInfo) => ({type: UPDATE_INGREDIENT, ingredientInfo});
+export const deleteIngredient = (id: number) =>                            ({type: DELETE_INGREDIENT, id});

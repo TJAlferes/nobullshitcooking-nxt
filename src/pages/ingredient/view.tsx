@@ -2,14 +2,14 @@ import type { IIngredient } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function IngredientView({ ingredient: { id, fullname, image, ingredient_type_name, description }, myPrivateIngredients }: Props): JSX.Element {
+export function IngredientView({ ingredient: { id, fullname, image, ingredient_type_name, description }, myIngredients }: Props): JSX.Element {
   return (
     <div className="ingredient two-col-b">
       <div className="two-col-b-left">
         <h1>{fullname}</h1>
 
         <div className="image">
-          {myPrivateIngredients.find(ing => ing.id === id)
+          {myIngredients.find(ing => ing.id === id)
             ? <img src={`${url}user-ingredients/${image}`} />
             : <img src={`${url}images-01/ingredients/${image}.jpg`} />}
         </div>
@@ -29,6 +29,6 @@ export function IngredientView({ ingredient: { id, fullname, image, ingredient_t
 }
 
 type Props = {
-  ingredient:           IIngredient;
-  myPrivateIngredients: IIngredient[];
+  ingredient:    IIngredient;
+  myIngredients: IIngredient[];
 }

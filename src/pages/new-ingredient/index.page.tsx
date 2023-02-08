@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewPrivateIngredient, editPrivateIngredient } from '../../store/user/ingredient/actions';
+import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './view';
 
 export default function NewIngredient(): JSX.Element {
@@ -14,10 +14,10 @@ export default function NewIngredient(): JSX.Element {
   const id = params.get('id');
 
   const dispatch = useDispatch();
-  //const ingredients =          useSelector(state => state.data.ingredients);
-  const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
-  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
-  const message =              useSelector(state => state.user.message);
+  //const ingredients =     useSelector(state => state.data.ingredients);
+  const ingredientTypes = useSelector(state => state.data.ingredientTypes);
+  const myIngredients =   useSelector(state => state.data.myIngredients);
+  const message =         useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -46,8 +46,9 @@ export default function NewIngredient(): JSX.Element {
 
       setLoading(true);
       window.scrollTo(0, 0);
-      const [ prev ] = myPrivateIngredients.filter(i => i.id === Number(id));
+      const [ prev ] = myIngredients.filter(i => i.id === Number(id));
       if (!prev) {
+        router.push('/dashboard');
         setLoading(false);
         return;
       }
@@ -99,10 +100,10 @@ export default function NewIngredient(): JSX.Element {
     setLoading(true);
     const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
     if (editingId) {
-      const ingredientEditInfo = {id: editingId, prevImage, ...ingredientInfo};
-      dispatch(editPrivateIngredient(ingredientEditInfo));
+      const ingredientUpdateInfo = {id: editingId, prevImage, ...ingredientInfo};
+      dispatch(updateIngredient(ingredientUpdateInfo));
     } else {
-      dispatch(createNewPrivateIngredient(ingredientInfo));
+      dispatch(createIngredient(ingredientInfo));
     }
   };
 
@@ -135,7 +136,7 @@ export default function NewIngredient(): JSX.Element {
   const valid = () => {
     const validTypeId = typeId !== 0;
     if (!validTypeId) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Select ingredient type.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
@@ -143,7 +144,7 @@ export default function NewIngredient(): JSX.Element {
 
     const validName = name.trim() !== "";
     if (!validName) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Check name.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
@@ -151,7 +152,7 @@ export default function NewIngredient(): JSX.Element {
 
     const validDescription = description.trim() !== "";
     if (!validDescription) {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       setFeedback("Check description.");
       setTimeout(() => setFeedback(""), 3000);
       return false;

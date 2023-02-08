@@ -1,25 +1,25 @@
 export const actionTypes = {
-  CREATE_NEW_PRIVATE_INGREDIENT: 'CREATE_NEW_PRIVATE_INGREDIENT',
-  EDIT_PRIVATE_INGREDIENT:       'EDIT_PRIVATE_INGREDIENT',
-  DELETE_PRIVATE_INGREDIENT:     'DELETE_PRIVATE_INGREDIENT'
+  CREATE_INGREDIENT: 'CREATE_INGREDIENT',
+  UPDATE_INGREDIENT: 'UPDATE_INGREDIENT',
+  DELETE_INGREDIENT: 'DELETE_INGREDIENT'
 } as const;
 
-export interface ICreateNewPrivateIngredient {
-  type:           typeof actionTypes.CREATE_NEW_PRIVATE_INGREDIENT;
-  ingredientInfo: ICreatingIngredientInfo;
+export interface ICreateIngredient {
+  type:           typeof actionTypes.CREATE_INGREDIENT;
+  ingredientInfo: IIngredientInfo;
 }
 
-export interface IEditPrivateIngredient {
-  type:           typeof actionTypes.EDIT_PRIVATE_INGREDIENT;
-  ingredientInfo: IEditingIngredientInfo;
+export interface IUpdateIngredient {
+  type:           typeof actionTypes.UPDATE_INGREDIENT;
+  ingredientInfo: IIngredientUpdateInfo;
 }
 
-export interface IDeletePrivateIngredient {
-  type: typeof actionTypes.DELETE_PRIVATE_INGREDIENT;
+export interface IDeleteIngredient {
+  type: typeof actionTypes.DELETE_INGREDIENT;
   id:   number;
 }
 
-export interface ICreatingIngredientInfo {
+export interface IIngredientInfo {
   ingredientTypeId: number;
   name:             string;
   description:      string;
@@ -28,7 +28,7 @@ export interface ICreatingIngredientInfo {
   tinyImage:        File | null;
 }
 
-export interface IEditingIngredientInfo extends ICreatingIngredientInfo {
+export interface IIngredientUpdateInfo extends IIngredientInfo {
   id:        number;
   prevImage: string;
 }

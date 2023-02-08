@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -11,9 +11,10 @@ import { saveRecipe } from '../../store/user/save/actions';
 import { RecipeView } from './view';
 
 export default function Recipe(): JSX.Element {
-  const router = useRouter();
-  const { pathname } = router;
-  const { id } = router.query;
+  const pathname = usePathname();
+  const router =   useRouter();
+  const params =   useSearchParams();
+  const id =       Number(params.get('id'));
 
   const dispatch = useDispatch();
   const myFavoriteRecipes =   useSelector(state => state.data.myFavoriteRecipes);
@@ -44,15 +45,15 @@ export default function Recipe(): JSX.Element {
   }, [message]);
 
   useEffect(() => {
-    if (!id) {
-      router.push('/home');
+    if (!id || !pathname) {
+      router.push('/');
       return;
     }
 
     const getPrivateRecipe = async (id: number) => {
       const res = await axios.post(`${endpoint}/user/recipe/private/one`, {id}, {withCredentials: true});
       if (res.data) setRecipe(res.data);
-      //else TO DO (and on all other component fetches) (react query?)
+      //else TO DO (and on all other component fetches)
     };
 
     const getPublicRecipe = async (id: number) => {
@@ -63,8 +64,8 @@ export default function Recipe(): JSX.Element {
 
     const isPrivateUserRecipe = pathname.match(/^(\/user-recipe\/([1-9][0-9]*))$/);
     
-    if (isPrivateUserRecipe) getPrivateRecipe(Number(id));
-    else getPublicRecipe(Number(id));
+    if (isPrivateUserRecipe) getPrivateRecipe(id);
+    else                     getPublicRecipe(id);
   }, []);
 
   const favorite = () => {
@@ -72,7 +73,7 @@ export default function Recipe(): JSX.Element {
     if (favorited) return;
     setFavorited(true);
     setLoading(true);
-    dispatch(favoriteRecipe(Number(id)));
+    dispatch(favoriteRecipe(id));
   };
 
   const save = () => {
@@ -80,7 +81,7 @@ export default function Recipe(): JSX.Element {
     if (saved) return;
     setSaved(true);
     setLoading(true);
-    dispatch(saveRecipe(Number(id)));
+    dispatch(saveRecipe(id));
   };
 
   return !recipe

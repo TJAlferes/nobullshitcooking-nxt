@@ -2,7 +2,7 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { getMyPrivateEquipmentsSaga } from '../../data/sagas';
+import { getMyEquipmentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import type { ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';
 
@@ -25,7 +25,7 @@ export function* createEquipmentSaga(action: ICreateEquipment) {
       yield call([axios, axios.post], `${endpoint}/user/equipment/create`, {equipmentInfo: {equipmentTypeId, name, description, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateEquipmentsSaga);
+    yield call(getMyEquipmentSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -53,7 +53,7 @@ export function* updateEquipmentSaga(action: IUpdateEquipment) {
       yield call([axios, axios.put], `${endpoint}/user/equipment/update`, {equipmentInfo: {id, equipmentTypeId, name, description, prevImage, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateEquipmentsSaga);
+    yield call(getMyEquipmentSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -67,7 +67,7 @@ export function* deleteEquipmentSaga(action: IDeleteEquipment) {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateEquipmentsSaga);
+    yield call(getMyEquipmentSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

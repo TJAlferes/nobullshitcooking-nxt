@@ -2,11 +2,11 @@ import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
 import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
-import { getMyPrivateIngredientsSaga } from '../../data/sagas';
+import { getMyIngredientsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type { ICreateNewPrivateIngredient, IEditPrivateIngredient, IDeletePrivateIngredient } from './types';
+import type { ICreateIngredient, IUpdateIngredient, IDeleteIngredient } from './types';
 
-export function* createNewPrivateIngredientSaga(action: ICreateNewPrivateIngredient) {
+export function* createIngredientSaga(action: ICreateIngredient) {
   let { ingredientTypeId, name, description, image, fullImage, tinyImage } = action.ingredientInfo;
 
   try {
@@ -25,7 +25,7 @@ export function* createNewPrivateIngredientSaga(action: ICreateNewPrivateIngredi
       yield call([axios, axios.post], `${endpoint}/user/ingredient/create`, {ingredientInfo: {ingredientTypeId, name, description, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateIngredientsSaga);
+    yield call(getMyIngredientsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -34,7 +34,7 @@ export function* createNewPrivateIngredientSaga(action: ICreateNewPrivateIngredi
   yield put(userMessageClear());
 }
 
-export function* editPrivateIngredientSaga(action: IEditPrivateIngredient) {
+export function* updateIngredientSaga(action: IUpdateIngredient) {
   let { id, ingredientTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.ingredientInfo;
 
   try {
@@ -53,7 +53,7 @@ export function* editPrivateIngredientSaga(action: IEditPrivateIngredient) {
       yield call([axios, axios.put], `${endpoint}/user/ingredient/update`, {ingredientInfo: {id, ingredientTypeId, name, description, prevImage, image}}, {withCredentials: true});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateIngredientsSaga);
+    yield call(getMyIngredientsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }
@@ -62,12 +62,12 @@ export function* editPrivateIngredientSaga(action: IEditPrivateIngredient) {
   yield put(userMessageClear());
 }
 
-export function* deletePrivateIngredientSaga(action: IDeletePrivateIngredient) {
+export function* deleteIngredientSaga(action: IDeleteIngredient) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/ingredient/delete`, {withCredentials: true, data: {id: action.id}});
 
     yield put(userMessage(message));
-    yield call(getMyPrivateIngredientsSaga);
+    yield call(getMyIngredientsSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));
   }

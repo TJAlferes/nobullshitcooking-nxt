@@ -7,17 +7,17 @@ import { v4 as uuid } from 'uuid';
 
 import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
-import { createNewPrivateRecipe, createNewPublicRecipe, editPrivateRecipe, editPublicRecipe } from '../../store/user/recipe/actions';
+import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../store/user/recipe/actions';
 import type { IRequiredMethod } from '../../store/user/recipe/types';
 import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './view';
 
 export default function NewRecipe(): JSX.Element | null {
-  const router = useRouter();
-  const params = useSearchParams();
+  const router =    useRouter();
+  const params =    useSearchParams();
   const ownership = params.get('ownership');
-  const id = Number(params.get('id'));
+  const id =        Number(params.get('id'));
   if (!id || !ownership) {
     router.push('/dashboard');
     return null;
@@ -25,22 +25,22 @@ export default function NewRecipe(): JSX.Element | null {
 
   const dispatch = useDispatch();
   
-  const message =          useSelector(state => state.user.message);
-  const authname =             useSelector(state => state.auth.authname);
-  const cuisines =             useSelector(state => state.data.cuisines);
-  const equipment =            useSelector(state => state.data.equipment);
-  const ingredients =          useSelector(state => state.data.ingredients);
-  const ingredientTypes =      useSelector(state => state.data.ingredientTypes);
-  const measurements =         useSelector(state => state.data.measurements);
-  const methods =              useSelector(state => state.data.methods);
-  const myFavoriteRecipes =    useSelector(state => state.data.myFavoriteRecipes);
-  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
-  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
-  const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
-  const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
-  const recipes =              useSelector(state => state.data.recipes);
-  const recipeTypes =          useSelector(state => state.data.recipeTypes);
+  const message =           useSelector(state => state.user.message);
+  const authname =          useSelector(state => state.auth.authname);
+  const cuisines =          useSelector(state => state.data.cuisines);
+  const equipment =         useSelector(state => state.data.equipment);
+  const ingredients =       useSelector(state => state.data.ingredients);
+  const ingredientTypes =   useSelector(state => state.data.ingredientTypes);
+  const measurements =      useSelector(state => state.data.measurements);
+  const methods =           useSelector(state => state.data.methods);
+  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
+  const myEquipment =       useSelector(state => state.data.myEquipment);
+  const myIngredients =     useSelector(state => state.data.myIngredients);
+  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
+  const recipes =           useSelector(state => state.data.recipes);
+  const recipeTypes =       useSelector(state => state.data.recipeTypes);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -58,8 +58,12 @@ export default function NewRecipe(): JSX.Element | null {
     19: false, 20: false, 21: false, 22: false, 23: false, 24: false
   });
 
-  const [ equipmentRows, setEquipmentRows ] =   useState<IEquipmentRow[]>([{key: uuid(), amount: "", type: "", id: ""}]);
-  const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([{key: uuid(), amount: "", measurementId: "", type: "", id: ""}]);
+  const [ equipmentRows, setEquipmentRows ] =   useState<IEquipmentRow[]>([
+    {key: uuid(), amount: "", type: "", id: ""}
+  ]);
+  const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
+    {key: uuid(), amount: "", measurementId: "", type: "", id: ""}
+  ]);
   const [ subrecipeRows, setSubrecipeRows ] =   useState<ISubrecipeRow[]>([]);
 
   // this is insane. do better.
@@ -133,7 +137,6 @@ export default function NewRecipe(): JSX.Element | null {
       setTitle(title);
       setDescription(description);
       setDirections(directions);
-
       // double check this!!!
       const methodsToSet: number[] = [];
       methods.length && methods.map(m => methodsToSet.push(m.method_id));
@@ -144,11 +147,9 @@ export default function NewRecipe(): JSX.Element | null {
         });
         return nextState;
       });
-
       setRequiredEquipment(equipment);
       setRequiredIngredients(ingredients);
       setRequiredSubrecipes(subrecipes);
-
       setRecipePrevImage(recipe_image);
       setEquipmentPrevImage(equipment_image);
       setIngredientsPrevImage(ingredients_image);
@@ -222,11 +223,11 @@ export default function NewRecipe(): JSX.Element | null {
 
   const getCheckedMethods = () => {
     const checkedMethods: IRequiredMethod[] = [];
-    Object.entries(usedMethods).forEach(([key, value]) => {
+    Object.entries(usedMethods).forEach(([ key, value ]) => {
       if (value === true) checkedMethods.push({id: Number(key)});
     });
     return checkedMethods;
-    //return Object.entries(usedMethods).map(([key, value]) => (value === true) && ({id: Number(key)}));
+    //return Object.entries(usedMethods).map(([ key, value ]) => (value === true) && ({id: Number(key)}));
   };
 
   const getRequiredEquipment = () => {
@@ -329,12 +330,12 @@ export default function NewRecipe(): JSX.Element | null {
     setLoading(true);
 
     if (editingId) {
-      const recipeEditInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
-      if      (ownership === "private") dispatch(editPrivateRecipe(recipeEditInfo));
-      else if (ownership === "public")  dispatch(editPublicRecipe(recipeEditInfo));
+      const recipeUpdateInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
+      if      (ownership === "private") dispatch(updatePrivateRecipe(recipeUpdateInfo));
+      else if (ownership === "public")  dispatch(updatePublicRecipe(recipeUpdateInfo));
     } else {
-      if      (ownership === "private") dispatch(createNewPrivateRecipe(recipeInfo));
-      else if (ownership === "public")  dispatch(createNewPublicRecipe(recipeInfo));
+      if      (ownership === "private") dispatch(createPrivateRecipe(recipeInfo));
+      else if (ownership === "public")  dispatch(createPublicRecipe(recipeInfo));
     }
   };
 
@@ -460,8 +461,8 @@ export default function NewRecipe(): JSX.Element | null {
       measurements={measurements}
       methods={methods}
       myFavoriteRecipes={myFavoriteRecipes}
-      myPrivateEquipment={myPrivateEquipment}
-      myPrivateIngredients={myPrivateIngredients}
+      myEquipment={myEquipment}
+      myIngredients={myIngredients}
       myPrivateRecipes={myPrivateRecipes}
       myPublicRecipes={myPublicRecipes}
       mySavedRecipes={mySavedRecipes}

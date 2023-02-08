@@ -2,14 +2,14 @@ import type { IEquipment } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myPrivateEquipment }: Props): JSX.Element {
+export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myEquipment }: Props): JSX.Element {
   return (
     <div className="equipment two-col-b">
       <div className="two-col-b-left">
         <h1>{name}</h1>
 
         <div className="image">
-          {myPrivateEquipment.find(e => e.id === id)
+          {myEquipment.find(e => e.id === id)
             ? <img src={`${url}user-equipment/${image}`} />
             : <img src={`${url}images-01/equipment/${image}.jpg`} />}
         </div>
@@ -29,6 +29,6 @@ export function EquipmentView({ equipment: { id, name, image, equipment_type_nam
 }
 
 type Props = {
-  equipment:          IEquipment;
-  myPrivateEquipment: IEquipment[];
+  equipment:   IEquipment;
+  myEquipment: IEquipment[];
 }

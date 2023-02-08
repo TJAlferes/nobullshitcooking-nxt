@@ -2,7 +2,7 @@ import { actionTypes, IInitialData, IInitialUserData } from './types';
 
 const { INIT, INIT_USER, GET_INITIAL_DATA, GET_DATA, GET_INITIAL_USER_DATA, GET_USER_DATA } = actionTypes;
 
-export const init = () => ({type: INIT});
+export const init =     () => ({type: INIT});
 export const initUser = () => ({type: INIT_USER});
 
 export const getInitialData = (initialData: IInitialData) =>                             ({type: GET_INITIAL_DATA, initialData});

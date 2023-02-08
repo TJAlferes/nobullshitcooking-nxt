@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { LoaderSpinner } from '../../components';
@@ -8,30 +8,29 @@ import { IngredientView } from './view';
 
 export default function Ingredient(): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useSearchParams();
+  const id =     Number(params.get('id'));
 
   const officialIngredients =  useSelector(state => state.data.ingredients);
-  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
+  const myIngredients =        useSelector(state => state.data.myIngredients);
 
   const [ ingredient, setIngredient ] = useState<IIngredient>();
 
   useEffect(() => {
     if (!id) {
-      router.push('/home');
+      router.push('/');
       return;
     }
 
-    const localIngredient = (officialIngredients.find(i => i.id == Number(id)) || myPrivateIngredients.find(i => i.id == Number(id)));
+    const localIngredient = (officialIngredients.find(i => i.id == Number(id)) || myIngredients.find(i => i.id == Number(id)));
 
     if (!localIngredient) {
-      router.push('/home');
+      router.push('/');
       return;
     }
     
     setIngredient(localIngredient);
   }, []);
 
-  return !ingredient
-    ? <LoaderSpinner />
-    : <IngredientView ingredient={ingredient} myPrivateIngredients={myPrivateIngredients} />;
+  return !ingredient ? <LoaderSpinner /> : <IngredientView ingredient={ingredient} myIngredients={myIngredients} />;
 }

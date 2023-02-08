@@ -7,7 +7,7 @@ export function IngredientRow({
   ingredients,
   ingredientTypes,
   measurements,
-  myPrivateIngredients,
+  myIngredients,
   changeIngredientRow,
   id,
   removeIngredientRow,
@@ -15,7 +15,7 @@ export function IngredientRow({
   type,
   measurementId
 }: Props): JSX.Element {
-  const availableIngredients = [...ingredients, ...(myPrivateIngredients.length ? myPrivateIngredients : [])];
+  const availableIngredients = [...ingredients, ...myIngredients];
   
   return (
     <div className="recipe-row">
@@ -55,7 +55,7 @@ type Props = {
   ingredients:                                            IIngredient[];
   ingredientTypes:                                        IIngredientType[];
   measurements:                                           IMeasurement[];
-  myPrivateIngredients:                                   IIngredient[];
+  myIngredients:                                          IIngredient[];
   id:                                                     string | number;
   removeIngredientRow(rowKey: string):                    void;
   rowKey:                                                 string;

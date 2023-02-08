@@ -6,10 +6,6 @@ const NewPlan = dynamic(() => import('./NewPlan'), {
   ssr: false
 });
 
-export default function NewPlanPage({ editing }: Props): JSX.Element {
-  return <NewPlan editing={editing} />;
+export default function NewPlanPage(): JSX.Element {
+  return <NewPlan />;
 }
-
-type Props = {
-  editing: boolean;
-};

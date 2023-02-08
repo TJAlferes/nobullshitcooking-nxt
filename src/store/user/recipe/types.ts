@@ -1,21 +1,21 @@
 export const actionTypes = {
-  CREATE_NEW_PRIVATE_RECIPE: 'CREATE_NEW_PRIVATE_RECIPE',
-  EDIT_PRIVATE_RECIPE:       'EDIT_PRIVATE_RECIPE',
-  DELETE_PRIVATE_RECIPE:     'DELETE_PRIVATE_RECIPE',
+  CREATE_PRIVATE_RECIPE: 'CREATE_PRIVATE_RECIPE',
+  UPDATE_PRIVATE_RECIPE: 'UPDATE_PRIVATE_RECIPE',
+  DELETE_PRIVATE_RECIPE: 'DELETE_PRIVATE_RECIPE',
 
-  CREATE_NEW_PUBLIC_RECIPE: 'CREATE_NEW_PUBLIC_RECIPE',
-  EDIT_PUBLIC_RECIPE:       'EDIT_PUBLIC_RECIPE',
-  DISOWN_PUBLIC_RECIPE:     'DISOWN_PUBLIC_RECIPE'
+  CREATE_PUBLIC_RECIPE: 'CREATE_PUBLIC_RECIPE',
+  UPDATE_PUBLIC_RECIPE: 'UPDATE_PUBLIC_RECIPE',
+  DISOWN_PUBLIC_RECIPE: 'DISOWN_PUBLIC_RECIPE'
 } as const;
 
-export interface ICreateNewPrivateRecipe {
-  type:       typeof actionTypes.CREATE_NEW_PRIVATE_RECIPE;
-  recipeInfo: ICreatingRecipeInfo;
+export interface ICreatePrivateRecipe {
+  type:       typeof actionTypes.CREATE_PRIVATE_RECIPE;
+  recipeInfo: IRecipeInfo;
 }
 
-export interface IEditPrivateRecipe {
-  type:       typeof actionTypes.EDIT_PRIVATE_RECIPE;
-  recipeInfo: IEditingRecipeInfo;
+export interface IUpdatePrivateRecipe {
+  type:       typeof actionTypes.UPDATE_PRIVATE_RECIPE;
+  recipeInfo: IRecipeUpdateInfo;
 }
 
 export interface IDeletePrivateRecipe {
@@ -23,14 +23,14 @@ export interface IDeletePrivateRecipe {
   id:   number;
 }
 
-export interface ICreateNewPublicRecipe {
-  type:       typeof actionTypes.CREATE_NEW_PUBLIC_RECIPE;
-  recipeInfo: ICreatingRecipeInfo;
+export interface ICreatePublicRecipe {
+  type:       typeof actionTypes.CREATE_PUBLIC_RECIPE;
+  recipeInfo: IRecipeInfo;
 }
 
-export interface IEditPublicRecipe {
-  type:       typeof actionTypes.EDIT_PUBLIC_RECIPE;
-  recipeInfo: IEditingRecipeInfo;
+export interface IUpdatePublicRecipe {
+  type:       typeof actionTypes.UPDATE_PUBLIC_RECIPE;
+  recipeInfo: IRecipeUpdateInfo;
 }
 
 export interface IDisownPublicRecipe {
@@ -38,7 +38,7 @@ export interface IDisownPublicRecipe {
   id:   number;
 }
 
-export interface ICreatingRecipeInfo {
+export interface IRecipeInfo {
   ownership:    string;
   recipeTypeId: number;
   cuisineId:    number;
@@ -65,7 +65,7 @@ export interface ICreatingRecipeInfo {
   //video
 }
 
-export interface IEditingRecipeInfo extends ICreatingRecipeInfo {
+export interface IRecipeUpdateInfo extends IRecipeInfo {
   id:                   number
   recipePrevImage:      string;
   equipmentPrevImage:   string;

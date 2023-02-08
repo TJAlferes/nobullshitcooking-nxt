@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -8,7 +8,8 @@ import { PlanView } from './view';
 
 export default function Plan(): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useSearchParams();
+  const id = Number(params.get('id'));
 
   const dispatch = useDispatch();
   const myPlans =     useSelector(state => state.data.myPlans);

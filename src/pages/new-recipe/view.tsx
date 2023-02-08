@@ -36,8 +36,8 @@ export function NewRecipeView({
   measurements,
   methods,
   myFavoriteRecipes,
-  myPrivateEquipment,
-  myPrivateIngredients,
+  myEquipment,
+  myIngredients,
   myPrivateRecipes,
   myPublicRecipes,
   mySavedRecipes,
@@ -166,7 +166,7 @@ export function NewRecipeView({
             <EquipmentRow
               amount={amount}
               equipment={equipment}
-              myPrivateEquipment={ownership === "private" ? myPrivateEquipment : []}
+              myEquipment={ownership === "private" ? myEquipment : []}
               id={id}
               changeEquipmentRow={changeEquipmentRow}
               key={key}
@@ -189,7 +189,7 @@ export function NewRecipeView({
               ingredientTypes={ingredientTypes}
               measurementId={measurementId}
               measurements={measurements}
-              myPrivateIngredients={ownership === "private" ? myPrivateIngredients : []}
+              myIngredients={ownership === "private" ? myIngredients : []}
               changeIngredientRow={changeIngredientRow}
               id={id}
               key={key}
@@ -325,8 +325,8 @@ type Props = {
   measurements:                                           IMeasurement[];
   methods:                                                IMethod[];
   myFavoriteRecipes:                                      IWorkRecipe[];
-  myPrivateEquipment:                                     IEquipment[];
-  myPrivateIngredients:                                   IIngredient[];
+  myEquipment:                                            IEquipment[];
+  myIngredients:                                          IIngredient[];
   myPrivateRecipes:                                       IWorkRecipe[];
   myPublicRecipes:                                        IWorkRecipe[];
   mySavedRecipes:                                         IWorkRecipe[];

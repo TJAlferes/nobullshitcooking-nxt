@@ -22,8 +22,8 @@ const initialState: IState = {
   myFavoriteRecipes: [],
   myFriendships: [],
   myPlans: [],
-  myPrivateEquipment: [],
-  myPrivateIngredients: [],
+  myEquipment: [],
+  myIngredients: [],
   myPrivateRecipes: [],
   myPublicRecipes: [],
   mySavedRecipes: []
@@ -32,40 +32,46 @@ const initialState: IState = {
 export const dataReducer = (state = initialState, action: AnyAction): IState => {
   switch (action.type) {
     case HYDRATE: return {...state, ...action['payload'].data};
+
     case GET_INITIAL_DATA:
       return {
         ...state,
         ...{
-          cuisines: action['initialData'].cuisines,
-          equipment: action['initialData'].equipment,
-          equipmentTypes: action['initialData'].equipmentTypes,
-          ingredients: action['initialData'].ingredients,
-          ingredientTypes: action['initialData'].ingredientTypes,
-          measurements: action['initialData'].measurements,
-          methods: action['initialData'].methods,
-          recipes: action['initialData'].recipes,
-          recipeTypes: action['initialData'].recipeTypes,
-          //products: action['initialData'].products,
+          cuisines:          action['initialData'].cuisines,
+          equipment:         action['initialData'].equipment,
+          equipmentTypes:    action['initialData'].equipmentTypes,
+          ingredients:       action['initialData'].ingredients,
+          ingredientTypes:   action['initialData'].ingredientTypes,
+          measurements:      action['initialData'].measurements,
+          methods:           action['initialData'].methods,
+          recipes:           action['initialData'].recipes,
+          recipeTypes:       action['initialData'].recipeTypes,
+          //products:          action['initialData'].products,
           //productCategories: action['initialData'].productCategories,
-          //productTypes: action['initialData'].productTypes
+          //productTypes:      action['initialData'].productTypes
         }
       };
-    //case GET_DATA: return {...state, ...{[action.data.key]: action.data.value}};
+
+    case GET_DATA: return {...state, ...{[action['data'].key]: action['data'].value}};
+
     case GET_INITIAL_USER_DATA:
       return {
         ...state,
         ...{
-          myPublicRecipes: action['initialUserData'].myPublicRecipes,
-          myPrivateEquipment: action['initialUserData'].myPrivateEquipment,
-          myPrivateIngredients: action['initialUserData'].myPrivateIngredients,
-          myPrivateRecipes: action['initialUserData'].myPrivateRecipes,
+          //myOrders:          action['initialUserData'].myOrders,
+          myPublicRecipes:   action['initialUserData'].myPublicRecipes,
+          myEquipment:       action['initialUserData'].myEquipment,
+          myIngredients:     action['initialUserData'].myIngredients,
+          myPrivateRecipes:  action['initialUserData'].myPrivateRecipes,
           myFavoriteRecipes: action['initialUserData'].myFavoriteRecipes,
-          mySavedRecipes: action['initialUserData'].mySavedRecipes,
-          myPlans: action['initialUserData'].myPlans,
-          myFriendships: action['initialUserData'].myFriendships
+          mySavedRecipes:    action['initialUserData'].mySavedRecipes,
+          myPlans:           action['initialUserData'].myPlans,
+          myFriendships:     action['initialUserData'].myFriendships
         }
       };
-    //case GET_USER_DATA: return {...state, ...{[action.userData.key]: action.userData.value}};
+
+    case GET_USER_DATA: return {...state, ...{[action['userData'].key]: action['userData'].value}};
+    
     default: return state;
   }
 };

@@ -141,6 +141,13 @@ export interface IProductType {
   name: string;
 }
 
+/*export interface IOrder {
+  id:       number;
+  placed:   string;
+  status:   string;
+  products: IWorkProduct[];
+}*/
+
 /*
 
 Actions
@@ -149,18 +156,14 @@ Actions
 
 export type Actions =
   IInit |
-  IInitUser |
   IGetInitialData |
   IGetData |
+  IInitUser |
   IGetInitialUserData |
   IGetUserData;
 
 export interface IInit {
   type: typeof actionTypes.INIT;
-}
-
-export interface IInitUser {
-  type: typeof actionTypes.INIT_USER;
 }
 
 export interface IGetInitialData {         
@@ -174,6 +177,10 @@ export interface IGetData {
     key:   keyof IInitialData;
     value: Partial<IInitialData>;
   };
+}
+
+export interface IInitUser {
+  type: typeof actionTypes.INIT_USER;
 }
 
 export interface IGetInitialUserData {

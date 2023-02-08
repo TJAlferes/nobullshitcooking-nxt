@@ -5,11 +5,16 @@ import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
 import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import type {
-  ICreateNewPrivateRecipe, IEditPrivateRecipe, IDeletePrivateRecipe,
-  ICreateNewPublicRecipe, IEditPublicRecipe, IDisownPublicRecipe
+  ICreatePrivateRecipe,
+  IUpdatePrivateRecipe,
+  IDeletePrivateRecipe,
+
+  ICreatePublicRecipe,
+  IUpdatePublicRecipe,
+  IDisownPublicRecipe
 } from './types';
 
-export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateNewPublicRecipe)) {
+export function* createRecipeSaga(action: (ICreatePrivateRecipe | ICreatePublicRecipe)) {
   let {
     ownership,
     recipeTypeId,
@@ -38,9 +43,9 @@ export function* createNewRecipeSaga(action: (ICreateNewPrivateRecipe | ICreateN
       const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
         yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe'}, {withCredentials: true});
       
-      yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], fullSignature,  recipeFullImage,  {headers: {'Content-Type': 'image/jpeg'}});
       yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, recipeTinyImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature,  recipeTinyImage,  {headers: {'Content-Type': 'image/jpeg'}});
 
       recipeImage = fullName;
     }
@@ -141,7 +146,7 @@ export function* disownPublicRecipeSaga(action: IDisownPublicRecipe) {
   yield put(userMessageClear());
 }
 
-export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)) {
+export function* updateRecipeSaga(action: (IUpdatePrivateRecipe | IUpdatePublicRecipe)) {
   let {
     id,
     ownership,
@@ -175,9 +180,9 @@ export function* editRecipeSaga(action: (IEditPrivateRecipe | IEditPublicRecipe)
       const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
         yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe'}, {withCredentials: true});
 
-      yield call([axios, axios.put], fullSignature, recipeFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], fullSignature,  recipeFullImage,  {headers: {'Content-Type': 'image/jpeg'}});
       yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, recipeTinyImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature,  recipeTinyImage,  {headers: {'Content-Type': 'image/jpeg'}});
 
       recipeImage = fullName;
     }

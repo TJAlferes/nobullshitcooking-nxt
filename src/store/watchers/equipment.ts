@@ -1,14 +1,14 @@
 import { all, takeEvery } from 'redux-saga/effects';
 
-import { createNewPrivateEquipmentSaga, editPrivateEquipmentSaga, deletePrivateEquipmentSaga } from '../user/equipment/sagas';
-import { actionTypes as userEquipmentActionTypes } from '../user/equipment/types';
+import { createEquipmentSaga, updateEquipmentSaga, deleteEquipmentSaga } from '../user/equipment/sagas';
+import { actionTypes } from '../user/equipment/types';
 
-const { CREATE_NEW_PRIVATE_EQUIPMENT, EDIT_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = userEquipmentActionTypes;
+const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
 export function* watchEquipment() {
   yield all([
-    takeEvery(CREATE_NEW_PRIVATE_EQUIPMENT, createNewPrivateEquipmentSaga),
-    takeEvery(EDIT_PRIVATE_EQUIPMENT,       editPrivateEquipmentSaga),
-    takeEvery(DELETE_PRIVATE_EQUIPMENT,     deletePrivateEquipmentSaga)
+    takeEvery(CREATE_EQUIPMENT, createEquipmentSaga),
+    takeEvery(UPDATE_EQUIPMENT, updateEquipmentSaga),
+    takeEvery(DELETE_EQUIPMENT, deleteEquipmentSaga)
   ]);
 }

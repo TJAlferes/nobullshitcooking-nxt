@@ -38,27 +38,28 @@ export function* getInitialUserDataSaga() {
 
 // refetches
 
-export const getCuisinesSaga =          makeDataSaga("/cuisine",                 "cuisines");
-export const getEquipmentsSaga =        makeDataSaga("/equipment/official/all",  "equipment");
-export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",          "equipmentTypes");
-export const getIngredientsSaga =       makeDataSaga("/ingredient/official/all", "ingredients");
-export const getIngredientTypesSaga =   makeDataSaga("/ingredient-type",         "ingredientTypes");
-export const getMeasurementsSaga =      makeDataSaga("/measurement",             "measurements");
-export const getMethodsSaga =           makeDataSaga("/method",                  "methods");
-export const getProductsSaga =          makeDataSaga("/product",                 "products");
-export const getProductCategoriesSaga = makeDataSaga("/product-category",        "productCategories");
-export const getProductTypesSaga =      makeDataSaga("/product-type",            "productTypes");
-export const getRecipesSaga =           makeDataSaga("/recipe/official/all",     "recipes");
-export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",             "recipeTypes");
+export const getCuisinesSaga =          makeDataSaga("/cuisine",          "cuisines");
+export const getEquipmentsSaga =        makeDataSaga("/equipment",        "equipment");
+export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",   "equipmentTypes");
+export const getIngredientsSaga =       makeDataSaga("/ingredient",       "ingredients");
+export const getIngredientTypesSaga =   makeDataSaga("/ingredient-type",  "ingredientTypes");
+export const getMeasurementsSaga =      makeDataSaga("/measurement",      "measurements");
+export const getMethodsSaga =           makeDataSaga("/method",           "methods");
+export const getProductsSaga =          makeDataSaga("/product",          "products");
+export const getProductCategoriesSaga = makeDataSaga("/product-category", "productCategories");
+export const getProductTypesSaga =      makeDataSaga("/product-type",     "productTypes");
+export const getRecipesSaga =           makeDataSaga("/recipe",           "recipes");
+export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",      "recipeTypes");
 
-export const getMyFavoriteRecipesSaga =    makeUserDataSaga("/favorite-recipe",    "myFavoriteRecipes");
-export const getMyFriendshipsSaga =        makeUserDataSaga("/friendship",         "myFriendships");
-export const getMyPlansSaga =              makeUserDataSaga("/plan/all",           "myPlans");
-export const getMyPrivateEquipmentsSaga =  makeUserDataSaga("/equipment/all",      "myPrivateEquipment");
-export const getMyPrivateIngredientsSaga = makeUserDataSaga("/ingredient/all",     "myPrivateIngredients");
-export const getMyPrivateRecipesSaga =     makeUserDataSaga("/recipe/private/all", "myPrivateRecipes");
-export const getMyPublicRecipesSaga =      makeUserDataSaga("/recipe/public/all",  "myPublicRecipes");
-export const getMySavedRecipesSaga =       makeUserDataSaga("/saved-recipe",       "mySavedRecipes");
+export const getMyFavoriteRecipesSaga = makeUserDataSaga("/user/favorite-recipe", "myFavoriteRecipes");
+export const getMyFriendshipsSaga =     makeUserDataSaga("/user/friendship",      "myFriendships");
+export const getMyPlansSaga =           makeUserDataSaga("/user/plan",            "myPlans");
+export const getMyEquipmentSaga =       makeUserDataSaga("/user/equipment",       "myEquipment");
+export const getMyIngredientsSaga =     makeUserDataSaga("/user/ingredient",      "myIngredients");
+//export const getMyOrdersSaga =          makeUserDataSaga("/user/order",           "myOrders");
+export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/recipe/private",  "myPrivateRecipes");
+export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/recipe/public",   "myPublicRecipes");
+export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "mySavedRecipes");
 
 function makeDataSaga(path: string, key: keyof IInitialData) {
   return function* () {
@@ -74,7 +75,7 @@ function makeDataSaga(path: string, key: keyof IInitialData) {
 function makeUserDataSaga(path: string, key: keyof IInitialUserData) {
   return function* () {
     try {
-      const { data } = yield call([axios, axios.post], `${endpoint}/user${path}`, {}, {withCredentials: true});
+      const { data } = yield call([axios, axios.post], `${endpoint}${path}`, {}, {withCredentials: true});
       yield put(getUserData(key, data));
     } catch (err) {
       //

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { LoaderSpinner } from '../../components';
@@ -8,28 +8,29 @@ import { EquipmentView } from './view';
 
 export default function Equipment(): JSX.Element {
   const router = useRouter();
-  const { id } = router.query;
+  const params = useSearchParams();
+  const id =     Number(params.get('id'));
 
-  const officialEquipment =  useSelector(state => state.data.equipment);
-  const myPrivateEquipment = useSelector(state => state.data.myPrivateEquipment);
+  const officialEquipment = useSelector(state => state.data.equipment);
+  const myEquipment =       useSelector(state => state.data.myEquipment);
 
   const [ equipment, setEquipment ] = useState<IEquipment>();
 
   useEffect(() => {
     if (!id) {
-      router.push('/home');
+      router.push('/');
       return;
     }
 
-    const localEquipment = (officialEquipment.find(e => e.id == Number(id)) || myPrivateEquipment.find(e => e.id == Number(id)));
+    const localEquipment = (officialEquipment.find(e => e.id == Number(id)) || myEquipment.find(e => e.id == Number(id)));
 
     if (!localEquipment) {
-      router.push('/home');
+      router.push('/');
       return;
     }
     
     setEquipment(localEquipment);
   }, []);
 
-  return !equipment ? <LoaderSpinner /> : <EquipmentView equipment={equipment} myPrivateEquipment={myPrivateEquipment} />;
+  return !equipment ? <LoaderSpinner /> : <EquipmentView equipment={equipment} myEquipment={myEquipment} />;
 }

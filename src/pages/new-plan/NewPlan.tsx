@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
 import { clearWork, setCreating, setEditingId, setPlanName, setPlanData } from '../../store/planner/actions';
-import { createNewPlan, editPlan } from '../../store/user/plan/actions';
+import { createPlan, updatePlan } from '../../store/user/plan/actions';
 import { NewPlanView } from './view';
 
 export default function NewPlan(): JSX.Element {
@@ -123,10 +123,10 @@ export default function NewPlan(): JSX.Element {
     setLoading(true);
     const planInfo = {name: planName, data: getPlanData()};
     if (editingId) {
-      const planEditInfo = {id: editingId as number, ...planInfo};
-      dispatch(editPlan(planEditInfo));
+      const planUpdateInfo = {id: editingId as number, ...planInfo};
+      dispatch(updatePlan(planUpdateInfo));
     }
-    else dispatch(createNewPlan(planInfo));
+    else dispatch(createPlan(planInfo));
   }
 
   return (
