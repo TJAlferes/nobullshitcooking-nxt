@@ -45,12 +45,26 @@ export const chatReducer = (state = initialState, action: Actions): IState => {
 
     case USER_JOINED_ROOM:
       return {...state, ...{
-        messages: state.messages.concat({kind: PUBLIC, id: 'admin' + action.ts, to: state.room, from: "messengerstatus", text: `${action.user} has joined the room.`, ts: action.ts}),
+        messages: state.messages.concat({
+          kind: PUBLIC,
+          id:   "admin" + action.ts,
+          to:   state.room,
+          from: "messengerstatus",
+          text: `${action.user} has joined the room.`,
+          ts:   action.ts
+        }),
         users: state.users.concat(action.user)
       }};
     case USER_LEFT_ROOM:
       return {...state, ...{
-        messages: state.messages.concat({kind: PUBLIC, id: 'admin' + action.ts, to: state.room, from: "messengerstatus", text: `${action.user} has left the room.`, ts: action.ts}),
+        messages: state.messages.concat({
+          kind: PUBLIC,
+          id:   "admin" + action.ts,
+          to:   state.room,
+          from: "messengerstatus",
+          text: `${action.user} has left the room.`,
+          ts:   action.ts
+        }),
         users: state.users.filter(u => u !== action.user)
       }};
     
@@ -59,7 +73,14 @@ export const chatReducer = (state = initialState, action: Actions): IState => {
     // ?
     case FAILED_PRIVATE_MESSAGE:
       return {...state, ...{
-        messages: state.messages.concat({kind: PRIVATE, id: 'admin' + action.ts, to: '', from: "messengerstatus", text: action.feedback, ts: action.ts})
+        messages: state.messages.concat({
+          kind: PRIVATE,
+          id:   "admin" + action.ts,
+          to:   "",
+          from: "messengerstatus",
+          text: action.feedback,
+          ts:   action.ts
+        })
       }};
     
     default: return state;
