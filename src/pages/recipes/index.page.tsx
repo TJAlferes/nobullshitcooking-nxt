@@ -5,58 +5,70 @@ import { ExpandCollapse } from '../../components';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
-function listResults(results: any) {
-  if (results && results[0] && results[0].id) {
-    return results.map((r: any) => (
-      <div className="recipes" key={r.id.raw}>
-        <Link href={`/recipe/${r.id.raw}`} className="recipes-link">
-          <div className="text">
-            <div className="title">{r.title.raw}</div>
-
-            <div className="author">{r.author.raw}</div>
-
-            <div>
-              <div className="cuisine">{r.cuisine_name.raw}</div>
-              <div className="type">{r.recipe_type_name.raw}</div>
-            </div>
-
-            <div className="tags">
-              <div className="methods">
-                {r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}
-              </div>
-              <div className="ingredients">
-                {r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}
-              </div>
-            </div>
-          </div>
-            
-          {r.recipe_image.raw !== "nobsc-recipe-default"
-            ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
-            : <div className="image-default-100-62"></div>
-          }
-        </Link>
-      </div>
-    ));
-  }
-
-  return <div>Loading...</div>;
-}
-
-// facets, filters ?
-export function Recipes({ results, wasSearched }: PropsFromContext) {
+export function Recipes({ facets, filters, results, wasSearched }: PropsFromContext) {
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
         <h1>Recipes</h1>
 
-        {/* the `facets` props below are set incorrectly, fix them */}
-        {/*<p>{"props.facets: "}{JSON.stringify(props.facets)}</p>*/}
-
         <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
           <div className="search-results__filters">
             <span className="search-results__filter-title">Filter recipes by:</span>
+            <Facet field="recipe_type_name" filterType="any" label="Recipe Types" show={12} />
+            <Facet field="cuisine_name"     filterType="any" label="Cuisines"     show={24} />
+            <Facet field="method_names"     filterType="any" label="Methods"      show={24} />
+          </div>
+        </ExpandCollapse>
 
-            <Facet
+        {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
+        {wasSearched && <PagingInfo />}
+        <Paging />
+
+        <div className="search-results__list">
+          {results ? results.map((r: any) => (
+            <div className="recipes" key={r.id.raw}>
+              <Link href={`/recipe/${r.id.raw}`} className="recipes-link">
+                <div className="text">
+                  <div className="title">{r.title.raw}</div>
+                  <div className="author">{r.author.raw}</div>
+                  <div>
+                    <div className="cuisine">{r.cuisine_name.raw}</div>
+                    <div className="type">{r.recipe_type_name.raw}</div>
+                  </div>
+                  <div className="tags">
+                    <div className="methods">{r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
+                    <div className="ingredients">{r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
+                  </div>
+                </div>
+                {r.recipe_image.raw !== "nobsc-recipe-default"
+                  ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
+                  : <div className="image-default-100-62"></div>
+                }
+              </Link>
+            </div>
+          )) : <div>Loading...</div>}
+        </div>
+
+        {wasSearched && <PagingInfo />}
+        <Paging />
+      </div>
+
+      <div className="two-col-b-right"></div>
+    </div>
+  );
+}
+
+type PropsFromContext = {
+  facets:      any;
+  filters?:    any;
+  results:     any;
+  wasSearched: boolean;
+}
+
+const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
+
+export default withSearch(mapContextToProps)(Recipes);
+
               /*facets={{
                 recipe_type_name: [
                   {
@@ -79,13 +91,7 @@ export function Recipes({ results, wasSearched }: PropsFromContext) {
                   }
                 ]
               }}*/
-              field="recipe_type_name"
-              filterType="any"
-              label="Recipe Types"
-              show={12}
-            />
 
-            <Facet
               /*facets={{
                 cuisine_name: [
                   {
@@ -120,13 +126,7 @@ export function Recipes({ results, wasSearched }: PropsFromContext) {
                   },
                 ]
               }}*/
-              field="cuisine_name"
-              filterType="any"
-              label="Cuisines"
-              show={24}
-            />
 
-            <Facet
               /*facets={{
                 method_names: [
                   {
@@ -161,36 +161,3 @@ export function Recipes({ results, wasSearched }: PropsFromContext) {
                   },
                 ]
               }}*/
-              field="method_names"
-              filterType="any"
-              label="Methods"
-              show={24}
-            />
-          </div>
-        </ExpandCollapse>
-
-        {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
-        {wasSearched && <PagingInfo />}
-        <Paging />
-
-        <div className="search-results__list">{listResults(results)}</div>
-
-        {wasSearched && <PagingInfo />}
-        <Paging />
-      </div>
-
-      <div className="two-col-b-right"></div>
-    </div>
-  );
-}
-
-type PropsFromContext = {
-  facets:      any;
-  filters?:    any;
-  results:     any;
-  wasSearched: boolean;
-}
-
-const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
-
-export default withSearch(mapContextToProps)(Recipes);
