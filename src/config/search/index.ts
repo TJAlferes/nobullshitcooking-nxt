@@ -1,72 +1,39 @@
-import type { SearchDriverOptions, APIConnector, RequestState, QueryConfig, ResponseState, AutocompleteQueryConfig, AutocompleteResponseState } from '@elastic/search-ui';
 import axios from 'axios';
 import type { Store } from 'redux';
 
-import { applyDisjunctiveFaceting, buildAutocompleteState, buildSearchRequest, buildSearchState } from './helpers';
 import { NOBSCAPI as endpoint } from '../NOBSCAPI';
+import type { SearchRequest, SearchResponse, SearchState } from './types';
 
 // TO DO: allergies (ingredient_type_name and ingredient fullname)
 
-export function makeSearchConfig(store: Store): SearchDriverOptions {
-  return {
-    apiConnector: (new SearchConnector(store)),
-    searchQuery: {
-      facets: getFacets(store),
-      disjunctiveFacets: getDisjunctiveFacets(store)
-    },
-    trackUrlState: false  // ?
-  };
-}
-
-export class SearchConnector implements APIConnector {
+// merge with search reducer
+export class SearchManager {
   store: Store;
 
   constructor(store: Store) {
-    this.store = store;
+    this.store =         store;
+    this.autosuggest = this.autosuggest.bind(this);
+    this.search =      this.search.bind(this);
   }
 
-  async onAutocomplete(state: RequestState, queryConfig: AutocompleteQueryConfig): Promise<any> {
+  async autosuggest(state: SearchRequest): Promise<any> {
     const index = this.store.getState().search.index;
-
-    const response = await axios.post(`${endpoint}/search/autocomplete/${index}`, {searchTerm: state.searchTerm}, {withCredentials: true});
-
-    const { results } = buildAutocompleteState(response.data.found, index);
-
-    return {autocompletedResults: results};
+    const response = await axios.post(`${endpoint}/search/auto/${index}`, {term: state.term}, {withCredentials: true});
+    return response.data.found;
   }
 
-  async onAutocompleteResultClick(params: any) {
-    
-  }
-
-  async onSearch(state: RequestState, queryConfig: QueryConfig): Promise<any> {
+  async search(state: SearchState): Promise<SearchResponse> {
     const index = this.store.getState().search.index;
-    const names = getDisjunctiveFacets(this.store);
+    const { term, filters, sorts, currentPage, resultsPerPage } = state;
+    const body = {term, filters, sorts, currentPage, resultsPerPage};
+    const response = await axios.post(`${endpoint}/search/find/${index}`, {body}, {withCredentials: true});
+    return response.data.found;
 
-    const response = await axios.post(`${endpoint}/search/find/${index}`, {body: buildSearchRequest(state, index)}, {withCredentials: true});
-
-    const resWithDisjunctiveFacetCounts = await applyDisjunctiveFaceting(response.data.found, state, names, index);
-
-    return buildSearchState(resWithDisjunctiveFacetCounts, state.resultsPerPage, index);
+    // do all this on the back end
+    const startPage =  totalResults === 0 ? 0 : (current - 1) * resultsPerPage + 1;
+    const endPage =    totalResults < (start + resultsPerPage) ? totalResults : start + resultsPerPage - 1;
+    const totalPages = totalResults === 0 ? 1 : Math.ceil(totalResults / resultsPerPage)
   };
-
-  async onResultClick(params: any) {
-    
-  }
 }
 
-function getFacets(store: Store) {
-  const index = store.getState().search.index;
-  if (index === "recipes")     return {cuisine_name: {type: "value", size: 24}, method_name: {type: "value", size: 12}, recipe_type_name: {type: "value", size: 12}};
-  if (index === "ingredients") return {ingredient_type_name: {type: "value", size: 18}};
-  if (index === "equipments")  return {equipment_type_name: {type: "value", size: 5}}
-  return {};
-}
-
-function getDisjunctiveFacets(store: Store) {
-  const index = store.getState().search.index;
-  if (index === "recipes")     return ["cuisine_name", "method_name", "recipe_type_name"];
-  if (index === "ingredients") return ["ingredient_type_name"];
-  if (index === "equipments")  return ["equipment_type_name"];
-  return [];
-}
+//const offset = (current - 1) * resultsPerPage;       // starting / from

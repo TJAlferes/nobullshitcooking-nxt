@@ -1,9 +1,207 @@
+import axios                        from 'axios';
 import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
-import Link from 'next/link';
+import Link                         from 'next/link';
+import { useEffect, useState }      from 'react';
 
 import { ExpandCollapse } from '../../components';
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
+
+import { NOBSCAPI as endpoint } from '../../../../config/NOBSCAPI';
+import './recipes.css';
+
+export default function Recipes(props) {
+  const dispatch =        useDispatch();
+  const viewDisplay =     useSelector(state => state.data.viewMainRecipesDisplay);
+  const viewPages =       useSelector(state => state.data.viewMainRecipesPages);
+  const viewStarting =    useSelector(state => state.data.viewMainRecipesStarting);
+  const viewRecipes =     useSelector(state => state.data.viewMainRecipes);
+  const dataRecipes =     useSelector(state => state.data.recipes);
+  const dataRecipeTypes = useSelector(state => state.data.recipeTypes);
+  const dataMethods =     useSelector(state => state.data.methods);
+  const dataCuisines =    useSelector(state => state.data.cuisines);
+
+  const [ pages, setPages ] =       useState(1);
+  const [ starting, setStarting ] = useState(0);
+
+  const [ recipeTypesFilters, setRecipeTypesFilters ] = useState({
+    1: false, 2: false, 3: false,  4: false,  5: false,  6: false,
+    7: false, 8: false, 9: false, 10: false, 11: false, 12: false
+  });
+  const [ methodsFilters, setMethodsFilters ] = useState({
+     1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
+     7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
+    13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
+    19: false, 20: false, 21: false, 22: false, 23: false, 24: false
+  });
+  const [ cuisinesFilters, setCuisinesFilters ] = useState({
+    1: false, 2: false, 3: false,  4: false,  5: false,  6: false,
+    7: false, 8: false, 9: false, 10: false, 11: false, 12: false
+  });
+
+  useEffect(() => {
+    /*
+    {
+      recipeTypes: ["Drink", "Main"],
+      methods:     [],
+      cuisines:    []
+    }
+    */
+    const t = props.searchParams.filters;  // ?recipeTypes=Drink&recipeTypes=Main
+
+    function setFiltersFromURLParams(filterType: string) {
+      let data;
+      let fn;
+      if (filterType === "recipeTypes") {
+        data = dataRecipeTypes;
+        fn =   setRecipeTypesFilters;
+      } else if (filterType === "methods") {
+        data = dataMethods;
+        fn =   setMethodsFilters;
+      } else if (filterType === "cuisines") {
+        data = dataCuisines;
+        fn =   setCuisinesFilters;
+      } else return;
+
+      const values = data.map(d => Object.values(d)[0]);
+      const valid =  values.includes(t);
+      if (!valid) return;
+
+      const keys = [];
+      data.map(d => {
+        const [ key, value ] = Object.entries(d)[0];
+        if (value === t) keys.push(key);
+      });
+      for (const key of keys) fn(prevState => ({...prevState, [key]: true}));
+    }
+
+    setFiltersFromURLParams("recipeTypes");  // put an if statement in front of each
+    setFiltersFromURLParams("methods");
+    setFiltersFromURLParams("cuisines");
+  }, [props.match.params.type]);
+
+  useEffect(() => {
+    getRecipes();
+    // fix
+    if (props.recipeTypesPreFilter) setRecipeTypesFilters();
+    if (props.cuisinesPreFilter)    setCuisinesFilters();
+    else getRecipes();
+  }, []);
+
+  useEffect(() => {
+    getRecipes();  //getRecipesView();
+  }, [recipeTypesFilters, cuisinesFilters]);
+
+  const getRecipes = async (startingAt = 0) => {
+    const response = await axios.post(`${endpoint}/recipe`, {
+      types:    getCheckedRecipeTypesFilters(),
+      cuisines: getCheckedCuisinesFilters(),
+      start:    startingAt
+    });
+
+    setRecipes(response.data.rows);
+    setPages(response.data.pages);
+    setStarting(response.data.starting);
+  }
+
+  const getRecipesView = (startingAt = 0) => dispatch(viewGetRecipes(checkedRTFilters(), checkedCFilters(), display, startingAt));
+
+  const getCheckedRecipeTypesFilters = () => Object.entries(recipeTypesFilters).map(([ key, value ]) => value === true && Number(key));
+  const getCheckedMethodsFilters =     () => Object.entries(methodsFilters).map(([ key, value ]) => value === true && Number(key));
+  const getCheckedCuisinesFilters =    () => Object.entries(cuisinesFilters).map(([ key, value ]) => value === true && Number(key));
+
+  const handleRecipeTypesFilterChange = async (e) => {
+    const id = e.target.id;
+    await setRecipeTypesFilters(prevState => ({
+      ...prevState,
+      [id]: !prevState[[id]]
+    }));
+  }
+
+  const handleCuisinesFilterChange = async (e) => {
+    const id = e.target.id;
+    await setCuisinesFilters(prevState => ({
+      ...prevState,
+      [id]: !prevState[[id]]
+    }));
+  }
+
+  const pageNumbers = (currPage) => {
+    const display = 25;
+    const numbers = [];
+    for (let i = 1; i <= viewPages; i++) {
+      const startingAt = viewDisplay * (i - 1);
+      if (i !== currPage) numbers.push(<span onClick={() => getRecipes(startingAt)} key={i}>{i}</span>);  // page number
+      else                numbers.push(<span key={i}>{i}</span>);                                         // current page number
+    }
+    return numbers;
+  };
+
+  const paginate = () => {
+    const display =        25;
+    const currPage =       Math.floor((starting / display) + 1);
+    const startingAtPrev = (starting == 0) ? starting : (starting - display);
+    const startingAtNext = (starting + display);
+
+    return (
+      <div>
+        <span>
+          {currentPage !== 1 &&     <span onClick={() => getRecipes(startingAtPrev)}>Prev</span>}
+          {pageNumbers(currPage)}
+          {currentPage !== pages && <span onClick={() => getRecipes(startingAtNext)}>Next</span>}
+        </span>
+      </div>
+    );
+  }
+
+  return(
+    <div className="recipes two-col-b">
+      <div className="two-col-b-left">
+        <h1>Recipes</h1>
+
+        <div id="filters">
+          <span>Filter by:</span>
+
+          <form id="rtid" name="rtid" onChange={e => handleRecipeTypesFilterChange(e)}>
+            <div>
+              <p>Recipe type</p>
+              {dataRecipeTypes.map(({ id, name }) => (
+                <span key={id}><input type="checkbox" id={id} /><label>{name}</label></span>
+              ))}
+            </div>
+          </form>
+
+          <form id="cid" name="cid" onChange={e => handleCuisinesFilterChange(e)}>
+            <div>
+              <p>Cuisine</p>
+              {dataCuisines.map(({ id, name }) => (
+                <span key={id}><input type="checkbox" id={id}/><label>{name}</label></span>
+              ))}
+            </div>
+          </form>
+        </div>
+
+        {(pages > 1) && paginate()}
+
+        <div>
+          {recipes.map(({ id, name, image }) => (
+            <div key={id}>
+              <Link to={`/food/recipe/${id}`}>
+                <div>{name}</div>
+                <img src={`https://s3.amazonaws.com/nobsc-images-01/recipes/recipe/${image}.jpg`} />
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        {(pages > 1) && paginate()}
+      </div>
+
+      <div className="two-col-b-right"></div>
+    </div>
+  );
+}
 
 export function Recipes({ facets, filters, results, wasSearched }: PropsFromContext) {
   return (
@@ -26,22 +224,22 @@ export function Recipes({ facets, filters, results, wasSearched }: PropsFromCont
 
         <div className="search-results__list">
           {results ? results.map((r: any) => (
-            <div className="recipes" key={r.id.raw}>
-              <Link href={`/recipe/${r.id.raw}`} className="recipes-link">
+            <div className="recipes" key={r.id}>
+              <Link href={`/recipe/${r.id}`} className="recipes-link">
                 <div className="text">
-                  <div className="title">{r.title.raw}</div>
-                  <div className="author">{r.author.raw}</div>
+                  <div className="title">{r.title}</div>
+                  <div className="author">{r.author}</div>
                   <div>
-                    <div className="cuisine">{r.cuisine_name.raw}</div>
-                    <div className="type">{r.recipe_type_name.raw}</div>
+                    <div className="cuisine">{r.cuisine_name}</div>
+                    <div className="type">{r.recipe_type_name}</div>
                   </div>
                   <div className="tags">
-                    <div className="methods">{r.method_names.raw.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
-                    <div className="ingredients">{r.ingredient_names.raw.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
+                    <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
+                    <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
                   </div>
                 </div>
-                {r.recipe_image.raw !== "nobsc-recipe-default"
-                  ? <img className="recipes-image" src={`${url}${r.recipe_image.raw}-thumb`} />
+                {r.recipe_image !== "nobsc-recipe-default"
+                  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
                   : <div className="image-default-100-62"></div>
                 }
               </Link>
