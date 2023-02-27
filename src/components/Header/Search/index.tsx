@@ -1,31 +1,50 @@
-import { useRef }                from 'react';
-import { SearchBox, withSearch } from '@elastic/react-search-ui';
-import { useRouter }             from 'next/router';
-import { useDispatch }           from 'react-redux';
+import type { ChangeEvent, SyntheticEvent } from 'react';
+import { useRef }                           from 'react';
+import { useRouter }                        from 'next/router';
 
-import { useTypedSelector as useSelector } from '../../../store';
-import { setIndex }                        from '../../../store/search/actions';
-import { AutocompleteView }                from './view';
+// TO DO: move
+function debounce(cb: Function, delay = 1250) {
+  let timeout: any;
 
-export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
-  const router =   useRouter();
-  const sInsert =  useRef<HTMLElement>();
-  const dispatch = useDispatch();
-  const index =    useSelector(state => state.search.index);
+  return (...args: any) => {
+    clearTimeout(timeout);
 
-  const changeSearchIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    sInsert.current = document.getElementsByClassName("sui-search-box__wrapper")[0]?.firstChild as HTMLElement;
-    dispatch(setIndex(e.target.value));
-    sInsert.current.focus();
+    timeout = setTimeout(() => {
+      cb(...args);
+    }, delay);
+  }
+}
+
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../../store';
+import type { SearchIndex } from '../../../store/search/types';
+import { getSuggestions, setIndex, setTerm } from '../../../store/search/actions';
+
+export function Search(): JSX.Element {
+  const router =      useRouter();
+  const inputRef =    useRef<HTMLInputElement>();
+  const dispatch =    useDispatch();
+  const index =       useSelector(state => state.search.index);
+  const term =        useSelector(state => state.search.term);
+  const suggestions = useSelector(state => state.search.suggestions);
+
+  const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    inputRef.current = document.getElementById("search-input") as HTMLInputElement;
+    inputRef.current.focus();
+    dispatch(setIndex(e.target.value as SearchIndex));
   }
 
-  const selectAutocomplete = (selection: any) => {
-    setSearchTerm(selection[field as string].raw);
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {  // IMPORTANT: sequence and debounce
+    const value = e.target.value;
+    dispatch(setTerm(value));
+    if (value.length > 2) debounce(dispatch(getSuggestions(value)));
+  }
+
+  const selectSuggestion = (suggestion: string) => {
+    dispatch(setTerm(suggestion));
     router.push(`/${index}`);
   };
 
   const submit = () => {
-    setSearchTerm(searchTerm);
     redirectToSearchPage();
   };
 
@@ -43,11 +62,9 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
   return (
     <div className="search">
       <div className="category">
-        <div className="facade">
-          <span>{facadeText}</span>
-          <img src="/images/header/down-arrow-gray.png" width="8" height="6" />
-        </div>
-        <select className="filters" onChange={changeSearchIndex}>
+        <div className="facade"><span>{facadeText}</span><img src="/images/header/down-arrow-gray.png" width="8" height="6" /></div>
+        
+        <select className="filters" onChange={onSearchIndexChange}>
           <option value="recipes">Recipes</option>
           <option value="ingredients">Ingredients</option>
           <option value="equipments">Equipment</option>
@@ -56,35 +73,18 @@ export function Search({ searchTerm, setSearchTerm }: Props): JSX.Element {
       </div>
 
       <div className="insert">
-        <SearchBox
-          autocompleteMinimumCharacters={2}
-          autocompleteResults={{
-            shouldTrackClickThrough: true,
-            titleField: field as string,
-            urlField: field as string
-          }}
-          autocompleteView={AutocompleteView}
-          inputProps={{placeholder: ""}}
-          onSelectAutocomplete={selectAutocomplete}
-          onSubmit={submit}
-        />
-
+        <input id="search-input" onChange={onInputChange} value={term} />
         <div className="magnifying-glass" onClick={submit}><span></span></div>
       </div>
+
+      {suggestions.length < 1 ? false : (
+        <div className='suggestions'>
+          {/* <select><option> instead of <ul><li> ? */}
+          <ul>
+            {suggestions.map(suggestion => <li onClick={() => selectSuggestion(suggestion)}>{suggestion}</li>)}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
-
-interface RootContext {
-  searchTerm?:   string;
-  setSearchTerm: any;
-}
-
-type Props = {
-  searchTerm:    string;
-  setSearchTerm: any;
-};
-
-export default withSearch(
-  ({ searchTerm, setSearchTerm }: RootContext) => ({searchTerm, setSearchTerm})
-)(Search);

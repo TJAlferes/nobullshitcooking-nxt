@@ -7,7 +7,7 @@ const initialState: IState = {windowFocused: true};
 
 export const nobscappReducer = (state = initialState, action: Actions): IState => {
   switch (action.type) {
-    case WINDOW_FOCUSED: return {...state, ...{windowFocused: action.condition}};
+    case WINDOW_FOCUSED: return {...state, windowFocused: action.condition};
     default:             return state;
   }
 };

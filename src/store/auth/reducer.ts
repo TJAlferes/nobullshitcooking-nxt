@@ -7,7 +7,7 @@ const {
   MESSAGE,
   MESSAGE_CLEAR,
   RESET,
-  UPDATE_LOCAL_AVATAR,
+  //UPDATE_LOCAL_AVATAR,
   STAFF_DISPLAY,
   STAFF_LOGOUT,
   USER_DISPLAY,
@@ -19,11 +19,11 @@ const initialState: IState = {authname: '', message: '', staffIsAuthenticated: f
 export const authReducer = (state = initialState, action: AnyAction): IState => {
   switch (action.type) {
     case HYDRATE:             return {...state, ...action['payload'].auth};
-    case MESSAGE:             return {...state, ...{message: action['message']}};
-    case MESSAGE_CLEAR:       return {...state, ...{message: ''}};
-    case UPDATE_LOCAL_AVATAR: return {...state, ...{avatar: action['avatar']}};
-    case STAFF_DISPLAY:       return {...state, ...{staffIsAuthenticated: true, authname: action['authname']}};
-    case USER_DISPLAY:        return {...state, ...{userIsAuthenticated: true, authname: action['authname']}};
+    case MESSAGE:             return {...state, message: action['message']};
+    case MESSAGE_CLEAR:       return {...state, message: ''};
+    //case UPDATE_LOCAL_AVATAR: return {...state, avatar: action['avatar']};
+    case STAFF_DISPLAY:       return {...state, staffIsAuthenticated: true, authname: action['authname']};
+    case USER_DISPLAY:        return {...state, userIsAuthenticated: true, authname: action['authname']};
     case RESET:
     case USER_LOGOUT:
     case STAFF_LOGOUT:

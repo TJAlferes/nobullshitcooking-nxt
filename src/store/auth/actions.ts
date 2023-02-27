@@ -15,7 +15,7 @@ export const reset =      () => ({type: RESET});
 export const message =      (message: string) => ({type: MESSAGE, message});
 export const messageClear = () =>                ({type: MESSAGE_CLEAR});
 
-export const updateLocalAvatar = (avatar: string) => ({type: UPDATE_LOCAL_AVATAR, avatar});
+//export const updateLocalAvatar = (avatar: string) => ({type: UPDATE_LOCAL_AVATAR, avatar});
 
 export const staffDisplay = (authname: string) =>                ({type: STAFF_DISPLAY, authname});
 export const staffLogin =   (email: string, password: string) => ({type: STAFF_LOGIN, email, password});

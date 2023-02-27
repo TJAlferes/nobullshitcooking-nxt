@@ -99,10 +99,10 @@ export const plannerReducer = (state = initialState, action: Actions): IState =>
     //case PUBLIC_LOAD_FROM_URL: return publicLoadFromUrl(state, action);
     //case PUBLIC_SAVE_TO_URL:   return publicSaveToUrl(state, action);
     case CLEAR_WORK:             return {...state, ...initialState};
-    case SET_CREATING:           return {...state, ...{creating: true}};
-    case SET_PLAN_NAME:          return {...state, ...{planName: action.name}};
-    case SET_EDITING_ID:         return {...state, ...{editingId: action.id}};
-    case SET_PLAN_DATA:          return {...state, ...{planData: action.data}};
+    case SET_CREATING:           return {...state, creating: true};
+    case SET_PLAN_NAME:          return {...state, planName: action.name};
+    case SET_EDITING_ID:         return {...state, editingId: action.id};
+    case SET_PLAN_DATA:          return {...state, ...{planData: action.data}};  // sufficient?
     default:                     return state;
   }
 };

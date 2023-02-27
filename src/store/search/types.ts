@@ -6,21 +6,34 @@ export const actionTypes = {
   SET_SORTS:            'SET_SORTS',
   SET_CURRENT_PAGE:     'SET_CURRENT_PAGE',
   SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE',
-  SET_FOUND:            'SET_FOUND'
+  GET_RESULTS:          'GET_RESULTS',
+  GET_SUGGESTIONS:      'GET_SUGGESTIONS',
+  SET_RESULTS:          'SET_RESULTS',
+  SET_SUGGESTIONS:      'SET_SUGGESTIONS'
 } as const;
 
 export type State = SearchRequest & SearchResponse & {
   loading:     boolean;
-  index:       string;
-  suggestions: [];
+  index:       SearchIndex;
+  suggestions: any[];  // FINISH
 };
+
+export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
 
 export type SearchRequest = {
   term:           string;    // setTerm
-  filters:        Filter[];  // setFilters (add, remove, clear)
-  sorts:          Sort[];    // setSorts   (add, remove, clear)
-  currentPage:    number;    // setCurrentPage     // OFFSET in MySQL
-  resultsPerPage: number;    // setResultsPerPage  // LIMIT in MySQL
+  filters:        {
+    equipmentTypes:    string[],
+    ingredientTypes:   string[],
+    recipeTypes:       string[],
+    methods:           string[],
+    cuisines:          string[],
+    productCategories: string[],
+    productTypes:      string[]
+  };                       // setFilters (add, remove, clear)
+  sorts:          {};      // setSorts   (add, remove, clear)
+  currentPage:    number;  // setCurrentPage     // OFFSET in MySQL
+  resultsPerPage: number;  // setResultsPerPage  // LIMIT in MySQL
 };
 
 export type SearchResponse = {
@@ -32,14 +45,18 @@ export type SearchResponse = {
 };
 
 export type Filter = {
-  field:  string;    //"recipeType"  "method"  "cuisine"  recipeType=Main&method=stew&cuisine=AFG
-  values: string[];  //["Main"]      ["Stew"]  ["AFG"]
+  key:    FilterKey;  //"recipeType"  "method"  "cuisine"  recipeType=Main&method=stew&cuisine=AFG
+  values: string[];   //["Main"]      ["Stew"]  ["AFG"]
 };
 
+export type FilterKey = "equipmentTypes" | "ingredientTypes" | "recipeTypes" | "methods" | "cuisines" | "productCategories" | "productTypes";
+
 export type Sort = {
-  field:     string;
-  direction: string;
+  col:       string;  // CAREFUL of overlaps
+  direction: SortDirection;
 };
+
+export type SortDirection = "asc" | "desc" | "none";
 
 export type IActions = 
   | IReset
@@ -49,43 +66,61 @@ export type IActions =
   | ISetSorts
   | ISetCurrentPage
   | ISetResultsPerPage
-  | ISetFound;
+  | IGetResults
+  | IGetSuggestions
+  | ISetResults
+  | ISetSuggestions;
 
-interface IReset {
+export interface IReset {
   type: typeof actionTypes.RESET;
 }
 
-interface ISetIndex {
+export interface ISetIndex {
   type:  typeof actionTypes.SET_INDEX;
-  index: string;
+  index: SearchIndex;
 }
 
-interface ISetTerm {
+export interface ISetTerm {
   type: typeof actionTypes.SET_TERM;
   term: string;
 }
 
-interface ISetFilters {
+export interface ISetFilters {
   type:    typeof actionTypes.SET_FILTERS;
-  filters: Filter[];
+  key:     string;
+  values:  string[];
 }
 
-interface ISetSorts {
-  type:  typeof actionTypes.SET_SORTS;
-  sorts: Sort[];
+export interface ISetSorts {
+  type:      typeof actionTypes.SET_SORTS;
+  col:       string;
+  direction: string;
 }
 
-interface ISetCurrentPage {
+export interface ISetCurrentPage {
   type:        typeof actionTypes.SET_CURRENT_PAGE;
   currentPage: number;
 }
 
-interface ISetResultsPerPage {
+export interface ISetResultsPerPage {
   type:           typeof actionTypes.SET_RESULTS_PER_PAGE;
   resultsPerPage: number;
 }
 
-interface ISetFound {
-  type:  typeof actionTypes.SET_FOUND;
+export interface IGetResults {
+  type: typeof actionTypes.GET_RESULTS;
+}
+
+export interface IGetSuggestions {
+  type: typeof actionTypes.GET_SUGGESTIONS;
+}
+
+export interface ISetResults {
+  type:  typeof actionTypes.SET_RESULTS;
   found: SearchResponse;
+}
+
+export interface ISetSuggestions {
+  type:        typeof actionTypes.SET_SUGGESTIONS;
+  suggestions: any[];  // FINISH
 }

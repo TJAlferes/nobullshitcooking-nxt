@@ -55,7 +55,7 @@ function makeStore(context: Context) {
 
   if (typeof window !== 'undefined') {
     store.subscribe(() => saveToLocalStorage(store.getState()));
-    chatInit(store);  // start socket.io (is this being called on EVERY re-route???)
+    chatInit(store);  // start socket.io (is this being called on EVERY re-route???) (move socket.io into redux middleware or RTK listener or RTKQ cache entry lifecycle handler)
     initWindowBlurHandler(store);
     initWindowFocusHandler(store);
   }
