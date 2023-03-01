@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { endpoint } from '../../../utils/api';
 import { getMyPlansSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import type { ICreatePlan, IUpdatePlan, IDeletePlan } from './types';

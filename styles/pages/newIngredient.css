@@ -15,9 +15,13 @@
   width: 100%;
 }
 
-.new-ingredient .description {width: 100%;}
+.new-ingredient .description {
+  width: 100%;
+}
 
-.new-ingredient h4 {padding-bottom: 3px;}
+.new-ingredient h4 {
+  padding-bottom: 3px;
+}
 
 .new-ingredient .finish {
   display: flex;
@@ -26,5 +30,7 @@
 }
 
 @media (max-width: 899px) {
-  .new-ingredient .finish {flex-direction: column;}
+  .new-ingredient .finish {
+    flex-direction: column;
+  }
 }

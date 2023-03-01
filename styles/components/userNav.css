@@ -21,7 +21,9 @@
   font-style: normal;
 }
 
-.user-nav .mode {line-height: 16px;}
+.user-nav .mode {
+  line-height: 16px;
+}
 
 .user-nav .mode,
 .user-nav a,

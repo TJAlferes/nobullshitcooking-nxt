@@ -10,20 +10,30 @@
   width: max-content;
 }
 
-.crumbs a {color: #68abe6;}
+.crumbs a {
+  color: #68abe6;
+}
 
-.crumbs a:visited {color: #68abe6;}
+.crumbs a:visited {
+  color: #68abe6;
+}
 
-.crumb-pointer {padding: 0 12px;}
+.crumb-pointer {
+  padding: 0 12px;
+}
 
+.light .crumbs a:hover {
+  color: #c10006;
+}
 
+.light .crumbs .crumb-pointer {
+  color: #000;
+}
 
-.light .crumbs a:hover {color: #c10006;}
+.dark .crumbs a:hover {
+  color: #690004;
+}
 
-.light .crumbs .crumb-pointer {color: #000;}
-
-
-
-.dark .crumbs a:hover {color: #690004;}
-
-.dark .crumbs .crumb-pointer {color: #aaa;}
+.dark .crumbs .crumb-pointer {
+  color: #aaa;
+}

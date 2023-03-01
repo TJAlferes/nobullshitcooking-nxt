@@ -19,11 +19,17 @@
   font-style: italic;
 }
 
-.chat-messages .--self {color: #009fff;}
+.chat-messages .--self {
+  color: #009fff;
+}
 
-.chat-messages .--other {color: #326fff;}
+.chat-messages .--other {
+  color: #326fff;
+}
 
-.chat-messages .--private {color: #a100ff;}
+.chat-messages .--private {
+  color: #a100ff;
+}
 
 .chat-messages input {
   border: 2px solid #68abe6;
@@ -40,19 +46,23 @@
   outline: none;
 }
 
+.light .chat-messages ul {
+  border-color: #ddd;
+}
 
-
-.light .chat-messages ul {border-color: #ddd;}
-
-.light .message-ts {color: #bbb;}
-
-
+.light .message-ts {
+  color: #bbb;
+}
 
 /*.dark .chat-messages,
 .dark .chat-messages input,*/
-.dark .chat-messages ul {border-color: #444;}
+.dark .chat-messages ul {
+  border-color: #444;
+}
 
-.dark .message-ts {color: #666;}
+.dark .message-ts {
+  color: #666;
+}
 
 .dark .chat-messages,
 .dark .chat-messages ul,
@@ -62,9 +72,9 @@
   color: #bbb;
 }
 
-
-
 /* TO DO: just fill remaining space after 180px of People */
 @media (max-width: 1279px) {
-  .chat-messages {width: 450px;}
+  .chat-messages {
+    width: 450px;
+  }
 }

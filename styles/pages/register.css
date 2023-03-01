@@ -123,5 +123,7 @@
     margin: 0 auto;
   }
 
-  .register form {width: 280px;}
+  .register form {
+    width: 280px;
+  }
 }

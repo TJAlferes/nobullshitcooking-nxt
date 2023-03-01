@@ -22,7 +22,9 @@
 }
 
 .footer-links a:active,
-.footer-links a:hover {text-decoration: underline;}
+.footer-links a:hover {
+  text-decoration: underline;
+}
 
 .footer p {
   display: block;
@@ -31,21 +33,25 @@
   text-align: center;
 }
 
+.light .footer {
+  background-color: #666;
+}
 
+.light .footer-links a:hover {
+  color: #c10006;
+}
 
-.light .footer {background-color: #666;}
+.dark .footer {
+  background-color: #333;
+}
 
-.light .footer-links a:hover {color: #c10006;}
+.dark .footer-links a:hover {
+  color: #690004;
+}
 
-
-
-.dark .footer {background-color: #333;}
-
-.dark .footer-links a:hover {color: #690004;}
-
-.dark .footer p {color: #888;}
-
-
+.dark .footer p {
+  color: #888;
+}
 
 @media (max-width: 899px) {
   .footer {

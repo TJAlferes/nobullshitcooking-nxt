@@ -7,5 +7,7 @@
 }
 
 @media (max-width: 899px) {
-  #layout {grid-template-rows: 56px auto 237px;}
+  #layout {
+    grid-template-rows: 56px auto 237px;
+  }
 }

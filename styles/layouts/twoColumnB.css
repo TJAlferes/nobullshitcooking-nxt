@@ -29,17 +29,15 @@
   order: 2;
 }
 
-
-
 .light .two-col-b-left,
 .light .two-col-b-right {
   background-color: #fff;
   color: #000;
 }
 
-.light .two-col-b-left {border-right-color: #bfbfbf;}
-
-
+.light .two-col-b-left {
+  border-right-color: #bfbfbf;
+}
 
 .dark .two-col-b-left,
 .dark .two-col-b-right {
@@ -47,17 +45,19 @@
   color: #aaa;
 }
 
-.dark .two-col-b-left {border-right-color: #444;}
-
-
-
-
+.dark .two-col-b-left {
+  border-right-color: #444;
+}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.light .page_links {border-color: #fff;}
+.light .page_links {
+  border-color: #fff;
+}
 
-.light .current_page_number {color: #000;}
+.light .current_page_number {
+  color: #000;
+}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
@@ -79,7 +79,9 @@
 .light .search-result-ingredient-text__name,
 .light .search-result-ingredient-text__type,
 .light .search-result-equipment-text__name,
-.light .search-result-equipment-text__type {color: #000;}
+.light .search-result-equipment-text__type {
+  color: #000;
+}
 
 .light .search-result-recipe-text__tags-method {
   background-color: #cfcfcf;
@@ -89,13 +91,15 @@
   background-color: #dedede;
 }
 
-
-
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.dark .page_links {border-color: #222;}
+.dark .page_links {
+  border-color: #222;
+}
 
-.dark .current_page_number {color: #aaa;}
+.dark .current_page_number {
+  color: #aaa;
+}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
@@ -117,7 +121,9 @@
 .dark .search-result-ingredient-text__name,
 .dark .search-result-ingredient-text__type,
 .dark .search-result-equipment-text__name,
-.dark .search-result-equipment-text__type {color: #aaa;}
+.dark .search-result-equipment-text__type {
+  color: #aaa;
+}
 
 .dark .search-result-recipe-text__tags-method {
   background-color: #555;
@@ -127,18 +133,20 @@
   background-color: #444;
 }
 
-
-
-
-
 /* NOT USED (Recipes? Recipe?) */
 
 .light .recipe-details__required-method {
   background-color: #cfcfcf;
 }
 
-.light .recipe-details__author-name:hover {color: #c10006;}
+.light .recipe-details__author-name:hover {
+  color: #c10006;
+}
 
-.dark .recipe-details__required-method {background-color: #555;}
+.dark .recipe-details__required-method {
+  background-color: #555;
+}
 
-.dark .recipe-details__author-name:hover {color: #690004;}
+.dark .recipe-details__author-name:hover {
+  color: #690004;
+}

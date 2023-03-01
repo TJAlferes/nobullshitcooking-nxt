@@ -7,17 +7,15 @@
   padding: 10px 0 10px 0;
 }
 
-.two-col-a.light {
+.light .two-col-a {
   background-color: #fff;
   color: #000;
 }
 
-.two-col-a.dark {
+.dark .two-col-a {
   background-color: #222;
   color: #aaa;
 }
-
-
 
 /*.light .supplements td a:hover {color: #c10006;}
 

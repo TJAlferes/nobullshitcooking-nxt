@@ -1,18 +1,17 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../store';
 import { MenuView } from './view';
 
 // This Menu component heavily borrows from    react-menu-aim   https://github.com/jasonslyvia/react-menu-aim
 // which is a React mixin heavily inspired by  jQuery-menu-aim  https://github.com/kamens/jQuery-menu-aim
 // All rights reserved by the original authors.
 
-const DELAY =              200;  // ms delay when appearing to entering submenu
+const DELAY =              250;  // ms delay when appearing to entering submenu
 const MOUSE_LOCS_TRACKED = 3;    // number of past mouse locations to track
 const TOLERANCE =          50;   // bigger = more forgivey when entering submenu
 
-let lastDelayLoc: IMouseLocation | null;
-let mouseLocs:    IMouseLocation[] = [];
+let lastDelayLoc: Coord | null;
+let mouseLocs:    Coord[] = [];
 let menuTimer:    ReturnType<typeof setTimeout> | null;
 
 function offset(el: HTMLElement|null) {
@@ -37,7 +36,7 @@ function outerHeight(el: HTMLElement|null) {
   return _height;
 }
 
-function slope(a: IMouseLocation, b: IMouseLocation) {
+function slope(a: Coord, b: Coord) {
   return (b.y - a.y) / (b.x - a.x);
 }
 
@@ -83,8 +82,6 @@ function getActivateDelay() {
 }
 
 export function Menu({ expanded, closeMenus, level, menuItems, openMenu }: Props): JSX.Element {
-  const theme = useSelector(state => state.theme.theme);
-
   const [ activeMenuRow, setActiveMenuRow ] = useState<number | undefined>();
 
   useLayoutEffect(() => {  // useRef? forwardRef?
@@ -120,7 +117,7 @@ export function Menu({ expanded, closeMenus, level, menuItems, openMenu }: Props
       return;
     }
     setActiveMenuRow(row);
-    console.log('row: ', row);
+    //console.log('row: ', row);
   };
 
   const clearActiveMenuRow = () => setActiveMenuRow(undefined);
@@ -136,27 +133,26 @@ export function Menu({ expanded, closeMenus, level, menuItems, openMenu }: Props
       level={level}
       menuItems={menuItems}
       openMenu={openMenu}
-      theme={theme}
     />
   );
 }
 
-export interface IMenuItem {
+export type MenuItem = {
   name:     string;
   link:     string;
   image:    string | null;
-  children: IMenuItem[];
-}
+  children: MenuItem[];
+};
 
-interface IMouseLocation {
+type Coord = {
   x: number;
   y: number;
-}
+};
 
 type Props = {
   closeMenus():           void;
   expanded:               string;
   level:                  number;
-  menuItems:              IMenuItem[];
+  menuItems:              MenuItem[];
   openMenu(name: string): void;
 };

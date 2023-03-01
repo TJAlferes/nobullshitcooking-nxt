@@ -14,12 +14,16 @@
   color-scheme: dark light;
 }
 
-body, html, #root {
+body,
+html,
+#root {
   height: 100vh;
   min-height: 100vh;
 }
 
-html {font-size: 10px;}
+html {
+  font-size: 10px;
+}
 
 body {
   font-family: Helvetica, sans-serif;
@@ -28,25 +32,46 @@ body {
   overflow-x: hidden;  /* kind of a hack job IMHO... */
 }
 
-img, picture, svg, video {
+img,
+picture,
+svg,
+video {
   display: block;
   max-width: 100%;
 }
 
-a, li, p, span, td, th {font-size: 1.3rem;}
+a,
+li,
+p,
+span,
+td,
+th {
+  font-size: 1.3rem;
+}
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-weight: bold;
   line-height: 1.2;
 }
 
-h1 {font-size: 2.8rem;}
+h1 {
+  font-size: 2.8rem;
+}
 
-h2 {font-size: 2rem;}
+h2 {
+  font-size: 2rem;
+}
 
-h3 {font-size: 1.6rem;}
+h3 {
+  font-size: 1.6rem;
+}
 
-h4 {font-size: 1.4rem;}
+h4 {
+  font-size: 1.4rem;
+}
 
 .left-nav-toggle {
   cursor: pointer;
@@ -89,7 +114,9 @@ h4 {font-size: 1.4rem;}
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
 }
 
-.crop-tool-tip {display: block;}
+.crop-tool-tip {
+  display: block;
+}
 
 .crops {
   display: flex;
@@ -109,7 +136,9 @@ h4 {font-size: 1.4rem;}
 
 .crop-full,
 .crop-thumb,
-.crop-tiny {margin-left: 5px;}
+.crop-tiny {
+  margin-left: 5px;
+}
 
 .image-cancel-button {
   height: 21px;
@@ -131,15 +160,11 @@ h4 {font-size: 1.4rem;}
   min-width: 28px;
 }
 
-
-
 .light .img-280-172,
 .light .img-100-62,
 .light .img-28-18 {
   background-color: #c10006;
 }
-
-
 
 .dark .img-280-172,
 .dark .img-100-62,
@@ -147,26 +172,34 @@ h4 {font-size: 1.4rem;}
   background-color: #690004;
 }
 
-
-
 @media (max-width: 899px) {
-  body, html, #root {min-width: 300px;}
+  body,
+  html,
+  #root {
+    min-width: 300px;
+  }
 
-  h1 {font-size: 2rem;}
+  h1 {
+    font-size: 2rem;
+  }
 
-  h2 {font-size: 1.7rem;}
+  h2 {
+    font-size: 1.7rem;
+  }
 
-  h3 {font-size: 1.5rem;}
+  h3 {
+    font-size: 1.5rem;
+  }
 
-  h4 {font-size: 1.4rem;}
+  h4 {
+    font-size: 1.4rem;
+  }
 
   .cancel-button,
-  .submit-button {margin: 15px auto 0 auto;}
+  .submit-button {
+    margin: 15px auto 0 auto;
+  }
 }
-
-/*@import 'react-image-crop/lib/ReactCrop.scss';*/
-/*@import 'react-image-crop/lib/ReactCrop.module.scss';*/
-/*@import 'react-image-crop/dist/ReactCrop.module.css';*/
 
 @import './components/addToCartButton.css';
 @import './components/app.css';

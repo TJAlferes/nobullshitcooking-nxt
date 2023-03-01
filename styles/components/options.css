@@ -6,11 +6,17 @@
   width: 100%;
 }
 
-.chat-options > button {order: 1;}
+.chat-options > button {
+  order: 1;
+}
 
-.current-room {order: 2;}
+.current-room {
+  order: 2;
+}
 
-.change-room {order: 3;}
+.change-room {
+  order: 3;
+}
 
 .change-room button,
 .chat-options > button {
@@ -67,21 +73,27 @@
   border: 2px solid #87c6fd;
 }
 
-
-
 /*.light .chat__options,*/
 .light .current-room,
 .light .change-room,
-.light .change-room label {background-color: #ddd;} /*{border-color: #ddd;}*/
+.light .change-room label {
+  background-color: #ddd;
+} /*{
+  border-color: #ddd;
+}*/
 
-.light .current-room span {background-color: #fff;}
-
-
+.light .current-room span {
+  background-color: #fff;
+}
 
 /*.dark .chat__options,*/
 .dark .current-room,
 .dark .change-room,
-.dark .change-room label {background-color: #444;} /*{border-color: #444;}*/
+.dark .change-room label {
+  background-color: #444;
+} /*{
+  border-color: #444;
+}*/
 
 .dark .current-room span,
 .dark .change-room input {
@@ -89,14 +101,16 @@
   color: #bbb;
 }
 
-
-
 /* TO DO: JUST MAKE RESPONSIVE... FLEXBOX... GRID... */
 
 @media (max-width: 1279px) {
-  .current-room label {padding-left: 50px;}
+  .current-room label {
+    padding-left: 50px;
+  }
 
-  .change-room label {padding-left: 41px;}
+  .change-room label {
+    padding-left: 41px;
+  }
 }
 
 @media (max-width: 799px) {
@@ -105,9 +119,13 @@
     height: 118px;
   }
 
-  .current-room label {padding-left: 0px;}
+  .current-room label {
+    padding-left: 0px;
+  }
 
-  .change-room {margin-bottom: 4px;}
+  .change-room {
+    margin-bottom: 4px;
+  }
 
   .change-room label {
     padding-right: 20px;

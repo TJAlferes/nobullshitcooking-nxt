@@ -49,16 +49,16 @@ light
 
 */
 
-.nav-grid-a-light {
+.light .nav-grid-a {
   background-color: #fff;
   color: #000;
 }
 
-.nav-grid-a-light .nav-grid-a-item {
+.light .nav-grid-a .nav-grid-a-item {
   border-color: #ddd;
 }
 
-.nav-grid-a-light a:hover {
+.light .nav-grid-a a:hover {
   color: #c10006;
 }
 
@@ -68,15 +68,15 @@ dark
 
 */
 
-.nav-grid-a-dark {
+.dark .nav-grid-a {
   background-color: #222;
   color: #aaa;
 }
 
-.nav-grid-a-dark .nav-grid-a-item {
+.dark .nav-grid-a .nav-grid-a-item {
   border-color: #333;
 }
 
-.nav-grid-a-dark a:hover {
+.dark .nav-grid-a a:hover {
   color: #690004;
 }

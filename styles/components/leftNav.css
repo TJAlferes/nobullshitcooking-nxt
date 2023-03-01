@@ -59,40 +59,56 @@
   margin: 5px 0;
 }
 
-
-
 .light .left-nav,
-.light .left-nav .main {background-color: #fff;}
+.light .left-nav .main {
+  background-color: #fff;
+}
 
 .light .left-nav .heading,
-.light .logo {background-color: #c10006;}
+.light .logo {
+  background-color: #c10006;
+}
 
-.light .left-nav .toggle {background-color: #000;}
+.light .left-nav .toggle {
+  background-color: #000;
+}
 
 .light .left-nav .main a {
   background-color: inherit;
   color: #000;
 }
 
-.light .left-nav .main a:hover {background-color: #ddd;}
+.light .left-nav .main a:hover {
+  background-color: #ddd;
+}
 
-.light .left-nav hr {background-color: #bfbfbf;}
-
-
+.light .left-nav hr {
+  background-color: #bfbfbf;
+}
 
 .dark .left-nav,
-.dark .left-nav .main {background-color: #222;}
+.dark .left-nav .main {
+  background-color: #222;
+}
 
 .dark .left-nav .heading,
-.dark .logo {background-color: #690004;}
+.dark .logo {
+  background-color: #690004;
+}
 
-.dark .left-nav .toggle {background-color: #aaa;}
+.dark .left-nav .toggle {
+  background-color: #aaa;
+}
 
 .dark .left-nav .main a {
   background-color: inherit;
   color: #aaa;
 }
 
-.dark .left-nav .main a:hover {background-color: #444;}
+.dark .left-nav .main a:hover {
+  background-color: #444;
+}
 
-.dark .left-nav hr {background-color: #444;}
+.dark .left-nav hr {
+  background-color: #444;
+}

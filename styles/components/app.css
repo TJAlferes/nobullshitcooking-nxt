@@ -18,6 +18,10 @@
   z-index: 5;
 }
 
-.shadow--hide {display: none;}
+.shadow--hide {
+  display: none;
+}
 
-.shadow--show {display: block;}
+.shadow--show {
+  display: block;
+}

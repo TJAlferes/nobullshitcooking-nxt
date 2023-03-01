@@ -6,78 +6,82 @@
   padding: 10px 10px;
 }
 
-.one-col-a.light {
+.light .one-col-a {
   background-color: #fff;
   color: #000;
 }
 
-.one-col-a.dark {
+.dark .one-col-a {
   background-color: #222;
   color: #aaa;
 }
 
-
-
 /* NEED CLASSES */
 
-.one-column-a-light label {color: #777;}
+.light .one-col-a label {
+  color: #777;
+}
 
-.one-column-a-light input,
-.one-column-a-light select,
-.one-column-a-light textarea {
+.light .one-col-a :is(input, select, textarea) {
   background-color: #fff;
   border-color: #bbb;
   color: #000;
 }
 
-.one-column-a-light option {
+.light .one-col-a option {
   background-color: #fff;
   color: #000;
 }
 
 /* PROFILE (a needs a class) */
 
-.one-column-a-light .profile-list-item {border-color: #ddd;}
+.light .one-col-a .profile-list-item {
+  border-color: #ddd;
+}
 
-.one-column-a-light .profile-list-item:nth-child(even) {
+.light .one-col-a .profile-list-item:nth-child(even) {
   background-color: #eee;
 }
 
-.one-column-a-light .profile-list-item-name a:hover {color: #c10006;}
-
-
+.light .one-col-a .profile-list-item-name a:hover {
+  color: #c10006;
+}
 
 /* NEED CLASSES, NEWRECIPE? */
 
-.one-column-a-dark label,
-.one-column-a-dark .method-span-label,
-.one-column-a-dark .ownership-span-label {color: #999;}
+.dark .one-col-a label,
+.dark .one-col-a .method-span-label,
+.dark .one-col-a .ownership-span-label {
+  color: #999;
+}
 
-.one-column-a-dark .equipment_row:nth-child(even),
-.one-column-a-dark .ingredient_row:nth-child(even),
-.one-column-a-dark .subrecipe_row:nth-child(even) {
+.dark .one-col-a .equipment_row:nth-child(even),
+.dark .one-col-a .ingredient_row:nth-child(even),
+.dark .one-col-a .subrecipe_row:nth-child(even) {
   background-color: #2d2d2d;
 }
 
-.one-column-a-dark input,
-.one-column-a-dark select,
-.one-column-a-dark textarea {
+.dark .one-col-a :is(input, select, textarea) {
   background-color: #1e1e1e;
   border-color: #666;
   color: #bbb;
 }
 
-.one-column-a-dark option {
+.dark .one-col-a option {
   background-color: #1e1e1e;
   color: #bbb;
 }
 
 /* PROFILE (a needs a class) */
 
-.one-column-a-dark .profile-list-item {border-color: #3a3a3a;}
+.dark .one-col-a .profile-list-item {
+  border-color: #3a3a3a;
+}
 
-.one-column-a-dark .profile-list-item:nth-child(even) {
+.dark .one-col-a .profile-list-item:nth-child(even) {
   background-color: #2d2d2d;
 }
 
-.one-column-a-dark .profile-list-item-name a:hover {color: #690004;}
+.dark .one-col-a .profile-list-item-name a:hover {
+  color: #690004;
+}

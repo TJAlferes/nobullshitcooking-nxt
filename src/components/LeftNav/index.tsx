@@ -55,12 +55,16 @@ export function LeftNav(): JSX.Element | null {
           <NavLink text="Home" to="/" />
           <hr />
 
-          {userIsAuthenticated && <NavLink text={authname} to="/dashboard" />}
-          {userIsAuthenticated && <NavLink text="Chat" to="/chat" />}
-          {userIsAuthenticated && <NavLink text="Friends" to="/friends" />}
-          {userIsAuthenticated && <hr />}
+          {userIsAuthenticated && (
+            <>
+              <NavLink text={authname} to="/dashboard" />
+              <NavLink text="Chat"     to="/chat" />
+              <NavLink text="Friends"  to="/friends" />
+              <hr />
+            </>
+          )}
 
-          <NavLink text="Supplements" to="/page/guide/food/nutrition/supplements" />
+          {/*<NavLink text="Supplements" to="/page/guide/food/nutrition/supplements" />
           <NavLink text="Equipment" to="/supply/kitchen-equipment" />
           <hr />
 
@@ -77,7 +81,7 @@ export function LeftNav(): JSX.Element | null {
           <NavLink text="Seasonal" to="/page/promo/seasonal" />
           <hr />
 
-          <NavLink text="Charity" to="/page/site/charity" />
+          <NavLink text="Charity" to="/page/site/charity" />*/}
         </div>
       </nav>
       <div className="shadow--show"></div>

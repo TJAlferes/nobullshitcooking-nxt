@@ -3,9 +3,13 @@
   width: 240px;
 }
 
-.promo .large {display: block;}
+.promo .large {
+  display: block;
+}
 
-.promo .small {display: none;}
+.promo .small {
+  display: none;
+}
 
 @media (max-width: 1279px) {
   .promo {
@@ -13,7 +17,11 @@
     width: 180px;
   }
 
-  .promo .large {display: none;}
+  .promo .large {
+    display: none;
+  }
   
-  .promo .small {display: block;}
+  .promo .small {
+    display: block;
+  }
 }

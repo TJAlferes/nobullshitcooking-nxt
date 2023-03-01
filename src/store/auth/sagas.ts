@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { removeStorageItem } from '../../utils/storageHelpers';
+import { endpoint } from '../../utils/api';
+import { removeItem } from '../../utils/storage';
 import { initUser } from '../data/actions';
 import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
 import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
@@ -26,7 +26,7 @@ export function* staffLogoutSaga(action: IStaffLogout) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/staff/auth/logout`, {}, {withCredentials: true});
 
-    yield call(removeStorageItem, 'appState');
+    yield call(removeItem, 'appState');
     yield put(authMessage(message));
   } catch(err) {
     yield put(authMessage('An error occurred. Please try again.'));
@@ -60,10 +60,10 @@ export function* userLogoutSaga(action: IUserLogout) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/logout`, {}, {withCredentials: true});
 
-    yield call(removeStorageItem, 'appState');
+    yield call(removeItem, 'appState');
     yield put(authMessage(message));
   } catch(err) {
-    yield call(removeStorageItem, 'appState');
+    yield call(removeItem, 'appState');
     //yield put(authMessage('An error occurred. Please try again.'));
   }
 

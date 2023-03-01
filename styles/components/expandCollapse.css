@@ -9,17 +9,19 @@
   font-size: 1.1rem;
 }
 
+.light .expand-collapse {
+  background-color: #d5fdd5;
+}
 
-
-.light .expand-collapse {background-color: #d5fdd5;}
-
-.light .expand-collapse div {color: #777;}
-
-
+.light .expand-collapse div {
+  color: #777;
+}
 
 .dark .expand-collapse {
   background-color: #507ea7;
   color: #000;
 }
 
-.dark .expand-collapse div {color: #ccc;}
+.dark .expand-collapse div {
+  color: #ccc;
+}

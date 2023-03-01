@@ -22,18 +22,18 @@
   width: 240px;
 }
 
-
-
 .light .header,
-.light .header-l {background-color: #c10006;}
-
-
+.light .header-l {
+  background-color: #c10006;
+}
 
 .dark .header,
-.dark .header-l {background-color: #690004;}
-
-
+.dark .header-l {
+  background-color: #690004;
+}
 
 @media (max-width: 899px) {
-  .header {flex-direction: column;}
+  .header {
+    flex-direction: column;
+  }
 }

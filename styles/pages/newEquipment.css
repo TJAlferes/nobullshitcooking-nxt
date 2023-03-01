@@ -15,9 +15,13 @@
   width: 100%;
 }
 
-.new-equipment .description {width: 100%;}
+.new-equipment .description {
+  width: 100%;
+}
 
-.new-equipment h4 {padding-bottom: 3px;}
+.new-equipment h4 {
+  padding-bottom: 3px;
+}
 
 .new-equipment .finish {
   display: flex;
@@ -26,5 +30,7 @@
 }
 
 @media (max-width: 899px) {
-  .new-equipment .finish {flex-direction: column;}
+  .new-equipment .finish {
+    flex-direction: column;
+  }
 }

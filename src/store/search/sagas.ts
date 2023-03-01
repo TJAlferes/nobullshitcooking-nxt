@@ -1,7 +1,7 @@
 import axios          from 'axios';
 import { call, put, select }  from 'redux-saga/effects';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
+import { endpoint } from '../../utils/api';
 import type { RootState } from '..';
 import { setResults, setSuggestions } from './actions';
 import type { IGetResults, IGetSuggestions } from './types';

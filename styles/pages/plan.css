@@ -23,7 +23,9 @@
   order: 1;
 }
 
-.plan .name span {order: 2;}
+.plan .name span {
+  order: 2;
+}
 
 .plan .calendar {
   height: 328px;
@@ -53,7 +55,9 @@
   width: 100%;
 }
 
-.monthly-plan .header {height: 20px;}
+.monthly-plan .header {
+  height: 20px;
+}
 
 .monthly-plan .header span {
   height: 20px;
@@ -167,15 +171,15 @@ copy to .new-plan .date
   width: 90%;
 }
 
-.plan-recipe .image {margin: 1px 0 0 1px;}
+.plan-recipe .image {
+  margin: 1px 0 0 1px;
+}
 
 .plan-recipe .text {
   font-size: 1.1rem;
   text-align: center;
   width: 100%;
 }
-
-
 
 .light .monthly-plan .header,
 .light .monthly-plan .header span {
@@ -188,17 +192,19 @@ copy to .new-plan .date
   border-color: #b1d7f9;
 }
 
-.light .expanded-day-container {border-color: #fff;}
+.light .expanded-day-container {
+  border-color: #fff;
+}
 
-.light .plan .date {color: #afafaf;}
+.light .plan .date {
+  color: #afafaf;
+}
 
 .light .plan .expanded-day {
   background-color: #fff;
   border-color: #bfbfbf;
   box-shadow: 1px 1px 1px #555;
 }
-
-
 
 .dark .monthly-plan .header,
 .dark .monthly-plan .header span {
@@ -211,9 +217,13 @@ copy to .new-plan .date
   border-color: #507ea7;
 }
 
-.dark .expanded-day-container {border-color: #222;}
+.dark .expanded-day-container {
+  border-color: #222;
+}
 
-.dark .plan .date {color: #666;}
+.dark .plan .date {
+  color: #666;
+}
 
 .dark .plan .expanded-day {
   background-color: #222;

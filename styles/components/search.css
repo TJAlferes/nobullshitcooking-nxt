@@ -57,7 +57,9 @@
   width: 100%;
 }
 
-.search .filters option {font-size: 1.4rem;}
+.search .filters option {
+  font-size: 1.4rem;
+}
 
 .search .insert {
   flex: 1;
@@ -98,8 +100,6 @@
   cursor: pointer;
 }
 
-
-
 /*
 Note: Most of these "sui-" classnames are from @elastic/react-search-ui
 
@@ -134,7 +134,9 @@ We're overriding default values / setting new values to get the look we desire.
 
 /*.sui-search-box__autocomplete-container {}*/
 
-.sui-search-box__autocomplete {border: 1px solid #bfbfbf;}
+.sui-search-box__autocomplete {
+  border: 1px solid #bfbfbf;
+}
 
 .sui-search-box__results-list {
   list-style-type: none;
@@ -153,10 +155,14 @@ We're overriding default values / setting new values to get the look we desire.
   width: 100%;
 }
 
-.sui-search-box__results-list li {padding: 0 10px;}
+.sui-search-box__results-list li {
+  padding: 0 10px;
+}
 
 .sui-search-box__results-list li,
-.sui-search-box__results-list li span {color: #666;}
+.sui-search-box__results-list li span {
+  color: #666;
+}
 
 .sui-search-box__results-list li em {
   font-style: normal;
@@ -208,8 +214,6 @@ We're overriding default values / setting new values to get the look we desire.
   background-image: none;
 }
 
-
-
 .light .sui-search-box__text-input {
   background-color: #fff;
   color: #111;
@@ -221,14 +225,14 @@ We're overriding default values / setting new values to get the look we desire.
   color: #666;
 }
 
-.light .sui-search-box__results-list li em {color: #111;}
+.light .sui-search-box__results-list li em {
+  color: #111;
+}
 
 .light .sui-search-box__results-list li[aria-selected=true],
 .light .sui-search-box__results-list li[aria-selected=true] > * {
   background-color: #ddd;
 }
-
-
 
 .dark .sui-search-box__text-input {
   background-color: #333;
@@ -241,7 +245,9 @@ We're overriding default values / setting new values to get the look we desire.
   color: #aaa;
 }
 
-.dark .sui-search-box__results-list li em {color: #bcbcbc;}
+.dark .sui-search-box__results-list li em {
+  color: #bcbcbc;
+}
 
 .dark .sui-search-box__results-list li[aria-selected=true],
 .dark .sui-search-box__results-list li[aria-selected=true] > * {

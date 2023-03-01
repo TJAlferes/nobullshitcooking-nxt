@@ -1,14 +1,14 @@
 export const actionTypes = {
-  LATITUDE:  'LATITUDE',
-  LONGITUDE: 'LONGITUDE',
-  ADDRESS:   'ADDRESS',
+  LATITUDE:              'LATITUDE',
+  LONGITUDE:             'LONGITUDE',
+  ADDRESS:               'ADDRESS',
   NEARBY_STORES_CLICKED: 'NEARBY_STORES_CLICKED'
 } as const;
 
 export interface IState {
-  latitude:  string;
-  longitude: string;
-  address:   string;
+  latitude:            string;
+  longitude:           string;
+  address:             string;
   nearbyStoresClicked: boolean;
 }
 
@@ -19,21 +19,21 @@ export type Actions =
   INearbyStoresClicked;
 
 interface IAddress {
-  type: typeof actionTypes.ADDRESS;
+  type:    typeof actionTypes.ADDRESS;
   address: string;
 }
 
 interface ILatitude {
-  type: typeof actionTypes.LATITUDE;
+  type:     typeof actionTypes.LATITUDE;
   latitude: string;
 }
 
 interface ILongitude {
-  type: typeof actionTypes.LONGITUDE;
+  type:      typeof actionTypes.LONGITUDE;
   longitude: string;
 }
 
 interface INearbyStoresClicked {
-  type: typeof actionTypes.NEARBY_STORES_CLICKED;
+  type:    typeof actionTypes.NEARBY_STORES_CLICKED;
   clicked: boolean;
 }

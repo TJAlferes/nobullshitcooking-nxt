@@ -6,9 +6,9 @@ import type { Action, Store }                                                  f
 import createSagaMiddleware, { END, Task }                                     from 'redux-saga';
 import { fork }                                                                from 'redux-saga/effects';
 
-import { NOBSCAPI as endpoint } from '../config/NOBSCAPI';
-import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/nobscappWindow';
-import { loadFromLocalStorage, saveToLocalStorage }      from '../utils/storageHelpers';
+import { endpoint } from '../utils/api';
+import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/window';
+import { loadFromLocalStorage, saveToLocalStorage }      from '../utils/storage';
 import { chatInit }           from './chat/sagas';
 import { init, initUser, getInitialUserData }     from './data/actions';
 import { authReducer }        from './auth/reducer';
@@ -17,7 +17,6 @@ import { chatReducer }        from './chat/reducer';
 import { dataReducer }        from './data/reducer';
 import { geolocationReducer } from './geolocation/reducer';
 import { menuReducer }        from './menu/reducer';
-import { nobscappReducer }    from './nobscapp/reducer';
 import { plannerReducer }     from './planner/reducer';
 import { plannerViewReducer } from './plannerView/reducer';
 import { searchReducer }      from './search/reducer';
@@ -25,6 +24,7 @@ import { searchReducer }      from './search/reducer';
 import { staffReducer }       from './staff/reducer';
 import { themeReducer }       from './theme/reducer';
 import { userReducer }        from './user/reducer';
+import { windowReducer }      from './window/reducer';
 import {
   watchAuth,
   watchAvatar,
@@ -55,7 +55,7 @@ function makeStore(context: Context) {
 
   if (typeof window !== 'undefined') {
     store.subscribe(() => saveToLocalStorage(store.getState()));
-    chatInit(store);  // start socket.io (is this being called on EVERY re-route???) (move socket.io into redux middleware or RTK listener or RTKQ cache entry lifecycle handler)
+    chatInit(store);  // start socket.io (is this being called on EVERY re-route???) (move socket.io into redux middleware?)
     initWindowBlurHandler(store);
     initWindowFocusHandler(store);
   }
@@ -70,7 +70,6 @@ export const rootReducer = combineReducers({
   data:        dataReducer,
   geolocation: geolocationReducer,
   menu:        menuReducer,
-  nobscapp:    nobscappReducer,
   planner:     plannerReducer,
   plannerView: plannerViewReducer,
   search:      searchReducer,
@@ -78,6 +77,7 @@ export const rootReducer = combineReducers({
   staff:       staffReducer,
   theme:       themeReducer,
   user:        userReducer,
+  window:      windowReducer
 });
 
 export function* rootSaga() {

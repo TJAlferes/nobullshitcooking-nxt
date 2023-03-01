@@ -6,11 +6,17 @@
   padding-bottom: 25px;
 }
 
-.light .main {background-color: #eee;}
+.light .main {
+  background-color: #eee;
+}
 
-.dark .main {background-color: #111;}
+.dark .main {
+  background-color: #111;
+}
 
 /* ? */
 @media (max-width: 899px) {
-  .main {max-width: 100vw;}
+  .main {
+    max-width: 100vw;
+  }
 }

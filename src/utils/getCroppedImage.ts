@@ -1,6 +1,11 @@
 import type { Crop } from 'react-image-crop';
 
-export async function getCroppedImage(imageWidth: number, imageHeight: number, image: HTMLImageElement, crop: Crop) {
+export async function getCroppedImage(
+  imageWidth:  number,
+  imageHeight: number,
+  image:       HTMLImageElement,
+  crop:        Crop
+) {
   if (!crop.x || !crop.y || !crop.width || !crop.height) return;
 
   const canvas =  document.createElement("canvas");
@@ -13,7 +18,17 @@ export async function getCroppedImage(imageWidth: number, imageHeight: number, i
   const ctx =    canvas.getContext("2d");
   if (!ctx) return;
 
-  ctx.drawImage(image, crop.x * scaleX, crop.y * scaleY, crop.width * scaleX, crop.height * scaleY, 0, 0, imageWidth, imageHeight);
+  ctx.drawImage(
+    image,
+    crop.x * scaleX,
+    crop.y * scaleY,
+    crop.width * scaleX,
+    crop.height * scaleY,
+    0,
+    0,
+    imageWidth,
+    imageHeight
+  );
 
   const preview: string = await new Promise(resolve => {
     canvas.toBlob(blob => {

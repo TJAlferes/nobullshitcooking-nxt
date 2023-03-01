@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import { NOBSCAPI as endpoint } from '../../../config/NOBSCAPI';
+import { endpoint } from '../../../utils/api';
 import { getMyEquipmentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
 import type { ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';

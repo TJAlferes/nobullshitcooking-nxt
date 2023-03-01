@@ -1,4 +1,6 @@
-.recipe {font-size: 1.3rem;}
+.recipe {
+  font-size: 1.3rem;
+}
 
 .recipe .save-area {
   display: flex;

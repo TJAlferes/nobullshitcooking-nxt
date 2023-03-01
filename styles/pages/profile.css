@@ -1,4 +1,6 @@
-.profile {width: 1000px;}
+.profile {
+  width: 1000px;
+}
 
 .profile .feedback {
   color: #c10006;
@@ -34,7 +36,9 @@
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
 }
 
-.profile .none {font-size: 13px;}
+.profile .none {
+  font-size: 13px;
+}
 
 .profile .item {
   align-items: center;
@@ -49,7 +53,9 @@
   width: 100%;
 }
 
-.profile .item:first-of-type {border-top: 1px solid;}
+.profile .item:first-of-type {
+  border-top: 1px solid;
+}
 
 .profile .item .image {
   height: 18px;
@@ -63,16 +69,26 @@
 }
 
 .profile .item .name a,
-.profile .item .name a:visited {color: #68abe6;}
+.profile .item .name a:visited {
+  color: #68abe6;
+}
 
 @media (max-width: 1209px) {
-  .profile {width: 100%;}
+  .profile {
+    width: 100%;
+  }
 }
 
 @media (max-width: 509px) {
-  .profile .tabs {width: 100%;}
+  .profile .tabs {
+    width: 100%;
+  }
 
-  .profile .tabs button {width: 50%;}
+  .profile .tabs button {
+    width: 50%;
+  }
 
-  .profile .item .name {width: 100%;}
+  .profile .item .name {
+    width: 100%;
+  }
 }

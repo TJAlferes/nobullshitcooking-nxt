@@ -16,19 +16,27 @@
   color: #000;
 }
 
-.feed-light .feed-item {border-bottom-color: #eee;}
+.feed-light .feed-item {
+  border-bottom-color: #eee;
+}
 
 .feed-dark {
   background-color: #222;
   color: #aaa;
 }
 
-.feed-dark .feed-item {border-bottom-color: #111;}
+.feed-dark .feed-item {
+  border-bottom-color: #111;
+}
 
 @media (max-width: 899px) {
-  .feed {max-width: calc(90% - 10px);}
+  .feed {
+    max-width: calc(90% - 10px);
+  }
 }
 
 @media (max-width: 599px) {
-  .feed {max-width: 90%;}
+  .feed {
+    max-width: 90%;
+  }
 }

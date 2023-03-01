@@ -2,7 +2,7 @@ import type { Store }  from 'redux';
 import { io }          from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
+import { endpoint } from '../../utils/api';
 import {
   connected,
   disconnected,
