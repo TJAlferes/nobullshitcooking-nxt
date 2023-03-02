@@ -3,6 +3,8 @@ export const actionTypes = {
   SET_INDEX:            'SET_INDEX',
   SET_TERM:             'SET_TERM',
   SET_FILTERS:          'SET_FILTERS',
+  ADD_FILTER:           'ADD_FILTER',
+  REMOVE_FILTER:        'REMOVE_FILTER',
   SET_SORTS:            'SET_SORTS',
   SET_CURRENT_PAGE:     'SET_CURRENT_PAGE',
   SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE',
@@ -23,6 +25,7 @@ export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
 export type SearchRequest = {
   term:           string;    // setTerm
   filters:        {
+    [index: string]: string[];
     equipmentTypes:    string[],
     ingredientTypes:   string[],
     recipeTypes:       string[],
@@ -63,6 +66,8 @@ export type IActions =
   | ISetIndex
   | ISetTerm
   | ISetFilters
+  | IAddFilter
+  | IRemoveFilter
   | ISetSorts
   | ISetCurrentPage
   | ISetResultsPerPage
@@ -89,6 +94,18 @@ export interface ISetFilters {
   type:    typeof actionTypes.SET_FILTERS;
   key:     string;
   values:  string[];
+}
+
+export interface IAddFilter {
+  type:   typeof actionTypes.ADD_FILTER;
+  key:    string;
+  value:  string;
+}
+
+export interface IRemoveFilter {
+  type:   typeof actionTypes.REMOVE_FILTER;
+  key:    string;
+  value:  string;
 }
 
 export interface ISetSorts {

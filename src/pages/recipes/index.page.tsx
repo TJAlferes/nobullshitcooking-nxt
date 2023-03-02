@@ -1,54 +1,48 @@
-import axios                        from 'axios';
-import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
-import Link                         from 'next/link';
-import { useEffect, useState }      from 'react';
+import axios                   from 'axios';
+import Link                    from 'next/link';
+import { useEffect, useState } from 'react';
 
+//import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '../../components';
 import { ExpandCollapse } from '../../components';
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
+import {
+  setFilters,
+  addFilter,
+  removeFilter,
+  setSorts,
+  setCurrentPage,
+  setResultsPerPage
+} from '../../store/search/actions';
+import {
+  useTypedDispatch as useDispatch,
+  useTypedSelector as useSelector
+} from '../../store';
+import { endpoint } from '../../utils/api';
+import './recipes.css';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
-import { NOBSCAPI as endpoint } from '../../../../config/NOBSCAPI';
-import './recipes.css';
+export default function Recipes() {
+  const dispatch =       useDispatch();
 
-export default function Recipes(props) {
-  const dispatch =        useDispatch();
-  const viewDisplay =     useSelector(state => state.data.viewMainRecipesDisplay);
-  const viewPages =       useSelector(state => state.data.viewMainRecipesPages);
-  const viewStarting =    useSelector(state => state.data.viewMainRecipesStarting);
-  const viewRecipes =     useSelector(state => state.data.viewMainRecipes);
-  const dataRecipes =     useSelector(state => state.data.recipes);
-  const dataRecipeTypes = useSelector(state => state.data.recipeTypes);
-  const dataMethods =     useSelector(state => state.data.methods);
-  const dataCuisines =    useSelector(state => state.data.cuisines);
+  const recipeTypes =    useSelector(state => state.data.recipeTypes);
+  const methods =        useSelector(state => state.data.methods);
+  const cuisines =       useSelector(state => state.data.cuisines);
 
-  // Should this state live here or in redux ? If here, useState or useRef ?
-  //const [ pages, setPages ] =       useState(1);
-  //const [ starting, setStarting ] = useState(0);
-  const [ recipeTypesFilters, setRecipeTypesFilters ] = useState({
-    1: false, 2: false, 3: false,  4: false,  5: false,  6: false,
-    7: false, 8: false, 9: false, 10: false, 11: false, 12: false
-  });
-  const [ methodsFilters, setMethodsFilters ] = useState({
-     1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
-     7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
-    13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
-    19: false, 20: false, 21: false, 22: false, 23: false, 24: false
-  });
-  const [ cuisinesFilters, setCuisinesFilters ] = useState({
-    1: false, 2: false, 3: false,  4: false,  5: false,  6: false,
-    7: false, 8: false, 9: false, 10: false, 11: false, 12: false
-  });
+  const term =           useSelector(state => state.search.term);
+  const filters =        useSelector(state => state.search.filters);
+  const sorts =          useSelector(state => state.search.sorts);
+  const currentPage =    useSelector(state => state.search.currentPage);
+  const resultsPerPage = useSelector(state => state.search.resultsPerPage);
+
+  const results =        useSelector(state => state.search.results);
+  const totalResults =   useSelector(state => state.search.totalResults);
+  const startPage =      useSelector(state => state.search.startPage);
+  const endPage =        useSelector(state => state.search.endPage);
+  const totalPages =     useSelector(state => state.search.totalPages);
 
   useEffect(() => {
-    /*
-    {
-      recipeTypes: ["Drink", "Main"],
-      methods:     [],
-      cuisines:    []
-    }
-    */
-    const t = props.searchParams.filters;  // ?recipeTypes=Drink&recipeTypes=Main
+    /*{recipeTypes: ["Drink", "Main"], methods:     [], cuisines:    []}*/
+    const t = props.searchParams.filters;  // ?r=Drink&r=Main
 
     function setFiltersFromURLParams(filterType: string) {
       let data;
@@ -111,19 +105,19 @@ export default function Recipes(props) {
   const getCheckedMethodsFilters =     () => Object.entries(methodsFilters).map(([ key, value ]) => value === true && Number(key));
   const getCheckedCuisinesFilters =    () => Object.entries(cuisinesFilters).map(([ key, value ]) => value === true && Number(key));
 
-  const handleRecipeTypesFilterChange = async (e) => {
+  const handleRecipeTypesFilterChange = (e) => {
     const id = e.target.id;
-    await setRecipeTypesFilters(prevState => ({
+    setRecipeTypesFilters(prevState => ({
       ...prevState,
-      [id]: !prevState[[id]]
+      [id]: !prevState[id]
     }));
   }
 
-  const handleCuisinesFilterChange = async (e) => {
+  const handleCuisinesFilterChange = (e) => {
     const id = e.target.id;
-    await setCuisinesFilters(prevState => ({
+    setCuisinesFilters(prevState => ({
       ...prevState,
-      [id]: !prevState[[id]]
+      [id]: !prevState[id]
     }));
   }
 
@@ -155,7 +149,7 @@ export default function Recipes(props) {
     );
   }
 
-  return(
+  return (
     <div className="recipes two-col-b">
       <div className="two-col-b-left">
         <h1>Recipes</h1>
@@ -163,23 +157,29 @@ export default function Recipes(props) {
         <div id="filters">
           <span>Filter by:</span>
 
-          <form id="rtid" name="rtid" onChange={e => handleRecipeTypesFilterChange(e)}>
-            <div>
-              <p>Recipe type</p>
-              {dataRecipeTypes.map(({ id, name }) => (
-                <span key={id}><input type="checkbox" id={id} /><label>{name}</label></span>
-              ))}
-            </div>
-          </form>
+          <div className="filter-group">
+            <label>Recipe Types</label>
+            {recipeTypes.map(({ id, name }) => (
+              <span key={id}>
+                <input
+                  type="checkbox"
+                  checked={filters.recipeTypes.includes(name)}
+                  onChange={() => filters.recipeTypes.includes(name) ? removeFilter("recipeTypes", name) : addFilter("recipeTypes", name)}
+                />
+                <label>{name}</label>
+              </span>
+            ))}
+          </div>
 
-          <form id="cid" name="cid" onChange={e => handleCuisinesFilterChange(e)}>
-            <div>
-              <p>Cuisine</p>
-              {dataCuisines.map(({ id, name }) => (
-                <span key={id}><input type="checkbox" id={id}/><label>{name}</label></span>
-              ))}
-            </div>
-          </form>
+          <div className="filter-group">
+            <label>Methods</label>
+            {methods.map(({ id, name }) => <span key={id}><input type="checkbox" onChange={e => handleCuisinesFilterChange(e)} /><label>{name}</label></span>)}
+          </div>
+
+          <div className="filter-group">
+            <label>Cuisines</label>
+            {cuisines.map(({ id, name }) => <span key={id}><input type="checkbox" onChange={e => handleCuisinesFilterChange(e)} /><label>{name}</label></span>)}
+          </div>
         </div>
 
         {(pages > 1) && paginate()}
@@ -203,7 +203,7 @@ export default function Recipes(props) {
   );
 }
 
-export function Recipes({ facets, filters, results, wasSearched }: PropsFromContext) {
+/*export function Recipes({ filters, results }: PropsFromContext) {
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
@@ -212,14 +212,11 @@ export function Recipes({ facets, filters, results, wasSearched }: PropsFromCont
         <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
           <div className="search-results__filters">
             <span className="search-results__filter-title">Filter recipes by:</span>
-            <Facet field="recipe_type_name" filterType="any" label="Recipe Types" show={12} />
-            <Facet field="cuisine_name"     filterType="any" label="Cuisines"     show={24} />
-            <Facet field="method_names"     filterType="any" label="Methods"      show={24} />
           </div>
         </ExpandCollapse>
 
-        {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
-        {wasSearched && <PagingInfo />}
+        <ResultsPerPage options={[20, 50, 100]} />
+        <PagingInfo />
         <Paging />
 
         <div className="search-results__list">
@@ -247,7 +244,7 @@ export function Recipes({ facets, filters, results, wasSearched }: PropsFromCont
           )) : <div>Loading...</div>}
         </div>
 
-        {wasSearched && <PagingInfo />}
+        <PagingInfo />
         <Paging />
       </div>
 
@@ -257,12 +254,10 @@ export function Recipes({ facets, filters, results, wasSearched }: PropsFromCont
 }
 
 type PropsFromContext = {
-  facets:      any;
   filters?:    any;
   results:     any;
-  wasSearched: boolean;
 }
 
-const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
+const mapContextToProps = ({ filters, results }: PropsFromContext) => ({filters, results});
 
-export default withSearch(mapContextToProps)(Recipes);
+export default withSearch(mapContextToProps)(Recipes);*/

@@ -1,14 +1,14 @@
-import axios from 'axios';
+import axios                                       from 'axios';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState }                     from 'react';
+import { useDispatch }                             from 'react-redux';
 
-import { LoaderSpinner } from '../../components';
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
+import { LoaderSpinner }                   from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { favoriteRecipe } from '../../store/user/favorite/actions';
-import { saveRecipe } from '../../store/user/save/actions';
-import { RecipeView } from './view';
+import { favoriteRecipe }                  from '../../store/user/favorite/actions';
+import { saveRecipe }                      from '../../store/user/save/actions';
+import { endpoint }                        from '../../utils/api';
+import { RecipeView }                      from './view';
 
 export default function Recipe(): JSX.Element {
   const pathname = usePathname();
