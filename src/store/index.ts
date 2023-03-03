@@ -36,7 +36,8 @@ import {
   watchIngredient,
   watchPlan,
   watchRecipe,
-  watchSave
+  watchSave,
+  watchSearch
 } from './watchers';
 
 function makeStore(context: Context) {
@@ -92,6 +93,7 @@ export function* rootSaga() {
   yield fork(watchPlan);
   yield fork(watchRecipe);
   yield fork(watchSave);
+  yield fork(watchSearch);
 }
 
 export const wrapper = createWrapper<SagaStore>(makeStore, {debug: false});

@@ -9,3 +9,4 @@ export { watchIngredient } from './ingredient';
 export { watchPlan }       from './plan';
 export { watchRecipe }     from './recipe';
 export { watchSave }       from './save';
+export { watchSearch }     from './search';

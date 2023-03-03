@@ -1,10 +1,13 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useEffect, useState } from 'react';
+'use client';
+
+import Link                       from 'next/link';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 
 //import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '../../components';
 import { ExpandCollapse } from '../../components';
 import {
+  getResults,
   setFilters,
   addFilter,
   removeFilter,
@@ -22,8 +25,14 @@ import './recipes.css';
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const dispatch =       useDispatch();
+  const router =          useRouter();
+  const pathname =        usePathname();
+  const searchParams =    useSearchParams();
+  const currRecipeTypes = searchParams.get('t');
+  const currMethods =     searchParams.get('m');
+  const currCuisines =    searchParams.get('c');
 
+  const dispatch =       useDispatch();
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
@@ -41,92 +50,38 @@ export default function Recipes() {
   const totalPages =     useSelector(state => state.search.totalPages);
 
   useEffect(() => {
-    /*{recipeTypes: ["Drink", "Main"], methods:     [], cuisines:    []}*/
-    const t = props.searchParams.filters;  // ?r=Drink&r=Main
+    // ?t=Drink&t=Main  -->  {recipeTypes: ["Drink", "Main"], methods: [], cuisines: []}
+
+    // use useRouter or Link to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
 
     function setFiltersFromURLParams(filterType: string) {
-      let data;
-      let fn;
-      if (filterType === "recipeTypes") {
-        data = dataRecipeTypes;
-        fn =   setRecipeTypesFilters;
-      } else if (filterType === "methods") {
-        data = dataMethods;
-        fn =   setMethodsFilters;
-      } else if (filterType === "cuisines") {
-        data = dataCuisines;
-        fn =   setCuisinesFilters;
-      } else return;
-
-      const values = data.map(d => Object.values(d)[0]);
-      const valid =  values.includes(t);
-      if (!valid) return;
-
-      const keys = [];
-      data.map(d => {
-        const [ key, value ] = Object.entries(d)[0];
-        if (value === t) keys.push(key);
-      });
-      for (const key of keys) fn(prevState => ({...prevState, [key]: true}));
+      
     }
 
-    setFiltersFromURLParams("recipeTypes");  // put an if statement in front of each
+    setFiltersFromURLParams("recipeTypes");
     setFiltersFromURLParams("methods");
     setFiltersFromURLParams("cuisines");
-  }, [props.match.params.type]);
+  }, [filters.recipeTypes, filters.methods, filters.cuisines]);
 
   useEffect(() => {
-    getRecipes();
-    // fix
-    if (props.recipeTypesPreFilter) setRecipeTypesFilters();
-    if (props.cuisinesPreFilter)    setCuisinesFilters();
-    else getRecipes();
-  }, []);
+    dispatch(getResults());
+  }, [filters.recipeTypes, filters.methods, filters.cuisines]);
 
-  useEffect(() => {
-    getRecipes();  //getRecipesView();
-  }, [recipeTypesFilters, cuisinesFilters]);
-
-  const getRecipes = async (startingAt = 0) => {
-    const response = await axios.post(`${endpoint}/recipe`, {
-      types:    getCheckedRecipeTypesFilters(),
-      cuisines: getCheckedCuisinesFilters(),
-      start:    startingAt
-    });
-
-    setRecipes(response.data.rows);
-    setPages(response.data.pages);
-    setStarting(response.data.starting);
-  }
-
-  const getRecipesView = (startingAt = 0) => dispatch(viewGetRecipes(checkedRTFilters(), checkedCFilters(), display, startingAt));
-
-  const getCheckedRecipeTypesFilters = () => Object.entries(recipeTypesFilters).map(([ key, value ]) => value === true && Number(key));
-  const getCheckedMethodsFilters =     () => Object.entries(methodsFilters).map(([ key, value ]) => value === true && Number(key));
-  const getCheckedCuisinesFilters =    () => Object.entries(cuisinesFilters).map(([ key, value ]) => value === true && Number(key));
-
-  const handleRecipeTypesFilterChange = (e) => {
-    const id = e.target.id;
-    setRecipeTypesFilters(prevState => ({
-      ...prevState,
-      [id]: !prevState[id]
-    }));
-  }
-
-  const handleCuisinesFilterChange = (e) => {
-    const id = e.target.id;
-    setCuisinesFilters(prevState => ({
-      ...prevState,
-      [id]: !prevState[id]
-    }));
-  }
+  // Get a new searchParams string by merging the curr searchParams with a provided key/value pair
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const pageNumbers = (currPage) => {
-    const display = 25;
     const numbers = [];
     for (let i = 1; i <= viewPages; i++) {
       const startingAt = viewDisplay * (i - 1);
-      if (i !== currPage) numbers.push(<span onClick={() => getRecipes(startingAt)} key={i}>{i}</span>);  // page number
+      if (i !== currPage) numbers.push(<span onClick={() => dispatch(getResults(s)tartingAt)} key={i}>{i}</span>);  // page number
       else                numbers.push(<span key={i}>{i}</span>);                                         // current page number
     }
     return numbers;
@@ -141,9 +96,11 @@ export default function Recipes() {
     return (
       <div>
         <span>
-          {currentPage !== 1 &&     <span onClick={() => getRecipes(startingAtPrev)}>Prev</span>}
+          <span onClick={() => dispatch(getResults(1))}>First</span>
+          {currentPage !== 1 &&     <span onClick={() => dispatch(getResults(s)tartingAtPrev)}>Prev</span>}
           {pageNumbers(currPage)}
-          {currentPage !== pages && <span onClick={() => getRecipes(startingAtNext)}>Next</span>}
+          {currentPage !== pages && <span onClick={() => dispatch(getResults(s)tartingAtNext)}>Next</span>}
+          <span onClick={() => dispatch(getResults(3))}>Last</span>
         </span>
       </div>
     );
@@ -153,6 +110,8 @@ export default function Recipes() {
     <div className="recipes two-col-b">
       <div className="two-col-b-left">
         <h1>Recipes</h1>
+
+        <p>{totalResults} total results for "{term}"</p>
 
         <div id="filters">
           <span>Filter by:</span>
@@ -173,14 +132,37 @@ export default function Recipes() {
 
           <div className="filter-group">
             <label>Methods</label>
-            {methods.map(({ id, name }) => <span key={id}><input type="checkbox" onChange={e => handleCuisinesFilterChange(e)} /><label>{name}</label></span>)}
+            {methods.map(({ id, name }) => (
+              <span key={id}>
+                <input
+                  type="checkbox"
+                  checked={filters.methods.includes(name)}
+                  onChange={() => filters.methods.includes(name) ? removeFilter("methods", name) : addFilter("methods", name)}
+                />
+                <label>{name}</label>
+              </span>
+            ))}
           </div>
 
           <div className="filter-group">
             <label>Cuisines</label>
-            {cuisines.map(({ id, name }) => <span key={id}><input type="checkbox" onChange={e => handleCuisinesFilterChange(e)} /><label>{name}</label></span>)}
+            {cuisines.map(({ id, code, name }) => (
+              <span key={id}>
+                <input
+                  type="checkbox"
+                  checked={filters.cuisines.includes(code)}
+                  onChange={() => filters.cuisines.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
+                />
+                <label>{name}</label>
+              </span>
+            ))}
           </div>
         </div>
+
+        {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
+        {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
+        <Link href={pathname + '?' + createQueryString('sort', 'asc')}>ASC</Link>
+        <Link href={pathname + '?' + createQueryString('sort', 'desc')}>DESC</Link>
 
         {(pages > 1) && paginate()}
 

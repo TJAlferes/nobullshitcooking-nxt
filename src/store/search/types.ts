@@ -35,15 +35,15 @@ export type SearchRequest = {
     productTypes:      string[]
   };                       // setFilters (add, remove, clear)
   sorts:          {};      // setSorts   (add, remove, clear)
-  currentPage:    number;  // setCurrentPage     // OFFSET in MySQL
-  resultsPerPage: number;  // setResultsPerPage  // LIMIT in MySQL
+  currentPage:    number;  // setCurrentPage     // OFFSET in MySQL = (currentPage - 1) * resultsPerPage
+  resultsPerPage: number;  // setResultsPerPage  // LIMIT  in MySQL = resultsPerPage
 };
 
 export type SearchResponse = {
   results:      [];
   totalResults: number;
-  startPage:    number;
-  endPage:      number;
+  //startPage:    number;
+  //endPage:      number;
   totalPages:   number;
 };
 
