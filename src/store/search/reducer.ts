@@ -30,12 +30,10 @@ const initialState: State = {
   },                   // setFilters (add, remove, clear)
   sorts:          {},  // setSorts   (add, remove, clear)
   currentPage:    1,   // setCurrentPage
-  resultsPerPage: 1,   // setResultsPerPage
+  resultsPerPage: 20,  // setResultsPerPage
   // search response state:
   results:        [],
   totalResults:   0,
-  //startPage:      0,
-  //endPage:        0,
   totalPages:     0,
   // autosuggest response state:
   suggestions:    []
@@ -85,8 +83,6 @@ export const searchReducer = (state = initialState, action: IActions): State => 
       ...state,
       results:      action.found.results,
       totalResults: action.found.totalResults,
-      //startPage:    action.found.startPage,
-      //endPage:      action.found.endPage,
       totalPages:   action.found.totalPages
     };
     case SET_SUGGESTIONS:      return {...state, suggestions: action.suggestions};

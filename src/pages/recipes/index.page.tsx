@@ -28,9 +28,9 @@ export default function Recipes() {
   const router =          useRouter();
   const pathname =        usePathname();
   const searchParams =    useSearchParams();
-  const currRecipeTypes = searchParams.get('t');
-  const currMethods =     searchParams.get('m');
-  const currCuisines =    searchParams.get('c');
+  const currRecipeTypes = searchParams.get('recipeTypes');
+  const currMethods =     searchParams.get('methods');
+  const currCuisines =    searchParams.get('cuisines');
 
   const dispatch =       useDispatch();
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
@@ -38,10 +38,10 @@ export default function Recipes() {
   const cuisines =       useSelector(state => state.data.cuisines);
 
   const term =           useSelector(state => state.search.term);
-  const filters =        useSelector(state => state.search.filters);
-  const sorts =          useSelector(state => state.search.sorts);
+  //const filters =        useSelector(state => state.search.filters);  // not even needed?
+  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
   const currentPage =    useSelector(state => state.search.currentPage);
-  const resultsPerPage = useSelector(state => state.search.resultsPerPage);
+  const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
 
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
@@ -49,62 +49,53 @@ export default function Recipes() {
   const endPage =        useSelector(state => state.search.endPage);
   const totalPages =     useSelector(state => state.search.totalPages);
 
-  useEffect(() => {
-    // ?t=Drink&t=Main  -->  {recipeTypes: ["Drink", "Main"], methods: [], cuisines: []}
+  // ?recipeTypes=Drink&recipeTypes=Main  -->  {recipeTypes: ["Drink", "Main"], methods: [], cuisines: []}
 
-    // use useRouter or Link to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
-
-    function setFiltersFromURLParams(filterType: string) {
-      
-    }
-
-    setFiltersFromURLParams("recipeTypes");
-    setFiltersFromURLParams("methods");
-    setFiltersFromURLParams("cuisines");
-  }, [filters.recipeTypes, filters.methods, filters.cuisines]);
+  // use Link (or router) to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
 
   useEffect(() => {
-    dispatch(getResults());
-  }, [filters.recipeTypes, filters.methods, filters.cuisines]);
+    const params = new URLSearchParams(searchParams);
 
-  // Get a new searchParams string by merging the curr searchParams with a provided key/value pair
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-      return params.toString();
-    },
-    [searchParams],
-  );
+    if (!params.has("currentPage")) params.set("currentPage", "1");
+    if (!params.has("resultsPerPage")) params.set("resultsPerPage", "20");
 
-  const pageNumbers = (currPage) => {
-    const numbers = [];
-    for (let i = 1; i <= viewPages; i++) {
-      const startingAt = viewDisplay * (i - 1);
-      if (i !== currPage) numbers.push(<span onClick={() => dispatch(getResults(s)tartingAt)} key={i}>{i}</span>);  // page number
-      else                numbers.push(<span key={i}>{i}</span>);                                         // current page number
-    }
-    return numbers;
+    dispatch(getResults(params.toString()));
+  }, [searchParams]);
+
+  const addFilter = (filterName: string, filterValue: string) => {
+    // TO DO: clean searchParams so that it matches SearchRequest
+    const params = new URLSearchParams(searchParams);
+
+    if (params.has(filterName)) params.append(filterName, filterValue);
+    else                        params.set(filterName, filterValue);
+    params.set("currentPage", "1");
+
+    router.push(pathname + '?' + params.toString());
   };
 
-  const paginate = () => {
-    const display =        25;
-    const currPage =       Math.floor((starting / display) + 1);
-    const startingAtPrev = (starting == 0) ? starting : (starting - display);
-    const startingAtNext = (starting + display);
+  const removeFilter = (filterName: string, filterValue: string) => {
+    const next = searchParams.getAll(filterName).filter(v => v !== filterValue).toString();
+    const params = new URLSearchParams(next);
 
-    return (
-      <div>
-        <span>
-          <span onClick={() => dispatch(getResults(1))}>First</span>
-          {currentPage !== 1 &&     <span onClick={() => dispatch(getResults(s)tartingAtPrev)}>Prev</span>}
-          {pageNumbers(currPage)}
-          {currentPage !== pages && <span onClick={() => dispatch(getResults(s)tartingAtNext)}>Next</span>}
-          <span onClick={() => dispatch(getResults(3))}>Last</span>
-        </span>
-      </div>
-    );
-  }
+    params.set("currentPage", "1");
+
+    router.push(pathname + '?' + params);
+  };
+
+  const clearFilters = (filterName: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.delete(filterName);
+    params.set("currentPage", "1");
+
+    router.push(pathname + '?' + params.toString());
+  };
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("currentPage", `${page}`);
+    router.push(pathname + '?' + params.toString());
+  };
 
   return (
     <div className="recipes two-col-b">
@@ -117,13 +108,13 @@ export default function Recipes() {
           <span>Filter by:</span>
 
           <div className="filter-group">
-            <label>Recipe Types</label>
+            <p>Recipe Types</p>
             {recipeTypes.map(({ id, name }) => (
               <span key={id}>
                 <input
                   type="checkbox"
-                  checked={filters.recipeTypes.includes(name)}
-                  onChange={() => filters.recipeTypes.includes(name) ? removeFilter("recipeTypes", name) : addFilter("recipeTypes", name)}
+                  checked={currRecipeTypes?.includes(name)}
+                  onChange={() => currRecipeTypes?.includes(name) ? removeFilter("recipeTypes", name) : addFilter("recipeTypes", name)}
                 />
                 <label>{name}</label>
               </span>
@@ -131,13 +122,13 @@ export default function Recipes() {
           </div>
 
           <div className="filter-group">
-            <label>Methods</label>
+            <p>Methods</p>
             {methods.map(({ id, name }) => (
               <span key={id}>
                 <input
                   type="checkbox"
-                  checked={filters.methods.includes(name)}
-                  onChange={() => filters.methods.includes(name) ? removeFilter("methods", name) : addFilter("methods", name)}
+                  checked={currMethods?.includes(name)}
+                  onChange={() => currMethods?.includes(name) ? removeFilter("methods", name) : addFilter("methods", name)}
                 />
                 <label>{name}</label>
               </span>
@@ -145,13 +136,13 @@ export default function Recipes() {
           </div>
 
           <div className="filter-group">
-            <label>Cuisines</label>
+            <p>Cuisines</p>
             {cuisines.map(({ id, code, name }) => (
               <span key={id}>
                 <input
                   type="checkbox"
-                  checked={filters.cuisines.includes(code)}
-                  onChange={() => filters.cuisines.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
+                  checked={currCuisines?.includes(code)}
+                  onChange={() => currCuisines?.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
                 />
                 <label>{name}</label>
               </span>
@@ -161,10 +152,8 @@ export default function Recipes() {
 
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
-        <Link href={pathname + '?' + createQueryString('sort', 'asc')}>ASC</Link>
-        <Link href={pathname + '?' + createQueryString('sort', 'desc')}>DESC</Link>
 
-        {(pages > 1) && paginate()}
+        <Pagination totalPages={totalPages} currentPage={Number(currentPage)} handler={goToPage} />
 
         <div>
           {recipes.map(({ id, name, image }) => (
@@ -177,7 +166,7 @@ export default function Recipes() {
           ))}
         </div>
 
-        {(pages > 1) && paginate()}
+        <Pagination totalPages={totalPages} currentPage={Number(currentPage)} handler={goToPage} />
       </div>
 
       <div className="two-col-b-right"></div>
@@ -185,61 +174,66 @@ export default function Recipes() {
   );
 }
 
-/*export function Recipes({ filters, results }: PropsFromContext) {
+function Pagination({ totalPages, currentPage, handler }: PaginationProps) {
+  if (totalPages <= 1) return null;
+
+  const first =   1;
+  const prev =    currentPage - 1;
+  const curr =    currentPage;
+  const next =    currentPage + 1;
+  const last =    totalPages;
+
   return (
-    <div className="search-results two-col-b">
-      <div className="two-col-b-left">
-        <h1>Recipes</h1>
-
-        <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
-          <div className="search-results__filters">
-            <span className="search-results__filter-title">Filter recipes by:</span>
-          </div>
-        </ExpandCollapse>
-
-        <ResultsPerPage options={[20, 50, 100]} />
-        <PagingInfo />
-        <Paging />
-
-        <div className="search-results__list">
-          {results ? results.map((r: any) => (
-            <div className="recipes" key={r.id}>
-              <Link href={`/recipe/${r.id}`} className="recipes-link">
-                <div className="text">
-                  <div className="title">{r.title}</div>
-                  <div className="author">{r.author}</div>
-                  <div>
-                    <div className="cuisine">{r.cuisine_name}</div>
-                    <div className="type">{r.recipe_type_name}</div>
-                  </div>
-                  <div className="tags">
-                    <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
-                    <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
-                  </div>
-                </div>
-                {r.recipe_image !== "nobsc-recipe-default"
-                  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
-                  : <div className="image-default-100-62"></div>
-                }
-              </Link>
-            </div>
-          )) : <div>Loading...</div>}
-        </div>
-
-        <PagingInfo />
-        <Paging />
-      </div>
-
-      <div className="two-col-b-right"></div>
+    <div>
+                      <span onClick={() => handler(first)}>First</span>
+      {curr > 1 &&    <span onClick={() => handler(prev)}>Prev</span>}
+                      <span onClick={() => handler(curr)}>{curr}</span>
+      {curr < last && <span onClick={() => handler(next)}>Next</span>}
+                      <span onClick={() => handler(last)}>Last</span>
     </div>
   );
 }
 
-type PropsFromContext = {
-  filters?:    any;
-  results:     any;
+type PaginationProps = {
+  totalPages:  number;
+  currentPage: number;
+  handler:     (page: number) => void;
+};
+
+function ResultsPerPage() {
+  return (
+    <div>
+      <label>Results per page:</label>
+      <select>
+        <option value={20}>20</option>
+        <option value={50}>50</option>
+        <option value={100}>100</option>
+      </select>
+    </div>
+  );
 }
 
-const mapContextToProps = ({ filters, results }: PropsFromContext) => ({filters, results});
-
-export default withSearch(mapContextToProps)(Recipes);*/
+/*
+{results ? results.map((r: any) => (
+  <div className="recipes" key={r.id}>
+    <Link href={`/recipe/${r.id}`} className="recipes-link">
+      <div className="text">
+        <div className="title">{r.title}</div>
+        <div className="author">{r.author}</div>
+        <div>
+          <div className="cuisine">{r.cuisine_name}</div>
+          <div className="type">{r.recipe_type_name}</div>
+        </div>
+        <div className="tags">
+          <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
+          <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
+        </div>
+      </div>
+      {r.recipe_image !== "nobsc-recipe-default"
+        ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
+        : <div className="image-default-100-62"></div>
+      }
+    </Link>
+  </div>
+)) : <div>Loading...</div>}
+*/

@@ -17,20 +17,11 @@ export function* getSuggestionsSaga(action: IGetSuggestions) {
   } catch (err) {}
 }
 
-//state: SearchState
 export function* getResultsSaga(action: IGetResults) {
   try {
-    const index =           (yield select(state => state.search.index)) as RootState;
-    const term =            (yield select(state => state.search.term)) as RootState;
-    const filters =         (yield select(state => state.search.filters)) as RootState;
-    const sorts =           (yield select(state => state.search.sorts)) as RootState;
-    const currentPage =     (yield select(state => state.search.currentPage)) as RootState;
-    const resultsPerPage =  (yield select(state => state.search.resultsPerPage)) as RootState;
+    const index = (yield select(state => state.search.index)) as RootState;
 
-    const body = {term, filters, sorts, currentPage, resultsPerPage};
-    const urlSearchParams = body;  // CONVERT
-
-    const { data } = yield call([axios, axios.get], `${endpoint}/search/find/${index}/?${urlSearchParams}`);
+    const { data } = yield call([axios, axios.get], `${endpoint}/search/find/${index}/?${action.searchParams}`);
     
     yield put(setResults(data.found));
   } catch (err) {}

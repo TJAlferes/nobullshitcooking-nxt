@@ -23,27 +23,36 @@ export type State = SearchRequest & SearchResponse & {
 export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
 
 export type SearchRequest = {
-  term:           string;    // setTerm
-  filters:        {
+  term?:           string;    // setTerm
+  filters?:        {
     [index: string]: string[];
-    equipmentTypes:    string[],
-    ingredientTypes:   string[],
-    recipeTypes:       string[],
-    methods:           string[],
-    cuisines:          string[],
-    productCategories: string[],
-    productTypes:      string[]
+    equipmentTypes?:    string[],
+    ingredientTypes?:   string[],
+    recipeTypes?:       string[],
+    methods?:           string[],
+    cuisines?:          string[],
+    productCategories?: string[],
+    productTypes?:      string[]
   };                       // setFilters (add, remove, clear)
-  sorts:          {};      // setSorts   (add, remove, clear)
-  currentPage:    number;  // setCurrentPage     // OFFSET in MySQL = (currentPage - 1) * resultsPerPage
-  resultsPerPage: number;  // setResultsPerPage  // LIMIT  in MySQL = resultsPerPage
+  sorts?:          {};      // setSorts   (add, remove, clear)
+  currentPage?:    string;  // setCurrentPage     // OFFSET in MySQL = (currentPage - 1) * resultsPerPage
+  resultsPerPage?: string;  // setResultsPerPage  // LIMIT  in MySQL = resultsPerPage
+};
+
+// TO DO: move?
+export type RecipeCard = {
+  id:               number;
+  author:           string;
+  recipe_type_name: string;
+  cuisine_name:     string;
+  title:            string;
+  description:      string;
+  recipe_image:     string;
 };
 
 export type SearchResponse = {
-  results:      [];
+  results:      Array<RecipeCard>;
   totalResults: number;
-  //startPage:    number;
-  //endPage:      number;
   totalPages:   number;
 };
 
@@ -125,7 +134,8 @@ export interface ISetResultsPerPage {
 }
 
 export interface IGetResults {
-  type: typeof actionTypes.GET_RESULTS;
+  type:         typeof actionTypes.GET_RESULTS;
+  searchParams: string;
 }
 
 export interface IGetSuggestions {

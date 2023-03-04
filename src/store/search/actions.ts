@@ -25,7 +25,7 @@ export const removeFilter =      (key: FilterKey, value: string) =>         ({ty
 export const setSorts =          (col: string, direction: SortDirection) => ({type: SET_SORTS, col, direction});
 export const setCurrentPage =    (currentPage: number) =>                   ({type: SET_CURRENT_PAGE, currentPage});
 export const setResultsPerPage = (resultsPerPage: number) =>                ({type: SET_RESULTS_PER_PAGE, resultsPerPage});
-export const getResults =        () =>                                      ({type: GET_RESULTS});
+export const getResults =        (searchParams: string) =>                  ({type: GET_RESULTS, searchParams});
 export const getSuggestions =    () =>                                      ({type: GET_SUGGESTIONS});
 export const setResults =        (found: SearchResponse) =>                 ({type: SET_RESULTS, found});
 export const setSuggestions =    (suggestions: any[]) =>                    ({type: SET_SUGGESTIONS, suggestions});
