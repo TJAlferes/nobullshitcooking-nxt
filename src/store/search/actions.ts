@@ -23,8 +23,8 @@ export const setFilters =        (key: FilterKey, values: string[]) =>      ({ty
 export const addFilter =         (key: FilterKey, value: string) =>         ({type: ADD_FILTER, key, value});
 export const removeFilter =      (key: FilterKey, value: string) =>         ({type: REMOVE_FILTER, key, value});
 export const setSorts =          (col: string, direction: SortDirection) => ({type: SET_SORTS, col, direction});
-export const setCurrentPage =    (currentPage: number) =>                   ({type: SET_CURRENT_PAGE, currentPage});
-export const setResultsPerPage = (resultsPerPage: number) =>                ({type: SET_RESULTS_PER_PAGE, resultsPerPage});
+export const setCurrentPage =    (currentPage: string) =>                   ({type: SET_CURRENT_PAGE, currentPage});
+export const setResultsPerPage = (resultsPerPage: string) =>                ({type: SET_RESULTS_PER_PAGE, resultsPerPage});
 export const getResults =        (searchParams: string) =>                  ({type: GET_RESULTS, searchParams});
 export const getSuggestions =    () =>                                      ({type: GET_SUGGESTIONS});
 export const setResults =        (found: SearchResponse) =>                 ({type: SET_RESULTS, found});

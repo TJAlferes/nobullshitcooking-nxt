@@ -29,8 +29,8 @@ const initialState: State = {
     productTypes:      []
   },                   // setFilters (add, remove, clear)
   sorts:          {},  // setSorts   (add, remove, clear)
-  currentPage:    1,   // setCurrentPage
-  resultsPerPage: 20,  // setResultsPerPage
+  currentPage:    "1",   // setCurrentPage
+  resultsPerPage: "20",  // setResultsPerPage
   // search response state:
   results:        [],
   totalResults:   0,
@@ -52,7 +52,7 @@ export const searchReducer = (state = initialState, action: IActions): State => 
       }
     };
     case ADD_FILTER: {
-      const values = state.filters[action.key];
+      const values = state.filters?.[action.key];
       if (values === undefined) return state;
       return {
         ...state,
@@ -66,7 +66,7 @@ export const searchReducer = (state = initialState, action: IActions): State => 
       };
     };
     case REMOVE_FILTER: {
-      const values = state.filters[action.key];
+      const values = state.filters?.[action.key];
       if (values === undefined) return state;
       return {
         ...state,

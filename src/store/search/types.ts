@@ -125,12 +125,12 @@ export interface ISetSorts {
 
 export interface ISetCurrentPage {
   type:        typeof actionTypes.SET_CURRENT_PAGE;
-  currentPage: number;
+  currentPage: string;
 }
 
 export interface ISetResultsPerPage {
   type:           typeof actionTypes.SET_RESULTS_PER_PAGE;
-  resultsPerPage: number;
+  resultsPerPage: string;
 }
 
 export interface IGetResults {

@@ -19,8 +19,6 @@ import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
 } from '../../store';
-import { endpoint } from '../../utils/api';
-import './recipes.css';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
@@ -45,8 +43,8 @@ export default function Recipes() {
 
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
-  const startPage =      useSelector(state => state.search.startPage);
-  const endPage =        useSelector(state => state.search.endPage);
+  //const startPage =      useSelector(state => state.search.startPage);
+  //const endPage =        useSelector(state => state.search.endPage);
   const totalPages =     useSelector(state => state.search.totalPages);
 
   // ?recipeTypes=Drink&recipeTypes=Main  -->  {recipeTypes: ["Drink", "Main"], methods: [], cuisines: []}
@@ -86,6 +84,16 @@ export default function Recipes() {
     const params = new URLSearchParams(searchParams);
 
     params.delete(filterName);
+    params.set("currentPage", "1");
+
+    router.push(pathname + '?' + params.toString());
+  };
+
+  const changeResultsPerPage = (e: SyntheticEvent) => {
+    const params = new URLSearchParams(searchParams);
+    const value =  (e.target as HTMLInputElement).value;
+
+    params.set("resultsPerPage", `${value}`);
     params.set("currentPage", "1");
 
     router.push(pathname + '?' + params.toString());
@@ -154,22 +162,52 @@ export default function Recipes() {
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
 
         <Pagination totalPages={totalPages} currentPage={Number(currentPage)} handler={goToPage} />
+        <ResultsPerPage handler={changeResultsPerPage} resultsPerPage={resultsPerPage ?? "20"} />
 
         <div>
-          {recipes.map(({ id, name, image }) => (
-            <div key={id}>
-              <Link to={`/food/recipe/${id}`}>
-                <div>{name}</div>
-                <img src={`https://s3.amazonaws.com/nobsc-images-01/recipes/recipe/${image}.jpg`} />
+          {results ? results.map((r: any) => (
+            <div className="recipes" key={r.id}>
+              <Link href={`/recipe/${r.id}`} className="recipes-link">
+                <div className="text">
+                  <div className="title">{r.title}</div>
+                  <div className="author">{r.author}</div>
+                  <div>
+                    <div className="cuisine">{r.cuisine_name}</div>
+                    <div className="type">{r.recipe_type_name}</div>
+                  </div>
+                  {/*
+                  <div className="tags">
+                    <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
+                    <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
+                  </div>
+                  */}
+                </div>
+                {r.recipe_image !== "nobsc-recipe-default"
+                  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
+                  : <div className="image-default-100-62"></div>
+                }
               </Link>
             </div>
-          ))}
+          )) : <div>Loading...</div>}
         </div>
 
         <Pagination totalPages={totalPages} currentPage={Number(currentPage)} handler={goToPage} />
       </div>
 
       <div className="two-col-b-right"></div>
+    </div>
+  );
+}
+
+function ResultsPerPage({ handler, resultsPerPage }: ResultsPerPageProps) {
+  return (
+    <div>
+      <label>Results per page:</label>
+      <select onChange={handler} value={resultsPerPage}>
+        <option value={20}>20</option>
+        <option value={50}>50</option>
+        <option value={100}>100</option>
+      </select>
     </div>
   );
 }
@@ -194,46 +232,15 @@ function Pagination({ totalPages, currentPage, handler }: PaginationProps) {
   );
 }
 
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+type ResultsPerPageProps = {
+  resultsPerPage: string;
+  handler(e: SyntheticEvent): void;
+};
+
 type PaginationProps = {
   totalPages:  number;
   currentPage: number;
-  handler:     (page: number) => void;
+  handler(page: number): void;
 };
-
-function ResultsPerPage() {
-  return (
-    <div>
-      <label>Results per page:</label>
-      <select>
-        <option value={20}>20</option>
-        <option value={50}>50</option>
-        <option value={100}>100</option>
-      </select>
-    </div>
-  );
-}
-
-/*
-{results ? results.map((r: any) => (
-  <div className="recipes" key={r.id}>
-    <Link href={`/recipe/${r.id}`} className="recipes-link">
-      <div className="text">
-        <div className="title">{r.title}</div>
-        <div className="author">{r.author}</div>
-        <div>
-          <div className="cuisine">{r.cuisine_name}</div>
-          <div className="type">{r.recipe_type_name}</div>
-        </div>
-        <div className="tags">
-          <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
-          <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
-        </div>
-      </div>
-      {r.recipe_image !== "nobsc-recipe-default"
-        ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
-        : <div className="image-default-100-62"></div>
-      }
-    </Link>
-  </div>
-)) : <div>Loading...</div>}
-*/

@@ -46,9 +46,11 @@ export interface IInitialUserData {
 }
 
 export interface ICuisine {
-  id:     number
-  name:   string
-  nation: string
+  id:        number;
+  continent: string;
+  code:      string;
+  name:      string;
+  nation:    string;
 }
 
 export interface IEquipment {
