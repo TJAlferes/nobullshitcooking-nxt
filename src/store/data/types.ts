@@ -50,7 +50,7 @@ export interface ICuisine {
   continent: string;
   code:      string;
   name:      string;
-  nation:    string;
+  country:   string;
 }
 
 export interface IEquipment {

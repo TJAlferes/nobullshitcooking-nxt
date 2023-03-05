@@ -10,11 +10,9 @@
     "test": "jest --color --detectOpenHandles"
   },
   "dependencies": {
-    "@elastic/react-search-ui": "^1.18.3",
     "@reduxjs/toolkit": "^1.9.2",
     "@stripe/react-stripe-js": "^1.16.4",
     "@stripe/stripe-js": "^1.46.0",
-    "@types/qs": "^6.9.7",
     "axios": "^1.3.2",
     "date-fns": "^2.29.3",
     "fibers": "^5.0.3",
@@ -53,6 +51,7 @@
     "@types/react-dom": "^18.0.10",
     "@types/react-image-crop": "^8.1.3",
     "@types/react-redux": "^7.1.25",
+    "@types/qs": "^6.9.7",
     "@types/uuid": "^9.0.0",
     "babel-jest": "^29.3.1",
     "cross-env": "^7.0.3",

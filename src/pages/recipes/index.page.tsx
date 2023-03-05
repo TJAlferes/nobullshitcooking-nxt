@@ -1,10 +1,10 @@
 'use client';
 
-import Link                       from 'next/link';
+import Link                                        from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useEffect }                               from 'react';
+import qs                                          from 'qs';
 
-//import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '../../components';
 import { ExpandCollapse } from '../../components';
 import {
   getResults,
@@ -15,6 +15,7 @@ import {
   setCurrentPage,
   setResultsPerPage
 } from '../../store/search/actions';
+import type { SearchRequest } from '../../store/search/types';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
@@ -52,57 +53,105 @@ export default function Recipes() {
   // use Link (or router) to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
+    // nesting not supported
+    /*const params = new URLSearchParams(searchParams);
 
-    if (!params.has("currentPage")) params.set("currentPage", "1");
+    if (!params.has("currentPage"))    params.set("currentPage", "1");
     if (!params.has("resultsPerPage")) params.set("resultsPerPage", "20");
 
-    dispatch(getResults(params.toString()));
+    dispatch(getResults(params.toString()));*/
+
+    // nesting supported
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+
+    if (!params.hasOwnProperty("currentPage"))    params.currentPage = "1";
+    if (!params.hasOwnProperty("resultsPerPage")) params.resultsPerPage = "1";
+
+    dispatch(getResults(qs.stringify(params)));
   }, [searchParams]);
 
   const addFilter = (filterName: string, filterValue: string) => {
     // TO DO: clean searchParams so that it matches SearchRequest
-    const params = new URLSearchParams(searchParams);
+    /*const params = new URLSearchParams(searchParams);
 
     if (params.has(filterName)) params.append(filterName, filterValue);
     else                        params.set(filterName, filterValue);
     params.set("currentPage", "1");
 
-    router.push(pathname + '?' + params.toString());
+    router.push(pathname + '?' + params.toString());*/
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+
+    if (params.hasOwnProperty("filters")) {
+      if (params.filters.hasOwnProperty(filterName)) params.filters[filterName]?.push(filterValue);
+      else                                           params.filters[filterName] = [filterValue];
+    } else {
+      params.filters = {
+        [filterName]: [filterValue]
+      };
+    }
+    params.currentPage = "1";
+
+    router.push(pathname + '?' + qs.stringify(params));
   };
 
   const removeFilter = (filterName: string, filterValue: string) => {
-    const next = searchParams.getAll(filterName).filter(v => v !== filterValue).toString();
+    /*const next = searchParams.getAll(filterName).filter(v => v !== filterValue).toString();
     const params = new URLSearchParams(next);
 
     params.set("currentPage", "1");
 
-    router.push(pathname + '?' + params);
+    router.push(pathname + '?' + params);*/
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+
+    if (params.hasOwnProperty("filters")) {
+      if (params.filters.hasOwnProperty(filterName)) params.filters[filterName]?.filter(v => v !== filterValue);
+    }
+    params.currentPage = "1";
+
+    router.push(pathname + '?' + qs.stringify(params));
   };
 
   const clearFilters = (filterName: string) => {
-    const params = new URLSearchParams(searchParams);
+    /*const params = new URLSearchParams(searchParams);
 
     params.delete(filterName);
     params.set("currentPage", "1");
 
-    router.push(pathname + '?' + params.toString());
+    router.push(pathname + '?' + params.toString());*/
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+
+    if (params.hasOwnProperty("filters")) {
+      if (params.filters.hasOwnProperty(filterName)) delete params.filters[filterName];
+    }
+    params.currentPage = "1";
+
+    router.push(pathname + '?' + qs.stringify(params));
   };
 
   const changeResultsPerPage = (e: SyntheticEvent) => {
-    const params = new URLSearchParams(searchParams);
+    /*const params = new URLSearchParams(searchParams);
     const value =  (e.target as HTMLInputElement).value;
 
     params.set("resultsPerPage", `${value}`);
     params.set("currentPage", "1");
 
-    router.push(pathname + '?' + params.toString());
+    router.push(pathname + '?' + params.toString());*/
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    const value = (e.target as HTMLInputElement).value;
+
+    params.resultsPerPage = `${value}`;
+    params.currentPage = "1";
+
+    router.push(pathname + '?' + qs.stringify(params));
   };
 
   const goToPage = (page: number) => {
-    const params = new URLSearchParams(searchParams);
+    /*const params = new URLSearchParams(searchParams);
     params.set("currentPage", `${page}`);
-    router.push(pathname + '?' + params.toString());
+    router.push(pathname + '?' + params.toString());*/
+    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    params.currentPage = "1";
+    router.push(pathname + '?' + qs.stringify(params));
   };
 
   return (
