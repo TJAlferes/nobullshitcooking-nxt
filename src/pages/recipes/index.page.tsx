@@ -2,18 +2,18 @@
 
 import Link                                        from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect }                               from 'react';
+import { useEffect, useState }                               from 'react';
 import qs                                          from 'qs';
 
 import { ExpandCollapse } from '../../components';
 import {
   getResults,
-  setFilters,
-  addFilter,
-  removeFilter,
-  setSorts,
-  setCurrentPage,
-  setResultsPerPage
+  //setFilters,
+  //addFilter,
+  //removeFilter,
+  //setSorts,
+  //setCurrentPage,
+  //setResultsPerPage
 } from '../../store/search/actions';
 import type { SearchRequest } from '../../store/search/types';
 import {
@@ -24,12 +24,14 @@ import {
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const router =          useRouter();
-  const pathname =        usePathname();
-  const searchParams =    useSearchParams();
-  const currRecipeTypes = searchParams.get('recipeTypes');
-  const currMethods =     searchParams.get('methods');
-  const currCuisines =    searchParams.get('cuisines');
+  const router =       useRouter();
+  const pathname =     usePathname();
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const currRecipeTypes = params.filters?.recipeTypes;
+  const currMethods =     params.filters?.methods;
+  const currCuisines =    params.filters?.cuisines;
 
   const dispatch =       useDispatch();
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
@@ -53,33 +55,18 @@ export default function Recipes() {
   // use Link (or router) to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
 
   useEffect(() => {
-    // nesting not supported
-    /*const params = new URLSearchParams(searchParams);
+    //const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-    if (!params.has("currentPage"))    params.set("currentPage", "1");
-    if (!params.has("resultsPerPage")) params.set("resultsPerPage", "20");
-
-    dispatch(getResults(params.toString()));*/
-
-    // nesting supported
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
-
-    if (!params.hasOwnProperty("currentPage"))    params.currentPage = "1";
-    if (!params.hasOwnProperty("resultsPerPage")) params.resultsPerPage = "1";
+    if (!params.hasOwnProperty("currentPage"))    params['currentPage'] = "1";
+    if (!params.hasOwnProperty("resultsPerPage")) params['resultsPerPage'] = "1";
 
     dispatch(getResults(qs.stringify(params)));
-  }, [searchParams]);
+  }, [/* TO DO: change me? fill me in? */]);
 
   const addFilter = (filterName: string, filterValue: string) => {
     // TO DO: clean searchParams so that it matches SearchRequest
-    /*const params = new URLSearchParams(searchParams);
-
-    if (params.has(filterName)) params.append(filterName, filterValue);
-    else                        params.set(filterName, filterValue);
-    params.set("currentPage", "1");
-
-    router.push(pathname + '?' + params.toString());*/
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
 
     if (params.hasOwnProperty("filters")) {
       if (params.filters.hasOwnProperty(filterName)) params.filters[filterName]?.push(filterValue);
@@ -95,48 +82,30 @@ export default function Recipes() {
   };
 
   const removeFilter = (filterName: string, filterValue: string) => {
-    /*const next = searchParams.getAll(filterName).filter(v => v !== filterValue).toString();
-    const params = new URLSearchParams(next);
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-    params.set("currentPage", "1");
+    if (!params.filters) return;
+    //if (!params.filters[filterName]) return;
 
-    router.push(pathname + '?' + params);*/
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    const removed = (params.filters?.[filterName]?.filter(v => v !== filterValue)) as string[];
+    params.filters[filterName] = removed;
 
-    if (params.hasOwnProperty("filters")) {
-      if (params.filters.hasOwnProperty(filterName)) params.filters[filterName]?.filter(v => v !== filterValue);
-    }
     params.currentPage = "1";
 
     router.push(pathname + '?' + qs.stringify(params));
   };
 
   const clearFilters = (filterName: string) => {
-    /*const params = new URLSearchParams(searchParams);
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-    params.delete(filterName);
-    params.set("currentPage", "1");
-
-    router.push(pathname + '?' + params.toString());*/
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
-
-    if (params.hasOwnProperty("filters")) {
-      if (params.filters.hasOwnProperty(filterName)) delete params.filters[filterName];
-    }
+    delete params['filters']?.[filterName];
     params.currentPage = "1";
 
     router.push(pathname + '?' + qs.stringify(params));
   };
 
   const changeResultsPerPage = (e: SyntheticEvent) => {
-    /*const params = new URLSearchParams(searchParams);
-    const value =  (e.target as HTMLInputElement).value;
-
-    params.set("resultsPerPage", `${value}`);
-    params.set("currentPage", "1");
-
-    router.push(pathname + '?' + params.toString());*/
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
     const value = (e.target as HTMLInputElement).value;
 
     params.resultsPerPage = `${value}`;
@@ -146,11 +115,8 @@ export default function Recipes() {
   };
 
   const goToPage = (page: number) => {
-    /*const params = new URLSearchParams(searchParams);
-    params.set("currentPage", `${page}`);
-    router.push(pathname + '?' + params.toString());*/
-    const params: SearchRequest = Object.fromEntries(searchParams.entries());
-    params.currentPage = "1";
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
+    params.currentPage = `${page}`;
     router.push(pathname + '?' + qs.stringify(params));
   };
 
@@ -170,7 +136,7 @@ export default function Recipes() {
               <span key={id}>
                 <input
                   type="checkbox"
-                  checked={currRecipeTypes?.includes(name)}
+                  checked={currRecipeTypes?.includes(name) ? true : false}
                   onChange={() => currRecipeTypes?.includes(name) ? removeFilter("recipeTypes", name) : addFilter("recipeTypes", name)}
                 />
                 <label>{name}</label>
