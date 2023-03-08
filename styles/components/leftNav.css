@@ -9,7 +9,7 @@
   max-width: 240px;
   min-width: 240px;
   position: absolute;
-  top: 0;
+  top: 56px;
   width: 240px;
   z-index: 6;
 }
@@ -57,6 +57,20 @@
   border: 0 none;
   height: 1px;
   margin: 5px 0;
+}
+
+.shadow {
+  display: block;
+  background: rgba(0, 0, 0, .5);
+  bottom: 1;
+  height: 100vh;
+  min-height: 100vh;
+  left: -42px;
+  position: absolute;
+  top: 56px;
+  width: 3000px;
+  min-width: 3000px;
+  z-index: 5;
 }
 
 .light .left-nav,

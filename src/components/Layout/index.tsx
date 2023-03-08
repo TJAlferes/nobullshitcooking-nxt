@@ -9,15 +9,15 @@ export function Layout({ children }: Props): JSX.Element {
   const authPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);
 
   // This layout does not apply to auth pages.
-  return authPage ? (
-    <>{children}</>
-  ) : (
-    <div id="layout">
-      <Header />
-      <Main>{children}</Main>
-      <Footer />
-    </div>
-  );
+  return authPage
+    ? <>{children}</>
+    : (
+      <div id="layout">
+        <Header />
+        <Main>{children}</Main>
+        <Footer />
+      </div>
+    );
 }
 
 type Props = {

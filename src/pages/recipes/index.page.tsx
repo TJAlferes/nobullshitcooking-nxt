@@ -2,7 +2,7 @@
 
 import Link                                        from 'next/link';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useState }                               from 'react';
+import { useEffect }                               from 'react';
 import qs                                          from 'qs';
 
 import { ExpandCollapse } from '../../components';
@@ -27,6 +27,7 @@ export default function Recipes() {
   const router =       useRouter();
   const pathname =     usePathname();
   const searchParams = useSearchParams();
+
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const currRecipeTypes = params.filters?.recipeTypes;
@@ -39,44 +40,39 @@ export default function Recipes() {
   const cuisines =       useSelector(state => state.data.cuisines);
 
   const term =           useSelector(state => state.search.term);
-  //const filters =        useSelector(state => state.search.filters);  // not even needed?
+  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
   //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
   const currentPage =    useSelector(state => state.search.currentPage);
   const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
 
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
-  //const startPage =      useSelector(state => state.search.startPage);
-  //const endPage =        useSelector(state => state.search.endPage);
   const totalPages =     useSelector(state => state.search.totalPages);
-
-  // ?recipeTypes=Drink&recipeTypes=Main  -->  {recipeTypes: ["Drink", "Main"], methods: [], cuisines: []}
-
-  // use Link (or router) to set new searchParams. After a navigating, the curr page.js will receive an updated searchParams prop.
 
   useEffect(() => {
     //const params: SearchRequest = Object.fromEntries(searchParams.entries());
     const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-    if (!params.hasOwnProperty("currentPage"))    params['currentPage'] = "1";
-    if (!params.hasOwnProperty("resultsPerPage")) params['resultsPerPage'] = "1";
+    if (!params.currentPage)    params.currentPage = "1";
+    if (!params.resultsPerPage) params.resultsPerPage = "20";
 
     dispatch(getResults(qs.stringify(params)));
-  }, [/* TO DO: change me? fill me in? */]);
+  }, [searchParams]);
 
   const addFilter = (filterName: string, filterValue: string) => {
     // TO DO: clean searchParams so that it matches SearchRequest
     const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-    if (params.hasOwnProperty("filters")) {
-      if (params.filters.hasOwnProperty(filterName)) params.filters[filterName]?.push(filterValue);
-      else                                           params.filters[filterName] = [filterValue];
+    if (params.filters) {
+      if (params.filters[filterName]) params.filters[filterName]?.push(filterValue);
+      else                            params.filters[filterName] = [filterValue];
     } else {
       params.filters = {
         [filterName]: [filterValue]
       };
     }
     params.currentPage = "1";
+    if (!params.resultsPerPage) params.resultsPerPage = "20";
 
     router.push(pathname + '?' + qs.stringify(params));
   };
@@ -85,12 +81,12 @@ export default function Recipes() {
     const params = qs.parse(searchParams.toString()) as SearchRequest;
 
     if (!params.filters) return;
-    //if (!params.filters[filterName]) return;
 
     const removed = (params.filters?.[filterName]?.filter(v => v !== filterValue)) as string[];
     params.filters[filterName] = removed;
 
     params.currentPage = "1";
+    if (!params.resultsPerPage) params.resultsPerPage = "20";
 
     router.push(pathname + '?' + qs.stringify(params));
   };
@@ -108,8 +104,8 @@ export default function Recipes() {
     const params = qs.parse(searchParams.toString()) as SearchRequest;
     const value = (e.target as HTMLInputElement).value;
 
-    params.resultsPerPage = `${value}`;
     params.currentPage = "1";
+    params.resultsPerPage = `${value}`;
 
     router.push(pathname + '?' + qs.stringify(params));
   };
@@ -207,6 +203,7 @@ export default function Recipes() {
         </div>
 
         <Pagination totalPages={totalPages} currentPage={Number(currentPage)} handler={goToPage} />
+        <ResultsPerPage handler={changeResultsPerPage} resultsPerPage={resultsPerPage ?? "20"} />
       </div>
 
       <div className="two-col-b-right"></div>
@@ -250,12 +247,12 @@ function Pagination({ totalPages, currentPage, handler }: PaginationProps) {
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type ResultsPerPageProps = {
-  resultsPerPage: string;
+  resultsPerPage:             string;
   handler(e: SyntheticEvent): void;
 };
 
 type PaginationProps = {
-  totalPages:  number;
-  currentPage: number;
+  totalPages:            number;
+  currentPage:           number;
   handler(page: number): void;
 };

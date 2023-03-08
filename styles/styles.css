@@ -32,6 +32,12 @@ body {
   overflow-x: hidden;  /* kind of a hack job IMHO... */
 }
 
+#app {
+  display: block;
+  height: 100vh;
+  min-height: 100vh;
+}
+
 img,
 picture,
 svg,
@@ -202,7 +208,6 @@ h4 {
 }
 
 @import './components/addToCartButton.css';
-@import './components/app.css';
 @import './components/breadcrumbs.css';
 @import './components/cropPreview.css';
 @import './components/expandCollapse.css';

@@ -9,7 +9,7 @@ import { SuggestionsView } from './view';
 const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
 const url =                 'https://maps.googleapis.com/maps/api/geocode/json';
 
-export function Suggestions(): JSX.Element {
+export function Suggestions() {
   const dispatch = useDispatch();
 
   const address =             useSelector(state => state.geolocation.address);
