@@ -10,7 +10,7 @@
   z-index: 3;
 }
 
-.header-l {
+.site-nav {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -22,13 +22,79 @@
   width: 240px;
 }
 
-.light .header,
-.light .header-l {
+.left-nav-toggle {
+  cursor: pointer;
+  height: 24px;
+  margin: 16px 0 0 8px;
+  width: 24px;
+}
+
+.logo {
+  height: 20px;
+  margin: 17px 0 0 22px;
+  width: 68px;
+}
+
+.user-nav {
+  display: flex;
+  flex-direction: row;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  order: 3;
+  padding: 17px 15px 0 0;
+}
+
+.user-nav .mode {
+  line-height: 16px;
+}
+
+.moon {
+  color: #183a39;
+  font-style: normal;
+}
+
+.sun {
+  color: #fffdb1;
+  font-style: normal;
+}
+
+.user-nav .mode,
+.user-nav a,
+.user-nav .logout {
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size: 1.4rem;
+  height: 16px;
+  margin: 0 9px;
+  text-decoration: none;
+}
+
+.user-nav a:hover,
+.user-nav a:active,
+.user-nav .logout:hover,
+.user-nav .logout:active {
+  text-decoration: underline;
+}
+
+/*
+
+Light/Day/Sun Theme
+
+*/
+
+.light .header {
   background-color: #c10006;
 }
 
-.dark .header,
-.dark .header-l {
+/*
+
+Dark/Night/Moon Theme
+
+*/
+
+.dark .header {
   background-color: #690004;
 }
 

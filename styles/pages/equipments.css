@@ -50,6 +50,8 @@
   display: none;
 }
 
+
+
 .sui-paging {
   list-style-type: none;
   margin: 20px 0;
@@ -74,10 +76,14 @@
   cursor: pointer;
 }
 
+
+
 .sui-paging-info {
   font-size: 12px;
   margin-left: 12px;
 }
+
+
 
 .sui-results-per-page {
   margin-left: 12px;
@@ -98,9 +104,7 @@
   padding-top: 4px;
 }
 
-/*.sui-results-per-page .sui-select .sui-select--inline {
 
-}*/
 
 .equipments {
   padding: 10px;

@@ -1,19 +1,19 @@
-import Link from 'next/link';
+import Link          from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { userLogout } from '../../store/auth/actions';
+import { userLogout }    from '../../store/auth/actions';
 import { toggleLeftNav } from '../../store/menu/actions';
-import { dark, light } from '../../store/theme/actions';
-import { Search } from '..';
+import { dark, light }   from '../../store/theme/actions';
+import { Search }        from '..';
 
 export function Header() {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const authname =             useSelector(state => state.auth.authname);
-  const userIsAuthenticated =  useSelector(state => state.auth.userIsAuthenticated);
-  const theme =                useSelector(state => state.theme.theme);
+  const authname =            useSelector(state => state.auth.authname);
+  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+  const theme =               useSelector(state => state.theme.theme);
 
   const click = () => dispatch(toggleLeftNav());
 
@@ -24,14 +24,14 @@ export function Header() {
 
   return (
     <header className="header">
-      <div className="header-l">
+      <div className="site-nav">
         <svg className="left-nav-toggle" onClick={click}>
           <g>
             <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path>
           </g>
         </svg>
 
-        <div className={`logo ${theme}`}>
+        <div className="logo">
           <Link href={{pathname: "/"}}>
             <img
               className="home-link"

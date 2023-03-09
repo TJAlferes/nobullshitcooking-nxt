@@ -79,14 +79,6 @@ h4 {
   font-size: 1.4rem;
 }
 
-.left-nav-toggle {
-  cursor: pointer;
-  height: 24px;
-  margin: 16px 0 0 8px;
-  order: 1;
-  width: 24px;
-}
-
 .feedback {
   color: #c10006;
   display: block;
@@ -218,9 +210,7 @@ h4 {
 @import './components/layout.css';
 @import './components/leftNav.css';
 @import './components/loaderSpinner.css';
-@import './components/logo.css';
 @import './components/main.css';
-@import './components/menu.css';
 @import './components/messages.css';
 @import './components/options.css';
 @import './components/people.css';
@@ -229,7 +219,6 @@ h4 {
 @import './components/search.css';
 @import './components/starRating.css';
 @import './components/suggestions.css';
-@import './components/userNav.css';
 
 @import './layouts/navGridA.css';
 @import './layouts/oneColumnA.css';

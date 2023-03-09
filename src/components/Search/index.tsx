@@ -1,10 +1,10 @@
+import { useRouter }        from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useRef }           from 'react';
-import { useRouter }        from 'next/router';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import type { SearchIndex } from '../../store/search/types';
-import { getSuggestions, setIndex, setTerm } from '../../store/search/actions';
+import { getSuggestions, setIndex, setTerm }                                from '../../store/search/actions';
+import type { SearchIndex }                                                 from '../../store/search/types';
 
 export function Search() {
   const router =      useRouter();
@@ -38,9 +38,12 @@ export function Search() {
   return (
     <div className="search">
       <div className="category">
-        <div className="facade"><span>{capitalized}</span><img src="/images/header/down-arrow-gray.png" width="8" height="6" /></div>
+        <div className="facade">
+          <span>{capitalized}</span>
+          <img src="/images/header/down-arrow-gray.png" width="8" height="6" />
+        </div>
         
-        <select className="filters" onChange={onSearchIndexChange}>
+        <select onChange={onSearchIndexChange}>
           <option value="recipes">Recipes</option>
           <option value="ingredients">Ingredients</option>
           <option value="equipments">Equipment</option>
@@ -50,14 +53,18 @@ export function Search() {
 
       <div className="insert">
         <input id="search-input" onChange={onInputChange} value={term} />
-        <div className="magnifying-glass" onClick={goToSearchResults}><span></span></div>
+        <div className="magnifying-glass" onClick={goToSearchResults}>
+          <span></span>
+        </div>
       </div>
 
       {suggestions.length >= 1 && (
-        <div className='suggestions'>
+        <div className="autosuggestions">
           {/* <select><option> instead of <ul><li> ? */}
           <ul>
-            {suggestions.map(suggestion => <li onClick={() => selectSuggestion(suggestion)}>{suggestion}</li>)}
+            {suggestions.map(suggestion => (
+              <li onClick={() => selectSuggestion(suggestion)}>{suggestion}</li>
+            ))}
           </ul>
         </div>
       )}
