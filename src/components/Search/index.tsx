@@ -14,7 +14,8 @@ export function Search() {
   const term =        useSelector(state => state.search.term);
   const suggestions = useSelector(state => state.search.suggestions);
 
-  const capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
+  let capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
+  if (capitalized === "Equipments") capitalized = "Equipment";
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current = document.getElementById("search-input") as HTMLInputElement;
@@ -40,7 +41,7 @@ export function Search() {
       <div className="category">
         <div className="facade">
           <span>{capitalized}</span>
-          <img src="/images/header/down-arrow-gray.png" width="8" height="6" />
+          <img src="/images/header/down-arrow.png" width="8" height="6" />
         </div>
         
         <select onChange={onSearchIndexChange}>

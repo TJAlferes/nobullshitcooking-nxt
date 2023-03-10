@@ -31,16 +31,9 @@ export function Header() {
           </g>
         </svg>
 
-        <div className="logo">
-          <Link href={{pathname: "/"}}>
-            <img
-              className="home-link"
-              src={theme === "light" ? "/images/header/logo-mobile-red-small.png" : "/images/header/logo-mobile-dark-red-small.png"}
-              width="68"
-              height="20"
-            />
-          </Link>
-        </div>
+        <Link className="logo" href={{pathname: "/"}}>
+          <img src={`/images/header/logo-${theme}.png`} />
+        </Link>
       </div>
 
       <Search />
