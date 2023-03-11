@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { combineReducers, configureStore, ConfigureStoreOptions, ThunkAction } from '@reduxjs/toolkit';
 import { useDispatch, useSelector, TypedUseSelectorHook }                      from 'react-redux';
 import { Context, createWrapper }                                              from 'next-redux-wrapper';
@@ -6,11 +5,10 @@ import type { Action, Store }                                                  f
 import createSagaMiddleware, { END, Task }                                     from 'redux-saga';
 import { fork }                                                                from 'redux-saga/effects';
 
-import { endpoint } from '../utils/api';
 import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/window';
 import { loadFromLocalStorage, saveToLocalStorage }      from '../utils/storage';
 import { chatInit }           from './chat/sagas';
-import { init, initUser, getInitialUserData }     from './data/actions';
+import { init }               from './data/actions';
 import { authReducer }        from './auth/reducer';
 import { cartReducer }        from './cart/reducer';
 import { chatReducer }        from './chat/reducer';
@@ -56,7 +54,7 @@ function makeStore(context: Context) {
 
   if (typeof window !== 'undefined') {
     store.subscribe(() => saveToLocalStorage(store.getState()));
-    chatInit(store);  // start socket.io (is this being called on EVERY re-route???) (move socket.io into redux middleware?)
+    chatInit(store);  // start socket.io
     initWindowBlurHandler(store);
     initWindowFocusHandler(store);
   }
@@ -98,46 +96,12 @@ export function* rootSaga() {
 
 export const wrapper = createWrapper<SagaStore>(makeStore, {debug: false});
 
-// ideally only called once, but for now in every non-authenticated page
-export function initialProps() {
-  return wrapper.getInitialPageProps(
+export function staticProps() {
+  return wrapper.getStaticProps(
     store => async (context) => {
       store.dispatch(init());
       store.dispatch(END);
       await (store as SagaStore).sagaTask?.toPromise();
-      return {props: {}};
-    }
-  );
-}
-
-// only called once, in Dashboard, when they are redirected there upon being authenticated
-export function initialUserProps() {
-  return wrapper.getInitialPageProps(
-    store => async (context) => {
-      store.dispatch(initUser());
-      store.dispatch(END);
-      await (store as SagaStore).sagaTask?.toPromise();
-      return {props: {}};
-    }
-  );
-}
-
-export function serverUserProps() {
-  return wrapper.getServerSideProps(
-    store => async (context) => {
-      console.log("hi");
-
-      const { data } = await axios.get(`${endpoint}/equipment-type`);
-      console.log(data.equipmentTypes);
-
-      //const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
-      //console.log(data.myPlans);
-      //store.dispatch(getInitialUserData(data));
-
-      //store.dispatch(initUser());
-      //store.dispatch(END);
-      //await (store as SagaStore).sagaTask?.toPromise();
-
       return {props: {}};
     }
   );

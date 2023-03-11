@@ -1,16 +1,12 @@
-//import axios from 'axios';
-//import type { GetServerSideProps } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import type { Crop, PixelCrop } from 'react-image-crop';
 import { useDispatch } from 'react-redux';
 
-//import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { /*initialUserProps, serverUserProps,*/ useTypedSelector as useSelector } from '../../store';
-import { updateLocalAvatar } from '../../store/auth/actions';
+import { useTypedSelector as useSelector } from '../../store';
 import { submitAvatar            as userSubmitAvatar } from '../../store/user/avatar/actions';
 import { unfavoriteRecipe        as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
-import { deletePrivateEquipment  as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
-import { deletePrivateIngredient as userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
+import { deleteEquipment  as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
+import { deleteIngredient as userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
 import { deletePlan              as userDeletePlan } from '../../store/user/plan/actions';
 import { deletePrivateRecipe     as userDeletePrivateRecipe,
          disownPublicRecipe      as userDisownPublicRecipe } from '../../store/user/recipe/actions';
@@ -23,8 +19,8 @@ export default function Dashboard(): JSX.Element {
 
   const myFavoriteRecipes =    useSelector(state => state.data.myFavoriteRecipes);
   const myPlans =              useSelector(state => state.data.myPlans);
-  const myPrivateEquipment =   useSelector(state => state.data.myPrivateEquipment);
-  const myPrivateIngredients = useSelector(state => state.data.myPrivateIngredients);
+  const myPrivateEquipment =   useSelector(state => state.data.myEquipment);
+  const myPrivateIngredients = useSelector(state => state.data.myIngredients);
   const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
   const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
   const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
@@ -51,13 +47,6 @@ export default function Dashboard(): JSX.Element {
   const [ tinyCrop, setTinyCrop ] = useState("");
 
   const imageRef = useRef<HTMLImageElement | null>();
-
-  //useEffect(() => {
-  //  async function getShit() {
-  //    const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
-  //  }  
-  //  getShit();
-  //}, []);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -154,7 +143,6 @@ export default function Dashboard(): JSX.Element {
   const submitAvatar = () => {
     setLoading(true);
     dispatch(userSubmitAvatar(fullAvatar, tinyAvatar));
-    dispatch(updateLocalAvatar(authname));
   };
 
   const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);
@@ -213,19 +201,3 @@ export default function Dashboard(): JSX.Element {
     />
   );
 }
-
-// But these are not needed for Dashboard. Just use client-side data fetching here.
-
-//export const getServerSideProps = serverUserProps();
-//Dashboard.getInitialProps = initialUserProps();
-
-/*export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await axios.post(`${endpoint}/user/data-init`, {}, {withCredentials: true});
-  store.dispatch(getInitialUserData(data));
-
-  //store.dispatch(initUser());
-  //store.dispatch(END);
-  //await (store as SagaStore).sagaTask?.toPromise();
-
-  return {props: {}};
-};*/

@@ -64,7 +64,6 @@ export function* userLogoutSaga(action: IUserLogout) {
     yield put(authMessage(message));
   } catch(err) {
     yield call(removeItem, 'appState');
-    //yield put(authMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);

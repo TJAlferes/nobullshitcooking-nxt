@@ -17,7 +17,7 @@ export const actionTypes = {
 export type State = SearchRequest & SearchResponse & {
   loading:     boolean;
   index:       SearchIndex;
-  suggestions: any[];  // FINISH
+  suggestions: Suggestion[];
 };
 
 export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
@@ -48,6 +48,12 @@ export type RecipeCard = {
   title:            string;
   description:      string;
   recipe_image:     string;
+};
+
+export type Suggestion = {
+  id:           number;
+  title:        string;
+  recipe_image: string;
 };
 
 export type SearchResponse = {
@@ -140,6 +146,7 @@ export interface IGetResults {
 
 export interface IGetSuggestions {
   type: typeof actionTypes.GET_SUGGESTIONS;
+  term: string;
 }
 
 export interface ISetResults {
@@ -149,5 +156,5 @@ export interface ISetResults {
 
 export interface ISetSuggestions {
   type:        typeof actionTypes.SET_SUGGESTIONS;
-  suggestions: any[];  // FINISH
+  suggestions: Suggestion[];
 }

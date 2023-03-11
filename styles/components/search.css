@@ -1,5 +1,6 @@
 .search {
   display: flex;
+  position: relative;
   flex-direction: row;
 
   width: 100%;
@@ -124,10 +125,15 @@
 }
 
 .autosuggestions {
+  display: block;
+  position: absolute;
+  top: 30px;
+  width: calc(100% - 31px);
   border: 1px solid #bfbfbf;
 }
 
 .autosuggestions ul {
+  width: 100%;
   list-style-type: none;
   overflow: hidden;
 }

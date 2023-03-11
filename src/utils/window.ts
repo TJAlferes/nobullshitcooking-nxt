@@ -20,3 +20,15 @@ export function initWindowFocusHandler(store: Store) {
     store.dispatch(focused(true));
   };
 }
+
+/*export function initSearchInputBlurHandler() {
+  if (typeof window === 'undefined')   return;
+  if (typeof document === 'undefined') return;
+
+  const searchInput =     document.getElementById("search-input") as HTMLInputElement;
+  const autosuggestions = document.querySelector(".autosuggestions") as HTMLDivElement;
+
+  searchInput.onblur = function() {
+    if (document.activeElement !== autosuggestions) autosuggestions.style.display = "none";
+  };
+}*/

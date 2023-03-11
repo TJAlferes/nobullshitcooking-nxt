@@ -1,4 +1,4 @@
-import { actionTypes, SearchIndex, SearchResponse, FilterKey, SortDirection } from './types';
+import { actionTypes, SearchIndex, Suggestion, SearchResponse, FilterKey, SortDirection } from './types';
 
 const {
   RESET,
@@ -26,6 +26,6 @@ export const setSorts =          (col: string, direction: SortDirection) => ({ty
 export const setCurrentPage =    (currentPage: string) =>                   ({type: SET_CURRENT_PAGE, currentPage});
 export const setResultsPerPage = (resultsPerPage: string) =>                ({type: SET_RESULTS_PER_PAGE, resultsPerPage});
 export const getResults =        (searchParams: string) =>                  ({type: GET_RESULTS, searchParams});
-export const getSuggestions =    () =>                                      ({type: GET_SUGGESTIONS});
+export const getSuggestions =    (term: string) =>                          ({type: GET_SUGGESTIONS, term});
 export const setResults =        (found: SearchResponse) =>                 ({type: SET_RESULTS, found});
-export const setSuggestions =    (suggestions: any[]) =>                    ({type: SET_SUGGESTIONS, suggestions});
+export const setSuggestions =    (suggestions: Suggestion[]) =>             ({type: SET_SUGGESTIONS, suggestions});

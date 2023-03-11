@@ -5,7 +5,6 @@ export const actionTypes = {
   MESSAGE:       'MESSAGE',
   MESSAGE_CLEAR: 'MESSAGE_CLEAR',
   RESET:         'RESET',
-  //UPDATE_LOCAL_AVATAR: 'UPDATE_LOCAL_AVATAR',
   STAFF_DISPLAY: 'STAFF_DISPLAY',
   STAFF_LOGIN:   'STAFF_LOGIN',
   STAFF_LOGOUT:  'STAFF_LOGOUT',
@@ -28,7 +27,6 @@ ICheckState |
 IMessage |
 IMessageClear |
 IReset |
-//IUpdateLocalAvatar |
 IStaffDisplay |
 IStaffLogin |
 IStaffLogout |
@@ -54,11 +52,6 @@ export interface IMessageClear {
 export interface IReset {
   type: typeof actionTypes.RESET;
 }
-
-/*export interface IUpdateLocalAvatar {
-  type:   typeof actionTypes.UPDATE_LOCAL_AVATAR;
-  avatar: string
-}*/
 
 export interface IStaffDisplay {
   type: typeof actionTypes.STAFF_DISPLAY;

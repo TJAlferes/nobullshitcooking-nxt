@@ -1,3 +1,5 @@
+'use client';
+
 import Link          from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -7,7 +9,7 @@ import { toggleLeftNav } from '../../store/menu/actions';
 import { dark, light }   from '../../store/theme/actions';
 import { Search }        from '..';
 
-export function Header() {
+export default function Header() {
   const router = useRouter();
 
   const dispatch = useDispatch();

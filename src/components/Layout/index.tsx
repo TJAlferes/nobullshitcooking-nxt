@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { Header, Main, Footer } from '../../components';
 
-export function Layout({ children }: Props): JSX.Element {
+export function Layout({ children }: Props) {
   const { pathname } = useRouter();
 
   const authPage = pathname.match(/\/login/) || pathname.match(/\/register/) || pathname.match(/\/verify/);

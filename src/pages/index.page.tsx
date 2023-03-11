@@ -1,8 +1,8 @@
 import { Home }    from '../components';
-import { initialProps } from '../store';
+import { staticProps } from '../store';
 
 export default function IndexPage() {
   return <Home />;
 }
 
-IndexPage.getInitialProps = initialProps();
+export const getStaticProps = staticProps();

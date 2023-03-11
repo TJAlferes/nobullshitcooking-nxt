@@ -1,14 +1,18 @@
+'use client';
+
 import { useRouter }        from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useRef }           from 'react';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { getSuggestions, setIndex, setTerm }                                from '../../store/search/actions';
+import { getSuggestions, setSuggestions, setIndex, setTerm }                from '../../store/search/actions';
 import type { SearchIndex }                                                 from '../../store/search/types';
 
-export function Search() {
+export default function Search() {
   const router =      useRouter();
-  const inputRef =    useRef<HTMLInputElement>();
+  const inputRef =           useRef<HTMLInputElement>(null);
+  const autosuggestionsRef = useRef<HTMLDivElement>(null);
+  const mouseIsOverRef =     useRef<boolean>(false);
   const dispatch =    useDispatch();
   const index =       useSelector(state => state.search.index);
   const term =        useSelector(state => state.search.term);
@@ -18,23 +22,55 @@ export function Search() {
   if (capitalized === "Equipments") capitalized = "Equipment";
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    inputRef.current = document.getElementById("search-input") as HTMLInputElement;
-    inputRef.current.focus();
+    inputRef.current?.focus();
     dispatch(setIndex(e.target.value as SearchIndex));
   }
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {  // IMPORTANT: sequence and debounce
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
     dispatch(setTerm(value));
-    if (value.length > 2) debounce(() => dispatch(getSuggestions()));
+
+    if (value.length > 2) {
+      if (autosuggestionsRef.current) autosuggestionsRef.current.style.display = "block";
+      dispatch(getSuggestions(value));
+    }
   }
 
   const selectSuggestion = (suggestion: string) => {
     dispatch(setTerm(suggestion));
-    goToSearchResults();
+    dispatch(setSuggestions([]));
   };
 
-  const goToSearchResults = () => router.push(`/${index}${index === "equipment" && "s"}`);
+  const goToSearchResults = () => {
+    dispatch(setSuggestions([]));
+    router.push(`/${index}?term=${term}`);
+  }
+
+  const initSearchInputBlurHandler = () => {
+    if (typeof window === 'undefined')   return;
+    if (typeof document === 'undefined') return;
+
+    mouseIsOverRef.current = false;
+
+    if (!autosuggestionsRef.current) return;
+    if (!inputRef.current) return;
+
+    autosuggestionsRef.current.onmouseover = function() {
+      mouseIsOverRef.current = true;
+    };
+
+    autosuggestionsRef.current.onmouseout = function() {
+      mouseIsOverRef.current = false;
+    };
+
+    inputRef.current.onblur = function() {
+      if (mouseIsOverRef.current === false && autosuggestionsRef.current) autosuggestionsRef.current.style.display = "none";
+    };
+  }
+
+  // put into a useEffect?
+  initSearchInputBlurHandler();
 
   return (
     <div className="search">
@@ -53,35 +89,20 @@ export function Search() {
       </div>
 
       <div className="insert">
-        <input id="search-input" onChange={onInputChange} value={term} />
+        <input ref={inputRef} id="search-input" onFocus={onInputChange} onChange={onInputChange} value={term} />
+
         <div className="magnifying-glass" onClick={goToSearchResults}>
           <span></span>
         </div>
-      </div>
 
-      {suggestions.length >= 1 && (
-        <div className="autosuggestions">
-          {/* <select><option> instead of <ul><li> ? */}
+        <div ref={autosuggestionsRef} className="autosuggestions">
           <ul>
             {suggestions.map(suggestion => (
-              <li onClick={() => selectSuggestion(suggestion)}>{suggestion}</li>
+              <li key={suggestion.id} onClick={() => selectSuggestion(suggestion.title)}>{suggestion.title}</li>
             ))}
           </ul>
         </div>
-      )}
+      </div>
     </div>
   );
-}
-
-// TO DO: move
-function debounce(cb: Function, delay = 1250) {
-  let timeout: any;
-
-  return (...args: any) => {
-    clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-      cb(...args);
-    }, delay);
-  }
 }

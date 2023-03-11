@@ -1,13 +1,12 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import { actionTypes, IState, Actions } from './types';
+import { actionTypes, IState } from './types';
 
 const {
   MESSAGE,
   MESSAGE_CLEAR,
   RESET,
-  //UPDATE_LOCAL_AVATAR,
   STAFF_DISPLAY,
   STAFF_LOGOUT,
   USER_DISPLAY,
@@ -21,7 +20,6 @@ export const authReducer = (state = initialState, action: AnyAction): IState => 
     case HYDRATE:             return {...state, ...action['payload'].auth};
     case MESSAGE:             return {...state, message: action['message']};
     case MESSAGE_CLEAR:       return {...state, message: ''};
-    //case UPDATE_LOCAL_AVATAR: return {...state, avatar: action['avatar']};
     case STAFF_DISPLAY:       return {...state, staffIsAuthenticated: true, authname: action['authname']};
     case USER_DISPLAY:        return {...state, userIsAuthenticated: true, authname: action['authname']};
     case RESET:
