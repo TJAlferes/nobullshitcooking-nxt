@@ -6,7 +6,7 @@ import { Subtabs } from '.';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-export function PrivateRecipes({ activateModal, deactivateModal, deleteName, deletePrivateRecipe, getApplicationNode, modalActive, myPrivateRecipes, subTab, subTabClick }: Props): JSX.Element {
+export function PrivateRecipes({ activateModal, deactivateModal, deleteName, deleteRecipe, getApplicationNode, modalActive, myPrivateRecipes, subTab, subTabClick }: Props) {
   return (
     <div className="dashboard-content">
       <h2>Private Recipes</h2>
@@ -26,7 +26,7 @@ export function PrivateRecipes({ activateModal, deactivateModal, deleteName, del
           >
             <p>{'Delete Recipe: '}{deleteName}{' ?'}</p>
             <button className="--cancel" onClick={deactivateModal}>No</button>
-            <button className="--action" onClick={deletePrivateRecipe}>Yes, Delete Recipe</button>
+            <button className="--action" onClick={deleteRecipe}>Yes, Delete Recipe</button>
           </AriaModal>
         )
         : false
@@ -58,7 +58,7 @@ type Props = {
   activateModal(id: number, name: string):           void;
   deactivateModal():                                 void;
   deleteName:                                        string;
-  deletePrivateRecipe():                             void;
+  deleteRecipe():                                    void;
   getApplicationNode():                              Element | Node;
   modalActive:                                       boolean;
   myPrivateRecipes:                                  IWorkRecipe[];

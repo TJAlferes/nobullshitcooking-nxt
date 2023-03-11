@@ -68,9 +68,8 @@ export default function Search() {
       if (mouseIsOverRef.current === false && autosuggestionsRef.current) autosuggestionsRef.current.style.display = "none";
     };
   }
-
-  // put into a useEffect?
-  initSearchInputBlurHandler();
+  
+  initSearchInputBlurHandler();  // put into a useEffect?
 
   return (
     <div className="search">

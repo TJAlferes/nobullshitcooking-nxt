@@ -3,7 +3,7 @@ import AriaModal from 'react-aria-modal';
 
 import type { IPlan } from '../../../store/data/types';
 
-export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName, deletePlan, editingId, getApplicationNode, modalActive, myPlans }: Props): JSX.Element {
+export function Plans({ activateModal, creatingPlan, deactivateModal, deleteName, deletePlan, editingId, getApplicationNode, modalActive, myPlans }: Props) {
   return (
     <div className="dashboard-content">
       <h2>Plans</h2>

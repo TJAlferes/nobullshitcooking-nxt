@@ -1,4 +1,4 @@
-export function Subtabs({ subTab, subTabClick }: Props): JSX.Element {
+export function Subtabs({ subTab, subTabClick }: Props) {
   return (
     <div className="dashboard-subtabs">
       <button className={subTab === "private" ? "--active" : ""}  name={"private"}  onClick={e => subTabClick(e)}>{"Private"}</button>

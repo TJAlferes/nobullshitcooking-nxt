@@ -4,15 +4,15 @@ import type { IEquipment } from '../../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-equipment";
 
-export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props): JSX.Element {
+export function Equipment({ deleteEquipment, myEquipment }: Props) {
   return (
     <div className="dashboard-content">
       <h2>Private Equipment</h2>
 
       <Link href="/new-equipment" className="new-entity">Create New Equipment</Link>
 
-      {myPrivateEquipment.length
-        ? myPrivateEquipment.map(e => (
+      {myEquipment.length
+        ? myEquipment.map(e => (
           <div className="dashboard-item" key={e.id}>
             <span className="tiny">{e.image !== "nobsc-equipment-default" ? <img src={`${url}/${e.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
 
@@ -20,7 +20,7 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
 
             <span className="action"><Link href={{pathname: '/new-equipment', query: {id: e.id}}}>Edit</Link></span>
 
-            <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
+            <span className="delete" onClick={() => deleteEquipment(e.id)}>Delete</span>
           </div>
         ))
         : <div className="no-content">You haven't created any private equipment yet.</div>
@@ -30,6 +30,6 @@ export function Equipment({ deletePrivateEquipment, myPrivateEquipment }: Props)
 }
 
 type Props = {
-  deletePrivateEquipment(id: number): void;
-  myPrivateEquipment:                 IEquipment[];
+  deleteEquipment(id: number): void;
+  myEquipment:                 IEquipment[];
 };

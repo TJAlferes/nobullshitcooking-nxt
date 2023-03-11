@@ -13,10 +13,10 @@ export function DashboardView({
   deactivateModal,
   deleteName,
   deletePlan,
-  deletePrivateEquipment,
-  deletePrivateIngredient,
-  deletePrivateRecipe,
-  disownPublicRecipe,
+  deleteEquipment,
+  deleteIngredient,
+  deleteRecipe,
+  disownRecipe,
   editingId,
   feedback,
   fullCrop,
@@ -25,8 +25,8 @@ export function DashboardView({
   modalActive,
   myFavoriteRecipes,
   myPlans,
-  myPrivateEquipment,
-  myPrivateIngredients,
+  myEquipment,
+  myIngredients,
   myPrivateRecipes,
   myPublicRecipes,
   mySavedRecipes,
@@ -40,8 +40,8 @@ export function DashboardView({
   tab,
   tabClick,
   tinyCrop,
-  unfavoriteRecipe,
-  unsaveRecipe,
+  unfavorite,
+  unsave,
 }: Props): JSX.Element {
   return (
     <div className="dashboard one-col-a">
@@ -90,7 +90,7 @@ export function DashboardView({
           activateModal={activateModal}
           deactivateModal={deactivateModal}
           deleteName={deleteName}
-          deletePrivateRecipe={deletePrivateRecipe}
+          deleteRecipe={deleteRecipe}
           getApplicationNode={getApplicationNode}
           modalActive={modalActive}
           myPrivateRecipes={myPrivateRecipes}
@@ -104,7 +104,7 @@ export function DashboardView({
           activateModal={activateModal}
           deactivateModal={deactivateModal}
           deleteName={deleteName}
-          disownPublicRecipe={disownPublicRecipe}
+          disownRecipe={disownRecipe}
           getApplicationNode={getApplicationNode}
           modalActive={modalActive}
           myPublicRecipes={myPublicRecipes}
@@ -114,19 +114,19 @@ export function DashboardView({
       )}
 
       {(tab === "recipes" && subTab === "favorite") && (
-        <FavoriteRecipes myFavoriteRecipes={myFavoriteRecipes} subTab={subTab} subTabClick={subTabClick} unfavoriteRecipe={unfavoriteRecipe} />
+        <FavoriteRecipes myFavoriteRecipes={myFavoriteRecipes} subTab={subTab} subTabClick={subTabClick} unfavorite={unfavorite} />
       )}
 
       {(tab === "recipes" && subTab === "saved") && (
-        <SavedRecipes mySavedRecipes={mySavedRecipes} subTab={subTab} subTabClick={subTabClick} unsaveRecipe={unsaveRecipe} />
+        <SavedRecipes mySavedRecipes={mySavedRecipes} subTab={subTab} subTabClick={subTabClick} unsave={unsave} />
       )}
 
       {tab === "ingredients" && (
-        <Ingredients deletePrivateIngredient={deletePrivateIngredient} myPrivateIngredients={myPrivateIngredients} />
+        <Ingredients deleteIngredient={deleteIngredient} myIngredients={myIngredients} />
       )}
 
       {tab === "equipment" && (
-        <Equipment deletePrivateEquipment={deletePrivateEquipment} myPrivateEquipment={myPrivateEquipment} />
+        <Equipment deleteEquipment={deleteEquipment} myEquipment={myEquipment} />
       )}
     </div>
   );
@@ -142,10 +142,10 @@ type Props = {
   deactivateModal():                                        void;
   deleteName:                                               string;
   deletePlan():                                             void;
-  deletePrivateEquipment(id: number):                       void;
-  deletePrivateIngredient(id: number):                      void;
-  deletePrivateRecipe():                                    void;
-  disownPublicRecipe():                                     void;
+  deleteEquipment(id: number):                              void;
+  deleteIngredient(id: number):                             void;
+  deleteRecipe():                                           void;
+  disownRecipe():                                           void;
   editingId:                                                number | null;
   feedback:                                                 string;
   fullCrop:                                                 string;
@@ -154,8 +154,8 @@ type Props = {
   modalActive:                                              boolean;
   myFavoriteRecipes:                                        IWorkRecipe[];
   myPlans:                                                  IPlan[];
-  myPrivateEquipment:                                       IEquipment[];
-  myPrivateIngredients:                                     IIngredient[];
+  myEquipment:                                              IEquipment[];
+  myIngredients:                                            IIngredient[];
   myPrivateRecipes:                                         IWorkRecipe[];
   myPublicRecipes:                                          IWorkRecipe[];
   mySavedRecipes:                                           IWorkRecipe[];
@@ -169,6 +169,6 @@ type Props = {
   tab:                                                      string;
   tabClick(e: React.SyntheticEvent<EventTarget>):           void;
   tinyCrop:                                                 string;
-  unfavoriteRecipe(id: number):                             void;
-  unsaveRecipe(id: number):                                 void;
+  unfavorite(id: number):                                   void;
+  unsave(id: number):                                       void;
 };

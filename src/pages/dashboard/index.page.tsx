@@ -1,33 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Crop, PixelCrop } from 'react-image-crop';
-import { useDispatch } from 'react-redux';
+import type { Crop, PixelCrop }        from 'react-image-crop';
+import { useDispatch }                 from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../store';
-import { submitAvatar            as userSubmitAvatar } from '../../store/user/avatar/actions';
-import { unfavoriteRecipe        as userUnfavoriteRecipe } from '../../store/user/favorite/actions';
-import { deleteEquipment  as userDeletePrivateEquipment } from '../../store/user/equipment/actions';
-import { deleteIngredient as userDeletePrivateIngredient } from '../../store/user/ingredient/actions';
-import { deletePlan              as userDeletePlan } from '../../store/user/plan/actions';
-import { deletePrivateRecipe     as userDeletePrivateRecipe,
-         disownPublicRecipe      as userDisownPublicRecipe } from '../../store/user/recipe/actions';
-import { unsaveRecipe            as userUnsaveRecipe } from '../../store/user/save/actions';
-import { getCroppedImage } from '../../utils/getCroppedImage';
-import { DashboardView } from './view';
+import { useTypedSelector as useSelector }         from '../../store';
+import { submitAvatar }                            from '../../store/user/avatar/actions';
+import { unfavoriteRecipe }                        from '../../store/user/favorite/actions';
+import { deleteEquipment }                         from '../../store/user/equipment/actions';
+import { deleteIngredient }                        from '../../store/user/ingredient/actions';
+import { deletePlan }                              from '../../store/user/plan/actions';
+import { deletePrivateRecipe, disownPublicRecipe } from '../../store/user/recipe/actions';
+import { unsaveRecipe }                            from '../../store/user/save/actions';
+import { getCroppedImage }                         from '../../utils/getCroppedImage';
+import { DashboardView }                           from './view';
 
-export default function Dashboard(): JSX.Element {
+export default function Dashboard() {
   const dispatch = useDispatch();
 
-  const myFavoriteRecipes =    useSelector(state => state.data.myFavoriteRecipes);
-  const myPlans =              useSelector(state => state.data.myPlans);
-  const myPrivateEquipment =   useSelector(state => state.data.myEquipment);
-  const myPrivateIngredients = useSelector(state => state.data.myIngredients);
-  const myPrivateRecipes =     useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =      useSelector(state => state.data.myPublicRecipes);
-  const mySavedRecipes =       useSelector(state => state.data.mySavedRecipes);
-  const authname =             useSelector(state => state.auth.authname);
-  const creatingPlan =         useSelector(state => state.planner.creating);
-  const editingId =            useSelector(state => state.planner.editingId);
-  const message =              useSelector(state => state.user.message);
+  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
+  const myPlans =           useSelector(state => state.data.myPlans);
+  const myEquipment =       useSelector(state => state.data.myEquipment);
+  const myIngredients =     useSelector(state => state.data.myIngredients);
+  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
+  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
+  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
+  const authname =          useSelector(state => state.auth.authname);
+  const creatingPlan =      useSelector(state => state.planner.creating);
+  const editingId =         useSelector(state => state.planner.editingId);
+  const message =           useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
@@ -84,32 +83,32 @@ export default function Dashboard(): JSX.Element {
     setModalActive(false);
   };
 
-  const deletePlan = () => {
+  const deleteUserPlan = () => {
     if (!deleteId) return;
     setLoading(true);
-    dispatch(userDeletePlan(deleteId));
+    dispatch(deletePlan(deleteId));
   };
 
   const deletePrivateEquipment = (id: number) => {
     setLoading(true);
-    dispatch(userDeletePrivateEquipment(id));
+    dispatch(deleteEquipment(id));
   };
 
   const deletePrivateIngredient = (id: number) => {
     setLoading(true);
-    dispatch(userDeletePrivateIngredient(id));
+    dispatch(deleteIngredient(id));
   };
 
-  const deletePrivateRecipe = () => {
+  const deleteRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
-    dispatch(userDeletePrivateRecipe(deleteId));
+    dispatch(deletePrivateRecipe(deleteId));
   };
 
-  const disownPublicRecipe = () => {
+  const disownRecipe = () => {
     if (!deleteId) return;
     setLoading(true);
-    dispatch(userDisownPublicRecipe(deleteId));
+    dispatch(disownPublicRecipe(deleteId));
   };
 
   const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
@@ -140,22 +139,22 @@ export default function Dashboard(): JSX.Element {
     reader.readAsDataURL(target.files[0] as Blob);
   };
 
-  const submitAvatar = () => {
+  const uploadAvatar = () => {
     setLoading(true);
-    dispatch(userSubmitAvatar(fullAvatar, tinyAvatar));
+    dispatch(submitAvatar(fullAvatar, tinyAvatar));
   };
 
   const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);
   const tabClick =    (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
 
-  const unfavoriteRecipe = (id: number) => {
+  const unfavorite = (id: number) => {
     setLoading(true);
-    dispatch(userUnfavoriteRecipe(id));
+    dispatch(unfavoriteRecipe(id));
   };
 
-  const unsaveRecipe = (id: number) => {
+  const unsave = (id: number) => {
     setLoading(true);
-    dispatch(userUnsaveRecipe(id));
+    dispatch(unsaveRecipe(id));
   };
 
   return (
@@ -168,11 +167,11 @@ export default function Dashboard(): JSX.Element {
       crop={crop}
       deactivateModal={deactivateModal}
       deleteName={deleteName}
-      deletePlan={deletePlan}
-      deletePrivateEquipment={deletePrivateEquipment}
-      deletePrivateIngredient={deletePrivateIngredient}
-      deletePrivateRecipe={deletePrivateRecipe}
-      disownPublicRecipe={disownPublicRecipe}
+      deletePlan={deleteUserPlan}
+      deleteEquipment={deletePrivateEquipment}
+      deleteIngredient={deletePrivateIngredient}
+      deleteRecipe={deleteRecipe}
+      disownRecipe={disownRecipe}
       editingId={editingId}
       feedback={feedback}
       fullCrop={fullCrop}
@@ -181,8 +180,8 @@ export default function Dashboard(): JSX.Element {
       modalActive={modalActive}
       myFavoriteRecipes={myFavoriteRecipes}
       myPlans={myPlans}
-      myPrivateEquipment={myPrivateEquipment}
-      myPrivateIngredients={myPrivateIngredients}
+      myEquipment={myEquipment}
+      myIngredients={myIngredients}
       myPrivateRecipes={myPrivateRecipes}
       myPublicRecipes={myPublicRecipes}
       mySavedRecipes={mySavedRecipes}
@@ -190,14 +189,14 @@ export default function Dashboard(): JSX.Element {
       onCropComplete={onCropComplete}
       onImageLoaded={onImageLoaded}
       onSelectFile={onSelectFile}
-      submitAvatar={submitAvatar}
+      submitAvatar={uploadAvatar}
       subTab={subTab}
       subTabClick={subTabClick}
       tab={tab}
       tabClick={tabClick}
       tinyCrop={tinyCrop}
-      unfavoriteRecipe={unfavoriteRecipe}
-      unsaveRecipe={unsaveRecipe}
+      unfavorite={unfavorite}
+      unsave={unsave}
     />
   );
 }

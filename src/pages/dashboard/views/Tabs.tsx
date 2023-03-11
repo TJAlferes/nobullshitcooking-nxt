@@ -1,4 +1,4 @@
-export function Tabs({ tab, tabClick }: Props): JSX.Element {
+export function Tabs({ tab, tabClick }: Props) {
   return (
     <div className="dashboard-tabs">
       <button className={tab === "avatar" ? "--active" : ""}      name={"avatar"}      onClick={e => tabClick(e)}>{"Avatar"}</button>

@@ -5,7 +5,7 @@ import { Subtabs } from '.';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavoriteRecipe }: Props): JSX.Element {
+export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavorite }: Props) {
   return (
     <div className="dashboard-content">
       <h2 className="--tall">Favorite Recipes</h2>
@@ -21,7 +21,7 @@ export function FavoriteRecipes({ myFavoriteRecipes, subTab, subTabClick, unfavo
 
             <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
 
-            <span className="unfavorite" onClick={() => unfavoriteRecipe(r.id)}>Unfavorite</span>
+            <span className="unfavorite" onClick={() => unfavorite(r.id)}>Unfavorite</span>
           </div>
         ))
         : <div className="no-content">You haven't favorited any recipes yet.</div>
@@ -34,5 +34,5 @@ type Props = {
   myFavoriteRecipes:                                 IWorkRecipe[];
   subTab:                                            string;
   subTabClick(e: React.SyntheticEvent<EventTarget>): void;
-  unfavoriteRecipe(id: number):                      void;
+  unfavorite(id: number):                            void;
 };

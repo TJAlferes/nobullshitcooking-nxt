@@ -1,7 +1,7 @@
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCropChange, onCropComplete, onImageLoaded, submitAvatar, tinyCrop }: Props): JSX.Element {
+export function AvatarEdit({ avatar, cancelAvatar, crop, fullCrop, loading, onCropChange, onCropComplete, onImageLoaded, submitAvatar, tinyCrop }: Props) {
   return (
     <div className="dashboard-avatar-edit">
       <ReactCrop
