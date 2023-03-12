@@ -28,7 +28,7 @@ export function NewPlanView({
   planName,
   planData,
   tab
-}: Props): JSX.Element {
+}: Props) {
   const tabToList: ITabToList = {
     "official": officialRecipes,
     "private":  myPrivateRecipes,
@@ -198,9 +198,9 @@ type Props = {
 type MonthlyPlanProps = {
   expandedDay: number | null;
   planData:    IData;
-}
+};
 
 type MemoizedRecipesProps = {
   expandedDay: number | null;
   recipes:     IWorkRecipe[];
-}
+};

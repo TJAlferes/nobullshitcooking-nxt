@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Star } from './Star';
 
-export function StarRating ({ onChange, rating, readOnly = false }: Props): JSX.Element {
+export function StarRating ({ onChange, rating, readOnly = false }: Props) {
   const [ override, setOverride ] = useState<number | null>(null);
 
   return (

@@ -13,7 +13,7 @@ import { getCroppedImage } from '../../utils/getCroppedImage';
 import { validRecipeInfo } from './validation/validRecipeInfo';
 import { NewRecipeView } from './view';
 
-export default function NewRecipe(): JSX.Element | null {
+export default function NewRecipe() {
   const router =    useRouter();
   const params =    useSearchParams();
   const ownership = params.get('ownership');

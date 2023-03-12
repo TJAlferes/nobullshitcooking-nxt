@@ -14,7 +14,7 @@ export function IngredientRow({
   rowKey,
   type,
   measurementId
-}: Props): JSX.Element {
+}: Props) {
   const availableIngredients = [...ingredients, ...myIngredients];
   
   return (

@@ -8,7 +8,7 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 // TO DO: wrap this in memo?
 // id={recipe.id}
-export function Recipes({ day, expandedDay, recipes }: Props): JSX.Element {
+export function Recipes({ day, expandedDay, recipes }: Props) {
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ , drop ] = useDrop(() => ({

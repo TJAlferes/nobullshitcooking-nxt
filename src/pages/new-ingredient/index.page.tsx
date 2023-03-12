@@ -8,7 +8,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
 import { NewIngredientView } from './view';
 
-export default function NewIngredient(): JSX.Element {
+export default function NewIngredient() {
   const router = useRouter();
   const params = useSearchParams();
   const id = params.get('id');
@@ -186,6 +186,6 @@ export default function NewIngredient(): JSX.Element {
       typeId={typeId}
     />
   );
-};
+}
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;

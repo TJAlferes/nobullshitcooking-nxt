@@ -7,7 +7,7 @@ import { clearWork, setCreating, setEditingId, setPlanName, setPlanData } from '
 import { createPlan, updatePlan } from '../../store/user/plan/actions';
 import { NewPlanView } from './view';
 
-export default function NewPlan(): JSX.Element {
+export default function NewPlan() {
   const router = useRouter();
   const params = useSearchParams();
   const id = params.get('id');

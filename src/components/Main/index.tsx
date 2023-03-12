@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Breadcrumbs } from '..';
 
-export function Main({ children }: Props): JSX.Element {
+export function Main({ children }: Props) {
   return (
     <main className="main">
       <Breadcrumbs />

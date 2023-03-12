@@ -6,6 +6,6 @@ const Chat = dynamic(() => import('./Chat'), {
   ssr: true
 });
 
-export default function ChatPage(): JSX.Element {
+export default function ChatPage() {
   return <Chat />;
 }

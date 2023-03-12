@@ -8,7 +8,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
 import { NewEquipmentView } from './view';
 
-export default function NewEquipment(): JSX.Element {
+export default function NewEquipment() {
   const router = useRouter();
   const params = useSearchParams();
   const id = params.get('id');
@@ -186,6 +186,6 @@ export default function NewEquipment(): JSX.Element {
       typeId={typeId}
     />
   );
-};
+}
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;

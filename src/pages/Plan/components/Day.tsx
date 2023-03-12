@@ -4,7 +4,7 @@ import { clickDay } from '../../../store/plannerView/actions';
 import type { IRecipe } from '../../../store/plannerView/types';
 import { Recipe } from './Recipe';
 
-export function Day({ day, recipes }: Props): JSX.Element|null {
+export function Day({ day, recipes }: Props) {
   const dispatch = useDispatch();
 
   const handleClickDay = () => dispatch(clickDay(day));

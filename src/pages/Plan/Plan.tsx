@@ -6,7 +6,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { load } from '../../store/plannerView/actions';
 import { PlanView } from './view';
 
-export default function Plan(): JSX.Element {
+export default function Plan() {
   const router = useRouter();
   const params = useSearchParams();
   const id = Number(params.get('id'));

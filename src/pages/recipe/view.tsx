@@ -23,7 +23,7 @@ export function RecipeView({
   save,
   saved,
   userIsAuthenticated
-}: Props): JSX.Element {
+}: Props) {
   const {
     id,
     author,

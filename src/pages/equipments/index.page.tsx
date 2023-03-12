@@ -1,11 +1,47 @@
-import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
-import Link from 'next/link';
+'use client';
 
-import { ExpandCollapse } from '../../components';
+import Link                                        from 'next/link';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useEffect }                               from 'react';
+import qs                                          from 'qs';
+
+import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
+import {
+  getResults,
+  //setFilters,
+  //addFilter,
+  //removeFilter,
+  //setSorts,
+  //setCurrentPage,
+  //setResultsPerPage
+} from '../../store/search/actions';
+import type { SearchRequest } from '../../store/search/types';
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
-export function Equipments({ facets, filters, results, wasSearched }: PropsFromContext) {
+export function Equipments() {
+  const router =       useRouter();
+  const pathname =     usePathname();
+  const searchParams = useSearchParams();
+
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const currEquipmentTypes = params.filters?.equipmentTypes;
+
+  const dispatch =       useDispatch();
+  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
+
+  const term =           useSelector(state => state.search.term);
+  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
+  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
+  const currentPage =    useSelector(state => state.search.currentPage);
+  const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
+
+  const results =        useSelector(state => state.search.results);
+  const totalResults =   useSelector(state => state.search.totalResults);
+  const totalPages =     useSelector(state => state.search.totalPages);
+
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
@@ -44,24 +80,3 @@ export function Equipments({ facets, filters, results, wasSearched }: PropsFromC
     </div>
   );
 }
-
-type PropsFromContext = {
-  facets:      any;
-  filters?:    any;
-  results:     any;
-  wasSearched: boolean;
-};
-
-const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
-
-export default withSearch(mapContextToProps)(Equipments);
-
-              /*facets={{
-                equipment_type_name: [
-                  {
-                    data: [{count: 1, value: "Cleaning"}, {count: 1, value: "Preparing"}, {count: 1, value: "Cooking"}, {count: 1, value: "Dining"}, {count: 1, value: "Storage"}],
-                    field: "equipment_type_name",
-                    type: "value"
-                  }
-                ]
-              }}*/

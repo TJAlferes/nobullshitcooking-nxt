@@ -1,4 +1,4 @@
-export function OptionsView({ changeRoom, changeRoomInput, connect, disconnect, loading, room, roomToEnter, status }: Props): JSX.Element {
+export function OptionsView({ changeRoom, changeRoomInput, connect, disconnect, loading, room, roomToEnter, status }: Props) {
   return (
     <div className="chat-options">
       <button disabled={loading} onClick={status === "connected" ? disconnect : connect}>

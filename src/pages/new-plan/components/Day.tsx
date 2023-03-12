@@ -11,7 +11,7 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 // TO DO: wrap this in memo?
 // TO DO: check your ref usage
 // TO DO: limit the max number of recipes per day
-export function Day({ day, expandedDay, recipes }: Props): JSX.Element | null {
+export function Day({ day, expandedDay, recipes }: Props) {
   const dispatch = useDispatch();
 
   //const ref = useRef<HTMLDivElement>(null);

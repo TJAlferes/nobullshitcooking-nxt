@@ -4,7 +4,7 @@ import type { IRecipe } from '../../../store/plannerView/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-export function Recipe({ recipe: { id, owner_id, title, recipe_image } }: Props): JSX.Element {
+export function Recipe({ recipe: { id, owner_id, title, recipe_image } }: Props) {
   return (
     <div className="plan-recipe">
       <div className="image">

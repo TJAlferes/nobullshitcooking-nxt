@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { cartRemoveItem } from '../../store/cart/actions';
 import type { ICartItem } from '../../store/cart/types';
 
-export default function RemoveFromCartButton({ item }: Props): JSX.Element {
+export default function RemoveFromCartButton({ item }: Props) {
   const dispatch = useDispatch();
 
   const handleClick = () => dispatch(cartRemoveItem(item));

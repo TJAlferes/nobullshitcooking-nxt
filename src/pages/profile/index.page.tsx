@@ -9,7 +9,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { requestFriendship as userRequestFriendship } from '../../store/user/friendship/actions';
 import { ProfileView } from './view';
 
-export default function Profile(): JSX.Element {
+export default function Profile() {
   const router = useRouter();
   const params = useSearchParams();
   const username = params.get('username');

@@ -27,7 +27,7 @@ export function NewEquipmentView({
   submit,
   tinyCrop,
   typeId
-}: Props): JSX.Element {
+}: Props) {
   // move up into parent container NewEquipment component?
   const dir = 'https://s3.amazonaws.com/nobsc-user-equipment';  // .com/nobsc-user/equipment instead?
 

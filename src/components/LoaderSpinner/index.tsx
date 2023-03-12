@@ -1,3 +1,3 @@
-export function LoaderSpinner(): JSX.Element {
+export function LoaderSpinner() {
   return <div className="loader-spinner"></div>;
 }

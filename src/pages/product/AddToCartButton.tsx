@@ -1,14 +1,13 @@
-import { useDispatch } from 'react-redux';
+import { useTypedDispatch as useDispatch } from '../../store';
+import { cartAddItem }                     from '../../store/cart/actions';
+import type { ICartItem }                  from '../../store/cart/types';
 
-import { cartAddItem } from '../../store/cart/actions';
-import type { ICartItem } from '../../store/cart/types';
-
-export default function AddToCartButton({ item }: Props): JSX.Element {
+export default function AddToCartButton({ item }: Props) {
   const dispatch = useDispatch();
 
-  const handleClick = () => dispatch(cartAddItem(item));
+  const click = () => dispatch(cartAddItem(item));
 
-  return <button className="add-to-cart-button" onClick={handleClick}>Add</button>;
+  return <button className="add-to-cart-button" onClick={click}>Add</button>;
 }
 
 type Props = {

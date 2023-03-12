@@ -7,7 +7,7 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { ProductView } from './view';
 
-export default function Product(): JSX.Element {
+export default function Product() {
   const router = useRouter();
   const { id } = router.query;
 

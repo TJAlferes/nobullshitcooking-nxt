@@ -6,7 +6,7 @@ import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
 import { useTypedSelector as useSelector } from '../../store';
 
-export function LeftNav(): JSX.Element | null {
+export function LeftNav() {
   const authname =            useSelector(state => state.auth.authname);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const leftNav =             useSelector(state => state.menu.leftNav);

@@ -10,7 +10,7 @@ import { saveRecipe }                      from '../../store/user/save/actions';
 import { endpoint }                        from '../../utils/api';
 import { RecipeView }                      from './view';
 
-export default function Recipe(): JSX.Element {
+export default function Recipe() {
   const pathname = usePathname();
   const router =   useRouter();
   const params =   useSearchParams();

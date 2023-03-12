@@ -46,7 +46,7 @@ export function ImageUploads({
   recipePrevImage,
   recipeThumbCrop,
   recipeTinyCrop
-}: Props): JSX.Element {
+}: Props) {
   const commonReactCropProps = {
     aspect:    1,
     className: "crop-tool",

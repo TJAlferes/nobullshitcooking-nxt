@@ -1,6 +1,6 @@
 import type { IEquipment } from '../../../store/data/types';
 
-export function EquipmentRow({ amount, equipment, myEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props): JSX.Element {
+export function EquipmentRow({ amount, equipment, myEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props) {
   const availableEquipment = [...equipment, ...myEquipment];
   
   return (

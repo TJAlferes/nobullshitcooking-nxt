@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export function Footer(): JSX.Element {
+export function Footer() {
   return (
     <footer className="footer">
       <div className="footer-links">

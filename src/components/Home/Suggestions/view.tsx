@@ -1,7 +1,7 @@
 const googleMapsAPIKeyOne = 'AIzaSyCULKDLxoF9O413jjvF5Ot2xXXMdgz0Eag';  // renew
 const url = 'https://www.google.com/maps/embed/v1/search';
 
-export function SuggestionsView({ address, latitude, longitude, handleShowNearbyStoresClick, nearbyStoresClicked }: Props): JSX.Element {
+export function SuggestionsView({ address, latitude, longitude, handleShowNearbyStoresClick, nearbyStoresClicked }: Props) {
   return (
     <div className="suggestions">
       <span>Stores near you</span>

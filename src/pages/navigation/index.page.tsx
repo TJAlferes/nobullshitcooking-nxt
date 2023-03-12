@@ -6,7 +6,7 @@ import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 
 const s3Path = 'https://s3.amazonaws.com/nobsc-images-01/content';
 
-export default function Navigation({ links, name, path }: Props): JSX.Element {
+export default function Navigation({ links, name, path }: Props) {
   const [ contentLinks, setContentLinks ] = useState<IContentLink[] | null>(null);
 
   useEffect(() => {

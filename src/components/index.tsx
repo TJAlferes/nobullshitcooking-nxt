@@ -12,6 +12,8 @@ export { LeftNav }        from './LeftNav';
 export { LoaderButton }   from './LoaderButton';
 export { LoaderSpinner }  from './LoaderSpinner';
 export { Main }           from './Main';
+export { Pagination }     from './Pagination';
+export { ResultsPerPage } from './ResultsPerPage';
 export { AuthenticatedRoute, Guard, UnauthenticatedRoute } from './Routes';
 export { Search };
 export { StarRating }     from './StarRating';

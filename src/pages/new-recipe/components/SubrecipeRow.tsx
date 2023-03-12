@@ -19,7 +19,7 @@ export function SubrecipeRow({
   id,
   type,
   measurementId
-}: Props): JSX.Element {
+}: Props) {
   const availableRecipes = [
     ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),
     ...(myPrivateRecipes.length

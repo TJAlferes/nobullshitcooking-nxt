@@ -12,7 +12,7 @@ import {
 } from '../../store/user/friendship/actions';
 import { FriendsView } from './view';
 
-export default function Friends(): JSX.Element {
+export default function Friends() {
   const dispatch = useDispatch();
   const authname =      useSelector(state => state.auth.authname);
   const myFriendships = useSelector(state => state.data.myFriendships);

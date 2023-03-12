@@ -18,7 +18,7 @@ export function FriendsView({
   tabChange,
   unblockUser,
   userToFind
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div className="friends two-col-a">
       <h1>Friends</h1>

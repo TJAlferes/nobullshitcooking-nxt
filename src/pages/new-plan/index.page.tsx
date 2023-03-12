@@ -6,6 +6,6 @@ const NewPlan = dynamic(() => import('./NewPlan'), {
   ssr: false
 });
 
-export default function NewPlanPage(): JSX.Element {
+export default function NewPlanPage() {
   return <NewPlan />;
 }

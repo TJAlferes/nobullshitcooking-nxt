@@ -1,11 +1,47 @@
-import { Facet, Paging, PagingInfo, ResultsPerPage, withSearch } from '@elastic/react-search-ui';
-import Link from 'next/link';
+'use client';
 
-import { ExpandCollapse } from '../../components';
+import Link                                        from 'next/link';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useEffect }                               from 'react';
+import qs                                          from 'qs';
+
+import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
+import {
+  getResults,
+  //setFilters,
+  //addFilter,
+  //removeFilter,
+  //setSorts,
+  //setCurrentPage,
+  //setResultsPerPage
+} from '../../store/search/actions';
+import type { SearchRequest } from '../../store/search/types';
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
-export function Ingredients({ facets, filters, results, wasSearched }: PropsFromContext) {
+export function Ingredients() {
+  const router =       useRouter();
+  const pathname =     usePathname();
+  const searchParams = useSearchParams();
+
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const currIngredientTypes = params.filters?.ingredientTypes;
+
+  const dispatch =        useDispatch();
+  const ingredientTypes = useSelector(state => state.data.ingredientTypes);
+
+  const term =           useSelector(state => state.search.term);
+  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
+  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
+  const currentPage =    useSelector(state => state.search.currentPage);
+  const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
+
+  const results =        useSelector(state => state.search.results);
+  const totalResults =   useSelector(state => state.search.totalResults);
+  const totalPages =     useSelector(state => state.search.totalPages);
+
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
@@ -45,43 +81,3 @@ export function Ingredients({ facets, filters, results, wasSearched }: PropsFrom
     </div>
   );
 }
-
-type PropsFromContext = {
-  facets:      any;
-  filters?:    any;
-  results:     any;
-  wasSearched: boolean;
-}
-
-const mapContextToProps = ({ facets, filters, results, wasSearched }: PropsFromContext) => ({facets, filters, results, wasSearched});
-
-export default withSearch(mapContextToProps)(Ingredients);
-
-/*facets={{
-                ingredient_type_name: [
-                  {
-                    data: [
-                      {count: 1, value: "Fish"},
-                      {count: 1, value: "Shellfish"},
-                      {count: 1, value: "Beef"},
-                      {count: 1, value: "Pork"},
-                      {count: 1, value: "Poultry"},
-                      {count: 1, value: "Egg"},
-                      {count: 1, value: "Dairy"},
-                      {count: 1, value: "Oil"},
-                      {count: 1, value: "Grain"},
-                      {count: 1, value: "Bean"},
-                      {count: 1, value: "Vegetable"},
-                      {count: 1, value: "Fruit"},
-                      {count: 1, value: "Nut"},
-                      {count: 1, value: "Seed"},
-                      {count: 1, value: "Spice"},
-                      {count: 1, value: "Herb"},
-                      {count: 1, value: "Acid"},
-                      {count: 1, value: "Product"}
-                    ],
-                    field: "ingredient_type_name",
-                    type: "value"
-                  }
-                ]
-              }}*/

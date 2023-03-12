@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useEffect }                               from 'react';
 import qs                                          from 'qs';
 
-import { ExpandCollapse } from '../../components';
+import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import {
   getResults,
   //setFilters,
@@ -16,10 +16,7 @@ import {
   //setResultsPerPage
 } from '../../store/search/actions';
 import type { SearchRequest } from '../../store/search/types';
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector
-} from '../../store';
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
@@ -176,23 +173,21 @@ export default function Recipes() {
         <ResultsPerPage handler={changeResultsPerPage} resultsPerPage={resultsPerPage ?? "20"} />
 
         <div>
-          {results ? results.map((r: any) => (
+          {results ? results.map(r => (
             <div className="recipes" key={r.id}>
               <Link href={`/recipe/${r.id}`} className="recipes-link">
                 <div className="text">
                   <div className="title">{r.title}</div>
+
                   <div className="author">{r.author}</div>
+
                   <div>
                     <div className="cuisine">{r.cuisine_name}</div>
+
                     <div className="type">{r.recipe_type_name}</div>
                   </div>
-                  {/*
-                  <div className="tags">
-                    <div className="methods">{r.method_names.map((m: any) => <span className="method" key={m}>{m}</span>)}</div>
-                    <div className="ingredients">{r.ingredient_names.map((i: any) => <span className="ingredient" key={i}>{i}</span>)}</div>
-                  </div>
-                  */}
                 </div>
+
                 {r.recipe_image !== "nobsc-recipe-default"
                   ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
                   : <div className="image-default-100-62"></div>
@@ -211,48 +206,4 @@ export default function Recipes() {
   );
 }
 
-function ResultsPerPage({ handler, resultsPerPage }: ResultsPerPageProps) {
-  return (
-    <div>
-      <label>Results per page:</label>
-      <select onChange={handler} value={resultsPerPage}>
-        <option value={20}>20</option>
-        <option value={50}>50</option>
-        <option value={100}>100</option>
-      </select>
-    </div>
-  );
-}
-
-function Pagination({ totalPages, currentPage, handler }: PaginationProps) {
-  if (totalPages <= 1) return null;
-
-  const first =   1;
-  const prev =    currentPage - 1;
-  const curr =    currentPage;
-  const next =    currentPage + 1;
-  const last =    totalPages;
-
-  return (
-    <div>
-                      <span onClick={() => handler(first)}>First</span>
-      {curr > 1 &&    <span onClick={() => handler(prev)}>Prev</span>}
-                      <span onClick={() => handler(curr)}>{curr}</span>
-      {curr < last && <span onClick={() => handler(next)}>Next</span>}
-                      <span onClick={() => handler(last)}>Last</span>
-    </div>
-  );
-}
-
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
-type ResultsPerPageProps = {
-  resultsPerPage:             string;
-  handler(e: SyntheticEvent): void;
-};
-
-type PaginationProps = {
-  totalPages:            number;
-  currentPage:           number;
-  handler(page: number): void;
-};

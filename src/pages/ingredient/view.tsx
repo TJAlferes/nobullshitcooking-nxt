@@ -2,7 +2,7 @@ import type { IIngredient } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function IngredientView({ ingredient: { id, fullname, image, ingredient_type_name, description }, myIngredients }: Props): JSX.Element {
+export function IngredientView({ ingredient: { id, fullname, image, ingredient_type_name, description }, myIngredients }: Props) {
   return (
     <div className="ingredient two-col-b">
       <div className="two-col-b-left">
@@ -31,4 +31,4 @@ export function IngredientView({ ingredient: { id, fullname, image, ingredient_t
 type Props = {
   ingredient:    IIngredient;
   myIngredients: IIngredient[];
-}
+};

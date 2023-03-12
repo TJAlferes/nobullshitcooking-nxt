@@ -42,7 +42,7 @@ export function DashboardView({
   tinyCrop,
   unfavorite,
   unsave,
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div className="dashboard one-col-a">
       <h1>{authname}</h1>

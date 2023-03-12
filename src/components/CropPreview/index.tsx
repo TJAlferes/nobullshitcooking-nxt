@@ -1,4 +1,4 @@
-export function CropPreview({ cancelImage, fullCrop, loading, tinyCrop }: Props): JSX.Element {
+export function CropPreview({ cancelImage, fullCrop, loading, tinyCrop }: Props) {
   return (
     <>
       <p className="crop-tip">Move the crop to your desired position. These two images will be saved for you:</p>

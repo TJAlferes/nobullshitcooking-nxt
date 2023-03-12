@@ -9,7 +9,7 @@ import { Recipe } from './Recipe';
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 // TO DO: wrap this in memo?
-export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element | null {
+export function ExpandedDay({ day, expandedDay, recipes }: Props) {
   const dispatch = useDispatch();
 
   //const ref = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export function ExpandedDay({ day, expandedDay, recipes }: Props): JSX.Element |
       ))}
     </div>
   );
-};
+}
 
 type Props = {
   day:         number;

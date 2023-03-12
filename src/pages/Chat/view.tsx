@@ -30,7 +30,7 @@ export function ChatView({
   startPrivateMessage,
   status,
   users
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div className="chat two-col-a">
       <div className="chat-desktop">

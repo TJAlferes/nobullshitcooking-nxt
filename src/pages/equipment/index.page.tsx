@@ -1,12 +1,12 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState }        from 'react';
 
-import { LoaderSpinner } from '../../components';
+import { LoaderSpinner }                   from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import type { IEquipment } from '../../store/data/types';
-import { EquipmentView } from './view';
+import type { IEquipment }                 from '../../store/data/types';
+import { EquipmentView }                   from './view';
 
-export default function Equipment(): JSX.Element {
+export default function Equipment() {
   const router = useRouter();
   const params = useSearchParams();
   const id =     Number(params.get('id'));

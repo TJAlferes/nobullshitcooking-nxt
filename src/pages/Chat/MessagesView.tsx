@@ -15,7 +15,7 @@ function formattedMessage(authname: string, { kind, from, to, text }: IMessageWi
   return <><span className="--other">{from}{' '}whispers to you:{' '}</span><span className="--private">{text}</span></>;  // received
 };
 
-export function MessagesView({ authname, changeMessageInput, messages, messagesRef, messageToSend, send, status }: Props): JSX.Element {
+export function MessagesView({ authname, changeMessageInput, messages, messagesRef, messageToSend, send, status }: Props) {
   return (
     <div className="chat-messages">
       <ul ref={messagesRef}>

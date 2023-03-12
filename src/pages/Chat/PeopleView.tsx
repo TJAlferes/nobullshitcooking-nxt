@@ -1,6 +1,6 @@
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
-export function PeopleView({ changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, friends, peopleTab, startPrivateMessage, users }: Props): JSX.Element {
+export function PeopleView({ changePeopleTab, focusedFriend, focusFriend, focusedUser, focusUser, friends, peopleTab, startPrivateMessage, users }: Props) {
   return (
     <div className="chat-people">
       <div className="people-tabs">

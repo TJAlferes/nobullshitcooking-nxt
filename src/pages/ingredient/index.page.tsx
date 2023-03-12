@@ -6,7 +6,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import type { IIngredient } from '../../store/data/types';
 import { IngredientView } from './view';
 
-export default function Ingredient(): JSX.Element {
+export default function Ingredient() {
   const router = useRouter();
   const params = useSearchParams();
   const id =     Number(params.get('id'));

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, headingWhileExpanded, toggle }: Props): JSX.Element {
+export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, headingWhileExpanded, toggle }: Props) {
   return (
     <div className="expand-collapse">
       {!expanded

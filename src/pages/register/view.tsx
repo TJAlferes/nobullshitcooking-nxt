@@ -24,7 +24,7 @@ export function RegisterView({
   username,
   validateConfirmationCode,
   validateRegistrationInfo
-}: Props): JSX.Element {
+}: Props) {
   const registerForm = () => (
     <form>
       <h1>Create Account</h1>

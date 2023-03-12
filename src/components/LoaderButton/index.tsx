@@ -8,7 +8,7 @@ export function LoaderButton({
   onClick,
   onKeyUp = (e: React.KeyboardEvent) => {},
   text
-}: Props): JSX.Element {
+}: Props) {
   return (
     <button
       className={`LoaderButton ${className}`}

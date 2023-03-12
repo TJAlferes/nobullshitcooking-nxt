@@ -4,7 +4,7 @@ import { CardElement, Elements, useElements, useStripe } from '@stripe/react-str
 
 const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
-export default function Checkout(): JSX.Element {
+export default function Checkout() {
   return <div></div>;  // placeholder for now
   /*const elements = useElements();
   const stripe = useStripe();

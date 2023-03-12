@@ -7,14 +7,15 @@ import { staffLogin, userLogin } from '../../store/auth/actions';
 import { LoginView } from './view';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
-// TO DO: finite state machine
 
-export default function Login(): JSX.Element {
+export default function Login() {
   const pathname = usePathname();
-  const router = useRouter();
+  const router =   useRouter();
+
   const dispatch = useDispatch();
   //const authname = useSelector(state => state.auth.authname);
-  const message =             useSelector(state => state.auth.message);
+  const message =  useSelector(state => state.auth.message);
+
   const [ email,    setEmail ] =    useState("");
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);

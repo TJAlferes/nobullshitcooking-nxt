@@ -4,7 +4,7 @@ import { LoaderButton } from '../../components';
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
-export function LoginView({ email, feedback, emailChange, loginClick, loginKeyUp, passwordChange, loading, password, validateLoginInfo }: Props): JSX.Element {
+export function LoginView({ email, feedback, emailChange, loginClick, loginKeyUp, passwordChange, loading, password, validateLoginInfo }: Props) {
   return (
     <div className="login" onKeyUp={e => loginKeyUp(e)}>
       <Link href="/">

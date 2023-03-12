@@ -4,7 +4,7 @@ import type { IWorkProduct } from '../../store/data/types';
 import AddToCartButton from './AddToCartButton';
 import type { IProduct } from './index.page';
 
-export function ProductView({ products, feedback, loading, product, userIsAuthenticated }: Props): JSX.Element {
+export function ProductView({ products, feedback, loading, product, userIsAuthenticated }: Props) {
   const { id, product_type_id, supplier_id, fullname } = product;
 
   return (

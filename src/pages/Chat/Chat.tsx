@@ -6,7 +6,7 @@ import { connect as chatConnect, disconnect as chatDisconnect, joinRoom, sendMes
 import { ChatView } from './view';
 
 // TO DO: fix no longer auto scrolling after spam debounce
-export default function Chat(): JSX.Element {
+export default function Chat() {
   const dispatch = useDispatch();
   // move some of this down in the component tree?
   const room =     useSelector(state => state.chat.room);
@@ -17,7 +17,7 @@ export default function Chat(): JSX.Element {
 
   const authname =      useSelector(state => state.auth.authname);
   const message =       useSelector(state => state.user.message);
-  const windowFocused = useSelector(state => state.nobscapp.windowFocused);
+  const windowFocused = useSelector(state => state.window.focused);
 
   const [ debounced,     setDebounced ] =     useState(false);
   const [ feedback,      setFeedback ] =      useState("");

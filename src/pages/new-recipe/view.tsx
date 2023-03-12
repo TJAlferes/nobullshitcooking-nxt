@@ -87,7 +87,7 @@ export function NewRecipeView({
   submit,
   subrecipeRows,
   title
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div className="new-recipe one-col-a">
       <h1>New Recipe</h1>

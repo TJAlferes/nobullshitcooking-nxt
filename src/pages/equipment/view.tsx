@@ -2,7 +2,7 @@ import type { IEquipment } from '../../store/data/types';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myEquipment }: Props): JSX.Element {
+export function EquipmentView({ equipment: { id, name, image, equipment_type_name, description }, myEquipment }: Props) {
   return (
     <div className="equipment two-col-b">
       <div className="two-col-b-left">

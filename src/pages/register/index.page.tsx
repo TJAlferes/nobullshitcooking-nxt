@@ -6,7 +6,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { userRegister, userVerify } from '../../store/auth/actions';
 import { RegisterView } from './view';
 
-export default function Register({ confirmingUser }: Props): JSX.Element {
+export default function Register({ confirmingUser }: Props) {
   const router = useRouter();
   const dispatch = useDispatch();
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);

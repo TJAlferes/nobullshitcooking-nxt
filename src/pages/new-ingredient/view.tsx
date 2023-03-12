@@ -27,7 +27,7 @@ export function NewIngredientView({
   submit,
   tinyCrop,
   typeId
-}: Props): JSX.Element {
+}: Props) {
   // move up into parent container NewIngredient component?
   const dir = 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
