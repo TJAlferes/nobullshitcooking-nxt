@@ -1,117 +1,39 @@
 'use client';
 
-import Link                                        from 'next/link';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect }                               from 'react';
-import qs                                          from 'qs';
+import Link from 'next/link';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
-import {
-  getResults,
-  //setFilters,
-  //addFilter,
-  //removeFilter,
-  //setSorts,
-  //setCurrentPage,
-  //setResultsPerPage
-} from '../../store/search/actions';
-import type { SearchRequest } from '../../store/search/types';
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector }            from '../../store';
+import { useSearch }                                  from '../../utils/useSearch';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const router =       useRouter();
-  const pathname =     usePathname();
-  const searchParams = useSearchParams();
-
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
-
+  const {
+    params,
+    addFilter,
+    removeFilter,
+    clearFilters,
+    changeResultsPerPage,
+    goToPage
+  } = useSearch();
   const currRecipeTypes = params.filters?.recipeTypes;
   const currMethods =     params.filters?.methods;
   const currCuisines =    params.filters?.cuisines;
 
-  const dispatch =       useDispatch();
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
 
   const term =           useSelector(state => state.search.term);
-  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
-  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
+  //const filters =        useSelector(state => state.search.filters);  // needed, because they may want to leave the page and come back to their same filters
+  //const sorts =          useSelector(state => state.search.sorts);  // needed, because they may want to leave the page and come back to their same sorts
   const currentPage =    useSelector(state => state.search.currentPage);
   const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
 
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
-
-  useEffect(() => {
-    //const params: SearchRequest = Object.fromEntries(searchParams.entries());
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-
-    if (!params.currentPage)    params.currentPage = "1";
-    if (!params.resultsPerPage) params.resultsPerPage = "20";
-
-    dispatch(getResults(qs.stringify(params)));
-  }, [searchParams]);
-
-  const addFilter = (filterName: string, filterValue: string) => {
-    // TO DO: clean searchParams so that it matches SearchRequest
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-
-    if (params.filters) {
-      if (params.filters[filterName]) params.filters[filterName]?.push(filterValue);
-      else                            params.filters[filterName] = [filterValue];
-    } else {
-      params.filters = {
-        [filterName]: [filterValue]
-      };
-    }
-    params.currentPage = "1";
-    if (!params.resultsPerPage) params.resultsPerPage = "20";
-
-    router.push(pathname + '?' + qs.stringify(params));
-  };
-
-  const removeFilter = (filterName: string, filterValue: string) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-
-    if (!params.filters) return;
-
-    const removed = (params.filters?.[filterName]?.filter(v => v !== filterValue)) as string[];
-    params.filters[filterName] = removed;
-
-    params.currentPage = "1";
-    if (!params.resultsPerPage) params.resultsPerPage = "20";
-
-    router.push(pathname + '?' + qs.stringify(params));
-  };
-
-  const clearFilters = (filterName: string) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-
-    delete params['filters']?.[filterName];
-    params.currentPage = "1";
-
-    router.push(pathname + '?' + qs.stringify(params));
-  };
-
-  const changeResultsPerPage = (e: SyntheticEvent) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-    const value = (e.target as HTMLInputElement).value;
-
-    params.currentPage = "1";
-    params.resultsPerPage = `${value}`;
-
-    router.push(pathname + '?' + qs.stringify(params));
-  };
-
-  const goToPage = (page: number) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
-    params.currentPage = `${page}`;
-    router.push(pathname + '?' + qs.stringify(params));
-  };
 
   return (
     <div className="recipes two-col-b">
@@ -205,5 +127,3 @@ export default function Recipes() {
     </div>
   );
 }
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
