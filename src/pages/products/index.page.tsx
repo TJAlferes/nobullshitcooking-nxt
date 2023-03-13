@@ -1,75 +1,82 @@
 'use client';
 
-import Link                                        from 'next/link';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect }                               from 'react';
-import qs                                          from 'qs';
+import Link from 'next/link';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
-import {
-  getResults,
-  //setFilters,
-  //addFilter,
-  //removeFilter,
-  //setSorts,
-  //setCurrentPage,
-  //setResultsPerPage
-} from '../../store/search/actions';
-import type { SearchRequest } from '../../store/search/types';
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector }            from '../../store';
+import { useSearch }                                  from '../../utils/useSearch';
 
 const url = "https://s3.amazonaws.com/images-01/products/";
 
-export function Products() {
-  const router =       useRouter();
-  const pathname =     usePathname();
-  const searchParams = useSearchParams();
-
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+export default function Products() {
+  const { params, addFilter, removeFilter } = useSearch();
 
   const currProductCategories = params.filters?.productCategories;
   const currProductTypes =      params.filters?.productTypes;
 
-  const dispatch =          useDispatch();
-  const productCategories = useSelect(state => state.data.productCategories);
+  const productCategories = useSelector(state => state.data.productCategories);
   const productTypes =      useSelector(state => state.data.productTypes);
-
-  const term =           useSelector(state => state.search.term);
-  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
-  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
-  const currentPage =    useSelector(state => state.search.currentPage);
-  const resultsPerPage = useSelector(state => state.search.resultsPerPage);  // 20, 50, 100
-
-  const results =        useSelector(state => state.search.results);
-  const totalResults =   useSelector(state => state.search.totalResults);
-  const totalPages =     useSelector(state => state.search.totalPages);
+  const term =              useSelector(state => state.search.term);
+  //const filters =          useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
+  //const sorts =            useSelector(state => state.search.sorts);  // not even needed?
+  const results =          useSelector(state => state.search.results);
+  const totalResults =     useSelector(state => state.search.totalResults);
+  const totalPages =       useSelector(state => state.search.totalPages);
 
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
         <h1>Products</h1>
 
-        <ExpandCollapse headingWhileCollapsed="Filter Results (Click here to expand)">
-          <div className="search-results__filters">
-            <span className="search-results__filter-title">Filter products by:</span>
-            <Facet field="product_type_name" filterType="any" label="Product Types" show={5} />
-          </div>
-        </ExpandCollapse>
-        
-        {wasSearched && <ResultsPerPage options={[20, 50, 100]} />}
-        {wasSearched && <PagingInfo />}
-        <Paging />
+        <div id="filters">
+          <span>Filter by:</span>
+
+          <ExpandCollapse headingWhileCollapsed="Product Categories">
+            <div className="filter-group">
+              <p>Product Categories</p>
+              {productCategories.map(({ id, name }) => (
+                <span key={id}>
+                  <input
+                    type="checkbox"
+                    checked={currProductCategories?.includes(name) ? true : false}
+                    onChange={() => currProductCategories?.includes(name) ? removeFilter("productCategories", name) : addFilter("productCategories", name)}
+                    />
+                    <label>{name}</label>
+                </span>
+              ))}
+            </div>
+          </ExpandCollapse>
+
+          <ExpandCollapse headingWhileCollapsed="Product Types">
+            <div className="filter-group">
+              <p>Product Types</p>
+              {productTypes.map(({ id, name }) => (
+                <span key={id}>
+                  <input
+                    type="checkbox"
+                    checked={currProductTypes?.includes(name) ? true : false}
+                    onChange={() => currProductTypes?.includes(name) ? removeFilter("productTypes", name) : addFilter("productTypes", name)}
+                    />
+                    <label>{name}</label>
+                </span>
+              ))}
+            </div>
+          </ExpandCollapse>
+        </div>
+
+        <Pagination />
+        <ResultsPerPage />
 
         <div className="search-results__list">
-          {results ? results.map((p: any) => (
-            <div className="products" key={p.id.raw}>
-              <Link href={`/product/${p.id.raw}`}>
+          {results ? results.map(p => (
+            <div className="products" key={p.id}>
+              <Link href={`/product/${p.id}`}>
                 <div className="text">
-                  <div className="fullname">{p.fullname.raw}</div>
-                  <div className="type">{p.product_type_name.raw}</div>
+                  <div className="fullname">{p.fullname}</div>
+                  <div className="type">{p.product_type_name}</div>
                 </div>
-                {p.image.raw !== "nobsc-product-default"
-                  ? <img className="products-image" src={`${url}${p.image.raw}-thumb`} />
+                {p.image !== "nobsc-product-default"
+                  ? <img className="products-image" src={`${url}${p.image}-thumb`} />
                   : <div className="image-default-100-62"></div>
                 }
               </Link>
@@ -77,8 +84,8 @@ export function Products() {
           )) : <div>Loading...</div>}
         </div>
 
-        {wasSearched && <PagingInfo />}
-        <Paging />
+        <Pagination />
+        <ResultsPerPage />
       </div>
 
       <div className="two-col-b-right"></div>

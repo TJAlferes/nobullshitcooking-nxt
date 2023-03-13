@@ -1,16 +1,8 @@
-.search-results__filters {
-  display: block;
-}
-
 .search-results__filter-title {
   display: block;
   font-size: 1.6rem;
   font-weight: 900;
   margin: 0 0 12px 5px;
-}
-
-.sui-facet {
-  border-width: 0px;
 }
 
 .sui-facet__title {
@@ -21,90 +13,6 @@
   padding: 3px 0 8px 0;
   text-align: left;
 }
-
-.sui-multi-checkbox-facet {
-  padding: 12px;
-}
-
-.sui-multi-checkbox-facet__option-label {
-  display: inline-block;
-  height: 32px;
-  max-height: 32px;
-  max-width: 92px;
-  min-height: 32px;
-  min-width: 92px;
-  width: 92px;
-}
-
-.sui-multi-checkbox-facet__checkbox {
-  display: inline;
-}
-
-.sui-multi-checkbox-facet__input-text {
-  display: inline;
-  font-size: 1.3rem;
-  margin-left: 2px;
-}
-
-.sui-multi-checkbox-facet__option-count {
-  display: none;
-}
-
-
-
-.sui-paging {
-  list-style-type: none;
-  margin: 20px 0;
-}
-
-.rc-pagination {
-  display: flex;
-  flex-direction: row;
-}
-
-.rc-pagination-item {
-  font-weight: 900;
-  margin: 0 12px;
-}
-
-.rc-pagination-item a {
-  font-size: 1.5rem;
-}
-
-.rc-pagination-item:hover {
-  color: #c10006;
-  cursor: pointer;
-}
-
-
-
-.sui-paging-info {
-  font-size: 12px;
-  margin-left: 12px;
-}
-
-
-
-.sui-results-per-page {
-  margin-left: 12px;
-}
-
-.sui-results-per-page,
-.sui-select__control {
-  display: flex;
-  flex-direction: row;
-}
-
-.sui-select__single-value {
-  font-size: 12px;
-}
-
-.sui-results-per-page__label {
-  font-size: 12px;
-  padding-top: 4px;
-}
-
-
 
 .equipments {
   padding: 10px;

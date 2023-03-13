@@ -51,9 +51,9 @@ export type RecipeCard = {
 };
 
 export type Suggestion = {
-  id:           number;
-  title:        string;
-  recipe_image: string;
+  id:     number;
+  text:   string;
+  image?: string;
 };
 
 export type SearchResponse = {

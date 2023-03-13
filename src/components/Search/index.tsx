@@ -19,7 +19,6 @@ export default function Search() {
   const suggestions = useSelector(state => state.search.suggestions);
 
   let capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
-  if (capitalized === "Equipments") capitalized = "Equipment";
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
@@ -44,7 +43,8 @@ export default function Search() {
 
   const goToSearchResults = () => {
     dispatch(setSuggestions([]));
-    router.push(`/${index}?term=${term}`);
+    const idx = index === "equipment" ? "equipments" : index;
+    router.push(`/${idx}?term=${term}`);
   }
 
   const initSearchInputBlurHandler = () => {
@@ -82,7 +82,7 @@ export default function Search() {
         <select onChange={onSearchIndexChange}>
           <option value="recipes">Recipes</option>
           <option value="ingredients">Ingredients</option>
-          <option value="equipments">Equipment</option>
+          <option value="equipment">Equipment</option>
           <option value="products">Products</option>
         </select>
       </div>
@@ -97,7 +97,7 @@ export default function Search() {
         <div ref={autosuggestionsRef} className="autosuggestions">
           <ul>
             {suggestions.map(suggestion => (
-              <li key={suggestion.id} onClick={() => selectSuggestion(suggestion.title)}>{suggestion.title}</li>
+              <li key={suggestion.id} onClick={() => selectSuggestion(suggestion.text)}>{suggestion.text}</li>
             ))}
           </ul>
         </div>

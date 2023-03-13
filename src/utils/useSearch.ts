@@ -4,7 +4,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useEffect }                               from 'react';
 import qs                                          from 'qs';
 
-import { getResults }                      from '../store/search/actions';
+import { getResults, setCurrentPage, setResultsPerPage }                      from '../store/search/actions';
 import type { SearchRequest }              from '../store/search/types';
 import { useTypedDispatch as useDispatch } from '../store';
 
@@ -22,6 +22,9 @@ export function useSearch() {
 
     if (!params.currentPage)    params.currentPage = "1";
     if (!params.resultsPerPage) params.resultsPerPage = "20";
+
+    dispatch(setCurrentPage(params.currentPage));
+    dispatch(setResultsPerPage(params.resultsPerPage));
 
     dispatch(getResults(qs.stringify(params)));
   }, [searchParams]);

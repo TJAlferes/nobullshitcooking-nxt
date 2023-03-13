@@ -127,9 +127,11 @@
 .autosuggestions {
   display: block;
   position: absolute;
+  left: -1px;
   top: 30px;
-  width: calc(100% - 31px);
-  border: 1px solid #bfbfbf;
+  width: calc(100% - 29px);
+  border: 1px solid #aaa;
+  border-top: none;
 }
 
 .autosuggestions ul {
@@ -138,26 +140,21 @@
   overflow: hidden;
 }
 
-.autosuggestions li,
-.autosuggestions li span {
-  color: #666;
-  cursor: pointer;
-  font-size: 1.3rem;
-  font-style: normal;
-  font-weight: 100;
-  height: 30px;
-  line-height: 26px;
-  overflow: hidden;
-  width: 100%;
-}
-
 .autosuggestions li {
-  padding: 0 10px;
-}
+  width: 100%;
+  height: 30px;
 
-.autosuggestions li em {
-  font-style: normal;
-  font-weight: 700;
+  padding: 3px 10px 3px 0;
+
+  overflow: hidden;
+
+  font-size: 1.4rem;
+  text-indent: 5px;
+  line-height: 26px;
+
+  color: #666;
+
+  cursor: pointer;
 }
 
 /*
@@ -176,8 +173,9 @@ Light/Day/Sun Theme
   color: #666;
 }
 
-.light .autosuggestions li em {
-  color: #111;
+.light .autosuggestions li:hover,
+.light .autosuggestions li:active {
+  background-color: #d5fdd5;
 }
 
 .light .autosuggestions li[aria-selected=true],
@@ -197,12 +195,13 @@ Dark/Night/Moon Theme
 }
 
 .dark .autosuggestions li {
-  background-color: #222;
+  background-color: #333;
   color: #aaa;
 }
 
-.dark .autosuggestions li em {
-  color: #bcbcbc;
+.dark .autosuggestions li:hover,
+.dark .autosuggestions li:active {
+  background-color: #507ea7;
 }
 
 .dark .autosuggestions li[aria-selected=true],

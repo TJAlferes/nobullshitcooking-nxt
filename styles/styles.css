@@ -213,9 +213,11 @@ h4 {
 @import './components/main.css';
 @import './components/messages.css';
 @import './components/options.css';
+@import './components/pagination.css';
 @import './components/people.css';
 @import './components/promo.css';
 @import './components/removeFromCartButton.css';
+@import './components/resultsPerPage.css';
 @import './components/search.css';
 @import './components/starRating.css';
 @import './components/suggestions.css';

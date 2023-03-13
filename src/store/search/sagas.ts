@@ -1,9 +1,8 @@
-import axios          from 'axios';
-import { call, delay, put, select }  from 'redux-saga/effects';
+import axios                        from 'axios';
+import { call, delay, put, select } from 'redux-saga/effects';
 
-import { endpoint } from '../../utils/api';
-//import type { RootState } from '..';
-import { setResults, setSuggestions } from './actions';
+import { endpoint }                          from '../../utils/api';
+import { setResults, setSuggestions }        from './actions';
 import type { IGetResults, IGetSuggestions } from './types';
 
 export function* getSuggestionsSaga(action: IGetSuggestions) {
@@ -28,4 +27,4 @@ export function* getResultsSaga(action: IGetResults) {
     
     yield put(setResults(data.found));
   } catch (err) {}
-};
+}
