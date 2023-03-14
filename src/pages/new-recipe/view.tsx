@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from          'next/link';
 import type { Crop } from 'react-image-crop';
 
 import { ExpandCollapse, LoaderButton } from '../../components';

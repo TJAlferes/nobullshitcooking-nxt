@@ -1,11 +1,11 @@
-import { memo } from 'react';
-import AriaModal from 'react-aria-modal';
+import { memo }         from 'react';
+import AriaModal        from 'react-aria-modal';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ExpandCollapse, LoaderButton } from '../../components';
-import type { IWorkRecipe } from '../../store/data/types';
-import type { IData } from '../../store/planner/types';
-import { Day, ExpandedDay, Recipes } from './components';
+import type { IWorkRecipe }             from '../../store/data/types';
+import type { IData }                   from '../../store/planner/types';
+import { Day, ExpandedDay, Recipes }    from './components';
 
 export function NewPlanView({
   activateModal,

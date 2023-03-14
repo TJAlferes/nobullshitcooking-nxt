@@ -18,7 +18,7 @@ export function ProfileView({
   username,
   userPublicRecipes,
   userFavoriteRecipes,
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div className="profile one-col-a">
       <h1>{username}</h1>

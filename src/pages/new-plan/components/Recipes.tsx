@@ -1,8 +1,8 @@
-//import { memo, useRef } from 'react';
+//import { memo, useRef }               from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';  //DropTarget, DropTargetConnector,
 
 import type { IRecipe } from '../../../store/planner/types';
-import { Recipe } from './Recipe';
+import { Recipe }       from './Recipe';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 

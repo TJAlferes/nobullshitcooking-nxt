@@ -1,4 +1,4 @@
-import type { IData } from '../../store/plannerView/types';
+import type { IData }       from '../../store/plannerView/types';
 import { Day, ExpandedDay } from './components';
 
 export function PlanView({ expandedDay, planName, planData }: Props) {

@@ -12,6 +12,7 @@ import {
 } from '../../store/user/friendship/actions';
 import { FriendsView } from './view';
 
+// Just make this a Dashboard tab?
 export default function Friends() {
   const dispatch = useDispatch();
   const authname =      useSelector(state => state.auth.authname);

@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import axios                          from 'axios';
+import { useRouter, useSearchParams } from 'next/navigation';  // or useRouter from 'next/router' ?
+import { useEffect, useState }        from 'react';
+import { useDispatch }                from 'react-redux';
 
-import { LoaderSpinner } from '../../components';
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
-import { useTypedSelector as useSelector } from '../../store';
+import { LoaderSpinner }                              from '../../components';
+import { useTypedSelector as useSelector }            from '../../store';
 import { requestFriendship as userRequestFriendship } from '../../store/user/friendship/actions';
-import { ProfileView } from './view';
+import { endpoint }                                   from '../../utils/api';
+import { ProfileView }                                from './view';
 
 export default function Profile() {
   const router = useRouter();

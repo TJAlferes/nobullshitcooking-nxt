@@ -1,10 +1,10 @@
-import { useRouter } from 'next/navigation';
+import { useRouter }           from 'next/navigation';  // or useRouter from 'next/router' ?
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch }         from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { userRegister, userVerify } from '../../store/auth/actions';
-import { RegisterView } from './view';
+import { userRegister, userVerify }        from '../../store/auth/actions';
+import { RegisterView }                    from './view';
 
 export default function Register({ confirmingUser }: Props) {
   const router = useRouter();

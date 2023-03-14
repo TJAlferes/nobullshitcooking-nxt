@@ -1,10 +1,10 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect }                  from 'react';
+import { useDispatch }                from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { load } from '../../store/plannerView/actions';
-import { PlanView } from './view';
+import { load }                            from '../../store/plannerView/actions';
+import { PlanView }                        from './view';
 
 export default function Plan() {
   const router = useRouter();

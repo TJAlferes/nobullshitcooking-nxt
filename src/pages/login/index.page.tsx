@@ -1,10 +1,10 @@
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { usePathname, useRouter } from 'next/navigation';  // or useRouter from 'next/router' ?
+import { useEffect, useState }    from 'react';
+import { useDispatch }            from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { staffLogin, userLogin } from '../../store/auth/actions';
-import { LoginView } from './view';
+import { userLogin }                       from '../../store/auth/actions';
+import { LoginView }                       from './view';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
 
@@ -13,7 +13,6 @@ export default function Login() {
   const router =   useRouter();
 
   const dispatch = useDispatch();
-  //const authname = useSelector(state => state.auth.authname);
   const message =  useSelector(state => state.auth.message);
 
   const [ email,    setEmail ] =    useState("");
@@ -32,10 +31,6 @@ export default function Login() {
     };
   }, [message]);
 
-  //useEffect(() => {
-  //  if (authname !== "") router.push('/dashboard');
-  //}, [authname]);
-
   const emailChange =    (e: React.SyntheticEvent<EventTarget>) => setEmail((e.target as HTMLInputElement).value);
   const passwordChange = (e: React.SyntheticEvent<EventTarget>) => setPassword((e.target as HTMLInputElement).value);
 
@@ -44,8 +39,7 @@ export default function Login() {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
-    if (pathname === "/staff-login") dispatch(staffLogin(email, password));
-    if (pathname === "/login")       dispatch(userLogin(email, password, router));
+    if (pathname === "/login") dispatch(userLogin(email, password, router));
   }
 
   const loginKeyUp = (e: React.KeyboardEvent) => {
@@ -53,8 +47,7 @@ export default function Login() {
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    if (pathname === "/staff-login") dispatch(staffLogin(email, password));
-    if (pathname === "/login")       dispatch(userLogin(email, password, router));
+    if (pathname === "/login") dispatch(userLogin(email, password, router));
   }
 
   const validateLoginInfo = () => ((email.length > 4) && (password.length > 5));

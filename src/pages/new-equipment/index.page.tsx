@@ -1,12 +1,12 @@
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import type { Crop } from 'react-image-crop';
-import { useDispatch } from 'react-redux';
+import type { Crop }                   from 'react-image-crop';
+import { useDispatch }                 from 'react-redux';
 
-import { getCroppedImage } from '../../utils/getCroppedImage';
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector }  from '../../store';
 import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
-import { NewEquipmentView } from './view';
+import { getCroppedImage }                  from '../../utils/getCroppedImage';
+import { NewEquipmentView }                 from './view';
 
 export default function NewEquipment() {
   const router = useRouter();
@@ -44,8 +44,8 @@ export default function NewEquipment() {
         return;
       }
       
-      window.scrollTo(0, 0);
       setLoading(true);
+      window.scrollTo(0, 0);
       const [ prev ] = myEquipment.filter(e => e.id === Number(id));
       if (!prev) {
         router.push('/dashboard');

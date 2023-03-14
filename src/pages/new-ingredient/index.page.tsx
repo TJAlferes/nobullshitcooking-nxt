@@ -1,12 +1,12 @@
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import type { Crop } from 'react-image-crop';
-import { useDispatch } from 'react-redux';
+import type { Crop }                   from 'react-image-crop';
+import { useDispatch }                 from 'react-redux';
 
-import { getCroppedImage } from '../../utils/getCroppedImage';
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector }    from '../../store';
 import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
-import { NewIngredientView } from './view';
+import { getCroppedImage }                    from '../../utils/getCroppedImage';
+import { NewIngredientView }                  from './view';
 
 export default function NewIngredient() {
   const router = useRouter();

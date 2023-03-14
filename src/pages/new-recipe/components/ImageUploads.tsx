@@ -6,6 +6,7 @@ const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 function ToolTip() {
   return <span className="crop-tool-tip">Move the crop to your desired position. The image&#40;s&#41; will be saved for you:</span>;
 }
+
 // TO DO: change h4 elems to label elms with for attr
 // TO DO: change some div elems to react fragments (maybe)
 export function ImageUploads({

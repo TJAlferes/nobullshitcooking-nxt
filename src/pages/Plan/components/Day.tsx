@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 
-import { clickDay } from '../../../store/plannerView/actions';
+import { clickDay }     from '../../../store/plannerView/actions';
 import type { IRecipe } from '../../../store/plannerView/types';
-import { Recipe } from './Recipe';
+import { Recipe }       from './Recipe';
 
 export function Day({ day, recipes }: Props) {
   const dispatch = useDispatch();

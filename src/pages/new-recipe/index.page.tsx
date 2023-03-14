@@ -1,17 +1,17 @@
-import axios from 'axios';
-import { useSearchParams, useRouter } from 'next/navigation';
+import axios                           from 'axios';
+import { useSearchParams, useRouter }  from 'next/navigation';  // or useRouter from 'next/router' ?
 import { useEffect, useRef, useState } from 'react';
-import type { Crop, PixelCrop } from 'react-image-crop';
-import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid';
+import type { Crop, PixelCrop }        from 'react-image-crop';
+import { useDispatch }                 from 'react-redux';
+import { v4 as uuid }                  from 'uuid';
 
-import { NOBSCAPI as endpoint } from '../../config/NOBSCAPI';
 import { useTypedSelector as useSelector } from '../../store';
 import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../store/user/recipe/actions';
 import type { IRequiredMethod } from '../../store/user/recipe/types';
-import { getCroppedImage } from '../../utils/getCroppedImage';
-import { validRecipeInfo } from './validation/validRecipeInfo';
-import { NewRecipeView } from './view';
+import { endpoint }             from '../../utils/api';
+import { getCroppedImage }      from '../../utils/getCroppedImage';
+import { validRecipeInfo }      from './validation/validRecipeInfo';
+import { NewRecipeView }        from './view';
 
 export default function NewRecipe() {
   const router =    useRouter();
