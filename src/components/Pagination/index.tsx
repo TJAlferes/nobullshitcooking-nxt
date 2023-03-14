@@ -1,21 +1,23 @@
 'use client';
 
+import { memo } from 'react';
+
 import { useTypedSelector as useSelector } from '../../store';
 import { useSearch }                       from '../../utils/useSearch';
 
-export function Pagination() {
+export const Pagination = memo(function Pagination() {
   const { goToPage } = useSearch();
 
   const currentPage = useSelector(state => state.search.currentPage);
   const totalPages =  useSelector(state => state.search.totalPages);
 
-  if (totalPages <= 1) return null;
+  if (!totalPages || Number(totalPages) <= 1) return null;
 
   const curr =  currentPage ? Number(currentPage) : 1;
   const first = 1;
   const prev =  curr - 1;
   const next =  curr + 1;
-  const last =  totalPages;
+  const last =  Number(totalPages);
 
   return (
     <div className="pagination">
@@ -26,4 +28,4 @@ export function Pagination() {
       <span>{curr !== last &&  <button onClick={() => goToPage(last)}>Last</button>}</span>
     </div>
   );
-}
+});

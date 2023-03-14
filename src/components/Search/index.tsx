@@ -1,15 +1,15 @@
 'use client';
 
-import { useRouter }        from 'next/router';
 import type { ChangeEvent } from 'react';
 import { useRef }           from 'react';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 import { getSuggestions, setSuggestions, setIndex, setTerm }                from '../../store/search/actions';
 import type { SearchIndex }                                                 from '../../store/search/types';
+import { useSearch } from '../../utils/useSearch';
 
 export default function Search() {
-  const router =      useRouter();
+  const { goToSearchResults } = useSearch();
   const inputRef =           useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef =     useRef<boolean>(false);
@@ -40,12 +40,6 @@ export default function Search() {
     dispatch(setTerm(suggestion));
     dispatch(setSuggestions([]));
   };
-
-  const goToSearchResults = () => {
-    dispatch(setSuggestions([]));
-    const idx = index === "equipment" ? "equipments" : index;
-    router.push(`/${idx}?term=${term}`);
-  }
 
   const initSearchInputBlurHandler = () => {
     if (typeof window === 'undefined')   return;
@@ -90,7 +84,7 @@ export default function Search() {
       <div className="insert">
         <input ref={inputRef} id="search-input" onFocus={onInputChange} onChange={onInputChange} value={term} />
 
-        <div className="magnifying-glass" onClick={goToSearchResults}>
+        <div className="magnifying-glass" onClick={() => goToSearchResults(index, term)}>
           <span></span>
         </div>
 

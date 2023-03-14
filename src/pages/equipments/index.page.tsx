@@ -6,7 +6,7 @@ import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
 import { useSearch }                                  from '../../utils/useSearch';
 
-const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
+//const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
 export default function Equipments() {
   const { params, addFilter, removeFilter } = useSearch();
@@ -14,9 +14,10 @@ export default function Equipments() {
   const currEquipmentTypes = params.filters?.equipmentTypes;
 
   const equipmentTypes = useSelector(state => state.data.equipmentTypes);
-  const term =           useSelector(state => state.search.term);
-  //const filters =        useSelector(state => state.search.filters);  // not even needed? it is, because they may want to leave the page and come back to their same filters
-  //const sorts =          useSelector(state => state.search.sorts);  // not even needed?
+  //const filters =        useSelector(state => state.search.filters);
+  //const sorts =          useSelector(state => state.search.sorts);
+  
+  //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
@@ -25,6 +26,7 @@ export default function Equipments() {
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
         <h1>Equipment</h1>
+        <p>{totalResults} total results and {totalPages} total pages</p>
 
         <div id="filters">
           <span>Filter by:</span>
@@ -59,7 +61,7 @@ export default function Equipments() {
                   <div className="type">{e.equipment_type_name}</div>
                 </div>
 
-                <img src={`${url}/${e.image}.jpg`} />
+                {/*<img src={`${url}/${e.image}.jpg`} />*/}
               </Link>
             </div>
           )) : <div>Loading...</div>}

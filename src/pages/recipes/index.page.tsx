@@ -6,7 +6,7 @@ import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
 import { useSearch }                                  from '../../utils/useSearch';
 
-const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
+//const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
   const { params, addFilter, removeFilter } = useSearch();
@@ -18,9 +18,10 @@ export default function Recipes() {
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
-  const term =           useSelector(state => state.search.term);
   //const filters =        useSelector(state => state.search.filters);  // needed, because they may want to leave the page and come back to their same filters
   //const sorts =          useSelector(state => state.search.sorts);  // needed, because they may want to leave the page and come back to their same sorts
+  
+  //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
@@ -29,8 +30,7 @@ export default function Recipes() {
     <div className="recipes two-col-b">
       <div className="two-col-b-left">
         <h1>Recipes</h1>
-
-        <p>{totalResults} total results for "{term}"</p>
+        <p>{totalResults} total results and {totalPages} total pages</p>
 
         <div id="filters">
           <span>Filter by:</span>
@@ -106,10 +106,11 @@ export default function Recipes() {
                   </div>
                 </div>
 
-                {r.recipe_image !== "nobsc-recipe-default"
+                {/*
+                  r.recipe_image !== "nobsc-recipe-default"
                   ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
                   : <div className="image-default-100-62"></div>
-                }
+                */}
               </Link>
             </div>
           )) : <div>Loading...</div>}

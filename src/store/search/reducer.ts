@@ -32,6 +32,7 @@ const initialState: State = {
   currentPage:    "1",   // setCurrentPage
   resultsPerPage: "20",  // setResultsPerPage
   // search response state:
+  //resultTerm:     "",
   results:        [],
   totalResults:   0,
   totalPages:     0,
@@ -81,6 +82,7 @@ export const searchReducer = (state = initialState, action: IActions): State => 
     case SET_RESULTS_PER_PAGE: return {...state, resultsPerPage: action.resultsPerPage};
     case SET_RESULTS:          return {
       ...state,
+      //termResult: action.found.termResult,
       results:      action.found.results,
       totalResults: action.found.totalResults,
       totalPages:   action.found.totalPages
