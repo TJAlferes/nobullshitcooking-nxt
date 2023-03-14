@@ -1,13 +1,10 @@
-import type { useRouter } from 'next/navigation';
+import type { useRouter } from 'next/navigation';  // or useRouter from 'next/router' ?
 
 export const actionTypes = {
   CHECK_STATE:   'CHECK_STATE',
   MESSAGE:       'MESSAGE',
   MESSAGE_CLEAR: 'MESSAGE_CLEAR',
   RESET:         'RESET',
-  STAFF_DISPLAY: 'STAFF_DISPLAY',
-  STAFF_LOGIN:   'STAFF_LOGIN',
-  STAFF_LOGOUT:  'STAFF_LOGOUT',
   USER_DISPLAY:  'USER_DISPLAY',
   USER_LOGIN:    'USER_LOGIN',
   USER_LOGOUT:   'USER_LOGOUT',
@@ -18,7 +15,6 @@ export const actionTypes = {
 export interface IState {
   authname:             string;
   message:              string;
-  staffIsAuthenticated: boolean;
   userIsAuthenticated:  boolean;
 }
 
@@ -27,9 +23,6 @@ ICheckState |
 IMessage |
 IMessageClear |
 IReset |
-IStaffDisplay |
-IStaffLogin |
-IStaffLogout |
 IUserDisplay | 
 IUserRegister |
 IUserVerify |
@@ -51,21 +44,6 @@ export interface IMessageClear {
 
 export interface IReset {
   type: typeof actionTypes.RESET;
-}
-
-export interface IStaffDisplay {
-  type: typeof actionTypes.STAFF_DISPLAY;
-  authname: string;
-}
-
-export interface IStaffLogin {
-  type:     typeof actionTypes.STAFF_LOGIN;
-  email:    string;
-  password: string;
-}
-
-export interface IStaffLogout {
-  type: typeof actionTypes.STAFF_LOGOUT;
 }
 
 export interface IUserDisplay {

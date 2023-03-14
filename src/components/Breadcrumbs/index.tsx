@@ -82,11 +82,9 @@ type Breadcrumb = {
 /*
 (same for equipment)
 
-const page = staffIsAuthenticated
-  ? editing ? 'Edit Ingredient' : 'Create New Ingredient'
-  : editing ? 'Edit Private Ingredient' : 'Create New Private Ingredient';
+const page = editing ? 'Edit Private Ingredient' : 'Create New Private Ingredient';
 
-const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+const path = '/dashboard';
 
 <div>
   <span><Link href="/home"><a>Home</a></Link><i>{`&gt;`}</i></span>
@@ -110,13 +108,10 @@ const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
 
 
 
-const page = staffIsAuthenticated
-  ? editing
-    ? 'Edit Recipe' : 'Create New Recipe'
-  : editing
+const page = editing
     ? ownership === "private"
       ? 'Edit Private Recipe' : 'Edit Public Recipe'
     : ownership === "private"
       ? 'Submit New Private Recipe' : 'Submit New Public Recipe';
-const path = staffIsAuthenticated ? '/staff-dashboard' : '/dashboard';
+const path = '/dashboard';
 */

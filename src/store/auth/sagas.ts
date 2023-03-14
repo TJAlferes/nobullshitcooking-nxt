@@ -4,37 +4,8 @@ import { call, delay, put } from 'redux-saga/effects';
 import { endpoint } from '../../utils/api';
 import { removeItem } from '../../utils/storage';
 import { initUser } from '../data/actions';
-import { message as authMessage, messageClear, staffDisplay, userDisplay } from './actions';
-import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout, IStaffLogin, IStaffLogout } from './types';
-
-export function* staffLoginSaga(action: IStaffLogin) {
-  try {
-    const { data: { message, staffname } } =
-      yield call([axios, axios.post], `${endpoint}/staff/auth/login`, {staffInfo: {email: action.email, password: action.password}}, {withCredentials: true});
-
-    if (message === 'Signed in.') yield put(staffDisplay(staffname));
-    else yield put(authMessage(message));
-  } catch(err) {
-    yield put(authMessage('An error occurred. Please try again.'));
-  }
-
-  yield delay(4000);
-  yield put(messageClear());
-}
-
-export function* staffLogoutSaga(action: IStaffLogout) {
-  try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/staff/auth/logout`, {}, {withCredentials: true});
-
-    yield call(removeItem, 'appState');
-    yield put(authMessage(message));
-  } catch(err) {
-    yield put(authMessage('An error occurred. Please try again.'));
-  }
-
-  yield delay(4000);
-  yield put(messageClear());
-}
+import { message as authMessage, messageClear, userDisplay } from './actions';
+import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout } from './types';
 
 export function* userLoginSaga(action: IUserLogin) {
   try {

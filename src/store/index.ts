@@ -19,7 +19,6 @@ import { plannerReducer }     from './planner/reducer';
 import { plannerViewReducer } from './plannerView/reducer';
 import { searchReducer }      from './search/reducer';
 //ssrReducer
-import { staffReducer }       from './staff/reducer';
 import { themeReducer }       from './theme/reducer';
 import { userReducer }        from './user/reducer';
 import { windowReducer }      from './window/reducer';
@@ -73,7 +72,6 @@ export const rootReducer = combineReducers({
   plannerView: plannerViewReducer,
   search:      searchReducer,
   //ssr
-  staff:       staffReducer,
   theme:       themeReducer,
   user:        userReducer,
   window:      windowReducer

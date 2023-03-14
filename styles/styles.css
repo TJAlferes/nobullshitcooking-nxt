@@ -199,33 +199,20 @@ h4 {
   }
 }
 
-@import './components/addToCartButton.css';
 @import './components/breadcrumbs.css';
 @import './components/cropPreview.css';
 @import './components/expandCollapse.css';
-@import './components/feed.css';
 @import './components/footer.css';
 @import './components/header.css';
-@import './components/home.css';
 @import './components/layout.css';
 @import './components/leftNav.css';
 @import './components/loaderSpinner.css';
 @import './components/main.css';
-@import './components/messages.css';
-@import './components/options.css';
 @import './components/pagination.css';
-@import './components/people.css';
-@import './components/promo.css';
-@import './components/removeFromCartButton.css';
 @import './components/resultsPerPage.css';
-@import './components/search.css';
 @import './components/starRating.css';
-@import './components/suggestions.css';
 
-@import './layouts/navGridA.css';
 @import './layouts/oneColumnA.css';
-@import './layouts/tableA.css';
-@import './layouts/twoColumnA.css';
 @import './layouts/twoColumnB.css';
 
 @import './pages/cart.css';
@@ -235,10 +222,10 @@ h4 {
 @import './pages/equipment.css';
 @import './pages/equipments.css';
 @import './pages/friends.css';
+@import './pages/home.css';
 @import './pages/ingredient.css';
 @import './pages/ingredients.css';
 @import './pages/login.css';
-@import './pages/navigation.css';
 @import './pages/newEquipment.css';
 @import './pages/newIngredient.css';
 @import './pages/newPlan.css';

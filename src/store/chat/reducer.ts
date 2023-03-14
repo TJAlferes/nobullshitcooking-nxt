@@ -25,7 +25,6 @@ const {
 // remember Nir Kofman's actions patterns (maybe)
 
 // TO DO: reserve/disable the username "messengerstatus"!
-// TO DO: STAFF_LOGOUT ?
 
 const initialState: IState = {room: "", messages: [], users: [], friends: [], status: "disconnected"};
 
