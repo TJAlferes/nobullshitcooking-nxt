@@ -1,14 +1,24 @@
+.shadow {
+  display: block;
+  position: absolute;
+  bottom: 1;
+  left: -42px;
+  top: 56px;
+  width: 3000px;
+  min-width: 3000px;
+  height: 100vh;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, .5);
+}
+
 .left-nav {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-
   position: absolute;
   left: 0;
   top: 56px;
-
   margin: 0;
-  
   width: 240px;
   max-width: 240px;
   min-width: 240px;
@@ -16,58 +26,18 @@
   min-height: 100vh;
 }
 
-.left-nav .anchor {
-  display: block;
-
-  position: relative;
-
-  min-height: 120px;
-  height: 120px;
-}
-
-.left-nav .main {
-  padding: 0 10px;
-}
-
-.left-nav .main a {
-  display: flex;
-  align-items: center;
-
-  height: 40px;
-
-  padding-left: 16px;
-
-  font-size: 1.4rem;
-  text-decoration: none;
-}
-
-.left-nav .main a:hover {
-  cursor: pointer;
-  cursor: hand;
-}
-
-.left-nav hr {
+.left-nav hr,
+.left-nav-mobile hr {
   height: 1px;
-
   border: 0 none;
-
-  margin: 5px 0;
 }
 
 .menu {
-  position: absolute;
-  top: 0;
-
   margin: 0;
-
   width: 240px;
   max-width: 240px;
   min-width: 240px;
-
-  padding: 0 10px;
-  
   overflow-x: visible;
-
   cursor: pointer;
 }
 
@@ -79,13 +49,10 @@
   position: absolute;
   left: 240px;
   top: 0;
-
   width: 300px;
   height: fit-content;
   min-height: fit-content;
-
-  border-left: 1px solid #000;
-
+  border-left: 2px solid;
   background-color: #fff;
   color: #fff;
 }
@@ -94,38 +61,37 @@
 .submenu-item a {
   display: flex;
   align-items: center;
-
   height: 40px;
-
-  padding-left: 16px;
-
   font-size: 1.4rem;
-}
-
-.menu-items,
-.menu-item,
-.menu-item a,
-.submenu-items,
-.submenu-item,
-.submenu-item a {
-  color: #000;
   text-decoration: none;
+  text-indent: 18px;
+  color: #000;
 }
 
-.shadow {
-  display: block;
 
+
+.left-nav-mobile {
+  display: none;
   position: absolute;
-  bottom: 1;
-  left: -42px;
-  top: 56px;
-
-  width: 3000px;
-  min-width: 3000px;
+  left: 0;
+  top: 48px;
+  margin: 0;
+  width: 100vw;
+  min-width: 100vw;
   height: 100vh;
   min-height: 100vh;
+}
 
-  background: rgba(0, 0, 0, .5);
+.left-nav-mobile .menu-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+  height: 32px;
+  padding-right: 7px;
+  background-color: #ccc;
 }
 
 /*
@@ -135,16 +101,17 @@ Light/Day/Sun Theme
 */
 
 .light .left-nav,
-.light .left-nav .main {
+.light .left-nav-mobile,
+.light .left-nav-mobile .expand-collapse {
   background-color: #fff;
 }
 
-.light .left-nav .main a {
+.light .left-nav a {
   background-color: inherit;
   color: #000;
 }
 
-.light .left-nav .main a:hover {
+.light .left-nav a:hover {
   background-color: #ddd;
 }
 
@@ -152,14 +119,18 @@ Light/Day/Sun Theme
   background-color: #bfbfbf;
 }
 
-.light .menu,
-.light .submenu {
+.light .left-nav .menu {
   background-color: #fff;
 }
 
-.light .menu-item.active .menu-item a,
-.light .submenu-item.active .submenu-item a {
-  color: #c10006;
+.light .left-nav .submenu-items {
+  border-left-color: #d5fdd5;
+}
+
+.light .menu-item.active a,
+.light .submenu-item a:hover,
+.light .submenu-item a:active {
+  background-color: #d5fdd5;
 }
 
 /*
@@ -169,29 +140,40 @@ Dark/Night/Moon Theme
 */
 
 .dark .left-nav,
-.dark .left-nav .main {
+.dark .left-nav-mobile {
   background-color: #222;
 }
 
-.dark .left-nav .main a {
+.dark .left-nav a
+.dark .left-nav-mobile a {
   background-color: inherit;
   color: #aaa;
 }
 
-.dark .left-nav .main a:hover {
-  background-color: #444;
+.dark .menu-item a {
+  color: #aaa;
+}
+
+.dark .menu-item.active a,
+.dark .submenu-item a:hover,
+.dark .submenu-item a:active {
+  color: #ccc;
+  background-color: #507ea7;  /*#690004;*/
 }
 
 .dark .left-nav hr {
   background-color: #444;
 }
 
-.dark .menu,
-.dark .submenu {
-  background-color: #999;
-}
 
-.dark .menu-item.active .menu-item a,
-.dark .submenu-item.active .submenu-item a {
-  color: #690004;
+
+@media (max-width: 899px) {
+  .shadow,
+  .left-nav {
+    display: none;
+  }
+
+  .left-nav-mobile {
+    display: block;
+  }
 }

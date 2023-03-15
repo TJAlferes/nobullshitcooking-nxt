@@ -4,11 +4,10 @@ export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, 
   return (
     <div className="expand-collapse">
       {!expanded
-        ? <div data-test="expand" onClick={toggle}>{headingWhileCollapsed}</div>
+        ? <div className="collapsed" onClick={toggle}>{headingWhileCollapsed}</div>
         : (
           <>
-            <div data-test="collapse" onClick={toggle}>{headingWhileExpanded}</div>
-            <br />
+            <div className="expanded" onClick={toggle}>{headingWhileExpanded}</div>
             {children}
           </>
         )
@@ -20,7 +19,7 @@ export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, 
 type Props = {
   children:              ReactNode;
   expanded:              boolean;
-  headingWhileCollapsed: string;
-  headingWhileExpanded:  string;
+  headingWhileCollapsed: ReactNode;
+  headingWhileExpanded:  ReactNode;
   toggle():              void; 
 };

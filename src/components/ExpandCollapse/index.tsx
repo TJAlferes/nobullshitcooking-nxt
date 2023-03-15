@@ -16,6 +16,6 @@ export function ExpandCollapse({ children, headingWhileCollapsed = "More info (C
 
 type Props = {
   children:               ReactNode;
-  headingWhileCollapsed?: string;
-  headingWhileExpanded?:  string;
+  headingWhileCollapsed?: ReactNode;
+  headingWhileExpanded?:  ReactNode;
 };

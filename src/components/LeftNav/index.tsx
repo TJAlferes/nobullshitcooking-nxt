@@ -1,10 +1,13 @@
+'use client';
+
 import Link                               from 'next/link';
-import { useRouter }                      from 'next/router';
+import { usePathname }                    from 'next/navigation';
 import qs                                 from 'qs';
 import { useState }                       from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
 import { useTypedSelector as useSelector } from '../../store';
+import { ExpandCollapse } from '..';
 
 export function LeftNav() {
   const authname =            useSelector(state => state.auth.authname);
@@ -18,53 +21,107 @@ export function LeftNav() {
       <div className="shadow"></div>
 
       <nav className="left-nav">
-        <div className="anchor">
-          <ReactAimMenu className="menu" onMouseLeave={() => setActive(null)}>
-            <div className="menu-items">
-              {menuItems.map(item => (
-                <MenuItem className={`menu-item${active === item.name ? ' active' : ''}`} onHover={() => setActive(item.name)}>
+        <ReactAimMenu className="menu" onMouseLeave={() => setActive(null)}>
+          <div className="menu-items">
+            {menuItems.map(item => (
+              <MenuItem className={`menu-item${active === item.name ? ' active' : ''}`} onHover={() => setActive(item.name)}>
+                <Link href={item.link}>{item.name}</Link>
+              </MenuItem>
+            ))}
+            <hr />
+          </div>
+
+          {active && (
+            <div className="submenu-items">
+              {submenuItems.map(item => active === item.parent && (
+                <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
                   <Link href={item.link}>{item.name}</Link>
-                </MenuItem>
+                </div>
               ))}
-
-              <div className="main">
-                <NavLink text="Home" to="/" />
-                <hr />
-                {userIsAuthenticated && (
-                  <>
-                    <NavLink text={authname} to="/dashboard" />
-                    <NavLink text="Chat"     to="/chat" />
-                    <NavLink text="Friends"  to="/friends" />
-                    <hr />
-                  </>
-                )}
-              </div>
             </div>
+          )}
+        </ReactAimMenu>
 
-            {active && (
-              <div className="submenu-items">
-                {submenuItems.map(item => active === item.parent && (
-                  <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
+        <NavLink text="Home" to="/" />
+        <hr />
+
+        {userIsAuthenticated && (
+          <>
+            <NavLink text={authname} to="/dashboard" />
+            <NavLink text="Chat"     to="/chat" />
+            <NavLink text="Friends"  to="/friends" />
+            <hr />
+          </>
+        )}
+      </nav>
+
+      <nav className="left-nav-mobile">
+        <div className="menu">
+          <div className="menu-items">
+            {menuItems.map(item => (
+              <ExpandCollapse
+                headingWhileCollapsed={(
+                  <div className="menu-item">
                     <Link href={item.link}>{item.name}</Link>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+                headingWhileExpanded={(
+                  <div className="menu-item">
+                    <Link href={item.link}>{item.name}</Link>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+              >
+                {submenuItems.filter(subitem => subitem.parent === item.name).map(subitem => (
+                  <div className="submenu-item">
+                    <Link href={subitem.link}>{subitem.name}</Link>
                   </div>
                 ))}
-              </div>
-            )}
-          </ReactAimMenu>
+              </ExpandCollapse>
+            ))}
+          </div>
         </div>
+
+        <NavLink text="Home" to="/" />
+        <hr />
+
+        {userIsAuthenticated && (
+          <>
+            <NavLink text={authname} to="/dashboard" />
+            <NavLink text="Chat"     to="/chat" />
+            <NavLink text="Friends"  to="/friends" />
+            <hr />
+          </>
+        )}
       </nav>
     </>
   );
 }
 
-export const menuItems = [
+function NavLink({ text, to }: NavLinkProps) {
+  const pathname = usePathname();
+  const theme =    useSelector(state => state.theme.theme);
+
+  const backgroundColor = theme === "light" ? "#ddd" : "#444";
+  const style =           (to === pathname) ? {backgroundColor} : {};
+
+  return <Link href={to} style={style}>{`${text}`}</Link>;
+}
+
+type NavLinkProps = {
+  text: string;
+  to:   string;
+};
+
+const menuItems = [
   {name: 'Recipes',     link: '/recipes',     image: 'recipes'},
   {name: 'Methods',     link: '/recipes',     image: 'methods'},
   {name: 'Ingredients', link: '/ingredients', image: 'ingredients'},
   {name: 'Equipment',   link: '/equipment',   image: 'equipment'}
 ];
 
-export const submenuItems = [
+const submenuItems = [
   {parent: 'Recipes', name: 'Drinks',     link: `/recipes?${rt(['Drinks'])}`,     image: null},
   {parent: 'Recipes', name: 'Appetizers', link: `/recipes?${rt(['Appetizers'])}`, image: null},
   {parent: 'Recipes', name: 'Mains',      link: `/recipes?${rt(['Mains'])}`,      image: null},
@@ -116,21 +173,6 @@ function it(value: string[]) {
 function et(value: string[]) {
   return qs.stringify({equipmentTypes: value});
 }
-
-function NavLink({ text, to }: NavLinkProps): JSX.Element {
-  const { pathname } = useRouter();
-  const theme =        useSelector(state => state.theme.theme);
-
-  const backgroundColor = theme === "light" ? "#ddd" : "#444";
-  const style =           (to === pathname) ? {backgroundColor} : {};
-
-  return <Link href={to} style={style}>{`${text}`}</Link>;
-}
-
-type NavLinkProps = {
-  text: string;
-  to:   string;
-};
 
         /*<NavLink text="Supplements" to="/page/guide/food/nutrition/supplements" />
           <NavLink text="Equipment" to="/supply/kitchen-equipment" />
