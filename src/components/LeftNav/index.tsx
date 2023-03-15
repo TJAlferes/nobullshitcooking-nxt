@@ -15,6 +15,8 @@ export function LeftNav() {
 
   return !leftNav ? null : (
     <>
+      <div className="shadow"></div>
+
       <nav className="left-nav">
         <div className="anchor">
           <ReactAimMenu className="menu" onMouseLeave={() => setActive(null)}>
@@ -24,6 +26,7 @@ export function LeftNav() {
                   <Link href={item.link}>{item.name}</Link>
                 </MenuItem>
               ))}
+
               <div className="main">
                 <NavLink text="Home" to="/" />
                 <hr />
@@ -37,6 +40,7 @@ export function LeftNav() {
                 )}
               </div>
             </div>
+
             {active && (
               <div className="submenu-items">
                 {submenuItems.map(item => active === item.parent && (
@@ -49,8 +53,6 @@ export function LeftNav() {
           </ReactAimMenu>
         </div>
       </nav>
-
-      <div className="shadow"></div>
     </>
   );
 }

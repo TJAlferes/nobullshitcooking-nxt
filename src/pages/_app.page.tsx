@@ -4,8 +4,8 @@ import { Provider }       from 'react-redux';
 import { HTML5toTouch }   from 'rdndmb-html5-to-touch';
 
 import '../../styles/styles.css';
-import { Layout, LeftNav, Guard, Theme } from '../components';
-import { wrapper }                       from '../store';
+import { Layout, Guard, Theme } from '../components';
+import { wrapper }              from '../store';
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
@@ -15,12 +15,9 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
       <DndProvider options={HTML5toTouch}>
         <Guard>
           <Theme>
-            <div id="app">
-              <LeftNav />
-              <Layout>
-                <Component {...props.pageProps} />
-              </Layout>
-            </div>
+            <Layout>
+              <Component {...props.pageProps} />
+            </Layout>
           </Theme>
         </Guard>
       </DndProvider>

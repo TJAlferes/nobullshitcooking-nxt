@@ -7,7 +7,7 @@ import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from
 import { userLogout }    from '../../store/auth/actions';
 import { toggleLeftNav } from '../../store/menu/actions';
 import { dark, light }   from '../../store/theme/actions';
-import { Search }        from '..';
+import { LeftNav, Search }        from '..';
 
 export default function Header() {
   const router = useRouter();
@@ -52,6 +52,8 @@ export default function Header() {
         {userIsAuthenticated && <span className="logout" onClick={handleLogout}>Sign Out</span>}
         <Link href="/cart">Cart</Link>
       </div>
+      
+      <LeftNav />
     </header>
   );
 }

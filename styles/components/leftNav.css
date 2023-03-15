@@ -1,50 +1,43 @@
 .left-nav {
-  height: 100vh;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+
+  position: absolute;
   left: 0;
+  top: 56px;
+
   margin: 0;
+  
+  width: 240px;
   max-width: 240px;
   min-width: 240px;
-  position: absolute;
-  top: 56px;
-  width: 240px;
-  z-index: 6;
-}
-
-.left-nav .heading {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  height: 56px;
-  padding-left: 16px;
-  order: 1;
-  width: inherit;
+  height: 100vh;
+  min-height: 100vh;
 }
 
 .left-nav .anchor {
   display: block;
+
+  position: relative;
+
   min-height: 120px;
   height: 120px;
-  order: 2;
-  position: relative;
-  z-index: 6;
 }
 
 .left-nav .main {
-  order: 3;
   padding: 0 10px;
 }
 
 .left-nav .main a {
-  align-items: center;
   display: flex;
-  font-size: 1.4rem;
+  align-items: center;
+
   height: 40px;
+
   padding-left: 16px;
+
+  font-size: 1.4rem;
   text-decoration: none;
 }
 
@@ -54,51 +47,59 @@
 }
 
 .left-nav hr {
-  border: 0 none;
   height: 1px;
+
+  border: 0 none;
+
   margin: 5px 0;
 }
 
 .menu {
-  cursor: pointer;
-  display: block;
+  position: absolute;
+  top: 0;
+
   margin: 0;
+
+  width: 240px;
   max-width: 240px;
   min-width: 240px;
-  overflow-x: visible;
+
   padding: 0 10px;
-  position: absolute;
-  top: 0px;
-  width: 240px;
-  z-index: 7;
+  
+  overflow-x: visible;
+
+  cursor: pointer;
 }
 
 .menu-items,
 .menu-item {
-  display: block;
 }
 
 .submenu-items {
-  display: block;
   position: absolute;
   left: 240px;
   top: 0;
+
   width: 300px;
   height: fit-content;
+  min-height: fit-content;
+
   border-left: 1px solid #000;
+
   background-color: #fff;
   color: #fff;
-  min-height: fit-content;
-  z-index: 7;
 }
 
 .menu-item a,
 .submenu-item a {
-  align-items: center;
   display: flex;
-  font-size: 1.4rem;
+  align-items: center;
+
   height: 40px;
+
   padding-left: 16px;
+
+  font-size: 1.4rem;
 }
 
 .menu-items,
@@ -113,30 +114,29 @@
 
 .shadow {
   display: block;
-  background: rgba(0, 0, 0, .5);
-  bottom: 1;
-  height: 100vh;
-  min-height: 100vh;
-  left: -42px;
+
   position: absolute;
+  bottom: 1;
+  left: -42px;
   top: 56px;
+
   width: 3000px;
   min-width: 3000px;
-  z-index: 5;
+  height: 100vh;
+  min-height: 100vh;
+
+  background: rgba(0, 0, 0, .5);
 }
+
+/*
+
+Light/Day/Sun Theme
+
+*/
 
 .light .left-nav,
 .light .left-nav .main {
   background-color: #fff;
-}
-
-.light .left-nav .heading,
-.light .logo {
-  background-color: #c10006;
-}
-
-.light .left-nav .toggle {
-  background-color: #000;
 }
 
 .light .left-nav .main a {
@@ -162,18 +162,15 @@
   color: #c10006;
 }
 
+/*
+
+Dark/Night/Moon Theme
+
+*/
+
 .dark .left-nav,
 .dark .left-nav .main {
   background-color: #222;
-}
-
-.dark .left-nav .heading,
-.dark .logo {
-  background-color: #690004;
-}
-
-.dark .left-nav .toggle {
-  background-color: #aaa;
 }
 
 .dark .left-nav .main a {

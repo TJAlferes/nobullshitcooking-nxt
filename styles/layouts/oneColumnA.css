@@ -1,20 +1,25 @@
 .one-col-a {
-  display: block;
   margin: 20px auto 0px auto;
   max-width: 1200px;  /* ? */
   min-width: 300px;  /* ? */
   padding: 10px 10px;
 }
 
+
+
 .light .one-col-a {
   background-color: #fff;
   color: #000;
 }
 
+
+
 .dark .one-col-a {
   background-color: #222;
   color: #aaa;
 }
+
+
 
 /* NEED CLASSES */
 

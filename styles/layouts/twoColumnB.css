@@ -1,33 +1,40 @@
 .two-col-b {
-  align-items: stretch;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: stretch;
+
   margin: 0 auto;
+
   max-width: 900px;
   min-width: 300px;
+
   padding: 10px 0;
 }
 
 .two-col-b-left {
-  border-right: 1px solid;
-  max-width: 600px;
   margin: 10px 0;
+
+  width: 100%;
   max-width: 600px;
   min-width: 300px;
+
   padding: 10px;
-  order: 1;
-  width: 100%;
+
+  border-right: 1px solid;
 }
 
 .two-col-b-right {
   margin: 10px 0;
+
   max-width: 300px;
   min-width: 300px;
+
   padding: 10px;
-  order: 2;
 }
+
+
 
 .light .two-col-b-left,
 .light .two-col-b-right {
@@ -39,6 +46,8 @@
   border-right-color: #bfbfbf;
 }
 
+
+
 .dark .two-col-b-left,
 .dark .two-col-b-right {
   background-color: #222;
@@ -48,6 +57,8 @@
 .dark .two-col-b-left {
   border-right-color: #444;
 }
+
+
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 

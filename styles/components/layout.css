@@ -1,13 +1,12 @@
 #layout {
   display: grid;
-  grid-template-rows: 56px auto 92px;
+  grid-template-rows: min-content auto 92px;
   height: 100vh;
   min-height: 100vh;
-  z-index: 4;
 }
 
 @media (max-width: 899px) {
   #layout {
-    grid-template-rows: 56px auto 237px;
+    grid-template-rows: min-content auto 237px;
   }
 }
