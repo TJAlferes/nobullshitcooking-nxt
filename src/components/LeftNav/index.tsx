@@ -10,8 +10,6 @@ import { useTypedSelector as useSelector } from '../../store';
 import { ExpandCollapse } from '..';
 
 export function LeftNav() {
-  const authname =            useSelector(state => state.auth.authname);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const leftNav =             useSelector(state => state.menu.leftNav);
 
   const [ active, setActive ] = useState<string|null>(null);
@@ -22,17 +20,16 @@ export function LeftNav() {
 
       <nav className="left-nav">
         <ReactAimMenu className="menu" onMouseLeave={() => setActive(null)}>
-          <div className="menu-items">
-            {menuItems.map(item => (
-              <MenuItem className={`menu-item${active === item.name ? ' active' : ''}`} onHover={() => setActive(item.name)}>
-                <Link href={item.link}>{item.name}</Link>
-              </MenuItem>
-            ))}
-            <hr />
-          </div>
+          {menuItems.map(item => (
+            <MenuItem className={`menu-item${active === item.name ? ' active' : ''}`} onHover={() => setActive(item.name)}>
+              <Link href={item.link}>{item.name}</Link>
+            </MenuItem>
+          ))}
+          <hr />
+          <NavLinks />
 
           {active && (
-            <div className="submenu-items">
+            <div className="submenu">
               {submenuItems.map(item => active === item.parent && (
                 <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
                   <Link href={item.link}>{item.name}</Link>
@@ -41,24 +38,13 @@ export function LeftNav() {
             </div>
           )}
         </ReactAimMenu>
-
-        <NavLink text="Home" to="/" />
-        <hr />
-
-        {userIsAuthenticated && (
-          <>
-            <NavLink text={authname} to="/dashboard" />
-            <NavLink text="Chat"     to="/chat" />
-            <NavLink text="Friends"  to="/friends" />
-            <hr />
-          </>
-        )}
       </nav>
 
-      <nav className="left-nav-mobile">
+      <nav className="left-nav--mobile">
         <div className="menu">
-          <div className="menu-items">
-            {menuItems.map(item => (
+          {menuItems.map(item => (
+            <>
+              <hr />
               <ExpandCollapse
                 headingWhileCollapsed={(
                   <div className="menu-item">
@@ -79,22 +65,41 @@ export function LeftNav() {
                   </div>
                 ))}
               </ExpandCollapse>
-            ))}
-          </div>
+            </>
+          ))}
         </div>
 
-        <NavLink text="Home" to="/" />
-        <hr />
-
-        {userIsAuthenticated && (
-          <>
-            <NavLink text={authname} to="/dashboard" />
-            <NavLink text="Chat"     to="/chat" />
-            <NavLink text="Friends"  to="/friends" />
-            <hr />
-          </>
-        )}
+        <NavLinks />
       </nav>
+    </>
+  );
+}
+
+function NavLinks() {
+  const authname =            useSelector(state => state.auth.authname);
+  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+
+  return (
+    <>
+      <NavLink text="Home" to="/" />
+      <hr />
+
+      {userIsAuthenticated && (
+        <>
+          <NavLink text={authname} to="/dashboard" />
+          <NavLink text="Chat"     to="/chat" />
+          <NavLink text="Friends"  to="/friends" />
+          <hr />
+        </>
+      )}
+
+      <NavLink text="Water"  to="/page/promo/water-filtration" />
+      <NavLink text="Tea"    to="/page/promo/tea" />
+      <NavLink text="Coffee" to="/page/promo/coffee" />
+      <hr />
+      <NavLink text="Outdoors" to="/page/promo/outdoors" />
+      <NavLink text="Garden"   to="/page/promo/garden" />
+      <NavLink text="Tools"    to="/page/promo/tools" />
     </>
   );
 }
@@ -104,9 +109,14 @@ function NavLink({ text, to }: NavLinkProps) {
   const theme =    useSelector(state => state.theme.theme);
 
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
-  const style =           (to === pathname) ? {backgroundColor} : {};
+  
+  const style = (to === pathname) ? {backgroundColor} : {};
 
-  return <Link href={to} style={style}>{`${text}`}</Link>;
+  return (
+    <div className="left-nav-item">
+      <Link href={to} style={style}>{`${text}`}</Link>
+    </div>
+  );
 }
 
 type NavLinkProps = {
@@ -174,21 +184,5 @@ function et(value: string[]) {
   return qs.stringify({equipmentTypes: value});
 }
 
-        /*<NavLink text="Supplements" to="/page/guide/food/nutrition/supplements" />
-          <NavLink text="Equipment" to="/supply/kitchen-equipment" />
-          <hr />
-
-          <NavLink text="Water Filtration" to="/page/promo/water-filtration" />
-          <NavLink text="Tea" to="/page/promo/tea" />
-          <NavLink text="Coffee" to="/page/promo/coffee" />
-          <hr />
-
-          <NavLink text="Outdoors" to="/page/promo/outdoors" />
-          <NavLink text="Garden" to="/page/promo/garden" />
-          <NavLink text="Tools" to="/page/promo/tools" />
-          <hr />
-
-          <NavLink text="Seasonal" to="/page/promo/seasonal" />
-          <hr />
-
-          <NavLink text="Charity" to="/page/site/charity" />*/
+        /*<NavLink text="Equipment" to="/products" /> (Products) (Maybe also Supply?)
+          <hr />*/

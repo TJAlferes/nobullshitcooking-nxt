@@ -18,34 +18,17 @@
   position: absolute;
   left: 0;
   top: 56px;
-  margin: 0;
   width: 240px;
-  max-width: 240px;
-  min-width: 240px;
   height: 100vh;
   min-height: 100vh;
 }
 
-.left-nav hr,
-.left-nav-mobile hr {
-  height: 1px;
-  border: 0 none;
-}
-
-.menu {
-  margin: 0;
-  width: 240px;
-  max-width: 240px;
-  min-width: 240px;
-  overflow-x: visible;
+.left-nav .menu {
+  overflow-x: visible;  /* ? */
   cursor: pointer;
 }
 
-.menu-items,
-.menu-item {
-}
-
-.submenu-items {
+.left-nav .submenu {
   position: absolute;
   left: 240px;
   top: 0;
@@ -53,24 +36,23 @@
   height: fit-content;
   min-height: fit-content;
   border-left: 2px solid;
-  background-color: #fff;
-  color: #fff;
 }
 
-.menu-item a,
-.submenu-item a {
+.left-nav .menu-item a,
+.left-nav .submenu-item a,
+.left-nav .left-nav-item a,
+.left-nav--mobile .menu-item a,
+.left-nav--mobile .submenu-item a,
+.left-nav--mobile .left-nav-item a {
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 32px;
   font-size: 1.4rem;
   text-decoration: none;
   text-indent: 18px;
-  color: #000;
 }
 
-
-
-.left-nav-mobile {
+.left-nav--mobile {
   display: none;
   position: absolute;
   left: 0;
@@ -82,7 +64,12 @@
   min-height: 100vh;
 }
 
-.left-nav-mobile .menu-item {
+.left-nav--mobile .menu {
+  width: 100%;
+}
+
+.left-nav--mobile .menu-item,
+.left-nav--mobile .left-nav-item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -90,8 +77,17 @@
   column-gap: 10px;
   width: 100%;
   height: 32px;
-  padding-right: 7px;
-  background-color: #ccc;
+  padding-right: 18px;
+}
+
+.left-nav--mobile .left-nav-item a {
+  width: 100%;
+}
+
+.left-nav hr,
+.left-nav--mobile hr {
+  height: 1px;
+  border: 0 none;
 }
 
 /*
@@ -100,37 +96,57 @@ Light/Day/Sun Theme
 
 */
 
-.light .left-nav,
-.light .left-nav-mobile,
-.light .left-nav-mobile .expand-collapse {
+.light .left-nav {
   background-color: #fff;
 }
-
-.light .left-nav a {
-  background-color: inherit;
+.light .left-nav .menu-item a,
+.light .left-nav .left-nav-item a {
   color: #000;
 }
-
-.light .left-nav a:hover {
-  background-color: #ddd;
+.light .left-nav .menu-item.active a,
+.light .left-nav .left-nav-item:hover,
+.light .left-nav .left-nav-item:active {
+  background-color: #d5fdd5;
 }
-
+.light .left-nav .submenu {
+  border-left-color: #d5fdd5;
+  background-color: #fff;
+}
+.light .left-nav .submenu-item a {
+  color: #000;
+}
+.light .left-nav .submenu-item a:hover,
+.light .left-nav .submenu-item a:active {
+  background-color: #d5fdd5;
+}
 .light .left-nav hr {
   background-color: #bfbfbf;
 }
 
-.light .left-nav .menu {
+.light .left-nav--mobile {
   background-color: #fff;
 }
-
-.light .left-nav .submenu-items {
-  border-left-color: #d5fdd5;
+.light .left-nav--mobile .menu-item {
+  background-color: #ccc;
 }
-
-.light .menu-item.active a,
-.light .submenu-item a:hover,
-.light .submenu-item a:active {
+.light .left-nav--mobile .menu-item a,
+.light .left-nav--mobile .left-nav-item a {
+  color: #000;
+}
+.light .left-nav--mobile .submenu-item {
+  background-color: #fff;
+}
+.light .left-nav--mobile .submenu-item a {
+  color: #000;
+}
+.light .left-nav--mobile .submenu-item a:hover,
+.light .left-nav--mobile .submenu-item a:active,
+.light .left-nav--mobile .left-nav-item a:hover,
+.light .left-nav--mobile .left-nav-item a:active {
   background-color: #d5fdd5;
+}
+.light .left-nav--mobile hr {
+  background-color: #bfbfbf;
 }
 
 /*
@@ -139,29 +155,61 @@ Dark/Night/Moon Theme
 
 */
 
-.dark .left-nav,
-.dark .left-nav-mobile {
+.dark .left-nav {
   background-color: #222;
 }
-
-.dark .left-nav a
-.dark .left-nav-mobile a {
-  background-color: inherit;
+.dark .left-nav .menu-item a,
+.dark .left-nav .left-nav-item a {
   color: #aaa;
 }
-
-.dark .menu-item a {
-  color: #aaa;
-}
-
-.dark .menu-item.active a,
-.dark .submenu-item a:hover,
-.dark .submenu-item a:active {
+.dark .left-nav .menu-item.active a,
+.dark .left-nav .left-nav-item a:hover,
+.dark .left-nav .left-nav-item a:active {
   color: #ccc;
-  background-color: #507ea7;  /*#690004;*/
+  background-color: #507ea7;
+}
+.dark .left-nav .submenu {
+  border-left-color: #507ea7;
+  background-color: #222;
+}
+.dark .left-nav .submenu-item a {
+  color: #aaa;
+}
+.dark .left-nav .submenu-item a:hover,
+.dark .left-nav .submenu-item a:active {
+  color: #ccc;
+  background-color: #507ea7;
+}
+.dark .left-nav hr {
+  background-color: #444;
 }
 
-.dark .left-nav hr {
+.dark .left-nav--mobile {
+  background-color: #222;
+}
+.dark .left-nav--mobile .menu-item {
+  background-color: #ccc;
+}
+.dark .left-nav--mobile .menu-item a {
+  color: #000;
+}
+.dark .left-nav--mobile .left-nav-item a {
+  color: #aaa;
+}
+.dark .left-nav--mobile .submenu-item {
+  background-color: #222;
+}
+.dark .left-nav--mobile .submenu-item a {
+  color: #aaa;
+}
+.dark .left-nav--mobile .submenu-item a:hover,
+.dark .left-nav--mobile .submenu-item a:active,
+.dark .left-nav--mobile .left-nav-item a:hover,
+.dark .left-nav--mobile .left-nav-item a:active {
+  color: #ccc;
+  background-color: #507ea7;
+}
+.dark .left-nav--mobile hr {
   background-color: #444;
 }
 
@@ -173,7 +221,7 @@ Dark/Night/Moon Theme
     display: none;
   }
 
-  .left-nav-mobile {
+  .left-nav--mobile {
     display: block;
   }
 }
