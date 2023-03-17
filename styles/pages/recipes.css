@@ -1,10 +1,13 @@
 .search-results .filters {
   display: flex;
   align-items: center;
+
+  position: relative;
 }
 
 .search-results .filter-by {
   padding-right: 10px;
+
   font-size: 1.4rem;
   font-weight: 700;
 }
@@ -13,8 +16,10 @@
   display: flex;
   align-items: center;
   column-gap: 10px;
+
   width: max-content;
-  height: 32px;
+  height: 30px;
+
   padding: 0 8px;
 
   border: 1px solid;
@@ -28,26 +33,46 @@
   cursor: pointer;
 }
 
-/*.search-results .filter-name:hover,
-.search-results .filter-name:active {
-  background-image: linear-gradient(to bottom, #ddd, #aaa);
+.search-results .filter-name.active {
+  border-color: #d6ffd6;
+  background-color: #d6ffd6;
+  background-image: none;
 }
-
-.search-results .filter-name:active {
-  border-color: #888 #fff #fff #888; 
-}*/
 
 .search-results .filter-name span {
   font-size: 1.4rem;
 }
 
-.sui-facet__title {
-  font-family: 'Play', sans-serif;
+.search-results .filter-name.active span {
+  color: #000;
+  background-color: #d6ffd6;
+}
+
+
+
+.search-results .filter-group {
+  position: absolute;
+  left: 0;
+  top: 30px;
+
+  padding: 8px;
+
+  /*border: 1px solid #aaa;*/
+  border: 2px solid #d6ffd6;
+
+  background-color: #fff;
+}
+
+.search-results .filter-group span {
+  margin-right: 10px;
+}
+
+.search-results .filter-group input {
+  margin-right: 2px;
+}
+
+.search-results .filter-group label {
   font-size: 1.4rem;
-  font-weight: 900;
-  margin-left: 5px;
-  padding: 3px 0 8px 0;
-  text-align: left;
 }
 
 .recipes {

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
@@ -26,6 +27,13 @@ export default function Recipes() {
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
 
+  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+
+  const toggleFilterDropdown = (name: string) => {
+    if (expandedFilter === name) setExpandedFilter(null);
+    else                         setExpandedFilter(name);
+  };
+
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
@@ -37,17 +45,19 @@ export default function Recipes() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "recipeTypes" ? " active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "recipeTypes" ? " active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
+            isDisabled={expandedFilter !== "recipeTypes" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("recipeTypes")}
           >
             <div className="filter-group">
               {recipeTypes.map(({ id, name }) => (
@@ -65,17 +75,19 @@ export default function Recipes() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "methods" ? " active" : ""}`}>
                 <span>Methods</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "methods" ? " active" : ""}`}>
                 <span>Methods</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
+            isDisabled={expandedFilter !== "methods" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("methods")}
           >
             <div className="filter-group">
               {methods.map(({ id, name }) => (
@@ -93,17 +105,19 @@ export default function Recipes() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "cuisines" ? " active" : ""}`}>
                 <span>Cuisines</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className="filter-name">
+              <div className={`filter-name${expandedFilter === "cuisines" ? " active" : ""}`}>
                 <span>Cuisines</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
+            isDisabled={expandedFilter !== "cuisines" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("cuisines")}
           >
             <div className="filter-group">
               {cuisines.map(({ id, code, name }) => (

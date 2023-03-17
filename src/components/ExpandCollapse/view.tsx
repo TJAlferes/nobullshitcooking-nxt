@@ -1,6 +1,12 @@
 import React, { ReactNode } from 'react';
 
-export function ExpandCollapseView({ children, expanded, headingWhileCollapsed, headingWhileExpanded, toggle }: Props) {
+export function ExpandCollapseView({
+  children,
+  expanded,
+  headingWhileCollapsed,
+  headingWhileExpanded,
+  toggle
+}: Props) {
   return (
     <div className="expand-collapse">
       {!expanded
@@ -21,5 +27,5 @@ type Props = {
   expanded:              boolean;
   headingWhileCollapsed: ReactNode;
   headingWhileExpanded:  ReactNode;
-  toggle():              void; 
+  toggle():              void;
 };
