@@ -10,7 +10,7 @@ import { useTypedSelector as useSelector } from '../../store';
 import { ExpandCollapse } from '..';
 
 export function LeftNav() {
-  const leftNav =             useSelector(state => state.menu.leftNav);
+  const leftNav = useSelector(state => state.menu.leftNav);
 
   const [ active, setActive ] = useState<string|null>(null);
 
@@ -109,7 +109,7 @@ function NavLink({ text, to }: NavLinkProps) {
   const theme =    useSelector(state => state.theme.theme);
 
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
-  
+
   const style = (to === pathname) ? {backgroundColor} : {};
 
   return (

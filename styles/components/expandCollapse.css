@@ -2,7 +2,7 @@
 
 .expand-collapse div {
   cursor: pointer;
-  font-size: 1.1rem;
+  /*font-size: 1.1rem;*/
 }
 
 /*
@@ -11,13 +11,13 @@ Light/Day/Sun Theme
 
 */
 
-.light .expand-collapse {
+/*.light .expand-collapse {
   background-color: #d5fdd5;
 }
 
 .light .expand-collapse div {
   color: #777;
-}
+}*/
 
 /*
 
@@ -25,11 +25,11 @@ Dark/Night/Moon Theme
 
 */
 
-.dark .expand-collapse {
+/*.dark .expand-collapse {
   background-color: #507ea7;
   color: #000;
 }
 
 .dark .expand-collapse div {
   color: #ccc;
-}
+}*/

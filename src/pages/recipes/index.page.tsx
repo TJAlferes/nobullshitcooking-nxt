@@ -27,17 +27,29 @@ export default function Recipes() {
   const totalPages =     useSelector(state => state.search.totalPages);
 
   return (
-    <div className="recipes two-col-b">
+    <div className="search-results two-col-b">
       <div className="two-col-b-left">
         <h1>Recipes</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
-        <div id="filters">
-          <span>Filter by:</span>
+        <div className="filters">
+          <span className="filter-by">Filter by:</span>
 
-          <ExpandCollapse headingWhileCollapsed="Recipe Types">
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className="filter-name">
+                <span>Recipe Types</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className="filter-name">
+                <span>Recipe Types</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+          >
             <div className="filter-group">
-              <p>Recipe Types</p>
               {recipeTypes.map(({ id, name }) => (
                 <span key={id}>
                   <input
@@ -51,9 +63,21 @@ export default function Recipes() {
             </div>
           </ExpandCollapse>
 
-          <ExpandCollapse headingWhileCollapsed="Methods">
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className="filter-name">
+                <span>Methods</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className="filter-name">
+                <span>Methods</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+          >
             <div className="filter-group">
-              <p>Methods</p>
               {methods.map(({ id, name }) => (
                 <span key={id}>
                   <input
@@ -67,9 +91,21 @@ export default function Recipes() {
             </div>
           </ExpandCollapse>
 
-          <ExpandCollapse headingWhileCollapsed="Cuisines">
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className="filter-name">
+                <span>Cuisines</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className="filter-name">
+                <span>Cuisines</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+          >
             <div className="filter-group">
-              <p>Cuisines</p>
               {cuisines.map(({ id, code, name }) => (
                 <span key={id}>
                   <input

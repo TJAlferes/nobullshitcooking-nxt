@@ -96,17 +96,17 @@ Light/Day/Sun Theme
 
 */
 
-.light .left-nav {
+.light .left-nav,
+.light .left-nav--mobile,
+.light .left-nav--mobile .submenu-item {
   background-color: #fff;
 }
 .light .left-nav .menu-item a,
-.light .left-nav .left-nav-item a {
+.light .left-nav .left-nav-item a,
+.light .left-nav--mobile .menu-item a,
+.light .left-nav--mobile .submenu-item a,
+.light .left-nav--mobile .left-nav-item a {
   color: #000;
-}
-.light .left-nav .menu-item.active a,
-.light .left-nav .left-nav-item:hover,
-.light .left-nav .left-nav-item:active {
-  background-color: #d5fdd5;
 }
 .light .left-nav .submenu {
   border-left-color: #d5fdd5;
@@ -115,36 +115,21 @@ Light/Day/Sun Theme
 .light .left-nav .submenu-item a {
   color: #000;
 }
-.light .left-nav .submenu-item a:hover,
-.light .left-nav .submenu-item a:active {
-  background-color: #d5fdd5;
-}
-.light .left-nav hr {
-  background-color: #bfbfbf;
-}
-
-.light .left-nav--mobile {
-  background-color: #fff;
-}
 .light .left-nav--mobile .menu-item {
   background-color: #ccc;
 }
-.light .left-nav--mobile .menu-item a,
-.light .left-nav--mobile .left-nav-item a {
-  color: #000;
-}
-.light .left-nav--mobile .submenu-item {
-  background-color: #fff;
-}
-.light .left-nav--mobile .submenu-item a {
-  color: #000;
-}
+.light .left-nav .menu-item.active a,
+.light .left-nav .submenu-item a:hover,
+.light .left-nav .submenu-item a:active,
+.light .left-nav .left-nav-item:hover,
+.light .left-nav .left-nav-item:active,
 .light .left-nav--mobile .submenu-item a:hover,
 .light .left-nav--mobile .submenu-item a:active,
 .light .left-nav--mobile .left-nav-item a:hover,
 .light .left-nav--mobile .left-nav-item a:active {
   background-color: #d5fdd5;
 }
+.light .left-nav hr,
 .light .left-nav--mobile hr {
   background-color: #bfbfbf;
 }
@@ -155,36 +140,20 @@ Dark/Night/Moon Theme
 
 */
 
-.dark .left-nav {
+.dark .left-nav,
+.dark .left-nav--mobile,
+.dark .left-nav--mobile .submenu-item {
   background-color: #222;
 }
 .dark .left-nav .menu-item a,
-.dark .left-nav .left-nav-item a {
+.dark .left-nav .submenu-item a,
+.dark .left-nav .left-nav-item a,
+.dark .left-nav--mobile .submenu-item a,
+.dark .left-nav--mobile .left-nav-item a {
   color: #aaa;
-}
-.dark .left-nav .menu-item.active a,
-.dark .left-nav .left-nav-item a:hover,
-.dark .left-nav .left-nav-item a:active {
-  color: #ccc;
-  background-color: #507ea7;
 }
 .dark .left-nav .submenu {
   border-left-color: #507ea7;
-  background-color: #222;
-}
-.dark .left-nav .submenu-item a {
-  color: #aaa;
-}
-.dark .left-nav .submenu-item a:hover,
-.dark .left-nav .submenu-item a:active {
-  color: #ccc;
-  background-color: #507ea7;
-}
-.dark .left-nav hr {
-  background-color: #444;
-}
-
-.dark .left-nav--mobile {
   background-color: #222;
 }
 .dark .left-nav--mobile .menu-item {
@@ -193,15 +162,11 @@ Dark/Night/Moon Theme
 .dark .left-nav--mobile .menu-item a {
   color: #000;
 }
-.dark .left-nav--mobile .left-nav-item a {
-  color: #aaa;
-}
-.dark .left-nav--mobile .submenu-item {
-  background-color: #222;
-}
-.dark .left-nav--mobile .submenu-item a {
-  color: #aaa;
-}
+.dark .left-nav .menu-item.active a,
+.dark .left-nav .submenu-item a:hover,
+.dark .left-nav .submenu-item a:active,
+.dark .left-nav .left-nav-item a:hover,
+.dark .left-nav .left-nav-item a:active,
 .dark .left-nav--mobile .submenu-item a:hover,
 .dark .left-nav--mobile .submenu-item a:active,
 .dark .left-nav--mobile .left-nav-item a:hover,
@@ -209,6 +174,7 @@ Dark/Night/Moon Theme
   color: #ccc;
   background-color: #507ea7;
 }
+.dark .left-nav hr,
 .dark .left-nav--mobile hr {
   background-color: #444;
 }
