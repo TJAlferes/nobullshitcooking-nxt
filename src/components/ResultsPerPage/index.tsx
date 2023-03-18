@@ -2,13 +2,12 @@
 
 import { memo } from 'react';
 
-import { useTypedSelector as useSelector } from '../../store';
-import { useSearch }                       from '../../utils/useSearch';
+import { useSearch } from '../../utils/useSearch';
 
 export const ResultsPerPage = memo(function ResultsPerPage() {
-  const { changeResultsPerPage } = useSearch();
+  const { params, changeResultsPerPage } = useSearch();
 
-  const resultsPerPage = useSelector(state => state.search.resultsPerPage);
+  const resultsPerPage = params.resultsPerPage; 
   const value = resultsPerPage ? Number(resultsPerPage) : 20;
 
   return (

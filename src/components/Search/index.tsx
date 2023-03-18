@@ -9,10 +9,12 @@ import type { SearchIndex }                                                 from
 import { useSearch } from '../../utils/useSearch';
 
 export default function Search() {
-  const { goToSearchResults } = useSearch();
+  const { search } = useSearch();
+
   const inputRef =           useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef =     useRef<boolean>(false);
+
   const dispatch =    useDispatch();
   const index =       useSelector(state => state.search.index);
   const term =        useSelector(state => state.search.term);
@@ -63,7 +65,7 @@ export default function Search() {
     };
   }
   
-  initSearchInputBlurHandler();  // put into a useEffect?
+  initSearchInputBlurHandler();  // put into a useEffect? and is a manual teardown needed?
 
   return (
     <div className="search">
@@ -84,7 +86,7 @@ export default function Search() {
       <div className="insert">
         <input ref={inputRef} id="search-input" onFocus={onInputChange} onChange={onInputChange} value={term} />
 
-        <div className="magnifying-glass" onClick={() => goToSearchResults(index, term)}>
+        <div className="magnifying-glass" onClick={search}>
           <span></span>
         </div>
 

@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+import Link         from 'next/link';
+import { useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
@@ -16,13 +17,18 @@ export default function Products() {
 
   const productCategories = useSelector(state => state.data.productCategories);
   const productTypes =      useSelector(state => state.data.productTypes);
-  //const filters =          useSelector(state => state.search.filters);
-  //const sorts =            useSelector(state => state.search.sorts);
   
   //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =          useSelector(state => state.search.results);
   const totalResults =     useSelector(state => state.search.totalResults);
   const totalPages =       useSelector(state => state.search.totalPages);
+
+  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+
+  const toggleFilterDropdown = (name: string) => {
+    if (expandedFilter === name) setExpandedFilter(null);
+    else                         setExpandedFilter(name);
+  };
 
   return (
     <div className="search-results two-col-b">
@@ -30,12 +36,26 @@ export default function Products() {
         <h1>Products</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
-        <div id="filters">
-          <span>Filter by:</span>
+        <div className="filters">
+          <span className="filter-by">Filter by:</span>
 
-          <ExpandCollapse headingWhileCollapsed="Product Categories">
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className={`filter-name${expandedFilter === "productCategories" ? " active" : ""}`}>
+                <span>Product Categories</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className={`filter-name${expandedFilter === "productCategories" ? " active" : ""}`}>
+                <span>Product Categories</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            isDisabled={expandedFilter !== "productCategories" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("productCategories")}
+          >
             <div className="filter-group">
-              <p>Product Categories</p>
               {productCategories.map(({ id, name }) => (
                 <span key={id}>
                   <input
@@ -49,9 +69,23 @@ export default function Products() {
             </div>
           </ExpandCollapse>
 
-          <ExpandCollapse headingWhileCollapsed="Product Types">
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className={`filter-name${expandedFilter === "productTypes" ? " active" : ""}`}>
+                <span>Product Types</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className={`filter-name${expandedFilter === "productTypes" ? " active" : ""}`}>
+                <span>Product Types</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            isDisabled={expandedFilter !== "productTypes" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("productTypes")}
+          >
             <div className="filter-group">
-              <p>Product Types</p>
               {productTypes.map(({ id, name }) => (
                 <span key={id}>
                   <input

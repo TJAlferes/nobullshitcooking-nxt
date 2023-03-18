@@ -48,8 +48,6 @@
   background-color: #d6ffd6;
 }
 
-
-
 .search-results .filter-group {
   position: absolute;
   left: 0;
@@ -74,6 +72,8 @@
 .search-results .filter-group label {
   font-size: 1.4rem;
 }
+
+
 
 .recipes {
   padding: 10px;

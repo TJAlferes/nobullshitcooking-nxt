@@ -1,3 +1,5 @@
+import type { useRouter } from 'next/navigation';
+
 export const actionTypes = {
   RESET:                'RESET',
   SET_INDEX:            'SET_INDEX',
@@ -142,6 +144,7 @@ export interface ISetResultsPerPage {
 export interface IGetResults {
   type:         typeof actionTypes.GET_RESULTS;
   searchParams: string;
+  router:       ReturnType<typeof useRouter>;
 }
 
 export interface IGetSuggestions {

@@ -6,9 +6,9 @@ import { useTypedSelector as useSelector } from '../../store';
 import { useSearch }                       from '../../utils/useSearch';
 
 export const Pagination = memo(function Pagination() {
-  const { goToPage } = useSearch();
+  const { params, goToPage } = useSearch();
 
-  const currentPage = useSelector(state => state.search.currentPage);
+  const currentPage = params.currentPage;
   const totalPages =  useSelector(state => state.search.totalPages);
 
   if (!totalPages || Number(totalPages) <= 1) return null;

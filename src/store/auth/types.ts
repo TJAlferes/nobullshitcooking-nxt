@@ -1,4 +1,4 @@
-import type { useRouter } from 'next/navigation';  // or useRouter from 'next/router' ?
+import type { useRouter } from 'next/navigation';
 
 export const actionTypes = {
   CHECK_STATE:   'CHECK_STATE',

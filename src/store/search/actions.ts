@@ -1,3 +1,5 @@
+import type { useRouter } from 'next/navigation';
+
 import { actionTypes, SearchIndex, Suggestion, SearchResponse, FilterKey, SortDirection } from './types';
 
 const {
@@ -25,7 +27,9 @@ export const removeFilter =      (key: FilterKey, value: string) =>         ({ty
 export const setSorts =          (col: string, direction: SortDirection) => ({type: SET_SORTS, col, direction});
 export const setCurrentPage =    (currentPage: string) =>                   ({type: SET_CURRENT_PAGE, currentPage});
 export const setResultsPerPage = (resultsPerPage: string) =>                ({type: SET_RESULTS_PER_PAGE, resultsPerPage});
-export const getResults =        (searchParams: string) =>                  ({type: GET_RESULTS, searchParams});
-export const getSuggestions =    (term: string) =>                          ({type: GET_SUGGESTIONS, term});
+
+export const getResults =        (searchParams: string, router: ReturnType<typeof useRouter>) => ({type: GET_RESULTS, searchParams, router});
+export const getSuggestions =    (term: string) =>                                               ({type: GET_SUGGESTIONS, term});
+
 export const setResults =        (found: SearchResponse) =>                 ({type: SET_RESULTS, found});
 export const setSuggestions =    (suggestions: Suggestion[]) =>             ({type: SET_SUGGESTIONS, suggestions});

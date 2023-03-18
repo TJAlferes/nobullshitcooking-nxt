@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link         from 'next/link';
 import { useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
@@ -11,18 +11,17 @@ import { useSearch }                                  from '../../utils/useSearc
 
 export default function Recipes() {
   const { params, addFilter, removeFilter } = useSearch();
-  
+
   const currRecipeTypes = params.filters?.recipeTypes;
   const currMethods =     params.filters?.methods;
   const currCuisines =    params.filters?.cuisines;
+  //const sorts =           params.filters?.sorts;
 
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
-  //const filters =        useSelector(state => state.search.filters);  // needed, because they may want to leave the page and come back to their same filters
-  //const sorts =          useSelector(state => state.search.sorts);  // needed, because they may want to leave the page and come back to their same sorts
   
-  //const resultTerm        useSelector(state = state.search.resultTerm);
+  //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
