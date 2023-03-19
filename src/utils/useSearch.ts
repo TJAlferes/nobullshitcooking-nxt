@@ -14,13 +14,16 @@ export function useSearch() {
   const pathname =     usePathname();
   const searchParams = useSearchParams();
 
-  const term = useSelector(state => state.search.term);
+  //const term = useSelector(state => state.search.term);
 
-  const params = useMemo(() => {
+  /*const params = useMemo(() => {
+    console.log("useSearch.ts params useMemo, searchParams: ", qs.parse(searchParams.toString()) as SearchRequest);
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
-  }, [searchParams]);
+  }, [searchParams]);*/
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   useEffect(() => {
+    console.log("useSearch.ts useEffect");
     const anySearchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].some(value => value === pathname);
     if (anySearchResultsPage) {
       delete params.filters;
@@ -35,7 +38,7 @@ export function useSearch() {
 
   // maybe make a useEffect for each changed string/array..... in the component
 
-  const search = () => {
+  const search = (term?: string) => {
     if (term) params.term = term;
     // filters
     // sorts

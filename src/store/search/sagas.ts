@@ -17,6 +17,7 @@ export function* getSuggestionsSaga(action: IGetSuggestions) {
 
 export function* getResultsSaga(action: IGetResults) {
   try {
+    yield delay(500);
     const { searchParams, router } = action;
     const index = (yield select(state => state.search.index)) as string;
     const idx = index === "equipment" ? "equipments" : index;

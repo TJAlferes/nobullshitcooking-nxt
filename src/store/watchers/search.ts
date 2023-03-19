@@ -8,6 +8,6 @@ const { GET_SUGGESTIONS, GET_RESULTS } = actionTypes;
 export function* watchSearch() {
   yield all([
     takeLatest(GET_SUGGESTIONS, getSuggestionsSaga),  // debounces when combined with the 'delay' in 'search/sagas.ts'
-    takeEvery(GET_RESULTS, getResultsSaga)
+    takeLatest(GET_RESULTS, getResultsSaga)
   ]);
 }

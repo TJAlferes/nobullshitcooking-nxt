@@ -38,6 +38,11 @@ export default function Search() {
     }
   }
 
+  const submitSearch = () => {
+    if (term) search(term);
+    else search();
+  };
+
   const selectSuggestion = (suggestion: string) => {
     dispatch(setTerm(suggestion));
     dispatch(setSuggestions([]));
@@ -86,7 +91,7 @@ export default function Search() {
       <div className="insert">
         <input ref={inputRef} id="search-input" onFocus={onInputChange} onChange={onInputChange} value={term} />
 
-        <div className="magnifying-glass" onClick={search}>
+        <div className="magnifying-glass" onClick={submitSearch}>
           <span></span>
         </div>
 
