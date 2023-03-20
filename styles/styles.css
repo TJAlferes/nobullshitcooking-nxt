@@ -11,25 +11,19 @@
 }
 
 :root {
+  min-width: 300px;
+  height: 100vh;
+  min-height: 100vh;
+  font-size: 10px;
   color-scheme: dark light;
 }
 
-body,
-html,
-#root {
+body {
+  min-width: 300px;
   height: 100vh;
   min-height: 100vh;
-}
-
-html {
-  font-size: 10px;
-}
-
-body {
+  overflow-x: hidden;  /* kind of a hack job IMHO... see if this is really needed */
   font-family: Helvetica, sans-serif;
-  min-height: 100vh;
-  /*overflow-y: hidden;*/
-  overflow-x: hidden;  /* kind of a hack job IMHO... */
 }
 
 img,
@@ -165,12 +159,6 @@ h4 {
 }
 
 @media (max-width: 899px) {
-  body,
-  html,
-  #root {
-    min-width: 300px;
-  }
-
   h1 {
     font-size: 2rem;
   }

@@ -1,39 +1,44 @@
-.crumbs span,
 .crumbs {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
 }
 
-.crumbs {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 6px auto 0px auto;
-  width: max-content;
+.crumbs span {
+  display: flex;
 }
 
 .crumbs a {
-  color: #68abe6;
+  font-size: 1.4rem;
 }
 
+.crumbs a,
 .crumbs a:visited {
   color: #68abe6;
 }
 
-.crumb-pointer {
+.crumbs .pointer {
   padding: 0 12px;
+  user-select: none;
 }
+
+
 
 .light .crumbs a:hover {
   color: #c10006;
 }
 
-.light .crumbs .crumb-pointer {
+.light .crumbs .pointer {
   color: #000;
 }
+
+
 
 .dark .crumbs a:hover {
   color: #690004;
 }
 
-.dark .crumbs .crumb-pointer {
+.dark .crumbs .pointer {
   color: #aaa;
 }

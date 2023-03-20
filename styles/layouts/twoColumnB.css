@@ -1,40 +1,34 @@
 .two-col-b {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: stretch;
-
-  margin: 0 auto;
-
-  max-width: 900px;
-  min-width: 300px;
-
-  padding: 10px 0;
 }
 
 .two-col-b-left {
-  margin: 10px 0;
-
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
   min-width: 300px;
-
   padding: 10px;
-
-  border-right: 1px solid;
 }
 
 .two-col-b-right {
-  margin: 10px 0;
-
   max-width: 300px;
   min-width: 300px;
-
   padding: 10px;
 }
 
+@media (max-width: 899px) {
+  .two-col-b {
+    flex-direction: column;
+  }
+}
 
+/*
+
+Light Theme
+
+*/
 
 .light .two-col-b-left,
 .light .two-col-b-right {
@@ -42,20 +36,16 @@
   color: #000;
 }
 
-.light .two-col-b-left {
-  border-right-color: #bfbfbf;
-}
+/*
 
+Dark Theme
 
+*/
 
 .dark .two-col-b-left,
 .dark .two-col-b-right {
   background-color: #222;
   color: #aaa;
-}
-
-.dark .two-col-b-left {
-  border-right-color: #444;
 }
 
 

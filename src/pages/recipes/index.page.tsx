@@ -1,7 +1,7 @@
 'use client';
 
 import Link         from 'next/link';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
@@ -10,9 +10,6 @@ import { useSearch }                                  from '../../utils/useSearc
 //const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const renders = useRef(0);
-  renders.current++;
-
   const { params, addFilter, removeFilter } = useSearch();
 
   const currRecipeTypes = params.filters?.recipeTypes;
@@ -39,7 +36,6 @@ export default function Recipes() {
   return (
     <div className="search-results two-col-b">
       <div className="two-col-b-left">
-        <h1>{renders.current}</h1>
         <h1>Recipes</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 

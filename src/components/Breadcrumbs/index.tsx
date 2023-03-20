@@ -48,10 +48,16 @@ export function Breadcrumbs() {
 
   return (
     <nav className="crumbs">
-      <span><Link href="/">Home</Link><i className="crumb-pointer">&gt;</i></span>
+      <span>
+        <Link href="/">Home</Link>
+        <i className="pointer">&gt;</i>
+      </span>
 
       {breadcrumbs.map(({ name, href }, index) => (
-        <span key={href}><Link href={href}>{name}</Link>{index < breadcrumbs.length - 1 && <i className="crumb-pointer">&gt;</i>}</span>
+        <span key={href}>
+          <Link href={href}>{name}</Link>
+          {index < breadcrumbs.length - 1 && <i className="pointer">&gt;</i>}
+        </span>
       ))}
     </nav>
   );
