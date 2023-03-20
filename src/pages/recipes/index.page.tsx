@@ -1,7 +1,7 @@
 'use client';
 
-import Link         from 'next/link';
-import { useState } from 'react';
+import Link                           from 'next/link';
+import { Fragment, useRef, useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
@@ -21,26 +21,11 @@ export default function Recipes() {
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
   const cuisineGroups = [
-    {
-      continent: "Africa",
-      cuisines: [...(cuisines.filter(c => c.continent === "AF"))]
-    },
-    {
-      continent: "Americas",
-      cuisines: [...(cuisines.filter(c => c.continent === "AM"))]
-    },
-    {
-      continent: "Asia",
-      cuisines: [...(cuisines.filter(c => c.continent === "AS"))]
-    },
-    {
-      continent: "Europe",
-      cuisines: [...(cuisines.filter(c => c.continent === "EU"))]
-    },
-    {
-      continent: "Oceania",
-      cuisines: [...(cuisines.filter(c => c.continent === "OC"))]
-    }
+    {continent: "Africa", cuisines: [...(cuisines.filter(c => c.continent === "AF"))]},
+    {continent: "Americas", cuisines: [...(cuisines.filter(c => c.continent === "AM"))]},
+    {continent: "Asia", cuisines: [...(cuisines.filter(c => c.continent === "AS"))]},
+    {continent: "Europe", cuisines: [...(cuisines.filter(c => c.continent === "EU"))]},
+    {continent: "Oceania", cuisines: [...(cuisines.filter(c => c.continent === "OC"))]}
   ];
   
   //const resultTerm       useSelector(state = state.search.resultTerm);
@@ -49,10 +34,20 @@ export default function Recipes() {
   const totalPages =     useSelector(state => state.search.totalPages);
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+  const [ loading, setLoading ] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) setExpandedFilter(null);
     else                         setExpandedFilter(name);
+  };
+
+  const temporarilyDisable = () => {
+    //clearTimeout(timeoutRef.current);
+    setLoading(true);
+    timeoutRef.current = setTimeout(() => {
+      setLoading(false);
+    }, 250);
   };
 
   return (
@@ -85,8 +80,14 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    checked={currRecipeTypes?.includes(name) ? true : false}
-                    onChange={() => currRecipeTypes?.includes(name) ? removeFilter("recipeTypes", name) : addFilter("recipeTypes", name)}
+                    disabled={loading}
+                    onClick={temporarilyDisable}
+                    defaultChecked={currRecipeTypes?.includes(name)}
+                    onChange={() => {
+                      //setLoading(true);
+                      if (currRecipeTypes?.includes(name)) removeFilter("recipeTypes", name);
+                      else addFilter("recipeTypes", name);
+                    }}
                   />
                   <label>{name}</label>
                 </span>
@@ -115,7 +116,9 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    checked={currMethods?.includes(name)}
+                    disabled={loading}
+                    onClick={temporarilyDisable}
+                    defaultChecked={currMethods?.includes(name)}
                     onChange={() => currMethods?.includes(name) ? removeFilter("methods", name) : addFilter("methods", name)}
                   />
                   <label>{name}</label>
@@ -142,19 +145,21 @@ export default function Recipes() {
           >
             <div className="filter-group">
               {cuisineGroups.map(group => (
-                <>
+                <Fragment key={group.continent}>
                   <h4>{group.continent}</h4>
                   {group.cuisines.map(({ id, code, name }) => (
                     <span key={id}>
                       <input
                         type="checkbox"
-                        checked={currCuisines?.includes(code)}
+                        disabled={loading}
+                        onClick={temporarilyDisable}
+                        defaultChecked={currCuisines?.includes(code)}
                         onChange={() => currCuisines?.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
                       />
                       <label>{name}</label>
                     </span>
                   ))}
-                </>
+                </Fragment >
               ))}
             </div>
           </ExpandCollapse>
