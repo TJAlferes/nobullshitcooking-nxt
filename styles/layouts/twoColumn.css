@@ -1,25 +1,25 @@
-.two-col-b {
+.two-col {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
 }
 
-.two-col-b-left {
+.two-col-left {
   width: 100%;
   max-width: 1200px;
   min-width: 300px;
   padding: 10px;
 }
 
-.two-col-b-right {
+.two-col-right {
   max-width: 300px;
   min-width: 300px;
   padding: 10px;
 }
 
 @media (max-width: 899px) {
-  .two-col-b {
+  .two-col {
     flex-direction: column;
   }
 }
@@ -30,8 +30,8 @@ Light Theme
 
 */
 
-.light .two-col-b-left,
-.light .two-col-b-right {
+.light .two-col-left,
+.light .two-col-right {
   background-color: #fff;
   color: #000;
 }
@@ -42,8 +42,8 @@ Dark Theme
 
 */
 
-.dark .two-col-b-left,
-.dark .two-col-b-right {
+.dark .two-col-left,
+.dark .two-col-right {
   background-color: #222;
   color: #aaa;
 }

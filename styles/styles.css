@@ -194,8 +194,8 @@ h4 {
 @import './components/resultsPerPage.css';
 @import './components/starRating.css';
 
-@import './layouts/oneColumnA.css';
-@import './layouts/twoColumnB.css';
+@import './layouts/oneColumn.css';
+@import './layouts/twoColumn.css';
 
 @import './pages/cart.css';
 @import './pages/chat.css';

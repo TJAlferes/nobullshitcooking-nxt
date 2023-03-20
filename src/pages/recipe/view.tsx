@@ -43,8 +43,8 @@ export function RecipeView({
   } = recipe;
 
   return (
-    <div className="recipe two-col-b">
-      <div className="two-col-b-left">
+    <div className="recipe two-col">
+      <div className="two-col-left">
         <h1>{title}</h1>
 
         <p className="feedback">{feedback}</p>
@@ -124,7 +124,7 @@ export function RecipeView({
         <div className="recipe-directions">{directions}</div>
       </div>
 
-      <div className="two-col-b-right"></div>
+      <div className="two-col-right"></div>
     </div>
   );
 }

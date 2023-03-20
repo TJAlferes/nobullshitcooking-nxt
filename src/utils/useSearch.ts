@@ -16,11 +16,11 @@ export function useSearch() {
 
   //const term = useSelector(state => state.search.term);
 
-  /*const params = useMemo(() => {
+  const params = useMemo(() => {
     console.log("useSearch.ts params useMemo, searchParams: ", qs.parse(searchParams.toString()) as SearchRequest);
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
-  }, [searchParams]);*/
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  }, [searchParams]);
+  //const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   useEffect(() => {
     console.log("useSearch.ts useEffect");
@@ -65,7 +65,10 @@ export function useSearch() {
 
   const removeFilter = (filterName: string, filterValue: string) => {
     if (!params.filters) return;
+    if (!params.filters[filterName]) return;
+    if (!params.filters[filterName]?.includes(filterValue)) return;
     const removed = (params.filters?.[filterName]?.filter(v => v !== filterValue)) as string[];
+    // the bug is in here. you need an if else i think
     params.filters[filterName] = removed;
     params.currentPage = "1";
     search();

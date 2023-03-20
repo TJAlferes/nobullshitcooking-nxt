@@ -20,6 +20,28 @@ export default function Recipes() {
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
+  const cuisineGroups = [
+    {
+      continent: "Africa",
+      cuisines: [...(cuisines.filter(c => c.continent === "AF"))]
+    },
+    {
+      continent: "Americas",
+      cuisines: [...(cuisines.filter(c => c.continent === "AM"))]
+    },
+    {
+      continent: "Asia",
+      cuisines: [...(cuisines.filter(c => c.continent === "AS"))]
+    },
+    {
+      continent: "Europe",
+      cuisines: [...(cuisines.filter(c => c.continent === "EU"))]
+    },
+    {
+      continent: "Oceania",
+      cuisines: [...(cuisines.filter(c => c.continent === "OC"))]
+    }
+  ];
   
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
@@ -34,8 +56,8 @@ export default function Recipes() {
   };
 
   return (
-    <div className="search-results two-col-b">
-      <div className="two-col-b-left">
+    <div className="search-results two-col">
+      <div className="two-col-left">
         <h1>Recipes</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
@@ -119,15 +141,20 @@ export default function Recipes() {
             handler={() => toggleFilterDropdown("cuisines")}
           >
             <div className="filter-group">
-              {cuisines.map(({ id, code, name }) => (
-                <span key={id}>
-                  <input
-                    type="checkbox"
-                    checked={currCuisines?.includes(code)}
-                    onChange={() => currCuisines?.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
-                  />
-                  <label>{name}</label>
-                </span>
+              {cuisineGroups.map(group => (
+                <>
+                  <h4>{group.continent}</h4>
+                  {group.cuisines.map(({ id, code, name }) => (
+                    <span key={id}>
+                      <input
+                        type="checkbox"
+                        checked={currCuisines?.includes(code)}
+                        onChange={() => currCuisines?.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
+                      />
+                      <label>{name}</label>
+                    </span>
+                  ))}
+                </>
               ))}
             </div>
           </ExpandCollapse>
@@ -169,7 +196,7 @@ export default function Recipes() {
         <ResultsPerPage />
       </div>
 
-      <div className="two-col-b-right"></div>
+      <div className="two-col-right"></div>
     </div>
   );
 }
