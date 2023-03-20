@@ -47,7 +47,7 @@ export function useSearch() {
     dispatch(getResults(qs.stringify(params), router));
   };
 
-  const addFilter = (filterName: string, filterValue: string) => {
+  /*const addFilter = (filterName: string, filterValue: string) => {
     if (params.filters) {
       if (params.filters[filterName]) {
         if (params.filters[filterName]?.includes(filterValue)) return;
@@ -73,6 +73,18 @@ export function useSearch() {
     else delete params.filters[filterName];
     params.currentPage = "1";
     search();
+  };*/
+
+  const setFilters = (filterName: string, filterValues: string[]) => {
+    if (params.filters) {
+      params.filters[filterName] = filterValues;
+    } else {
+      params.filters = {
+        [filterName]: filterValues
+      };
+    }
+    params.currentPage = "1";
+    search();
   };
 
   const clearFilters = (filterName: string) => {
@@ -96,8 +108,9 @@ export function useSearch() {
   return {
     params,
     search,
-    addFilter,
-    removeFilter,
+    /*addFilter,
+    removeFilter,*/
+    setFilters,
     clearFilters,
     changeResultsPerPage,
     goToPage

@@ -1,7 +1,7 @@
 'use client';
 
-import Link                           from 'next/link';
-import { Fragment, useRef, useState } from 'react';
+import Link                   from 'next/link';
+import { Fragment, useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
@@ -10,44 +10,44 @@ import { useSearch }                                  from '../../utils/useSearc
 //const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const { params, addFilter, removeFilter } = useSearch();
+  const { params, setFilters } = useSearch();
 
   const currRecipeTypes = params.filters?.recipeTypes;
   const currMethods =     params.filters?.methods;
   const currCuisines =    params.filters?.cuisines;
-  //const sorts =           params.filters?.sorts;
 
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
   const cuisineGroups = [
-    {continent: "Africa", cuisines: [...(cuisines.filter(c => c.continent === "AF"))]},
+    {continent: "Africa",   cuisines: [...(cuisines.filter(c => c.continent === "AF"))]},
     {continent: "Americas", cuisines: [...(cuisines.filter(c => c.continent === "AM"))]},
-    {continent: "Asia", cuisines: [...(cuisines.filter(c => c.continent === "AS"))]},
-    {continent: "Europe", cuisines: [...(cuisines.filter(c => c.continent === "EU"))]},
-    {continent: "Oceania", cuisines: [...(cuisines.filter(c => c.continent === "OC"))]}
-  ];
-  
+    {continent: "Asia",     cuisines: [...(cuisines.filter(c => c.continent === "AS"))]},
+    {continent: "Europe",   cuisines: [...(cuisines.filter(c => c.continent === "EU"))]},
+    {continent: "Oceania",  cuisines: [...(cuisines.filter(c => c.continent === "OC"))]}
+  ];  // TO DO: improve this
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
-  const [ loading, setLoading ] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const [ expandedFilter,  setExpandedFilter ] =  useState<string|null>(null);
+  // you might need a useEffect to initialize these?
+  const [ nextRecipeTypes, setNextRecipeTypes ] = useState<string[]>(currRecipeTypes ?? []);
+  const [ nextMethods,     setNextMethods ] =     useState<string[]>(currMethods ?? []);
+  const [ nextCuisines,    setNextCuisines ] =    useState<string[]>(currCuisines ?? []);
+  //const sorts =           params.filters?.sorts;
 
   const toggleFilterDropdown = (name: string) => {
-    if (expandedFilter === name) setExpandedFilter(null);
-    else                         setExpandedFilter(name);
-  };
-
-  const temporarilyDisable = () => {
-    //clearTimeout(timeoutRef.current);
-    setLoading(true);
-    timeoutRef.current = setTimeout(() => {
-      setLoading(false);
-    }, 250);
+    if (expandedFilter === name) {
+      setExpandedFilter(null);  // close the dropdown
+      // if needed, re-search with updated filters
+      if (name === "recipeTypes" && currRecipeTypes !== nextRecipeTypes) setFilters(name, nextRecipeTypes);
+      if (name === "methods"     && currMethods !== nextMethods)         setFilters(name, nextMethods);
+      if (name === "cuisines"    && currCuisines !== nextCuisines)       setFilters(name, nextCuisines);
+    } else {
+      setExpandedFilter(name);  // open the dropdown
+    }
   };
 
   return (
@@ -80,13 +80,10 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    disabled={loading}
-                    onClick={temporarilyDisable}
                     defaultChecked={currRecipeTypes?.includes(name)}
+                    checked={nextRecipeTypes.includes(name)}
                     onChange={() => {
-                      //setLoading(true);
-                      if (currRecipeTypes?.includes(name)) removeFilter("recipeTypes", name);
-                      else addFilter("recipeTypes", name);
+                      setNextRecipeTypes(nextRecipeTypes?.includes(name) ? nextRecipeTypes.filter(v => v !== name) : [...nextRecipeTypes, name]);
                     }}
                   />
                   <label>{name}</label>
@@ -116,10 +113,11 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    disabled={loading}
-                    onClick={temporarilyDisable}
                     defaultChecked={currMethods?.includes(name)}
-                    onChange={() => currMethods?.includes(name) ? removeFilter("methods", name) : addFilter("methods", name)}
+                    checked={nextMethods.includes(name)}
+                    onChange={() => {
+                      setNextMethods(nextMethods?.includes(name) ? nextMethods.filter(v => v !== name) : [...nextMethods, name]);
+                    }}
                   />
                   <label>{name}</label>
                 </span>
@@ -151,10 +149,11 @@ export default function Recipes() {
                     <span key={id}>
                       <input
                         type="checkbox"
-                        disabled={loading}
-                        onClick={temporarilyDisable}
                         defaultChecked={currCuisines?.includes(code)}
-                        onChange={() => currCuisines?.includes(code) ? removeFilter("cuisines", code) : addFilter("cuisines", code)}
+                        checked={nextCuisines.includes(code)}
+                        onChange={() => {
+                          setNextCuisines(nextCuisines?.includes(code) ? nextCuisines.filter(v => v !== code) : [...nextCuisines, code]);
+                        }}
                       />
                       <label>{name}</label>
                     </span>
