@@ -52,16 +52,6 @@ Dark Theme
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.light .page_links {
-  border-color: #fff;
-}
-
-.light .current_page_number {
-  color: #000;
-}
-
-/* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
-
 .light .search-result-recipe-link:hover,
 .light .search-result-recipe-link:active,
 .light .search-result-ingredient-link:hover,
@@ -92,15 +82,7 @@ Dark Theme
   background-color: #dedede;
 }
 
-/* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 
-.dark .page_links {
-  border-color: #222;
-}
-
-.dark .current_page_number {
-  color: #aaa;
-}
 
 /* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
 

@@ -4,10 +4,11 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo }                      from 'react';
 import qs                                          from 'qs';
 
-import { getResults, setSuggestions, reset } from '../store/search/actions';
-import type { SearchRequest }                from '../store/search/types';
-import { useTypedDispatch as useDispatch }   from '../store';
+import { getResults, setIndex, setSuggestions, reset } from '../store/search/actions';
+import type { SearchIndex, SearchRequest }             from '../store/search/types';
+import { useTypedDispatch as useDispatch }             from '../store';
 
+// maybe move this so that there is only one instance of this in the whole app... and then just share the return value object as a context
 export function useSearch() {
   const dispatch =     useDispatch();
   const router =       useRouter();
@@ -30,24 +31,67 @@ export function useSearch() {
       params.resultsPerPage = "20";
       search();
     } else {
-      dispatch(reset());
+      dispatch(reset());  // ?
     }
   }, [pathname]);
 
   const search = (term?: string) => {
-    if (term) params.term = term;
-    // filters
-    // sorts
+    if (term)                   params.term = term;
     if (!params.currentPage)    params.currentPage = "1";
     if (!params.resultsPerPage) params.resultsPerPage = "20";
-    //dispatch(setTotalPages(1)); ?
-    //dispatch(setTotalResults(1)); ?
     dispatch(setSuggestions([]));
-    console.log(params.filters?.cuisines);
     dispatch(getResults(qs.stringify(params), router));
   };
 
-  /*const addFilter = (filterName: string, filterValue: string) => {
+  const setFilters = (filterName: string, filterValues: string[]) => {
+    if (params.filters) {
+      params.filters[filterName] = filterValues;
+    } else {
+      params.filters = {
+        [filterName]: filterValues
+      };
+    }
+    params.currentPage = "1";
+    search();
+  };
+
+  const setPreFilters = (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => {
+    dispatch(setIndex(searchIndex));
+    setFilters(filterName, filterValues);
+  };
+
+  const clearFilters = (filterName: string) => {
+    delete params['filters']?.[filterName];
+    params.currentPage = "1";
+    search();
+  };
+
+  const changeResultsPerPage = (e: SyntheticEvent) => {
+    const value = (e.target as HTMLInputElement).value;
+    params.currentPage = "1";
+    params.resultsPerPage = `${value}`;
+    search();
+  };
+
+  const goToPage = (page: number) => {
+    params.currentPage = `${page}`;
+    search();
+  };
+
+  return {
+    params,
+    search,
+    setFilters,
+    setPreFilters,
+    clearFilters,
+    changeResultsPerPage,
+    goToPage
+  };
+}
+
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+/*const addFilter = (filterName: string, filterValue: string) => {
     if (params.filters) {
       if (params.filters[filterName]) {
         if (params.filters[filterName]?.includes(filterValue)) return;
@@ -75,46 +119,5 @@ export function useSearch() {
     search();
   };*/
 
-  const setFilters = (filterName: string, filterValues: string[]) => {
-    if (params.filters) {
-      params.filters[filterName] = filterValues;
-    } else {
-      params.filters = {
-        [filterName]: filterValues
-      };
-    }
-    params.currentPage = "1";
-    search();
-  };
-
-  const clearFilters = (filterName: string) => {
-    delete params['filters']?.[filterName];
-    params.currentPage = "1";
-    search();
-  };
-
-  const changeResultsPerPage = (e: SyntheticEvent) => {
-    const value = (e.target as HTMLInputElement).value;
-    params.currentPage = "1";
-    params.resultsPerPage = `${value}`;
-    search();
-  };
-
-  const goToPage = (page: number) => {
-    params.currentPage = `${page}`;
-    search();
-  };
-
-  return {
-    params,
-    search,
-    /*addFilter,
+  /*addFilter,
     removeFilter,*/
-    setFilters,
-    clearFilters,
-    changeResultsPerPage,
-    goToPage
-  };
-}
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;

@@ -32,7 +32,6 @@ export default function Recipes() {
   const totalPages =     useSelector(state => state.search.totalPages);
 
   const [ expandedFilter,  setExpandedFilter ] =  useState<string|null>(null);
-  // you might need a useEffect to initialize these?
   const [ nextRecipeTypes, setNextRecipeTypes ] = useState<string[]>(currRecipeTypes ?? []);
   const [ nextMethods,     setNextMethods ] =     useState<string[]>(currMethods ?? []);
   const [ nextCuisines,    setNextCuisines ] =    useState<string[]>(currCuisines ?? []);
@@ -51,8 +50,8 @@ export default function Recipes() {
   };
 
   return (
-    <div className="search-results two-col">
-      <div className="two-col-left">
+    <div className="two-col">
+      <div className="two-col-left search-results">
         <h1>Recipes</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
@@ -170,30 +169,20 @@ export default function Recipes() {
         <Pagination />
         <ResultsPerPage />
 
-        <div>
-          {results ? results.map(r => (
-            <div className="recipes" key={r.id}>
-              <Link href={`/recipe/${r.id}`} className="recipes-link">
-                <div className="text">
-                  <div className="title">{r.title}</div>
-
+        <div className="search-results-list">
+          {
+            results
+              ? results.map(r => (
+                <Link className="search-results-list-item" href={`/recipe?title=${r.title}`} key={r.id}>
+                  <img src="/images/dev/sushi-280-172.jpg" />
+                  <h3>{r.title}</h3>
                   <div className="author">{r.author}</div>
-
-                  <div>
-                    <div className="cuisine">{r.cuisine_name}</div>
-
-                    <div className="type">{r.recipe_type_name}</div>
-                  </div>
-                </div>
-
-                {/*
-                  r.recipe_image !== "nobsc-recipe-default"
-                  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
-                  : <div className="image-default-100-62"></div>
-                */}
-              </Link>
-            </div>
-          )) : <div>Loading...</div>}
+                  <div className="cuisine">{r.cuisine_name}</div>
+                  <div className="type">{r.recipe_type_name}</div>
+                </Link>
+              ))
+              : <div>Loading...</div>
+          }
         </div>
 
         <Pagination />
@@ -204,3 +193,9 @@ export default function Recipes() {
     </div>
   );
 }
+
+/*
+r.recipe_image !== "nobsc-recipe-default"
+  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
+  : <div className="image-default-100-62"></div>
+*/

@@ -78,32 +78,29 @@
   font-size: 1.4rem;
 }
 
-
-
-.recipes {
-  padding: 10px;
-}
-
-.recipes-link {
-  align-items: flex-start;
+.search-results-list {
   display: flex;
-  flex-direction: row;
-  height: 100%;
-  justify-content: space-between;
-  padding: 10px;
-  text-decoration: none;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+  outline: 1px solid red;
 }
 
-.recipes-link .title {
+.search-results-list-item {
+  display: block;
+  width: 280px;
   text-decoration: none;
-  font-size: 1.6rem;
-  font-weight: 900;
   color: #000;
 }
 
-.recipes-link:hover .text .title,
-.recipes-link:active .text .title {
+.search-results-list-item img {
+  display: block;
+  width: 280px;
+}
+
+/*.search-results-list-item h3 {}*/
+
+.search-results-list-item:hover h3,
+.search-results-list-item:active h3 {
   color: #c10006;
 }
 

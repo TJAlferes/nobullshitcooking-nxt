@@ -6,7 +6,7 @@ import { useRef }           from 'react';
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 import { getSuggestions, setSuggestions, setIndex, setTerm }                from '../../store/search/actions';
 import type { SearchIndex }                                                 from '../../store/search/types';
-import { useSearch } from '../../utils/useSearch';
+import { useSearch }                                                        from '../../utils/useSearch';
 
 export default function Search() {
   const { search } = useSearch();
@@ -25,18 +25,16 @@ export default function Search() {
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
     dispatch(setIndex(e.target.value as SearchIndex));
-  }
+  };
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
     dispatch(setTerm(value));
-
     if (value.length > 2) {
       if (autosuggestionsRef.current) autosuggestionsRef.current.style.display = "block";
       dispatch(getSuggestions(value));
     }
-  }
+  };
 
   const submitSearch = () => {
     if (term) search(term);
@@ -51,24 +49,19 @@ export default function Search() {
   const initSearchInputBlurHandler = () => {
     if (typeof window === 'undefined')   return;
     if (typeof document === 'undefined') return;
-
     mouseIsOverRef.current = false;
-
     if (!autosuggestionsRef.current) return;
     if (!inputRef.current) return;
-
     autosuggestionsRef.current.onmouseover = function() {
       mouseIsOverRef.current = true;
     };
-
     autosuggestionsRef.current.onmouseout = function() {
       mouseIsOverRef.current = false;
     };
-
     inputRef.current.onblur = function() {
       if (mouseIsOverRef.current === false && autosuggestionsRef.current) autosuggestionsRef.current.style.display = "none";
     };
-  }
+  };
   
   initSearchInputBlurHandler();  // put into a useEffect? and is a manual teardown needed?
 
