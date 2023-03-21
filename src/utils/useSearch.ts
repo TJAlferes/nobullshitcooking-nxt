@@ -4,18 +4,17 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo }                      from 'react';
 import qs                                          from 'qs';
 
-import { getResults, setIndex, setSuggestions, reset } from '../store/search/actions';
-import type { SearchIndex, SearchRequest }             from '../store/search/types';
-import { useTypedDispatch as useDispatch }             from '../store';
+import { getResults, setIndex, setSuggestions } from '../store/search/actions';
+import { toggleLeftNav }                        from '../store/menu/actions';
+import type { SearchIndex, SearchRequest }      from '../store/search/types';
+import { useTypedDispatch as useDispatch }      from '../store';
 
-// maybe move this so that there is only one instance of this in the whole app... and then just share the return value object as a context
+// maybe move this so there is only one instance of this in the whole app... and then just share the return value object as a react context
 export function useSearch() {
   const dispatch =     useDispatch();
   const router =       useRouter();
   const pathname =     usePathname();
   const searchParams = useSearchParams();
-
-  //const term = useSelector(state => state.search.term);
 
   const params = useMemo(() => {
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
@@ -23,15 +22,11 @@ export function useSearch() {
   //const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   useEffect(() => {
-    const anySearchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].some(value => value === pathname);
-    if (anySearchResultsPage) {
-      delete params.filters;
-      delete params.sorts;
+    const searchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].includes(pathname);
+    if (searchResultsPage) {
       params.currentPage = "1";
       params.resultsPerPage = "20";
       search();
-    } else {
-      dispatch(reset());  // ?
     }
   }, [pathname]);
 
@@ -57,6 +52,8 @@ export function useSearch() {
 
   const setPreFilters = (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => {
     dispatch(setIndex(searchIndex));
+    dispatch(toggleLeftNav());
+    delete params.filters;
     setFilters(filterName, filterValues);
   };
 
