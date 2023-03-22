@@ -1,4 +1,4 @@
-import { all, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, takeLatest } from 'redux-saga/effects';
 
 import { getSuggestionsSaga, getResultsSaga } from '../search/sagas';
 import { actionTypes } from '../search/types';

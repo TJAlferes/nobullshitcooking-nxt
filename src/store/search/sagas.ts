@@ -17,12 +17,12 @@ export function* getSuggestionsSaga(action: IGetSuggestions) {
 
 export function* getResultsSaga(action: IGetResults) {
   try {
-    yield delay(500);
+    yield delay(250);  // debounces when combined with the 'takeLatest' in 'watchers/search.ts'
     const { searchParams, router } = action;
     const index = (yield select(state => state.search.index)) as string;
     const idx = index === "equipment" ? "equipments" : index;
     const { data } = yield call([axios, axios.get], `${endpoint}/search/find/${index}?${searchParams}`);
     yield put(setResults(data.found));
-    yield call([router, router.push], `/${idx}?${searchParams}`);  //yield call(() => router.push(`/${index}?${searchParams}`));
+    yield call([router, router.push], `/${idx}?${searchParams}`);
   } catch (err) {}
 }

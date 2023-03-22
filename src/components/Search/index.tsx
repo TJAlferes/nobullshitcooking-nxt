@@ -1,7 +1,7 @@
 'use client';
 
-import type { ChangeEvent }   from 'react';
-import { useContext, useRef } from 'react';
+import type { ChangeEvent }             from 'react';
+import { useContext, useState, useRef } from 'react';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
 import { getSuggestions, setSuggestions, setIndex, setTerm }                from '../../store/search/actions';
@@ -10,6 +10,8 @@ import { SearchContext }                                                    from
 
 export default function Search() {
   const searchDriver = useContext(SearchContext);
+
+  const [ searchIndexChanged, setSearchIndexChanged ] = useState(false);  // useRef?
 
   const inputRef =           useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
@@ -25,7 +27,7 @@ export default function Search() {
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
     dispatch(setIndex(e.target.value as SearchIndex));
-    // remove filters from prev index here? use history to see prev location?
+    setSearchIndexChanged(true);
   };
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +40,7 @@ export default function Search() {
   };
 
   const submitSearch = () => {
-    if (term) searchDriver.search(term);
-    else searchDriver.search();
+    searchDriver.search(searchIndexChanged && searchIndexChanged, term && term);
   };
 
   const selectSuggestion = (suggestion: string) => {

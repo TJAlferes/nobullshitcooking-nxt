@@ -1,14 +1,14 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams }   from 'next/navigation';
-import { createContext, useEffect, useMemo, useRef } from 'react';
-import type { ReactNode }                            from 'react';
-import qs                                            from 'qs';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { createContext, useMemo }     from 'react';
+import type { ReactNode }             from 'react';
+import qs                             from 'qs';
 
-import { getResults, setIndex, setSuggestions } from '../store/search/actions';
-import { toggleLeftNav }                        from '../store/menu/actions';
-import type { SearchIndex, SearchRequest }      from '../store/search/types';
-import { useTypedDispatch as useDispatch }      from '../store';
+import { getResults, setIndex, setSuggestions, setTerm } from '../store/search/actions';
+import { toggleLeftNav }                                 from '../store/menu/actions';
+import type { SearchIndex, SearchRequest }               from '../store/search/types';
+import { useTypedDispatch as useDispatch }               from '../store';
 
 export const SearchContext = createContext({} as UseSearch);
 
@@ -26,45 +26,17 @@ type SearchProviderProps = {
   children: ReactNode;
 };
 
-function usePreviousPathname() {
-  const pathname = usePathname();
-
-  const ref = useRef<string|null>(null);
-
-  useEffect(() => {
-    ref.current = pathname;
-  }, [pathname]);
-
-  return ref.current;
-};
-
 function useSearch() {
   const dispatch =     useDispatch();
   const router =       useRouter();
-  const pathname =     usePathname();
   const searchParams = useSearchParams();
-
-  const previousPathname = usePreviousPathname();
 
   const params = useMemo(() => {
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
   }, [searchParams]);
 
-  useEffect(() => {
-    const goingToSearchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].includes(pathname);
-    if (goingToSearchResultsPage) {
-      //console.log("previousPathname: ", previousPathname);
-      const comingFromSearchResultsPage = (previousPathname && ["/equipments", "/ingredients", "/products", "/recipes"].includes(previousPathname)) as boolean;
-      //console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
-      if (comingFromSearchResultsPage) delete params.filters;  // FIX HERE: move/change/remove this
-
-      params.currentPage = "1";
-      params.resultsPerPage = "20";
-      search();
-    }
-  }, [pathname]);
-
-  const search = (term?: string) => {
+  const search = (searchIndexChanged?: boolean, term?: string) => {
+    if (searchIndexChanged)     delete params.filters;
     if (term)                   params.term = term;
     if (!params.currentPage)    params.currentPage = "1";
     if (!params.resultsPerPage) params.resultsPerPage = "20";
@@ -91,6 +63,8 @@ function useSearch() {
   };
 
   const setPreFilters = (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => {
+    dispatch(setTerm(""));
+    delete params.term;
     dispatch(setIndex(searchIndex));
     dispatch(toggleLeftNav());
     delete params.filters;
@@ -130,13 +104,28 @@ type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 export type UseSearch = {
   params:               SearchRequest;
-  search:               (term?: string) =>                                                        void;
+  search:               (searchIndexChanged?: boolean, term?: string) =>                          void;
   setFilters:           (filterName: string, filterValues: string[]) =>                           void;
   setPreFilters:        (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
   clearFilters:         (filterName: string) =>                                                   void;
   changeResultsPerPage: (e: SyntheticEvent) =>                                                    void;
   goToPage:             (page: number) =>                                                         void;
 };
+
+//console.log("previousPathname: ", previousPathname);
+//console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
+
+/*function usePreviousPathname() {
+  const pathname = usePathname();
+
+  const ref = useRef<string|null>(null);
+
+  useEffect(() => {
+    ref.current = pathname;
+  }, [pathname]);
+
+  return ref.current;
+};*/
 
 /*const addFilter = (filterName: string, filterValue: string) => {
     if (params.filters) {
