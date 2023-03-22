@@ -1,6 +1,6 @@
 'use client';
 
-import Link                               from 'next/link';
+import Link                                       from 'next/link';
 import { Fragment, useContext, useState, useRef } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
@@ -13,10 +13,6 @@ export default function Recipes() {
   const renders = useRef(0);
   renders.current++;
   const searchDriver = useContext(SearchContext);
-
-  const currRecipeTypes = searchDriver.params.filters?.recipeTypes;
-  const currMethods =     searchDriver.params.filters?.methods;
-  const currCuisines =    searchDriver.params.filters?.cuisines;
 
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
@@ -33,19 +29,19 @@ export default function Recipes() {
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter,  setExpandedFilter ] =  useState<string|null>(null);
-  const [ nextRecipeTypes, setNextRecipeTypes ] = useState<string[]>(currRecipeTypes ?? []);
-  const [ nextMethods,     setNextMethods ] =     useState<string[]>(currMethods ?? []);
-  const [ nextCuisines,    setNextCuisines ] =    useState<string[]>(currCuisines ?? []);
+  const [ expandedFilter,     setExpandedFilter ] =     useState<string|null>(null);
+  const [ checkedRecipeTypes, setCheckedRecipeTypes ] = useState<string[]>(searchDriver.params.filters?.recipeTypes ?? []);
+  const [ checkedMethods,     setCheckedMethods ] =     useState<string[]>(searchDriver.params.filters?.methods ?? []);
+  const [ checkedCuisines,    setCheckedCuisines ] =    useState<string[]>(searchDriver.params.filters?.cuisines ?? []);
   //const sorts =           params.filters?.sorts;
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "recipeTypes" && currRecipeTypes !== nextRecipeTypes) searchDriver.setFilters(name, nextRecipeTypes);
-      if (name === "methods"     && currMethods !== nextMethods)         searchDriver.setFilters(name, nextMethods);
-      if (name === "cuisines"    && currCuisines !== nextCuisines)       searchDriver.setFilters(name, nextCuisines);
+      if (name === "recipeTypes" && checkedRecipeTypes !== searchDriver.params.filters?.recipeTypes) searchDriver.setFilters(name, checkedRecipeTypes);
+      if (name === "methods"     && checkedMethods !== searchDriver.params.filters?.methods)         searchDriver.setFilters(name, checkedMethods);
+      if (name === "cuisines"    && checkedCuisines !== searchDriver.params.filters?.cuisines)       searchDriver.setFilters(name, checkedCuisines);
     } else {
       setExpandedFilter(name);  // open the dropdown
     }
@@ -82,10 +78,9 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currRecipeTypes?.includes(name)}
-                    checked={nextRecipeTypes.includes(name)}
+                    checked={checkedRecipeTypes?.includes(name)}
                     onChange={() => {
-                      setNextRecipeTypes(nextRecipeTypes?.includes(name) ? nextRecipeTypes.filter(v => v !== name) : [...nextRecipeTypes, name]);
+                      setCheckedRecipeTypes(checkedRecipeTypes?.includes(name) ? checkedRecipeTypes.filter(v => v !== name) : [...checkedRecipeTypes, name]);
                     }}
                   />
                   <label>{name}</label>
@@ -115,10 +110,9 @@ export default function Recipes() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currMethods?.includes(name)}
-                    checked={nextMethods.includes(name)}
+                    checked={checkedMethods?.includes(name)}
                     onChange={() => {
-                      setNextMethods(nextMethods?.includes(name) ? nextMethods.filter(v => v !== name) : [...nextMethods, name]);
+                      setCheckedMethods(checkedMethods?.includes(name) ? checkedMethods.filter(v => v !== name) : [...checkedMethods, name]);
                     }}
                   />
                   <label>{name}</label>
@@ -151,10 +145,9 @@ export default function Recipes() {
                     <span key={id}>
                       <input
                         type="checkbox"
-                        defaultChecked={currCuisines?.includes(code)}
-                        checked={nextCuisines.includes(code)}
+                        checked={checkedCuisines?.includes(code)}
                         onChange={() => {
-                          setNextCuisines(nextCuisines?.includes(code) ? nextCuisines.filter(v => v !== code) : [...nextCuisines, code]);
+                          setCheckedCuisines(checkedCuisines?.includes(code) ? checkedCuisines.filter(v => v !== code) : [...checkedCuisines, code]);
                         }}
                       />
                       <label>{name}</label>

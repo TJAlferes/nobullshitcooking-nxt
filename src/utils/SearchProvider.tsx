@@ -1,15 +1,14 @@
 'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { createContext, useEffect, useMemo}        from 'react';
-import type { ReactNode }                          from 'react';
-import qs                                          from 'qs';
+import { useRouter, usePathname, useSearchParams }   from 'next/navigation';
+import { createContext, useEffect, useMemo, useRef } from 'react';
+import type { ReactNode }                            from 'react';
+import qs                                            from 'qs';
 
 import { getResults, setIndex, setSuggestions } from '../store/search/actions';
 import { toggleLeftNav }                        from '../store/menu/actions';
 import type { SearchIndex, SearchRequest }      from '../store/search/types';
 import { useTypedDispatch as useDispatch }      from '../store';
-import { usePreviousPathname }                  from './usePreviousPathname';
 
 export const SearchContext = createContext({} as UseSearch);
 
@@ -27,11 +26,24 @@ type SearchProviderProps = {
   children: ReactNode;
 };
 
+function usePreviousPathname() {
+  const pathname = usePathname();
+
+  const ref = useRef<string|null>(null);
+
+  useEffect(() => {
+    ref.current = pathname;
+  }, [pathname]);
+
+  return ref.current;
+};
+
 function useSearch() {
   const dispatch =     useDispatch();
   const router =       useRouter();
   const pathname =     usePathname();
   const searchParams = useSearchParams();
+
   const previousPathname = usePreviousPathname();
 
   const params = useMemo(() => {
@@ -39,13 +51,13 @@ function useSearch() {
   }, [searchParams]);
 
   useEffect(() => {
-    // BUG IN HERE?
     const goingToSearchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].includes(pathname);
     if (goingToSearchResultsPage) {
-      console.log("previousPathname: ", previousPathname);
+      //console.log("previousPathname: ", previousPathname);
       const comingFromSearchResultsPage = (previousPathname && ["/equipments", "/ingredients", "/products", "/recipes"].includes(previousPathname)) as boolean;
-      console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
-      if (comingFromSearchResultsPage) delete params.filters;
+      //console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
+      if (comingFromSearchResultsPage) delete params.filters;  // FIX HERE: move/change/remove this
+
       params.currentPage = "1";
       params.resultsPerPage = "20";
       search();
@@ -62,11 +74,17 @@ function useSearch() {
 
   const setFilters = (filterName: string, filterValues: string[]) => {
     if (params.filters) {
-      params.filters[filterName] = filterValues;
+      if (filterValues.length > 0) {
+        params.filters[filterName] = filterValues;
+      } else {
+        delete params.filters[filterName];
+      }
     } else {
-      params.filters = {
-        [filterName]: filterValues
-      };
+      if (filterValues.length > 0) {
+        params.filters = {
+          [filterName]: filterValues
+        };
+      }
     }
     params.currentPage = "1";
     search();
