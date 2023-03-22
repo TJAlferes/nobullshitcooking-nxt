@@ -1,20 +1,22 @@
 'use client';
 
-import Link                   from 'next/link';
-import { Fragment, useState } from 'react';
+import Link                               from 'next/link';
+import { Fragment, useContext, useState, useRef } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
-import { useSearch }                                  from '../../utils/useSearch';
+import { SearchContext }                              from '../../utils/SearchProvider';
 
 //const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 export default function Recipes() {
-  const { params, setFilters } = useSearch();
+  const renders = useRef(0);
+  renders.current++;
+  const searchDriver = useContext(SearchContext);
 
-  const currRecipeTypes = params.filters?.recipeTypes;
-  const currMethods =     params.filters?.methods;
-  const currCuisines =    params.filters?.cuisines;
+  const currRecipeTypes = searchDriver.params.filters?.recipeTypes;
+  const currMethods =     searchDriver.params.filters?.methods;
+  const currCuisines =    searchDriver.params.filters?.cuisines;
 
   const recipeTypes =    useSelector(state => state.data.recipeTypes);
   const methods =        useSelector(state => state.data.methods);
@@ -41,9 +43,9 @@ export default function Recipes() {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "recipeTypes" && currRecipeTypes !== nextRecipeTypes) setFilters(name, nextRecipeTypes);
-      if (name === "methods"     && currMethods !== nextMethods)         setFilters(name, nextMethods);
-      if (name === "cuisines"    && currCuisines !== nextCuisines)       setFilters(name, nextCuisines);
+      if (name === "recipeTypes" && currRecipeTypes !== nextRecipeTypes) searchDriver.setFilters(name, nextRecipeTypes);
+      if (name === "methods"     && currMethods !== nextMethods)         searchDriver.setFilters(name, nextMethods);
+      if (name === "cuisines"    && currCuisines !== nextCuisines)       searchDriver.setFilters(name, nextCuisines);
     } else {
       setExpandedFilter(name);  // open the dropdown
     }
@@ -52,6 +54,7 @@ export default function Recipes() {
   return (
     <div className="two-col">
       <div className="two-col-left search-results">
+        <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
         <h1>Recipes</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 

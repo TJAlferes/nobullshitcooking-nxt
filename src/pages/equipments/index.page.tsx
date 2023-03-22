@@ -1,36 +1,40 @@
 'use client';
 
-import Link         from 'next/link';
-import { useState } from 'react';
+import Link                     from 'next/link';
+import { useContext, useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
-import { useSearch }                                  from '../../utils/useSearch';
+import { SearchContext }                              from '../../utils/SearchProvider';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
 export default function Equipments() {
-  const { params, addFilter, removeFilter } = useSearch();
+  const searchDriver = useContext(SearchContext);
 
-  const currEquipmentTypes = params.filters?.equipmentTypes;
+  const currEquipmentTypes = searchDriver.params.filters?.equipmentTypes;
 
   const equipmentTypes = useSelector(state => state.data.equipmentTypes);
-  
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+  const [ expandedFilter, setExpandedFilter ] =         useState<string|null>(null);
+  const [ nextEquipmentTypes, setNextEquipmentTypes ] = useState<string[]>(currEquipmentTypes ?? []);
 
   const toggleFilterDropdown = (name: string) => {
-    if (expandedFilter === name) setExpandedFilter(null);
-    else                         setExpandedFilter(name);
+    if (expandedFilter === name) {
+      setExpandedFilter(null);
+      if (name === "equipmentTypes" && currEquipmentTypes !== nextEquipmentTypes) searchDriver.setFilters(name, nextEquipmentTypes);
+    } else {
+      setExpandedFilter(name);
+    }
   };
 
   return (
-    <div className="search-results two-col-b">
-      <div className="two-col-b-left">
+    <div className="two-col">
+      <div className="two-col-left search-results">
         <h1>Equipment</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
@@ -58,9 +62,12 @@ export default function Equipments() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    checked={currEquipmentTypes?.includes(name) ? true : false}
-                    onChange={() => currEquipmentTypes?.includes(name) ? removeFilter("equipmentTypes", name) : addFilter("equipmentTypes", name)}
-                    />
+                    defaultChecked={currEquipmentTypes?.includes(name)}
+                    checked={nextEquipmentTypes.includes(name)}
+                    onChange={() => {
+                      setNextEquipmentTypes(nextEquipmentTypes?.includes(name) ? nextEquipmentTypes.filter(v => v !== name) : [...nextEquipmentTypes, name]);
+                    }}
+                  />
                     <label>{name}</label>
                 </span>
               ))}
@@ -70,28 +77,26 @@ export default function Equipments() {
 
         <Pagination />
         <ResultsPerPage />
-
-        <div>
-          {results ? results.map(e => (
-            <div className="equipments" key={e.id}>
-              <Link href={`/equipment/${e.id}`}>
-                <div className="text">
-                  <div className="name">{e.name}</div>
-                  
+        
+        <div className="search-results-list">
+          {
+            results
+              ? results.map(e => (
+                <Link className="search-results-list-item" href={`/equipment?name=${e.name}`} key={e.id}>
+                  <img src="/images/dev/knife-280-172.jpg" />
+                  <h3>{e.name}</h3>
                   <div className="type">{e.equipment_type_name}</div>
-                </div>
-
-                {/*<img src={`${url}/${e.image}.jpg`} />*/}
-              </Link>
-            </div>
-          )) : <div>Loading...</div>}
+                </Link>
+              ))
+              : <div>Loading...</div>
+          }
         </div>
 
         <Pagination />
         <ResultsPerPage />
       </div>
 
-      <div className="two-col-b-right"></div>
+      <div className="two-col-right"></div>
     </div>
   );
 }

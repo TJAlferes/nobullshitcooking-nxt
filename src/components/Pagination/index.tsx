@@ -1,14 +1,14 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useContext } from 'react';
 
 import { useTypedSelector as useSelector } from '../../store';
-import { useSearch }                       from '../../utils/useSearch';
+import { SearchContext }                   from '../../utils/SearchProvider';
 
 export const Pagination = memo(function Pagination() {
-  const { params, goToPage } = useSearch();
+  const searchDriver = useContext(SearchContext);
 
-  const currentPage = params.currentPage;
+  const currentPage = searchDriver.params.currentPage;
   const totalPages =  useSelector(state => state.search.totalPages);
 
   if (!totalPages || Number(totalPages) <= 1) return null;
@@ -21,11 +21,11 @@ export const Pagination = memo(function Pagination() {
 
   return (
     <div className="pagination">
-      <span>{curr !== first && <button onClick={() => goToPage(first)}>First</button>}</span>
-      <span>{curr > 1 &&       <button onClick={() => goToPage(prev)}>Prev</button>}</span>
+      <span>{curr !== first && <button onClick={() => searchDriver.goToPage(first)}>First</button>}</span>
+      <span>{curr > 1 &&       <button onClick={() => searchDriver.goToPage(prev)}>Prev</button>}</span>
       <span className="current-page">{curr}</span>
-      <span>{curr < last &&    <button onClick={() => goToPage(next)}>Next</button>}</span>
-      <span>{curr !== last &&  <button onClick={() => goToPage(last)}>Last</button>}</span>
+      <span>{curr < last &&    <button onClick={() => searchDriver.goToPage(next)}>Next</button>}</span>
+      <span>{curr !== last &&  <button onClick={() => searchDriver.goToPage(last)}>Last</button>}</span>
     </div>
   );
 });

@@ -1,26 +1,29 @@
-import type { AppProps }  from 'next/app';
-import { DndProvider }    from 'react-dnd-multi-backend';
-import { Provider }       from 'react-redux';
-import { HTML5toTouch }   from 'rdndmb-html5-to-touch';
+import type { AppProps }      from 'next/app';
+import { DndProvider as Dnd } from 'react-dnd-multi-backend';
+import { Provider as Redux }  from 'react-redux';
+import { HTML5toTouch }       from 'rdndmb-html5-to-touch';
 
 import '../../styles/styles.css';
-import { Layout, Guard, Theme } from '../components';
-import { wrapper }              from '../store';
+import { Layout, Guard, Theme }     from '../components';
+import { wrapper }                  from '../store';
+import { SearchProvider as Search } from '../utils/SearchProvider';
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
 
   return (
-    <Provider store={store}>
-      <DndProvider options={HTML5toTouch}>
-        <Guard>
-          <Theme>
-            <Layout>
-              <Component {...props.pageProps} />
-            </Layout>
-          </Theme>
-        </Guard>
-      </DndProvider>
-    </Provider>
+    <Redux store={store}>
+      <Dnd options={HTML5toTouch}>
+        <Search>
+          <Guard>
+            <Theme>
+              <Layout>
+                <Component {...props.pageProps} />
+              </Layout>
+            </Theme>
+          </Guard>
+        </Search>
+      </Dnd>
+    </Redux>
   );
 }

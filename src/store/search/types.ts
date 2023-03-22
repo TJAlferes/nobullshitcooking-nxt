@@ -52,6 +52,27 @@ export type RecipeCard = {
   recipe_image:     string;
 };
 
+export type EquipmentCard = {
+  id:                  number;
+  equipment_type_name: string;
+  name:                string;
+};
+
+export type IngredientCard = {
+  id:                   number;
+  ingredient_type_name: string;
+  name:                 string;
+};
+
+export type ProductCard = {
+  id:                    number;
+  product_category_name: string;
+  product_type_name:     string;
+  name:                  string;
+};
+
+
+
 export type Suggestion = {
   id:     number;
   text:   string;
@@ -59,7 +80,8 @@ export type Suggestion = {
 };
 
 export type SearchResponse = {
-  results:      Array<RecipeCard>;
+  //results:      EquipmentCard[] | IngredientCard[] | ProductCard[] | RecipeCard[];
+  results:      any[];
   totalResults: number;
   totalPages:   number;
 };

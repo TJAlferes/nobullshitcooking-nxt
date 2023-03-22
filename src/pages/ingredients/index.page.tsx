@@ -1,36 +1,40 @@
 'use client';
 
-import Link         from 'next/link';
-import { useState } from 'react';
+import Link                     from 'next/link';
+import { useContext, useState } from 'react';
 
 import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
-import { useSearch }                                  from '../../utils/useSearch';
+import { SearchContext }                              from '../../utils/SearchProvider';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
 export default function Ingredients() {
-  const { params, addFilter, removeFilter } = useSearch();
+  const searchDriver = useContext(SearchContext);
 
-  const currIngredientTypes = params.filters?.ingredientTypes;
+  const currIngredientTypes = searchDriver.params.filters?.ingredientTypes;
 
   const ingredientTypes = useSelector(state => state.data.ingredientTypes);
-
   //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =         useSelector(state => state.search.results);
   const totalResults =    useSelector(state => state.search.totalResults);
   const totalPages =      useSelector(state => state.search.totalPages);
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+  const [ nextIngredientTypes, setNextIngredientTypes ] = useState<string[]>(currIngredientTypes ?? []);
 
   const toggleFilterDropdown = (name: string) => {
-    if (expandedFilter === name) setExpandedFilter(null);
-    else                         setExpandedFilter(name);
+    if (expandedFilter === name) {
+      setExpandedFilter(null);
+      if (name === "ingredientTypes" && currIngredientTypes !== nextIngredientTypes) searchDriver.setFilters(name, nextIngredientTypes);
+    } else {
+      setExpandedFilter(name);
+    }
   };
 
   return (
-    <div className="search-results two-col-b">
-      <div className="two-col-b-left">
+    <div className="two-col">
+      <div className="two-col-left search-results">
         <h1>Ingredients</h1>
         <p>{totalResults} total results and {totalPages} total pages</p>
 
@@ -58,8 +62,11 @@ export default function Ingredients() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    checked={currIngredientTypes?.includes(name) ? true : false}
-                    onChange={() => currIngredientTypes?.includes(name) ? removeFilter("ingredientTypes", name) : addFilter("ingredientTypes", name)}
+                    defaultChecked={currIngredientTypes?.includes(name)}
+                    checked={nextIngredientTypes.includes(name)}
+                    onChange={() => {
+                      setNextIngredientTypes(nextIngredientTypes?.includes(name) ? nextIngredientTypes.filter(v => v !== name) : [...nextIngredientTypes, name]);
+                    }}
                   />
                   <label>{name}</label>
                 </span>
@@ -71,27 +78,25 @@ export default function Ingredients() {
         <Pagination />
         <ResultsPerPage />
 
-        <div className="search-results__list">
-          {results ? results.map(i => (
-            <div className="ingredients" key={i.id}>
-              <Link href={`/ingredient/${i.id}`}>
-                <div className="text">
-                  <div className="fullname">{i.fullname}</div>
-
+        <div className="search-results-list">
+          {
+            results
+              ? results.map(i => (
+                <Link className="search-results-list-item" href={`/ingredient?fullname=${i.fullname}`} key={i.id}>
+                  <img src="/images/dev/peas-280-172.jpg" />
+                  <h3>{i.fullname}</h3>
                   <div className="type">{i.ingredient_type_name}</div>
-                </div>
-
-                {/*<img src={`${url}${i.image}.jpg`} />*/}
-              </Link>
-            </div>
-          )) : <div>Loading...</div>}
+                </Link>
+              ))
+              : <div>Loading...</div>
+          }
         </div>
 
         <Pagination />
         <ResultsPerPage />
       </div>
 
-      <div className="two-col-b-right">
+      <div className="two-col-right">
       </div>
     </div>
   );

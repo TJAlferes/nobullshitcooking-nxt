@@ -1,29 +1,51 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo }                      from 'react';
+import { createContext, useEffect, useMemo}        from 'react';
+import type { ReactNode }                          from 'react';
 import qs                                          from 'qs';
 
 import { getResults, setIndex, setSuggestions } from '../store/search/actions';
 import { toggleLeftNav }                        from '../store/menu/actions';
 import type { SearchIndex, SearchRequest }      from '../store/search/types';
 import { useTypedDispatch as useDispatch }      from '../store';
+import { usePreviousPathname }                  from './usePreviousPathname';
 
-// maybe move this so there is only one instance of this in the whole app... and then just share the return value object as a react context
-export function useSearch() {
+export const SearchContext = createContext({} as UseSearch);
+
+export function SearchProvider({ children }: SearchProviderProps) {
+  const searchDriver = useSearch();
+
+  return (
+    <SearchContext.Provider value={searchDriver}>
+      {children}
+    </SearchContext.Provider>
+  );
+}
+
+type SearchProviderProps = {
+  children: ReactNode;
+};
+
+function useSearch() {
   const dispatch =     useDispatch();
   const router =       useRouter();
   const pathname =     usePathname();
   const searchParams = useSearchParams();
+  const previousPathname = usePreviousPathname();
 
   const params = useMemo(() => {
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
   }, [searchParams]);
-  //const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   useEffect(() => {
-    const searchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].includes(pathname);
-    if (searchResultsPage) {
+    // BUG IN HERE?
+    const goingToSearchResultsPage = ["/equipments", "/ingredients", "/products", "/recipes"].includes(pathname);
+    if (goingToSearchResultsPage) {
+      console.log("previousPathname: ", previousPathname);
+      const comingFromSearchResultsPage = (previousPathname && ["/equipments", "/ingredients", "/products", "/recipes"].includes(previousPathname)) as boolean;
+      console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
+      if (comingFromSearchResultsPage) delete params.filters;
       params.currentPage = "1";
       params.resultsPerPage = "20";
       search();
@@ -87,6 +109,16 @@ export function useSearch() {
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+export type UseSearch = {
+  params:               SearchRequest;
+  search:               (term?: string) =>                                                        void;
+  setFilters:           (filterName: string, filterValues: string[]) =>                           void;
+  setPreFilters:        (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
+  clearFilters:         (filterName: string) =>                                                   void;
+  changeResultsPerPage: (e: SyntheticEvent) =>                                                    void;
+  goToPage:             (page: number) =>                                                         void;
+};
 
 /*const addFilter = (filterName: string, filterValue: string) => {
     if (params.filters) {

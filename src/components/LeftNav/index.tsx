@@ -2,16 +2,16 @@
 
 import Link                               from 'next/link';
 import { usePathname }                    from 'next/navigation';
-import { useState }                       from 'react';
+import { useContext, useState }           from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
 import { useTypedSelector as useSelector } from '../../store';
 import type { SearchIndex }                from '../../store/search/types';
-import { useSearch }                       from '../../utils/useSearch';
+import { SearchContext }                   from '../../utils/SearchProvider';
 import { ExpandCollapse }                  from '..';
 
 export function LeftNav() {
-  const { setPreFilters } = useSearch();
+  const searchDriver = useContext(SearchContext);
 
   const leftNav = useSelector(state => state.menu.leftNav);
 
@@ -35,7 +35,7 @@ export function LeftNav() {
             <div className="submenu">
               {submenuItems.map(item => active === item.parent && (
                 <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
-                  <Link href="#" onClick={() => setPreFilters(item.searchIndex as SearchIndex, item.filterName, item.filterValues)}>{item.name}</Link>
+                  <Link href="#" onClick={() => searchDriver.setPreFilters(item.searchIndex as SearchIndex, item.filterName, item.filterValues)}>{item.name}</Link>
                 </div>
               ))}
             </div>
@@ -64,7 +64,7 @@ export function LeftNav() {
               >
                 {submenuItems.filter(subitem => subitem.parent === item.name).map(subitem => (
                   <div className="submenu-item">
-                    <Link href="#" onClick={() => setPreFilters(subitem.searchIndex as SearchIndex, subitem.filterName, subitem.filterValues)}>{item.name}</Link>
+                    <Link href="#" onClick={() => searchDriver.setPreFilters(subitem.searchIndex as SearchIndex, subitem.filterName, subitem.filterValues)}>{item.name}</Link>
                   </div>
                 ))}
               </ExpandCollapse>
