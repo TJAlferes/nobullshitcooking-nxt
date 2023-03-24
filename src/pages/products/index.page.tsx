@@ -12,26 +12,22 @@ import { SearchContext }                              from '../../utils/SearchPr
 export default function Products() {
   const searchDriver = useContext(SearchContext);
 
-  const currProductCategories = searchDriver.params.filters?.productCategories;
-  const currProductTypes =      searchDriver.params.filters?.productTypes;
-
   const productCategories = useSelector(state => state.data.productCategories);
   const productTypes =      useSelector(state => state.data.productTypes);
-  
-  //const resultTerm        useSelector(state = state.search.resultTerm);
-  const results =          useSelector(state => state.search.results);
-  const totalResults =     useSelector(state => state.search.totalResults);
-  const totalPages =       useSelector(state => state.search.totalPages);
+  //const resultTerm          useSelector(state = state.search.resultTerm);
+  const results =           useSelector(state => state.search.results);
+  const totalResults =      useSelector(state => state.search.totalResults);
+  const totalPages =        useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter,        setExpandedFilter ] =        useState<string|null>(null);
-  const [ nextProductCategories, setNextProductCategories ] = useState<string[]>(currProductCategories ?? []);
-  const [ nextProductTypes,      setNextProductTypes ] =      useState<string[]>(currProductTypes ?? []);
+  const [ expandedFilter,        setExpandedFilter ] =              useState<string|null>(null);
+  const [ checkedProductCategories, setCheckedProductCategories ] = useState<string[]>(searchDriver.params.filters?.productCategories ?? []);
+  const [ checkedProductTypes,      setCheckedProductTypes ] =      useState<string[]>(searchDriver.params.filters?.productTypes ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "productCategories" && currProductCategories !== nextProductCategories) searchDriver.setFilters(name, nextProductCategories);
-      if (name === "productTypes"      && currProductTypes !== nextProductTypes)           searchDriver.setFilters(name, nextProductTypes);
+      if (name === "productCategories" && checkedProductCategories !== searchDriver.params.filters?.productCategories) searchDriver.setFilters(name, checkedProductCategories);
+      if (name === "productTypes"      && checkedProductTypes !== searchDriver.params.filters?.productTypes)           searchDriver.setFilters(name, checkedProductTypes);
     } else {
       setExpandedFilter(name);
     }
@@ -67,10 +63,9 @@ export default function Products() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currProductCategories?.includes(name)}
-                    checked={nextProductCategories.includes(name)}
+                    checked={checkedProductCategories?.includes(name)}
                     onChange={() => {
-                      setNextProductCategories(nextProductCategories?.includes(name) ? nextProductCategories.filter(v => v !== name) : [...nextProductCategories, name]);
+                      setCheckedProductCategories(checkedProductCategories?.includes(name) ? checkedProductCategories.filter(v => v !== name) : [...checkedProductCategories, name]);
                     }}
                   />
                   <label>{name}</label>
@@ -100,10 +95,9 @@ export default function Products() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currProductTypes?.includes(name)}
-                    checked={nextProductTypes.includes(name)}
+                    checked={checkedProductTypes?.includes(name)}
                     onChange={() => {
-                      setNextProductTypes(nextProductTypes?.includes(name) ? nextProductTypes.filter(v => v !== name) : [...nextProductTypes, name]);
+                      setCheckedProductTypes(checkedProductTypes?.includes(name) ? checkedProductTypes.filter(v => v !== name) : [...checkedProductTypes, name]);
                     }}
                   />
                   <label>{name}</label>

@@ -12,21 +12,19 @@ import { SearchContext }                              from '../../utils/SearchPr
 export default function Ingredients() {
   const searchDriver = useContext(SearchContext);
 
-  const currIngredientTypes = searchDriver.params.filters?.ingredientTypes;
-
   const ingredientTypes = useSelector(state => state.data.ingredientTypes);
   //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =         useSelector(state => state.search.results);
   const totalResults =    useSelector(state => state.search.totalResults);
   const totalPages =      useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
-  const [ nextIngredientTypes, setNextIngredientTypes ] = useState<string[]>(currIngredientTypes ?? []);
+  const [ expandedFilter, setExpandedFilter ] =                 useState<string|null>(null);
+  const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>(searchDriver.params.filters?.ingredientTypes ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "ingredientTypes" && currIngredientTypes !== nextIngredientTypes) searchDriver.setFilters(name, nextIngredientTypes);
+      if (name === "ingredientTypes" && checkedIngredientTypes !== searchDriver.params.filters?.ingredientTypes) searchDriver.setFilters(name, checkedIngredientTypes);
     } else {
       setExpandedFilter(name);
     }
@@ -62,10 +60,9 @@ export default function Ingredients() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currIngredientTypes?.includes(name)}
-                    checked={nextIngredientTypes.includes(name)}
+                    checked={checkedIngredientTypes?.includes(name)}
                     onChange={() => {
-                      setNextIngredientTypes(nextIngredientTypes?.includes(name) ? nextIngredientTypes.filter(v => v !== name) : [...nextIngredientTypes, name]);
+                      setCheckedIngredientTypes(checkedIngredientTypes?.includes(name) ? checkedIngredientTypes.filter(v => v !== name) : [...checkedIngredientTypes, name]);
                     }}
                   />
                   <label>{name}</label>

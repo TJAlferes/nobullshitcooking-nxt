@@ -12,21 +12,19 @@ import { SearchContext }                              from '../../utils/SearchPr
 export default function Equipments() {
   const searchDriver = useContext(SearchContext);
 
-  const currEquipmentTypes = searchDriver.params.filters?.equipmentTypes;
-
   const equipmentTypes = useSelector(state => state.data.equipmentTypes);
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
   const totalResults =   useSelector(state => state.search.totalResults);
   const totalPages =     useSelector(state => state.search.totalPages);
 
-  const [ expandedFilter, setExpandedFilter ] =         useState<string|null>(null);
-  const [ nextEquipmentTypes, setNextEquipmentTypes ] = useState<string[]>(currEquipmentTypes ?? []);
+  const [ expandedFilter, setExpandedFilter ] =               useState<string|null>(null);
+  const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] = useState<string[]>(searchDriver.params.filters?.equipmentTypes ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "equipmentTypes" && currEquipmentTypes !== nextEquipmentTypes) searchDriver.setFilters(name, nextEquipmentTypes);
+      if (name === "equipmentTypes" && checkedEquipmentTypes !== searchDriver.params.filters?.equipmentTypes) searchDriver.setFilters(name, checkedEquipmentTypes);
     } else {
       setExpandedFilter(name);
     }
@@ -62,10 +60,9 @@ export default function Equipments() {
                 <span key={id}>
                   <input
                     type="checkbox"
-                    defaultChecked={currEquipmentTypes?.includes(name)}
-                    checked={nextEquipmentTypes.includes(name)}
+                    checked={checkedEquipmentTypes?.includes(name)}
                     onChange={() => {
-                      setNextEquipmentTypes(nextEquipmentTypes?.includes(name) ? nextEquipmentTypes.filter(v => v !== name) : [...nextEquipmentTypes, name]);
+                      setCheckedEquipmentTypes(checkedEquipmentTypes?.includes(name) ? checkedEquipmentTypes.filter(v => v !== name) : [...checkedEquipmentTypes, name]);
                     }}
                   />
                     <label>{name}</label>

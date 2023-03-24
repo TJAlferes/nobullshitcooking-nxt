@@ -1,14 +1,9 @@
 import Link from 'next/link';
 
-import type { IWorkRecipe } from '../../store/data/types';
+import type { IWorkRecipe } from '../../store/data/types';  // rename IWorkRecipe to WorkRecipe and/or consolidate with RecipeCard?
 import type { IRecipe } from './index.page';
 
-const url = "https://s3.amazonaws.com/nobsc-user-recipe";
-
-function recipeBy(author: string) {
-  if (author === "Unknown") return "Unknown";
-  return <Link href={`/profile/${author}`}>{author}</Link>;
-};
+//const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 export function RecipeView({
   favorite,
@@ -43,14 +38,14 @@ export function RecipeView({
   } = recipe;
 
   return (
-    <div className="recipe two-col">
-      <div className="two-col-left">
+    <div className="two-col">
+      <div className="two-col-left recipe">
         <h1>{title}</h1>
 
         <p className="feedback">{feedback}</p>
 
         <div className="save-area">
-          {(userIsAuthenticated && !myPrivateRecipes.find(r => r.id == id) && !myPublicRecipes.find(r => r.id == id))
+          {( userIsAuthenticated && !myPrivateRecipes.find(r => r.id == id) && !myPublicRecipes.find(r => r.id == id) )
             ? (
               <>
                 {myFavoriteRecipes.find(r => r.id == id)
@@ -74,10 +69,11 @@ export function RecipeView({
         </div>
 
         <div className="image">
-          {recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>}
+          <img src="/images/dev/sushi-280-172.jpg" />
+          {/*recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
 
-        <div className="author"><b>Author:</b>{' '}{recipeBy(author)}</div>
+        <div className="author"><b>Author:</b>{' '}{author === "Unknown" ? "Unknown" : <Link href={`/profile/${author}`}>{author}</Link>}</div>
 
         <div className="description"><b>Author's note:</b>{' '}<em>{description}</em></div>
 
@@ -92,7 +88,8 @@ export function RecipeView({
 
         <h2>Required Equipment</h2>
         <div className="equipment-image">
-          {equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>}
+          <img src="/images/dev/sushi-280-172.jpg" />
+          {/*equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="equipments">
           {equipment && equipment.map(e => <div className="equipment" key={e.equipment_name}>{e.amount}{' '}{e.equipment_name}</div>)}
@@ -100,7 +97,8 @@ export function RecipeView({
 
         <h2>Required Ingredients</h2>
         <div className="ingredients-image">
-          {ingredients_image !== "nobsc-recipe-ingredients-default" ? <img src={`${url}-ingredients/${ingredients_image}`} /> : <div className="img-280-172"></div>}
+          <img src="/images/dev/sushi-280-172.jpg" />
+          {/*ingredients_image !== "nobsc-recipe-ingredients-default" ? <img src={`${url}-ingredients/${ingredients_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="ingredients">
           {ingredients && ingredients.map(i => (
@@ -112,14 +110,13 @@ export function RecipeView({
 
         <h2>Required Subrecipes</h2>
         <div className="subrecipes">
-          {subrecipes
-            ? subrecipes.map(s => <div className="subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.measurement_name}{' '}{s.subrecipe_title}</div>)
-            : "none"}
+          {!subrecipes ? "none" : subrecipes.map(s => <div className="subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.measurement_name}{' '}{s.subrecipe_title}</div>)}
         </div>
 
         <h2>Directions</h2>
         <div className="cooking-image">
-          {cooking_image !== "nobsc-recipe-cooking-default" ? <img src={`${url}-cooking/${cooking_image}`} /> : <div className="img-280-172"></div>}
+          <img src="/images/dev/sushi-280-172.jpg" />
+          {/*cooking_image !== "nobsc-recipe-cooking-default" ? <img src={`${url}-cooking/${cooking_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="recipe-directions">{directions}</div>
       </div>

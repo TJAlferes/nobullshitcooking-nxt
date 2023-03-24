@@ -21,12 +21,9 @@ export function* getInitialUserDataSaga() {
   } catch (err: any) {
     if (err.response) {
       // Server responded with a status code outside of 2xx
-      console.log(err.response.data);
-      console.log(err.response.status);
-      console.log(err.response.headers);
+      console.log(err.response.status, err.response.data, err.response.headers);
     } else if (err.request) {
-      // No response was received
-      // `err.request` is: an instance of XMLHttpRequest in the browser, an instance of http.ClientRequest in node.js
+      // No response was received -- `err.request` is: an instance of XMLHttpRequest in the browser, an instance of http.ClientRequest in node.js
       console.log(err.request);
     } else {
       // Something happened in setting up the request that triggered an Error
