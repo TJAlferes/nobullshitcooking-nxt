@@ -72,9 +72,17 @@ export default function Recipe({ recipe }: {recipe: IRecipe}) {
     );
 }
 
+function slugify(title: string) {
+  return title.split(' ').map(word => word.charAt(0).toLowerCase() + word.slice(1)).join('-');
+}
+
+function unslugify(title: string) {
+  return title.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 export async function getStaticPaths() {
   const response = await axios.get(`${endpoint}/recipe/titles`);
-  const paths = response.data.map((recipe: {title: string}) => ({params: {title: recipe.title}}));
+  const paths = response.data.map((recipe: {title: string}) => ({params: {title: slugify(recipe.title)}}));
   return {paths, fallback: false};
 }
 
