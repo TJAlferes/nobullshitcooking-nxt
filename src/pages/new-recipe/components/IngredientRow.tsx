@@ -1,26 +1,34 @@
 import type { IIngredient, IIngredientType, IMeasurement } from '../../../store/data/types';
 
 // TO DO: Add brand and variety
-
 export function IngredientRow({
-  amount,
-  ingredients,
-  ingredientTypes,
   measurements,
+  ingredientTypes,
+  ingredients,
   myIngredients,
-  changeIngredientRow,
-  id,
-  removeIngredientRow,
   rowKey,
+  amount,
+  measurementId,
   type,
-  measurementId
+  id,
+  changeIngredientRow,
+  removeIngredientRow,
 }: Props) {
   const availableIngredients = [...ingredients, ...myIngredients];
   
   return (
     <div className="recipe-row">
       <label>Amount:</label>
-      <input max="9999" min="0.125" name="amount" onChange={(e) => changeIngredientRow(e, rowKey)} required step="any" type="number" value={amount} />
+      <input
+        max="9999"
+        min="0.125"
+        name="amount"
+        onChange={(e) => changeIngredientRow(e, rowKey)}
+        required
+        step="any"
+        type="number"
+        value={amount}
+      />
 
       <label>Unit:</label>
       <select name="unit" onChange={(e) => changeIngredientRow(e, rowKey)} required value={measurementId}>
@@ -50,15 +58,15 @@ export function IngredientRow({
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Props = {
-  amount:                                                 string | number;
-  changeIngredientRow(e: SyntheticEvent, rowKey: string): void;
-  ingredients:                                            IIngredient[];
-  ingredientTypes:                                        IIngredientType[];
-  measurements:                                           IMeasurement[];
-  myIngredients:                                          IIngredient[];
-  id:                                                     string | number;
-  removeIngredientRow(rowKey: string):                    void;
-  rowKey:                                                 string;
-  type:                                                   string | number;
-  measurementId:                                          string | number;
+  measurements:        IMeasurement[];
+  ingredientTypes:     IIngredientType[];
+  ingredients:         IIngredient[];
+  myIngredients:       IIngredient[];
+  rowKey:              string;
+  amount:              string | number;
+  measurementId:       string | number;
+  type:                string | number;
+  id:                  string | number;
+  changeIngredientRow: (e: SyntheticEvent, rowKey: string) => void;
+  removeIngredientRow: (rowKey: string) =>                    void;
 };

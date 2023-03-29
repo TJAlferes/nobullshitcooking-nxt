@@ -7,89 +7,89 @@ import { EquipmentRow, IngredientRow, SubrecipeRow, ImageUploads } from './compo
 import type { IMethods, IEquipmentRow, IIngredientRow, ISubrecipeRow } from './index.page';
 
 export function NewRecipeView({
+  id,
+  ownership,
+  measurements,
+  equipment,
+  myEquipment,
+  ingredientTypes,
+  ingredients,
+  myIngredients,
+  recipeTypes,
+  cuisines,
+  methods,
+  recipes,
+  myFavoriteRecipes,
+  mySavedRecipes,
+  myPrivateRecipes,
+  myPublicRecipes,
+  authname,
+  feedback,
+  loading,
+  editingId,
+  recipeTypeId,
+  cuisineId,
+  title,
+  description,
+  directions,
+  usedMethods,
+  equipmentRows,
+  ingredientRows,
+  subrecipeRows,
+  recipePrevImage,
+  recipeImage,
+  recipeCrop,
+  recipeFullCrop,
+  recipeThumbCrop,
+  recipeTinyCrop,
+  equipmentPrevImage,
+  equipmentImage,
+  equipmentCrop,
+  equipmentFullCrop,
+  ingredientsPrevImage,
+  ingredientsImage,
+  ingredientsCrop,
+  ingredientsFullCrop,
+  cookingPrevImage,
+  cookingImage,
+  cookingCrop,
+  cookingFullCrop,
+  changeRecipeType,
+  changeCuisine,
+  changeTitle,
+  changeDescription,
+  changeDirections,
+  changeMethods,
+  changeEquipmentRow,
+  changeIngredientRow,
+  changeSubrecipeRow,
   addEquipmentRow,
   addIngredientRow,
   addSubrecipeRow,
-  authname,
-  cancelCookingImage,
-  cancelEquipmentImage,
-  cancelIngredientsImage,
-  cancelRecipeImage,
-  changeCuisine,
-  changeDescription,
-  changeDirections,
-  changeEquipmentRow,
-  changeIngredientRow,
-  changeMethods,
-  changeRecipeType,
-  changeSubrecipeRow,
-  changeTitle,
-  cookingCrop,
-  cookingFullCrop,
-  cookingImage,
-  cookingPrevImage,
-  cuisineId,
-  cuisines,
-  equipment,
-  ingredients,
-  ingredientTypes,
-  measurements,
-  methods,
-  myFavoriteRecipes,
-  myEquipment,
-  myIngredients,
-  myPrivateRecipes,
-  myPublicRecipes,
-  mySavedRecipes,
-  recipes,
-  recipeTypes,
-  description,
-  directions,
-  editingId,
-  equipmentCrop,
-  equipmentFullCrop,
-  equipmentImage,
-  equipmentPrevImage,
-  equipmentRows,
-  feedback,
-  id,
-  ingredientsCrop,
-  ingredientsFullCrop,
-  ingredientsImage,
-  ingredientsPrevImage,
-  ingredientRows,
-  loading,
-  usedMethods,
-  onCookingCropChange,
-  onCookingCropComplete,
-  onCookingImageLoaded,
-  onEquipmentCropChange,
-  onEquipmentCropComplete,
-  onEquipmentImageLoaded,
-  onIngredientsCropChange,
-  onIngredientsCropComplete,
-  onIngredientsImageLoaded,
-  onRecipeCropChange,
-  onRecipeCropComplete,
-  onRecipeImageLoaded,
-  onSelectFile,
-  ownership,
-  recipeCrop,
-  recipeFullCrop,
-  recipeImage,
-  recipePrevImage,
-  recipeThumbCrop,
-  recipeTinyCrop,
-  recipeTypeId,
   removeEquipmentRow,
   removeIngredientRow,
   removeSubrecipeRow,
-  submit,
-  subrecipeRows,
-  title
+  onSelectFile,
+  onRecipeImageLoaded,
+  onRecipeCropChange,
+  onRecipeCropComplete,
+  cancelRecipeImage,
+  onEquipmentImageLoaded,
+  onEquipmentCropChange,
+  onEquipmentCropComplete,
+  cancelEquipmentImage,
+  onIngredientsImageLoaded,
+  onIngredientsCropChange,
+  onIngredientsCropComplete,
+  cancelIngredientsImage,
+  onCookingImageLoaded,
+  onCookingCropChange,
+  onCookingCropComplete,
+  cancelCookingImage,
+  submit
 }: Props) {
   return (
-    <div className="new-recipe one-col-a">
+    <div className="one-col new-recipe">
       <h1>New Recipe</h1>
 
       <p className="feedback">{feedback}</p>
@@ -164,15 +164,15 @@ export function NewRecipeView({
         <div className="equipment-rows">
           {equipmentRows.map(({ key, amount, type, id }) => (
             <EquipmentRow
-              amount={amount}
+              key={key}
               equipment={equipment}
               myEquipment={ownership === "private" ? myEquipment : []}
+              rowKey={key}
+              amount={amount}
+              type={type}
               id={id}
               changeEquipmentRow={changeEquipmentRow}
-              key={key}
               removeEquipmentRow={removeEquipmentRow}
-              rowKey={key}
-              type={type}
             />
           ))}
         </div>
@@ -184,18 +184,18 @@ export function NewRecipeView({
         <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
             <IngredientRow
-              amount={amount}
-              ingredients={ingredients}
-              ingredientTypes={ingredientTypes}
-              measurementId={measurementId}
-              measurements={measurements}
-              myIngredients={ownership === "private" ? myIngredients : []}
-              changeIngredientRow={changeIngredientRow}
-              id={id}
               key={key}
-              removeIngredientRow={removeIngredientRow}
+              measurements={measurements}
+              ingredientTypes={ingredientTypes}
+              ingredients={ingredients}
+              myIngredients={ownership === "private" ? myIngredients : []}
               rowKey={key}
+              amount={amount}
+              measurementId={measurementId}
               type={type}
+              id={id}
+              changeIngredientRow={changeIngredientRow}
+              removeIngredientRow={removeIngredientRow}
             />
           ))}
         </div>
@@ -207,25 +207,25 @@ export function NewRecipeView({
         <div className="subrecipe-rows">
           {subrecipeRows.map(s => (
             <SubrecipeRow
-              amount={s.amount}
-              cuisine={s.cuisine}
-              cuisines={cuisines}
-              measurementId={s.measurementId}
+              key={s.key}
               measurements={measurements}
+              recipeTypes={recipeTypes}
+              cuisines={cuisines}
+              recipes={recipes}
               myFavoriteRecipes={myFavoriteRecipes}
+              mySavedRecipes={mySavedRecipes}
               myPrivateRecipes={ownership === "private" ? myPrivateRecipes : []}
               myPublicRecipes={myPublicRecipes}
-              mySavedRecipes={mySavedRecipes}
-              recipes={recipes}
-              recipeTypes={recipeTypes}
               editingId={editingId}
-              changeSubrecipeRow={changeSubrecipeRow}
-              key={s.key}
-              removeSubrecipeRow={removeSubrecipeRow}
-              rowKey={s.key}
               selfId={id}
-              id={s.id}
+              rowKey={s.key}
+              amount={s.amount}
+              measurementId={s.measurementId}
               type={s.type}
+              cuisine={s.cuisine}
+              id={s.id}
+              changeSubrecipeRow={changeSubrecipeRow}
+              removeSubrecipeRow={removeSubrecipeRow}
             />
           ))}
         </div>
@@ -293,87 +293,100 @@ export function NewRecipeView({
 
 type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
-type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
+//type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type Props = {
-  addEquipmentRow():                                      void;
-  addIngredientRow():                                     void;
-  addSubrecipeRow():                                      void;
-  authname:                                               string;
-  cancelCookingImage():                                   void;
-  cancelEquipmentImage():                                 void;
-  cancelIngredientsImage():                               void;
-  cancelRecipeImage():                                    void;
-  changeCuisine(e: SyntheticEvent):                       void;
-  changeDescription(e: SyntheticEvent):                   void;
-  changeDirections(e: SyntheticEvent):                    void;
-  changeEquipmentRow(e: SyntheticEvent, rowKey: string):  void;
-  changeIngredientRow(e: SyntheticEvent, rowKey: string): void;
-  changeMethods(e: SyntheticEvent):                       void;
-  changeRecipeType(e: SyntheticEvent):                    void;
-  changeSubrecipeRow(e: SyntheticEvent, rowKey: string):  void;
-  changeTitle(e: SyntheticEvent):                         void;
-  cookingCrop:                                            Crop;
-  cookingFullCrop:                                        string;
-  cookingImage:                                           string | ArrayBuffer | null;
-  cookingPrevImage:                                       string;
-  cuisineId:                                              number;
-  cuisines:                                               ICuisine[];
-  equipment:                                              IEquipment[];
-  ingredients:                                            IIngredient[];
-  ingredientTypes:                                        IIngredientType[];
-  measurements:                                           IMeasurement[];
-  methods:                                                IMethod[];
-  myFavoriteRecipes:                                      IWorkRecipe[];
-  myEquipment:                                            IEquipment[];
-  myIngredients:                                          IIngredient[];
-  myPrivateRecipes:                                       IWorkRecipe[];
-  myPublicRecipes:                                        IWorkRecipe[];
-  mySavedRecipes:                                         IWorkRecipe[];
-  recipes:                                                IWorkRecipe[];
-  recipeTypes:                                            IRecipeType[];
-  description:                                            string;
-  directions:                                             string;
-  editingId:                                              number | null;
-  equipmentCrop:                                          Crop;
-  equipmentFullCrop:                                      string;
-  equipmentImage:                                         string | ArrayBuffer | null;
-  equipmentPrevImage:                                     string;
-  equipmentRows:                                          IEquipmentRow[];
-  feedback:                                               string;
-  id:                                                     number;
-  ingredientsCrop:                                        Crop;
-  ingredientsFullCrop:                                    string;
-  ingredientsImage:                                       string | ArrayBuffer | null;
-  ingredientsPrevImage:                                   string;
-  ingredientRows:                                         IIngredientRow[];
-  loading:                                                boolean;
-  usedMethods:                                            IMethods;
-  onCookingCropChange(crop: Crop):                        void;
-  onCookingCropComplete(crop: Crop):                      void;
-  onCookingImageLoaded(e: SyntheticImageEvent):           void;
-  onEquipmentCropChange(crop: Crop):                      void;
-  onEquipmentCropComplete(crop: Crop):                    void;
-  onEquipmentImageLoaded(e: SyntheticImageEvent):         void;
-  onIngredientsCropChange(crop: Crop):                    void;
-  onIngredientsCropComplete(crop: Crop):                  void;
-  onIngredientsImageLoaded(e: SyntheticImageEvent):       void;
-  onRecipeCropChange(crop: Crop):                         void;
-  onRecipeCropComplete(crop: Crop):                       void;
-  onRecipeImageLoaded(e: SyntheticImageEvent):            void;
-  onSelectFile(e: ChangeEvent, type: string):             void;
-  ownership:                                              string;
-  recipeCrop:                                             Crop;
-  recipeFullCrop:                                         string;
-  recipeImage:                                            string | ArrayBuffer | null;
-  recipePrevImage:                                        string;
-  recipeThumbCrop:                                        string;
-  recipeTinyCrop:                                         string;
-  recipeTypeId:                                           number;
-  removeEquipmentRow(rowKey: string):                     void;
-  removeIngredientRow(rowKey: string):                    void;
-  removeSubrecipeRow(rowKey: string):                     void;
-  submit():                                               void;
-  subrecipeRows:                                          ISubrecipeRow[];
-  title:                                                  string;
+  id:        number;
+  ownership: string;
+
+  measurements:      IMeasurement[];
+  equipment:         IEquipment[];
+  myEquipment:       IEquipment[];
+  ingredientTypes:   IIngredientType[];
+  ingredients:       IIngredient[];
+  myIngredients:     IIngredient[];
+  recipeTypes:       IRecipeType[];
+  cuisines:          ICuisine[];
+  methods:           IMethod[];
+  recipes:           IWorkRecipe[];
+  myFavoriteRecipes: IWorkRecipe[];
+  mySavedRecipes:    IWorkRecipe[];
+  myPrivateRecipes:  IWorkRecipe[];
+  myPublicRecipes:   IWorkRecipe[];
+
+  authname: string;
+  
+  feedback: string;
+  loading:  boolean;
+
+  editingId: number | null;
+
+  recipeTypeId: number;
+  cuisineId:    number;
+  title:        string;
+  description:  string;
+  directions:   string;
+
+  usedMethods:    IMethods;
+  equipmentRows:  IEquipmentRow[];
+  ingredientRows: IIngredientRow[];
+  subrecipeRows:  ISubrecipeRow[];
+
+  recipePrevImage:      string;
+  recipeImage:          string | ArrayBuffer | null;
+  recipeCrop:           Crop;
+  recipeFullCrop:       string;
+  recipeThumbCrop:      string;
+  recipeTinyCrop:       string;
+  
+  equipmentPrevImage:   string;
+  equipmentImage:       string | ArrayBuffer | null;
+  equipmentCrop:        Crop;
+  equipmentFullCrop:    string;
+  
+  ingredientsPrevImage: string;
+  ingredientsImage:     string | ArrayBuffer | null;
+  ingredientsCrop:      Crop;
+  ingredientsFullCrop:  string;
+
+  cookingPrevImage:     string;
+  cookingImage:         string | ArrayBuffer | null;
+  cookingCrop:          Crop;
+  cookingFullCrop:      string;
+
+  changeRecipeType:    (e: SyntheticEvent) => void;
+  changeCuisine:       (e: SyntheticEvent) => void;
+  changeTitle:         (e: SyntheticEvent) => void;
+  changeDescription:   (e: SyntheticEvent) => void;
+  changeDirections:    (e: SyntheticEvent) => void;
+  changeMethods:       (e: SyntheticEvent) => void;
+  changeEquipmentRow:  (e: SyntheticEvent, rowKey: string) => void;
+  changeIngredientRow: (e: SyntheticEvent, rowKey: string) => void;
+  changeSubrecipeRow:  (e: SyntheticEvent, rowKey: string) => void;
+  addEquipmentRow:     () => void;
+  addIngredientRow:    () => void;
+  addSubrecipeRow:     () => void;
+  removeEquipmentRow:  (rowKey: string) => void;
+  removeIngredientRow: (rowKey: string) => void;
+  removeSubrecipeRow:  (rowKey: string) => void;
+  
+  onSelectFile:              (e: ChangeEvent, type: string) => void;
+  onRecipeImageLoaded:       (e: SyntheticEvent) => void;
+  onRecipeCropChange:        (crop: Crop) => void;
+  onRecipeCropComplete:      (crop: Crop) => void;
+  cancelRecipeImage:         () => void;
+  onEquipmentImageLoaded:    (e: SyntheticEvent) => void;
+  onEquipmentCropChange:     (crop: Crop) => void;
+  onEquipmentCropComplete:   (crop: Crop) => void;
+  cancelEquipmentImage:      () => void;
+  onIngredientsImageLoaded:  (e: SyntheticEvent) => void;
+  onIngredientsCropChange:   (crop: Crop) => void;
+  onIngredientsCropComplete: (crop: Crop) => void;
+  cancelIngredientsImage:    () => void;
+  onCookingImageLoaded:      (e: SyntheticEvent) => void;
+  onCookingCropChange:       (crop: Crop) => void;
+  onCookingCropComplete:     (crop: Crop) => void;
+  cancelCookingImage:        () => void;
+
+  submit: () => void;
 };

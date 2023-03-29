@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios                from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
-import { getMyFavoriteRecipesSaga } from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
+import { endpoint }                                from '../../../utils/api';
+import { getMyFavoriteRecipesSaga }                from '../../data/sagas';
+import { userMessage, userMessageClear }           from '../actions';
 import type { IFavoriteRecipe, IUnfavoriteRecipe } from './types';
 
 export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {

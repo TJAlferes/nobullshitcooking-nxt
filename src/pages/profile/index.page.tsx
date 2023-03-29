@@ -1,5 +1,5 @@
 import axios                          from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';  // or useRouter from 'next/router' ?
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 import { useDispatch }                from 'react-redux';
 
@@ -30,17 +30,16 @@ export default function Profile() {
 
   useEffect(() => {
     let isSubscribed = true;
-
     if (isSubscribed) {
-      if (message !== "") window.scrollTo(0,0);
+      if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
     }
-
     return () => {
       isSubscribed = false;
     };
   }, [message]);
 
+  // TO DO: getServerSideProps
   useEffect(() => {
     if (!username || (username.length < 6) || (username.length > 20)) {
       router.push('/');

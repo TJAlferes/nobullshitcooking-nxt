@@ -1,4 +1,4 @@
-import { actionTypes, IRecipeInfo, IRecipeUpdateInfo } from './types';
+import { actionTypes, RecipeInfo, RecipeUpdateInfo } from './types';
 
 const {
   CREATE_PRIVATE_RECIPE,
@@ -10,10 +10,10 @@ const {
   DISOWN_PUBLIC_RECIPE
 } = actionTypes;
 
-export const createPrivateRecipe = (recipeInfo: IRecipeInfo) =>       ({type: CREATE_PRIVATE_RECIPE, recipeInfo});
-export const updatePrivateRecipe = (recipeInfo: IRecipeUpdateInfo) => ({type: UPDATE_PRIVATE_RECIPE, recipeInfo});
-export const deletePrivateRecipe = (id: number) =>                    ({type: DELETE_PRIVATE_RECIPE, id});
+export const createPrivateRecipe = (recipeInfo: RecipeInfo) =>       ({type: CREATE_PRIVATE_RECIPE, recipeInfo});
+export const updatePrivateRecipe = (recipeInfo: RecipeUpdateInfo) => ({type: UPDATE_PRIVATE_RECIPE, recipeInfo});
+export const deletePrivateRecipe = (id: number) =>                   ({type: DELETE_PRIVATE_RECIPE, id});
 
-export const createPublicRecipe = (recipeInfo: IRecipeInfo) =>       ({type: CREATE_PUBLIC_RECIPE, recipeInfo});
-export const updatePublicRecipe = (recipeInfo: IRecipeUpdateInfo) => ({type: UPDATE_PUBLIC_RECIPE, recipeInfo});
-export const disownPublicRecipe = (id: number) =>                    ({type: DISOWN_PUBLIC_RECIPE, id});
+export const createPublicRecipe = (recipeInfo: RecipeInfo) =>       ({type: CREATE_PUBLIC_RECIPE, recipeInfo});
+export const updatePublicRecipe = (recipeInfo: RecipeUpdateInfo) => ({type: UPDATE_PUBLIC_RECIPE, recipeInfo});
+export const disownPublicRecipe = (id: number) =>                   ({type: DISOWN_PUBLIC_RECIPE, id});

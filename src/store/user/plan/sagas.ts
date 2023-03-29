@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios                from 'axios';
 import { call, delay, put } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
-import { getMyPlansSaga } from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
+import { endpoint }                                   from '../../../utils/api';
+import { getMyPlansSaga }                             from '../../data/sagas';
+import { userMessage, userMessageClear }              from '../actions';
 import type { ICreatePlan, IUpdatePlan, IDeletePlan } from './types';
 
 export function* createPlanSaga(action: ICreatePlan) {
@@ -11,7 +11,6 @@ export function* createPlanSaga(action: ICreatePlan) {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/plan/create`, {planInfo: action.planInfo}, {withCredentials: true});
 
     yield put(userMessage(message));
-    // if it refreshes too quickly, put a delay here?
     yield call(getMyPlansSaga);
   } catch(err) {
     yield put(userMessage('An error occurred. Please try again.'));

@@ -1,31 +1,47 @@
-import { mount } from 'enzyme';
-import React from 'react';
-import { act } from 'react-dom/test-utils';
+import {
+  act,
+  buildQueries,
+  cleanup,
+  computeHeadingLevel,
+  configure,
+  createEvent,
+  getByRole,
+  queryByRole,
+  findByRole,
+  fireEvent,
+  isInaccessible,
+  logDOM,
+  logRoles,
+  prettyDOM,
+  prettyFormat,
+  queries,
+  queryHelpers,
+  render,
+  renderHook,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved
+} from '@testing-library/react';
 
 import NewRecipe from '../../../src/pages/new-recipe/index.page';
-import { staffCreateNewRecipe, staffEditRecipe, } from '../../../src/store/staff/recipe/actions';
-import { userCreateNewPrivateRecipe, userCreateNewPublicRecipe, userEditPrivateRecipe, userEditPublicRecipe } from '../../../src/store/user/recipe/actions';
+import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../../src/store/user/recipe/actions';
 import mockFn from '../../mockFn';
 
 const mockPush = jest.fn();
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
+const useRouter = jest.spyOn(require("next/navigation"), "useRouter");
 // place inside beforeEach?
 useRouter.mockImplementation(() => ({push: mockPush, query: {}}));
 
-const mockedStaffCreateNewRecipe =       mockFn(staffCreateNewRecipe);
-const mockedStaffEditRecipe =            mockFn(staffEditRecipe);
-const mockedUserCreateNewPrivateRecipe = mockFn(userCreateNewPrivateRecipe);
-const mockedUserCreateNewPublicRecipe =  mockFn(userCreateNewPublicRecipe);
-const mockedUserEditPrivateRecipe =      mockFn(userEditPrivateRecipe);
-const mockedUserEditPublicRecipe =       mockFn(userEditPublicRecipe);
+const mockedCreatePrivateRecipe = mockFn(createPrivateRecipe);
+const mockedCreatePublicRecipe =  mockFn(createPublicRecipe);
+const mockedUpdatePrivateRecipe = mockFn(updatePrivateRecipe);
+const mockedUpdatePublicRecipe =  mockFn(updatePublicRecipe);
 
 type Actions =
-  typeof mockedStaffCreateNewRecipe |
-  typeof mockedStaffEditRecipe |
-  typeof mockedUserCreateNewPrivateRecipe |
-  typeof mockedUserCreateNewPublicRecipe |
-  typeof mockedUserEditPrivateRecipe |
-  typeof mockedUserEditPublicRecipe;
+  | typeof mockedCreatePrivateRecipe
+  | typeof mockedCreatePublicRecipe
+  | typeof mockedUpdatePrivateRecipe
+  | typeof mockedUpdatePublicRecipe;
 
 jest.mock('react-redux', () => ({
   connect:     () => jest.fn(),
@@ -94,16 +110,14 @@ describe('NewRecipe', () => {
 
     describe('when ownership is private', () => {
       it('should not redirect to /dashboard if given no id', () => {
-        mount(<NewRecipe editing={false} ownership="private" {...initialProps} />);
-
+        render(<NewRecipe editing={false} ownership="private" {...initialProps} />);
         expect(mockPush).not.toHaveBeenCalled();
       });
     });
 
     describe('when ownership is public', () => {
       it('should not redirect to /dashboard if given no id', () => {
-        mount(<NewRecipe editing={false} ownership="public" {...initialProps} />);
-
+        render(<NewRecipe editing={false} ownership="public" {...initialProps} />);
         expect(mockPush).not.toHaveBeenCalled();
       });
     });
@@ -114,22 +128,15 @@ describe('NewRecipe', () => {
 
     describe('when ownership is private', () => {
       it('should redirect to /dashboard if given no id', () => {
-        mount(<NewRecipe editing={true} ownership="private" {...initialProps} />);
-
+        render(<NewRecipe editing={true} ownership="private" {...initialProps} />);
         expect(mockPush).toHaveBeenCalledWith("/dashboard");
       });
     });
 
     describe('when ownership is public', () => {
       it('should redirect to /dashboard if given no id', async () => {
-        const wrapper = mount(<NewRecipe editing={true} ownership="public" {...initialProps} />);
-
-        await act(async () => {
-          Promise.resolve(() => {
-            setImmediate(() => wrapper.update());
-            expect(mockPush).toHaveBeenCalledWith("/dashboard");
-          });
-        });
+        render(<NewRecipe editing={true} ownership="public" {...initialProps} />);
+        expect(mockPush).toHaveBeenCalledWith("/dashboard");
       });
     });
 

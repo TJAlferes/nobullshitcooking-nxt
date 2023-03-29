@@ -6,12 +6,12 @@ export const actionTypes = {
 
 export interface ICreatePlan {
   type:     typeof actionTypes.CREATE_PLAN;
-  planInfo: IPlanInfo;
+  planInfo: PlanInfo;
 }
 
 export interface IUpdatePlan {
   type:     typeof actionTypes.UPDATE_PLAN;
-  planInfo: IPlanUpdateInfo;
+  planInfo: PlanUpdateInfo;
 }
 
 export interface IDeletePlan {
@@ -19,11 +19,11 @@ export interface IDeletePlan {
   id:   number;
 }
 
-export interface IPlanInfo {
+export type PlanInfo = {
   name: string;
   data: string;
-}
+};
 
-export interface IPlanUpdateInfo extends IPlanInfo {
+export type PlanUpdateInfo = PlanInfo & {
   id: number;
-}
+};

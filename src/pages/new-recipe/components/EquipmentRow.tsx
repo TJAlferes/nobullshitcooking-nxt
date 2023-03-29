@@ -1,6 +1,15 @@
 import type { IEquipment } from '../../../store/data/types';
 
-export function EquipmentRow({ amount, equipment, myEquipment, id, changeEquipmentRow, removeEquipmentRow, rowKey, type }: Props) {
+export function EquipmentRow({
+  equipment,
+  myEquipment,
+  rowKey,
+  amount,
+  type,
+  id,
+  changeEquipmentRow,
+  removeEquipmentRow
+}: Props) {
   const availableEquipment = [...equipment, ...myEquipment];
   
   return (
@@ -38,12 +47,12 @@ export function EquipmentRow({ amount, equipment, myEquipment, id, changeEquipme
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Props = {
-  amount:                                                string | number;
-  changeEquipmentRow(e: SyntheticEvent, rowKey: string): void;
-  equipment:                                             IEquipment[];
-  myEquipment:                                           IEquipment[];
-  id:                                                    string | number;
-  removeEquipmentRow(rowKey: string):                    void;
-  rowKey:                                                string;
-  type:                                                  string | number;
+  equipment:          IEquipment[];
+  myEquipment:        IEquipment[];
+  rowKey:             string;
+  amount:             string | number;
+  type:               string | number;
+  id:                 string | number;
+  changeEquipmentRow: (e: SyntheticEvent, rowKey: string) => void;
+  removeEquipmentRow: (rowKey: string) =>                    void;
 };

@@ -10,43 +10,43 @@ function ToolTip() {
 // TO DO: change h4 elems to label elms with for attr
 // TO DO: change some div elems to react fragments (maybe)
 export function ImageUploads({
-  cancelCookingImage,
-  cancelEquipmentImage,
-  cancelIngredientsImage,
-  cancelRecipeImage,
-  cookingCrop,
-  cookingFullCrop,
-  cookingImage,
-  cookingPrevImage,
-  editingId,
-  equipmentCrop,
-  equipmentFullCrop,
-  equipmentImage,
-  equipmentPrevImage,
-  ingredientsCrop,
-  ingredientsFullCrop,
-  ingredientsImage,
-  ingredientsPrevImage,
   loading,
-  onCookingCropChange,
-  onCookingCropComplete,
-  onCookingImageLoaded,
-  onEquipmentCropChange,
-  onEquipmentCropComplete,
-  onEquipmentImageLoaded,
-  onIngredientsCropChange,
-  onIngredientsCropComplete,
-  onIngredientsImageLoaded,
-  onRecipeCropChange,
-  onRecipeCropComplete,
-  onRecipeImageLoaded,
-  onSelectFile,
+  editingId,
+  recipePrevImage,
+  recipeImage,
   recipeCrop,
   recipeFullCrop,
-  recipeImage,
-  recipePrevImage,
   recipeThumbCrop,
-  recipeTinyCrop
+  recipeTinyCrop,
+  equipmentPrevImage,
+  equipmentImage,
+  equipmentCrop,
+  equipmentFullCrop,
+  ingredientsPrevImage,
+  ingredientsImage,
+  ingredientsCrop,
+  ingredientsFullCrop,
+  cookingPrevImage,
+  cookingImage,
+  cookingCrop,
+  cookingFullCrop,
+  onSelectFile,
+  onRecipeImageLoaded,
+  onRecipeCropChange,
+  onRecipeCropComplete,
+  cancelRecipeImage,
+  onEquipmentImageLoaded,
+  onEquipmentCropChange,
+  onEquipmentCropComplete,
+  cancelEquipmentImage,
+  onIngredientsImageLoaded,
+  onIngredientsCropChange,
+  onIngredientsCropComplete,
+  cancelIngredientsImage,
+  onCookingImageLoaded,
+  onCookingCropChange,
+  onCookingCropComplete,
+  cancelCookingImage
 }: Props) {
   const commonReactCropProps = {
     aspect:    1,
@@ -199,46 +199,48 @@ export function ImageUploads({
   );
 }
 
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
-
+type ChangeEvent =    React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type Props = {
-  cancelCookingImage():                        void;
-  cancelEquipmentImage():                      void;
-  cancelIngredientsImage():                    void;
-  cancelRecipeImage():                         void;
-  cookingCrop:                                 Crop;
-  cookingFullCrop:                             string;
-  cookingImage:                                string | ArrayBuffer | null;
-  cookingPrevImage:                            string;
-  editingId:                                   number | null;
-  equipmentCrop:                               Crop;
-  equipmentFullCrop:                           string;
-  equipmentImage:                              string | ArrayBuffer | null;
-  equipmentPrevImage:                          string;
-  ingredientsCrop:                             Crop;
-  ingredientsFullCrop:                         string;
-  ingredientsImage:                            string | ArrayBuffer | null;
-  ingredientsPrevImage:                        string;
-  loading:                                     boolean;
-  onCookingCropChange(crop: Crop):             void;
-  onCookingCropComplete(crop: Crop):           void;
-  onCookingImageLoaded(e: SyntheticEvent):     void;
-  onEquipmentCropChange(crop: Crop):           void;
-  onEquipmentCropComplete(crop: Crop):         void;
-  onEquipmentImageLoaded(e: SyntheticEvent):   void;
-  onIngredientsCropChange(crop: Crop):         void;
-  onIngredientsCropComplete(crop: Crop):       void;
-  onIngredientsImageLoaded(e: SyntheticEvent): void;
-  onRecipeCropChange(crop: Crop):              void;
-  onRecipeCropComplete(crop: Crop):            void;
-  onRecipeImageLoaded(e: SyntheticEvent):      void;
-  onSelectFile(e: ChangeEvent, type: string):  void;
-  recipeCrop:                                  Crop;
-  recipeFullCrop:                              string;
-  recipeImage:                                 string | ArrayBuffer | null;
-  recipePrevImage:                             string;
-  recipeThumbCrop:                             string;
-  recipeTinyCrop:                              string;
+  loading:              boolean;
+
+  editingId:            number | null;
+
+  recipePrevImage:      string;
+  recipeImage:          string | ArrayBuffer | null;
+  recipeCrop:           Crop;
+  recipeFullCrop:       string;
+  recipeThumbCrop:      string;
+  recipeTinyCrop:       string;
+  equipmentPrevImage:   string;
+  equipmentImage:       string | ArrayBuffer | null;
+  equipmentCrop:        Crop;
+  equipmentFullCrop:    string;
+  ingredientsPrevImage: string;
+  ingredientsImage:     string | ArrayBuffer | null;
+  ingredientsCrop:      Crop;
+  ingredientsFullCrop:  string;
+  cookingPrevImage:     string;
+  cookingImage:         string | ArrayBuffer | null;
+  cookingCrop:          Crop;
+  cookingFullCrop:      string;
+
+  onSelectFile:              (e: ChangeEvent, type: string) => void;
+  onRecipeImageLoaded:       (e: SyntheticEvent) => void;
+  onRecipeCropChange:        (crop: Crop) => void;
+  onRecipeCropComplete:      (crop: Crop) => void;
+  cancelRecipeImage:         () => void;
+  onEquipmentImageLoaded:    (e: SyntheticEvent) => void;
+  onEquipmentCropChange:     (crop: Crop) => void;
+  onEquipmentCropComplete:   (crop: Crop) => void;
+  cancelEquipmentImage:      () => void;
+  onIngredientsImageLoaded:  (e: SyntheticEvent) => void;
+  onIngredientsCropChange:   (crop: Crop) => void;
+  onIngredientsCropComplete: (crop: Crop) => void;
+  cancelIngredientsImage:    () => void;
+  onCookingImageLoaded:      (e: SyntheticEvent) => void;
+  onCookingCropChange:       (crop: Crop) => void;
+  onCookingCropComplete:     (crop: Crop) => void;
+  cancelCookingImage:        () => void;
 };

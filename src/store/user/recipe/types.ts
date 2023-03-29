@@ -10,12 +10,12 @@ export const actionTypes = {
 
 export interface ICreatePrivateRecipe {
   type:       typeof actionTypes.CREATE_PRIVATE_RECIPE;
-  recipeInfo: IRecipeInfo;
+  recipeInfo: RecipeInfo;
 }
 
 export interface IUpdatePrivateRecipe {
   type:       typeof actionTypes.UPDATE_PRIVATE_RECIPE;
-  recipeInfo: IRecipeUpdateInfo;
+  recipeInfo: RecipeUpdateInfo;
 }
 
 export interface IDeletePrivateRecipe {
@@ -25,12 +25,12 @@ export interface IDeletePrivateRecipe {
 
 export interface ICreatePublicRecipe {
   type:       typeof actionTypes.CREATE_PUBLIC_RECIPE;
-  recipeInfo: IRecipeInfo;
+  recipeInfo: RecipeInfo;
 }
 
 export interface IUpdatePublicRecipe {
   type:       typeof actionTypes.UPDATE_PUBLIC_RECIPE;
-  recipeInfo: IRecipeUpdateInfo;
+  recipeInfo: RecipeUpdateInfo;
 }
 
 export interface IDisownPublicRecipe {
@@ -38,19 +38,17 @@ export interface IDisownPublicRecipe {
   id:   number;
 }
 
-export interface IRecipeInfo {
-  ownership:    string;
-  recipeTypeId: number;
-  cuisineId:    number;
-  title:        string;
-  description:  string;
-  directions:   string;
-
-  methods:      IRequiredMethod[];
-  equipment:    IRequiredEquipment[];
-  ingredients:  IRequiredIngredient[];
-  subrecipes:   IRequiredSubrecipe[];
-
+export type RecipeInfo = {
+  ownership:            string;
+  recipeTypeId:         number;
+  cuisineId:            number;
+  title:                string;
+  description:          string;
+  directions:           string;
+  methods:              RequiredMethod[];
+  equipment:            RequiredEquipment[];
+  ingredients:          RequiredIngredient[];
+  subrecipes:           RequiredSubrecipe[];
   recipeImage:          string | ArrayBuffer | null;
   recipeFullImage:      File | null;
   recipeThumbImage:     File | null;
@@ -61,36 +59,35 @@ export interface IRecipeInfo {
   ingredientsFullImage: File | null;
   cookingImage:         string | ArrayBuffer | null;
   cookingFullImage:     File | null;
+  //video:                string;
+};
 
-  //video
-}
-
-export interface IRecipeUpdateInfo extends IRecipeInfo {
-  id:                   number
+export type RecipeUpdateInfo = RecipeInfo & {
+  id:                   number;
   recipePrevImage:      string;
   equipmentPrevImage:   string;
   ingredientsPrevImage: string;
   cookingPrevImage:     string;
-  //prevVideo
-}
+  //prevVideo:            string;
+};
 
-export interface IRequiredMethod {
+export type RequiredMethod = {
   id: number;
-}
+};
 
-export interface IRequiredEquipment {
+export type RequiredEquipment = {
   amount: number;
   id:     number;
-}
+};
 
-export interface IRequiredIngredient {
+export type RequiredIngredient = {
   amount:        number;
   measurementId: number;
   id:            number;
-}
+};
 
-export interface IRequiredSubrecipe {
+export type RequiredSubrecipe = {
   amount:        number;
   measurementId: number;
   id:            number;
-}
+};
