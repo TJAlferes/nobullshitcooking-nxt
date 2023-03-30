@@ -1,27 +1,28 @@
 import {
   act,
-  buildQueries,
-  cleanup,
-  computeHeadingLevel,
-  configure,
-  createEvent,
+  //buildQueries,
+  //computeHeadingLevel,
+  //configure,
+  //createEvent,
   getByRole,
   queryByRole,
   findByRole,
-  fireEvent,
-  isInaccessible,
-  logDOM,
-  logRoles,
-  prettyDOM,
-  prettyFormat,
-  queries,
-  queryHelpers,
+  //fireEvent,
+  //isInaccessible,
+  //logDOM,
+  //logRoles,
+  //prettyDOM,
+  //prettyFormat,
+  //queries,
+  //queryHelpers,
   render,
   renderHook,
   screen,
   waitFor,
-  waitForElementToBeRemoved
+  //waitForElementToBeRemoved
 } from '@testing-library/react';
+//import { act, renderHook } from '@testing-library/react-hooks';
+import userEvent from '@testing-library/user-event';
 
 import NewRecipe from '../../../src/pages/new-recipe/index.page';
 import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../../src/store/user/recipe/actions';
@@ -104,42 +105,31 @@ afterEach(() => {
 });
 
 // TO DO: this needs more thorough tests
-describe('NewRecipe', () => {
 
-  describe('when creating', () => {
-
-    describe('when ownership is private', () => {
-      it('should not redirect to /dashboard if given no id', () => {
-        render(<NewRecipe editing={false} ownership="private" {...initialProps} />);
-        expect(mockPush).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('when ownership is public', () => {
-      it('should not redirect to /dashboard if given no id', () => {
-        render(<NewRecipe editing={false} ownership="public" {...initialProps} />);
-        expect(mockPush).not.toHaveBeenCalled();
-      });
-    });
-
+describe('when creating and ownership is private', () => {
+  it('should not redirect to /dashboard if given no id', () => {
+    render(<NewRecipe editing={false} ownership="private" {...initialProps} />);
+    expect(mockPush).not.toHaveBeenCalled();
   });
+});
 
-  describe('when editing', () => {
-
-    describe('when ownership is private', () => {
-      it('should redirect to /dashboard if given no id', () => {
-        render(<NewRecipe editing={true} ownership="private" {...initialProps} />);
-        expect(mockPush).toHaveBeenCalledWith("/dashboard");
-      });
-    });
-
-    describe('when ownership is public', () => {
-      it('should redirect to /dashboard if given no id', async () => {
-        render(<NewRecipe editing={true} ownership="public" {...initialProps} />);
-        expect(mockPush).toHaveBeenCalledWith("/dashboard");
-      });
-    });
-
+describe('when creating and ownership is public', () => {
+  it('should not redirect to /dashboard if given no id', () => {
+    render(<NewRecipe editing={false} ownership="public" {...initialProps} />);
+    expect(mockPush).not.toHaveBeenCalled();
   });
+});
 
+describe('when editing and ownership is private', () => {
+  it('should redirect to /dashboard if given no id', () => {
+    render(<NewRecipe editing={true} ownership="private" {...initialProps} />);
+    expect(mockPush).toHaveBeenCalledWith("/dashboard");
+  });
+});
+
+describe('when editing and ownership is public', () => {
+  it('should redirect to /dashboard if given no id', async () => {
+    render(<NewRecipe editing={true} ownership="public" {...initialProps} />);
+    expect(mockPush).toHaveBeenCalledWith("/dashboard");
+  });
 });

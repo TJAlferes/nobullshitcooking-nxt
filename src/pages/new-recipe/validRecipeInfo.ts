@@ -14,7 +14,7 @@ export function validRecipeInfo({
   setFeedback
 }: RecipeInfo): boolean {
   function feedback(message: string) {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     setFeedback(message);
     setTimeout(() => setFeedback(""), 3000);
     return false;

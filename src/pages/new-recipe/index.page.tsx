@@ -1,17 +1,19 @@
 import axios                           from 'axios';
+import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import type { Crop, PixelCrop }        from 'react-image-crop';
+import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import { v4 as uuid }                  from 'uuid';
+import 'react-image-crop/dist/ReactCrop.css';
 
+import { ExpandCollapse, LoaderButton }    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
 import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../store/user/recipe/actions';
 import type { RequiredMethod } from '../../store/user/recipe/types';
 import { endpoint }            from '../../utils/api';
 import { getCroppedImage }     from '../../utils/getCroppedImage';
-import { validRecipeInfo }     from './validation/validRecipeInfo';
-import { NewRecipeView }       from './view';
+import { validRecipeInfo }     from './validRecipeInfo';
 
 export default function NewRecipe() {
   const router =    useRouter();
@@ -256,45 +258,60 @@ export default function NewRecipe() {
     setSubrecipeRows(newRows);
   };
 
-  const addEquipmentRow = () => {
-    const newEquipmentRows = equipmentRows.concat({key: uuid(), amount: "", type: "", id: ""});
-    setEquipmentRows(newEquipmentRows);
-  };
+  const addEquipmentRow = () =>
+    setEquipmentRows([...equipmentRows, {key: uuid(), amount: "", type: "", id: ""}]);
 
-  const addIngredientRow = () => {
-    const newIngredientRows = ingredientRows.concat({key: uuid(), amount: "", measurementId: "", type: "", id: ""});
-    setIngredientRows(newIngredientRows);
-  };
+  const addIngredientRow = () =>
+    setIngredientRows([...ingredientRows, {key: uuid(), amount: "", measurementId: "", type: "", id: ""}]);
 
-  const addSubrecipeRow = () => {
-    const newSubrecipeRows = subrecipeRows.concat({key: uuid(), amount: "", measurementId: "", type: "", cuisine: "", id: ""});
-    setSubrecipeRows(newSubrecipeRows);
-  };
+  const addSubrecipeRow = () =>
+    setSubrecipeRows([...subrecipeRows, {key: uuid(), amount: "", measurementId: "", type: "", cuisine: "", id: ""}]);
 
-  const removeEquipmentRow = (rowKey: string) => {
-    const newEquipmentRows = equipmentRows.filter(row => row.key !== rowKey);
-    setEquipmentRows(newEquipmentRows);
-  };
+  const removeEquipmentRow = (rowKey: string) =>
+    setEquipmentRows(equipmentRows.filter(row => row.key !== rowKey));
 
-  const removeIngredientRow = (rowKey: string) => {
-    const newIngredientRows = ingredientRows.filter(row => row.key !== rowKey);
-    setIngredientRows(newIngredientRows);
-  };
+  const removeIngredientRow = (rowKey: string) =>
+    setIngredientRows(ingredientRows.filter(row => row.key !== rowKey));
 
-  const removeSubrecipeRow = (rowKey: string) => {
-    const newSubrecipeRows = subrecipeRows.filter(row => row.key !== rowKey);
-    setSubrecipeRows(newSubrecipeRows);
-  };
+  const removeSubrecipeRow = (rowKey: string) =>
+    setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
+  
+  const availableEquipment = [...equipment, ...myEquipment];
+
+  const availableIngredients = [...ingredients, ...myIngredients];
+
+  const availableRecipes = [
+    ...recipes,
+    ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),  // TO DO: make sure they can't be the author
+    ...(mySavedRecipes.length    ? mySavedRecipes    : []),  // TO DO: make sure they can't be the author
+    ...(myPrivateRecipes.length  ? (editingId && id !== 0 ? myPrivateRecipes.filter(r => r.id != id) : myPrivateRecipes) : []),
+    ...(myPublicRecipes.length   ? (editingId && id !== 0 ? myPublicRecipes.filter(r => r.id != id)  : myPublicRecipes)  : [])
+  ];
 
   /*
 
   Images
 
   */
+
+  const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+
+  const commonReactCropProps = {
+    aspect:    1,
+    className: "crop-tool",
+    disabled:  true,
+    locked:    true,
+    maxHeight: 172,
+    maxWidth:  280,
+    minHeight: 172,
+    minWidth:  280,
+    style: {
+      minHeight: "300px"
+    }
+  };
   
   const makeCookingCrops = async (crop: Crop) => {
-    if (!cookingImageRef || !cookingImageRef.current) return;
-    if (!crop.width) return;
+    if (!cookingImageRef.current) return;
     const full = await getCroppedImage(280, 172, cookingImageRef.current, crop);
     if (!full) return;
     setCookingFullCrop(full.preview);
@@ -302,8 +319,7 @@ export default function NewRecipe() {
   };
 
   const makeEquipmentCrops = async (crop: Crop) => {
-    if (!equipmentImageRef || !equipmentImageRef.current) return;
-    if (!crop.width) return;
+    if (!equipmentImageRef.current) return;
     const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop);
     if (!full) return;
     setEquipmentFullCrop(full.preview);
@@ -311,8 +327,7 @@ export default function NewRecipe() {
   };
 
   const makeIngredientsCrops = async (crop: Crop) => {
-    if (!ingredientsImageRef || !ingredientsImageRef.current) return;
-    if (!crop.width) return;
+    if (!ingredientsImageRef.current) return;
     const full = await getCroppedImage(280, 172, ingredientsImageRef.current, crop);
     if (!full) return;
     setIngredientsFullCrop(full.preview);
@@ -320,8 +335,7 @@ export default function NewRecipe() {
   };
 
   const makeRecipeCrops = async (crop: Crop) => {
-    if (!recipeImageRef || !recipeImageRef.current) return;
-    if (!crop.width) return;
+    if (!recipeImageRef.current) return;
     const full =  await getCroppedImage(280, 172, recipeImageRef.current, crop);
     const thumb = await getCroppedImage(100, 62,  recipeImageRef.current, crop);
     const tiny =  await getCroppedImage(28,  18,  recipeImageRef.current, crop);
@@ -459,90 +473,356 @@ export default function NewRecipe() {
   };
 
   return (
-    <NewRecipeView
-      addEquipmentRow={addEquipmentRow}
-      addIngredientRow={addIngredientRow}
-      addSubrecipeRow={addSubrecipeRow}
-      authname={authname}
-      cancelCookingImage={cancelCookingImage}
-      cancelEquipmentImage={cancelEquipmentImage}
-      cancelIngredientsImage={cancelIngredientsImage}
-      cancelRecipeImage={cancelRecipeImage}
-      cookingCrop={cookingCrop}
-      cookingFullCrop={cookingFullCrop}
-      cookingImage={cookingImage}
-      cookingPrevImage={cookingPrevImage}
-      cuisineId={cuisineId}
-      cuisines={cuisines}
-      equipment={equipment}
-      ingredients={ingredients}
-      ingredientTypes={ingredientTypes}
-      measurements={measurements}
-      methods={methods}
-      myFavoriteRecipes={myFavoriteRecipes}
-      myEquipment={myEquipment}
-      myIngredients={myIngredients}
-      myPrivateRecipes={myPrivateRecipes}
-      myPublicRecipes={myPublicRecipes}
-      mySavedRecipes={mySavedRecipes}
-      recipes={recipes}
-      recipeTypes={recipeTypes}
-      description={description}
-      directions={directions}
-      editingId={editingId}
-      equipmentCrop={equipmentCrop}
-      equipmentFullCrop={equipmentFullCrop}
-      equipmentImage={equipmentImage}
-      equipmentPrevImage={equipmentPrevImage}
-      equipmentRows={equipmentRows}
-      feedback={feedback}
-      changeCuisine={changeCuisine}
-      changeDescription={changeDescription}
-      changeDirections={changeDirections}
-      changeEquipmentRow={changeEquipmentRow}
-      changeIngredientRow={changeIngredientRow}
-      changeMethods={changeMethods}
-      changeRecipeType={changeRecipeType}
-      submit={submit}
-      changeSubrecipeRow={changeSubrecipeRow}
-      changeTitle={changeTitle}
-      id={id}
-      ingredientsCrop={ingredientsCrop}
-      ingredientsFullCrop={ingredientsFullCrop}
-      ingredientsImage={ingredientsImage}
-      ingredientsPrevImage={ingredientsPrevImage}
-      ingredientRows={ingredientRows}
-      loading={loading}
-      usedMethods={usedMethods}
-      onCookingCropChange={onCookingCropChange}
-      onCookingCropComplete={onCookingCropComplete}
-      onCookingImageLoaded={onCookingImageLoaded}
-      onEquipmentCropChange={onEquipmentCropChange}
-      onEquipmentCropComplete={onEquipmentCropComplete}
-      onEquipmentImageLoaded={onEquipmentImageLoaded}
-      onIngredientsCropChange={onIngredientsCropChange}
-      onIngredientsCropComplete={onIngredientsCropComplete}
-      onIngredientsImageLoaded={onIngredientsImageLoaded}
-      onRecipeCropChange={onRecipeCropChange}
-      onRecipeCropComplete={onRecipeCropComplete}
-      onRecipeImageLoaded={onRecipeImageLoaded}
-      onSelectFile={onSelectFile}
-      ownership={ownership}
-      recipeCrop={recipeCrop}
-      recipeFullCrop={recipeFullCrop}
-      recipeImage={recipeImage}
-      recipePrevImage={recipePrevImage}
-      recipeThumbCrop={recipeThumbCrop}
-      recipeTinyCrop={recipeTinyCrop}
-      recipeTypeId={recipeTypeId}
-      removeEquipmentRow={removeEquipmentRow}
-      removeIngredientRow={removeIngredientRow}
-      removeSubrecipeRow={removeSubrecipeRow}
-      subrecipeRows={subrecipeRows}
-      title={title}
-    />
+    <div className="one-col new-recipe">
+      <h1>New Recipe</h1>
+
+      <p className="feedback">{feedback}</p>
+
+      <h2>Ownership</h2>
+      <ExpandCollapse>
+        <div>
+          <p>Once submitted, a recipe's ownership can't be changed.</p><br />
+
+          <p>Public:</p>
+          <p>- Anyone can view</p>
+          <p>- May only use official NOBSC equipment, ingredients, and recipes, and public recipes submitted by other users</p>
+          <p>- Can't be deleted, but can be disowned (author will be changed from "{authname}" to "Unknown")</p><br />
+
+          <p>Tip: If you're setting your recipe to public, please be sure to include all four images below.</p><br />
+
+          <p>Private:</p>
+          <p>- Only you can view</p>
+          <p>- May also use private equipment, ingredients, and recipes submitted by you</p>
+          <p>- Can be deleted</p><br />
+
+          <p>Tip: If you're still improving your recipe, make it private for now, then make a public version later.</p><br />
+        </div>
+      </ExpandCollapse>
+      <div className="ownership">
+        <span>
+          <input checked={ownership === "private"} disabled={true} name="private" type="radio" value="private" />
+          <label>Private</label>
+        </span>
+        <span>
+          <input checked={ownership === "public"} disabled={true} name="public" type="radio" value="public" />
+          <label>Public</label>
+        </span>
+      </div>
+
+      <h2>Type of Recipe</h2>
+      <select id="recipe_type_id" name="recipeType" onChange={changeRecipeType} required value={recipeTypeId}>
+        <option value=""></option>
+        {recipeTypes.map(({ id, name }) => (<option key={id} data-test={name} value={id}>{name}</option>))}
+      </select>
+
+      <h2>Cuisine</h2>
+      <select id="cuisine_id" name="cuisine" onChange={changeCuisine} required value={cuisineId}>
+        <option value=""></option>
+        {cuisines.map(({ id, name }) => (<option key={id} value={id} data-test={name}>{name}</option>))}
+      </select>
+
+      <h2>Title</h2>
+      <input className="title" id="recipe_title" max={100} min={2} name="title" onChange={changeTitle} type="text" value={title} />
+
+      <h2>Description / Author Note</h2>
+      <input className="description" id="recipe_description" max={150} min={2} name="description" onChange={changeDescription} type="text" value={description} />
+
+      <h2>Methods</h2>
+      <div className="methods">
+        {methods.map(({ id, name }) => (
+          <span className="method" key={id}>
+            <input
+              checked={usedMethods[id] === true ? true : false}
+              data-test={`${id}-${name}`}
+              id={`${id}`}
+              onChange={e => changeMethods(e)}
+              type="checkbox"
+            />
+            <label data-test={name}>{name}</label>
+          </span>
+        ))}
+      </div>
+
+      <div className="required-equipment">
+        <h2>Equipment</h2>
+        <div className="equipment-rows">
+          {equipmentRows.map(({ key, amount, type, id }) => (
+            <div className="recipe-row" key={key}>
+              <label>Amount:</label>
+              <select name="amount" onChange={(e) => changeEquipmentRow(e, key)} required value={amount}>
+                <option value=""></option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+              <label>Type:</label>
+              <select name="type" onChange={(e) => changeEquipmentRow(e, key)} required value={type}>
+                <option value=""></option>
+                <option value="2">Preparing</option>
+                <option value="3">Cooking</option>
+              </select>
+              <label>Equipment:</label>
+              <select name="equipment" onChange={(e) => changeEquipmentRow(e, key)} required value={id}>
+                <option value=""></option>
+                {availableEquipment
+                  .filter(e => e.equipment_type_id == type)
+                  .map((e, index) => <option key={index} value={e.id}>{e.name}</option>)}
+              </select>
+              <button className="--remove" onClick={() => removeEquipmentRow(key)}>Remove</button>
+            </div>
+          ))}
+        </div>
+        <button className="--add-row" onClick={addEquipmentRow}>Add Equipment</button>
+      </div>
+
+      <div className="required-ingredients">
+        <h2>Ingredients</h2>
+        {/* TO DO: Add brand and variety */}
+        <div className="ingredient-rows">
+          {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
+            <div className="recipe-row" key={key}>
+              <label>Amount:</label>
+              <input
+                max="9999"
+                min="0.125"
+                name="amount"
+                onChange={(e) => changeIngredientRow(e, key)}
+                required
+                step="any"
+                type="number"
+                value={amount}
+              />
+
+              <label>Unit:</label>
+              <select name="unit" onChange={(e) => changeIngredientRow(e, key)} required value={measurementId}>
+                <option value=""></option>
+                {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
+              </select>
+
+              <label>Type:</label>
+              <select name="type" onChange={(e) => changeIngredientRow(e, key)} required value={type}>
+                <option value=""></option>
+                {ingredientTypes.map((i, index) => (<option key={index} value={i.id}>{i.name}</option>))}
+              </select>
+
+              <label>Ingredient:</label>
+              <select name="ingredient" onChange={(e) => changeIngredientRow(e, key)} required value={id}>
+                <option value=""></option>
+                {availableIngredients
+                  .filter(i => i.ingredient_type_id == type)
+                  .map((i, index) => <option key={index} value={i.id}>{i.name}</option>)}
+              </select>
+
+              <button className="--remove" onClick={() => removeIngredientRow(key)}>Remove</button>
+            </div>
+          ))}
+        </div>
+        <button className="--add-row" onClick={addIngredientRow}>Add Ingredient</button>
+      </div>
+
+      <div className="required-subrecipes">
+        <h2>Subrecipes</h2>
+        <div className="subrecipe-rows">
+          {subrecipeRows.map(s => (
+            <div className="recipe-row" key={s.key}>
+              <label>Amount:</label>
+              <input
+                max="9999"
+                min="0.125"
+                name="amount"
+                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                required
+                step="any"
+                type="number"
+                value={s.amount}
+              />
+              
+              <label>Unit:</label>
+              <select name="unit" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.measurementId}>
+                <option value=""></option>
+                {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
+              </select>
+              
+              <label>Type:</label>
+              <select name="type" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.type}>
+                <option value=""></option>
+                {recipeTypes.map((r, index) => <option key={index} value={r.id}>{r.name}</option>)}
+              </select>
+              
+              <label>Cuisine:</label>
+              <select name="cuisine" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.cuisine}>
+                <option value=""></option>
+                {cuisines.map((c, index) => <option key={index} value={c.id}>{c.name}</option>)}
+              </select>
+              
+              <label>Subrecipe:</label>
+              <select className="--subrecipe" name="subrecipe" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={id}>
+                <option value=""></option>
+                {availableRecipes
+                  .filter(r => r.recipe_type_id == s.type)
+                  .filter(r => r.cuisine_id == s.cuisine)
+                  .map((r, index) => <option key={index} value={r.id}>{r.title}</option>)}
+              </select>
+              
+              <button className="--remove" onClick={() => removeSubrecipeRow(s.key)}>Remove</button>
+            </div>
+          ))}
+        </div>
+        <button className="--add-row" onClick={addSubrecipeRow}>Add Subrecipe</button>
+      </div>
+
+      <h2>Directions</h2>
+      <textarea className="directions" id="recipe_directions" name="directions" onChange={changeDirections} value={directions} />
+
+      <div className="new-recipe-images">
+      <div className="recipe-image">
+        <h2>Image of Finished Recipe</h2>
+
+        {!recipeImage && (
+          <div>
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />}
+            <h4>Change</h4>
+            <input accept="image/*" name="image-input" onChange={(e) => onSelectFile(e, "recipe")} type="file" />
+          </div>
+        )}
+
+        {recipeImage && (
+          <div>
+            <ReactCrop crop={recipeCrop} onChange={onRecipeCropChange} onComplete={onRecipeCropComplete} {...commonReactCropProps}>
+              <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
+            </ReactCrop>
+
+            <ToolTip />
+
+            <div className="crops">
+              <div className="crop-full-outer">
+                <span>Full Size: </span><img className="crop-full" src={recipeFullCrop} />
+              </div>
+              <div className="crop-thumb-outer">
+                <span>Thumb Size: </span><img className="crop-thumb" src={recipeThumbCrop} />
+              </div>
+              <div className="crop-tiny-outer">
+                <span>Tiny Size: </span><img className="crop-tiny" src={recipeTinyCrop} />
+              </div>
+            </div>
+
+            <button className="image-cancel-button" disabled={loading} onClick={cancelRecipeImage}>Cancel</button>
+          </div>
+        )}
+      </div>
+
+      <div className="equipment-image">
+        <h2>Image of All Equipment</h2>
+
+        {!equipmentImage && (
+          <div>
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />}
+            <h4>Change</h4>
+            <input accept="image/*" name="equipment-image-input" onChange={(e) => onSelectFile(e, "equipment")} type="file" />
+          </div>
+        )}
+
+        {equipmentImage && (
+          <div>
+            <ReactCrop crop={equipmentCrop} onChange={onEquipmentCropChange} onComplete={onEquipmentCropComplete} {...commonReactCropProps}>
+              <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
+            </ReactCrop>
+            
+            <ToolTip />
+
+            <div className="crops">
+              <div className="crop-full-outer">
+                <span>Full Size: </span><img className="crop-full" src={equipmentFullCrop} />
+              </div>
+            </div>
+
+            <button className="image-cancel-button" disabled={loading} onClick={cancelEquipmentImage}>Cancel</button>
+          </div>
+        )}
+      </div>
+
+      <div className="ingredients-image">
+        <h2>Image of All Ingredients</h2>
+
+        {!ingredientsImage && (
+          <div>
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />}
+            <h4>Change</h4>
+            <input accept="image/*" name="ingredients-image-input" onChange={(e) => onSelectFile(e, "ingredients")} type="file" />
+          </div>
+        )}
+
+        {ingredientsImage && (
+          <div>
+            <ReactCrop crop={ingredientsCrop} onChange={onIngredientsCropChange} onComplete={onIngredientsCropComplete} {...commonReactCropProps}>
+              <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
+            </ReactCrop>
+            
+            <ToolTip />
+
+            <div className="crops">
+              <div className="crop-full-outer">
+                <span>Full Size: </span><img className="crop-full" src={ingredientsFullCrop} />
+              </div>
+            </div>
+
+            <button className="image-cancel-button" disabled={loading} onClick={cancelIngredientsImage}>Cancel</button>
+          </div>
+        )}
+      </div>
+
+      <div className="cooking-image">
+        <h2>Image of Cooking In Action</h2>
+
+        {!cookingImage && (
+          <div>
+            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />}
+            <h4>Change</h4>
+            <input accept="image/*" name="cooking-image-input" onChange={(e) => onSelectFile(e, "cooking")} type="file" />
+          </div>
+        )}
+
+        {cookingImage && (
+          <div>
+            <ReactCrop crop={cookingCrop} onChange={onCookingCropChange} onComplete={onCookingCropComplete} {...commonReactCropProps}>
+              <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
+            </ReactCrop>
+            
+            <ToolTip />
+
+            <div className="crops">
+              <div className="crop-full-outer">
+                <span>Full Size: </span><img className="crop-full" src={cookingFullCrop} />
+              </div>
+            </div>
+
+            <button className="image-cancel-button" disabled={loading} onClick={cancelCookingImage}>Cancel</button>
+          </div>
+        )}
+      </div>
+    </div>
+
+      <div className="finish">
+        <Link className="cancel-button" href="/dashboard">Cancel</Link>
+        <LoaderButton
+          className="submit-button"
+          id="user_submit_recipe_button"
+          isLoading={loading}
+          loadingText="Submitting Recipe..."
+          name="submit"
+          onClick={submit}
+          text="Submit Recipe"
+        />
+      </div>
+    </div>
   );
-};
+}
+
+function ToolTip() {
+  return <span className="crop-tool-tip">Move the crop to your desired position. The image&#40;s&#41; will be saved for you:</span>;
+}
 
 type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
