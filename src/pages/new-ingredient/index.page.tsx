@@ -1,12 +1,14 @@
+import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import type { Crop }                   from 'react-image-crop';
+import ReactCrop, { Crop }             from "react-image-crop";
 import { useDispatch }                 from 'react-redux';
+import 'react-image-crop/dist/ReactCrop.css';
 
+import { CropPreview, LoaderButton }          from '../../components';
 import { useTypedSelector as useSelector }    from '../../store';
 import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
 import { getCroppedImage }                    from '../../utils/getCroppedImage';
-import { NewIngredientView }                  from './view';
 
 export default function NewIngredient() {
   const router = useRouter();
@@ -36,6 +38,8 @@ export default function NewIngredient() {
   const [ tinyCrop, setTinyCrop ] = useState("");
 
   const imageRef = useRef<HTMLImageElement>();
+
+  const dir = 'https://s3.amazonaws.com/nobsc-user-ingredients';
 
   useEffect(() => {
     const getExistingIngredientToEdit = () => {
@@ -82,34 +86,20 @@ export default function NewIngredient() {
     };
   }, [message]);
 
-  const cancelImage = () => {
-    setFullCrop("");
-    setTinyCrop("");
-    setImage(null);
-    setFullImage(null);
-    setTinyImage(null);
-  };
-
   const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
   const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
 
-  // TO DO: remove inner prefixes
-  const submit = () => {
-    if (!valid()) return;
-    setLoading(true);
-    const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
-    if (editingId) {
-      const ingredientUpdateInfo = {id: editingId, prevImage, ...ingredientInfo};
-      dispatch(updateIngredient(ingredientUpdateInfo));
-    } else {
-      dispatch(createIngredient(ingredientInfo));
-    }
+  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    if (!(target.files && target.files.length > 0)) return;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => setImage(reader.result));
+    reader.readAsDataURL(target.files[0] as Blob);
   };
 
   const makeCrops = async (crop: Crop) => {
-    if (!imageRef || !imageRef.current) return;
-    if (!crop.width) return;
+    if (!imageRef.current) return;
     const full = await getCroppedImage(280, 172, imageRef.current, crop);
     const tiny = await getCroppedImage(28, 18, imageRef.current, crop);
     if (!full || !tiny) return;
@@ -119,18 +109,16 @@ export default function NewIngredient() {
     setTinyImage(tiny.final);
   };
 
-  const onCropChange = (crop: Crop) => setCrop(crop);
-
+  const onImageLoaded =  (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
+  const onCropChange =   (crop: Crop) => setCrop(crop);
   const onCropComplete = (crop: Crop) => makeCrops(crop);
 
-  const onImageLoaded = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
-
-  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (!(target.files && target.files.length > 0)) return;
-    const reader = new FileReader();
-    reader.addEventListener("load", () => setImage(reader.result));
-    reader.readAsDataURL(target.files[0] as Blob);
+  const cancelImage = () => {
+    setFullCrop("");
+    setTinyCrop("");
+    setImage(null);
+    setFullImage(null);
+    setTinyImage(null);
   };
 
   const valid = () => {
@@ -161,30 +149,79 @@ export default function NewIngredient() {
     return validTypeId && validName && validDescription;
   };
 
+  // TO DO: remove inner prefixes
+  const submit = () => {
+    if (!valid()) return;
+    setLoading(true);
+    const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
+    if (editingId) {
+      const ingredientUpdateInfo = {id: editingId, prevImage, ...ingredientInfo};
+      dispatch(updateIngredient(ingredientUpdateInfo));
+    } else {
+      dispatch(createIngredient(ingredientInfo));
+    }
+  };
+
   return (
-    <NewIngredientView
-      cancelImage={cancelImage}
-      crop={crop}
-      ingredientTypes={ingredientTypes}
-      description={description}
-      editingId={editingId}
-      feedback={feedback}
-      fullCrop={fullCrop}
-      changeDescription={changeDescription}
-      changeName={changeName}
-      changeType={changeType}
-      image={image}
-      loading={loading}
-      name={name}
-      onCropChange={onCropChange}
-      onCropComplete={onCropComplete}
-      onImageLoaded={onImageLoaded}
-      onSelectFile={onSelectFile}
-      prevImage={prevImage}
-      submit={submit}
-      tinyCrop={tinyCrop}
-      typeId={typeId}
-    />
+    <div className="one-col new-ingredient">
+      <h1>New Ingredient</h1>
+
+      <p className="feedback">{feedback}</p>
+
+      <h2>Type of Ingredient</h2>
+      <select name="ingredientType" onChange={changeType} required value={typeId}>
+        <option value=""></option>
+        {ingredientTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
+      </select>
+
+      <h2>Name</h2>
+      <input className="name" onChange={changeName} type="text" value={name} />
+
+      <h2>Description</h2>
+      <textarea className="description" onChange={changeDescription} value={description} />
+
+      <div>
+        <h2>Image of Ingredient</h2>
+
+        {!image && (
+          <div>
+            {!editingId ? <img src={`${dir}/nobsc-ingredient-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
+            <h4>Change</h4>
+            <input accept="image/*" onChange={onSelectFile} type="file" />
+          </div>
+        )}
+
+        {image && (
+          <div>
+            <ReactCrop
+              aspect={1}
+              className="crop-tool"
+              crop={crop}
+              onChange={onCropChange}
+              onComplete={onCropComplete}
+              style={{minHeight: "300px"}}
+            >
+              <img onLoad={onImageLoaded} src={image as string} />
+            </ReactCrop>
+            <CropPreview cancelImage={cancelImage} fullCrop={fullCrop} loading={loading} tinyCrop={tinyCrop} />
+          </div>
+        )}
+      </div>
+
+      <div className="finish">
+        <Link href="/dashboard" className="cancel-button">Cancel</Link>
+
+        <LoaderButton
+          className="submit-button"
+          id="create_new_private_user_ingredient_button"
+          isLoading={loading}
+          loadingText="Creating..."
+          name="submit"
+          onClick={submit}
+          text="Create"
+        />
+      </div>
+    </div>
   );
 }
 

@@ -1,16 +1,21 @@
-import { useRouter }           from 'next/navigation';  // or useRouter from 'next/router' ?
-import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
+import Link                           from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState }        from 'react';
+import { useDispatch }                from 'react-redux';
 
+import { LoaderButton }                    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
 import { userRegister, userVerify }        from '../../store/auth/actions';
-import { RegisterView }                    from './view';
 
-export default function Register({ confirmingUser }: Props) {
-  const router = useRouter();
+export default function Register() {
+  const router =       useRouter();
+  const searchParams = useSearchParams();
+  const confirmingUser = searchParams.get('confirm');
+
   const dispatch = useDispatch();
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message =             useSelector(state => state.auth.message);
+
   const [ confirmationCode, setConfirmationCode ] = useState("");
   const [ email,            setEmail ] =            useState("");
   const [ feedback,         setFeedback ] =         useState("");
@@ -18,6 +23,8 @@ export default function Register({ confirmingUser }: Props) {
   const [ password,         setPassword ] =         useState("");
   const [ passwordAgain,    setPasswordAgain ] =    useState("");
   const [ username,         setUsername ] =         useState("");
+
+  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
   useEffect(() => {
     let isSubscribed = true;
@@ -71,35 +78,133 @@ export default function Register({ confirmingUser }: Props) {
   };
 
   const validateConfirmationCode = () => confirmationCode.length > 1;
-  const validateRegistrationInfo = () => ((username.length > 1) && (email.length > 4) && (password.length > 5) && (password == passwordAgain));
+  const validateRegistrationInfo = () => (username.length > 1 && email.length > 4 && password.length > 5 && password == passwordAgain);  // TO DO: do most of this in HTML
   
   return (
-    <RegisterView
-      confirmationCode={confirmationCode}
-      confirmingUser={confirmingUser}
-      email={email}
-      feedback={feedback}
-      confirmationCodeChange={confirmationCodeChange}
-      emailChange={emailChange}
-      passwordChange={passwordChange}
-      passwordAgainChange={passwordAgainChange}
-      registerClick={registerClick}
-      registerKeyUp={registerKeyUp}
-      usernameChange={usernameChange}
-      verifyClick={verifyClick}
-      verifyKeyUp={verifyKeyUp}
-      loading={loading}
-      password={password}
-      passwordAgain={passwordAgain}
-      username={username}
-      validateConfirmationCode={validateConfirmationCode}
-      validateRegistrationInfo={validateRegistrationInfo}
-    />
+    <div className="register" onKeyUp={e => registerKeyUp(e)}>
+      <Link href="/" className="home-links">
+        <img className="--desktop" src={`${url}logo-large-white.png`} />
+        <img className="--mobile" src={`${url}logo-small-white.png`} />
+      </Link>
+
+      {confirmingUser ? (
+        <form>
+          <h1>Verify</h1>
+
+          <p className="feedback">{feedback}</p>
+
+          <label>Code</label>
+          <input
+            autoComplete="confirmation-code"
+            autoFocus
+            disabled={loading}
+            id="confirmationCode"
+            maxLength={20}
+            name="confirmationCode"
+            onChange={confirmationCodeChange}
+            size={20}
+            type="text"
+            value={confirmationCode}
+          />
+
+          <p>Please check your email for the confirmation code.</p>
+
+          <LoaderButton
+            className="verify-confirmation-code"
+            disabled={!validateConfirmationCode()}
+            id="verify_confirmation_code"
+            isLoading={loading}
+            loadingText="Verifying..."
+            name="submit"
+            onClick={verifyClick}
+            onKeyUp={registerKeyUp}
+            text="Verify"
+          />
+        </form>
+      ) : (
+        <form>
+          <h1>Create Account</h1>
+
+          <p className="feedback">{feedback}</p>
+
+          <label>Username</label>
+          <input
+            autoComplete="username"
+            autoFocus
+            disabled={loading}
+            id="username"
+            maxLength={20}
+            name="username"
+            onChange={usernameChange}
+            size={20}
+            type="text"
+            value={username}
+          />
+
+          <label>Email</label>
+          <input
+            autoComplete="email"
+            disabled={loading}
+            id="email"
+            maxLength={60}
+            name="email"
+            onChange={emailChange}
+            size={20}
+            type="email"
+            value={email}
+          />
+
+          <label>Password</label>
+          <input
+            autoComplete="current-password"
+            disabled={loading}
+            id="password"
+            maxLength={20}
+            name="password"
+            onChange={passwordChange}
+            size={20}
+            type="password"
+            value={password}
+          />
+
+          <label>Password Again</label>
+          <input
+            autoComplete="current-password"
+            disabled={loading}
+            id="passwordAgain"
+            maxLength={20}
+            name="passwordAgain"
+            onChange={passwordAgainChange}
+            size={20}
+            type="password"
+            value={passwordAgain}
+          />
+
+          <LoaderButton
+            className="create-account"
+            disabled={!validateRegistrationInfo()}
+            id="create_account"
+            isLoading={loading}
+            loadingText="Creating Account..."
+            name="submit"
+            onClick={registerClick}
+            onKeyUp={registerKeyUp}
+            text="Create Account"
+          />
+        </form>
+      )}
+
+      <div className="links">
+        <Link href="/terms">Terms of Use</Link>
+        <Link href="/privacy">Privacy Policy</Link>
+        <Link href="/help">Help</Link>
+      </div>
+
+      <div className="copyright">
+        &copy;{` ${(new Date().getFullYear())}, NoBullshitCooking`}
+      </div>
+    </div>
   );
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
-type Props = {
-  confirmingUser: boolean;
-};

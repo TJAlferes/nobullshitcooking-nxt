@@ -10,10 +10,10 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { ExpandCollapse, LoaderButton }    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
 import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../store/user/recipe/actions';
-import type { RequiredMethod } from '../../store/user/recipe/types';
-import { endpoint }            from '../../utils/api';
-import { getCroppedImage }     from '../../utils/getCroppedImage';
-import { validRecipeInfo }     from './validRecipeInfo';
+import type { RequiredMethod }             from '../../store/user/recipe/types';
+import { endpoint }                        from '../../utils/api';
+import { getCroppedImage }                 from '../../utils/getCroppedImage';
+import { validRecipeInfo }                 from './validRecipeInfo';
 
 export default function NewRecipe() {
   const router =    useRouter();

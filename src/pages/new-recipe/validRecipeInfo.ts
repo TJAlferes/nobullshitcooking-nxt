@@ -1,4 +1,4 @@
-import type { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from '../index.page';
+import type { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from './index.page';
 
 export function validRecipeInfo({
   ownership,
