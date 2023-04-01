@@ -1,15 +1,13 @@
 import React, { ReactNode, useState } from 'react';
 
-import { ExpandCollapseView } from './view';
-
 const noop = () => {};
 
 export function ExpandCollapse({
   children,
   headingWhileCollapsed = "More info (Click here to expand)",
-  headingWhileExpanded = "(Click here to collapse)",
-  isDisabled = false,
-  handler = noop
+  headingWhileExpanded =  "(Click here to collapse)",
+  isDisabled =            false,
+  handler =               noop
 }: Props) {
   const [ expanded, setExpanded ] = useState(false);
 
@@ -20,14 +18,17 @@ export function ExpandCollapse({
   }
 
   return (
-    <ExpandCollapseView
-      expanded={expanded}
-      toggle={toggle}
-      headingWhileCollapsed={headingWhileCollapsed}
-      headingWhileExpanded={headingWhileExpanded}
-    >
-      {children}
-    </ExpandCollapseView>
+    <div className="expand-collapse">
+      {!expanded
+        ? <div className="collapsed" onClick={toggle}>{headingWhileCollapsed}</div>
+        : (
+          <>
+            <div className="expanded" onClick={toggle}>{headingWhileExpanded}</div>
+            {children}
+          </>
+        )
+      }
+    </div>
   );
 };
 

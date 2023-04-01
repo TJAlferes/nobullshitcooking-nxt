@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../store';
-import { connect as chatConnect, disconnect as chatDisconnect, joinRoom, sendMessage, sendPrivateMessage } from '../../store/chat/actions';
-import { ChatView } from './view';
+import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
+import {
+  connect as chatConnect,
+  disconnect as chatDisconnect,
+  joinRoom,
+  sendMessage,
+  sendPrivateMessage
+} from '../../store/chat/actions';
+import type { IMessageWithClientTimestamp } from '../../store/chat/types';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
@@ -25,12 +30,14 @@ export default function Chat() {
   const [ focusedUser,   setFocusedUser ] =   useState<string>();
   const [ loading,       setLoading ] =       useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
-  const [ mobileTab,     setMobileTab ] =     useState("Messages");
+  //const [ mobileTab,     setMobileTab ] =     useState("Messages");
   const [ peopleTab,     setPeopleTab ] =     useState("Room");
   const [ roomToEnter,   setRoomToEnter ] =   useState("");
   const [ spamCount,     setSpamCount ] =     useState(1);
 
   const messagesRef = useRef<HTMLUListElement>(null);
+
+  const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
   useEffect(() => {
     let isSubscribed = true;
@@ -68,10 +75,10 @@ export default function Chat() {
     autoScroll();
   }, [messages]);
 
-  const changeRoomInput =    (e: React.SyntheticEvent<EventTarget>) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
-  const changeMessageInput = (e: React.SyntheticEvent<EventTarget>) => setMessageToSend((e.target as HTMLInputElement).value.trim());
+  const changeRoomInput =    (e: SyntheticEvent) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
+  const changeMessageInput = (e: SyntheticEvent) => setMessageToSend((e.target as HTMLInputElement).value.trim());
   
-  const changeMobileTab = (value: string) => setMobileTab(value);
+  //const changeMobileTab = (value: string) => setMobileTab(value);
   const changePeopleTab = (value: string) => setPeopleTab(value);
   
   const changeRoom = () => {
@@ -173,33 +180,130 @@ export default function Chat() {
   });
 
   return (
-    <ChatView
-      authname={authname}
-      changeMessageInput={changeMessageInput}
-      changeMobileTab={changeMobileTab}
-      changePeopleTab={changePeopleTab}
-      changeRoom={changeRoom}
-      changeRoomInput={changeRoomInput}
-      connect={connect}
-      disconnect={disconnect}
-      feedback={feedback}
-      focusedFriend={focusedFriend}
-      focusFriend={focusFriend}
-      focusedUser={focusedUser}
-      focusUser={focusUser}
-      loading={loading}
-      messages={messages}
-      messagesRef={messagesRef}
-      messageToSend={messageToSend}
-      mobileTab={mobileTab}
-      friends={friends}
-      peopleTab={peopleTab}
-      room={room}
-      roomToEnter={roomToEnter}
-      send={send}
-      startPrivateMessage={startPrivateMessage}
-      status={status}
-      users={sortedUsers}
-    />
+    <div className="one-col chat">
+      <div className="chat-desktop">
+        <h1>Chat</h1>
+
+        <p className="feedback">{feedback}</p>
+
+        <div className="chat-options">
+          <button disabled={loading} onClick={status === "connected" ? disconnect : connect}>
+            {status === "connected" ? "Disconnect" : "Connect"}
+          </button>
+
+          <div className="current-room">
+            <label>Current Room:</label><span>{room}</span>
+          </div>
+
+          <div className="change-room">
+            <label>Go To Room:</label>
+            <input disabled={(status !== "connected") || loading} name="change-room-input" onChange={changeRoomInput} type="text" value={roomToEnter} />
+            <button disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
+          </div>
+        </div>
+
+        <div className="chat-main">
+          <div className="chat-messages">
+            <ul ref={messagesRef}>
+              {messages && messages.map(message =>
+                <li key={message.id}><span className="message-ts">{message.ts}{' '}</span>{formattedMessage(authname, message)}</li>
+              )}
+            </ul>
+            <input disabled={status !== "connected"} name="chat-input" onChange={changeMessageInput} onKeyUp={e => send(e)} type="text" value={messageToSend} />
+          </div>
+
+          <div className="chat-people">
+            <div className="people-tabs">
+              <button className={peopleTab === "Room" ? "--current" : ""}    onClick={() => changePeopleTab("Room")}>Room</button>
+              <button className={peopleTab === "Friends" ? "--current" : ""} onClick={() => changePeopleTab("Friends")}>Friends</button>
+            </div>
+            {peopleTab === "Room" && (
+              <ul className="chat-persons">
+                {users && users.map(user => (
+                  <li className="chat-person" key={user} onClick={() => focusUser(user)}>
+                    <img src={`${url}/${user}-tiny`} />
+                    <span>{user}</span>
+                    {focusedUser && focusedUser === user && (
+                      <div className="person-tooltip"><button onClick={() => startPrivateMessage(user)}>Whisper</button></div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {peopleTab === "Friends" && (
+              <ul className="chat-persons">
+                {friends && friends.map(friend => (
+                  <li className="chat-person" key={friend} onClick={() => focusFriend(friend)}>
+                    <img src={`${url}/${friend}-tiny`} />
+                    <span>{friend}</span>
+                    {focusedFriend && focusedFriend === friend && (
+                      <div className="person-tooltip"><button onClick={() => startPrivateMessage(friend)}>Whisper</button></div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/*<div className="chat-mobile">
+        <p className="feedback">{feedback}</p>
+        <div className="chat-mobile-tabs">
+          <button className={mobileTab === "Messages" ? "--current" : ""} onClick={() => changeMobileTab("Messages")}>Messages</button>
+          <button className={mobileTab === "People" ? "--current" : ""}   onClick={() => changeMobileTab("People")}>People</button>
+          <button className={mobileTab === "Options" ? "--current" : ""}  onClick={() => changeMobileTab("Options")}>Options</button>
+        </div>
+        {mobileTab === "Options" && (
+          <OptionsView
+            changeRoom={changeRoom}
+            changeRoomInput={changeRoomInput}
+            connect={connect}
+            disconnect={disconnect}
+            loading={loading}
+            room={room}
+            roomToEnter={roomToEnter}
+            status={status}
+          />
+        )}
+        {mobileTab === "Messages" && (
+          <MessagesView
+            authname={authname}
+            changeMessageInput={changeMessageInput}
+            messages={messages}
+            messagesRef={messagesRef}
+            messageToSend={messageToSend}
+            send={send}
+            status={status}
+          />
+        )}
+        {mobileTab === "People" && (
+          <PeopleView
+            changePeopleTab={changePeopleTab}
+            focusedFriend={focusedFriend}
+            focusFriend={focusFriend}
+            focusedUser={focusedUser}
+            focusUser={focusUser}
+            friends={friends}
+            peopleTab={peopleTab}
+            startPrivateMessage={startPrivateMessage}
+            users={users}
+          />
+        )}
+      </div>*/}
+    </div>
   );
 }
+
+function formattedMessage(authname: string, { kind, from, to, text }: IMessageWithClientTimestamp) {
+  if (kind === "public") {
+    if (from === "messengerstatus") return <span className="--admin">{text}</span>;                  // status
+    if (from === authname)          return <><span className="--self">{from}:{' '}</span>{text}</>;  // sent
+    return <><span className="--other">{from}:{' '}</span>{text}</>;                                 // received
+  }
+  if (from === authname)
+    return <><span className="--self">You whisper to{' '}{to}:{' '}</span><span className="--private">{text}</span></>;    // sent
+  return <><span className="--other">{from}{' '}whispers to you:{' '}</span><span className="--private">{text}</span></>;  // received
+};
+
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;

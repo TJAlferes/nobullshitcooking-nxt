@@ -48,8 +48,8 @@ export default function Dashboard() {
 
   const imageRef = useRef<HTMLImageElement | null>();
 
-  const url = "https://s3.amazonaws.com/nobsc-user-avatars";
-  const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+  const avatarUrl = "https://s3.amazonaws.com/nobsc-user-avatars";
+  const recipeUrl = "https://s3.amazonaws.com/nobsc-user-recipe";
 
   useEffect(() => {
     let isSubscribed = true;
@@ -175,8 +175,8 @@ export default function Dashboard() {
               <h2>Profile Picture</h2>
       
               <div className="avatar-crops">
-                <div className="--full"><span>Full Size: </span><img src={`${url}/${authname}`} /></div>
-                <div className="--tiny"><span>Tiny Size: </span><img src={`${url}/${authname}-tiny`} /></div>
+                <div className="--full"><span>Full Size: </span><img src={`${avatarUrl}/${authname}`} /></div>
+                <div className="--tiny"><span>Tiny Size: </span><img src={`${avatarUrl}/${authname}-tiny`} /></div>
               </div>
       
               <label>Change</label>
@@ -278,7 +278,7 @@ export default function Dashboard() {
             ? myPrivateRecipes.map(r => (
               <div className="dashboard-item" key={r.id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
+                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
                 <span className="name"><Link href={`/user-recipe/${r.id}`}>{r.title}</Link></span>
                 <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
@@ -317,7 +317,7 @@ export default function Dashboard() {
             ? myPublicRecipes.map(r => (
               <div className="dashboard-item" key={r.id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
+                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
                 <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
                 <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
@@ -337,7 +337,7 @@ export default function Dashboard() {
             ? myFavoriteRecipes.map(r => (
               <div className="dashboard-item" key={r.id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img--28-18"></div>}
+                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img--28-18"></div>}
                 </span>
                 <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
                 <span className="unfavorite" onClick={() => unfavorite(r.id)}>Unfavorite</span>
@@ -356,7 +356,7 @@ export default function Dashboard() {
             ? mySavedRecipes.map(r => (
               <div className="dashboard-item" key={r.id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
+                  {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
                 <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
                 <span className="unsave" onClick={() => unsave(r.id)}>Unsave</span>
@@ -374,7 +374,7 @@ export default function Dashboard() {
           {myIngredients.length
             ? myIngredients.map(i => (
               <div className="dashboard-item" key={i.id}>
-                <span className="tiny">{i.image !== "nobsc-ingredient-default" ? <img src={`${url}/${i.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
+                <span className="tiny">{i.image !== "nobsc-ingredient-default" ? <img src={`${recipeUrl}/${i.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
                 <span className="name"><Link href={`/user-ingredient/${i.id}`}>{i.name}</Link></span>
                 <span className="action"><Link href={`/user-ingredient/edit/${i.id}`}>Edit</Link></span>
                 <span className="delete" onClick={() => deletePrivateIngredient(i.id)}>Delete</span>
@@ -392,7 +392,7 @@ export default function Dashboard() {
           {myEquipment.length
             ? myEquipment.map(e => (
               <div className="dashboard-item" key={e.id}>
-                <span className="tiny">{e.image !== "nobsc-equipment-default" ? <img src={`${url}/${e.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
+                <span className="tiny">{e.image !== "nobsc-equipment-default" ? <img src={`${recipeUrl}/${e.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
                 <span className="name"><Link href={`/user-equipment/${e.id}`}>{e.name}</Link></span>
                 <span className="action"><Link href={{pathname: '/new-equipment', query: {id: e.id}}}>Edit</Link></span>
                 <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
