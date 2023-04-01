@@ -1,10 +1,10 @@
 import axios                from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                                from '../../../utils/api';
 import { getMyFavoriteRecipesSaga }                from '../../data/sagas';
 import { userMessage, userMessageClear }           from '../actions';
-import type { IFavoriteRecipe, IUnfavoriteRecipe } from './types';
+import { actionTypes, IFavoriteRecipe, IUnfavoriteRecipe } from './types';
 
 export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {
   try {
@@ -32,4 +32,13 @@ export function* unfavoriteRecipeSaga({ recipeId }: IUnfavoriteRecipe) {
 
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const { FAVORITE_RECIPE, UNFAVORITE_RECIPE } = actionTypes;
+
+export function* watchFavorite() {
+  yield all([
+    takeEvery(FAVORITE_RECIPE,   favoriteRecipeSaga),
+    takeEvery(UNFAVORITE_RECIPE, unfavoriteRecipeSaga)
+  ]);
 }

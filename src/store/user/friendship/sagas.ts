@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../utils/api';
 import { updateOnlineSaga } from '../../chat/sagas';
 import { getMyFriendshipsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type { IRequestFriendship, IAcceptFriendship, IRejectFriendship, IDeleteFriendship, IBlockUser, IUnblockUser } from './types';
+import { actionTypes, IRequestFriendship, IAcceptFriendship, IRejectFriendship, IDeleteFriendship, IBlockUser, IUnblockUser } from './types';
 
 const error = 'An error occurred. Please try again.';
 
@@ -93,4 +93,21 @@ export function* unblockUserSaga({ friend }: IUnblockUser) {
 
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const {
+  REQUEST_FRIENDSHIP, ACCEPT_FRIENDSHIP, REJECT_FRIENDSHIP, DELETE_FRIENDSHIP,
+  BLOCK_USER, UNBLOCK_USER
+} = actionTypes;
+
+export function* watchFriendship() {
+  yield all([
+    takeEvery(REQUEST_FRIENDSHIP, requestFriendshipSaga),
+    takeEvery(ACCEPT_FRIENDSHIP,  acceptFriendshipSaga),
+    takeEvery(REJECT_FRIENDSHIP,  rejectFriendshipSaga),
+    takeEvery(DELETE_FRIENDSHIP,  deleteFriendshipSaga),
+
+    takeEvery(BLOCK_USER,   blockUserSaga),
+    takeEvery(UNBLOCK_USER, unblockUserSaga)
+  ]);
 }

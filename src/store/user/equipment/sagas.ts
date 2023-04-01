@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../utils/api';
 import { getMyEquipmentSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type { ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';
+import { actionTypes, ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';
 
 export function* createEquipmentSaga(action: ICreateEquipment) {
   let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;
@@ -74,4 +74,14 @@ export function* deleteEquipmentSaga(action: IDeleteEquipment) {
 
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
+
+export function* watchEquipment() {
+  yield all([
+    takeEvery(CREATE_EQUIPMENT, createEquipmentSaga),
+    takeEvery(UPDATE_EQUIPMENT, updateEquipmentSaga),
+    takeEvery(DELETE_EQUIPMENT, deleteEquipmentSaga)
+  ]);
 }

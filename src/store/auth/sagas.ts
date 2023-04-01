@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../utils/api';
+import { endpoint }   from '../../utils/api';
 import { removeItem } from '../../utils/storage';
-import { initUser } from '../data/actions';
+import { initUser }   from '../data/actions';
 import { message as authMessage, messageClear, userDisplay } from './actions';
-import type { IUserRegister, IUserVerify, IUserLogin, IUserLogout } from './types';
+import { actionTypes, IUserRegister, IUserVerify, IUserLogin, IUserLogout } from './types';
 
 export function* userLoginSaga(action: IUserLogin) {
   try {
@@ -81,4 +81,16 @@ export function* userVerifySaga(action: IUserVerify) {
     yield delay(4000);
     yield put(messageClear());
   }
+}
+
+const { USER_REGISTER, USER_VERIFY, USER_LOGIN, USER_LOGOUT } = actionTypes;
+
+export function* watchAuth() {
+  yield all([
+    takeEvery(USER_REGISTER, userRegisterSaga),
+    takeEvery(USER_VERIFY,   userVerifySaga),
+
+    takeEvery(USER_LOGIN,    userLoginSaga),
+    takeEvery(USER_LOGOUT,   userLogoutSaga)
+  ]);
 }

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { call, put } from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../utils/api';
 import { getInitialData, getData, getInitialUserData, getUserData } from './actions';
-import type { IInitialData, IInitialUserData } from './types';
+import { actionTypes, IInitialData, IInitialUserData } from './types';
 
 export function* getInitialDataSaga() {
   try {
@@ -78,4 +78,16 @@ function makeUserDataSaga(path: string, key: keyof IInitialUserData) {
       //
     }
   }
+}
+
+const { INIT, INIT_USER } = actionTypes;
+
+export function* watchData() {
+  yield all([
+    takeEvery(INIT, getInitialDataSaga),
+    takeEvery(INIT_USER, getInitialUserDataSaga),
+
+    //takeEvery(, dataGetSaga),
+    //takeEvery(, dataGetSaga)
+  ]);
 }

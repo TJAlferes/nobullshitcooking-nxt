@@ -1,8 +1,10 @@
-import type { Store }  from 'redux';
-import { io }          from 'socket.io-client';
-import type { Socket } from 'socket.io-client';
+import type { Store }     from 'redux';
+import { all, takeEvery } from 'redux-saga/effects';
+import { io }             from 'socket.io-client';
+import type { Socket }    from 'socket.io-client';
 
 import { endpoint } from '../../utils/api';
+import { actionTypes as authActionTypes } from '../auth/types';
 import {
   connected,
   disconnected,
@@ -17,7 +19,7 @@ import {
   receivedPrivateMessage,
   failedPrivateMessage
 } from './actions';
-import type { IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
+import { actionTypes as chatActionTypes, IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
 
 const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, withCredentials: true});
 
@@ -104,4 +106,21 @@ interface IServerToClientEvents {
   Message(message: IMessage):                          void;
   PrivateMessage(message: IMessage):                   void;
   FailedPrivateMessage(feedback: string):              void;
+}
+
+const { USER_LOGOUT } = authActionTypes;
+const { CONNECT, DISCONNECT, JOIN_ROOM, SEND_MESSAGE, SEND_PRIVATE_MESSAGE } = chatActionTypes
+
+// takeLatest?
+export function* watchChat() {
+  yield all([
+    takeEvery(CONNECT,              connectSaga),
+    takeEvery(DISCONNECT,           disconnectSaga),
+    takeEvery(USER_LOGOUT,          disconnectSaga),
+
+    takeEvery(JOIN_ROOM,            joinRoomSaga),
+
+    takeEvery(SEND_MESSAGE,         sendMessageSaga),
+    takeEvery(SEND_PRIVATE_MESSAGE, sendPrivateMessageSaga)
+  ]);
 }
