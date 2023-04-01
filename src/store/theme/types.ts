@@ -3,16 +3,16 @@ export const actionTypes = {
   LIGHT: 'LIGHT'
 } as const;
 
-export interface IState {
+export type State = {
   theme: string;
-}
+};
 
-export type Actions = IDark | ILight;
+export type Actions = Dark | Light;
 
-interface IDark {
+type Dark = {
   type: typeof actionTypes.DARK
-}
+};
 
-interface ILight {
+type Light = {
   type: typeof actionTypes.LIGHT
-}
+};

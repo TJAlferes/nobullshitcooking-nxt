@@ -1,10 +1,10 @@
 import axios                from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                        from '../../../utils/api';
 import { getMySavedRecipesSaga }           from '../../data/sagas';
 import { userMessage, userMessageClear }   from '../actions';
-import type { ISaveRecipe, IUnsaveRecipe } from './types';
+import { actionTypes, ISaveRecipe, IUnsaveRecipe } from './types';
 
 export function* saveRecipeSaga({ recipeId }: ISaveRecipe) {
   try {
@@ -32,4 +32,13 @@ export function* unsaveRecipeSaga({ recipeId }: IUnsaveRecipe) {
 
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
+
+export function* watchSave() {
+  yield all([
+    takeEvery(SAVE_RECIPE,   saveRecipeSaga),
+    takeEvery(UNSAVE_RECIPE, unsaveRecipeSaga)
+  ]);
 }

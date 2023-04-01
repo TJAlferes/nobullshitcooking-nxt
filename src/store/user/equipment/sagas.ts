@@ -1,12 +1,22 @@
-import axios from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
-import { getMyEquipmentSaga } from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
-import { actionTypes, ICreateEquipment, IUpdateEquipment, IDeleteEquipment } from './types';
+import { endpoint }                                                       from '../../../utils/api';
+import { getMyEquipmentSaga }                                             from '../../data/sagas';
+import { userMessage, userMessageClear }                                  from '../actions';
+import { actionTypes, CreateEquipment, UpdateEquipment, DeleteEquipment } from './types';
 
-export function* createEquipmentSaga(action: ICreateEquipment) {
+const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
+
+export function* watchEquipment() {
+  yield all([
+    takeEvery(CREATE_EQUIPMENT, createEquipmentSaga),
+    takeEvery(UPDATE_EQUIPMENT, updateEquipmentSaga),
+    takeEvery(DELETE_EQUIPMENT, deleteEquipmentSaga)
+  ]);
+}
+
+export function* createEquipmentSaga(action: CreateEquipment) {
   let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -34,7 +44,7 @@ export function* createEquipmentSaga(action: ICreateEquipment) {
   yield put(userMessageClear());
 }
 
-export function* updateEquipmentSaga(action: IUpdateEquipment) {
+export function* updateEquipmentSaga(action: UpdateEquipment) {
   let { id, equipmentTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.equipmentInfo;
 
   try {
@@ -62,7 +72,7 @@ export function* updateEquipmentSaga(action: IUpdateEquipment) {
   yield put(userMessageClear());
 }
 
-export function* deleteEquipmentSaga(action: IDeleteEquipment) {
+export function* deleteEquipmentSaga(action: DeleteEquipment) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
 
@@ -74,14 +84,4 @@ export function* deleteEquipmentSaga(action: IDeleteEquipment) {
 
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
-
-export function* watchEquipment() {
-  yield all([
-    takeEvery(CREATE_EQUIPMENT, createEquipmentSaga),
-    takeEvery(UPDATE_EQUIPMENT, updateEquipmentSaga),
-    takeEvery(DELETE_EQUIPMENT, deleteEquipmentSaga)
-  ]);
 }

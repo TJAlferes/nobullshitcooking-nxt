@@ -16,44 +16,44 @@ State
 
 */
 
-export interface IState extends IInitialData, IInitialUserData {};
+export type State = InitialData & InitialUserData;
 
-export interface IInitialData {
-  cuisines:          ICuisine[];
-  equipment:         IEquipment[];
-  equipmentTypes:    IEquipmentType[];
-  ingredients:       IIngredient[];
-  measurements:      IMeasurement[];
-  methods:           IMethod[];
-  ingredientTypes:   IIngredientType[];
-  products:          IWorkProduct[];
-  productCategories: IProductCategory[];
-  productTypes:      IProductType[];
-  recipes:           IWorkRecipe[];
-  recipeTypes:       IRecipeType[];
-}
+export type InitialData = {
+  cuisines:          Cuisine[];
+  equipment:         Equipment[];
+  equipmentTypes:    EquipmentType[];
+  ingredients:       Ingredient[];
+  measurements:      Measurement[];
+  methods:           Method[];
+  ingredientTypes:   IngredientType[];
+  products:          WorkProduct[];
+  productCategories: ProductCategory[];
+  productTypes:      ProductType[];
+  recipes:           WorkRecipe[];
+  recipeTypes:       RecipeType[];
+};
 
-export interface IInitialUserData {
-  myFavoriteRecipes: IWorkRecipe[];
-  myFriendships:     IFriendship[];
-  myPlans:           IPlan[];
-  myEquipment:       IEquipment[];
-  myIngredients:     IIngredient[];
-  //myOrders: IOrder[];
-  myPrivateRecipes:  IWorkRecipe[];
-  myPublicRecipes:   IWorkRecipe[];
-  mySavedRecipes:    IWorkRecipe[];
-}
+export type InitialUserData = {
+  myFavoriteRecipes: WorkRecipe[];
+  myFriendships:     Friendship[];
+  myPlans:           Plan[];
+  myEquipment:       Equipment[];
+  myIngredients:     Ingredient[];
+  //myOrders:          Order[];
+  myPrivateRecipes:  WorkRecipe[];
+  myPublicRecipes:   WorkRecipe[];
+  mySavedRecipes:    WorkRecipe[];
+};
 
-export interface ICuisine {
+export type Cuisine = {
   id:        number;
   continent: string;
   code:      string;
   name:      string;
   country:   string;
-}
+};
 
-export interface IEquipment {
+export type Equipment = {
   id:                  number;
   equipment_type_id:   number;
   owner_id:            number;
@@ -61,21 +61,21 @@ export interface IEquipment {
   name:                string;
   description:         string;
   image:               string;
-}
+};
 
-export interface IEquipmentType {
+export type EquipmentType = {
   id:   number;
   name: string;
-}
+};
 
-export interface IFriendship {
+export type Friendship = {
   user_id:  number;
   username: string;
   avatar:   string;
   status:   string;
-}
+};
 
-export interface IIngredient {
+export type Ingredient = {
   id:                   number;
   ingredient_type_id:   number;
   owner_id:             number;
@@ -86,44 +86,44 @@ export interface IIngredient {
   name:                 string;
   description:          string;
   image:                string;
-}
+};
 
-export interface IIngredientType {
+export type IngredientType = {
   id:   number;
   name: string;
-}
+};
 
-export interface IMeasurement {
+export type Measurement = {
   id:   number;
   name: string;
-}
+};
 
-export interface IMethod {
+export type Method = {
   id:   number;
   name: string;
-}
+};
 
-export interface IPlan {
+export type Plan = {
   id:   number;
   name: string;
   data: IPlannerData;
-}
+};
 
-export interface IWorkRecipe {
+export type WorkRecipe = {
   id:             number;
   owner_id:       number;
   recipe_type_id: number;
   cuisine_id:     number;
   title:          string;
   recipe_image:   string;
-}
+};
 
-export interface IRecipeType {
+export type RecipeType = {
   id:   number;
   name: string;
-}
+};
 
-export interface IWorkProduct {
+export type WorkProduct = {
   id:                  number;
   product_category_id: number;
   product_type_id:     number;
@@ -131,24 +131,24 @@ export interface IWorkProduct {
   variety:             string | null;
   name:                string;
   fullname:            string;
-}
+};
 
-export interface IProductCategory {
+export type ProductCategory = {
   id:   number;
   name: string;
-}
+};
 
-export interface IProductType {
+export type ProductType = {
   id:   number;
   name: string;
-}
+};
 
-/*export interface IOrder {
+/*export type Order = {
   id:       number;
   placed:   string;
   status:   string;
-  products: IWorkProduct[];
-}*/
+  products: WorkProduct[];
+};*/
 
 /*
 
@@ -157,43 +157,43 @@ Actions
 */
 
 export type Actions =
-  IInit |
-  IGetInitialData |
-  IGetData |
-  IInitUser |
-  IGetInitialUserData |
-  IGetUserData;
+  | Init
+  | GetInitialData
+  | GetData
+  | InitUser
+  | GetInitialUserData
+  | GetUserData;
 
-export interface IInit {
+export type Init = {
   type: typeof actionTypes.INIT;
-}
+};
 
-export interface IGetInitialData {         
+export type GetInitialData = {         
   type:        typeof actionTypes.GET_INITIAL_DATA;
-  initialData: IInitialData;
-}
+  initialData: InitialData;
+};
 
-export interface IGetData {
+export type GetData = {
   type: typeof actionTypes.GET_DATA;
   data: {
-    key:   keyof IInitialData;
-    value: Partial<IInitialData>;
+    key:   keyof InitialData;
+    value: Partial<InitialData>;
   };
-}
+};
 
-export interface IInitUser {
+export type InitUser = {
   type: typeof actionTypes.INIT_USER;
-}
+};
 
-export interface IGetInitialUserData {
+export type GetInitialUserData = {
   type:            typeof actionTypes.GET_INITIAL_USER_DATA;
-  initialUserData: IInitialUserData;
-}
+  initialUserData: InitialUserData;
+};
 
-export interface IGetUserData {
+export type GetUserData = {
   type: typeof actionTypes.GET_USER_DATA;
   userData: {
-    key:   keyof IInitialUserData;
-    value: Partial<IInitialUserData>;
+    key:   keyof InitialUserData;
+    value: Partial<InitialUserData>;
   };
-}
+};

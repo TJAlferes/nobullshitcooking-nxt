@@ -1,14 +1,14 @@
-import { actionTypes, ICartState, CartActions } from './types';
+import { actionTypes, State, CartActions } from './types';
 
-const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
+const { ADD_ITEM, REMOVE_ITEM, EMPTY } = actionTypes;
 
-const initialState: ICartState = {items: []};
+const initialState: State = {items: []};
 
-export const cartReducer = (state = initialState, action: CartActions): ICartState => {
+export const cartReducer = (state = initialState, action: CartActions): State => {
   switch (action.type) {
-    case CART_ADD_ITEM:    return {...state, items: state.items.concat(action.item)};
-    case CART_REMOVE_ITEM: return {...state, items: state.items.filter(item => item.id !== action.item.id)};
-    case CART_EMPTY_CART:  return {...state, ...initialState};
-    default:               return state;
+    case ADD_ITEM:    return {...state, items: state.items.concat(action.item)};
+    case REMOVE_ITEM: return {...state, items: state.items.filter(item => item.id !== action.item.id)};
+    case EMPTY:       return {...state, ...initialState};
+    default:          return state;
   }
 };

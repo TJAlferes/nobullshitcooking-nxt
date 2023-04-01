@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../utils/api';
 import { getMyIngredientsSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type { ICreateIngredient, IUpdateIngredient, IDeleteIngredient } from './types';
+import { actionTypes, ICreateIngredient, IUpdateIngredient, IDeleteIngredient } from './types';
 
 export function* createIngredientSaga(action: ICreateIngredient) {
   let { ingredientTypeId, name, description, image, fullImage, tinyImage } = action.ingredientInfo;
@@ -74,4 +74,14 @@ export function* deleteIngredientSaga(action: IDeleteIngredient) {
 
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
+
+export function* watchIngredient() {
+  yield all([
+    takeEvery(CREATE_INGREDIENT, createIngredientSaga),
+    takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),
+    takeEvery(DELETE_INGREDIENT, deleteIngredientSaga)
+  ]);
 }

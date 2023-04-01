@@ -4,44 +4,22 @@ import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 import { endpoint }   from '../../utils/api';
 import { removeItem } from '../../utils/storage';
 import { initUser }   from '../data/actions';
-import { message as authMessage, messageClear, userDisplay } from './actions';
-import { actionTypes, IUserRegister, IUserVerify, IUserLogin, IUserLogout } from './types';
+import { message as authMessage, messageClear, authenticate } from './actions';
+import { actionTypes, Register, Verify, Login, Logout } from './types';
 
-export function* userLoginSaga(action: IUserLogin) {
-  try {
-    const { email, password, router } = action;
-    const { data: { message, username } } =
-      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email, pass: password}}, {withCredentials: true});
+const { REGISTER, VERIFY, LOGIN, LOGOUT } = actionTypes;
 
-    if (message === 'Signed in.') {
-      yield put(userDisplay(username));
-      yield put(initUser());
-      yield call([router, router.push], '/dashboard');  //yield call(() => router.push('/dashboard'));
-    }
-    else yield put(authMessage(message));
-  } catch(err) {
-    yield put(authMessage('An error occurred. Please try again.'));
-  }
+export function* watchAuth() {
+  yield all([
+    takeEvery(REGISTER, userRegisterSaga),
+    takeEvery(VERIFY,   userVerifySaga),
 
-  yield delay(4000);
-  yield put(messageClear());
+    takeEvery(LOGIN,    userLoginSaga),
+    takeEvery(LOGOUT,   userLogoutSaga)
+  ]);
 }
 
-export function* userLogoutSaga(action: IUserLogout) {
-  try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/logout`, {}, {withCredentials: true});
-
-    yield call(removeItem, 'appState');
-    yield put(authMessage(message));
-  } catch(err) {
-    yield call(removeItem, 'appState');
-  }
-
-  yield delay(4000);
-  yield put(messageClear());
-}
-
-export function* userRegisterSaga(action: IUserRegister) {
+export function* userRegisterSaga(action: Register) {
   try {
     const { email, password, username, router } = action;
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/register`, {userInfo: {email, password, username}});
@@ -62,7 +40,7 @@ export function* userRegisterSaga(action: IUserRegister) {
   }
 }
 
-export function* userVerifySaga(action: IUserVerify) {
+export function* userVerifySaga(action: Verify) {
   try {
     const { email, password, confirmationCode, router } = action;
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/verify`, {userInfo: {email, password, confirmationCode}});
@@ -83,14 +61,36 @@ export function* userVerifySaga(action: IUserVerify) {
   }
 }
 
-const { USER_REGISTER, USER_VERIFY, USER_LOGIN, USER_LOGOUT } = actionTypes;
+export function* userLoginSaga(action: Login) {
+  try {
+    const { email, password, router } = action;
+    const { data: { message, username } } =
+      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email, pass: password}}, {withCredentials: true});
 
-export function* watchAuth() {
-  yield all([
-    takeEvery(USER_REGISTER, userRegisterSaga),
-    takeEvery(USER_VERIFY,   userVerifySaga),
+    if (message === 'Signed in.') {
+      yield put(authenticate(username));
+      yield put(initUser());
+      yield call([router, router.push], '/dashboard');  //yield call(() => router.push('/dashboard'));
+    }
+    else yield put(authMessage(message));
+  } catch(err) {
+    yield put(authMessage('An error occurred. Please try again.'));
+  }
 
-    takeEvery(USER_LOGIN,    userLoginSaga),
-    takeEvery(USER_LOGOUT,   userLogoutSaga)
-  ]);
+  yield delay(4000);
+  yield put(messageClear());
+}
+
+export function* userLogoutSaga(action: Logout) {
+  try {
+    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/logout`, {}, {withCredentials: true});
+
+    yield call(removeItem, 'appState');
+    yield put(authMessage(message));
+  } catch(err) {
+    yield call(removeItem, 'appState');
+  }
+
+  yield delay(4000);
+  yield put(messageClear());
 }

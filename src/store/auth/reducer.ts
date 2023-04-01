@@ -1,26 +1,26 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import { actionTypes, IState } from './types';
+import { actionTypes, State } from './types';
 
 const {
   MESSAGE,
   MESSAGE_CLEAR,
   RESET,
-  USER_DISPLAY,
-  USER_LOGOUT
+  AUTHENTICATE,
+  LOGOUT
 } = actionTypes;
 
-const initialState: IState = {authname: '', message: '', userIsAuthenticated: false};
+const initialState: State = {authname: '', message: '', userIsAuthenticated: false};
 
-export const authReducer = (state = initialState, action: AnyAction): IState => {
+export const authReducer = (state = initialState, action: AnyAction): State => {
   switch (action.type) {
-    case HYDRATE:             return {...state, ...action['payload'].auth};
-    case MESSAGE:             return {...state, message: action['message']};
-    case MESSAGE_CLEAR:       return {...state, message: ''};
-    case USER_DISPLAY:        return {...state, userIsAuthenticated: true, authname: action['authname']};
+    case HYDRATE:       return {...state, ...action['payload'].auth};
+    case MESSAGE:       return {...state, message: action['message']};
+    case MESSAGE_CLEAR: return {...state, message: ''};
+    case AUTHENTICATE:  return {...state, userIsAuthenticated: true, authname: action['authname']};
     case RESET:
-    case USER_LOGOUT:
+    case LOGOUT:
       return {...state, ...initialState};
     default: return state;
   }

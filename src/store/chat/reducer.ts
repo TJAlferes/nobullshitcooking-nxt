@@ -1,7 +1,7 @@
 import { actionTypes as authActionTypes } from '../auth/types';
-import { actionTypes, IState, PUBLIC, PRIVATE, Actions } from './types';
+import { actionTypes, State, PUBLIC, PRIVATE, Actions } from './types';
 
-const { USER_LOGOUT } = authActionTypes;
+const { LOGOUT } = authActionTypes;
 const {
   CONNECTED,
   DISCONNECTED,
@@ -12,7 +12,6 @@ const {
 
   JOINED_ROOM,
   REJOINED_ROOM,
-
   USER_JOINED_ROOM,
   USER_LEFT_ROOM,
   
@@ -21,18 +20,22 @@ const {
   FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
-// NORMALIZE STATE, USE OBJECTS/MAPS, NOT ARRAYS (maybe)
-// remember Nir Kofman's actions patterns (maybe)
-
+// CONSIDER: normalize state (use objects/maps, not arrays), see Nir Kofman's action patterns
 // TO DO: reserve/disable the username "messengerstatus"!
 
-const initialState: IState = {room: "", messages: [], users: [], friends: [], status: "disconnected"};
+const initialState: State = {
+  status:   "disconnected",
+  room:     "",
+  messages: [],
+  users:    [],
+  friends:  []
+};
 
-export const chatReducer = (state = initialState, action: Actions): IState => {
+export const chatReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case CONNECTED: return {...state, status: "connected"};
     case DISCONNECTED:
-    case USER_LOGOUT:
+    case LOGOUT:
       return {...state, status: "disconnected"};
     
     case ONLINE_FRIENDS:      return {...state, friends: action.friends};

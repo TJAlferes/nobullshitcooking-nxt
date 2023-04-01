@@ -1,10 +1,15 @@
-import { actionTypes, IState, Actions } from './types';
+import { actionTypes, State, Actions } from './types';
 
 const { LATITUDE, LONGITUDE, ADDRESS, NEARBY_STORES_CLICKED } = actionTypes;
 
-const initialState: IState = {latitude: "", longitude: "", address: "", nearbyStoresClicked: false};
+const initialState: State = {
+  latitude:            "",
+  longitude:           "",
+  address:             "",
+  nearbyStoresClicked: false
+};
 
-export const geolocationReducer = (state = initialState, action: Actions): IState => {
+export const geolocationReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case LATITUDE:              return {...state, latitude: action.latitude};
     case LONGITUDE:             return {...state, longitude: action.longitude};

@@ -1,10 +1,10 @@
-import { actionTypes, IState, Actions } from './types';
+import { actionTypes, State, Actions } from './types';
 
 const { FOCUSED } = actionTypes;
 
-const initialState: IState = {focused: true};
+const initialState: State = {focused: true};
 
-export const windowReducer = (state = initialState, action: Actions): IState => {
+export const windowReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case FOCUSED: return {...state, focused: action.focused};
     default:      return state;

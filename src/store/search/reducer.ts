@@ -1,4 +1,4 @@
-import { actionTypes, State, IActions } from './types';
+import { actionTypes, State, Actions } from './types';
 
 const {
   RESET,
@@ -16,9 +16,9 @@ const {
 
 const initialState: State = {
   loading:        false,
-  index:          "recipes",  // setIndex
+  index:          "recipes",
   // search request state:
-  term:           "",         // setTerm
+  term:           "",
   filters:        {
     equipmentTypes:    [],
     ingredientTypes:   [],
@@ -27,10 +27,10 @@ const initialState: State = {
     cuisines:          [],
     productCategories: [],
     productTypes:      []
-  },                   // setFilters (add, remove, clear)
-  sorts:          {},  // setSorts   (add, remove, clear)
-  currentPage:    "1",   // setCurrentPage
-  resultsPerPage: "20",  // setResultsPerPage
+  },
+  sorts:          {},
+  currentPage:    "1",
+  resultsPerPage: "20",
   // search response state:
   //resultTerm:     "",
   results:        [],
@@ -40,7 +40,7 @@ const initialState: State = {
   suggestions:    []
 };
 
-export const searchReducer = (state = initialState, action: IActions): State => {
+export const searchReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case RESET:                return {...state, ...initialState};
     case SET_INDEX:            return {...state, index: action.index};

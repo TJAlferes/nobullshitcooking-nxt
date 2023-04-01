@@ -1,25 +1,23 @@
-import type { IUserLogout } from '../auth/types';
+import type { Logout } from '../auth/types';
 
 export const actionTypes = {
-  CONNECT:      'CONNECT',
-  CONNECTED:    'CONNECTED',
-  DISCONNECT:   'DISCONNECT',
-  DISCONNECTED: 'DISCONNECTED',
+  CONNECT:                  'CONNECT',
+  CONNECTED:                'CONNECTED',
+  DISCONNECT:               'DISCONNECT',
+  DISCONNECTED:             'DISCONNECTED',
 
-  ONLINE_FRIENDS:      'ONLINE_FRIENDS',
-  FRIEND_CAME_ONLINE:  'FRIEND_CAME_ONLINE',
-  FRIEND_WENT_OFFLINE: 'FRIEND_WENT_OFFLINE',
+  ONLINE_FRIENDS:           'ONLINE_FRIENDS',
+  FRIEND_CAME_ONLINE:       'FRIEND_CAME_ONLINE',
+  FRIEND_WENT_OFFLINE:      'FRIEND_WENT_OFFLINE',
 
-  JOIN_ROOM:     'JOIN_ROOM',
-  JOINED_ROOM:   'JOINED_ROOM',
-  REJOINED_ROOM: 'REJOINED_ROOM',
-
-  USER_JOINED_ROOM: 'USER_JOINED_ROOM',
-  USER_LEFT_ROOM:   'USER_LEFT_ROOM',
+  JOIN_ROOM:                'JOIN_ROOM',
+  JOINED_ROOM:              'JOINED_ROOM',
+  REJOINED_ROOM:            'REJOINED_ROOM',
+  USER_JOINED_ROOM:         'USER_JOINED_ROOM',
+  USER_LEFT_ROOM:           'USER_LEFT_ROOM',
 
   SEND_MESSAGE:             'SEND_MESSAGE',
   RECEIVED_MESSAGE:         'RECEIVED_MESSAGE',
-
   SEND_PRIVATE_MESSAGE:     'SEND_PRIVATE_MESSAGE',
   RECEIVED_PRIVATE_MESSAGE: 'RECEIVED_PRIVATE_MESSAGE',
   FAILED_PRIVATE_MESSAGE:   'FAILED_PRIVATE_MESSAGE'
@@ -33,28 +31,28 @@ State
 
 // TO DO: double-check times
 
-export interface IState {
+export type State = {
   status:   string;
   room:     string;
   messages: IMessageWithClientTimestamp[];
   users:    string[];
   friends:  string[];
-}
+};
 
 export const PRIVATE = "private" as const;
 export const PUBLIC =  "public" as const;
 
-export interface IMessage {
+export type IMessage = {
   kind: typeof PRIVATE | typeof PUBLIC;
   id:   string;
   to:   string;
   from: string;
   text: string;
-}
+};
 
-export interface IMessageWithClientTimestamp extends IMessage {
+export type IMessageWithClientTimestamp = IMessage & {
   ts: string;
-}
+};
 
 /*
 
@@ -63,108 +61,108 @@ Actions
 */
 
 export type Actions =
-IUserLogout |
-IConnect |
-IConnected |
-IDisconnect |
-IDisconnected |
-IOnlineFriends |
-IFriendCameOnline |
-IFriendWentOffline |
-IJoinRoom |
-IJoinedRoom |
-IRejoinedRoom |
-IUserJoinedRoom |
-IUserLeftRoom |
-ISendMessage |
-IReceivedMessage |
-ISendPrivateMessage |
-IReceivedPrivateMessage |
-IFailedPrivateMessage;
+  | Logout
+  | Connect
+  | Connected
+  | Disconnect
+  | Disconnected
+  | OnlineFriends
+  | FriendCameOnline
+  | FriendWentOffline
+  | JoinRoom
+  | JoinedRoom
+  | RejoinedRoom
+  | UserJoinedRoom
+  | UserLeftRoom
+  | SendMessage
+  | ReceivedMessage
+  | SendPrivateMessage
+  | ReceivedPrivateMessage
+  | FailedPrivateMessage;
 
-interface IConnect {
+type Connect = {
   type: typeof actionTypes.CONNECT;
-}
+};
 
-interface IConnected {
+type Connected = {
   type: typeof actionTypes.CONNECTED;
-}
+};
 
-interface IDisconnect {
+type Disconnect = {
   type: typeof actionTypes.DISCONNECT;
-}
+};
 
-interface IDisconnected {
+type Disconnected = {
   type: typeof actionTypes.DISCONNECTED;
-}
+};
 
-interface IOnlineFriends {
+type OnlineFriends = {
   type:    typeof actionTypes.ONLINE_FRIENDS;
   friends: string[];
-}
+};
 
-interface IFriendCameOnline {
+type FriendCameOnline = {
   type:   typeof actionTypes.FRIEND_CAME_ONLINE;
   friend: string;
-}
+};
 
-interface IFriendWentOffline {
+type FriendWentOffline = {
   type:   typeof actionTypes.FRIEND_WENT_OFFLINE;
   friend: string;
-}
+};
 
-export interface IJoinRoom {
+export type JoinRoom = {
   type: typeof actionTypes.JOIN_ROOM;
   room: string;
-}
+};
 
-interface IJoinedRoom {
+type JoinedRoom = {
   type:  typeof actionTypes.JOINED_ROOM;
   users: string[];
   room:  string;
-}
+};
 
-interface IRejoinedRoom {
+type RejoinedRoom = {
   type:  typeof actionTypes.REJOINED_ROOM;
   users: string[];
   room:  string;
-}
+};
 
-interface IUserJoinedRoom {
+type UserJoinedRoom = {
   type: typeof actionTypes.USER_JOINED_ROOM;
   user: string;
   ts:   string;
-}
+};
 
-interface IUserLeftRoom {
+type UserLeftRoom = {
   type: typeof actionTypes.USER_LEFT_ROOM;
   user: string;
   ts:   string;
-}
+};
 
-export interface ISendMessage {
+export type SendMessage = {
   type: typeof actionTypes.SEND_MESSAGE;
   text: string;
-}
+};
 
-export interface IReceivedMessage {
+export type ReceivedMessage = {
   type:    typeof actionTypes.RECEIVED_MESSAGE;
   message: IMessageWithClientTimestamp;
-}
+};
 
-export interface ISendPrivateMessage {
+export type SendPrivateMessage = {
   type: typeof actionTypes.SEND_PRIVATE_MESSAGE;
   text: string;
   to:   string;
-}
+};
 
-export interface IReceivedPrivateMessage {
+export type ReceivedPrivateMessage = {
   type:    typeof actionTypes.RECEIVED_PRIVATE_MESSAGE;
   message: IMessageWithClientTimestamp;
-}
+};
 
-interface IFailedPrivateMessage {
+type FailedPrivateMessage = {
   type:     typeof actionTypes.FAILED_PRIVATE_MESSAGE;
   feedback: string;
   ts:       string;  // ?
-}
+};

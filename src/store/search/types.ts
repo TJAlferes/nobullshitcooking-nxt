@@ -71,8 +71,6 @@ export type ProductCard = {
   name:                  string;
 };
 
-
-
 export type Suggestion = {
   id:     number;
   text:   string;
@@ -100,86 +98,86 @@ export type Sort = {
 
 export type SortDirection = "asc" | "desc" | "none";
 
-export type IActions = 
-  | IReset
-  | ISetIndex
-  | ISetTerm
-  | ISetFilters
-  | IAddFilter
-  | IRemoveFilter
-  | ISetSorts
-  | ISetCurrentPage
-  | ISetResultsPerPage
-  | IGetResults
-  | IGetSuggestions
-  | ISetResults
-  | ISetSuggestions;
+export type Actions = 
+  | Reset
+  | SetIndex
+  | SetTerm
+  | SetFilters
+  | AddFilter
+  | RemoveFilter
+  | SetSorts
+  | SetCurrentPage
+  | SetResultsPerPage
+  | GetResults
+  | GetSuggestions
+  | SetResults
+  | SetSuggestions;
 
-export interface IReset {
+export type Reset = {
   type: typeof actionTypes.RESET;
-}
+};
 
-export interface ISetIndex {
+export type SetIndex = {
   type:  typeof actionTypes.SET_INDEX;
   index: SearchIndex;
-}
+};
 
-export interface ISetTerm {
+export type SetTerm = {
   type: typeof actionTypes.SET_TERM;
   term: string;
-}
+};
 
-export interface ISetFilters {
+export type SetFilters = {
   type:    typeof actionTypes.SET_FILTERS;
   key:     string;
   values:  string[];
-}
+};
 
-export interface IAddFilter {
+export type AddFilter = {
   type:   typeof actionTypes.ADD_FILTER;
   key:    string;
   value:  string;
-}
+};
 
-export interface IRemoveFilter {
+export type RemoveFilter = {
   type:   typeof actionTypes.REMOVE_FILTER;
   key:    string;
   value:  string;
-}
+};
 
-export interface ISetSorts {
+export type SetSorts = {
   type:      typeof actionTypes.SET_SORTS;
   col:       string;
   direction: string;
-}
+};
 
-export interface ISetCurrentPage {
+export type SetCurrentPage = {
   type:        typeof actionTypes.SET_CURRENT_PAGE;
   currentPage: string;
-}
+};
 
-export interface ISetResultsPerPage {
+export type SetResultsPerPage = {
   type:           typeof actionTypes.SET_RESULTS_PER_PAGE;
   resultsPerPage: string;
-}
+};
 
-export interface IGetResults {
+export type GetResults = {
   type:         typeof actionTypes.GET_RESULTS;
   searchParams: string;
   router:       ReturnType<typeof useRouter>;
-}
+};
 
-export interface IGetSuggestions {
+export type GetSuggestions = {
   type: typeof actionTypes.GET_SUGGESTIONS;
   term: string;
-}
+};
 
-export interface ISetResults {
+export type SetResults = {
   type:  typeof actionTypes.SET_RESULTS;
   found: SearchResponse;
-}
+};
 
-export interface ISetSuggestions {
+export type SetSuggestions = {
   type:        typeof actionTypes.SET_SUGGESTIONS;
   suggestions: Suggestion[];
-}
+};

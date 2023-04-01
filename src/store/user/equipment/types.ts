@@ -4,31 +4,31 @@ export const actionTypes = {
   DELETE_EQUIPMENT: 'DELETE_EQUIPMENT'
 } as const;
 
-export interface ICreateEquipment {
+export type CreateEquipment = {
   type:          typeof actionTypes.CREATE_EQUIPMENT;
-  equipmentInfo: IEquipmentInfo;
-}
+  equipmentInfo: EquipmentInfo;
+};
 
-export interface IUpdateEquipment {
+export type UpdateEquipment = {
   type:          typeof actionTypes.UPDATE_EQUIPMENT;
-  equipmentInfo: IEquipmentUpdateInfo;
-}
+  equipmentInfo: EquipmentUpdateInfo;
+};
 
-export interface IDeleteEquipment {
+export type DeleteEquipment = {
   type: typeof actionTypes.DELETE_EQUIPMENT;
   id:   number;
-}
+};
 
-export interface IEquipmentInfo {
+export type EquipmentInfo = {
   equipmentTypeId: number;
   name:            string;
   description:     string;
   image:           string | ArrayBuffer | null;
   fullImage:       File | null;
   tinyImage:       File | null;
-}
+};
 
-export interface IEquipmentUpdateInfo extends IEquipmentInfo {
+export type EquipmentUpdateInfo = EquipmentInfo & {
   id:        number;
   prevImage: string;
-}
+};

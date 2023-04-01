@@ -5,35 +5,35 @@ export const actionTypes = {
   NEARBY_STORES_CLICKED: 'NEARBY_STORES_CLICKED'
 } as const;
 
-export interface IState {
+export type State = {
   latitude:            string;
   longitude:           string;
   address:             string;
   nearbyStoresClicked: boolean;
-}
+};
 
 export type Actions =
-  IAddress |
-  ILatitude |
-  ILongitude |
-  INearbyStoresClicked;
+  | Latitude
+  | Longitude
+  | Address
+  | NearbyStoresClicked;
 
-interface IAddress {
-  type:    typeof actionTypes.ADDRESS;
-  address: string;
-}
-
-interface ILatitude {
+type Latitude = {
   type:     typeof actionTypes.LATITUDE;
   latitude: string;
-}
+};
 
-interface ILongitude {
+type Longitude = {
   type:      typeof actionTypes.LONGITUDE;
   longitude: string;
-}
+};
 
-interface INearbyStoresClicked {
+type Address = {
+  type:    typeof actionTypes.ADDRESS;
+  address: string;
+};
+
+type NearbyStoresClicked = {
   type:    typeof actionTypes.NEARBY_STORES_CLICKED;
   clicked: boolean;
-}
+};

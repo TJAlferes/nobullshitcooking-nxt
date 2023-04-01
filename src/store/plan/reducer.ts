@@ -1,8 +1,8 @@
-import { actionTypes, IState, Actions, IClickDay } from './types';
+import { actionTypes, State, Actions, ClickDay } from './types';
 
 const { CLICK_DAY, LOAD } = actionTypes;
 
-const initialState: IState = {
+const initialState: State = {
   isLoading:   false,
   expandedDay: null,
   planName:    "",
@@ -14,14 +14,15 @@ const initialState: IState = {
   }
 };
 
-const clickDay = (state: IState, action: IClickDay): IState => {
+const clickDay = (state: State, action: ClickDay): State => {
   const { expandedDay } = state;
   const { day } = action;
-  if (day === expandedDay) return {...state, ...{expandedDay: null}};
-  return {...state, ...{expandedDay: action.day}};
+
+  if (day === expandedDay) return {...state, expandedDay: null};
+  return {...state, expandedDay: day};
 };
 
-export const plannerViewReducer = (state = initialState, action: Actions): IState => {
+export const plannerViewReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case CLICK_DAY: return clickDay(state, action);
     case LOAD:      return {...state, ...{planName: action.planName, planData: action.planData}};

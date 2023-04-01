@@ -1,13 +1,13 @@
 export const actionTypes = {
-  LEFT_NAV:  'LEFT_NAV'
+  LEFT_NAV: 'LEFT_NAV'
 } as const;
 
-export interface IState {
+export type State = {
   leftNav: boolean;
 }
 
-export type Actions = IToggleLeftNav;
+export type Actions = ToggleLeftNav;
 
-interface IToggleLeftNav {
+type ToggleLeftNav = {
   type: typeof actionTypes.LEFT_NAV;
 }

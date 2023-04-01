@@ -1,11 +1,17 @@
-import axios from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
+import { endpoint }                      from '../../../utils/api';
 import { userMessage, userMessageClear } from '../actions';
-import { actionTypes, ISubmitAvatar } from './types';
+import { actionTypes, SubmitAvatar }     from './types';
 
-export function* submitAvatarSaga(action: ISubmitAvatar) {
+const { SUBMIT_AVATAR } = actionTypes;
+
+export function* watchAvatar() {
+  yield all([takeEvery(SUBMIT_AVATAR, submitAvatarSaga)]);
+}
+
+export function* submitAvatarSaga(action: SubmitAvatar) {
   try {
     let avatarUrl;
 
@@ -35,10 +41,4 @@ export function* submitAvatarSaga(action: ISubmitAvatar) {
 
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const { SUBMIT_AVATAR } = actionTypes;
-
-export function* watchAvatar() {
-  yield all([takeEvery(SUBMIT_AVATAR, submitAvatarSaga)]);
 }

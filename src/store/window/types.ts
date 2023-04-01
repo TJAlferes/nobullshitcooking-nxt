@@ -1,12 +1,14 @@
-export const actionTypes = {FOCUSED: 'FOCUSED'} as const;
+export const actionTypes = {
+  FOCUSED: 'FOCUSED'
+} as const;
 
-export interface IState {
-  focused: boolean
-}
+export type State = {
+  focused: boolean;
+};
 
-export type Actions = IFocused;
+export type Actions = Focused;
 
-interface IFocused {
+type Focused = {
   type:    typeof actionTypes.FOCUSED;
   focused: boolean;
-}
+};

@@ -1,9 +1,9 @@
-import { actionTypes, ICartItem } from './types';
+import { actionTypes, CartItem } from './types';
 
-const { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_EMPTY_CART } = actionTypes;
+const { ADD_ITEM, REMOVE_ITEM, EMPTY } = actionTypes;
 
-export const cartAddItem = (item: ICartItem) => ({type: CART_ADD_ITEM, item});
+export const cartAddItem = (item: CartItem) => ({type: ADD_ITEM, item});
 
-export const cartRemoveItem = (item: ICartItem) => ({type: CART_REMOVE_ITEM, item});
+export const cartRemoveItem = (item: CartItem) => ({type: REMOVE_ITEM, item});
 
-export const cartEmpty = () => ({type: CART_EMPTY_CART});
+export const cartEmpty = () => ({type: EMPTY});

@@ -3,7 +3,19 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../utils/api';
 import { getInitialData, getData, getInitialUserData, getUserData } from './actions';
-import { actionTypes, IInitialData, IInitialUserData } from './types';
+import { actionTypes, InitialData, InitialUserData } from './types';
+
+const { INIT, INIT_USER } = actionTypes;
+
+export function* watchData() {
+  yield all([
+    takeEvery(INIT,      getInitialDataSaga),
+    takeEvery(INIT_USER, getInitialUserDataSaga),
+
+    //takeEvery(, dataGetSaga),
+    //takeEvery(, dataGetSaga)
+  ]);
+}
 
 export function* getInitialDataSaga() {
   try {
@@ -58,7 +70,7 @@ export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/recipe/private",
 export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/recipe/public",   "myPublicRecipes");
 export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "mySavedRecipes");
 
-function makeDataSaga(path: string, key: keyof IInitialData) {
+function makeDataSaga(path: string, key: keyof InitialData) {
   return function* () {
     try {
       const { data } = yield call([axios, axios.get], `${endpoint}${path}`);
@@ -69,7 +81,7 @@ function makeDataSaga(path: string, key: keyof IInitialData) {
   }
 }
 
-function makeUserDataSaga(path: string, key: keyof IInitialUserData) {
+function makeUserDataSaga(path: string, key: keyof InitialUserData) {
   return function* () {
     try {
       const { data } = yield call([axios, axios.post], `${endpoint}${path}`, {}, {withCredentials: true});
@@ -78,16 +90,4 @@ function makeUserDataSaga(path: string, key: keyof IInitialUserData) {
       //
     }
   }
-}
-
-const { INIT, INIT_USER } = actionTypes;
-
-export function* watchData() {
-  yield all([
-    takeEvery(INIT, getInitialDataSaga),
-    takeEvery(INIT_USER, getInitialUserDataSaga),
-
-    //takeEvery(, dataGetSaga),
-    //takeEvery(, dataGetSaga)
-  ]);
 }

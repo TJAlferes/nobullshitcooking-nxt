@@ -18,6 +18,8 @@ const {
   SET_SUGGESTIONS
 } = actionTypes;
 
+// TO DO: clean up action that are not needed
+
 export const reset =             () =>                                      ({type: RESET});
 export const setIndex =          (index: SearchIndex) =>                    ({type: SET_INDEX, index});
 export const setTerm =           (term: string) =>                          ({type: SET_TERM, term});

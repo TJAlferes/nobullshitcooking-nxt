@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { call, delay, put } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../utils/api';
 import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import type {
+import {
+  actionTypes,
   ICreatePrivateRecipe,
   IUpdatePrivateRecipe,
   IDeletePrivateRecipe,
-
   ICreatePublicRecipe,
   IUpdatePublicRecipe,
   IDisownPublicRecipe
@@ -258,4 +258,26 @@ export function* updateRecipeSaga(action: (IUpdatePrivateRecipe | IUpdatePublicR
   }
   yield delay(4000);
   yield put(userMessageClear());
+}
+
+const {
+  CREATE_PRIVATE_RECIPE,
+  UPDATE_PRIVATE_RECIPE,
+  DELETE_PRIVATE_RECIPE,
+  
+  CREATE_PUBLIC_RECIPE,
+  UPDATE_PUBLIC_RECIPE,
+  DISOWN_PUBLIC_RECIPE
+} = actionTypes;
+
+export function* watchRecipe() {
+  yield all([
+    takeEvery(CREATE_PRIVATE_RECIPE, createRecipeSaga),
+    takeEvery(UPDATE_PRIVATE_RECIPE, updateRecipeSaga),
+    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeSaga),
+
+    takeEvery(CREATE_PUBLIC_RECIPE, createRecipeSaga),
+    takeEvery(UPDATE_PUBLIC_RECIPE, updateRecipeSaga),
+    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeSaga)
+  ]);
 }

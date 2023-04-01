@@ -19,7 +19,7 @@ import {
   receivedPrivateMessage,
   failedPrivateMessage
 } from './actions';
-import { actionTypes as chatActionTypes, IMessage, IJoinRoom, ISendMessage, ISendPrivateMessage } from './types';
+import { actionTypes as chatActionTypes, IMessage, JoinRoom, SendMessage, SendPrivateMessage } from './types';
 
 const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, withCredentials: true});
 
@@ -67,15 +67,15 @@ export function* disconnectSaga() {
   socket.disconnect();
 }
 
-export function* joinRoomSaga({ room }: IJoinRoom) {
+export function* joinRoomSaga({ room }: JoinRoom) {
   socket.emit('JoinRoom', room);
 }
 
-export function* sendMessageSaga({ text }: ISendMessage) {
+export function* sendMessageSaga({ text }: SendMessage) {
   socket.emit('SendMessage', text);
 }
 
-export function* sendPrivateMessageSaga({ text, to }: ISendPrivateMessage) {
+export function* sendPrivateMessageSaga({ text, to }: SendPrivateMessage) {
   socket.emit('SendPrivateMessage', text, to);
 }
 
@@ -108,7 +108,7 @@ interface IServerToClientEvents {
   FailedPrivateMessage(feedback: string):              void;
 }
 
-const { USER_LOGOUT } = authActionTypes;
+const { LOGOUT } = authActionTypes;
 const { CONNECT, DISCONNECT, JOIN_ROOM, SEND_MESSAGE, SEND_PRIVATE_MESSAGE } = chatActionTypes
 
 // takeLatest?
@@ -116,7 +116,7 @@ export function* watchChat() {
   yield all([
     takeEvery(CONNECT,              connectSaga),
     takeEvery(DISCONNECT,           disconnectSaga),
-    takeEvery(USER_LOGOUT,          disconnectSaga),
+    takeEvery(LOGOUT,               disconnectSaga),
 
     takeEvery(JOIN_ROOM,            joinRoomSaga),
 

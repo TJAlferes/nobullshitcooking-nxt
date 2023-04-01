@@ -1,7 +1,7 @@
 export const actionTypes = {
-  CART_ADD_ITEM:'CART_ADD_ITEM',
-  CART_REMOVE_ITEM:'CART_REMOVE_ITEM',
-  CART_EMPTY_CART:'CART_EMPTY'
+  ADD_ITEM:    'ADD_ITEM',
+  REMOVE_ITEM: 'REMOVE_ITEM',
+  EMPTY:       'EMPTY'
 } as const;
 
 /*
@@ -10,16 +10,16 @@ State
 
 */
 
-export interface ICartState {
-  items: ICartItem[];
-}
+export type State = {
+  items: CartItem[];
+};
 
-export interface ICartItem {
-  id: number;
+export type CartItem = {
+  id:         number;
   itemTypeId: number;
-  name: string;
-  quantity: number;
-}
+  name:       string;
+  quantity:   number;
+};
 
 /*
 
@@ -27,18 +27,18 @@ Actions
 
 */
 
-export type CartActions = ICartAddItem | ICartRemoveItem | ICartEmpty;
+export type CartActions = AddItem | RemoveItem | Empty;
 
-interface ICartAddItem {
-  type: typeof actionTypes.CART_ADD_ITEM;
-  item: ICartItem;
-}
+type AddItem = {
+  type: typeof actionTypes.ADD_ITEM;
+  item: CartItem;
+};
 
-interface ICartRemoveItem {
-  type: typeof actionTypes.CART_REMOVE_ITEM;
-  item: ICartItem;
-}
+type RemoveItem = {
+  type: typeof actionTypes.REMOVE_ITEM;
+  item: CartItem;
+};
 
-interface ICartEmpty {
-  type: typeof actionTypes.CART_EMPTY_CART;
-}
+type Empty = {
+  type: typeof actionTypes.EMPTY;
+};

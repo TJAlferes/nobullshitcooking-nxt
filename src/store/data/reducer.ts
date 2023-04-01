@@ -1,11 +1,11 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import { actionTypes, IState, Actions } from './types';
+import { actionTypes, State } from './types';
 
 const { GET_INITIAL_DATA, GET_DATA, GET_INITIAL_USER_DATA, GET_USER_DATA } = actionTypes;
 
-const initialState: IState = {
+const initialState: State = {
   cuisines: [],
   equipment: [],
   equipmentTypes: [],
@@ -29,7 +29,7 @@ const initialState: IState = {
   mySavedRecipes: []
 };
 
-export const dataReducer = (state = initialState, action: AnyAction): IState => {
+export const dataReducer = (state = initialState, action: AnyAction): State => {
   switch (action.type) {
     case HYDRATE: return {...state, ...action['payload'].data};  // sufficient?
 

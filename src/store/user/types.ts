@@ -3,17 +3,17 @@ export const actionTypes = {
   USER_MESSAGE_CLEAR: 'USER_MESSAGE_CLEAR'
 } as const;
 
-export interface IUserState {
+export type UserState = {
   message: string;
-}
+};
 
-export type UserActions = IUserMessage | IUserMessageClear;
+export type UserActions = UserMessage | UserMessageClear;
 
-export interface IUserMessage {
+export type UserMessage = {
   type:    typeof actionTypes.USER_MESSAGE;
   message: string;
-}
+};
 
-export interface IUserMessageClear {
+export type UserMessageClear = {
   type: typeof actionTypes.USER_MESSAGE_CLEAR;
-}
+};

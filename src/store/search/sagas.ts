@@ -1,11 +1,20 @@
-import axios                        from 'axios';
-import { call, delay, put, select } from 'redux-saga/effects';
+import axios from 'axios';
+import { all, call, delay, put, select, takeLatest } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../utils/api';
-import { setResults, setSuggestions }        from './actions';
-import type { IGetResults, IGetSuggestions } from './types';
+import { endpoint }                                from '../../utils/api';
+import { setResults, setSuggestions }              from './actions';
+import { actionTypes, GetResults, GetSuggestions } from './types';
 
-export function* getSuggestionsSaga(action: IGetSuggestions) {
+const { GET_SUGGESTIONS, GET_RESULTS } = actionTypes;
+
+export function* watchSearch() {
+  yield all([
+    takeLatest(GET_SUGGESTIONS, getSuggestionsSaga),  // debounces when combined with the 'delay' in 'search/sagas.ts'
+    takeLatest(GET_RESULTS, getResultsSaga)
+  ]);
+}
+
+export function* getSuggestionsSaga(action: GetSuggestions) {
   try {
     yield delay(1250);  // debounces when combined with the 'takeLatest' in 'watchers/search.ts'
     const index = (yield select(state => state.search.index)) as string;
@@ -15,7 +24,7 @@ export function* getSuggestionsSaga(action: IGetSuggestions) {
   } catch (err) {}
 }
 
-export function* getResultsSaga(action: IGetResults) {
+export function* getResultsSaga(action: GetResults) {
   try {
     yield delay(250);  // debounces when combined with the 'takeLatest' in 'watchers/search.ts'
     const { searchParams, router } = action;

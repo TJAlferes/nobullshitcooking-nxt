@@ -1,10 +1,10 @@
-import { actionTypes, IUserState, UserActions } from './types';
+import { actionTypes, UserState, UserActions } from './types';
 
 const { USER_MESSAGE, USER_MESSAGE_CLEAR } = actionTypes;
 
-const initialState: IUserState = {message: ''};
+const initialState: UserState = {message: ''};
 
-export function userReducer(state = initialState, action: UserActions): IUserState {
+export function userReducer(state = initialState, action: UserActions): UserState {
   switch (action.type) {
     case USER_MESSAGE:       return {...state, message: action.message};
     case USER_MESSAGE_CLEAR: return {...state, message: ''};
