@@ -2,5 +2,5 @@ import { Feed } from './Feed';
 import { Suggestions } from './Suggestions';
 
 export function Home() {
-  return <div className="home"><Feed /><Suggestions /></div>;
+  return <div className="two-col home"><Feed /><Suggestions /></div>;
 }

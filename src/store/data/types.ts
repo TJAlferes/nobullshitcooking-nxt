@@ -1,4 +1,4 @@
-import type { IData as IPlannerData } from '../planner/types';
+import type { PlanData } from '../new-plan/types';
 
 export const actionTypes = {
   INIT:                  'INIT',
@@ -29,7 +29,7 @@ export type InitialData = {
   products:          WorkProduct[];
   productCategories: ProductCategory[];
   productTypes:      ProductType[];
-  recipes:           WorkRecipe[];
+  //recipes:           WorkRecipe[];  // don't do
   recipeTypes:       RecipeType[];
 };
 
@@ -106,7 +106,7 @@ export type Method = {
 export type Plan = {
   id:   number;
   name: string;
-  data: IPlannerData;
+  data: PlanData;
 };
 
 export type WorkRecipe = {

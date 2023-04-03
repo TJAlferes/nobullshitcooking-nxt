@@ -1,20 +1,42 @@
-import axios from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
+import { endpoint }                                        from '../../../utils/api';
 import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
+import { userMessage, userMessageClear }                   from '../actions';
 import {
   actionTypes,
-  ICreatePrivateRecipe,
-  IUpdatePrivateRecipe,
-  IDeletePrivateRecipe,
-  ICreatePublicRecipe,
-  IUpdatePublicRecipe,
-  IDisownPublicRecipe
+  CreatePrivateRecipe,
+  UpdatePrivateRecipe,
+  DeletePrivateRecipe,
+  CreatePublicRecipe,
+  UpdatePublicRecipe,
+  DisownPublicRecipe
 } from './types';
 
-export function* createRecipeSaga(action: (ICreatePrivateRecipe | ICreatePublicRecipe)) {
+const {
+  CREATE_PRIVATE_RECIPE,
+  UPDATE_PRIVATE_RECIPE,
+  DELETE_PRIVATE_RECIPE,
+  
+  CREATE_PUBLIC_RECIPE,
+  UPDATE_PUBLIC_RECIPE,
+  DISOWN_PUBLIC_RECIPE
+} = actionTypes;
+
+export function* watchRecipe() {
+  yield all([
+    takeEvery(CREATE_PRIVATE_RECIPE, createRecipeSaga),
+    takeEvery(UPDATE_PRIVATE_RECIPE, updateRecipeSaga),
+    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeSaga),
+
+    takeEvery(CREATE_PUBLIC_RECIPE, createRecipeSaga),
+    takeEvery(UPDATE_PUBLIC_RECIPE, updateRecipeSaga),
+    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeSaga)
+  ]);
+}
+
+export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRecipe)) {
   let {
     ownership,
     recipeTypeId,
@@ -118,7 +140,7 @@ export function* createRecipeSaga(action: (ICreatePrivateRecipe | ICreatePublicR
   yield put(userMessageClear());
 }
 
-export function* deletePrivateRecipeSaga(action: IDeletePrivateRecipe) {
+export function* deletePrivateRecipeSaga(action: DeletePrivateRecipe) {
   try {
     const { data: { message } } =
       yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {id: action.id}});
@@ -132,7 +154,7 @@ export function* deletePrivateRecipeSaga(action: IDeletePrivateRecipe) {
   yield put(userMessageClear());
 }
 
-export function* disownPublicRecipeSaga(action: IDisownPublicRecipe) {
+export function* disownPublicRecipeSaga(action: DisownPublicRecipe) {
   try {
     const { data: { message } } =
       yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {id: action.id}});
@@ -146,7 +168,7 @@ export function* disownPublicRecipeSaga(action: IDisownPublicRecipe) {
   yield put(userMessageClear());
 }
 
-export function* updateRecipeSaga(action: (IUpdatePrivateRecipe | IUpdatePublicRecipe)) {
+export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRecipe)) {
   let {
     id,
     ownership,
@@ -258,26 +280,4 @@ export function* updateRecipeSaga(action: (IUpdatePrivateRecipe | IUpdatePublicR
   }
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const {
-  CREATE_PRIVATE_RECIPE,
-  UPDATE_PRIVATE_RECIPE,
-  DELETE_PRIVATE_RECIPE,
-  
-  CREATE_PUBLIC_RECIPE,
-  UPDATE_PUBLIC_RECIPE,
-  DISOWN_PUBLIC_RECIPE
-} = actionTypes;
-
-export function* watchRecipe() {
-  yield all([
-    takeEvery(CREATE_PRIVATE_RECIPE, createRecipeSaga),
-    takeEvery(UPDATE_PRIVATE_RECIPE, updateRecipeSaga),
-    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeSaga),
-
-    takeEvery(CREATE_PUBLIC_RECIPE, createRecipeSaga),
-    takeEvery(UPDATE_PUBLIC_RECIPE, updateRecipeSaga),
-    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeSaga)
-  ]);
 }

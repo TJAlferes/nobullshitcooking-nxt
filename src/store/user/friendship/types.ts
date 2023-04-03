@@ -7,32 +7,32 @@ export const actionTypes = {
   UNBLOCK_USER:       'UNBLOCK_USER'
 } as const;
 
-export interface IRequestFriendship {
+export type RequestFriendship = {
   type:   typeof actionTypes.REQUEST_FRIENDSHIP;
   friend: string;
-}
+};
 
-export interface IAcceptFriendship {
+export type AcceptFriendship = {
   type:   typeof actionTypes.ACCEPT_FRIENDSHIP;
   friend: string;
-}
+};
 
-export interface IRejectFriendship {
+export type RejectFriendship = {
   type:   typeof actionTypes.REJECT_FRIENDSHIP;
   friend: string;
-}
+};
 
-export interface IDeleteFriendship {
+export type DeleteFriendship = {
   type:   typeof actionTypes.DELETE_FRIENDSHIP;
   friend: string;
-}
+};
 
-export interface IBlockUser {
+export type BlockUser = {
   type:   typeof actionTypes.BLOCK_USER;
   friend: string;
-}
+};
 
-export interface IUnblockUser {
+export type UnblockUser = {
   type:   typeof actionTypes.UNBLOCK_USER;
   friend: string;
-}
+};

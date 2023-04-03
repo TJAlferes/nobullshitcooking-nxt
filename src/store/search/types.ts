@@ -25,7 +25,7 @@ export type State = SearchRequest & SearchResponse & {
 export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
 
 export type SearchRequest = {
-  term?:           string;    // setTerm
+  term?:           string;
   filters?:        {
     [index: string]: string[];
     equipmentTypes?:    string[],
@@ -35,10 +35,10 @@ export type SearchRequest = {
     cuisines?:          string[],
     productCategories?: string[],
     productTypes?:      string[]
-  };                       // setFilters (add, remove, clear)
-  sorts?:          {};      // setSorts   (add, remove, clear)
-  currentPage?:    string;  // setCurrentPage     // OFFSET in MySQL = (currentPage - 1) * resultsPerPage
-  resultsPerPage?: string;  // setResultsPerPage  // LIMIT  in MySQL = resultsPerPage
+  };
+  sorts?:          {};
+  currentPage?:    string;
+  resultsPerPage?: string;
 };
 
 // TO DO: move?
@@ -78,8 +78,7 @@ export type Suggestion = {
 };
 
 export type SearchResponse = {
-  //results:      EquipmentCard[] | IngredientCard[] | ProductCard[] | RecipeCard[];
-  results:      any[];
+  results:      any[];  // EquipmentCard[] | IngredientCard[] | ProductCard[] | RecipeCard[];
   totalResults: number;
   totalPages:   number;
 };

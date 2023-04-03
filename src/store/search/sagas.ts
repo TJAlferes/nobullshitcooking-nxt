@@ -9,14 +9,14 @@ const { GET_SUGGESTIONS, GET_RESULTS } = actionTypes;
 
 export function* watchSearch() {
   yield all([
-    takeLatest(GET_SUGGESTIONS, getSuggestionsSaga),  // debounces when combined with the 'delay' in 'search/sagas.ts'
-    takeLatest(GET_RESULTS, getResultsSaga)
+    takeLatest(GET_SUGGESTIONS, getSuggestionsSaga),  // debounces when combined with the 'delay' below
+    takeLatest(GET_RESULTS,     getResultsSaga)       // debounces when combined with the 'delay' below
   ]);
 }
 
 export function* getSuggestionsSaga(action: GetSuggestions) {
   try {
-    yield delay(1250);  // debounces when combined with the 'takeLatest' in 'watchers/search.ts'
+    yield delay(1250);  // debounces when combined with the 'takeLatest' above
     const index = (yield select(state => state.search.index)) as string;
     if (action.term.length < 3) return;
     const { data } = yield call([axios, axios.get], `${endpoint}/search/auto/${index}?term=${action.term}`);
@@ -26,7 +26,7 @@ export function* getSuggestionsSaga(action: GetSuggestions) {
 
 export function* getResultsSaga(action: GetResults) {
   try {
-    yield delay(250);  // debounces when combined with the 'takeLatest' in 'watchers/search.ts'
+    yield delay(250);  // debounces when combined with the 'takeLatest' above
     const { searchParams, router } = action;
     const index = (yield select(state => state.search.index)) as string;
     const idx = index === "equipment" ? "equipments" : index;

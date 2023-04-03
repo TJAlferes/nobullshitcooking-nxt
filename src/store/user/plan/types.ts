@@ -4,20 +4,20 @@ export const actionTypes = {
   DELETE_PLAN: 'DELETE_PLAN'
 } as const;
 
-export interface ICreatePlan {
+export type CreatePlan = {
   type:     typeof actionTypes.CREATE_PLAN;
   planInfo: PlanInfo;
-}
+};
 
-export interface IUpdatePlan {
+export type UpdatePlan = {
   type:     typeof actionTypes.UPDATE_PLAN;
   planInfo: PlanUpdateInfo;
-}
+};
 
-export interface IDeletePlan {
+export type DeletePlan = {
   type: typeof actionTypes.DELETE_PLAN;
   id:   number;
-}
+};
 
 export type PlanInfo = {
   name: string;

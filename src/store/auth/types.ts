@@ -12,9 +12,9 @@ export const actionTypes = {
 } as const;
 
 export type State = {
-  authname:             string;
-  message:              string;
-  userIsAuthenticated:  boolean;
+  authname:            string;
+  message:             string;
+  userIsAuthenticated: boolean;
 }
 
 export type Actions =

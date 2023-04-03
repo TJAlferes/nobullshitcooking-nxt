@@ -4,10 +4,10 @@ import Link          from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { userLogout }    from '../../store/auth/actions';
-import { toggleLeftNav } from '../../store/menu/actions';
-import { dark, light }   from '../../store/theme/actions';
-import { LeftNav, Search }        from '..';
+import { logout }          from '../../store/auth/actions';
+import { toggleLeftNav }   from '../../store/menu/actions';
+import { dark, light }     from '../../store/theme/actions';
+import { LeftNav, Search } from '..';
 
 export default function Header() {
   const router = useRouter();
@@ -20,7 +20,7 @@ export default function Header() {
   const click = () => dispatch(toggleLeftNav());
 
   const handleLogout = () => {
-    if (userIsAuthenticated) dispatch(userLogout());
+    if (userIsAuthenticated) dispatch(logout());
     router.push('/');
   };
 

@@ -21,10 +21,10 @@ export default function NewRecipe() {
   const ownership = params.get('ownership');  // TO DO: triple test
   const id =        Number(params.get('id'));
   // TO DO: change
-  if (!id || !ownership) {
+  /*if (!id || !ownership) {
     router.push('/dashboard');
     return null;
-  }
+  }*/
 
   const dispatch = useDispatch();
 

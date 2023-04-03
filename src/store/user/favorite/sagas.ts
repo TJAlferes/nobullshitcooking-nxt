@@ -1,12 +1,21 @@
-import axios                from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                from '../../../utils/api';
-import { getMyFavoriteRecipesSaga }                from '../../data/sagas';
-import { userMessage, userMessageClear }           from '../actions';
-import { actionTypes, IFavoriteRecipe, IUnfavoriteRecipe } from './types';
+import { endpoint }                                      from '../../../utils/api';
+import { getMyFavoriteRecipesSaga }                      from '../../data/sagas';
+import { userMessage, userMessageClear }                 from '../actions';
+import { actionTypes, FavoriteRecipe, UnfavoriteRecipe } from './types';
 
-export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {
+const { FAVORITE_RECIPE, UNFAVORITE_RECIPE } = actionTypes;
+
+export function* watchFavorite() {
+  yield all([
+    takeEvery(FAVORITE_RECIPE,   favoriteRecipeSaga),
+    takeEvery(UNFAVORITE_RECIPE, unfavoriteRecipeSaga)
+  ]);
+}
+
+export function* favoriteRecipeSaga({ recipeId }: FavoriteRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/favorite-recipe/create`, {recipeId}, {withCredentials: true});
 
@@ -20,7 +29,7 @@ export function* favoriteRecipeSaga({ recipeId }: IFavoriteRecipe) {
   yield put(userMessageClear());
 }
 
-export function* unfavoriteRecipeSaga({ recipeId }: IUnfavoriteRecipe) {
+export function* unfavoriteRecipeSaga({ recipeId }: UnfavoriteRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/favorite-recipe/delete`, {withCredentials: true, data: {recipeId}});
 
@@ -32,13 +41,4 @@ export function* unfavoriteRecipeSaga({ recipeId }: IUnfavoriteRecipe) {
 
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const { FAVORITE_RECIPE, UNFAVORITE_RECIPE } = actionTypes;
-
-export function* watchFavorite() {
-  yield all([
-    takeEvery(FAVORITE_RECIPE,   favoriteRecipeSaga),
-    takeEvery(UNFAVORITE_RECIPE, unfavoriteRecipeSaga)
-  ]);
 }

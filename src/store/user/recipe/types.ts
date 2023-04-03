@@ -8,35 +8,35 @@ export const actionTypes = {
   DISOWN_PUBLIC_RECIPE: 'DISOWN_PUBLIC_RECIPE'
 } as const;
 
-export interface ICreatePrivateRecipe {
+export type CreatePrivateRecipe = {
   type:       typeof actionTypes.CREATE_PRIVATE_RECIPE;
   recipeInfo: RecipeInfo;
-}
+};
 
-export interface IUpdatePrivateRecipe {
+export type UpdatePrivateRecipe = {
   type:       typeof actionTypes.UPDATE_PRIVATE_RECIPE;
   recipeInfo: RecipeUpdateInfo;
-}
+};
 
-export interface IDeletePrivateRecipe {
+export type DeletePrivateRecipe = {
   type: typeof actionTypes.DELETE_PRIVATE_RECIPE;
   id:   number;
-}
+};
 
-export interface ICreatePublicRecipe {
+export type CreatePublicRecipe = {
   type:       typeof actionTypes.CREATE_PUBLIC_RECIPE;
   recipeInfo: RecipeInfo;
-}
+};
 
-export interface IUpdatePublicRecipe {
+export type UpdatePublicRecipe = {
   type:       typeof actionTypes.UPDATE_PUBLIC_RECIPE;
   recipeInfo: RecipeUpdateInfo;
-}
+};
 
-export interface IDisownPublicRecipe {
+export type DisownPublicRecipe = {
   type: typeof actionTypes.DISOWN_PUBLIC_RECIPE;
   id:   number;
-}
+};
 
 export type RecipeInfo = {
   ownership:            string;

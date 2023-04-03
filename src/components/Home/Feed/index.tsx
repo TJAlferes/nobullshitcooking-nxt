@@ -6,7 +6,7 @@ export function Feed() {
   ];
 
   return (
-    <div className="feed">
+    <div className="two-col-left feed">
       {[...(officialContent && officialContent)]
         .map(c => (
           <div className="feed-item" key={c.id}>

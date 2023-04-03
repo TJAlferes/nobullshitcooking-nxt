@@ -34,7 +34,7 @@ State
 export type State = {
   status:   string;
   room:     string;
-  messages: IMessageWithClientTimestamp[];
+  messages: MessageWithClientTimestamp[];
   users:    string[];
   friends:  string[];
 };
@@ -42,7 +42,7 @@ export type State = {
 export const PRIVATE = "private" as const;
 export const PUBLIC =  "public" as const;
 
-export type IMessage = {
+export type Message = {
   kind: typeof PRIVATE | typeof PUBLIC;
   id:   string;
   to:   string;
@@ -50,7 +50,7 @@ export type IMessage = {
   text: string;
 };
 
-export type IMessageWithClientTimestamp = IMessage & {
+export type MessageWithClientTimestamp = Message & {
   ts: string;
 };
 
@@ -147,7 +147,7 @@ export type SendMessage = {
 
 export type ReceivedMessage = {
   type:    typeof actionTypes.RECEIVED_MESSAGE;
-  message: IMessageWithClientTimestamp;
+  message: MessageWithClientTimestamp;
 };
 
 export type SendPrivateMessage = {
@@ -158,7 +158,7 @@ export type SendPrivateMessage = {
 
 export type ReceivedPrivateMessage = {
   type:    typeof actionTypes.RECEIVED_PRIVATE_MESSAGE;
-  message: IMessageWithClientTimestamp;
+  message: MessageWithClientTimestamp;
 };
 
 type FailedPrivateMessage = {

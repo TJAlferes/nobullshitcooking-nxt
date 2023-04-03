@@ -1,12 +1,22 @@
-import axios from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
-import { getMyIngredientsSaga } from '../../data/sagas';
+import { endpoint }                      from '../../../utils/api';
+import { getMyIngredientsSaga }          from '../../data/sagas';
 import { userMessage, userMessageClear } from '../actions';
-import { actionTypes, ICreateIngredient, IUpdateIngredient, IDeleteIngredient } from './types';
+import { actionTypes, CreateIngredient, UpdateIngredient, DeleteIngredient } from './types';
 
-export function* createIngredientSaga(action: ICreateIngredient) {
+const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
+
+export function* watchIngredient() {
+  yield all([
+    takeEvery(CREATE_INGREDIENT, createIngredientSaga),
+    takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),
+    takeEvery(DELETE_INGREDIENT, deleteIngredientSaga)
+  ]);
+}
+
+export function* createIngredientSaga(action: CreateIngredient) {
   let { ingredientTypeId, name, description, image, fullImage, tinyImage } = action.ingredientInfo;
 
   try {
@@ -34,7 +44,7 @@ export function* createIngredientSaga(action: ICreateIngredient) {
   yield put(userMessageClear());
 }
 
-export function* updateIngredientSaga(action: IUpdateIngredient) {
+export function* updateIngredientSaga(action: UpdateIngredient) {
   let { id, ingredientTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.ingredientInfo;
 
   try {
@@ -62,7 +72,7 @@ export function* updateIngredientSaga(action: IUpdateIngredient) {
   yield put(userMessageClear());
 }
 
-export function* deleteIngredientSaga(action: IDeleteIngredient) {
+export function* deleteIngredientSaga(action: DeleteIngredient) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/ingredient/delete`, {withCredentials: true, data: {id: action.id}});
 
@@ -74,14 +84,4 @@ export function* deleteIngredientSaga(action: IDeleteIngredient) {
 
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
-
-export function* watchIngredient() {
-  yield all([
-    takeEvery(CREATE_INGREDIENT, createIngredientSaga),
-    takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),
-    takeEvery(DELETE_INGREDIENT, deleteIngredientSaga)
-  ]);
 }

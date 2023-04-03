@@ -3,12 +3,12 @@ export const actionTypes = {
   UNSAVE_RECIPE: 'UNSAVE_RECIPE'
 } as const;
 
-export interface ISaveRecipe {
+export type SaveRecipe = {
   type:     typeof actionTypes.SAVE_RECIPE;
   recipeId: number;
-}
+};
 
-export interface IUnsaveRecipe {
+export type UnsaveRecipe = {
   type:     typeof actionTypes.UNSAVE_RECIPE;
   recipeId: number;
-}
+};

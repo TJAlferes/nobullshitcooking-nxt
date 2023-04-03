@@ -1,35 +1,15 @@
 .home {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: flex-start;
-
-  margin: 31px auto 0px auto;
-
-  max-width: 1200px;
-  min-width: 300px;
+  margin-top: 31px;
 }
 
-.feed {
-  margin: 10px;
-  max-width: 620px;
-  min-width: 280px;
-}
+/*.feed {}*/
 
 .feed-item {
   border-bottom: 20px solid;
   padding: 10px;
 }
 
-.suggestions {
-  margin: 10px 0 0 10px;
-
-  max-width: 340px;
-  min-width: 280px;
-
-  padding: 10px;
-}
+/*.suggestions {}*/
 
 .nearby-stores {
   width: 260px;

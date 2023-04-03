@@ -18,7 +18,7 @@ export function Guard({ children }: Props) {
     '/friends',
     '/new-equipment',
     '/new-ingredient',
-    '/new-recipe',
+    //'/new-recipe',
     '/new-plan'
   ];
   const authenticatedRoute = pathname && authenticatedRoutes.includes(pathname);

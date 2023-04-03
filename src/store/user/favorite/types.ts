@@ -3,12 +3,12 @@ export const actionTypes = {
   UNFAVORITE_RECIPE: 'UNFAVORITE_RECIPE'
 } as const;
 
-export interface IFavoriteRecipe {
+export type FavoriteRecipe = {
   type:     typeof actionTypes.FAVORITE_RECIPE;
   recipeId: number;
-}
+};
 
-export interface IUnfavoriteRecipe {
+export type UnfavoriteRecipe = {
   type:     typeof actionTypes.UNFAVORITE_RECIPE;
   recipeId: number;
-}
+};

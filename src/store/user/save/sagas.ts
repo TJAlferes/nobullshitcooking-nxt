@@ -1,12 +1,21 @@
-import axios                from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                        from '../../../utils/api';
-import { getMySavedRecipesSaga }           from '../../data/sagas';
-import { userMessage, userMessageClear }   from '../actions';
-import { actionTypes, ISaveRecipe, IUnsaveRecipe } from './types';
+import { endpoint }                              from '../../../utils/api';
+import { getMySavedRecipesSaga }                 from '../../data/sagas';
+import { userMessage, userMessageClear }         from '../actions';
+import { actionTypes, SaveRecipe, UnsaveRecipe } from './types';
 
-export function* saveRecipeSaga({ recipeId }: ISaveRecipe) {
+const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
+
+export function* watchSave() {
+  yield all([
+    takeEvery(SAVE_RECIPE,   saveRecipeSaga),
+    takeEvery(UNSAVE_RECIPE, unsaveRecipeSaga)
+  ]);
+}
+
+export function* saveRecipeSaga({ recipeId }: SaveRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/saved-recipe/create`, {recipeId}, {withCredentials: true});
 
@@ -20,7 +29,7 @@ export function* saveRecipeSaga({ recipeId }: ISaveRecipe) {
   yield put(userMessageClear());
 }
 
-export function* unsaveRecipeSaga({ recipeId }: IUnsaveRecipe) {
+export function* unsaveRecipeSaga({ recipeId }: UnsaveRecipe) {
   try {
     const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/saved-recipe/delete`, {withCredentials: true, data: {recipeId}});
 
@@ -32,13 +41,4 @@ export function* unsaveRecipeSaga({ recipeId }: IUnsaveRecipe) {
 
   yield delay(4000);
   yield put(userMessageClear());
-}
-
-const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
-
-export function* watchSave() {
-  yield all([
-    takeEvery(SAVE_RECIPE,   saveRecipeSaga),
-    takeEvery(UNSAVE_RECIPE, unsaveRecipeSaga)
-  ]);
 }

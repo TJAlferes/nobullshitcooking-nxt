@@ -4,31 +4,31 @@ export const actionTypes = {
   DELETE_INGREDIENT: 'DELETE_INGREDIENT'
 } as const;
 
-export interface ICreateIngredient {
+export type CreateIngredient = {
   type:           typeof actionTypes.CREATE_INGREDIENT;
-  ingredientInfo: IIngredientInfo;
-}
+  ingredientInfo: IngredientInfo;
+};
 
-export interface IUpdateIngredient {
+export type UpdateIngredient = {
   type:           typeof actionTypes.UPDATE_INGREDIENT;
-  ingredientInfo: IIngredientUpdateInfo;
-}
+  ingredientInfo: IngredientUpdateInfo;
+};
 
-export interface IDeleteIngredient {
+export type DeleteIngredient = {
   type: typeof actionTypes.DELETE_INGREDIENT;
   id:   number;
-}
+};
 
-export interface IIngredientInfo {
+export type IngredientInfo = {
   ingredientTypeId: number;
   name:             string;
   description:      string;
   image:            string | ArrayBuffer | null;
   fullImage:        File | null;
   tinyImage:        File | null;
-}
+};
 
-export interface IIngredientUpdateInfo extends IIngredientInfo {
+export type IngredientUpdateInfo = IngredientInfo & {
   id:        number;
   prevImage: string;
-}
+};

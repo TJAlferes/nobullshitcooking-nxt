@@ -7,35 +7,35 @@ import { fork }                                                                f
 
 import { initWindowBlurHandler, initWindowFocusHandler } from '../utils/window';
 import { loadFromLocalStorage, saveToLocalStorage }      from '../utils/storage';
+
 import { chatInit }           from './chat/sagas';
 import { init }               from './data/actions';
+
 import { authReducer }        from './auth/reducer';
 import { cartReducer }        from './cart/reducer';
 import { chatReducer }        from './chat/reducer';
 import { dataReducer }        from './data/reducer';
 import { geolocationReducer } from './geolocation/reducer';
 import { menuReducer }        from './menu/reducer';
-import { plannerReducer }     from './planner/reducer';
-import { plannerViewReducer } from './plannerView/reducer';
+import { plannerReducer }     from './new-plan/reducer';
+import { plannerViewReducer } from './plan/reducer';
 import { searchReducer }      from './search/reducer';
-//ssrReducer
 import { themeReducer }       from './theme/reducer';
 import { userReducer }        from './user/reducer';
 import { windowReducer }      from './window/reducer';
-import {
-  watchAuth,
-  watchAvatar,
-  watchChat,
-  watchData,
-  watchEquipment,
-  watchFavorite,
-  watchFriendship,
-  watchIngredient,
-  watchPlan,
-  watchRecipe,
-  watchSave,
-  watchSearch
-} from './watchers';
+
+import { watchAuth }          from './auth/sagas';
+import { watchAvatar }        from './user/avatar/sagas';
+import { watchChat }          from './chat/sagas';
+import { watchData }          from './data/sagas';
+import { watchEquipment }     from './user/equipment/sagas';
+import { watchFavorite }      from './user/favorite/sagas';
+import { watchFriendship }    from './user/friendship/sagas';
+import { watchIngredient }    from './user/ingredient/sagas';
+import { watchPlan }          from './user/plan/sagas';
+import { watchRecipe }        from './user/recipe/sagas';
+import { watchSave }          from './user/save/sagas';
+import { watchSearch }        from './search/sagas';
 
 function makeStore(context: Context) {
   const persistedState = (typeof window !== 'undefined') ? loadFromLocalStorage() : {};
