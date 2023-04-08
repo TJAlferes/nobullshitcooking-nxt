@@ -1,3 +1,5 @@
+// IMPORTANT: these types must be identical with the ones from the api
+
 export interface IRecipe {
   id:                number;
   recipe_type_id:    number;

@@ -1,29 +1,11 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
+import axios from 'axios';
+import Link  from 'next/link';
 
-import { LoaderSpinner }                   from '../../../components';
-import { useTypedSelector as useSelector } from '../../../store';
-import { favoriteRecipe }                  from '../../../store/user/favorite/actions';
-import { saveRecipe }                      from '../../../store/user/save/actions';
-import { endpoint }                        from '../../../utils/api';
-import type { IRecipe }                    from '../../../types';
+import { LoaderSpinner } from '../../../../components';
+import { endpoint }      from '../../../../utils/api';
+import type { IRecipe }  from '../../../../types';
 
-export default function UserRecipe({ recipe }: {recipe: IRecipe}) {
-  const dispatch = useDispatch();
-  const myFavoriteRecipes =   useSelector(state => state.data.myFavoriteRecipes);
-  const myPrivateRecipes =    useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =     useSelector(state => state.data.myPublicRecipes);
-  const mySavedRecipes =      useSelector(state => state.data.mySavedRecipes);
-  const message =             useSelector(state => state.user.message);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-
-  const [ feedback,  setFeedback ] =  useState("");
-  const [ loading,   setLoading ] =   useState(false);
-  const [ favorited, setFavorited ] = useState(false);
-  const [ saved,     setSaved ] =     useState(false);
-
+export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
     id,
@@ -43,65 +25,11 @@ export default function UserRecipe({ recipe }: {recipe: IRecipe}) {
     cooking_image
   } = recipe;
 
-  // move to 'useFeedback' ?
-  useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  const favorite = () => {
-    if (!userIsAuthenticated) return;
-    if (favorited) return;
-    setFavorited(true);
-    setLoading(true);
-    dispatch(favoriteRecipe(recipe.id));
-  };
-
-  const save = () => {
-    if (!userIsAuthenticated) return;
-    if (saved) return;
-    setSaved(true);
-    setLoading(true);
-    dispatch(saveRecipe(recipe.id));
-  };
-
   return !recipe ? <LoaderSpinner /> : (
     <div className="two-col">
       <div className="two-col-left recipe">
         <h1>{title}</h1>
-        <p className="feedback">{feedback}</p>
-        <div className="save-area">
-          {( userIsAuthenticated && !myPrivateRecipes.find(r => r.id == id) && !myPublicRecipes.find(r => r.id == id) )
-            ? (
-              <>
-                {myFavoriteRecipes.find(r => r.id == id)
-                  ? <span>Favorited</span>
-                  : (
-                    !favorited
-                    ? <button className="--save" disabled={loading} name="favorite-button" onClick={favorite}>Favorite</button>
-                    : <span>Favorited</span>
-                  )
-                }
-                {mySavedRecipes.find(r => r.id == id)
-                  ? <span>Saved</span>
-                  : (
-                    !saved
-                    ? <button className="--save" disabled={loading} name="save-button" onClick={save}>Save</button>
-                    : <span>Saved</span>
-                  )
-                }
-              </>
-            )
-            : false
-          }
-        </div>
+        <p className="feedback"></p>
         <div className="image">
           <img src="/images/dev/sushi-280-172.jpg" />
           {/*recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>*/}
@@ -151,6 +79,15 @@ export default function UserRecipe({ recipe }: {recipe: IRecipe}) {
 }
 
 export async function getServerSideProps({ params }: {params: {username: string; title: string}}) {
-  const response = await axios.get(`${endpoint}/user/recipe/public/${params.username}/${params.title}`);  // public user recipe
+  const response = await axios.post(
+    `${endpoint}/user/recipe/private/one`,
+    {username: params.username, title: params.title},
+    {withCredentials: true}
+  );  // private user recipe
+
+  if (response.status === 401) {
+    return {props: {}, redirect: {permanent: false, destination: "/login"}};
+  }
+
   return {props: {recipe: response.data}};
 }
