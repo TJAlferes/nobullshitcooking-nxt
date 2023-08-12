@@ -1,32 +1,24 @@
 // IMPORTANT: these types must be identical with the ones from the api
 
 export interface IRecipe {
-  id:                number;
-  recipe_type_id:    number;
-  cuisine_id:        number;
-  author_id:         number;
-  owner_id:          number;
-
-  title:             string;
-  recipe_type_name:  string;
-  cuisine_name:      string;
-  author:            string;
-  author_avatar:     string;  // ?
-  description:       string;
-  active_time:       string;
-  total_time:        string;
-  directions:        string;
-
-  recipe_image:      string;
-  equipment_image:   string;
-  ingredients_image: string;
-  cooking_image:     string;
-  //video:             string;
-
-  methods:           RequiredMethod[];
-  equipment:         RequiredEquipment[];
-  ingredients:       RequiredIngredient[];
-  subrecipes:        RequiredSubrecipe[];
+  recipe_id:            string;
+  recipe_type_id:       number;
+  cuisine_id:           number;
+  author_id:            string;
+  owner_id:             string;
+  title:                string;
+  recipe_type_name:     string;
+  cuisine_name:         string;
+  author:               string;
+  description:          string;
+  active_time:          string;
+  total_time:           string;
+  directions:           string;
+  image_url:            string;
+  required_methods:     RequiredMethod[];
+  required_equipment:   RequiredEquipment[];
+  required_ingredients: RequiredIngredient[];
+  required_subrecipes:  RequiredSubrecipe[];
 }
 
 type RequiredMethod = {
@@ -34,18 +26,18 @@ type RequiredMethod = {
 };
 
 type RequiredEquipment = {
-  amount:         number;
+  amount?:        number;
   equipment_name: string;
 };
 
 type RequiredIngredient = {
-  amount:           number;
-  measurement_name: string;
-  ingredient_name:  string;
+  amount?:         number;
+  unit_name?:      string;
+  ingredient_name: string;
 };
 
 type RequiredSubrecipe = {
-  amount:           number;
-  measurement_name: string;
-  subrecipe_title:  string;
+  amount?:         number;
+  unit_name?:      string;
+  subrecipe_title: string;
 };
