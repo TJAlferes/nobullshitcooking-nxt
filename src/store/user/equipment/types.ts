@@ -5,30 +5,32 @@ export const actionTypes = {
 } as const;
 
 export type CreateEquipment = {
-  type:          typeof actionTypes.CREATE_EQUIPMENT;
-  equipmentInfo: EquipmentInfo;
+  type:           typeof actionTypes.CREATE_EQUIPMENT;
+  equipment_info: EquipmentInfo;
 };
 
 export type UpdateEquipment = {
-  type:          typeof actionTypes.UPDATE_EQUIPMENT;
-  equipmentInfo: EquipmentUpdateInfo;
+  type:           typeof actionTypes.UPDATE_EQUIPMENT;
+  equipment_info: EquipmentUpdateInfo;
 };
 
 export type DeleteEquipment = {
-  type: typeof actionTypes.DELETE_EQUIPMENT;
-  id:   number;
+  type:         typeof actionTypes.DELETE_EQUIPMENT;
+  equipment_id: string;
 };
 
+// TO DO: move shared types to one location
+
 export type EquipmentInfo = {
-  equipmentTypeId: number;
-  name:            string;
-  description:     string;
-  image:           string | ArrayBuffer | null;
-  fullImage:       File | null;
-  tinyImage:       File | null;
+  equipment_type_id: number;
+  equipment_name:    string;
+  description:       string;
+  //image:             string | ArrayBuffer | null;
+  //fullImage:         File | null;
+  //tinyImage:         File | null;
 };
 
 export type EquipmentUpdateInfo = EquipmentInfo & {
-  id:        number;
-  prevImage: string;
+  equipment_id: string;
+  //prevImage:    string;
 };

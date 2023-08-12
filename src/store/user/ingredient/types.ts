@@ -5,30 +5,32 @@ export const actionTypes = {
 } as const;
 
 export type CreateIngredient = {
-  type:           typeof actionTypes.CREATE_INGREDIENT;
-  ingredientInfo: IngredientInfo;
+  type:            typeof actionTypes.CREATE_INGREDIENT;
+  ingredient_info: IngredientInfo;
 };
 
 export type UpdateIngredient = {
-  type:           typeof actionTypes.UPDATE_INGREDIENT;
-  ingredientInfo: IngredientUpdateInfo;
+  type:            typeof actionTypes.UPDATE_INGREDIENT;
+  ingredient_info: IngredientUpdateInfo;
 };
 
 export type DeleteIngredient = {
-  type: typeof actionTypes.DELETE_INGREDIENT;
-  id:   number;
+  type:          typeof actionTypes.DELETE_INGREDIENT;
+  ingredient_id: string;
 };
 
+// TO DO: move shared types to one location
+
 export type IngredientInfo = {
-  ingredientTypeId: number;
-  name:             string;
-  description:      string;
-  image:            string | ArrayBuffer | null;
-  fullImage:        File | null;
-  tinyImage:        File | null;
+  ingredient_type_id: number;
+  ingredient_name:    string;
+  description:        string;
+  //image:            string | ArrayBuffer | null;
+  //fullImage:        File | null;
+  //tinyImage:        File | null;
 };
 
 export type IngredientUpdateInfo = IngredientInfo & {
-  id:        number;
+  ingredient_id: string;
   prevImage: string;
 };

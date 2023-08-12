@@ -18,6 +18,8 @@ export type State = {
   planData:    PlanData;
 };
 
+// TO DO: move shared types to one location
+
 // url
 export type Recipe = {
   key:          string;

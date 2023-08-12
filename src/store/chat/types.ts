@@ -31,6 +31,8 @@ State
 
 // TO DO: double-check times
 
+// TO DO: move shared types to one location
+
 export type State = {
   status:   string;
   room:     string;

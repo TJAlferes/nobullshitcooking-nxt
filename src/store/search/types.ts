@@ -22,28 +22,28 @@ export type State = SearchRequest & SearchResponse & {
   suggestions: Suggestion[];
 };
 
-export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";
+// TO DO: move shared types to one location
+
+export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";  // "pages" | "posts" | 
 
 export type SearchRequest = {
-  term?:           string;
-  filters?:        {
-    [index: string]: string[];
-    equipmentTypes?:    string[],
-    ingredientTypes?:   string[],
-    recipeTypes?:       string[],
-    methods?:           string[],
-    cuisines?:          string[],
-    productCategories?: string[],
-    productTypes?:      string[]
+  term?:             string;
+  current_page?:     string;
+  results_per_page?: string;
+  sorts?:            {};
+  filters?:          {
+    [index: string]:   string[];
+    equipment_types?:  string[];
+    ingredient_types?: string[];
+    recipe_types?:     string[];
+    methods?:          string[];
+    cuisines?:         string[];
   };
-  sorts?:          {};
-  currentPage?:    string;
-  resultsPerPage?: string;
 };
 
 // TO DO: move?
 export type RecipeCard = {
-  id:               number;
+  recipe_id:        string;
   author:           string;
   recipe_type_name: string;
   cuisine_name:     string;
@@ -53,42 +53,35 @@ export type RecipeCard = {
 };
 
 export type EquipmentCard = {
-  id:                  number;
+  equipment_id:        string;
   equipment_type_name: string;
   name:                string;
 };
 
 export type IngredientCard = {
-  id:                   number;
+  ingredient_id:        string;
   ingredient_type_name: string;
   name:                 string;
 };
 
-export type ProductCard = {
-  id:                    number;
-  product_category_name: string;
-  product_type_name:     string;
-  name:                  string;
-};
-
 export type Suggestion = {
-  id:     number;
+  id:     string;
   text:   string;
   image?: string;
 };
 
 export type SearchResponse = {
-  results:      any[];  // EquipmentCard[] | IngredientCard[] | ProductCard[] | RecipeCard[];
-  totalResults: number;
-  totalPages:   number;
+  results:       any[];  // EquipmentCard[] | IngredientCard[] | ProductCard[] | RecipeCard[];
+  total_results: number;
+  total_pages:   number;
 };
 
 export type Filter = {
-  key:    FilterKey;  //"recipeType"  "method"  "cuisine"  recipeType=Main&method=stew&cuisine=AFG
-  values: string[];   //["Main"]      ["Stew"]  ["AFG"]
+  key:    FilterKey;  //"recipe_type"  "method"  "cuisine"  recipe_type=Main&method=stew&cuisine=AFG
+  values: string[];   //["Main"]       ["Stew"]  ["AFG"]
 };
 
-export type FilterKey = "equipmentTypes" | "ingredientTypes" | "recipeTypes" | "methods" | "cuisines" | "productCategories" | "productTypes";
+export type FilterKey = "equipmentTypes" | "ingredientTypes" | "recipeTypes" | "methods" | "cuisines";
 
 export type Sort = {
   col:       string;  // CAREFUL of overlaps
@@ -151,19 +144,19 @@ export type SetSorts = {
 };
 
 export type SetCurrentPage = {
-  type:        typeof actionTypes.SET_CURRENT_PAGE;
-  currentPage: string;
+  type:         typeof actionTypes.SET_CURRENT_PAGE;
+  current_page: string;
 };
 
 export type SetResultsPerPage = {
-  type:           typeof actionTypes.SET_RESULTS_PER_PAGE;
-  resultsPerPage: string;
+  type:             typeof actionTypes.SET_RESULTS_PER_PAGE;
+  results_per_page: string;
 };
 
 export type GetResults = {
-  type:         typeof actionTypes.GET_RESULTS;
-  searchParams: string;
-  router:       ReturnType<typeof useRouter>;
+  type:          typeof actionTypes.GET_RESULTS;
+  search_params: string;
+  router:        ReturnType<typeof useRouter>;
 };
 
 export type GetSuggestions = {

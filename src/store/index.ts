@@ -12,7 +12,7 @@ import { chatInit }           from './chat/sagas';
 import { init }               from './data/actions';
 
 import { authReducer }        from './auth/reducer';
-import { cartReducer }        from './cart/reducer';
+//import { cartReducer }        from './cart/reducer';
 import { chatReducer }        from './chat/reducer';
 import { dataReducer }        from './data/reducer';
 import { geolocationReducer } from './geolocation/reducer';
@@ -63,7 +63,7 @@ function makeStore(context: Context) {
 
 export const rootReducer = combineReducers({
   auth:        authReducer,
-  cart:        cartReducer,
+  //cart:        cartReducer,
   chat:        chatReducer,
   data:        dataReducer,
   geolocation: geolocationReducer,

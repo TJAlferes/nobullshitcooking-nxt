@@ -19,6 +19,8 @@ export type DeletePlan = {
   id:   number;
 };
 
+// TO DO: move shared types to one location
+
 export type PlanInfo = {
   name: string;
   data: string;

@@ -23,12 +23,9 @@ export type InitialData = {
   equipment:         Equipment[];
   equipmentTypes:    EquipmentType[];
   ingredients:       Ingredient[];
-  measurements:      Measurement[];
+  unirs:      Unit[];
   methods:           Method[];
   ingredientTypes:   IngredientType[];
-  products:          WorkProduct[];
-  productCategories: ProductCategory[];
-  productTypes:      ProductType[];
   //recipes:           WorkRecipe[];  // don't do
   recipeTypes:       RecipeType[];
 };
@@ -45,27 +42,31 @@ export type InitialUserData = {
   mySavedRecipes:    WorkRecipe[];
 };
 
+// TO DO: move shared types to one location
+
+// TO DO: rename most of these
+
 export type Cuisine = {
-  id:        number;
-  continent: string;
-  code:      string;
-  name:      string;
-  country:   string;
+  cuisine_id:     number;
+  cuisine_name:   string;
+  continent_code: string;
+  country_code:   string;
+  country_name:   string;
 };
 
 export type Equipment = {
-  id:                  number;
+  equipment_id:        string;
   equipment_type_id:   number;
   owner_id:            number;
   equipment_type_name: string;
-  name:                string;
+  equipment_name:      string;
   description:         string;
-  image:               string;
+  image_url:           string;
 };
 
 export type EquipmentType = {
-  id:   number;
-  name: string;
+  equipment_type_id:   number;
+  equipment_type_name: string;
 };
 
 export type Friendship = {
@@ -76,41 +77,41 @@ export type Friendship = {
 };
 
 export type Ingredient = {
-  id:                   number;
+  ingredient_id:        string;
   ingredient_type_id:   number;
   owner_id:             number;
   ingredient_type_name: string;
-  brand:                string | null;
-  variety:              string | null;
+  ingredient_brand:     string | null;
+  ingredient_variety:   string | null;
+  ingredient_name:      string;
   fullname:             string;
-  name:                 string;
   description:          string;
-  image:                string;
+  image_url:            string;
 };
 
 export type IngredientType = {
-  id:   number;
-  name: string;
+  ingredient_type_id:   number;
+  ingredient_type_name: string;
 };
 
-export type Measurement = {
-  id:   number;
-  name: string;
+export type Unit = {
+  unit_id:   number;
+  unit_name: string;
 };
 
 export type Method = {
-  id:   number;
-  name: string;
+  method_id:   number;
+  method_name: string;
 };
 
 export type Plan = {
-  id:   number;
-  name: string;
-  data: PlanData;
+  plan_id:   number;
+  plan_name: string;
+  //data: PlanData;
 };
 
 export type WorkRecipe = {
-  id:             number;
+  recipe_id:      string;
   owner_id:       number;
   recipe_type_id: number;
   cuisine_id:     number;
@@ -119,36 +120,9 @@ export type WorkRecipe = {
 };
 
 export type RecipeType = {
-  id:   number;
-  name: string;
+  recipe_type_id:   number;
+  recipe_type_name: string;
 };
-
-export type WorkProduct = {
-  id:                  number;
-  product_category_id: number;
-  product_type_id:     number;
-  brand:               string | null;
-  variety:             string | null;
-  name:                string;
-  fullname:            string;
-};
-
-export type ProductCategory = {
-  id:   number;
-  name: string;
-};
-
-export type ProductType = {
-  id:   number;
-  name: string;
-};
-
-/*export type Order = {
-  id:       number;
-  placed:   string;
-  status:   string;
-  products: WorkProduct[];
-};*/
 
 /*
 

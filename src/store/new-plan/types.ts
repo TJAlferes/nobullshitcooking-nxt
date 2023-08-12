@@ -30,6 +30,8 @@ export type State = {
   planData:    PlanData;
 };
 
+// TO DO: move shared types to one location
+
 export interface PlanData {
   [index: number|string]: any;
    1: Recipe[];  2: Recipe[];  3: Recipe[];  4: Recipe[];  5: Recipe[];  6: Recipe[];  7: Recipe[];

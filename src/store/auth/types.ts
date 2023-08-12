@@ -40,6 +40,8 @@ export type Reset = {
   type: typeof actionTypes.RESET;
 };
 
+// TO DO: move shared types to one location
+
 export type Authenticate = {
   type:     typeof actionTypes.AUTHENTICATE;
   authname: string;
