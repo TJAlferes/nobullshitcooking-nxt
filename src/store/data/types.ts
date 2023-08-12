@@ -19,27 +19,26 @@ State
 export type State = InitialData & InitialUserData;
 
 export type InitialData = {
-  cuisines:          Cuisine[];
-  equipment:         Equipment[];
-  equipmentTypes:    EquipmentType[];
-  ingredients:       Ingredient[];
-  unirs:      Unit[];
-  methods:           Method[];
-  ingredientTypes:   IngredientType[];
-  //recipes:           WorkRecipe[];  // don't do
-  recipeTypes:       RecipeType[];
+  cuisines:         Cuisine[];
+  equipment:        Equipment[];
+  equipment_types:  EquipmentType[];
+  ingredients:      Ingredient[];
+  units:            Unit[];
+  methods:          Method[];
+  ingredient_types: IngredientType[];
+  recipes:          WorkRecipe[];
+  recipe_types:     RecipeType[];
 };
 
 export type InitialUserData = {
-  myFavoriteRecipes: WorkRecipe[];
-  myFriendships:     Friendship[];
-  myPlans:           Plan[];
-  myEquipment:       Equipment[];
-  myIngredients:     Ingredient[];
-  //myOrders:          Order[];
-  myPrivateRecipes:  WorkRecipe[];
-  myPublicRecipes:   WorkRecipe[];
-  mySavedRecipes:    WorkRecipe[];
+  my_favorite_recipes: WorkRecipe[];
+  my_friendships:      Friendship[];
+  my_plans:            Plan[];
+  my_equipment:        Equipment[];
+  my_ingredients:      Ingredient[];
+  my_private_recipes:  WorkRecipe[];
+  my_public_recipes:   WorkRecipe[];
+  my_saved_recipes:    WorkRecipe[];
 };
 
 // TO DO: move shared types to one location

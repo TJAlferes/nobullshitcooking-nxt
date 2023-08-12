@@ -26,15 +26,15 @@ export const register = (
 });
 
 export const verify = (
-  email:            string,
-  password:         string,
-  confirmationCode: string,
-  router:           ReturnType<typeof useRouter>
+  email:             string,
+  password:          string,
+  confirmation_code: string,
+  router:            ReturnType<typeof useRouter>
 ) => ({
   type: VERIFY,
   email,
   password,
-  confirmationCode,
+  confirmation_code,
   router
 });
 

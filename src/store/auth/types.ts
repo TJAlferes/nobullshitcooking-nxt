@@ -67,9 +67,9 @@ export type Register = {
 };
 
 export type Verify = {
-  type:             typeof actionTypes.VERIFY;
-  email:            string;
-  password:         string;
-  confirmationCode: string;
-  router:           ReturnType<typeof useRouter>;
+  type:              typeof actionTypes.VERIFY;
+  email:             string;
+  password:          string;
+  confirmation_code: string;
+  router:            ReturnType<typeof useRouter>;
 };

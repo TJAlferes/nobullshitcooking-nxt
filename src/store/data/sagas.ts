@@ -47,28 +47,24 @@ export function* getInitialUserDataSaga() {
 
 // refetches
 
-export const getCuisinesSaga =          makeDataSaga("/cuisine",          "cuisines");
-export const getEquipmentsSaga =        makeDataSaga("/equipment",        "equipment");
-export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",   "equipmentTypes");
-export const getIngredientsSaga =       makeDataSaga("/ingredient",       "ingredients");
-export const getIngredientTypesSaga =   makeDataSaga("/ingredient-type",  "ingredientTypes");
-export const getMeasurementsSaga =      makeDataSaga("/measurement",      "measurements");
-export const getMethodsSaga =           makeDataSaga("/method",           "methods");
-export const getProductsSaga =          makeDataSaga("/product",          "products");
-export const getProductCategoriesSaga = makeDataSaga("/product-category", "productCategories");
-export const getProductTypesSaga =      makeDataSaga("/product-type",     "productTypes");
-export const getRecipesSaga =           makeDataSaga("/recipe",           "recipes");
-export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",      "recipeTypes");
+export const getCuisinesSaga =          makeDataSaga("/cuisine",         "cuisines");
+export const getEquipmentsSaga =        makeDataSaga("/equipment",       "equipment");
+export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",  "equipment_types");
+export const getIngredientsSaga =       makeDataSaga("/ingredient",      "ingredients");
+export const getIngredientTypesSaga =   makeDataSaga("/ingredient-type", "ingredient_types");
+export const getUnitsSaga =             makeDataSaga("/unit",            "units");
+export const getMethodsSaga =           makeDataSaga("/method",          "methods");
+export const getRecipesSaga =           makeDataSaga("/recipe",          "recipes");
+export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",     "recipe_types");
 
-export const getMyFavoriteRecipesSaga = makeUserDataSaga("/user/favorite-recipe", "myFavoriteRecipes");
-export const getMyFriendshipsSaga =     makeUserDataSaga("/user/friendship",      "myFriendships");
-export const getMyPlansSaga =           makeUserDataSaga("/user/plan",            "myPlans");
-export const getMyEquipmentSaga =       makeUserDataSaga("/user/equipment",       "myEquipment");
-export const getMyIngredientsSaga =     makeUserDataSaga("/user/ingredient",      "myIngredients");
-//export const getMyOrdersSaga =          makeUserDataSaga("/user/order",           "myOrders");
-export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/recipe/private",  "myPrivateRecipes");
-export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/recipe/public",   "myPublicRecipes");
-export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "mySavedRecipes");
+export const getMyFavoriteRecipesSaga = makeUserDataSaga("/user/favorite-recipe", "my_favorite_recipes");
+export const getMyFriendshipsSaga =     makeUserDataSaga("/user/friendship",      "my_friendships");
+export const getMyPlansSaga =           makeUserDataSaga("/user/plan",            "my_plans");
+export const getMyEquipmentSaga =       makeUserDataSaga("/user/equipment",       "my_equipment");
+export const getMyIngredientsSaga =     makeUserDataSaga("/user/ingredient",      "my_ingredients");
+export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/private/recipe",  "my_private_recipes");
+export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/public/recipe",   "my_public_recipes");
+export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "my_saved_recipes");
 
 function makeDataSaga(path: string, key: keyof InitialData) {
   return function* () {

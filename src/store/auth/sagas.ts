@@ -42,8 +42,8 @@ export function* userRegisterSaga(action: Register) {
 
 export function* userVerifySaga(action: Verify) {
   try {
-    const { email, password, confirmationCode, router } = action;
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/verify`, {userInfo: {email, password, confirmationCode}});
+    const { email, password, confirmation_code, router } = action;
+    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/verify`, {userInfo: {email, password, confirmation_code}});
     
     if (message === "User account verified.") {
       yield delay(2000);

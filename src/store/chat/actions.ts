@@ -23,6 +23,8 @@ const {
   FAILED_PRIVATE_MESSAGE
 } = actionTypes;
 
+// TO DO: you can still localize here, but let database create the timestamps
+
 function getTime() {
   return `${(new Date).toLocaleTimeString()}`;
 }
