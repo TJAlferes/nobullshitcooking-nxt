@@ -8,21 +8,21 @@ import type { IRecipe }  from '../../../../types';
 export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
-    id,
+    recipe_id,
     author,
     title,
     description,
     cuisine_name,
     recipe_type_name,
     directions,
-    equipment,
-    ingredients,
-    subrecipes,
-    methods,
-    recipe_image,
-    equipment_image,
-    ingredients_image,
-    cooking_image
+    required_equipment,
+    required_ingredients,
+    required_subrecipes,
+    required_methods,
+    //recipe_image,
+    //equipment_image,
+    //ingredients_image,
+    //cooking_image
   } = recipe;
 
   return !recipe ? <LoaderSpinner /> : (
@@ -40,7 +40,7 @@ export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
         <div className="type"><b>Recipe type:</b>{' '}<span>{recipe_type_name}</span></div>
         <h2>Required Methods</h2>
         <div className="methods">
-          {methods && methods.map(m => <div className="method" key={m.method_name}>{m.method_name}</div>)}
+          {required_methods?.map(m => <div className="method" key={m.method_name}>{m.method_name}</div>)}
         </div>
         <h2>Required Equipment</h2>
         <div className="equipment-image">
@@ -48,7 +48,11 @@ export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
           {/*equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="equipments">
-          {equipment && equipment.map(e => <div className="equipment" key={e.equipment_name}>{e.amount}{' '}{e.equipment_name}</div>)}
+          {required_equipment?.map(e => (
+            <div className="equipment" key={e.equipment_name}>
+              {e.amount}{' '}{e.equipment_name}
+            </div>
+          ))}
         </div>
         <h2>Required Ingredients</h2>
         <div className="ingredients-image">
@@ -56,15 +60,19 @@ export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
           {/*ingredients_image !== "nobsc-recipe-ingredients-default" ? <img src={`${url}-ingredients/${ingredients_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="ingredients">
-          {ingredients && ingredients.map(i => (
+          {required_ingredients?.map(i => (
             <div className="ingredient" key={i.ingredient_name}>
-              {i.amount}{' '}{i.measurement_name}{' '}{i.ingredient_name}
+              {i.amount}{' '}{i.unit_name}{' '}{i.ingredient_name}
             </div>
           ))}
         </div>
         <h2>Required Subrecipes</h2>
         <div className="subrecipes">
-          {!subrecipes ? "none" : subrecipes.map(s => <div className="subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.measurement_name}{' '}{s.subrecipe_title}</div>)}
+          {required_subrecipes?.map(s => (
+            <div className="subrecipe" key={s.subrecipe_title}>
+              {s.amount}{' '}{s.unit_name}{' '}{s.subrecipe_title}
+            </div>
+          ))}
         </div>
         <h2>Directions</h2>
         <div className="cooking-image">
