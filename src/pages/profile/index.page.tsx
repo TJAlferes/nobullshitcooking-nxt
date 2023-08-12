@@ -17,7 +17,7 @@ export default function Profile() {
 
   const dispatch = useDispatch();
   const authname =            useSelector(state => state.auth.authname);
-  const myFriendships =       useSelector(state => state.data.myFriendships);
+  const my_friendships =       useSelector(state => state.data.my_friendships);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message =             useSelector(state => state.user.message);
 
@@ -56,8 +56,8 @@ export default function Profile() {
       const res = await axios.get(`${endpoint}/user/profile/${trimmed}`);
 
       if (res.data.avatar !== "nobsc-user-default") setUserAvatar(trimmed);  // change, use avatar from server
-      setUserFavoriteRecipes(res.data.favoriteRecipes);
-      setUserPublicRecipes(res.data.publicRecipes);
+      setUserFavoriteRecipes(res.data.favorite_recipes);
+      setUserPublicRecipes(res.data.public_recipes);
     };
 
     getUserProfile(username);
@@ -82,7 +82,7 @@ export default function Profile() {
       
       <div className="friend-request-outer">
         {userIsAuthenticated && username !== authname
-          ? (myFriendships.find(f => f.username === username)
+          ? (my_friendships.find(f => f.username === username)
             ? <span>Friends</span>
             : (!clicked
               ? <button disabled={loading} onClick={requestFriendship}>Send Friend Request</button>

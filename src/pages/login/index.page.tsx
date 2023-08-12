@@ -5,7 +5,7 @@ import { useDispatch }            from 'react-redux';
 
 import { LoaderButton }                    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { userLogin }                       from '../../store/auth/actions';
+import { login }                       from '../../store/auth/actions';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
 
@@ -42,7 +42,7 @@ export default function Login() {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
-    if (pathname === "/login") dispatch(userLogin(email, password, router));
+    if (pathname === "/login") dispatch(login(email, password, router));
   }
 
   const loginKeyUp = (e: React.KeyboardEvent) => {
@@ -50,7 +50,7 @@ export default function Login() {
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    if (pathname === "/login") dispatch(userLogin(email, password, router));
+    if (pathname === "/login") dispatch(login(email, password, router));
   }
 
   const validateLoginInfo = () => (email.length > 4 && password.length > 5);

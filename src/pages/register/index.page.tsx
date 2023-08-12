@@ -5,7 +5,7 @@ import { useDispatch }                from 'react-redux';
 
 import { LoaderButton }                    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { userRegister, userVerify }        from '../../store/auth/actions';
+import { register, verify }        from '../../store/auth/actions';
 
 export default function Register() {
   const router =       useRouter();
@@ -16,7 +16,7 @@ export default function Register() {
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
   const message =             useSelector(state => state.auth.message);
 
-  const [ confirmationCode, setConfirmationCode ] = useState("");
+  const [ confirmation_code, setConfirmationCode ] = useState("");
   const [ email,            setEmail ] =            useState("");
   const [ feedback,         setFeedback ] =         useState("");
   const [ loading,          setLoading ] =          useState(false);
@@ -51,7 +51,7 @@ export default function Register() {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     setLoading(true);
-    dispatch(userRegister(email, password, username, router));  // do you really need to pass the router here?
+    dispatch(register(email, password, username, router));  // do you really need to pass the router here?
   };
 
   const registerKeyUp = (e: React.KeyboardEvent) => {
@@ -59,14 +59,14 @@ export default function Register() {
     if (!validateRegistrationInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(userRegister(email, password, username, router));
+    dispatch(register(email, password, username, router));
   };
 
   const verifyClick = () => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     setLoading(true);
-    dispatch(userVerify(email, password, confirmationCode, router));
+    dispatch(verify(email, password, confirmation_code, router));
   };
 
   const verifyKeyUp = (e: React.KeyboardEvent) => {
@@ -74,10 +74,10 @@ export default function Register() {
     if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(userVerify(email, password, confirmationCode, router));
+    dispatch(verify(email, password, confirmation_code, router));
   };
 
-  const validateConfirmationCode = () => confirmationCode.length > 1;
+  const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
   const validateRegistrationInfo = () => (username.length > 1 && email.length > 4 && password.length > 5 && password == passwordAgain);  // TO DO: do most of this in HTML
   
   return (
@@ -104,7 +104,7 @@ export default function Register() {
             onChange={confirmationCodeChange}
             size={20}
             type="text"
-            value={confirmationCode}
+            value={confirmation_code}
           />
 
           <p>Please check your email for the confirmation code.</p>
