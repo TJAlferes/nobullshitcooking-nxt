@@ -8,18 +8,18 @@ import { endpoint }                        from '../../utils/api';
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function Equipment({ equipment }: {equipment: IEquipment}) {
-  const myEquipment = useSelector(state => state.data.myEquipment);
+  const my_equipment = useSelector(state => state.data.my_equipment);
 
-  const { id, name, image, equipment_type_name, description } = equipment;
+  const { equipment_id, equipment_name, image_url, equipment_type_name, description } = equipment;
 
   return !equipment ? <LoaderSpinner /> : (
     <div className="two-col equipment">
       <div className="two-col-left">
-        <h1>{name}</h1>
+        <h1>{equipment_name}</h1>
         <div className="image">
-          {myEquipment.find(e => e.id === id)
-            ? <img src={`${url}user-equipment/${image}`} />
-            : <img src={`${url}images-01/equipment/${image}.jpg`} />}
+          {my_equipment.find(e => e.equipment_id === equipment_id)
+            ? <img src={`${url}user-equipment/${image_url}`} />
+            : <img src={`${url}images-01/equipment/${image_url}.jpg`} />}
         </div>
         <div className="type">
           <b>Equipment Type:</b>{' '}<span>{equipment_type_name}</span>

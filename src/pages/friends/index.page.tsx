@@ -15,9 +15,9 @@ import {
 // Just make this a Dashboard tab?
 export default function Friends() {
   const dispatch = useDispatch();
-  const authname =      useSelector(state => state.auth.authname);
-  const myFriendships = useSelector(state => state.data.myFriendships);
-  const message =       useSelector(state => state.user.message);
+  const authname =       useSelector(state => state.auth.authname);
+  const my_friendships = useSelector(state => state.data.my_friendships);
+  const message =        useSelector(state => state.user.message);
 
   const [ feedback,   setFeedback ] =   useState("");
   const [ loading,    setLoading ] =    useState(false);
@@ -104,7 +104,7 @@ export default function Friends() {
       </div>
 
       <div className="friends-list">
-        {myFriendships.filter(f => f.status === tab).map(f => (
+        {my_friendships.filter(f => f.status === tab).map(f => (
           <div className="friends-item" key={f.username}>
             <span className="avatar"><img src={`${url}/${f.avatar}-tiny`} /></span>
 

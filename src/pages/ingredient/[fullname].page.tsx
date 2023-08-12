@@ -8,18 +8,18 @@ import { endpoint }                        from '../../utils/api';
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function Ingredient({ ingredient }: {ingredient: IIngredient}) {
-  const myIngredients = useSelector(state => state.data.myIngredients);
+  const my_ingredients = useSelector(state => state.data.my_ingredients);
 
-  const { id, fullname, image, ingredient_type_name, description } = ingredient;
+  const { ingredient_id, fullname, image_url, ingredient_type_name, description } = ingredient;
 
   return !ingredient ? <LoaderSpinner /> : (
     <div className="two-col ingredient">
       <div className="two-col-left">
         <h1>{fullname}</h1>
         <div className="image">
-          {myIngredients.find(ing => ing.id === id)
-            ? <img src={`${url}user-ingredients/${image}`} />
-            : <img src={`${url}images-01/ingredients/${image}.jpg`} />}
+          {my_ingredients.find(i => i.ingredient_id === ingredient_id)
+            ? <img src={`${url}user-ingredients/${image_url}`} />
+            : <img src={`${url}images-01/ingredients/${image_url}.jpg`} />}
         </div>
         <div className="type">
           <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>

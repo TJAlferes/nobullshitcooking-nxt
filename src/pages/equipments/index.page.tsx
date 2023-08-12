@@ -12,19 +12,19 @@ import { SearchContext }                              from '../../utils/SearchPr
 export default function Equipments() {
   const searchDriver = useContext(SearchContext);
 
-  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
+  const equipment_types = useSelector(state => state.data.equipment_types);
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
-  const totalResults =   useSelector(state => state.search.totalResults);
-  const totalPages =     useSelector(state => state.search.totalPages);
+  const total_results =   useSelector(state => state.search.total_results);
+  const total_pages =     useSelector(state => state.search.total_pages);
 
   const [ expandedFilter, setExpandedFilter ] =               useState<string|null>(null);
-  const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] = useState<string[]>(searchDriver.params.filters?.equipmentTypes ?? []);
+  const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] = useState<string[]>(searchDriver.params.filters?.equipment_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "equipmentTypes" && checkedEquipmentTypes !== searchDriver.params.filters?.equipmentTypes) searchDriver.setFilters(name, checkedEquipmentTypes);
+      if (name === "equipmentTypes" && checkedEquipmentTypes !== searchDriver.params.filters?.equipment_types) searchDriver.setFilters(name, checkedEquipmentTypes);
     } else {
       setExpandedFilter(name);
     }
@@ -34,7 +34,7 @@ export default function Equipments() {
     <div className="two-col">
       <div className="two-col-left search-results">
         <h1>Equipment</h1>
-        <p>{totalResults} total results and {totalPages} total pages</p>
+        <p>{total_results} total results and {total_pages} total pages</p>
 
         <div className="filters">
           <span className="filter-by">Filter by:</span>
@@ -56,16 +56,20 @@ export default function Equipments() {
             handler={() => toggleFilterDropdown("equipmentTypes")}
           >
             <div className="filter-group">
-              {equipmentTypes.map(({ id, name }) => (
-                <span key={id}>
+              {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
+                <span key={equipment_type_id}>
                   <input
                     type="checkbox"
-                    checked={checkedEquipmentTypes?.includes(name)}
+                    checked={checkedEquipmentTypes?.includes(equipment_type_name)}
                     onChange={() => {
-                      setCheckedEquipmentTypes(checkedEquipmentTypes?.includes(name) ? checkedEquipmentTypes.filter(v => v !== name) : [...checkedEquipmentTypes, name]);
+                      setCheckedEquipmentTypes(
+                        checkedEquipmentTypes?.includes(equipment_type_name)
+                        ? checkedEquipmentTypes.filter(v => v !== equipment_type_name)
+                        : [...checkedEquipmentTypes, equipment_type_name]
+                      );
                     }}
                   />
-                    <label>{name}</label>
+                    <label>{equipment_type_name}</label>
                 </span>
               ))}
             </div>
@@ -79,9 +83,9 @@ export default function Equipments() {
           {
             results
               ? results.map(e => (
-                <Link className="search-results-list-item" href={`/equipment?name=${e.name}`} key={e.id}>
+                <Link className="search-results-list-item" href={`/equipment?name=${e.equipment_name}`} key={e.id}>
                   <img src="/images/dev/knife-280-172.jpg" />
-                  <h3>{e.name}</h3>
+                  <h3>{e.equipment_name}</h3>
                   <div className="type">{e.equipment_type_name}</div>
                 </Link>
               ))

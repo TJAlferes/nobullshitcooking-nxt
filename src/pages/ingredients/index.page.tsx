@@ -12,19 +12,19 @@ import { SearchContext }                              from '../../utils/SearchPr
 export default function Ingredients() {
   const searchDriver = useContext(SearchContext);
 
-  const ingredientTypes = useSelector(state => state.data.ingredientTypes);
+  const ingredient_types = useSelector(state => state.data.ingredient_types);
   //const resultTerm        useSelector(state = state.search.resultTerm);
   const results =         useSelector(state => state.search.results);
-  const totalResults =    useSelector(state => state.search.totalResults);
-  const totalPages =      useSelector(state => state.search.totalPages);
+  const total_results =    useSelector(state => state.search.total_results);
+  const total_pages =      useSelector(state => state.search.total_pages);
 
   const [ expandedFilter, setExpandedFilter ] =                 useState<string|null>(null);
-  const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>(searchDriver.params.filters?.ingredientTypes ?? []);
+  const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>(searchDriver.params.filters?.ingredient_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "ingredientTypes" && checkedIngredientTypes !== searchDriver.params.filters?.ingredientTypes) searchDriver.setFilters(name, checkedIngredientTypes);
+      if (name === "ingredientTypes" && checkedIngredientTypes !== searchDriver.params.filters?.ingredient_types) searchDriver.setFilters(name, checkedIngredientTypes);
     } else {
       setExpandedFilter(name);
     }
@@ -34,7 +34,7 @@ export default function Ingredients() {
     <div className="two-col">
       <div className="two-col-left search-results">
         <h1>Ingredients</h1>
-        <p>{totalResults} total results and {totalPages} total pages</p>
+        <p>{total_results} total results and {total_pages} total pages</p>
 
         <div className="filters">
           <span className="filter-by">Filter by:</span>
@@ -56,16 +56,20 @@ export default function Ingredients() {
             handler={() => toggleFilterDropdown("ingredientTypes")}
           >
             <div className="filter-group">
-              {ingredientTypes.map(({ id, name }) => (
-                <span key={id}>
+              {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
+                <span key={ingredient_type_id}>
                   <input
                     type="checkbox"
-                    checked={checkedIngredientTypes?.includes(name)}
+                    checked={checkedIngredientTypes?.includes(ingredient_type_name)}
                     onChange={() => {
-                      setCheckedIngredientTypes(checkedIngredientTypes?.includes(name) ? checkedIngredientTypes.filter(v => v !== name) : [...checkedIngredientTypes, name]);
+                      setCheckedIngredientTypes(
+                        checkedIngredientTypes?.includes(ingredient_type_name)
+                        ? checkedIngredientTypes.filter(v => v !== ingredient_type_name)
+                        : [...checkedIngredientTypes, ingredient_type_name]
+                      );
                     }}
                   />
-                  <label>{name}</label>
+                  <label>{ingredient_type_name}</label>
                 </span>
               ))}
             </div>

@@ -14,23 +14,23 @@ export default function Recipes() {
   renders.current++;
   const searchDriver = useContext(SearchContext);
 
-  const recipeTypes =    useSelector(state => state.data.recipeTypes);
+  const recipe_types =    useSelector(state => state.data.recipe_types);
   const methods =        useSelector(state => state.data.methods);
   const cuisines =       useSelector(state => state.data.cuisines);
   const cuisineGroups = [
-    {continent: "Africa",   cuisines: [...(cuisines.filter(c => c.continent === "AF"))]},
-    {continent: "Americas", cuisines: [...(cuisines.filter(c => c.continent === "AM"))]},
-    {continent: "Asia",     cuisines: [...(cuisines.filter(c => c.continent === "AS"))]},
-    {continent: "Europe",   cuisines: [...(cuisines.filter(c => c.continent === "EU"))]},
-    {continent: "Oceania",  cuisines: [...(cuisines.filter(c => c.continent === "OC"))]}
+    {continent: "Africa",   cuisines: [...(cuisines.filter(c => c.continent_code === "AF"))]},
+    {continent: "Americas", cuisines: [...(cuisines.filter(c => c.continent_code === "AM"))]},
+    {continent: "Asia",     cuisines: [...(cuisines.filter(c => c.continent_code === "AS"))]},
+    {continent: "Europe",   cuisines: [...(cuisines.filter(c => c.continent_code === "EU"))]},
+    {continent: "Oceania",  cuisines: [...(cuisines.filter(c => c.continent_code === "OC"))]}
   ];  // TO DO: improve this
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results =        useSelector(state => state.search.results);
-  const totalResults =   useSelector(state => state.search.totalResults);
-  const totalPages =     useSelector(state => state.search.totalPages);
+  const total_results =   useSelector(state => state.search.total_results);
+  const total_pages =     useSelector(state => state.search.total_pages);
 
   const [ expandedFilter,     setExpandedFilter ] =     useState<string|null>(null);
-  const [ checkedRecipeTypes, setCheckedRecipeTypes ] = useState<string[]>(searchDriver.params.filters?.recipeTypes ?? []);
+  const [ checkedRecipeTypes, setCheckedRecipeTypes ] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);
   const [ checkedMethods,     setCheckedMethods ] =     useState<string[]>(searchDriver.params.filters?.methods ?? []);
   const [ checkedCuisines,    setCheckedCuisines ] =    useState<string[]>(searchDriver.params.filters?.cuisines ?? []);
   //const sorts =           params.filters?.sorts;
@@ -39,9 +39,9 @@ export default function Recipes() {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "recipeTypes" && checkedRecipeTypes !== searchDriver.params.filters?.recipeTypes) searchDriver.setFilters(name, checkedRecipeTypes);
-      if (name === "methods"     && checkedMethods !== searchDriver.params.filters?.methods)         searchDriver.setFilters(name, checkedMethods);
-      if (name === "cuisines"    && checkedCuisines !== searchDriver.params.filters?.cuisines)       searchDriver.setFilters(name, checkedCuisines);
+      if (name === "recipeTypes" && checkedRecipeTypes !== searchDriver.params.filters?.recipe_types) searchDriver.setFilters(name, checkedRecipeTypes);
+      if (name === "methods"     && checkedMethods !== searchDriver.params.filters?.methods)          searchDriver.setFilters(name, checkedMethods);
+      if (name === "cuisines"    && checkedCuisines !== searchDriver.params.filters?.cuisines)        searchDriver.setFilters(name, checkedCuisines);
     } else {
       setExpandedFilter(name);  // open the dropdown
     }
@@ -52,7 +52,7 @@ export default function Recipes() {
       <div className="two-col-left search-results">
         <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
         <h1>Recipes</h1>
-        <p>{totalResults} total results and {totalPages} total pages</p>
+        <p>{total_results} total results and {total_pages} total pages</p>
 
         <div className="filters">
           <span className="filter-by">Filter by:</span>
@@ -74,16 +74,20 @@ export default function Recipes() {
             handler={() => toggleFilterDropdown("recipeTypes")}
           >
             <div className="filter-group">
-              {recipeTypes.map(({ id, name }) => (
-                <span key={id}>
+              {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
+                <span key={recipe_type_id}>
                   <input
                     type="checkbox"
-                    checked={checkedRecipeTypes?.includes(name)}
+                    checked={checkedRecipeTypes?.includes(recipe_type_name)}
                     onChange={() => {
-                      setCheckedRecipeTypes(checkedRecipeTypes?.includes(name) ? checkedRecipeTypes.filter(v => v !== name) : [...checkedRecipeTypes, name]);
+                      setCheckedRecipeTypes(
+                        checkedRecipeTypes?.includes(recipe_type_name)
+                        ? checkedRecipeTypes.filter(v => v !== recipe_type_name)
+                        : [...checkedRecipeTypes, recipe_type_name]
+                      );
                     }}
                   />
-                  <label>{name}</label>
+                  <label>{recipe_type_name}</label>
                 </span>
               ))}
             </div>
@@ -106,16 +110,16 @@ export default function Recipes() {
             handler={() => toggleFilterDropdown("methods")}
           >
             <div className="filter-group">
-              {methods.map(({ id, name }) => (
-                <span key={id}>
+              {methods.map(({ method_id, method_name }) => (
+                <span key={method_id}>
                   <input
                     type="checkbox"
-                    checked={checkedMethods?.includes(name)}
+                    checked={checkedMethods?.includes(method_name)}
                     onChange={() => {
-                      setCheckedMethods(checkedMethods?.includes(name) ? checkedMethods.filter(v => v !== name) : [...checkedMethods, name]);
+                      setCheckedMethods(checkedMethods?.includes(method_name) ? checkedMethods.filter(v => v !== method_name) : [...checkedMethods, method_name]);
                     }}
                   />
-                  <label>{name}</label>
+                  <label>{method_name}</label>
                 </span>
               ))}
             </div>
@@ -141,16 +145,20 @@ export default function Recipes() {
               {cuisineGroups.map(group => (
                 <Fragment key={group.continent}>
                   <h4>{group.continent}</h4>
-                  {group.cuisines.map(({ id, code, name }) => (
-                    <span key={id}>
+                  {group.cuisines.map(({ cuisine_id, country_code, cuisine_name }) => (
+                    <span key={cuisine_id}>
                       <input
                         type="checkbox"
-                        checked={checkedCuisines?.includes(code)}
+                        checked={checkedCuisines?.includes(country_code)}
                         onChange={() => {
-                          setCheckedCuisines(checkedCuisines?.includes(code) ? checkedCuisines.filter(v => v !== code) : [...checkedCuisines, code]);
+                          setCheckedCuisines(
+                            checkedCuisines?.includes(country_code)
+                            ? checkedCuisines.filter(v => v !== country_code)
+                            : [...checkedCuisines, country_code]
+                          );
                         }}
                       />
-                      <label>{name}</label>
+                      <label>{cuisine_name}</label>
                     </span>
                   ))}
                 </Fragment >

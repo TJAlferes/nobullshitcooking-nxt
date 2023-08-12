@@ -17,13 +17,13 @@ import { getCroppedImage }                         from '../../utils/getCroppedI
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
-  const myPlans =           useSelector(state => state.data.myPlans);
-  const myEquipment =       useSelector(state => state.data.myEquipment);
-  const myIngredients =     useSelector(state => state.data.myIngredients);
-  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
-  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
+  const myFavoriteRecipes = useSelector(state => state.data.my_favorite_recipes);
+  const my_plans =           useSelector(state => state.data.my_plans);
+  const my_equipment =       useSelector(state => state.data.my_equipment);
+  const my_ingredients =     useSelector(state => state.data.my_ingredients);
+  const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
+  const my_public_recipes =   useSelector(state => state.data.my_public_recipes);
+  const my_saved_recipes =    useSelector(state => state.data.my_saved_recipes);
   const authname =          useSelector(state => state.auth.authname);
   const creatingPlan =      useSelector(state => state.planner.creating);
   const editingId =         useSelector(state => state.planner.editingId);
@@ -238,12 +238,12 @@ export default function Dashboard() {
             : false
           }
   
-          {myPlans.length
-            ? myPlans.map(p => (
-              <div className="dashboard-item" key={p.id}>
-                <span className="name"><Link href={`/user-plan/${p.id}`}>{p.name}</Link></span>
-                {(!creatingPlan && !editingId) && <span className="action"><Link href={`/new-plan/${p.id}`}>Edit</Link></span>}
-                {(!creatingPlan && !editingId) && <span className="delete" onClick={() => activateModal(p.id, p.name)}>Delete</span>}
+          {my_plans.length
+            ? my_plans.map(p => (
+              <div className="dashboard-item" key={p.plan_id}>
+                <span className="name"><Link href={`/user-plan/${p.plan_id}`}>{p.plan_name}</Link></span>
+                {(!creatingPlan && !editingId) && <span className="action"><Link href={`/new-plan/${p.plan_id}`}>Edit</Link></span>}
+                {(!creatingPlan && !editingId) && <span className="delete" onClick={() => activateModal(p.plan_id, p.plan_name)}>Delete</span>}
               </div>
             ))
             : <div className="no-content">You haven't created any plans yet.</div>
@@ -274,15 +274,15 @@ export default function Dashboard() {
             : false
           }
           <Subtabs subTab={subTab} subTabClick={subTabClick} />
-          {myPrivateRecipes.length
-            ? myPrivateRecipes.map(r => (
-              <div className="dashboard-item" key={r.id}>
+          {my_private_recipes.length
+            ? my_private_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
-                <span className="name"><Link href={`/user-recipe/${r.id}`}>{r.title}</Link></span>
-                <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
-                <span className="delete" onClick={() => activateModal(r.id, r.title)}>Delete</span>
+                <span className="name"><Link href={`/user-recipe/${r.recipe_id}`}>{r.title}</Link></span>
+                <span className="action"><Link href={`/new-recipe/${r.recipe_id}`}>Edit</Link></span>
+                <span className="delete" onClick={() => activateModal(r.recipe_id, r.title)}>Delete</span>
               </div>
             ))
             : <div className="no-content">You haven't created any private recipes yet.</div>
@@ -313,15 +313,15 @@ export default function Dashboard() {
             : false
           }
           <Subtabs subTab={subTab} subTabClick={subTabClick} />
-          {myPublicRecipes.length
-            ? myPublicRecipes.map(r => (
-              <div className="dashboard-item" key={r.id}>
+          {my_public_recipes.length
+            ? my_public_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
-                <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
-                <span className="action"><Link href={`/new-recipe/${r.id}`}>Edit</Link></span>
-                <span className="delete" onClick={() => activateModal(r.id, r.title)}>Disown</span>
+                <span className="name"><Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link></span>
+                <span className="action"><Link href={`/new-recipe/${r.recipe_id}`}>Edit</Link></span>
+                <span className="delete" onClick={() => activateModal(r.recipe_id, r.title)}>Disown</span>
               </div>
             ))
             : <div className="no-content">You haven't created any public recipes yet.</div>
@@ -335,12 +335,12 @@ export default function Dashboard() {
           <Subtabs subTab={subTab} subTabClick={subTabClick} />
           {myFavoriteRecipes.length
             ? myFavoriteRecipes.map(r => (
-              <div className="dashboard-item" key={r.id}>
+              <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img--28-18"></div>}
                 </span>
-                <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
-                <span className="unfavorite" onClick={() => unfavorite(r.id)}>Unfavorite</span>
+                <span className="name"><Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link></span>
+                <span className="unfavorite" onClick={() => unfavorite(r.recipe_id)}>Unfavorite</span>
               </div>
             ))
             : <div className="no-content">You haven't favorited any recipes yet.</div>
@@ -352,14 +352,14 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2 className="--tall">Saved Recipes</h2>
           <Subtabs subTab={subTab} subTabClick={subTabClick} />
-          {mySavedRecipes.length
-            ? mySavedRecipes.map(r => (
-              <div className="dashboard-item" key={r.id}>
+          {my_saved_recipes.length
+            ? my_saved_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.recipe_image !== "nobsc-recipe-default" ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} /> : <div className="img-28-18"></div>}
                 </span>
-                <span className="name"><Link href={`/recipe/${r.id}`}>{r.title}</Link></span>
-                <span className="unsave" onClick={() => unsave(r.id)}>Unsave</span>
+                <span className="name"><Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link></span>
+                <span className="unsave" onClick={() => unsave(r.recipe_id)}>Unsave</span>
               </div>
             ))
             : <div className="no-content">You haven't saved any recipes yet.</div>
@@ -371,13 +371,13 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Private Ingredients</h2>
           <Link href="/new-ingredient" className="new-entity">Create New Ingredient</Link>
-          {myIngredients.length
-            ? myIngredients.map(i => (
-              <div className="dashboard-item" key={i.id}>
-                <span className="tiny">{i.image !== "nobsc-ingredient-default" ? <img src={`${recipeUrl}/${i.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
-                <span className="name"><Link href={`/user-ingredient/${i.id}`}>{i.name}</Link></span>
-                <span className="action"><Link href={`/user-ingredient/edit/${i.id}`}>Edit</Link></span>
-                <span className="delete" onClick={() => deletePrivateIngredient(i.id)}>Delete</span>
+          {my_ingredients.length
+            ? my_ingredients.map(i => (
+              <div className="dashboard-item" key={i.ingredient_id}>
+                <span className="tiny">{i.image_url !== "nobsc-ingredient-default" ? <img src={`${recipeUrl}/${i.image_url}-tiny`} /> : <div className="img-28-18"></div>}</span>
+                <span className="name"><Link href={`/user-ingredient/${i.id}`}>{i.ingredient_name}</Link></span>
+                <span className="action"><Link href={`/user-ingredient/edit/${i.ingredient_id}`}>Edit</Link></span>
+                <span className="delete" onClick={() => deletePrivateIngredient(i.ingredient_id)}>Delete</span>
               </div>
             ))
             : <div className="dashboard-no-content">You haven't created any private ingredients yet.</div>
@@ -389,13 +389,13 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Private Equipment</h2>
           <Link href="/new-equipment" className="new-entity">Create New Equipment</Link>
-          {myEquipment.length
-            ? myEquipment.map(e => (
-              <div className="dashboard-item" key={e.id}>
-                <span className="tiny">{e.image !== "nobsc-equipment-default" ? <img src={`${recipeUrl}/${e.image}-tiny`} /> : <div className="img-28-18"></div>}</span>
-                <span className="name"><Link href={`/user-equipment/${e.id}`}>{e.name}</Link></span>
-                <span className="action"><Link href={{pathname: '/new-equipment', query: {id: e.id}}}>Edit</Link></span>
-                <span className="delete" onClick={() => deletePrivateEquipment(e.id)}>Delete</span>
+          {my_equipment.length
+            ? my_equipment.map(e => (
+              <div className="dashboard-item" key={e.equipment_id}>
+                <span className="tiny">{e.image_url !== "nobsc-equipment-default" ? <img src={`${recipeUrl}/${e.image_url}-tiny`} /> : <div className="img-28-18"></div>}</span>
+                <span className="name"><Link href={`/user-equipment/${e.equipment_id}`}>{e.equipment_name}</Link></span>
+                <span className="action"><Link href={{pathname: '/new-equipment', query: {id: e.equipment_id}}}>Edit</Link></span>
+                <span className="delete" onClick={() => deletePrivateEquipment(e.equipment_id)}>Delete</span>
               </div>
             ))
             : <div className="no-content">You haven't created any private equipment yet.</div>
