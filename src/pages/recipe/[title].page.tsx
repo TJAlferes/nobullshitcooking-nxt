@@ -11,17 +11,18 @@ import { endpoint }                        from '../../utils/api';
 
 export default function Recipe({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
+  
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
-  const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
-  const my_public_recipes =   useSelector(state => state.data.my_public_recipes);
-  const my_saved_recipes =    useSelector(state => state.data.my_saved_recipes);
-  const message =             useSelector(state => state.user.message);
+  const my_private_recipes  = useSelector(state => state.data.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.data.my_public_recipes);
+  const my_saved_recipes    = useSelector(state => state.data.my_saved_recipes);
+  const message             = useSelector(state => state.user.message);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
 
-  const [ feedback,  setFeedback ] =  useState("");
-  const [ loading,   setLoading ] =   useState(false);
+  const [ feedback,  setFeedback ]  = useState("");
+  const [ loading,   setLoading ]   = useState(false);
   const [ favorited, setFavorited ] = useState(false);
-  const [ saved,     setSaved ] =     useState(false);
+  const [ saved,     setSaved ]     = useState(false);
 
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
@@ -101,26 +102,54 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
             : false
           }
         </div>
+
         <div className="image">
           <img src="/images/dev/sushi-280-172.jpg" />
           {/*recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
-        <div className="author"><b>Author:</b>{' '}{author === "Unknown" ? "Unknown" : <Link href={`/profile/${author}`}>{author}</Link>}</div>
-        <div className="description"><b>Author's note:</b>{' '}<em>{description}</em></div>
-        <div className="cuisine"><b>Cuisine:</b>{' '}<span>{cuisine_name}</span></div>
-        <div className="type"><b>Recipe type:</b>{' '}<span>{recipe_type_name}</span></div>
+
+        <div className="author">
+          <b>Author:</b>
+          {' '}
+          {
+            author === "Unknown"
+            ? "Unknown"
+            : <Link href={`/profile/${author}`}>{author}</Link>
+          }
+        </div>
+
+        <div className="description">
+          <b>Author's note:</b>{' '}<em>{description}</em>
+        </div>
+
+        <div className="cuisine">
+          <b>Cuisine:</b>{' '}<span>{cuisine_name}</span>
+        </div>
+
+        <div className="type">
+          <b>Recipe type:</b>{' '}<span>{recipe_type_name}</span>
+        </div>
+
         <h2>Required Methods</h2>
         <div className="methods">
-          {required_methods?.map(m => <div className="method" key={m.method_name}>{m.method_name}</div>)}
+          {required_methods?.map(m => (
+            <div className="method" key={m.method_name}>{m.method_name}</div>
+          ))}
         </div>
+
         <h2>Required Equipment</h2>
         <div className="equipment-image">
           <img src="/images/dev/sushi-280-172.jpg" />
           {/*equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
         <div className="equipments">
-          {required_equipment?.map(e => <div className="equipment" key={e.equipment_name}>{e.amount}{' '}{e.equipment_name}</div>)}
+          {required_equipment?.map(e => (
+            <div className="equipment" key={e.equipment_name}>
+              {e.amount}{' '}{e.equipment_name}
+            </div>
+          ))}
         </div>
+
         <h2>Required Ingredients</h2>
         <div className="ingredients-image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -133,10 +162,16 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
             </div>
           ))}
         </div>
+
         <h2>Required Subrecipes</h2>
         <div className="subrecipes">
-          {required_subrecipes?.map(s => <div className="subrecipe" key={s.subrecipe_title}>{s.amount}{' '}{s.unit_name}{' '}{s.subrecipe_title}</div>)}
+          {required_subrecipes?.map(s => (
+            <div className="subrecipe" key={s.subrecipe_title}>
+              {s.amount}{' '}{s.unit_name}{' '}{s.subrecipe_title}
+            </div>
+          ))}
         </div>
+
         <h2>Directions</h2>
         <div className="cooking-image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -144,28 +179,47 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
         </div>
         <div className="recipe-directions">{directions}</div>
       </div>
+
       <div className="two-col-right"></div>
     </div>
   );
 }
 
 function slugify(title: string) {
-  return title.split(' ').map(word => word.charAt(0).toLowerCase() + word.slice(1)).join('-');
+  return title.split(' ')
+  .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+  .join('-');
 }
 
 /*function unslugify(title: string) {
-  return title.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return title.split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
 }*/
 
 export async function getStaticPaths() {
   const response = await axios.get(`${endpoint}/recipe/titles`);
-  const paths = response.data.map((recipe: {title: string}) => ({params: {title: slugify(recipe.title)}}));
-  return {paths, fallback: false};
+
+  const paths = response.data.map((recipe: {title: string}) => ({
+    params: {
+      title: slugify(recipe.title)
+    }
+  }));
+
+  return {
+    paths,
+    fallback: false
+  };
 }
 
 export async function getStaticProps({ params }: {params: {title: string}}) {
   const response = await axios.get(`${endpoint}/recipe/${params.title}`);
-  return {props: {recipe: response.data}};
+
+  return {
+    props: {
+      recipe: response.data
+    }
+  };
 }
 
 // TO DO: move types to one location

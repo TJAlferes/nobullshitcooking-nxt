@@ -3,7 +3,7 @@ import Link  from 'next/link';
 
 import { LoaderSpinner } from '../../../../components';
 import { endpoint }      from '../../../../utils/api';
-import type { Recipe }  from '../../../../types';
+import type { Recipe }   from '../../../../types';
 
 export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
@@ -25,23 +25,48 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
     //cooking_image
   } = recipe;
 
-  return !recipe ? <LoaderSpinner /> : (
+  if (!recipe) return <LoaderSpinner />;
+  return (
     <div className="two-col">
       <div className="two-col-left recipe">
         <h1>{title}</h1>
+
         <p className="feedback"></p>
+
         <div className="image">
           <img src="/images/dev/sushi-280-172.jpg" />
           {/*recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>*/}
         </div>
-        <div className="author"><b>Author:</b>{' '}{author === "Unknown" ? "Unknown" : <Link href={`/profile/${author}`}>{author}</Link>}</div>
-        <div className="description"><b>Author's note:</b>{' '}<em>{description}</em></div>
-        <div className="cuisine"><b>Cuisine:</b>{' '}<span>{cuisine_name}</span></div>
-        <div className="type"><b>Recipe type:</b>{' '}<span>{recipe_type_name}</span></div>
+
+        <div className="author">
+          <b>Author:</b>
+          {' '}
+          {
+            author === "Unknown"
+            ? "Unknown"
+            : <Link href={`/profile/${author}`}>{author}</Link>
+          }
+        </div>
+
+        <div className="description">
+          <b>Author's note:</b>{' '}<em>{description}</em>
+        </div>
+
+        <div className="cuisine">
+          <b>Cuisine:</b>{' '}<span>{cuisine_name}</span>
+        </div>
+
+        <div className="type">
+          <b>Recipe type:</b>{' '}<span>{recipe_type_name}</span>
+        </div>
+
         <h2>Required Methods</h2>
         <div className="methods">
-          {required_methods?.map(m => <div className="method" key={m.method_name}>{m.method_name}</div>)}
+          {required_methods?.map(m => (
+            <div className="method" key={m.method_name}>{m.method_name}</div>
+          ))}
         </div>
+
         <h2>Required Equipment</h2>
         <div className="equipment-image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -54,6 +79,7 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
             </div>
           ))}
         </div>
+
         <h2>Required Ingredients</h2>
         <div className="ingredients-image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -66,6 +92,7 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
             </div>
           ))}
         </div>
+
         <h2>Required Subrecipes</h2>
         <div className="subrecipes">
           {required_subrecipes?.map(s => (
@@ -74,6 +101,7 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
             </div>
           ))}
         </div>
+
         <h2>Directions</h2>
         <div className="cooking-image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -81,12 +109,13 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
         </div>
         <div className="recipe-directions">{directions}</div>
       </div>
+
       <div className="two-col-right"></div>
     </div>
   );
 }
 
-export async function getServerSideProps({ params }: {params: {username: string; title: string}}) {
+export async function getServerSideProps({ params }: ServerSideProps) {
   const response = await axios.post(
     `${endpoint}/user/recipe/private/one`,
     {username: params.username, title: params.title},
@@ -94,8 +123,25 @@ export async function getServerSideProps({ params }: {params: {username: string;
   );  // private user recipe
 
   if (response.status === 401) {
-    return {props: {}, redirect: {permanent: false, destination: "/login"}};
+    return {
+      props: {},
+      redirect: {
+        permanent: false,
+        destination: "/login"
+      }
+    };
   }
 
-  return {props: {recipe: response.data}};
+  return {
+    props: {
+      recipe: response.data
+    }
+  };
 }
+
+type ServerSideProps = {
+  params: {
+    username: string;
+    title:    string;
+  };
+};

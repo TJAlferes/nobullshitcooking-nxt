@@ -36,9 +36,9 @@ function useSearch() {
   }, [searchParams]);
 
   const search = (searchIndexChanged?: boolean, term?: string) => {
-    if (searchIndexChanged)     delete params.filters;
-    if (term)                   params.term = term;
-    if (!params.current_page)    params.current_page = "1";
+    if (searchIndexChanged)       delete params.filters;
+    if (term)                     params.term             = term;
+    if (!params.current_page)     params.current_page     = "1";
     if (!params.results_per_page) params.results_per_page = "20";
     dispatch(setSuggestions([]));
     dispatch(getResults(qs.stringify(params), router));
@@ -62,7 +62,11 @@ function useSearch() {
     search();
   };
 
-  const setPreFilters = (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => {
+  const setPreFilters = (
+    searchIndex:  SearchIndex,
+    filterName:   string,
+    filterValues: string[]
+  ) => {
     dispatch(setTerm(""));
     delete params.term;
     dispatch(setIndex(searchIndex));
