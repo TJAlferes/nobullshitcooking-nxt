@@ -9,6 +9,6 @@ export type SaveRecipe = {
 };
 
 export type UnsaveRecipe = {
-  type:     typeof actionTypes.UNSAVE_RECIPE;
+  type:      typeof actionTypes.UNSAVE_RECIPE;
   recipe_id: string;
 };

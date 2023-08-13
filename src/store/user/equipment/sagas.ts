@@ -4,7 +4,12 @@ import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 import { endpoint }                                                       from '../../../utils/api';
 import { getMyEquipmentSaga }                                             from '../../data/sagas';
 import { userMessage, userMessageClear }                                  from '../actions';
-import { actionTypes, CreateEquipment, UpdateEquipment, DeleteEquipment } from './types';
+import {
+  actionTypes,
+  CreateEquipment,
+  UpdateEquipment,
+  DeleteEquipment
+} from './types';
 
 const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
@@ -17,22 +22,55 @@ export function* watchEquipment() {
 }
 
 export function* createEquipmentSaga(action: CreateEquipment) {
-  let { equipmentTypeId, name, description, image, fullImage, tinyImage } = action.equipmentInfo;
+  let {
+    equipment_type_id,
+    equipment_name,
+    description,
+    image,
+    fullImage,
+    tinyImage
+  } = action.equipmentInfo;
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'equipment'}, {withCredentials: true});
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'equipment'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        fullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+      
+      yield call(
+        [axios, axios.put],
+        tinySignature,
+        tinyImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       image = fullName;
     }
     else image = 'nobsc-equipment-default';
 
-    const { data: { message } } =
-      yield call([axios, axios.post], `${endpoint}/user/equipment/create`, {equipmentInfo: {equipmentTypeId, name, description, image}}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/equipment/create`,
+      {
+        equipmentInfo: {
+          equipment_type_id,
+          equipment_name,
+          description,
+          image
+        }
+      },
+      {withCredentials: true}
+    );
 
     yield put(userMessage(message));
     yield call(getMyEquipmentSaga);
@@ -45,22 +83,59 @@ export function* createEquipmentSaga(action: CreateEquipment) {
 }
 
 export function* updateEquipmentSaga(action: UpdateEquipment) {
-  let { id, equipmentTypeId, name, description, prevImage, image, fullImage, tinyImage } = action.equipmentInfo;
+  let {
+    equipment_id,
+    equipment_type_id,
+    equipment_name,
+    description,
+    prevImage,
+    image,
+    fullImage,
+    tinyImage
+  } = action.equipmentInfo;
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'equipment'}, {withCredentials: true});
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'equipment'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, fullImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, tinyImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        fullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+      
+      yield call(
+        [axios, axios.put],
+        tinySignature,
+        tinyImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       image = fullName;
     }
     else image = prevImage;
 
-    const { data: { message } } =
-      yield call([axios, axios.put], `${endpoint}/user/equipment/update`, {equipmentInfo: {id, equipmentTypeId, name, description, prevImage, image}}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.put],
+      `${endpoint}/user/equipment/update`,
+      {
+        equipmentInfo: {
+          equipment_id,
+          equipment_type_id,
+          equipment_name,
+          description,
+          prevImage,
+          image
+        }
+      },
+      {withCredentials: true}
+    );
 
     yield put(userMessage(message));
     yield call(getMyEquipmentSaga);
@@ -72,9 +147,16 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
   yield put(userMessageClear());
 }
 
-export function* deleteEquipmentSaga(action: DeleteEquipment) {
+export function* deleteEquipmentSaga({ equipment_id }: DeleteEquipment) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/equipment/delete`, {withCredentials: true, data: {id: action.id}});
+    const { data: { message } } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/equipment/delete`,
+      {
+        withCredentials: true,
+        data: {equipment_id}
+      }
+    );
 
     yield put(userMessage(message));
     yield call(getMyEquipmentSaga);

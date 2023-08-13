@@ -85,7 +85,12 @@ export function* deleteFriendshipSaga({ friend }: DeleteFriendship) {
 
 export function* blockUserSaga({ friend }: BlockUser) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/friendship/block`, {friend}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/friendship/block`,
+      {friend},
+      {withCredentials: true}
+    );
 
     yield put(userMessage(message));
     yield call(getMyFriendshipsSaga);
@@ -100,7 +105,14 @@ export function* blockUserSaga({ friend }: BlockUser) {
 
 export function* unblockUserSaga({ friend }: UnblockUser) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/friendship/unblock`, {withCredentials: true, data: {friend}});
+    const { data: { message } } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/friendship/unblock`,
+      {
+        withCredentials: true,
+        data: {friend}
+      }
+    );
 
     yield put(userMessage(message));
     yield call(getMyFriendshipsSaga);

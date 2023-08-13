@@ -28,14 +28,22 @@ export function* getInitialDataSaga() {
 
 export function* getInitialUserDataSaga() {
   try {
-    const { data } = yield call([axios, axios.post], `${endpoint}/user/data-init`, {}, {withCredentials: true});
+    const { data } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/data-init`,
+      {},
+      {withCredentials: true}
+    );
+
     yield put(getInitialUserData(data));
   } catch (err: any) {
     if (err.response) {
       // Server responded with a status code outside of 2xx
       console.log(err.response.status, err.response.data, err.response.headers);
     } else if (err.request) {
-      // No response was received -- `err.request` is: an instance of XMLHttpRequest in the browser, an instance of http.ClientRequest in node.js
+      // No response was received -- `err.request` is:
+      // an instance of XMLHttpRequest in the browser,
+      // an instance of http.ClientRequest in node.js
       console.log(err.request);
     } else {
       // Something happened in setting up the request that triggered an Error
@@ -70,6 +78,7 @@ function makeDataSaga(path: string, key: keyof InitialData) {
   return function* () {
     try {
       const { data } = yield call([axios, axios.get], `${endpoint}${path}`);
+
       yield put(getData(key, data));
     } catch (err) {
       //
@@ -80,7 +89,13 @@ function makeDataSaga(path: string, key: keyof InitialData) {
 function makeUserDataSaga(path: string, key: keyof InitialUserData) {
   return function* () {
     try {
-      const { data } = yield call([axios, axios.post], `${endpoint}${path}`, {}, {withCredentials: true});
+      const { data } = yield call(
+        [axios, axios.post],
+        `${endpoint}${path}`,
+        {},
+        {withCredentials: true}
+      );
+
       yield put(getUserData(key, data));
     } catch (err) {
       //

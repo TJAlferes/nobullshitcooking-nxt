@@ -17,7 +17,12 @@ export function* watchFavorite() {
 
 export function* favoriteRecipeSaga({ recipe_id }: FavoriteRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/favorite-recipe/create`, {recipe_id}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/favorite-recipe/create`,
+      {recipe_id},
+      {withCredentials: true}
+    );
 
     yield put(userMessage(message));
     yield call(getMyFavoriteRecipesSaga);
@@ -31,7 +36,14 @@ export function* favoriteRecipeSaga({ recipe_id }: FavoriteRecipe) {
 
 export function* unfavoriteRecipeSaga({ recipe_id }: UnfavoriteRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/favorite-recipe/delete`, {withCredentials: true, data: {recipe_id}});
+    const { data: { message } } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/favorite-recipe/delete`,
+      {
+        withCredentials: true,
+        data: {recipe_id}
+      }
+    );
 
     yield put(userMessage(message));
     yield call(getMyFavoriteRecipesSaga);

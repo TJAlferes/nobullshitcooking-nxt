@@ -62,12 +62,40 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
-      const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe'}, {withCredentials: true});
+      const {
+        data: {
+          fullName,
+          fullSignature,
+          thumbSignature,
+          tinySignature
+        }
+      } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe'},
+        {withCredentials: true}
+      );
       
-      yield call([axios, axios.put], fullSignature,  recipeFullImage,  {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature,  recipeTinyImage,  {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        recipeFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
+      yield call(
+        [axios, axios.put],
+        thumbSignature,
+        recipeThumbImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
+      yield call(
+        [axios, axios.put],
+        tinySignature,
+        recipeTinyImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       recipeImage = fullName;
     }
@@ -75,10 +103,19 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
 
     if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.put], `${endpoint}/user/signed-url`, {subBucket: 'recipe-equipment'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.put],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-equipment'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        equipmentFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       equipmentImage = fullName;
     }
@@ -86,10 +123,19 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
 
     if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe-ingredients'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-ingredients'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        ingredientsFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       ingredientsImage = fullName;
     }
@@ -97,10 +143,19 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
 
     if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe-cooking'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-cooking'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        cookingFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       cookingImage = fullName;
     }
@@ -142,8 +197,14 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
 export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
   try {
-    const { data: { message } } =
-      yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {recipe_id}});
+    const { data: { message } } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/recipe/delete/private`,
+      {
+        withCredentials: true,
+        data: {recipe_id}
+      }
+    );
 
     yield put(userMessage(message));
     yield call(getMyPrivateRecipesSaga);
@@ -156,8 +217,14 @@ export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
 
 export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
   try {
-    const { data: { message } } =
-      yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {recipe_id}});
+    const { data: { message } } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/recipe/disown/public`,
+      {
+        withCredentials: true,
+        data: {recipe_id}
+      }
+    );
       
     yield put(userMessage(message));
     yield call(getMyPublicRecipesSaga);
@@ -199,12 +266,41 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
 
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
-      const { data: { fullName, fullSignature, thumbSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe'}, {withCredentials: true});
+      const {
+        data: {
+          fullName,
+          fullSignature,
+          thumbSignature,
+          tinySignature
+        }
+      } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature,  recipeFullImage,  {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], thumbSignature, recipeThumbImage, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature,  recipeTinyImage,  {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        recipeFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
+      yield call(
+        [axios, axios.put],
+        thumbSignature,
+        recipeThumbImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
+      yield call(
+        [axios, axios.put],
+        tinySignature,
+        recipeTinyImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
 
       recipeImage = fullName;
     }
@@ -212,10 +308,19 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
 
 
     if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe-equipment'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-equipment'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, equipmentFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        equipmentFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       equipmentImage = fullName;
     }
@@ -223,10 +328,19 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
 
 
     if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe-ingredients'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-ingredients'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, ingredientsFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        ingredientsFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       ingredientsImage = fullName;
     }
@@ -234,10 +348,19 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
 
 
     if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'recipe-cooking'}, {withCredentials: true});
+      const { data: { fullName, fullSignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'recipe-cooking'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, cookingFullImage, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        cookingFullImage,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       cookingImage = fullName;
     }

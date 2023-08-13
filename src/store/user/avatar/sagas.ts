@@ -16,17 +16,37 @@ export function* submitAvatarSaga({ full_avatar, tiny_avatar }: SubmitAvatar) {
     let avatarUrl;
 
     if (full_avatar && tiny_avatar) {
-      const { data: { fullName, fullSignature, tinySignature } } =
-        yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'avatar'}, {withCredentials: true});
+      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/signed-url`,
+        {subBucket: 'avatar'},
+        {withCredentials: true}
+      );
 
-      yield call([axios, axios.put], fullSignature, full_avatar, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, tiny_avatar, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call(
+        [axios, axios.put],
+        fullSignature,
+        full_avatar,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
+
+      yield call(
+        [axios, axios.put],
+        tinySignature,
+        tiny_avatar,
+        {headers: {'Content-Type': 'image/jpeg'}}
+      );
 
       avatarUrl = fullName;
     }
     else avatarUrl = "nobsc-user-default";
 
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/set-avatar`, {avatar: avatarUrl}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/auth/set-avatar`,
+      {avatar: avatarUrl},
+      {withCredentials: true}
+    );
 
     yield put(userMessage(message));
 

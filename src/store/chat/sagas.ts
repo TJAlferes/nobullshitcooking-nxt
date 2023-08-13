@@ -19,7 +19,7 @@ import {
   receivedPrivateMessage,
   failedPrivateMessage
 } from './actions';
-import { actionTypes as chatActionTypes, IMessage, JoinRoom, SendMessage, SendPrivateMessage } from './types';
+import { actionTypes as chatActionTypes, Message, JoinRoom, SendMessage, SendPrivateMessage } from './types';
 
 const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(`${endpoint}`, {autoConnect: false, withCredentials: true});
 
@@ -85,27 +85,27 @@ export function* updateOnlineSaga(status: string) {  // TO DO: give this an acti
 }
 
 interface IClientToServerEvents {
-  GetOnlineFriends():                           void;
-  GetUsersInRoom(room: string):                 void;
-  JoinRoom(room: string):                       void;
-  RejoinRoom(room: string):                     void;
-  SendMessage(text: string):                    void;
-  SendPrivateMessage(text: string, to: string): void;
+  GetOnlineFriends:   () =>                         void;
+  GetUsersInRoom:     (room: string) =>             void;
+  JoinRoom:           (room: string) =>             void;
+  RejoinRoom:         (room: string) =>             void;
+  SendMessage:        (text: string) =>             void;
+  SendPrivateMessage: (text: string, to: string) => void;
   //disconnecting
 }
 
 // TO DO: question everything: do you need a saga? do you need the event/state in redux? do you need the event/state at all?
 interface IServerToClientEvents {
-  OnlineFriends(friends: string[]):                    void;
-  FriendCameOnline(friend: string):                    void;
-  FriendWentOffline(friend: string):                   void;
-  UsersInRoom(users: string[], room: string):          void;
-  UsersInRoomRefetched(users: string[], room: string): void;
-  UserJoinedRoom(user: string):                        void;
-  UserLeftRoom(user: string):                          void;
-  Message(message: IMessage):                          void;
-  PrivateMessage(message: IMessage):                   void;
-  FailedPrivateMessage(feedback: string):              void;
+  OnlineFriends:        (friends: string[]) =>             void;
+  FriendCameOnline:     (friend: string) =>                void;
+  FriendWentOffline:    (friend: string) =>                void;
+  UsersInRoom:          (users: string[], room: string) => void;
+  UsersInRoomRefetched: (users: string[], room: string) => void;
+  UserJoinedRoom:       (user: string) =>                  void;
+  UserLeftRoom:         (user: string) =>                  void;
+  Message:              (message: Message) =>              void;
+  PrivateMessage:       (message: Message) =>              void;
+  FailedPrivateMessage: (feedback: string) =>              void;
 }
 
 const { LOGOUT } = authActionTypes;

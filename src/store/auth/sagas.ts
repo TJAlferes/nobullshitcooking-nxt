@@ -22,7 +22,12 @@ export function* watchAuth() {
 export function* userRegisterSaga(action: Register) {
   try {
     const { email, password, username, router } = action;
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/register`, {userInfo: {email, password, username}});
+
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/auth/register`,
+      {userInfo: {email, password, username}}
+    );
 
     if (message === 'User account created.') {
       yield delay(2000);
@@ -43,7 +48,12 @@ export function* userRegisterSaga(action: Register) {
 export function* userVerifySaga(action: Verify) {
   try {
     const { email, password, confirmation_code, router } = action;
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/verify`, {userInfo: {email, password, confirmation_code}});
+
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/auth/verify`,
+      {userInfo: {email, password, confirmation_code}}
+    );
     
     if (message === "User account verified.") {
       yield delay(2000);
@@ -64,8 +74,13 @@ export function* userVerifySaga(action: Verify) {
 export function* userLoginSaga(action: Login) {
   try {
     const { email, password, router } = action;
-    const { data: { message, username } } =
-      yield call([axios, axios.post], `${endpoint}/user/auth/login`, {userInfo: {email, pass: password}}, {withCredentials: true});
+
+    const { data: { message, username } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/auth/login`,
+      {userInfo: {email, pass: password}},
+      {withCredentials: true}
+    );
 
     if (message === 'Signed in.') {
       yield put(authenticate(username));
@@ -83,7 +98,12 @@ export function* userLoginSaga(action: Login) {
 
 export function* userLogoutSaga(action: Logout) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/auth/logout`, {}, {withCredentials: true});
+    const { data: { message } } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/auth/logout`,
+      {},
+      {withCredentials: true}
+    );
 
     yield call(removeItem, 'appState');
     yield put(authMessage(message));
