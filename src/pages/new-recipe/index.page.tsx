@@ -475,7 +475,8 @@ export default function NewRecipe() {
     setLoading(true);
 
     if (editingId) {
-      const recipeUpdateInfo = {...recipeInfo, id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
+      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE RECIPE BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      const recipeUpdateInfo = {...recipeInfo, recipe_id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
       if      (ownership === "private") dispatch(updatePrivateRecipe(recipeUpdateInfo));
       else if (ownership === "public")  dispatch(updatePublicRecipe(recipeUpdateInfo));
     } else {

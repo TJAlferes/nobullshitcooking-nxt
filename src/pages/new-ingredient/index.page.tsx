@@ -13,20 +13,21 @@ import { getCroppedImage }                    from '../../utils/getCroppedImage'
 export default function NewIngredient() {
   const router = useRouter();
   const params = useSearchParams();
-  const id = params.get('id');
+  const ingredient_id = params.get('ingredient_id');
 
   const dispatch = useDispatch();
   //const ingredients =     useSelector(state => state.data.ingredients);
-  const ingredientTypes = useSelector(state => state.data.ingredientTypes);
-  const myIngredients =   useSelector(state => state.data.myIngredients);
-  const message =         useSelector(state => state.user.message);
+  const ingredient_types = useSelector(state => state.data.ingredient_types);
+  const my_ingredients =   useSelector(state => state.data.my_ingredients);
+  const message =          useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,   setEditingId ] =   useState<number|null>(null);
-  const [ typeId,      setTypeId ] =      useState(0);
-  const [ name,        setName ] =        useState("");
+  const ingredient_id                               = params.get('ingredient_id');
+  const [ editing_id,         setEditingId ]        = useState<string|null>(null);
+  const [ ingredient_type_id, setIngredientTypeId ] = useState(0);
+  const [ ingredient_name,    setIngredientName ]   = useState("");
   const [ description, setDescription ] = useState("");
   const [ prevImage,   setPrevImage ] =   useState("nobsc-ingredient-default");
   const [ image,       setImage ] =       useState<string | ArrayBuffer | null>(null);
@@ -43,30 +44,30 @@ export default function NewIngredient() {
 
   useEffect(() => {
     const getExistingIngredientToEdit = () => {
-      if (!id) {
+      if (!ingredient_id) {
         router.push('/dashboard');
         return;
       }
 
       setLoading(true);
       window.scrollTo(0, 0);
-      const [ prev ] = myIngredients.filter(i => i.id === Number(id));
+      const [ prev ] = my_ingredients.filter(i => i.ingredient_id === ingredient_id);
       if (!prev) {
         router.push('/dashboard');
         setLoading(false);
         return;
       }
 
-      setEditingId(prev.id);
-      setTypeId(prev.ingredient_type_id);
-      setName(prev.name);
+      setEditingId(prev.ingredient_id);
+      setIngredientTypeId(prev.ingredient_type_id);
+      setIngredientName(prev.ingredient_name);
       setDescription(prev.description);
-      setPrevImage(prev.image);
+      setPrevImage(prev.image_url);
       
       setLoading(false);
     };
 
-    if (id) getExistingIngredientToEdit();
+    if (ingredient_id) getExistingIngredientToEdit();
   }, []);
 
   useEffect(() => {
@@ -122,7 +123,7 @@ export default function NewIngredient() {
   };
 
   const valid = () => {
-    const validTypeId = typeId !== 0;
+    const validTypeId = ingredient_type_id !== 0;
     if (!validTypeId) {
       window.scrollTo(0, 0);
       setFeedback("Select ingredient type.");
@@ -130,7 +131,7 @@ export default function NewIngredient() {
       return false;
     }
 
-    const validName = name.trim() !== "";
+    const validName = ingredient_name.trim() !== "";
     if (!validName) {
       window.scrollTo(0, 0);
       setFeedback("Check name.");
@@ -153,9 +154,10 @@ export default function NewIngredient() {
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
-    const ingredientInfo = {ingredientTypeId: typeId, name, description, image, fullImage, tinyImage};
-    if (editingId) {
-      const ingredientUpdateInfo = {id: editingId, prevImage, ...ingredientInfo};
+    const ingredientInfo = {ingredient_type_id, ingredient_name, description, image, fullImage, tinyImage};
+    if (editing_id) {
+      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE INGREDIENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      const ingredientUpdateInfo = {ingredient_id: editing_id, prevImage, ...ingredientInfo};
       dispatch(updateIngredient(ingredientUpdateInfo));
     } else {
       dispatch(createIngredient(ingredientInfo));

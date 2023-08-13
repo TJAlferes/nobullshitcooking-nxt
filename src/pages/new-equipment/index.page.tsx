@@ -13,25 +13,25 @@ import { getCroppedImage }                  from '../../utils/getCroppedImage';
 export default function NewEquipment() {
   const router = useRouter();
   const params = useSearchParams();
-  const id = params.get('id');
+  const equipment_id = params.get('equipment_id');
 
   const dispatch = useDispatch();
   //const equipment =      useSelector(state => state.data.equipment);
-  const equipmentTypes = useSelector(state => state.data.equipmentTypes);
-  const myEquipment =    useSelector(state => state.data.myEquipment);
-  const message =        useSelector(state => state.user.message);
+  const equipment_types = useSelector(state => state.data.equipment_types);
+  const my_equipment =    useSelector(state => state.data.my_equipment);
+  const message =         useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const [ editingId,   setEditingId ] =   useState<number | null>(null);  // is this even needed?
-  const [ typeId,      setTypeId ] =      useState<number>(0);  // null?
-  const [ name,        setName ] =        useState("");
-  const [ description, setDescription ] = useState("");
-  const [ prevImage,   setPrevImage ] =   useState("nobsc-equipment-default");
-  const [ image,       setImage ] =       useState<string | ArrayBuffer | null>(null);
-  const [ fullImage,   setFullImage ] =   useState<File | null>(null);
-  const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
+  const [ editingId,   setEditingId ] =             useState<string | null>(null);  // is this even needed?
+  const [ equipment_type_id, setEquipmentTypeId ] = useState<number>(0);  // null?
+  const [ equipment_name,    setEquipmentName ]   = useState("");
+  const [ description, setDescription ] =           useState("");
+  const [ prevImage,   setPrevImage ] =             useState("nobsc-equipment-default");
+  const [ image,       setImage ] =                 useState<string | ArrayBuffer | null>(null);
+  const [ fullImage,   setFullImage ] =             useState<File | null>(null);
+  const [ tinyImage,   setTinyImage ] =             useState<File | null>(null);
 
   const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
   const [ fullCrop, setFullCrop ] = useState("");
@@ -43,30 +43,30 @@ export default function NewEquipment() {
 
   useEffect(() => {
     const getExistingEquipmentToEdit = () => {
-      if (!id) {
+      if (!equipment_id) {
         router.push('/dashboard');
         return;
       }
       
       setLoading(true);
       window.scrollTo(0, 0);
-      const [ prev ] = myEquipment.filter(e => e.id === Number(id));
+      const [ prev ] = my_equipment.filter(e => e.equipment_id === equipment_id);
       if (!prev) {
         router.push('/dashboard');
         setLoading(false);
         return;
       }
       
-      setEditingId(prev.id);  // is this even needed?
-      setTypeId(prev.equipment_type_id);
-      setName(prev.name);
+      setEditingId(prev.equipment_id);  // is this even needed?
+      setEquipmentTypeId(prev.equipment_type_id);
+      setEquipmentName(prev.equipment_name);
       setDescription(prev.description);
-      setPrevImage(prev.image);
+      setPrevImage(prev.image_url);
 
       setLoading(false);
     };
 
-    if (id) getExistingEquipmentToEdit();
+    if (equipment_id) getExistingEquipmentToEdit();
   }, []);
 
   useEffect(() => {
@@ -86,8 +86,8 @@ export default function NewEquipment() {
     };
   }, [message]);
 
-  const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
+  const changeType =        (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +122,7 @@ export default function NewEquipment() {
   };
 
   const valid = () => {
-    const validTypeId = typeId !== 0;
+    const validTypeId = equipment_type_id !== 0;
     if (!validTypeId) {
       window.scrollTo(0, 0);
       setFeedback("Select equipment type.");
@@ -130,7 +130,7 @@ export default function NewEquipment() {
       return false;
     }
 
-    const validName = name.trim() !== "";
+    const validName = equipment_name.trim() !== "";
     if (!validName) {
       window.scrollTo(0, 0);
       setFeedback("Check your name.");
@@ -153,9 +153,10 @@ export default function NewEquipment() {
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
-    const equipmentInfo = {equipmentTypeId: typeId, name, description, image, fullImage, tinyImage};
+    const equipmentInfo = {equipment_type_id, equipment_name, description, image, fullImage, tinyImage};
     if (editingId) {
-      const equipmentUpdateInfo = {id: editingId, prevImage, ...equipmentInfo};
+      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE EQUIPMENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      const equipmentUpdateInfo = {equipment_id: editingId, prevImage, ...equipmentInfo};
       dispatch(updateEquipment(equipmentUpdateInfo));
     } else {
       dispatch(createEquipment(equipmentInfo));
@@ -169,13 +170,15 @@ export default function NewEquipment() {
       <p className="feedback">{feedback}</p>
 
       <h2>Type of Equipment</h2>
-      <select name="equipmentType" onChange={changeType} required value={typeId}>
+      <select name="equipmentType" onChange={changeType} required value={equipment_type_id}>
         <option value=""></option>
-        {equipmentTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
+        {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
+          <option key={equipment_type_id} value={equipment_type_id}>{equipment_type_name}</option>
+        ))}
       </select>
 
       <h2>Name</h2>
-      <input className="name" onChange={changeName} type="text" value={name} />
+      <input className="name" onChange={changeName} type="text" value={equipment_name} />
 
       <h2>Description</h2>
       <textarea className="description" onChange={changeDescription} value={description} />
