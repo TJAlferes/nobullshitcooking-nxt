@@ -6,7 +6,7 @@ import { useDispatch }                from 'react-redux';
 
 import { LoaderSpinner }                              from '../../components';
 import { useTypedSelector as useSelector }            from '../../store';
-import type { IWorkRecipe }                           from '../../store/data/types';
+import type { WorkRecipe }                           from '../../store/data/types';
 import { requestFriendship as userRequestFriendship } from '../../store/user/friendship/actions';
 import { endpoint }                                   from '../../utils/api';
 
@@ -26,8 +26,8 @@ export default function Profile() {
   const [ loading,    setLoading ] =    useState(false);
   const [ tab,        setTab ] =        useState("public");
   const [ userAvatar, setUserAvatar ] = useState("nobsc-user-default");
-  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState<IWorkRecipe[]>([]);
-  const [ userPublicRecipes,   setUserPublicRecipes ] =   useState<IWorkRecipe[]>([]);
+  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState<WorkRecipe[]>([]);
+  const [ userPublicRecipes,   setUserPublicRecipes ] =   useState<WorkRecipe[]>([]);
 
   const url = "https://s3.amazonaws.com";
 
@@ -103,7 +103,7 @@ export default function Profile() {
       {tab === "favorite" && (
         userFavoriteRecipes.length
           ? (userFavoriteRecipes.map(r => (
-            <div className="item" key={r.id}>
+            <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.recipe_image !== "nobsc-recipe-default"
                   ? <img src={`${url}/nobsc-user-recipe/${r.recipe_image}-tiny`} />
@@ -111,7 +111,7 @@ export default function Profile() {
                 }
               </span>
               <span className="name">
-                <Link href={`/recipe/${r.id}`}>{r.title}</Link>
+                <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
               </span>
             </div>
           )))
@@ -122,7 +122,7 @@ export default function Profile() {
       {tab === "public" && (
         userPublicRecipes.length
           ? (userPublicRecipes.map(r => (
-            <div className="item" key={r.id}>
+            <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.recipe_image !== "nobsc-recipe-default"
                   ? <img src={`${url}/nobsc-user-recipe/${r.recipe_image}-tiny`} />
@@ -130,7 +130,7 @@ export default function Profile() {
                 }
               </span>
               <span className="name">
-                <Link href={`/recipe/${r.id}`}>{r.title}</Link>
+                <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
               </span>
               </div>
           )))

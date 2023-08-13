@@ -12,8 +12,8 @@ const {
 
 export const createPrivateRecipe = (recipeInfo: RecipeInfo) =>       ({type: CREATE_PRIVATE_RECIPE, recipeInfo});
 export const updatePrivateRecipe = (recipeInfo: RecipeUpdateInfo) => ({type: UPDATE_PRIVATE_RECIPE, recipeInfo});
-export const deletePrivateRecipe = (id: number) =>                   ({type: DELETE_PRIVATE_RECIPE, id});
+export const deletePrivateRecipe = (recipe_id: string) =>            ({type: DELETE_PRIVATE_RECIPE, recipe_id});
 
 export const createPublicRecipe = (recipeInfo: RecipeInfo) =>       ({type: CREATE_PUBLIC_RECIPE, recipeInfo});
 export const updatePublicRecipe = (recipeInfo: RecipeUpdateInfo) => ({type: UPDATE_PUBLIC_RECIPE, recipeInfo});
-export const disownPublicRecipe = (id: number) =>                   ({type: DISOWN_PUBLIC_RECIPE, id});
+export const disownPublicRecipe = (recipe_id: string) =>            ({type: DISOWN_PUBLIC_RECIPE, recipe_id});

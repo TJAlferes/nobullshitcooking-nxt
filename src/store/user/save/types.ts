@@ -4,11 +4,11 @@ export const actionTypes = {
 } as const;
 
 export type SaveRecipe = {
-  type:     typeof actionTypes.SAVE_RECIPE;
-  recipeId: number;
+  type:      typeof actionTypes.SAVE_RECIPE;
+  recipe_id: string;
 };
 
 export type UnsaveRecipe = {
   type:     typeof actionTypes.UNSAVE_RECIPE;
-  recipeId: number;
+  recipe_id: string;
 };

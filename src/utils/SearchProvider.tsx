@@ -27,8 +27,8 @@ type SearchProviderProps = {
 };
 
 function useSearch() {
-  const dispatch =     useDispatch();
-  const router =       useRouter();
+  const dispatch     = useDispatch();
+  const router       = useRouter();
   const searchParams = useSearchParams();
 
   const params = useMemo(() => {
@@ -38,8 +38,8 @@ function useSearch() {
   const search = (searchIndexChanged?: boolean, term?: string) => {
     if (searchIndexChanged)     delete params.filters;
     if (term)                   params.term = term;
-    if (!params.currentPage)    params.currentPage = "1";
-    if (!params.resultsPerPage) params.resultsPerPage = "20";
+    if (!params.current_page)    params.current_page = "1";
+    if (!params.results_per_page) params.results_per_page = "20";
     dispatch(setSuggestions([]));
     dispatch(getResults(qs.stringify(params), router));
   };
@@ -58,7 +58,7 @@ function useSearch() {
         };
       }
     }
-    params.currentPage = "1";
+    params.current_page = "1";
     search();
   };
 
@@ -73,19 +73,19 @@ function useSearch() {
 
   const clearFilters = (filterName: string) => {
     delete params['filters']?.[filterName];
-    params.currentPage = "1";
+    params.current_page = "1";
     search();
   };
 
   const changeResultsPerPage = (e: SyntheticEvent) => {
     const value = (e.target as HTMLInputElement).value;
-    params.currentPage = "1";
-    params.resultsPerPage = `${value}`;
+    params.current_page = "1";
+    params.results_per_page = `${value}`;
     search();
   };
 
   const goToPage = (page: number) => {
-    params.currentPage = `${page}`;
+    params.current_page = `${page}`;
     search();
   };
 
@@ -110,7 +110,7 @@ export type UseSearch = {
   clearFilters:         (filterName: string) =>                                                   void;
   changeResultsPerPage: (e: SyntheticEvent) =>                                                    void;
   goToPage:             (page: number) =>                                                         void;
-};
+};  // interface???
 
 //console.log("previousPathname: ", previousPathname);
 //console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);

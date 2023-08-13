@@ -15,9 +15,9 @@ export function* watchSave() {
   ]);
 }
 
-export function* saveRecipeSaga({ recipeId }: SaveRecipe) {
+export function* saveRecipeSaga({ recipe_id }: SaveRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/saved-recipe/create`, {recipeId}, {withCredentials: true});
+    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/saved-recipe/create`, {recipe_id}, {withCredentials: true});
 
     yield put(userMessage(message));
     yield call(getMySavedRecipesSaga);
@@ -29,9 +29,9 @@ export function* saveRecipeSaga({ recipeId }: SaveRecipe) {
   yield put(userMessageClear());
 }
 
-export function* unsaveRecipeSaga({ recipeId }: UnsaveRecipe) {
+export function* unsaveRecipeSaga({ recipe_id }: UnsaveRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/saved-recipe/delete`, {withCredentials: true, data: {recipeId}});
+    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/saved-recipe/delete`, {withCredentials: true, data: {recipe_id}});
 
     yield put(userMessage(message));
     yield call(getMySavedRecipesSaga);

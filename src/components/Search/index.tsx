@@ -8,7 +8,7 @@ import { getSuggestions, setSuggestions, setIndex, setTerm }                from
 import type { SearchIndex }                                                 from '../../store/search/types';
 import { SearchContext }                                                    from '../../utils/SearchProvider';
 
-export default function Search() {
+export function Search() {
   const searchDriver = useContext(SearchContext);
 
   const [ searchIndexChanged, setSearchIndexChanged ] = useState(false);  // useRef?

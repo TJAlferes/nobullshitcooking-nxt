@@ -9,7 +9,7 @@ import { favoriteRecipe }                  from '../../store/user/favorite/actio
 import { saveRecipe }                      from '../../store/user/save/actions';
 import { endpoint }                        from '../../utils/api';
 
-export default function Recipe({ recipe }: {recipe: IRecipe}) {
+export default function Recipe({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
   const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
@@ -170,7 +170,7 @@ export async function getStaticProps({ params }: {params: {title: string}}) {
 
 // TO DO: move types to one location
 
-export interface IRecipe {
+export interface Recipe {
   recipe_id:                number;
   recipe_type_id:    number;
   cuisine_id:        number;

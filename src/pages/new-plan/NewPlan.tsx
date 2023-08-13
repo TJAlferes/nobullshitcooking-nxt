@@ -7,7 +7,7 @@ import { v4 as uuidv4 }                                           from 'uuid';
 
 import { ExpandCollapse, LoaderButton } from '../../components';
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import type { IWorkRecipe } from '../../store/data/types';
+import type { WorkRecipe } from '../../store/data/types';
 import {
   addRecipeToDay,
   removeRecipeFromDay,
@@ -19,7 +19,7 @@ import {
   setPlanName,
   setPlanData
 } from '../../store/planner/actions';
-import type { IData, IRecipe }    from '../../store/planner/types';
+import type { Data, Recipe }    from '../../store/planner/types';
 import { createPlan, updatePlan } from '../../store/user/plan/actions';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
@@ -27,25 +27,25 @@ const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 export default function NewPlan() {
   const router = useRouter();
   const params = useSearchParams();
-  const id = params.get('id');
+  const plan_id = params.get('plan_id');
 
   const dispatch = useDispatch();
   const officialRecipes =   useSelector(state => state.data.recipes);
-  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
-  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
-  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
-  const myPlans =           useSelector(state => state.data.myPlans);
+  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
+  const my_saved_recipes =    useSelector(state => state.data.my_saved_recipes);
+  const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
+  const my_public_recipes =   useSelector(state => state.data.my_public_recipes);
+  const my_plans =           useSelector(state => state.data.my_plans);
   const expandedDay =       useSelector(state => state.planner.expandedDay);
   const editingId =         useSelector(state => state.planner.editingId);
   const planName =          useSelector(state => state.planner.planName);
   const planData =          useSelector(state => state.planner.planData);
   const message =           useSelector(state => state.user.message);
 
-  const [ feedback,    setFeedback ] =    useState("");
-  const [ loading,     setLoading ] =     useState(false);
+  const [ feedback,    setFeedback ]    = useState("");
+  const [ loading,     setLoading ]     = useState(false);
   const [ modalActive, setModalActive ] = useState(false);
-  const [ tab,         setTab ] =         useState("official");
+  const [ tab,         setTab ]         = useState("official");
 
   useEffect(() => {
     const getExistingPlanToEdit = () => {
@@ -425,29 +425,29 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
 
 interface ITabToList {
   [index: string]: any;
-  "official": IWorkRecipe[];
-  "private":  IWorkRecipe[];
-  "public":   IWorkRecipe[];
-  "favorite": IWorkRecipe[];
-  "saved":    IWorkRecipe[];
+  "official": WorkRecipe[];
+  "private":  WorkRecipe[];
+  "public":   WorkRecipe[];
+  "favorite": WorkRecipe[];
+  "saved":    WorkRecipe[];
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type MonthlyPlanProps = {
   expandedDay: number | null;
-  planData:    IData;
+  planData:    Data;
 };
 
 type MemoizedRecipesProps = {
   expandedDay: number | null;
-  recipes:     IWorkRecipe[];
+  recipes:     WorkRecipe[];
 };
 
 type DayProps = {
   day:         number;
   expandedDay: number | null;
-  recipes:     IRecipe[] | undefined;
+  recipes:     Recipe[] | undefined;
 };
 
 type RecipeProps = {
@@ -457,7 +457,7 @@ type RecipeProps = {
   index:       number;
   key:         string;
   listId:      number;
-  recipe:      IRecipe;
+  recipe:      Recipe;
 };
 
 type DragItem = {

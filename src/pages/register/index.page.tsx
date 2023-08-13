@@ -5,7 +5,7 @@ import { useDispatch }                from 'react-redux';
 
 import { LoaderButton }                    from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import { register, verify }        from '../../store/auth/actions';
+import { register, verify }                from '../../store/auth/actions';
 
 export default function Register() {
   const router =       useRouter();

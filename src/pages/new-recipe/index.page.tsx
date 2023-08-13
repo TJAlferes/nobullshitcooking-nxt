@@ -56,19 +56,19 @@ export default function NewRecipe() {
   const [ title,        setTitle ] =        useState("");
   const [ description,  setDescription ] =  useState("");
   const [ directions,   setDirections ] =   useState("");
-  const [ usedMethods,  setUsedMethods ] =  useState<IMethods>({
+  const [ usedMethods,  setUsedMethods ] =  useState<Methods>({
      1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
      7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
     13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
     19: false, 20: false, 21: false, 22: false, 23: false, 24: false
   });
-  const [ equipmentRows, setEquipmentRows ] =   useState<IEquipmentRow[]>([
-    {key: uuid(), amount: "", type: "", equipment_id: ""}
+  const [ equipmentRows, setEquipmentRows ] =   useState<EquipmentRow[]>([
+    {key: uuid(), amount: "", equipment_type_id: "", equipment_id: ""}
   ]);
-  const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: "", unit_id: "", type: "", ingredient_id: ""}
+  const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([
+    {key: uuid(), amount: "", unit_id: "", ingredient_type_id: "", ingredient_id: ""}
   ]);
-  const [ subrecipeRows, setSubrecipeRows ] =   useState<ISubrecipeRow[]>([]);
+  const [ subrecipeRows, setSubrecipeRows ] =   useState<SubrecipeRow[]>([]);
 
   const initialCrop: Crop = {unit: 'px', x: 25, y: 25, width: 50, height: 50};  // TO DO: change to NOBSC images ratio
 
@@ -141,44 +141,31 @@ export default function NewRecipe() {
       setTitle(title);
       setDescription(description);
       setDirections(directions);
+
       // double check this!!!
       const methodsToSet: number[] = [];
-      methods.length && methods.map(m => methodsToSet.push(m.method_id));
+      required_methods?.map(m => methodsToSet.push(m.method_id));
       setUsedMethods(prevState => {
         const nextState = {...prevState};
-        methodsToSet.map(method => {
-          nextState[method] = true;
+        methodsToSet.map(method_id => {
+          nextState[method_id] = true;
         });
         return nextState;
       });
+
       // TO DO: allow for optional amount and optional unit_id
-      setEquipmentRows(
-        equipment.map(({ amount, equipment_type_id, equipment_id }) => ({
-          key: uuid(),
-          amount,
-          equipment_type_id,
-          equipment_id
-        }))
-      );
-      setIngredientRows(
-        ingredients.map(({ amount, unit_id, ingredient_type_id, ingredient_id }) => ({
-          key: uuid(),
-          amount,
-          unit_id,
-          ingredient_type_id,
-          ingredient_id
-        }))
-      );
-      setSubrecipeRows(
-        subrecipes.map(({ amount, unit_id, recipe_type_id, cuisine_id, subrecipe_id }) => ({
-          key: uuid(),
-          amount,
-          unit_id,
-          recipe_type_id,
-          cuisine_id,
-          subrecipe_id
-        }))
-      );
+      setEquipmentRows(required_equipment.map(({ amount, equipment_type_id, equipment_id }) => ({
+        key: uuid(), amount, equipment_type_id, equipment_id
+      })));
+
+      setIngredientRows(required_ingredients.map(({ amount, unit_id, ingredient_type_id, ingredient_id }) => ({
+        key: uuid(), amount, unit_id, ingredient_type_id, ingredient_id
+      })));
+
+      setSubrecipeRows(required_subrecipes.map(({ amount, unit_id, recipe_type_id, cuisine_id, subrecipe_id }) => ({
+        key: uuid(), amount, unit_id, recipe_type_id, cuisine_id, subrecipe_id
+      })));
+      
       setRecipePrevImage(recipe_image);
       setEquipmentPrevImage(equipment_image);
       setIngredientsPrevImage(ingredients_image);
@@ -922,7 +909,7 @@ export type Methods = {
 };
 
 export type EquipmentRow = {
-  [index: string]:   any;
+  //[index: string]:   any;
   key:               string;
   amount:            string | number;
   equipment_type_id: string | number;  // (just a filter for nicer UX)
@@ -930,16 +917,16 @@ export type EquipmentRow = {
 };
 
 export type IngredientRow = {
-  [index: string]:    any;
+  //[index: string]:    any;
   key:                string;
   amount:             string | number;
-  measurementId:      string | number;
+  unit_id:            string | number;
   ingredient_type_id: string | number;  // (just a filter for nicer UX)
   ingredient_id:      string | number;
 };
 
 export type SubrecipeRow = {
-  [index: string]: any;
+  //[index: string]: any;
   key:             string;
   amount:          string | number;
   unit_id:         string | number;

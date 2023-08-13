@@ -9,7 +9,7 @@ import { toggleLeftNav }   from '../../store/menu/actions';
 import { dark, light }     from '../../store/theme/actions';
 import { LeftNav, Search } from '..';
 
-export default function Header() {
+export function Header() {
   const router = useRouter();
 
   const dispatch = useDispatch();

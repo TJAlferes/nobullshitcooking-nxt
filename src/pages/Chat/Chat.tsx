@@ -8,7 +8,7 @@ import {
   sendMessage,
   sendPrivateMessage
 } from '../../store/chat/actions';
-import type { IMessageWithClientTimestamp } from '../../store/chat/types';
+import type { MessageWithClientTimestamp } from '../../store/chat/types';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
@@ -295,7 +295,7 @@ export default function Chat() {
   );
 }
 
-function formattedMessage(authname: string, { kind, from, to, text }: IMessageWithClientTimestamp) {
+function formattedMessage(authname: string, { kind, from, to, text }: MessageWithClientTimestamp) {
   if (kind === "public") {
     if (from === "messengerstatus") return <span className="--admin">{text}</span>;                  // status
     if (from === authname)          return <><span className="--self">{from}:{' '}</span>{text}</>;  // sent

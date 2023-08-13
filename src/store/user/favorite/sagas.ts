@@ -15,9 +15,9 @@ export function* watchFavorite() {
   ]);
 }
 
-export function* favoriteRecipeSaga({ recipeId }: FavoriteRecipe) {
+export function* favoriteRecipeSaga({ recipe_id }: FavoriteRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/favorite-recipe/create`, {recipeId}, {withCredentials: true});
+    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/favorite-recipe/create`, {recipe_id}, {withCredentials: true});
 
     yield put(userMessage(message));
     yield call(getMyFavoriteRecipesSaga);
@@ -29,9 +29,9 @@ export function* favoriteRecipeSaga({ recipeId }: FavoriteRecipe) {
   yield put(userMessageClear());
 }
 
-export function* unfavoriteRecipeSaga({ recipeId }: UnfavoriteRecipe) {
+export function* unfavoriteRecipeSaga({ recipe_id }: UnfavoriteRecipe) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/favorite-recipe/delete`, {withCredentials: true, data: {recipeId}});
+    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/favorite-recipe/delete`, {withCredentials: true, data: {recipe_id}});
 
     yield put(userMessage(message));
     yield call(getMyFavoriteRecipesSaga);

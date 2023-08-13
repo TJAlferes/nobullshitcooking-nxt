@@ -1,4 +1,4 @@
-import type { IEquipmentRow, IIngredientRow, IMethods, ISubrecipeRow } from './index.page';
+import type { EquipmentRow, IngredientRow, Methods, SubrecipeRow } from './index.page';
 
 export function validRecipeInfo({
   ownership,
@@ -45,7 +45,7 @@ export function validRecipeInfo({
   let validEquipment = true;
   if (required_equipment.length) {
     required_equipment.map(r => {
-      if (r.amount === "" || r.id === "") validEquipment = false;
+      if (r.amount === "" || r.equipment_id === "") validEquipment = false;
     });
     if (!validEquipment) return feedback("Review required equipment.");
   }
@@ -53,7 +53,7 @@ export function validRecipeInfo({
   let validIngredients = true;
   if (required_ingredients.length) {
     required_ingredients.map(r => {
-      if (r.amount === "" || r.measurementId === "" || r.type === "" || r.id === "") validIngredients = false;
+      if (r.amount === "" || r.unit_id === "" || r.ingredient_type_id === "" || r.ingredient_id === "") validIngredients = false;
     });
     if (!validIngredients) return feedback("Review required ingredients.");
   }
@@ -61,7 +61,7 @@ export function validRecipeInfo({
   let validSubrecipes = true;
   if (required_subrecipes.length) {
     required_subrecipes.map(r => {
-      if (r.amount === "" || r.measurementId === "" || r.type === "" || r.cuisine === "" || r.id === "") validSubrecipes = false;
+      if (r.amount === "" || r.unit_id === "" || r.recipe_type_id === "" || r.cuisine_id === "" || r.subrecipe_id === "") validSubrecipes = false;
     });
     if (!validSubrecipes) return feedback("Review required subrecipes.");
   }
@@ -78,9 +78,9 @@ type RecipeInfo = {
   title:                string;
   description:          string;
   directions:           string;
-  required_methods:     IMethods;
-  required_equipment:   IEquipmentRow[];
-  required_ingredients: IIngredientRow[];
-  required_subrecipes:  ISubrecipeRow[];
+  required_methods:     Methods;
+  required_equipment:   EquipmentRow[];
+  required_ingredients: IngredientRow[];
+  required_subrecipes:  SubrecipeRow[];
   setFeedback:          (feedback: string) => void;
 };

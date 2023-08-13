@@ -1,6 +1,8 @@
 // IMPORTANT: these types must be identical with the ones from the api
 
-export interface IRecipe {
+// TO DO: move types to one location
+
+export type Recipe = {
   recipe_id:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
@@ -19,7 +21,7 @@ export interface IRecipe {
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
-}
+};
 
 type RequiredMethod = {
   method_name: string;

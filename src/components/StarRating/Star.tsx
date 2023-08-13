@@ -55,9 +55,9 @@ export function Star({ full, index, readOnly, setOverride, setRating }: Props) {
 }
 
 type Props = {
-  full:                              boolean;
-  index:                             number;
-  readOnly:                          boolean;
-  setOverride(index: number | null): void;  // change
-  setRating(index: number):          void;  // change
+  full:        boolean;
+  index:       number;
+  readOnly:    boolean;
+  setOverride: (index: number | null) => void;  // change
+  setRating:   (index: number) =>        void;  // change
 };

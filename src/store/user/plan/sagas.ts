@@ -16,9 +16,9 @@ export function* watchPlan() {
   ]);
 }
 
-export function* createPlanSaga(action: CreatePlan) {
+export function* createPlanSaga({ planInfo }: CreatePlan) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/plan/create`, {planInfo: action.planInfo}, {withCredentials: true});
+    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/plan/create`, {planInfo}, {withCredentials: true});
 
     yield put(userMessage(message));
     yield call(getMyPlansSaga);
@@ -30,9 +30,9 @@ export function* createPlanSaga(action: CreatePlan) {
   yield put(userMessageClear());
 }
 
-export function* updatePlanSaga(action: UpdatePlan) {
+export function* updatePlanSaga({ planInfo }: UpdatePlan) {
   try {
-    const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/plan/update`, {planInfo: action.planInfo}, {withCredentials: true});
+    const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/plan/update`, {planInfo}, {withCredentials: true});
 
     yield put(userMessage(message));
     yield call(getMyPlansSaga);
@@ -44,9 +44,9 @@ export function* updatePlanSaga(action: UpdatePlan) {
   yield put(userMessageClear());
 }
 
-export function* deletePlanSaga(action: DeletePlan) {
+export function* deletePlanSaga({ plan_id }: DeletePlan) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/plan/delete`, {withCredentials: true, data: {id: action.id}});
+    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/plan/delete`, {withCredentials: true, data: {plan_id}});
 
     yield put(userMessage(message));
     yield call(getMyPlansSaga);

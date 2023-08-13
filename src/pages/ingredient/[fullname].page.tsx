@@ -2,12 +2,12 @@ import axios from 'axios';
 
 import { LoaderSpinner }                   from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import type { IIngredient }                from '../../store/data/types';
+import type { Ingredient }                from '../../store/data/types';
 import { endpoint }                        from '../../utils/api';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function Ingredient({ ingredient }: {ingredient: IIngredient}) {
+export default function Ingredient({ ingredient }: {ingredient: Ingredient}) {
   const my_ingredients = useSelector(state => state.data.my_ingredients);
 
   const { ingredient_id, fullname, image_url, ingredient_type_name, description } = ingredient;

@@ -8,16 +8,16 @@ import { SearchContext }                   from '../../utils/SearchProvider';
 export const Pagination = memo(function Pagination() {
   const searchDriver = useContext(SearchContext);
 
-  const currentPage = searchDriver.params.currentPage;
-  const totalPages =  useSelector(state => state.search.totalPages);
+  const current_page = searchDriver.params.current_page;
+  const total_pages =  useSelector(state => state.search.total_pages);
 
-  if (!totalPages || Number(totalPages) <= 1) return null;
+  if (!total_pages || Number(total_pages) <= 1) return null;
 
-  const curr =  currentPage ? Number(currentPage) : 1;
+  const curr =  current_page ? Number(current_page) : 1;
   const first = 1;
   const prev =  curr - 1;
   const next =  curr + 1;
-  const last =  Number(totalPages);
+  const last =  Number(total_pages);
 
   return (
     <div className="pagination">

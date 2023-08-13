@@ -3,18 +3,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect }                  from 'react';
 
 import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { clickDay, load } from '../../store/plannerView/actions';
-import type { IRecipe }   from '../../store/plannerView/types';
+import { clickDay, load } from '../../store/plan/actions';
+import type { Recipe }   from '../../store/plan/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 export default function Plan() {
   const router = useRouter();
   const params = useSearchParams();
-  const id = Number(params.get('id'));
+  const plan_id = params.get('plan_id');
 
   const dispatch = useDispatch();
-  const myPlans =     useSelector(state => state.data.myPlans);
+  const my_plans =     useSelector(state => state.data.my_plans);
   const expandedDay = useSelector(state => state.plannerView.expandedDay);
   const planName =    useSelector(state => state.plannerView.planName);
   const planData =    useSelector(state => state.plannerView.planData);
@@ -22,11 +22,11 @@ export default function Plan() {
   useEffect(() => {
     const getPlan = () => {
       window.scrollTo(0, 0);
-      const [ prev ] = myPlans.filter(p => p.id === Number(id));
-      dispatch(load(prev.name, prev.data));
+      const [ prev ] = my_plans.filter(p => p.plan_id === plan_id);
+      dispatch(load(prev.plan_name, prev.plan_data));
     };
 
-    if (id) getPlan();
+    if (plan_id) getPlan();
     else router.push('/');
   }, []);
 
@@ -106,9 +106,9 @@ function Recipe({ recipe: { id, owner_id, title, recipe_image } }: RecipeProps) 
 
 type DayProps = {
   day:     number;
-  recipes: IRecipe[];
+  recipes: Recipe[];
 };
 
 type RecipeProps = {
-  recipe: IRecipe;
+  recipe: Recipe;
 };

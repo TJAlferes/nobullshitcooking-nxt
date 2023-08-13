@@ -11,16 +11,16 @@ export function* watchAvatar() {
   yield all([takeEvery(SUBMIT_AVATAR, submitAvatarSaga)]);
 }
 
-export function* submitAvatarSaga(action: SubmitAvatar) {
+export function* submitAvatarSaga({ full_avatar, tiny_avatar }: SubmitAvatar) {
   try {
     let avatarUrl;
 
-    if (action.fullAvatar && action.tinyAvatar) {
+    if (full_avatar && tiny_avatar) {
       const { data: { fullName, fullSignature, tinySignature } } =
         yield call([axios, axios.post], `${endpoint}/user/signed-url`, {subBucket: 'avatar'}, {withCredentials: true});
 
-      yield call([axios, axios.put], fullSignature, action.fullAvatar, {headers: {'Content-Type': 'image/jpeg'}});
-      yield call([axios, axios.put], tinySignature, action.tinyAvatar, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], fullSignature, full_avatar, {headers: {'Content-Type': 'image/jpeg'}});
+      yield call([axios, axios.put], tinySignature, tiny_avatar, {headers: {'Content-Type': 'image/jpeg'}});
 
       avatarUrl = fullName;
     }

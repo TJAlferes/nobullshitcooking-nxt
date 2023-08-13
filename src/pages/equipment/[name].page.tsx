@@ -2,12 +2,12 @@ import axios from 'axios';
 
 import { LoaderSpinner }                   from '../../components';
 import { useTypedSelector as useSelector } from '../../store';
-import type { IEquipment }                 from '../../store/data/types';
+import type { Equipment }                 from '../../store/data/types';
 import { endpoint }                        from '../../utils/api';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function Equipment({ equipment }: {equipment: IEquipment}) {
+export default function Equipment({ equipment }: {equipment: Equipment}) {
   const my_equipment = useSelector(state => state.data.my_equipment);
 
   const { equipment_id, equipment_name, image_url, equipment_type_name, description } = equipment;

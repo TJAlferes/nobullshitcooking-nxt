@@ -16,16 +16,16 @@ export type UpdatePlan = {
 
 export type DeletePlan = {
   type: typeof actionTypes.DELETE_PLAN;
-  id:   number;
+  plan_id:   string;
 };
 
 // TO DO: move shared types to one location
 
 export type PlanInfo = {
-  name: string;
-  data: string;
+  plan_name: string;
+  plan_data: string;  // TO DO: change/finish
 };
 
 export type PlanUpdateInfo = PlanInfo & {
-  id: number;
+  plan_id: string;
 };

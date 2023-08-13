@@ -3,9 +3,9 @@ import Link  from 'next/link';
 
 import { LoaderSpinner } from '../../../../components';
 import { endpoint }      from '../../../../utils/api';
-import type { IRecipe }  from '../../../../types';
+import type { Recipe }  from '../../../../types';
 
-export default function PrivateUserRecipe({ recipe }: {recipe: IRecipe}) {
+export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
     recipe_id,

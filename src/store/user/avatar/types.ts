@@ -4,6 +4,6 @@ export const actionTypes = {
 
 export type SubmitAvatar = {
   type:       typeof actionTypes.SUBMIT_AVATAR;
-  fullAvatar: File | null;  // rename to avatarFull ?
-  tinyAvatar: File | null;  // rename to avatarTiny ?
+  full_avatar: File | null;  // rename to avatarFull ?
+  tiny_avatar: File | null;  // rename to avatarTiny ?
 };

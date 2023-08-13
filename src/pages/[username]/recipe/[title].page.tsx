@@ -8,9 +8,9 @@ import { useTypedSelector as useSelector } from '../../../store';
 import { favoriteRecipe }                  from '../../../store/user/favorite/actions';
 import { saveRecipe }                      from '../../../store/user/save/actions';
 import { endpoint }                        from '../../../utils/api';
-import type { IRecipe }                    from '../../../types';
+import type { Recipe }                    from '../../../types';
 
-export default function UserRecipe({ recipe }: {recipe: IRecipe}) {
+export default function UserRecipe({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
   const my_private_recipes =  useSelector(state => state.data.my_private_recipes);

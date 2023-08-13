@@ -39,15 +39,15 @@ export function* watchRecipe() {
 export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRecipe)) {
   let {
     ownership,
-    recipeTypeId,
-    cuisineId,
+    recipe_type_id,
+    cuisine_id,
     title,
     description,
     directions,
-    methods,
-    equipment,
-    ingredients,
-    subrecipes,
+    required_methods,
+    required_equipment,
+    required_ingredients,
+    required_subrecipes,
     recipeImage,
     recipeFullImage,
     recipeThumbImage,
@@ -58,7 +58,7 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
     ingredientsFullImage,
     cookingImage,
     cookingFullImage
-  } = action.recipeInfo;
+  } = action.recipe_info;
 
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
@@ -113,15 +113,15 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
       {
         recipeInfo: {
           ownership,
-          recipeTypeId,
-          cuisineId,
+          recipe_type_id,
+          cuisine_id,
           title,
           description,
           directions,
-          methods,
-          equipment,
-          ingredients,
-          subrecipes,
+          required_methods,
+          required_equipment,
+          required_ingredients,
+          required_subrecipes,
           recipeImage,
           equipmentImage,
           ingredientsImage,
@@ -140,10 +140,10 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
   yield put(userMessageClear());
 }
 
-export function* deletePrivateRecipeSaga(action: DeletePrivateRecipe) {
+export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
   try {
     const { data: { message } } =
-      yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {id: action.id}});
+      yield call([axios, axios.delete], `${endpoint}/user/recipe/delete/private`, {withCredentials: true, data: {recipe_id}});
 
     yield put(userMessage(message));
     yield call(getMyPrivateRecipesSaga);
@@ -154,10 +154,10 @@ export function* deletePrivateRecipeSaga(action: DeletePrivateRecipe) {
   yield put(userMessageClear());
 }
 
-export function* disownPublicRecipeSaga(action: DisownPublicRecipe) {
+export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
   try {
     const { data: { message } } =
-      yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {id: action.id}});
+      yield call([axios, axios.delete], `${endpoint}/user/recipe/disown/public`, {withCredentials: true, data: {recipe_id}});
       
     yield put(userMessage(message));
     yield call(getMyPublicRecipesSaga);
@@ -170,17 +170,17 @@ export function* disownPublicRecipeSaga(action: DisownPublicRecipe) {
 
 export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRecipe)) {
   let {
-    id,
+    recipe_id,
     ownership,
-    recipeTypeId,
-    cuisineId,
+    recipe_type_id,
+    cuisine_id,
     title,
     description,
     directions,
-    methods,
-    equipment,
-    ingredients,
-    subrecipes,
+    required_methods,
+    required_equipment,
+    required_ingredients,
+    required_subrecipes,
     recipeImage,
     recipeFullImage,
     recipePrevImage,
@@ -195,7 +195,7 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
     cookingImage,
     cookingFullImage,
     cookingPrevImage
-  } = action.recipeInfo;
+  } = action.recipe_info;
 
   try {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
@@ -249,17 +249,17 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
       `${endpoint}/user/recipe/update`,
       {
         recipeInfo: {
-          id,
+          recipe_id,
           ownership,
-          recipeTypeId,
-          cuisineId,
+          recipe_type_id,
+          cuisine_id,
           title,
           description,
           directions,
-          methods,
-          equipment,
-          ingredients,
-          subrecipes,
+          required_methods,
+          required_equipment,
+          required_ingredients,
+          required_subrecipes,
           recipeImage,
           recipePrevImage,
           equipmentImage,
