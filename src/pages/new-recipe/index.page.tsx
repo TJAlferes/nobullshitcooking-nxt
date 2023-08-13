@@ -19,7 +19,7 @@ export default function NewRecipe() {
   const router =    useRouter();
   const params =    useSearchParams();
   const ownership = params.get('ownership');  // TO DO: triple test
-  const id =        Number(params.get('id'));
+  const recipe_id =        params.get('recipe_id');
   // TO DO: change
   /*if (!id || !ownership) {
     router.push('/dashboard');
@@ -28,23 +28,20 @@ export default function NewRecipe() {
 
   const dispatch = useDispatch();
 
-  const measurements =      useSelector(state => state.data.measurements);
-  
-  const equipment =         useSelector(state => state.data.equipment);
-  const myEquipment =       useSelector(state => state.data.myEquipment);
-
-  const ingredientTypes =   useSelector(state => state.data.ingredientTypes);
-  const ingredients =       useSelector(state => state.data.ingredients);
-  const myIngredients =     useSelector(state => state.data.myIngredients);
-
-  const recipeTypes =       useSelector(state => state.data.recipeTypes);
-  const cuisines =          useSelector(state => state.data.cuisines);
-  const methods =           useSelector(state => state.data.methods);
-  const recipes =           useSelector(state => state.data.recipes);
-  const myFavoriteRecipes = useSelector(state => state.data.myFavoriteRecipes);
-  const mySavedRecipes =    useSelector(state => state.data.mySavedRecipes);
-  const myPrivateRecipes =  useSelector(state => state.data.myPrivateRecipes);
-  const myPublicRecipes =   useSelector(state => state.data.myPublicRecipes);
+  const units =               useSelector(state => state.data.units);
+  const equipment =           useSelector(state => state.data.equipment);
+  const my_equipment =        useSelector(state => state.data.my_equipment);
+  const ingredient_types =    useSelector(state => state.data.ingredient_types);
+  const ingredients =         useSelector(state => state.data.ingredients);
+  const my_ingredients =      useSelector(state => state.data.my_ingredients);
+  const recipe_types =        useSelector(state => state.data.recipe_types);
+  const cuisines =            useSelector(state => state.data.cuisines);
+  const methods =             useSelector(state => state.data.methods);
+  const recipes =             useSelector(state => state.data.recipes);
+  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
+  const my_saved_recipes =    useSelector(state => state.data.my_saved_recipes);
+  const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
+  const my_public_recipes =   useSelector(state => state.data.my_public_recipes);
 
   const authname =          useSelector(state => state.auth.authname);
   const message =           useSelector(state => state.user.message);
@@ -54,8 +51,8 @@ export default function NewRecipe() {
 
   const [ editingId,    setEditingId ] =    useState<number|null>(null);
 
-  const [ recipeTypeId, setRecipeTypeId ] = useState<number>(0);
-  const [ cuisineId,    setCuisineId ] =    useState<number>(0);
+  const [ recipe_type_id, setRecipeTypeId ] = useState<number>(0);
+  const [ cuisine_id,    setCuisineId ] =    useState<number>(0);
   const [ title,        setTitle ] =        useState("");
   const [ description,  setDescription ] =  useState("");
   const [ directions,   setDirections ] =   useState("");
@@ -66,10 +63,10 @@ export default function NewRecipe() {
     19: false, 20: false, 21: false, 22: false, 23: false, 24: false
   });
   const [ equipmentRows, setEquipmentRows ] =   useState<IEquipmentRow[]>([
-    {key: uuid(), amount: "", type: "", id: ""}
+    {key: uuid(), amount: "", type: "", equipment_id: ""}
   ]);
   const [ ingredientRows, setIngredientRows ] = useState<IIngredientRow[]>([
-    {key: uuid(), amount: "", measurementId: "", type: "", id: ""}
+    {key: uuid(), amount: "", unit_id: "", type: "", ingredient_id: ""}
   ]);
   const [ subrecipeRows, setSubrecipeRows ] =   useState<ISubrecipeRow[]>([]);
 
@@ -111,13 +108,13 @@ export default function NewRecipe() {
     let mounted = true;
 
     async function getExistingRecipeToEdit() {
-      if (!id || !ownership) {
+      if (!recipe_id || !ownership) {
         router.push('/dashboard');
         return;
       }
       setLoading(true);
       window.scrollTo(0, 0);
-      const res = await axios.post(`${endpoint}/user/recipe/edit/${ownership}`, {id}, {withCredentials: true});
+      const res = await axios.post(`${endpoint}/user/recipe/edit/${ownership}`, {recipe_id}, {withCredentials: true});
       const recipe: IExistingRecipeToEdit = res.data.recipe;
       if (!recipe) {
         router.push('/dashboard');
@@ -129,16 +126,16 @@ export default function NewRecipe() {
         title,
         description,
         directions,
-        equipment,
-        ingredients,
-        methods,
-        subrecipes,
+        required_equipment,
+        required_ingredients,
+        required_methods,
+        required_subrecipes,
         recipe_image,
         equipment_image,
         ingredients_image,
         cooking_image
       } = recipe;
-      setEditingId(recipe.id);
+      setEditingId(recipe.recipe_id);
       setRecipeTypeId(recipe_type_id);
       setCuisineId(cuisine_id);
       setTitle(title);
@@ -154,31 +151,32 @@ export default function NewRecipe() {
         });
         return nextState;
       });
+      // TO DO: allow for optional amount and optional unit_id
       setEquipmentRows(
-        equipment.map(r => ({
-          key:    uuid(),
-          amount: r.amount,
-          type:   r.equipment_type_id,
-          id:     r.equipment_id
+        equipment.map(({ amount, equipment_type_id, equipment_id }) => ({
+          key: uuid(),
+          amount,
+          equipment_type_id,
+          equipment_id
         }))
       );
       setIngredientRows(
-        ingredients.map(r => ({
-          key:           uuid(),
-          amount:        r.amount,
-          measurementId: r.measurement_id,
-          type:          r.ingredient_type_id,
-          id:            r.ingredient_id
+        ingredients.map(({ amount, unit_id, ingredient_type_id, ingredient_id }) => ({
+          key: uuid(),
+          amount,
+          unit_id,
+          ingredient_type_id,
+          ingredient_id
         }))
       );
       setSubrecipeRows(
-        subrecipes.map(r => ({
-          key:           uuid(),
-          amount:        r.amount,
-          measurementId: r.measurement_id,
-          type:          r.recipe_type_id,
-          cuisine:       r.cuisine_id,
-          id:            r.subrecipe_id
+        subrecipes.map(({ amount, unit_id, recipe_type_id, cuisine_id, subrecipe_id }) => ({
+          key: uuid(),
+          amount,
+          unit_id,
+          recipe_type_id,
+          cuisine_id,
+          subrecipe_id
         }))
       );
       setRecipePrevImage(recipe_image);
@@ -189,7 +187,7 @@ export default function NewRecipe() {
     }
 
     if (mounted) {
-      if (id) getExistingRecipeToEdit();
+      if (recipe_id) getExistingRecipeToEdit();
     }
 
     return () => {
@@ -259,13 +257,13 @@ export default function NewRecipe() {
   };
 
   const addEquipmentRow = () =>
-    setEquipmentRows([...equipmentRows, {key: uuid(), amount: "", type: "", id: ""}]);
+    setEquipmentRows([...equipmentRows, {key: uuid(), amount: "", equipment_type_id: "", equipment_id: ""}]);
 
   const addIngredientRow = () =>
-    setIngredientRows([...ingredientRows, {key: uuid(), amount: "", measurementId: "", type: "", id: ""}]);
+    setIngredientRows([...ingredientRows, {key: uuid(), amount: "", unit_id: "", ingredient_type_id: "", ingredient_id: ""}]);
 
   const addSubrecipeRow = () =>
-    setSubrecipeRows([...subrecipeRows, {key: uuid(), amount: "", measurementId: "", type: "", cuisine: "", id: ""}]);
+    setSubrecipeRows([...subrecipeRows, {key: uuid(), amount: "", unit_id: "", recipe_type_id: "", cuisine_id: "", subrecipe_id: ""}]);
 
   const removeEquipmentRow = (rowKey: string) =>
     setEquipmentRows(equipmentRows.filter(row => row.key !== rowKey));
@@ -276,16 +274,16 @@ export default function NewRecipe() {
   const removeSubrecipeRow = (rowKey: string) =>
     setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
   
-  const availableEquipment = [...equipment, ...myEquipment];
+  const availableEquipment = [...equipment, ...my_equipment];
 
-  const availableIngredients = [...ingredients, ...myIngredients];
+  const availableIngredients = [...ingredients, ...my_ingredients];
 
   const availableRecipes = [
     ...recipes,
-    ...(myFavoriteRecipes.length ? myFavoriteRecipes : []),  // TO DO: make sure they can't be the author
-    ...(mySavedRecipes.length    ? mySavedRecipes    : []),  // TO DO: make sure they can't be the author
-    ...(myPrivateRecipes.length  ? (editingId && id !== 0 ? myPrivateRecipes.filter(r => r.id != id) : myPrivateRecipes) : []),
-    ...(myPublicRecipes.length   ? (editingId && id !== 0 ? myPublicRecipes.filter(r => r.id != id)  : myPublicRecipes)  : [])
+    ...(my_favorite_recipes.length ? my_favorite_recipes : []),  // TO DO: make sure they can't be the author
+    ...(my_saved_recipes.length    ? my_saved_recipes    : []),  // TO DO: make sure they can't be the author
+    ...(my_private_recipes.length  ? (editingId && recipe_id !== 0 ? my_private_recipes.filter(r => r.recipe_id != recipe_id) : my_private_recipes) : []),  // TO DO: change to "000..." ???
+    ...(my_public_recipes.length   ? (editingId && recipe_id !== 0 ? my_public_recipes.filter(r => r.recipe_id != recipe_id)  : my_public_recipes)  : [])   // TO DO: change to "000..." ???
   ];
 
   /*
@@ -414,50 +412,64 @@ export default function NewRecipe() {
   const submit = () => {
     if (!validRecipeInfo({
       ownership,
-      recipeTypeId,
-      cuisineId,
+      recipe_type_id,
+      cuisine_id,
       title,
       description,
       directions,
-      methods: usedMethods,
-      equipment: equipmentRows,
-      ingredients: ingredientRows,
-      subrecipes: subrecipeRows,
+      required_methods: usedMethods,
+      required_equipment: equipmentRows,
+      required_ingredients: ingredientRows,
+      required_subrecipes: subrecipeRows,
       setFeedback
     })) return;
 
     const getCheckedMethods = () => {
       const checkedMethods: RequiredMethod[] = [];
       Object.entries(usedMethods).forEach(([ key, value ]) => {
-        if (value === true) checkedMethods.push({id: Number(key)});
+        if (value === true) checkedMethods.push({method_id: Number(key)});
       });
       return checkedMethods;
     };
-    const getRequiredEquipment =   () => equipmentRows.map(e => ({amount: Number(e.amount), id: Number(e.id)}));                                           // bug ?
-    const getRequiredIngredients = () => ingredientRows.map(i => ({amount: Number(i.amount), measurementId: Number(i.measurementId), id: Number(i.id)}));  // bug ?
-    const getRequiredSubrecipes =  () => subrecipeRows.map(s => ({amount: Number(s.amount), measurementId: Number(s.measurementId), id: Number(s.id)}));   // bug ?
+
+    const getRequiredEquipment = () => equipmentRows.map(e => ({
+      amount:       Number(e.amount),
+      equipment_id: e.equipment_id
+    }));  // bug ?
+
+    const getRequiredIngredients = () => ingredientRows.map(i => ({
+      amount:  Number(i.amount),
+      unit_id: Number(i.unit_id),
+      ingredient_id: i.ingredient_id
+    }));  // bug ?
+
+    const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
+      amount:       Number(s.amount),
+      unit_id:      Number(s.unit_id),
+      subrecipe_id: s.subrecipe_id
+    }));  // bug ?
 
     const recipeInfo = {
       ownership,
-      recipeTypeId,
-      cuisineId,
+      recipe_type_id,
+      cuisine_id,
       title,
       description,
       directions,
-      methods: getCheckedMethods(),
-      equipment: getRequiredEquipment(),
-      ingredients: getRequiredIngredients(),
-      subrecipes: getRequiredSubrecipes(),
-      recipeImage,
-      recipeFullImage,
-      recipeThumbImage,
-      recipeTinyImage,
-      equipmentImage,
-      equipmentFullImage,
-      ingredientsImage,
-      ingredientsFullImage,
-      cookingImage,
-      cookingFullImage
+      required_methods: getCheckedMethods(),
+      required_equipment: getRequiredEquipment(),
+      required_ingredients: getRequiredIngredients(),
+      required_subrecipes: getRequiredSubrecipes(),
+      //recipeImage,
+      //recipeFullImage,
+      //recipeThumbImage,
+      //recipeTinyImage,
+      //equipmentImage,
+      //equipmentFullImage,
+      //ingredientsImage,
+      //ingredientsFullImage,
+      //cookingImage,
+      //cookingFullImage
     };
 
     setLoading(true);
@@ -512,13 +524,13 @@ export default function NewRecipe() {
       <h2>Type of Recipe</h2>
       <select id="recipe_type_id" name="recipeType" onChange={changeRecipeType} required value={recipeTypeId}>
         <option value=""></option>
-        {recipeTypes.map(({ id, name }) => (<option key={id} data-test={name} value={id}>{name}</option>))}
+        {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (<option key={recipe_type_id} value={recipe_type_id}>{recipe_type_name}</option>))}
       </select>
 
       <h2>Cuisine</h2>
       <select id="cuisine_id" name="cuisine" onChange={changeCuisine} required value={cuisineId}>
         <option value=""></option>
-        {cuisines.map(({ id, name }) => (<option key={id} value={id} data-test={name}>{name}</option>))}
+        {cuisines.map(({ cuisine_id, cuisine_name }) => (<option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>))}
       </select>
 
       <h2>Title</h2>
@@ -529,16 +541,15 @@ export default function NewRecipe() {
 
       <h2>Methods</h2>
       <div className="methods">
-        {methods.map(({ id, name }) => (
-          <span className="method" key={id}>
+        {methods.map(({ method_id, method_name }) => (
+          <span className="method" key={method_id}>
             <input
-              checked={usedMethods[id] === true ? true : false}
-              data-test={`${id}-${name}`}
-              id={`${id}`}
+              checked={usedMethods[method_id] === true ? true : false}
+              id={`${method_id}`}
               onChange={e => changeMethods(e)}
               type="checkbox"
             />
-            <label data-test={name}>{name}</label>
+            <label>{method_name}</label>
           </span>
         ))}
       </div>
@@ -546,7 +557,7 @@ export default function NewRecipe() {
       <div className="required-equipment">
         <h2>Equipment</h2>
         <div className="equipment-rows">
-          {equipmentRows.map(({ key, amount, type, id }) => (
+          {equipmentRows.map(({ key, amount, equipment_type_id, equipment_id }) => (
             <div className="recipe-row" key={key}>
               <label>Amount:</label>
               <select name="amount" onChange={(e) => changeEquipmentRow(e, key)} required value={amount}>
@@ -558,17 +569,17 @@ export default function NewRecipe() {
                 <option value="5">5</option>
               </select>
               <label>Type:</label>
-              <select name="type" onChange={(e) => changeEquipmentRow(e, key)} required value={type}>
+              <select name="type" onChange={(e) => changeEquipmentRow(e, key)} required value={equipment_type_id}>
                 <option value=""></option>
                 <option value="2">Preparing</option>
                 <option value="3">Cooking</option>
               </select>
               <label>Equipment:</label>
-              <select name="equipment" onChange={(e) => changeEquipmentRow(e, key)} required value={id}>
+              <select name="equipment" onChange={(e) => changeEquipmentRow(e, key)} required value={equipment_id}>
                 <option value=""></option>
                 {availableEquipment
-                  .filter(e => e.equipment_type_id == type)
-                  .map((e, index) => <option key={index} value={e.id}>{e.name}</option>)}
+                  .filter(e => e.equipment_type_id == equipment_type_id)
+                  .map((e, index) => <option key={index} value={e.equipment_id}>{e.equipment_name}</option>)}
               </select>
               <button className="--remove" onClick={() => removeEquipmentRow(key)}>Remove</button>
             </div>
@@ -581,7 +592,7 @@ export default function NewRecipe() {
         <h2>Ingredients</h2>
         {/* TO DO: Add brand and variety */}
         <div className="ingredient-rows">
-          {ingredientRows.map(({ key, amount, measurementId, type, id }) => (
+          {ingredientRows.map(({ key, amount, unit_id, ingredient_type_id, ingredient_id }) => (
             <div className="recipe-row" key={key}>
               <label>Amount:</label>
               <input
@@ -596,23 +607,23 @@ export default function NewRecipe() {
               />
 
               <label>Unit:</label>
-              <select name="unit" onChange={(e) => changeIngredientRow(e, key)} required value={measurementId}>
+              <select name="unit" onChange={(e) => changeIngredientRow(e, key)} required value={unit_id}>
                 <option value=""></option>
-                {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
+                {units.map((u, index) => <option key={index} value={u.unit_id}>{u.unit_name}</option>)}
               </select>
 
               <label>Type:</label>
-              <select name="type" onChange={(e) => changeIngredientRow(e, key)} required value={type}>
+              <select name="type" onChange={(e) => changeIngredientRow(e, key)} required value={ingredient_type_id}>
                 <option value=""></option>
-                {ingredientTypes.map((i, index) => (<option key={index} value={i.id}>{i.name}</option>))}
+                {ingredient_types.map((i, index) => (<option key={index} value={i.ingredient_type_id}>{i.ingredient_type_name}</option>))}
               </select>
 
               <label>Ingredient:</label>
-              <select name="ingredient" onChange={(e) => changeIngredientRow(e, key)} required value={id}>
+              <select name="ingredient" onChange={(e) => changeIngredientRow(e, key)} required value={ingredient_id}>
                 <option value=""></option>
                 {availableIngredients
-                  .filter(i => i.ingredient_type_id == type)
-                  .map((i, index) => <option key={index} value={i.id}>{i.name}</option>)}
+                  .filter(i => i.ingredient_type_id == ingredient_type_id)
+                  .map((i, index) => <option key={index} value={i.ingredient_id}>{i.ingredient_name}</option>)}
               </select>
 
               <button className="--remove" onClick={() => removeIngredientRow(key)}>Remove</button>
@@ -640,30 +651,30 @@ export default function NewRecipe() {
               />
               
               <label>Unit:</label>
-              <select name="unit" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.measurementId}>
+              <select name="unit" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.unit_id}>
                 <option value=""></option>
-                {measurements.map((m, index) => <option key={index} value={m.id}>{m.name}</option>)}
+                {units.map((u, index) => <option key={index} value={u.unit_id}>{u.unit_name}</option>)}
               </select>
               
               <label>Type:</label>
               <select name="type" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.type}>
                 <option value=""></option>
-                {recipeTypes.map((r, index) => <option key={index} value={r.id}>{r.name}</option>)}
+                {recipe_types.map((r, index) => <option key={index} value={r.recipe_type_id}>{r.recipe_type_name}</option>)}
               </select>
               
               <label>Cuisine:</label>
               <select name="cuisine" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.cuisine}>
                 <option value=""></option>
-                {cuisines.map((c, index) => <option key={index} value={c.id}>{c.name}</option>)}
+                {cuisines.map((c, index) => <option key={index} value={c.cuisine_id}>{c.cuisine_name}</option>)}
               </select>
               
               <label>Subrecipe:</label>
-              <select className="--subrecipe" name="subrecipe" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={id}>
+              <select className="--subrecipe" name="subrecipe" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.subrecipe_id}>
                 <option value=""></option>
                 {availableRecipes
                   .filter(r => r.recipe_type_id == s.type)
                   .filter(r => r.cuisine_id == s.cuisine)
-                  .map((r, index) => <option key={index} value={r.id}>{r.title}</option>)}
+                  .map((r, index) => <option key={index} value={r.recipe_id}>{r.title}</option>)}
               </select>
               
               <button className="--remove" onClick={() => removeSubrecipeRow(s.key)}>Remove</button>
@@ -821,8 +832,14 @@ export default function NewRecipe() {
 }
 
 function ToolTip() {
-  return <span className="crop-tool-tip">Move the crop to your desired position. The image&#40;s&#41; will be saved for you:</span>;
+  return (
+    <span className="crop-tool-tip">
+      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
+    </span>
+  );
 }
+
+// TO DO: move types to one location
 
 type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
@@ -831,17 +848,17 @@ type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 type IImage = string | ArrayBuffer | null;
 
 export interface IExistingRecipeToEdit {
-  id:                number;
+  recipe_id:         string;
   recipe_type_id:    number;
   cuisine_id:        number;
   owner_id:          number;
   title:             string;
   description:       string;
   directions:        string;
-  methods:           IExistingRequiredMethod[];
-  equipment:         IExistingRequiredEquipment[];
-  ingredients:       IExistingRequiredIngredient[];
-  subrecipes:        IExistingRequiredSubrecipe[];
+  required_methods:     ExistingRequiredMethod[];
+  required_equipment:   ExistingRequiredEquipment[];
+  required_ingredients: ExistingRequiredIngredient[];
+  required_subrecipes:  ExistingRequiredSubrecipe[];
   recipe_image:      string;
   equipment_image:   string;
   ingredients_image: string;
@@ -850,33 +867,33 @@ export interface IExistingRecipeToEdit {
 
 // change these too?
 
-export interface IExistingRequiredMethod {
+export type ExistingRequiredMethod = {
   method_id: number;
-}
+};
 
-export interface IExistingRequiredEquipment {
-  amount:            number;
+export type ExistingRequiredEquipment = {
+  amount?:           number;
   equipment_type_id: number;
-  equipment_id:      number;
-}
+  equipment_id:      string;
+};
 
-export interface IExistingRequiredIngredient {
-  amount:             number;
-  measurement_id:     number;
+export type ExistingRequiredIngredient = {
+  amount?:            number;
+  unit_id?:           number;
   ingredient_type_id: number;
-  ingredient_id:      number;
-}
+  ingredient_id:      string;
+};
 
-export interface IExistingRequiredSubrecipe {
-  amount:         number;
-  measurement_id: number;
+export type ExistingRequiredSubrecipe = {
+  amount?:        number;
+  unit_id?:       number;
   recipe_type_id: number;
   cuisine_id:     number;
-  subrecipe_id:   number;
-}
+  subrecipe_id:   string;
+};
 
-export interface IMethods {
-  [index: string]: any;  // ???
+export type Methods = {
+  //[index: string]: any;  // ???
   1:  boolean;
   2:  boolean;
   3:  boolean;
@@ -901,31 +918,31 @@ export interface IMethods {
   22: boolean;
   23: boolean;
   24: boolean;
-}
+};
 
-export interface IEquipmentRow {
+export type EquipmentRow = {
+  [index: string]:   any;
+  key:               string;
+  amount:            string | number;
+  equipment_type_id: string | number;  // (just a filter for nicer UX)
+  equipment_id:      string | number;
+};
+
+export type IngredientRow = {
+  [index: string]:    any;
+  key:                string;
+  amount:             string | number;
+  measurementId:      string | number;
+  ingredient_type_id: string | number;  // (just a filter for nicer UX)
+  ingredient_id:      string | number;
+};
+
+export type SubrecipeRow = {
   [index: string]: any;
   key:             string;
   amount:          string | number;
-  type:            string | number;  // equipmentTypeId? (just a filter for nicer UX)
-  id:              string | number;
-}
-
-export interface IIngredientRow {
-  [index: string]: any;
-  key:             string;
-  amount:          string | number;
-  measurementId:   string | number;
-  type:            string | number;  // ingredientTypeId? (just a filter for nicer UX)
-  id:              string | number;
-}
-
-export interface ISubrecipeRow {
-  [index: string]: any;
-  key:             string;
-  amount:          string | number;
-  measurementId:   string | number;
-  type:            string | number;  // recipeTypeId? (just a filter for nicer UX)
-  cuisine:         string | number;  // cuisineId?    (just a filter for nicer UX)
-  id:              string | number;
-}
+  unit_id:         string | number;
+  recipe_type_id:  string | number;  // (just a filter for nicer UX)
+  cuisine_id:      string | number;  // (just a filter for nicer UX)
+  subrecipe_id:    string | number;  // recipe_id or subrecipe_id ???
+};
