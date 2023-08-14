@@ -11,7 +11,7 @@ import { endpoint }                        from '../../utils/api';
 
 export default function Recipe({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
-  
+
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
   const my_private_recipes  = useSelector(state => state.data.my_private_recipes);
   const my_public_recipes   = useSelector(state => state.data.my_public_recipes);
@@ -61,7 +61,7 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
     if (favorited) return;
     setFavorited(true);
     setLoading(true);
-    dispatch(favoriteRecipe(recipe.id));
+    dispatch(favoriteRecipe(recipe_id));
   };
 
   const save = () => {
@@ -69,31 +69,58 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
     if (saved) return;
     setSaved(true);
     setLoading(true);
-    dispatch(saveRecipe(recipe.id));
+    dispatch(saveRecipe(recipe_id));
   };
 
-  return !recipe ? <LoaderSpinner /> : (
+  if (!recipe) return <LoaderSpinner />;
+
+  // TO DO: move logic out of return
+  return (
     <div className="two-col">
       <div className="two-col-left recipe">
+
         <h1>{title}</h1>
+
         <p className="feedback">{feedback}</p>
+
         <div className="save-area">
-          {( userIsAuthenticated && !my_private_recipes.find(r => r.recipe_id === recipe_id) && !my_public_recipes.find(r => r.recipe_id === recipe_id) )
+          {
+            (
+              userIsAuthenticated
+              && !my_private_recipes.find(r => r.recipe_id === recipe_id)
+              && !my_public_recipes.find(r => r.recipe_id === recipe_id)
+            )
             ? (
               <>
-                {my_favorite_recipes.find(r => r.recipe_id === recipe_id)
+                {
+                  my_favorite_recipes.find(r => r.recipe_id === recipe_id)
                   ? <span>Favorited</span>
                   : (
                     !favorited
-                    ? <button className="--save" disabled={loading} name="favorite-button" onClick={favorite}>Favorite</button>
+                    ? (
+                      <button
+                        className="--save"
+                        disabled={loading}
+                        name="favorite-button"
+                        onClick={favorite}
+                      >Favorite</button>
+                    )
                     : <span>Favorited</span>
                   )
                 }
-                {my_saved_recipes.find(r => r.recipe_id === recipe_id)
+                {
+                  my_saved_recipes.find(r => r.recipe_id === recipe_id)
                   ? <span>Saved</span>
                   : (
                     !saved
-                    ? <button className="--save" disabled={loading} name="save-button" onClick={save}>Save</button>
+                    ? (
+                      <button
+                        className="--save"
+                        disabled={loading}
+                        name="save-button"
+                        onClick={save}
+                      >Save</button>
+                    )
                     : <span>Saved</span>
                   )
                 }
@@ -186,15 +213,17 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
 }
 
 function slugify(title: string) {
-  return title.split(' ')
-  .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-  .join('-');
+  return title
+    .split(' ')
+    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+    .join('-');
 }
 
 /*function unslugify(title: string) {
-  return title.split('-')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(' ');
+  return title
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }*/
 
 export async function getStaticPaths() {
@@ -206,13 +235,10 @@ export async function getStaticPaths() {
     }
   }));
 
-  return {
-    paths,
-    fallback: false
-  };
+  return {paths, fallback: false};
 }
 
-export async function getStaticProps({ params }: {params: {title: string}}) {
+export async function getStaticProps({ params }: StaticProps) {
   const response = await axios.get(`${endpoint}/recipe/${params.title}`);
 
   return {
@@ -222,14 +248,20 @@ export async function getStaticProps({ params }: {params: {title: string}}) {
   };
 }
 
+type StaticProps = {
+  params: {
+    title: string;
+  };
+};
+
 // TO DO: move types to one location
 
 export interface Recipe {
-  recipe_id:                number;
+  recipe_id:         string;
   recipe_type_id:    number;
   cuisine_id:        number;
-  author_id:         number;
-  owner_id:          number;
+  author_id:         string;  // should this be exposed??? use author (username) instead?
+  owner_id:          string;  // should this be exposed??? use owner (username) instead?
 
   title:             string;
   recipe_type_name:  string;

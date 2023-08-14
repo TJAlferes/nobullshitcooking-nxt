@@ -17,8 +17,8 @@ import { chatReducer }        from './chat/reducer';
 import { dataReducer }        from './data/reducer';
 import { geolocationReducer } from './geolocation/reducer';
 import { menuReducer }        from './menu/reducer';
-import { plannerReducer }     from './new-plan/reducer';
-import { plannerViewReducer } from './plan/reducer';
+import { newPlanReducer }     from './new-plan/reducer';
+import { planReducer }        from './plan/reducer';
 import { searchReducer }      from './search/reducer';
 import { themeReducer }       from './theme/reducer';
 import { userReducer }        from './user/reducer';
@@ -68,8 +68,8 @@ export const rootReducer = combineReducers({
   data:        dataReducer,
   geolocation: geolocationReducer,
   menu:        menuReducer,
-  planner:     plannerReducer,
-  plannerView: plannerViewReducer,
+  newPlan:     newPlanReducer,
+  plan:        planReducer,
   search:      searchReducer,
   //ssr
   theme:       themeReducer,

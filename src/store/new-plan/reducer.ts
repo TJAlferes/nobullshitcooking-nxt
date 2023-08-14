@@ -32,8 +32,8 @@ const initialState: State = {
   editingId:   null,
   publicUrl:   "",
   expandedDay: null,
-  planName:    "",
-  planData: {
+  plan_name:   "",
+  plan_data: {
     1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
     8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
    15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
@@ -53,7 +53,7 @@ const addRecipeToDay = (state: State, action: AddRecipeToDay): State => {
   const { day, recipe } = action;
 
   return update(state, {
-    planData: {
+    plan_data: {
       [day]: {
         $push: [recipe]
       }
@@ -65,7 +65,7 @@ const removeRecipeFromDay = (state: State, action: RemoveRecipeFromDay): State =
   const { day, index } = action;
 
   return update(state, {
-    planData: {
+    plan_data: {
       [day]: {
         $splice: [[index, 1]]
       }
@@ -74,14 +74,14 @@ const removeRecipeFromDay = (state: State, action: RemoveRecipeFromDay): State =
 };
 
 const reorderRecipeInDay = (state: State, action: ReorderRecipeInDay): State => {
-  const { expandedDay, planData } = state;
+  const { expandedDay, plan_data } = state;
   const { dragIndex, hoverIndex } = action;
   if (!expandedDay ) return state;
 
-  const draggedRecipe = planData[expandedDay][dragIndex];
+  const draggedRecipe = plan_data[expandedDay][dragIndex];
 
   return update(state, {
-    planData: {
+    plan_data: {
       [expandedDay]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
@@ -100,7 +100,7 @@ const reorderRecipeInDay = (state: State, action: ReorderRecipeInDay): State => 
   return {...state, ...{publicUrl: newPublicUrl}}
 };*/
 
-export const plannerReducer = (state = initialState, action: Actions): State => {
+export const newPlanReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case CLICK_DAY:              return clickDay(state, action);
     case ADD_RECIPE_TO_DAY:      return addRecipeToDay(state, action);
@@ -109,9 +109,9 @@ export const plannerReducer = (state = initialState, action: Actions): State => 
 
     case CLEAR_WORK:             return {...state, ...initialState};
     case SET_CREATING:           return {...state, creating: true};
-    case SET_PLAN_NAME:          return {...state, planName: action.name};
+    case SET_PLAN_NAME:          return {...state, plan_name: action.name};
     case SET_EDITING_ID:         return {...state, editingId: action.id};
-    case SET_PLAN_DATA:          return {...state, ...{planData: action.data}};  // sufficient?
+    case SET_PLAN_DATA:          return {...state, ...{plan_data: action.data}};  // sufficient?
 
     //case PUBLIC_LOAD_FROM_URL: return publicLoadFromUrl(state, action);
     //case PUBLIC_SAVE_TO_URL:   return publicSaveToUrl(state, action);

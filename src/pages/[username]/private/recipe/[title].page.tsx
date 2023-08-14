@@ -26,6 +26,8 @@ export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
   } = recipe;
 
   if (!recipe) return <LoaderSpinner />;
+
+  // TO DO: move logic out of return
   return (
     <div className="two-col">
       <div className="two-col-left recipe">

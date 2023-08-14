@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
+import {
+  useTypedDispatch as useDispatch,
+  useTypedSelector as useSelector
+} from '../../store';
 import {
   connect as chatConnect,
   disconnect as chatDisconnect,
@@ -13,27 +16,28 @@ import type { MessageWithClientTimestamp } from '../../store/chat/types';
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
   const dispatch = useDispatch();
-  // move some of this down in the component tree?
-  const room =     useSelector(state => state.chat.room);
-  const messages = useSelector(state => state.chat.messages);
-  const friends =  useSelector(state => state.chat.friends);
-  const status =   useSelector(state => state.chat.status);
-  const users =    useSelector(state => state.chat.users);
 
-  const authname =      useSelector(state => state.auth.authname);
-  const message =       useSelector(state => state.user.message);
+  // move some of this down in the component tree?
+  const room     = useSelector(state => state.chat.room);
+  const messages = useSelector(state => state.chat.messages);
+  const friends  = useSelector(state => state.chat.friends);
+  const status   = useSelector(state => state.chat.status);
+  const users    = useSelector(state => state.chat.users);
+
+  const authname      = useSelector(state => state.auth.authname);
+  const message       = useSelector(state => state.user.message);
   const windowFocused = useSelector(state => state.window.focused);
 
-  const [ debounced,     setDebounced ] =     useState(false);
-  const [ feedback,      setFeedback ] =      useState("");
+  const [ debounced,     setDebounced ]     = useState(false);
+  const [ feedback,      setFeedback ]      = useState("");
   const [ focusedFriend, setFocusedFriend ] = useState<string>();
-  const [ focusedUser,   setFocusedUser ] =   useState<string>();
-  const [ loading,       setLoading ] =       useState(false);
+  const [ focusedUser,   setFocusedUser ]   = useState<string>();
+  const [ loading,       setLoading ]       = useState(false);
   const [ messageToSend, setMessageToSend ] = useState("");
-  //const [ mobileTab,     setMobileTab ] =     useState("Messages");
-  const [ peopleTab,     setPeopleTab ] =     useState("Room");
-  const [ roomToEnter,   setRoomToEnter ] =   useState("");
-  const [ spamCount,     setSpamCount ] =     useState(1);
+  //const [ mobileTab,     setMobileTab ]     = useState("Messages");
+  const [ peopleTab,     setPeopleTab ]     = useState("Room");
+  const [ roomToEnter,   setRoomToEnter ]   = useState("");
+  const [ spamCount,     setSpamCount ]     = useState(1);
 
   const messagesRef = useRef<HTMLUListElement>(null);
 
@@ -63,20 +67,31 @@ export default function Chat() {
       const newestMessage: HTMLUListElement = messagesRef.current.lastElementChild as HTMLUListElement;
       if (!newestMessage) return;
 
-      const containerHeight =     messagesRef.current.scrollHeight;
-      const newestMessageHeight = newestMessage.offsetHeight + parseInt(getComputedStyle(newestMessage).marginBottom);
-      const scrollOffset =        messagesRef.current.scrollTop + messagesRef.current.offsetHeight;
+      const containerHeight = messagesRef.current.scrollHeight;
+
+      const newestMessageHeight =
+        newestMessage.offsetHeight
+        + parseInt(getComputedStyle(newestMessage).marginBottom);
+
+      const scrollOffset =
+        messagesRef.current.scrollTop
+        + messagesRef.current.offsetHeight;
 
       // cancels autoscroll if user is scrolling up through older messages
-      if ((containerHeight - newestMessageHeight) <= scrollOffset) messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      if ((containerHeight - newestMessageHeight) <= scrollOffset) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
     };
 
     if (windowFocused === false) setAlertFavicon();
     autoScroll();
   }, [messages]);
 
-  const changeRoomInput =    (e: SyntheticEvent) => setRoomToEnter((e.target as HTMLInputElement).value.trim());
-  const changeMessageInput = (e: SyntheticEvent) => setMessageToSend((e.target as HTMLInputElement).value.trim());
+  const changeRoomInput = (e: SyntheticEvent) =>
+    setRoomToEnter((e.target as HTMLInputElement).value.trim());
+
+  const changeMessageInput = (e: SyntheticEvent) =>
+    setMessageToSend((e.target as HTMLInputElement).value.trim());
   
   //const changeMobileTab = (value: string) => setMobileTab(value);
   const changePeopleTab = (value: string) => setPeopleTab(value);
@@ -119,7 +134,8 @@ export default function Chat() {
   };
 
   const focusFriend = (friend: string) => setFocusedFriend(friend);
-  const focusUser =   (user: string) =>   user !== authname && setFocusedUser(user);
+
+  const focusUser = (user: string) => user !== authname && setFocusedUser(user);
 
   const preventSpam = () => {
     setSpamCount(prev => prev + 1);
@@ -175,7 +191,7 @@ export default function Chat() {
   const sortedUsers = users.sort((a, b) => {  // sorts yourself first, then others alphabetically
     if (a === authname) return -1;
     if (b === authname) return 1;
-    if (a < b) return -1;
+    if (a < b)          return -1;
     return a > b ? 1 : 0;
   });
 
@@ -187,7 +203,10 @@ export default function Chat() {
         <p className="feedback">{feedback}</p>
 
         <div className="chat-options">
-          <button disabled={loading} onClick={status === "connected" ? disconnect : connect}>
+          <button
+            disabled={loading}
+            onClick={status === "connected" ? disconnect : connect}
+          >
             {status === "connected" ? "Disconnect" : "Connect"}
           </button>
 
@@ -197,32 +216,64 @@ export default function Chat() {
 
           <div className="change-room">
             <label>Go To Room:</label>
-            <input disabled={(status !== "connected") || loading} name="change-room-input" onChange={changeRoomInput} type="text" value={roomToEnter} />
-            <button disabled={(status !== "connected") || loading} onClick={changeRoom}>Enter</button>
+
+            <input
+              disabled={(status !== "connected") || loading}
+              name="change-room-input"
+              onChange={changeRoomInput}
+              type="text"
+              value={roomToEnter}
+            />
+
+            <button
+              disabled={(status !== "connected") || loading}
+              onClick={changeRoom}
+            >Enter</button>
           </div>
         </div>
 
         <div className="chat-main">
           <div className="chat-messages">
             <ul ref={messagesRef}>
-              {messages && messages.map(message =>
-                <li key={message.id}><span className="message-ts">{message.ts}{' '}</span>{formattedMessage(authname, message)}</li>
-              )}
+              {messages && messages.map(message => (
+                <li key={message.id}>
+                  <span className="message-ts">{message.ts}{' '}</span>
+                  {formattedMessage(authname, message)}
+                </li>
+              ))}
             </ul>
-            <input disabled={status !== "connected"} name="chat-input" onChange={changeMessageInput} onKeyUp={e => send(e)} type="text" value={messageToSend} />
+
+            <input
+              disabled={status !== "connected"}
+              name="chat-input"
+              onChange={changeMessageInput}
+              onKeyUp={e => send(e)}
+              type="text"
+              value={messageToSend}
+            />
           </div>
 
           <div className="chat-people">
             <div className="people-tabs">
-              <button className={peopleTab === "Room" ? "--current" : ""}    onClick={() => changePeopleTab("Room")}>Room</button>
-              <button className={peopleTab === "Friends" ? "--current" : ""} onClick={() => changePeopleTab("Friends")}>Friends</button>
+              <button
+                className={peopleTab === "Room" ? "--current" : ""}
+                onClick={() => changePeopleTab("Room")}
+              >Room</button>
+
+              <button
+                className={peopleTab === "Friends" ? "--current" : ""}
+                onClick={() => changePeopleTab("Friends")}
+              >Friends</button>
             </div>
+
             {peopleTab === "Room" && (
               <ul className="chat-persons">
                 {users && users.map(user => (
                   <li className="chat-person" key={user} onClick={() => focusUser(user)}>
                     <img src={`${url}/${user}-tiny`} />
+
                     <span>{user}</span>
+
                     {focusedUser && focusedUser === user && (
                       <div className="person-tooltip"><button onClick={() => startPrivateMessage(user)}>Whisper</button></div>
                     )}
@@ -230,12 +281,15 @@ export default function Chat() {
                 ))}
               </ul>
             )}
+
             {peopleTab === "Friends" && (
               <ul className="chat-persons">
                 {friends && friends.map(friend => (
                   <li className="chat-person" key={friend} onClick={() => focusFriend(friend)}>
                     <img src={`${url}/${friend}-tiny`} />
+
                     <span>{friend}</span>
+
                     {focusedFriend && focusedFriend === friend && (
                       <div className="person-tooltip"><button onClick={() => startPrivateMessage(friend)}>Whisper</button></div>
                     )}
@@ -295,15 +349,35 @@ export default function Chat() {
   );
 }
 
+// TO DO: use as a component <FormattedMessage authname="" message={} />
 function formattedMessage(authname: string, { kind, from, to, text }: MessageWithClientTimestamp) {
   if (kind === "public") {
-    if (from === "messengerstatus") return <span className="--admin">{text}</span>;                  // status
-    if (from === authname)          return <><span className="--self">{from}:{' '}</span>{text}</>;  // sent
-    return <><span className="--other">{from}:{' '}</span>{text}</>;                                 // received
+    if (from === "messengerstatus") {
+      return <span className="--admin">{text}</span>;
+    }  // status
+
+    if (from === authname) {
+      return <><span className="--self">{from}:{' '}</span>{text}</>;
+    }  // sent
+
+    return <><span className="--other">{from}:{' '}</span>{text}</>;  // received
   }
-  if (from === authname)
-    return <><span className="--self">You whisper to{' '}{to}:{' '}</span><span className="--private">{text}</span></>;    // sent
-  return <><span className="--other">{from}{' '}whispers to you:{' '}</span><span className="--private">{text}</span></>;  // received
+
+  if (from === authname) {
+    return (
+      <>
+        <span className="--self">You whisper to{' '}{to}:{' '}</span>
+        <span className="--private">{text}</span>
+      </>
+    );  // sent
+  }
+
+  return (
+    <>
+      <span className="--other">{from}{' '}whispers to you:{' '}</span>
+      <span className="--private">{text}</span>
+    </>
+  );  // received
 };
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;

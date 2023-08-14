@@ -26,8 +26,8 @@ export type State = {
   editingId:   number | null;
   publicUrl:   string;
   expandedDay: number | null;
-  planName:    string;
-  planData:    PlanData;
+  plan_name:   string;
+  plan_data:   PlanData;
 };
 
 // TO DO: move shared types to one location

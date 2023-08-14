@@ -104,9 +104,9 @@ export type Method = {
 };
 
 export type Plan = {
-  plan_id:   number;
+  plan_id:   string;
   plan_name: string;
-  //data: PlanData;
+  plan_data: PlanData;
 };
 
 export type WorkRecipe = {

@@ -14,8 +14,8 @@ State
 export type State = {
   isLoading:   boolean;
   expandedDay: number | null;
-  planName:    string;
-  planData:    PlanData;
+  plan_name:   string;
+  plan_data:   PlanData;
 };
 
 // TO DO: move shared types to one location
@@ -43,7 +43,7 @@ export type ClickDay = {
 };
 
 type Load = {
-  type:     typeof actionTypes.LOAD;
-  planName: string;
-  planData: PlanData;
+  type:      typeof actionTypes.LOAD;
+  plan_name: string;
+  plan_data: PlanData;
 };

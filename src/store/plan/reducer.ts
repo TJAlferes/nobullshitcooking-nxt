@@ -5,8 +5,8 @@ const { CLICK_DAY, LOAD } = actionTypes;
 const initialState: State = {
   isLoading:   false,
   expandedDay: null,
-  planName:    "",
-  planData: {
+  plan_name:   "",
+  plan_data: {
      1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
      8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
     15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
@@ -22,10 +22,10 @@ const clickDay = (state: State, action: ClickDay): State => {
   return {...state, expandedDay: day};
 };
 
-export const plannerViewReducer = (state = initialState, action: Actions): State => {
+export const planReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case CLICK_DAY: return clickDay(state, action);
-    case LOAD:      return {...state, ...{planName: action.planName, planData: action.planData}};
+    case LOAD:      return {...state, ...{plan_name: action.plan_name, plan_data: action.plan_data}};
     default:        return state;
   }
 };

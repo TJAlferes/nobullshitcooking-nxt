@@ -10,7 +10,7 @@ import { saveRecipe }                      from '../../../store/user/save/action
 import { endpoint }                        from '../../../utils/api';
 import type { Recipe }                     from '../../../types';
 
-export default function UserRecipe({ recipe }: {recipe: Recipe}) {
+export default function PublicUserRecipe({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
@@ -75,6 +75,7 @@ export default function UserRecipe({ recipe }: {recipe: Recipe}) {
 
   if (!recipe) return <LoaderSpinner />;
 
+  // TO DO: move logic out of return
   return (
     <div className="two-col">
       <div className="two-col-left recipe">
