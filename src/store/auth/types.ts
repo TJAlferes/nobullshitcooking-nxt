@@ -1,14 +1,11 @@
 import type { useRouter } from 'next/navigation';
 
 export const actionTypes = {
-  MESSAGE:       'MESSAGE',
-  MESSAGE_CLEAR: 'MESSAGE_CLEAR',
-  RESET:         'RESET',
-  AUTHENTICATE:  'AUTHENTICATE',
+  MESSAGE:       'MESSAGE',  // MOVE
+  MESSAGE_CLEAR: 'MESSAGE_CLEAR',  // MOVE
+  RESET:         'RESET',  // ???
   REGISTER:      'REGISTER',
-  VERIFY:        'VERIFY',
-  LOGIN:         'LOGIN',
-  LOGOUT:        'LOGOUT',
+  VERIFY:        'VERIFY'
 } as const;
 
 export type State = {
@@ -18,23 +15,22 @@ export type State = {
 }
 
 export type Actions =
-| Message
-| MessageClear
+| Message// MOVE
+| MessageClear// MOVE
 | Reset
-| Authenticate
+
 | Register
 | Verify
-| Login
-| Logout;
+;
 
 export type Message = {
   type:    typeof actionTypes.MESSAGE;
   message: string;
-};
+};// MOVE
 
 export type MessageClear = {
   type: typeof actionTypes.MESSAGE_CLEAR;
-};
+};// MOVE
 
 export type Reset = {
   type: typeof actionTypes.RESET;

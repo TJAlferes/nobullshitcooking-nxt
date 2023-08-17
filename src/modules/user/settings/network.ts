@@ -1,9 +1,12 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../utils/api';
-import { userMessage, userMessageClear } from '../actions';
-import { actionTypes, SubmitAvatar }     from './types';
+import { endpoint } from '../../../utils/api';
+import {
+  systemMessage,
+  systemMessageClear
+} from '../../shared/system-message/state';
+import { actionTypes, SubmitAvatar } from './state';
 
 const { SUBMIT_AVATAR } = actionTypes;
 
@@ -48,17 +51,17 @@ export function* submitAvatarSaga({ full_avatar, tiny_avatar }: SubmitAvatar) {
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
 
     if (message === 'Avatar set.') {
       yield delay(2000);
-      yield put(userMessageClear());
+      yield put(systemMessageClear());
       yield call(() => location.reload());  // ?  // refresh/update respective list
     }
   } catch (err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
