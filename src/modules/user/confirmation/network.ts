@@ -3,27 +3,27 @@ import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                          from '../../../config/api';
 import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
-import { actionTypes, Verify }               from './state';
+import { actionTypes, Confirm }               from './state';
 
-const { VERIFY } = actionTypes;
+const { CONFIRM } = actionTypes;
 
 export function* watchAuth() {
   yield all([
-    takeEvery(VERIFY,   userVerifySaga)
+    takeEvery(CONFIRM, userConfirmSaga)
   ]);
 }
 
-export function* userVerifySaga(action: Verify) {
+export function* userConfirmSaga(action: Confirm) {
   try {
-    const { email, password, confirmation_code, router } = action;
+    const { confirmation_code, router } = action;
 
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/auth/verify`,
-      {userInfo: {email, password, confirmation_code}}
+      `${endpoint}/user/confirmation`,
+      {userInfo: {confirmation_code}}
     );
     
-    if (message === "User account verified.") {
+    if (message === "User account confirmed.") {
       yield delay(2000);
       yield put(systemMessageClear());
       yield call(() => router.push('/login'));

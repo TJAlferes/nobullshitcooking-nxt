@@ -4,34 +4,25 @@ import type { useRouter } from 'next/navigation';
 
 // action creators -------------------------------------------------------------
 
-export const verify = (
-  email:             string,
-  password:          string,
+export const confirm = (
   confirmation_code: string,
   router:            ReturnType<typeof useRouter>
 ) => ({
-  type: VERIFY,
-  email,
-  password,
+  type: CONFIRM,
   confirmation_code,
   router
 });
 
 // types -----------------------------------------------------------------------
 
-export const actionTypes = {
+export const actionTypes = {CONFIRM: 'CONFIRM'} as const;
 
-  VERIFY:        'VERIFY'
-} as const;
+const { CONFIRM } = actionTypes;
 
-const { VERIFY } = actionTypes;
+export type Actions = Confirm;
 
-export type Actions = Verify;
-
-export type Verify = {
-  type:              typeof actionTypes.VERIFY;
-  email:             string;
-  password:          string;
+export type Confirm = {
+  type:              typeof actionTypes.CONFIRM;
   confirmation_code: string;
   router:            ReturnType<typeof useRouter>;
 };

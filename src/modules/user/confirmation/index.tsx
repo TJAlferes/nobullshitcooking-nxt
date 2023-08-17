@@ -1,24 +1,22 @@
-import Link                           from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState }        from 'react';
-import { useDispatch }                from 'react-redux';
+import Link                    from 'next/link';
+import { useRouter }           from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch }         from 'react-redux';
 
 import { LoaderButton }                    from '../../shared/components';
 import { useTypedSelector as useSelector } from '../../store';
-import { verify }                from './state';
+import { confirm }                         from './state';
 
 export default function Register() {
   const router =       useRouter();
 
   const dispatch = useDispatch();
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const message =             useSelector(state => state.auth.message);
+  const message =             useSelector(state => state.auth.message);  // change to state.system.message
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
-  //const [ email,            setEmail ] =            useState("");
   const [ feedback,         setFeedback ] =         useState("");
   const [ loading,          setLoading ] =          useState(false);
-  //const [ password,         setPassword ] =         useState("");
 
   const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
@@ -39,32 +37,32 @@ export default function Register() {
 
   const confirmationCodeChange = (e: SyntheticEvent) => setConfirmationCode((e.target as HTMLInputElement).value);
 
-  const verifyClick = () => {
+  const confirmClick = () => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     setLoading(true);
-    dispatch(verify(email, password, confirmation_code, router));
+    dispatch(confirm(confirmation_code, router));
   };
 
-  const verifyKeyUp = (e: React.KeyboardEvent) => {
+  const confirmKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(verify(email, password, confirmation_code, router));
+    dispatch(confirm(confirmation_code, router));
   };
 
   const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
   
   return (
-    <div className="register" onKeyUp={e => verifyKeyUp(e)}>
+    <div className="register" onKeyUp={e => confirmKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile" src={`${url}logo-small-white.png`} />
       </Link>
 
       <form>
-        <h1>Verify</h1>
+        <h1>Confirm</h1>
 
         <p className="feedback">{feedback}</p>
 
@@ -89,11 +87,11 @@ export default function Register() {
           disabled={!validateConfirmationCode()}
           id="verify_confirmation_code"
           isLoading={loading}
-          loadingText="Verifying..."
+          loadingText="Confirming..."
           name="submit"
-          onClick={verifyClick}
-          onKeyUp={verifyKeyUp}
-          text="Verify"
+          onClick={confirmClick}
+          onKeyUp={confirmKeyUp}
+          text="Confirm"
         />
       </form>
 

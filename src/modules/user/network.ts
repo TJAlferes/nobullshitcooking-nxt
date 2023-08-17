@@ -19,14 +19,14 @@ export function* userRegisterSaga(action: Register) {
 
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/auth/register`,
+      `${endpoint}/user/registration`,
       {userInfo: {email, password, username}}
     );
 
     if (message === 'User account created.') {
       yield delay(2000);
       yield put(systemMessageClear());
-      yield call(() => router.push('/verify'));
+      yield call(() => router.push('/confirm'));
     } else {
       yield put(systemMessage(message));
       yield delay(4000);

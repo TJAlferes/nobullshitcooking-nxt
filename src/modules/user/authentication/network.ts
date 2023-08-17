@@ -24,7 +24,7 @@ export function* userLoginSaga(action: Login) {
 
     const { data: { message, username } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/auth/login`,
+      `${endpoint}/user/authentication/login`,
       {userInfo: {email, pass: password}},
       {withCredentials: true}
     );
@@ -47,7 +47,7 @@ export function* userLogoutSaga(action: Logout) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/auth/logout`,
+      `${endpoint}/user/authentication/logout`,
       {},
       {withCredentials: true}
     );
