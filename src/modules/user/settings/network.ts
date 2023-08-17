@@ -1,12 +1,9 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../../utils/api';
-import {
-  systemMessage,
-  systemMessageClear
-} from '../../shared/system-message/state';
-import { actionTypes, SubmitAvatar } from './state';
+import { endpoint }                          from '../../../config/api';
+import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
+import { actionTypes, SubmitAvatar }         from './state';
 
 const { SUBMIT_AVATAR } = actionTypes;
 

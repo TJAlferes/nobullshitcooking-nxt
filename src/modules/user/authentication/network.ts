@@ -1,16 +1,13 @@
 import axios from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }   from '../../utils/api';
-import { removeItem } from '../../utils/storage';
+import { endpoint }   from '../../../config/api';
+import { removeItem } from '../../../utils/storage';
 import { initUser }   from '../data/actions';
 
-import {
-  systemMessage,
-  systemMessageClear
-} from '../../shared/system-message/state';
-import { authenticate, actionTypes } from './state';
-import type { Login, Logout } from './state';
+import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
+import { authenticate, actionTypes }         from './state';
+import type { Login, Logout }                from './state';
 
 const { LOGIN, LOGOUT } = actionTypes;
 
