@@ -4,7 +4,7 @@ import { Provider as Redux }  from 'react-redux';
 import { HTML5toTouch }       from 'rdndmb-html5-to-touch';
 
 import '../../styles/styles.css';
-import { Layout, Guard, Theme }     from '../components';
+import { Layout, Guard, Theme }     from '../modules/shared/components';
 import { wrapper }                  from '../store';
 import { SearchProvider as Search } from '../utils/SearchProvider';
 

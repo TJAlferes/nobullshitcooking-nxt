@@ -19,6 +19,7 @@ export default function Dashboard() {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
+  //const my_friends
   const my_plans            = useSelector(state => state.data.my_plans);
   const my_equipment        = useSelector(state => state.data.my_equipment);
   const my_ingredients      = useSelector(state => state.data.my_ingredients);

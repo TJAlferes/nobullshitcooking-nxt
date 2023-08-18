@@ -3,13 +3,14 @@ import Link                    from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import { favoriteRecipe }                  from '../../store/user/favorite/actions';
-import { saveRecipe }                      from '../../store/user/save/actions';
-import { endpoint }                        from '../../utils/api';
+import { LoaderSpinner }                   from '../../../components';
+import { useTypedSelector as useSelector } from '../../../store';
+import { favoriteRecipe }                  from '../../../store/user/favorite/actions';
+import { saveRecipe }                      from '../../../store/user/save/actions';
+import { endpoint }                        from '../../../utils/api';
+import type { Recipe }                     from '../../../types';
 
-export default function Recipe({ recipe }: {recipe: Recipe}) {
+export default function PublicUserRecipeDetail({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
@@ -37,10 +38,10 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
     required_ingredients,
     required_subrecipes,
     required_methods,
-    recipe_image,
-    equipment_image,
-    ingredients_image,
-    cooking_image
+    //recipe_image,
+    //equipment_image,
+    //ingredients_image,
+    //cooking_image
   } = recipe;
 
   // move to 'useFeedback' ?
@@ -78,7 +79,6 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
   return (
     <div className="two-col">
       <div className="two-col-left recipe">
-
         <h1>{title}</h1>
 
         <p className="feedback">{feedback}</p>
@@ -93,7 +93,7 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
             ? (
               <>
                 {
-                  my_favorite_recipes.find(r => r.recipe_id === recipe_id)
+                  my_favorite_recipes.find(r => r.recipe_id == recipe_id)
                   ? <span>Favorited</span>
                   : (
                     !favorited
@@ -109,7 +109,7 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
                   )
                 }
                 {
-                  my_saved_recipes.find(r => r.recipe_id === recipe_id)
+                  my_saved_recipes.find(r => r.recipe_id == recipe_id)
                   ? <span>Saved</span>
                   : (
                     !saved
@@ -212,34 +212,10 @@ export default function Recipe({ recipe }: {recipe: Recipe}) {
   );
 }
 
-function slugify(title: string) {
-  return title
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
-/*function unslugify(title: string) {
-  return title
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}*/
-
-export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/recipe/titles`);
-
-  const paths = response.data.map((recipe: {title: string}) => ({
-    params: {
-      title: slugify(recipe.title)
-    }
-  }));
-
-  return {paths, fallback: false};
-}
-
-export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/recipe/${params.title}`);
+export async function getServerSideProps({ params }: ServerSideProps) {
+  const response = await axios.get(
+    `${endpoint}/user/recipe/public/${params.username}/${params.title}`  // change to user/public/recipe ???
+  );  // public user recipe
 
   return {
     props: {
@@ -248,61 +224,9 @@ export async function getStaticProps({ params }: StaticProps) {
   };
 }
 
-type StaticProps = {
+type ServerSideProps = {
   params: {
-    title: string;
+    username: string;
+    title:    string;
   };
-};
-
-// TO DO: move types to one location
-
-export interface Recipe {
-  recipe_id:         string;
-  recipe_type_id:    number;
-  cuisine_id:        number;
-  author_id:         string;  // should this be exposed??? use author (username) instead?
-  owner_id:          string;  // should this be exposed??? use owner (username) instead?
-
-  title:             string;
-  recipe_type_name:  string;
-  cuisine_name:      string;
-  author:            string;
-  author_avatar:     string;  // ?
-  description:       string;
-  active_time:       string;
-  total_time:        string;
-  directions:        string;
-
-  image_url:         string;
-  recipe_image:      string;
-  equipment_image:   string;
-  ingredients_image: string;
-  cooking_image:     string;
-  //video:             string;
-
-  required_methods:     RequiredMethod[];
-  required_equipment:   RequiredEquipment[];
-  required_ingredients: RequiredIngredient[];
-  required_subrecipes:  RequiredSubrecipe[];
-}
-
-type RequiredMethod = {
-  method_name: string;
-};
-
-type RequiredEquipment = {
-  amount?:        number;
-  equipment_name: string;
-};
-
-type RequiredIngredient = {
-  amount?:         number;
-  unit_name?:      string;
-  ingredient_name: string;
-};
-
-type RequiredSubrecipe = {
-  amount?:         number;
-  unit_name?:      string;
-  subrecipe_title: string;
 };

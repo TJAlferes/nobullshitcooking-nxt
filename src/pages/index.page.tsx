@@ -1,4 +1,4 @@
-import { Home }        from '../components';
+import { Home }        from '../modules/shared/components';
 import { staticProps } from '../store';
 
 export default function IndexPage() {

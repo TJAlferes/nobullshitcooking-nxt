@@ -15,7 +15,7 @@ import { endpoint }                        from '../../utils/api';
 import { getCroppedImage }                 from '../../utils/getCroppedImage';
 import { validRecipeInfo }                 from './validRecipeInfo';
 
-export default function NewRecipe() {
+export default function RecipeForm() {
   const router =    useRouter();
   const params =    useSearchParams();
   const ownership = params.get('ownership');  // TO DO: triple test
