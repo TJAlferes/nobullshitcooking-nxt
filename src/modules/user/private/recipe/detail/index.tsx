@@ -5,7 +5,7 @@ import { LoaderSpinner } from '../../../../components';
 import { endpoint }      from '../../../../utils/api';
 import type { Recipe }   from '../../../../types';
 
-export default function PrivateUserRecipe({ recipe }: {recipe: Recipe}) {
+export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
     recipe_id,

@@ -11,7 +11,7 @@ import type { Recipe }    from '../../store/plan/types';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-export default function Plan() {
+export default function UserPrivatePlanDetail() {
   const router  = useRouter();
 
   const params  = useSearchParams();

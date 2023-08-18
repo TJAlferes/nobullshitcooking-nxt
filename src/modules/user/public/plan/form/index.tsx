@@ -27,7 +27,7 @@ import { createPlan, updatePlan } from '../../store/user/plan/actions';
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
-export default function NewPlan() {
+export default function UserPublicPlanForm() {
   const router = useRouter();
 
   const params  = useSearchParams();

@@ -7,7 +7,7 @@ import { endpoint }                        from '../../utils/api';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function EquipmentDetail({ equipment }: {equipment: Equipment}) {
+export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Equipment}) {
   const my_equipment = useSelector(state => state.data.my_equipment);
 
   const {

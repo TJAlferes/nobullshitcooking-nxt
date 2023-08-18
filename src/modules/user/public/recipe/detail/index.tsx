@@ -10,7 +10,7 @@ import { saveRecipe }                      from '../../../store/user/save/action
 import { endpoint }                        from '../../../utils/api';
 import type { Recipe }                     from '../../../types';
 
-export default function PublicUserRecipeDetail({ recipe }: {recipe: Recipe}) {
+export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);

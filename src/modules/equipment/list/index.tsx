@@ -9,7 +9,7 @@ import { SearchContext }                              from '../../utils/SearchPr
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
-export default function Equipments() {
+export default function EquipmentList() {
   const searchDriver = useContext(SearchContext);
 
   const equipment_types = useSelector(state => state.data.equipment_types);

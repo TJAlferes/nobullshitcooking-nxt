@@ -2,14 +2,14 @@ import dynamic from 'next/dynamic';
 
 import { LoaderSpinner } from '../../../modules/shared/components';
 
-const PlanForm = dynamic(
-  () => import('../../../modules/plan/form'),
+const Plan = dynamic(
+  () => import('../../../modules/plan/detail'),
   {
     loading: () => <LoaderSpinner />,
-    ssr: false
+    ssr:     false
   }
 );
 
-export default function PlanFormPage() {
-  return <PlanForm />;
+export default function PlanPage() {
+  return <Plan />;
 }

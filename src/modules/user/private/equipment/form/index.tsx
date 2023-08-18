@@ -10,7 +10,7 @@ import { useTypedSelector as useSelector }  from '../../store';
 import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
 import { getCroppedImage }                  from '../../utils/getCroppedImage';
 
-export default function EquipmentForm() {
+export default function UserPrivateEquipmentForm() {
   const router = useRouter();
   const params = useSearchParams();
   const equipment_id = params.get('equipment_id');

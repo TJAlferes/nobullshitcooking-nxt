@@ -7,7 +7,7 @@ import { endpoint }                        from '../../utils/api';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function UserPrivateIngredientDetail({ ingredient }: {ingredient: Ingredient}) {
+export default function IngredientDetail({ ingredient }: {ingredient: Ingredient}) {
   const my_ingredients = useSelector(state => state.data.my_ingredients);
 
   const {

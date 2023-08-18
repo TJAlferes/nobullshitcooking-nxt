@@ -10,7 +10,7 @@ import { useTypedSelector as useSelector }    from '../../store';
 import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
 import { getCroppedImage }                    from '../../utils/getCroppedImage';
 
-export default function UserPrivateIngredientForm() {
+export default function IngredientForm() {
   const router = useRouter();
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');

@@ -1,38 +1,37 @@
 import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ReactCrop, { Crop }             from "react-image-crop";
+import ReactCrop, { Crop }             from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { CropPreview, LoaderButton }          from '../../components';
-import { useTypedSelector as useSelector }    from '../../store';
-import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
-import { getCroppedImage }                    from '../../utils/getCroppedImage';
+import { CropPreview, LoaderButton }        from '../../components';
+import { useTypedSelector as useSelector }  from '../../store';
+import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
+import { getCroppedImage }                  from '../../utils/getCroppedImage';
 
-export default function NewIngredient() {
+export default function EquipmentForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const ingredient_id = params.get('ingredient_id');
+  const equipment_id = params.get('equipment_id');
 
   const dispatch = useDispatch();
-  //const ingredients =     useSelector(state => state.data.ingredients);
-  const ingredient_types = useSelector(state => state.data.ingredient_types);
-  const my_ingredients =   useSelector(state => state.data.my_ingredients);
-  const message =          useSelector(state => state.user.message);
+  //const equipment =      useSelector(state => state.data.equipment);
+  const equipment_types = useSelector(state => state.data.equipment_types);
+  const my_equipment =    useSelector(state => state.data.my_equipment);
+  const message =         useSelector(state => state.user.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);
 
-  const ingredient_id                               = params.get('ingredient_id');
-  const [ editing_id,         setEditingId ]        = useState<string|null>(null);
-  const [ ingredient_type_id, setIngredientTypeId ] = useState(0);
-  const [ ingredient_name,    setIngredientName ]   = useState("");
-  const [ description, setDescription ] = useState("");
-  const [ prevImage,   setPrevImage ] =   useState("nobsc-ingredient-default");
-  const [ image,       setImage ] =       useState<string | ArrayBuffer | null>(null);
-  const [ fullImage,   setFullImage ] =   useState<File | null>(null);
-  const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
+  const [ editingId,   setEditingId ] =             useState<string | null>(null);  // is this even needed?
+  const [ equipment_type_id, setEquipmentTypeId ] = useState<number>(0);  // null?
+  const [ equipment_name,    setEquipmentName ]   = useState("");
+  const [ description, setDescription ] =           useState("");
+  const [ prevImage,   setPrevImage ] =             useState("nobsc-equipment-default");
+  const [ image,       setImage ] =                 useState<string | ArrayBuffer | null>(null);
+  const [ fullImage,   setFullImage ] =             useState<File | null>(null);
+  const [ tinyImage,   setTinyImage ] =             useState<File | null>(null);
 
   const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
   const [ fullCrop, setFullCrop ] = useState("");
@@ -40,34 +39,34 @@ export default function NewIngredient() {
 
   const imageRef = useRef<HTMLImageElement>();
 
-  const dir = 'https://s3.amazonaws.com/nobsc-user-ingredients';
+  const dir = 'https://s3.amazonaws.com/nobsc-user-equipment';  // .com/nobsc-user/equipment instead?
 
   useEffect(() => {
-    const getExistingIngredientToEdit = () => {
-      if (!ingredient_id) {
+    const getExistingEquipmentToEdit = () => {
+      if (!equipment_id) {
         router.push('/dashboard');
         return;
       }
-
+      
       setLoading(true);
       window.scrollTo(0, 0);
-      const [ prev ] = my_ingredients.filter(i => i.ingredient_id === ingredient_id);
+      const [ prev ] = my_equipment.filter(e => e.equipment_id === equipment_id);
       if (!prev) {
         router.push('/dashboard');
         setLoading(false);
         return;
       }
-
-      setEditingId(prev.ingredient_id);
-      setIngredientTypeId(prev.ingredient_type_id);
-      setIngredientName(prev.ingredient_name);
+      
+      setEditingId(prev.equipment_id);  // is this even needed?
+      setEquipmentTypeId(prev.equipment_type_id);
+      setEquipmentName(prev.equipment_name);
       setDescription(prev.description);
       setPrevImage(prev.image_url);
-      
+
       setLoading(false);
     };
 
-    if (ingredient_id) getExistingIngredientToEdit();
+    if (equipment_id) getExistingEquipmentToEdit();
   }, []);
 
   useEffect(() => {
@@ -76,19 +75,19 @@ export default function NewIngredient() {
     if (isSubscribed) {
       if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
-      if (message === "Ingredient created." || message === "Ingredient updated.") {
+      if (message === "Equipment created." || message === "Equipment updated.") {
         setTimeout(() => router.push('/dashboard'), 3000);
       }
       setLoading(false);
     }
-
+    
     return () => {
       isSubscribed = false;
     };
   }, [message]);
 
-  const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
+  const changeType =        (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName =        (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +101,7 @@ export default function NewIngredient() {
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
     const full = await getCroppedImage(280, 172, imageRef.current, crop);
-    const tiny = await getCroppedImage(28, 18, imageRef.current, crop);
+    const tiny = await getCroppedImage(28,  18,  imageRef.current, crop);
     if (!full || !tiny) return;
     setFullCrop(full.preview);
     setTinyCrop(tiny.preview);
@@ -123,18 +122,18 @@ export default function NewIngredient() {
   };
 
   const valid = () => {
-    const validTypeId = ingredient_type_id !== 0;
+    const validTypeId = equipment_type_id !== 0;
     if (!validTypeId) {
       window.scrollTo(0, 0);
-      setFeedback("Select ingredient type.");
+      setFeedback("Select equipment type.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
 
-    const validName = ingredient_name.trim() !== "";
+    const validName = equipment_name.trim() !== "";
     if (!validName) {
       window.scrollTo(0, 0);
-      setFeedback("Check name.");
+      setFeedback("Check your name.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
@@ -154,40 +153,42 @@ export default function NewIngredient() {
   const submit = () => {
     if (!valid()) return;
     setLoading(true);
-    const ingredientInfo = {ingredient_type_id, ingredient_name, description, image, fullImage, tinyImage};
-    if (editing_id) {
-      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE INGREDIENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-      const ingredientUpdateInfo = {ingredient_id: editing_id, prevImage, ...ingredientInfo};
-      dispatch(updateIngredient(ingredientUpdateInfo));
+    const equipmentInfo = {equipment_type_id, equipment_name, description, image, fullImage, tinyImage};
+    if (editingId) {
+      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE EQUIPMENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      const equipmentUpdateInfo = {equipment_id: editingId, prevImage, ...equipmentInfo};
+      dispatch(updateEquipment(equipmentUpdateInfo));
     } else {
-      dispatch(createIngredient(ingredientInfo));
+      dispatch(createEquipment(equipmentInfo));
     }
   };
-
+  
   return (
-    <div className="one-col new-ingredient">
-      <h1>New Ingredient</h1>
+    <div className="one-col new-equipment">
+      <h1>New Equipment</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Type of Ingredient</h2>
-      <select name="ingredientType" onChange={changeType} required value={typeId}>
+      <h2>Type of Equipment</h2>
+      <select name="equipmentType" onChange={changeType} required value={equipment_type_id}>
         <option value=""></option>
-        {ingredientTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
+        {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
+          <option key={equipment_type_id} value={equipment_type_id}>{equipment_type_name}</option>
+        ))}
       </select>
 
       <h2>Name</h2>
-      <input className="name" onChange={changeName} type="text" value={name} />
+      <input className="name" onChange={changeName} type="text" value={equipment_name} />
 
       <h2>Description</h2>
       <textarea className="description" onChange={changeDescription} value={description} />
 
       <div>
-        <h2>Image of Ingredient</h2>
+        <h2>Image of Equipment</h2>
 
         {!image && (
           <div>
-            {!editingId ? <img src={`${dir}/nobsc-ingredient-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
+            {!editingId ? <img src={`${dir}/nobsc-equipment-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
             <h4>Change</h4>
             <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
@@ -215,7 +216,7 @@ export default function NewIngredient() {
 
         <LoaderButton
           className="submit-button"
-          id="create_new_private_user_ingredient_button"
+          id="create_equipment_button"
           isLoading={loading}
           loadingText="Creating..."
           name="submit"

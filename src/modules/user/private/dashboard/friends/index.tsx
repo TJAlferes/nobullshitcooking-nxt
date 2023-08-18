@@ -12,7 +12,7 @@ import {
   unblockUser       as userUnblockUser
 } from './state';
 
-// Just make this a Dashboard tab?
+// Just make this a Dashboard tab
 export default function Friends() {
   const dispatch = useDispatch();
   const authname =       useSelector(state => state.auth.authname);
