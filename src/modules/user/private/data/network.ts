@@ -1,29 +1,18 @@
 import axios from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint } from '../../utils/api';
-import { getInitialData, getData, getInitialUserData, getUserData } from './actions';
-import { actionTypes, InitialData, InitialUserData } from './types';
+import { endpoint } from '../../../../config/api';
+import { getInitialUserData, getUserData, actionTypes } from './state';
+import type { InitialUserData } from './state';
 
-const { INIT, INIT_USER } = actionTypes;
+const { INIT_USER } = actionTypes;
 
 export function* watchData() {
   yield all([
-    takeEvery(INIT,      getInitialDataSaga),
     takeEvery(INIT_USER, getInitialUserDataSaga),
-
     //takeEvery(, dataGetSaga),
     //takeEvery(, dataGetSaga)
   ]);
-}
-
-export function* getInitialDataSaga() {
-  try {
-    const { data } = yield call([axios, axios.get], `${endpoint}/data-init`);
-    yield put(getInitialData(data));
-  } catch (err) {
-    //yield put(getInitialDataFailed());
-  }
 }
 
 export function* getInitialUserDataSaga() {
@@ -55,16 +44,6 @@ export function* getInitialUserDataSaga() {
 
 // refetches
 
-export const getCuisinesSaga =          makeDataSaga("/cuisine",         "cuisines");
-export const getEquipmentsSaga =        makeDataSaga("/equipment",       "equipment");
-export const getEquipmentTypesSaga =    makeDataSaga("/equipment-type",  "equipment_types");
-export const getIngredientsSaga =       makeDataSaga("/ingredient",      "ingredients");
-export const getIngredientTypesSaga =   makeDataSaga("/ingredient-type", "ingredient_types");
-export const getUnitsSaga =             makeDataSaga("/unit",            "units");
-export const getMethodsSaga =           makeDataSaga("/method",          "methods");
-export const getRecipesSaga =           makeDataSaga("/recipe",          "recipes");
-export const getRecipeTypesSaga =       makeDataSaga("/recipe-type",     "recipe_types");
-
 export const getMyFavoriteRecipesSaga = makeUserDataSaga("/user/favorite-recipe", "my_favorite_recipes");
 export const getMyFriendshipsSaga =     makeUserDataSaga("/user/friendship",      "my_friendships");
 export const getMyPlansSaga =           makeUserDataSaga("/user/plan",            "my_plans");
@@ -73,18 +52,6 @@ export const getMyIngredientsSaga =     makeUserDataSaga("/user/ingredient",    
 export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/private/recipe",  "my_private_recipes");
 export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/public/recipe",   "my_public_recipes");
 export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "my_saved_recipes");
-
-function makeDataSaga(path: string, key: keyof InitialData) {
-  return function* () {
-    try {
-      const { data } = yield call([axios, axios.get], `${endpoint}${path}`);
-
-      yield put(getData(key, data));
-    } catch (err) {
-      //
-    }
-  }
-}
 
 function makeUserDataSaga(path: string, key: keyof InitialUserData) {
   return function* () {

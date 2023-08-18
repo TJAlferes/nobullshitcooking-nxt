@@ -1,6 +1,6 @@
 import type { Store } from 'redux';
 
-import { focused } from '../store/window/actions';
+import { focused } from './state';
 
 export function initWindowBlurHandler(store: Store) {
   if (typeof window === 'undefined') {
