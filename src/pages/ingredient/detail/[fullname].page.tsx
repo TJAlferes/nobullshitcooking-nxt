@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { endpoint }        from '../../../config/api';
 import type { Ingredient } from '../../../modules/shared/types';
-import IngredientDetail    from "../../../modules/user/private/ingredient/detail";
+import IngredientDetail    from "../../../modules/ingredient/detail";
 
 export default function IngredientDetailPage({ ingredient }: {ingredient: Ingredient}) {
   return <IngredientDetail ingredient={ingredient} />;

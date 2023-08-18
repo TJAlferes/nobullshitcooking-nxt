@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 
 import { LoaderSpinner } from '../../../modules/shared/components';
 
-const Plan = dynamic(
+const PlanDetail = dynamic(
   () => import('../../../modules/plan/detail'),
   {
     loading: () => <LoaderSpinner />,
@@ -10,6 +10,6 @@ const Plan = dynamic(
   }
 );
 
-export default function PlanPage() {
-  return <Plan />;
+export default function PlanDetailPage() {
+  return <PlanDetail />;
 }

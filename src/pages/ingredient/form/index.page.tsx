@@ -1,4 +1,4 @@
-import IngredientForm from "../../../modules/user/private/ingredient/form";
+import IngredientForm from "../../../modules/ingredient/form";
 
 export default function IngredientFormPage() {
   return <IngredientForm />;

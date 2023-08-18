@@ -1,4 +1,4 @@
-import IngredientList from "../../../modules/user/private/ingredient/list/index.page";
+import IngredientList from "../../../modules/ingredient/list";
 
 export default function IngredientListPage() {
   return <IngredientList />;
