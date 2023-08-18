@@ -1,10 +1,13 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../utils/api';
+import { endpoint }                      from '../../../config/api';
 import { getMyPlansSaga }                from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
-import { actionTypes, CreatePlan, UpdatePlan, DeletePlan } from './types';
+import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { actionTypes } from './state';
+import type { CreatePlan, UpdatePlan, DeletePlan } from './state';
+
+// TO DO: split into private and public
 
 const { CREATE_PLAN, UPDATE_PLAN, DELETE_PLAN } = actionTypes;
 
@@ -20,57 +23,57 @@ export function* createPlanSaga({ planInfo }: CreatePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/plan/create`,
+      `${endpoint}/user/private/plan/create`,
       {planInfo},
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPlansSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* updatePlanSaga({ planInfo }: UpdatePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/plan/update`,
+      `${endpoint}/user/private/plan/update`,
       {planInfo},
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPlansSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* deletePlanSaga({ plan_id }: DeletePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/plan/delete`,
+      `${endpoint}/user/private/plan/delete`,
       {
         withCredentials: true,
         data: {plan_id}
       }
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPlansSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }

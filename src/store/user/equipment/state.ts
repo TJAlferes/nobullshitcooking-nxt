@@ -1,8 +1,23 @@
+
+
+export const createEquipment = (equipmentInfo: EquipmentInfo) =>
+  ({type: CREATE_EQUIPMENT, equipmentInfo});
+
+export const updateEquipment = (equipmentInfo: EquipmentUpdateInfo) =>
+  ({type: UPDATE_EQUIPMENT, equipmentInfo});
+
+export const deleteEquipment = (equipment_id: string) =>
+  ({type: DELETE_EQUIPMENT, equipment_id});
+
+
+
 export const actionTypes = {
   CREATE_EQUIPMENT: 'CREATE_EQUIPMENT',
   UPDATE_EQUIPMENT: 'UPDATE_EQUIPMENT',
   DELETE_EQUIPMENT: 'DELETE_EQUIPMENT'
 } as const;
+
+const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
 export type CreateEquipment = {
   type:           typeof actionTypes.CREATE_EQUIPMENT;
@@ -24,7 +39,7 @@ export type DeleteEquipment = {
 export type EquipmentInfo = {
   equipment_type_id: number;
   equipment_name:    string;
-  description:       string;
+  notes:             string;
   //image:             string | ArrayBuffer | null;
   //fullImage:         File | null;
   //tinyImage:         File | null;

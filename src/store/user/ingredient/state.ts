@@ -1,8 +1,23 @@
+
+
+export const createIngredient = (ingredientInfo: IngredientInfo) =>
+  ({type: CREATE_INGREDIENT, ingredientInfo});
+
+export const updateIngredient = (ingredientInfo: IngredientUpdateInfo) =>
+  ({type: UPDATE_INGREDIENT, ingredientInfo});
+
+export const deleteIngredient = (ingredient_id: string) =>
+  ({type: DELETE_INGREDIENT, ingredient_id});
+
+
+
 export const actionTypes = {
   CREATE_INGREDIENT: 'CREATE_INGREDIENT',
   UPDATE_INGREDIENT: 'UPDATE_INGREDIENT',
   DELETE_INGREDIENT: 'DELETE_INGREDIENT'
 } as const;
+
+const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
 export type CreateIngredient = {
   type:            typeof actionTypes.CREATE_INGREDIENT;
@@ -24,7 +39,7 @@ export type DeleteIngredient = {
 export type IngredientInfo = {
   ingredient_type_id: number;
   ingredient_name:    string;
-  description:        string;
+  notes:              string;
   //image:            string | ArrayBuffer | null;
   //fullImage:        File | null;
   //tinyImage:        File | null;

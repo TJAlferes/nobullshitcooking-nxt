@@ -8,14 +8,14 @@ export async function getCroppedImage(
 ) {
   if (!crop.x || !crop.y || !crop.width || !crop.height) return;
 
-  const canvas =  document.createElement("canvas");
-  canvas.width =  imageWidth;
+  const canvas  = document.createElement("canvas");
+  canvas.width  = imageWidth;
   canvas.height = imageHeight;
 
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
-  
-  const ctx =    canvas.getContext("2d");
+  const ctx    = canvas.getContext("2d");
+
   if (!ctx) return;
 
   ctx.drawImage(
@@ -33,7 +33,9 @@ export async function getCroppedImage(
   const preview: string = await new Promise(resolve => {
     canvas.toBlob(blob => {
       if (!blob) return;
+
       const fileUrl = window.URL.createObjectURL(blob);
+
       resolve(fileUrl);
     }, 'image/jpeg', 1);
   });
@@ -41,7 +43,13 @@ export async function getCroppedImage(
   const final: File = await new Promise(resolve => {
     canvas.toBlob(blob => {
       if (!blob) return;
-      const image = new File([blob], "final", {type: "image/jpeg"});
+
+      const image = new File(
+        [blob],
+        "final",
+        {type: "image/jpeg"}
+      );
+
       resolve(image);
     }, 'image/jpeg', 1);
   });

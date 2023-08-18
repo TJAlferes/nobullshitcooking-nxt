@@ -1,18 +1,21 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                        from '../../../utils/api';
+import { endpoint }                                        from '../../../config/api';
 import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
-import { userMessage, userMessageClear }                   from '../actions';
-import {
-  actionTypes,
+import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { actionTypes } from './state';
+import type {
   CreatePrivateRecipe,
   UpdatePrivateRecipe,
   DeletePrivateRecipe,
   CreatePublicRecipe,
   UpdatePublicRecipe,
   DisownPublicRecipe
-} from './types';
+} from './state';
+
+// TO DO: split into private and public
+// TO DO: add PRIVATE_ to the equipment and ingredient modules just like here
 
 const {
   CREATE_PRIVATE_RECIPE,
@@ -185,14 +188,14 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
       },
       {withCredentials: true}
     );
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPrivateRecipesSaga);
     yield call(getMyPublicRecipesSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
@@ -206,13 +209,13 @@ export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
       }
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPrivateRecipesSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
@@ -226,13 +229,13 @@ export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
       }
     );
       
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPublicRecipesSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRecipe)) {
@@ -395,12 +398,12 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
       },
       {withCredentials: true}
     );
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyPrivateRecipesSaga);
     yield call(getMyPublicRecipesSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }

@@ -1,15 +1,11 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                                       from '../../../utils/api';
-import { getMyEquipmentSaga }                                             from '../../data/sagas';
-import { userMessage, userMessageClear }                                  from '../actions';
-import {
-  actionTypes,
-  CreateEquipment,
-  UpdateEquipment,
-  DeleteEquipment
-} from './types';
+import { endpoint }           from '../../../config/api';
+import { getMyEquipmentSaga } from '../../data/sagas';
+import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { actionTypes } from './state';
+import type { CreateEquipment, UpdateEquipment, DeleteEquipment } from './state';
 
 const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
@@ -60,7 +56,7 @@ export function* createEquipmentSaga(action: CreateEquipment) {
 
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/equipment/create`,
+      `${endpoint}/user/private/equipment/create`,
       {
         equipmentInfo: {
           equipment_type_id,
@@ -72,14 +68,14 @@ export function* createEquipmentSaga(action: CreateEquipment) {
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyEquipmentSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* updateEquipmentSaga(action: UpdateEquipment) {
@@ -123,7 +119,7 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
 
     const { data: { message } } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/equipment/update`,
+      `${endpoint}/user/private/equipment/update`,
       {
         equipmentInfo: {
           equipment_id,
@@ -137,33 +133,33 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyEquipmentSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* deleteEquipmentSaga({ equipment_id }: DeleteEquipment) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/equipment/delete`,
+      `${endpoint}/user/private/equipment/delete`,
       {
         withCredentials: true,
         data: {equipment_id}
       }
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyEquipmentSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }

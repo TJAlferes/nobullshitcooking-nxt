@@ -1,15 +1,11 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../utils/api';
-import { getMyIngredientsSaga }          from '../../data/sagas';
-import { userMessage, userMessageClear } from '../actions';
-import {
-  actionTypes,
-  CreateIngredient,
-  UpdateIngredient,
-  DeleteIngredient
-} from './types';
+import { endpoint }                          from '../../../config/api';
+import { getMyIngredientsSaga }              from '../../data/sagas';
+import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { actionTypes } from './state';
+import type { CreateIngredient, UpdateIngredient, DeleteIngredient } from './state';
 
 const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
@@ -60,7 +56,7 @@ export function* createIngredientSaga(action: CreateIngredient) {
 
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/ingredient/create`,
+      `${endpoint}/user/private/ingredient/create`,
       {
         ingredientInfo: {
           ingredient_type_id,
@@ -72,14 +68,14 @@ export function* createIngredientSaga(action: CreateIngredient) {
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyIngredientsSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* updateIngredientSaga(action: UpdateIngredient) {
@@ -123,7 +119,7 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
 
     const { data: { message } } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/ingredient/update`,
+      `${endpoint}/user/private/ingredient/update`,
       {
         ingredientInfo: {
           ingredient_id,
@@ -137,33 +133,33 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
       {withCredentials: true}
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyIngredientsSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
 
 export function* deleteIngredientSaga({ ingredient_id }: DeleteIngredient) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/ingredient/delete`,
+      `${endpoint}/user/private/ingredient/delete`,
       {
         withCredentials: true,
         data: {ingredient_id}
       }
     );
 
-    yield put(userMessage(message));
+    yield put(systemMessage(message));
     yield call(getMyIngredientsSaga);
   } catch(err) {
-    yield put(userMessage('An error occurred. Please try again.'));
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
-  yield put(userMessageClear());
+  yield put(systemMessageClear());
 }
