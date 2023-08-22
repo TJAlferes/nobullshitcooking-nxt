@@ -6,9 +6,12 @@ import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { CropPreview, LoaderButton }        from '../../components';
-import { useTypedSelector as useSelector }  from '../../store';
+import { useTypedSelector as useSelector }  from '../../../store';
 import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
-import { getCroppedImage }                  from '../../utils/getCroppedImage';
+import { getCroppedImage }                  from '../../../utils/getCroppedImage';
+
+// REMOVE THIS FILE? SINCE USERS CAN ONLY CREATE PRIVATE EQUIPMENT
+// OR MOVE TO STAFF
 
 export default function EquipmentForm() {
   const router = useRouter();

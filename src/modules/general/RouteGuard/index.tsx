@@ -3,11 +3,11 @@
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactElement }      from 'react';
 
-import { useTypedSelector as useSelector } from '../../store';
-import { LoaderSpinner }                   from '..';
+import { useTypedSelector as useSelector } from '../../../store';
+import { LoaderSpinner }                   from '../../shared/components';
 
-export function Guard({ children }: Props) {
-  const router =   useRouter();
+export function RouteGuard({ children }: Props) {
+  const router   = useRouter();
   const pathname = usePathname();
 
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);

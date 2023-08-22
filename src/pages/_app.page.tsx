@@ -5,8 +5,8 @@ import { HTML5toTouch }       from 'rdndmb-html5-to-touch';
 
 import '../../styles/styles.css';
 import { Layout, Guard, Theme }     from '../modules/shared/components';
+import { SearchProvider as Search } from '../modules/shared/search/hook';
 import { wrapper }                  from '../store';
-import { SearchProvider as Search } from '../utils/SearchProvider';
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);

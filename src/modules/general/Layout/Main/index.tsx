@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Breadcrumbs } from '..';
+import { Breadcrumbs } from './Breadcrumbs';
 
 export function Main({ children }: Props) {
   return (

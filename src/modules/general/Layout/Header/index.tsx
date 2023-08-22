@@ -3,19 +3,24 @@
 import Link          from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { logout }          from '../../store/auth/actions';
-import { toggleLeftNav }   from '../../store/menu/actions';
-import { dark, light }     from '../../store/theme/actions';
-import { LeftNav, Search } from '..';
+import {
+  useTypedDispatch as useDispatch,
+  useTypedSelector as useSelector
+} from '../../../../store';
+import { LeftNav }       from '../../../shared/menu';
+import { toggleLeftNav } from '../../../shared/menu/state';
+import { Search }        from '../../../shared/search';
+import { logout }        from '../../../user/authentication/state';
+import { dark, light }   from '../../ThemeProvider/state';
 
 export function Header() {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const authname =            useSelector(state => state.auth.authname);
+
+  const authname            = useSelector(state => state.auth.authname);
   const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const theme =               useSelector(state => state.theme.theme);
+  const theme               = useSelector(state => state.theme.theme);
 
   const click = () => dispatch(toggleLeftNav());
 

@@ -10,6 +10,9 @@ import { useTypedSelector as useSelector }    from '../../store';
 import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
 import { getCroppedImage }                    from '../../utils/getCroppedImage';
 
+// REMOVE THIS FILE? SINCE USERS CAN ONLY CREATE PRIVATE INGREDIENT
+// OR MOVE TO STAFF
+
 export default function IngredientForm() {
   const router = useRouter();
   const params = useSearchParams();

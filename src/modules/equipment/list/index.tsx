@@ -3,9 +3,9 @@
 import Link                     from 'next/link';
 import { useContext, useState } from 'react';
 
-import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
-import { useTypedSelector as useSelector }            from '../../store';
-import { SearchContext }                              from '../../utils/SearchProvider';
+import { useTypedSelector as useSelector } from '../../../store';
+import { ExpandCollapse, Pagination, ResultsPerPage } from '../../shared/components';
+import { SearchContext } from '../../shared/search';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
@@ -13,18 +13,26 @@ export default function EquipmentList() {
   const searchDriver = useContext(SearchContext);
 
   const equipment_types = useSelector(state => state.data.equipment_types);
-  //const resultTerm       useSelector(state = state.search.resultTerm);
-  const results =        useSelector(state => state.search.results);
-  const total_results =   useSelector(state => state.search.total_results);
-  const total_pages =     useSelector(state => state.search.total_pages);
+  //const resultTerm      = useSelector(state = state.search.resultTerm);
+  const results         = useSelector(state => state.search.results);
+  const total_results   = useSelector(state => state.search.total_results);
+  const total_pages     = useSelector(state => state.search.total_pages);
 
-  const [ expandedFilter, setExpandedFilter ] =               useState<string|null>(null);
-  const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] = useState<string[]>(searchDriver.params.filters?.equipment_types ?? []);
+  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+
+  const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =
+    useState<string[]>(searchDriver.params.filters?.equipment_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "equipmentTypes" && checkedEquipmentTypes !== searchDriver.params.filters?.equipment_types) searchDriver.setFilters(name, checkedEquipmentTypes);
+
+      if (
+        name === "equipmentTypes"
+        && checkedEquipmentTypes !== searchDriver.params.filters?.equipment_types
+      ) {
+        searchDriver.setFilters(name, checkedEquipmentTypes);
+      }
     } else {
       setExpandedFilter(name);
     }

@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import type { Equipment }                  from '../../store/data/types';
-import { endpoint }                        from '../../utils/api';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../store';
+import { LoaderSpinner }                   from '../../shared/components';
+import type { Equipment }                  from '../../shared/data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
@@ -15,7 +15,7 @@ export default function EquipmentDetail({ equipment }: {equipment: Equipment}) {
     equipment_name,
     image_url,
     equipment_type_name,
-    description
+    notes
   } = equipment;
 
   if (!equipment) return <LoaderSpinner />;
@@ -35,8 +35,8 @@ export default function EquipmentDetail({ equipment }: {equipment: Equipment}) {
           <b>Equipment Type:</b>{' '}<span>{equipment_type_name}</span>
         </div>
 
-        <div className="description">
-          <b>Equipment Description:</b>{' '}<div>{description}</div>
+        <div className="notes">
+          <b>Equipment Notes:</b>{' '}<div>{notes}</div>
         </div>
       </div>
 
@@ -61,7 +61,10 @@ export async function getStaticPaths() {
     }
   }));
 
-  return {paths, fallback: false};
+  return {
+    paths,
+    fallback: false
+  };
 }
 
 export async function getStaticProps({ params }: StaticProps) {

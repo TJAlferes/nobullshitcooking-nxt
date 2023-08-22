@@ -3,10 +3,16 @@
 import type { ChangeEvent }             from 'react';
 import { useContext, useState, useRef } from 'react';
 
-import { useTypedDispatch as useDispatch, useTypedSelector as useSelector } from '../../store';
-import { getSuggestions, setSuggestions, setIndex, setTerm }                from '../../store/search/actions';
-import type { SearchIndex }                                                 from '../../store/search/types';
-import { SearchContext }                                                    from '../../utils/SearchProvider';
+import {
+  useTypedDispatch as useDispatch,
+  useTypedSelector as useSelector }
+from '../../../store';
+import { SearchContext }                                     from './hook';
+import { getSuggestions, setSuggestions, setIndex, setTerm } from './state';
+import type { SearchIndex }                                  from './state';
+
+export { Pagination }     from './Pagination';
+export { ResultsPerPage } from './ResultsPerPage';
 
 export function Search() {
   const searchDriver = useContext(SearchContext);

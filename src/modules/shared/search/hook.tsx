@@ -5,10 +5,10 @@ import { createContext, useMemo }     from 'react';
 import type { ReactNode }             from 'react';
 import qs                             from 'qs';
 
-import { getResults, setIndex, setSuggestions, setTerm } from '../store/search/actions';
-import { toggleLeftNav }                                 from '../store/menu/actions';
-import type { SearchIndex, SearchRequest }               from '../store/search/types';
-import { useTypedDispatch as useDispatch }               from '../store';
+import { useTypedDispatch as useDispatch }               from '../../../store';
+import { toggleLeftNav }                                 from '../menu/state';
+import { getResults, setIndex, setSuggestions, setTerm } from './state';
+import type { SearchIndex, SearchRequest }               from './state';
 
 export const SearchContext = createContext({} as UseSearch);
 

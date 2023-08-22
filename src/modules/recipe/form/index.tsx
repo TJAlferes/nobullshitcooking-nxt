@@ -15,6 +15,9 @@ import { endpoint }                        from '../../utils/api';
 import { getCroppedImage }                 from '../../utils/getCroppedImage';
 import { validRecipeInfo }                 from './validRecipeInfo';
 
+// REMOVE THIS FILE?
+// OR MOVE TO STAFF
+
 export default function RecipeForm() {
   const router =    useRouter();
   const params =    useSearchParams();

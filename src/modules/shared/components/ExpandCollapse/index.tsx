@@ -17,17 +17,20 @@ export function ExpandCollapse({
     if (handler) handler();
   }
 
+  if (!expanded) {
+    return (
+      <div className="expand-collapse">
+        <div className="collapsed" onClick={toggle}>{headingWhileCollapsed}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="expand-collapse">
-      {!expanded
-        ? <div className="collapsed" onClick={toggle}>{headingWhileCollapsed}</div>
-        : (
-          <>
-            <div className="expanded" onClick={toggle}>{headingWhileExpanded}</div>
-            {children}
-          </>
-        )
-      }
+      <>
+        <div className="expanded" onClick={toggle}>{headingWhileExpanded}</div>
+        {children}
+      </>
     </div>
   );
 };

@@ -25,6 +25,9 @@ import {
 import type { PlanData, Recipe }  from '../../store/new-plan/types';
 import { createPlan, updatePlan } from '../../store/user/plan/actions';
 
+// REMOVE THIS FILE?
+// OR MOVE TO STAFF
+
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 export default function PlanForm() {

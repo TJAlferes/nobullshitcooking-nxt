@@ -2,13 +2,13 @@
 
 import { memo, useContext } from 'react';
 
-import { SearchContext } from '../../utils/SearchProvider';
+import { SearchContext } from '../hook';
 
 export const ResultsPerPage = memo(function ResultsPerPage() {
   const searchDriver = useContext(SearchContext);
 
   const results_per_page = searchDriver.params.results_per_page; 
-  const value = results_per_page ? Number(results_per_page) : 20;
+  const value            = results_per_page ? Number(results_per_page) : 20;
 
   return (
     <div className="results-per-page">

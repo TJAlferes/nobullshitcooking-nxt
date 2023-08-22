@@ -2,22 +2,22 @@
 
 import { memo, useContext } from 'react';
 
-import { useTypedSelector as useSelector } from '../../store';
-import { SearchContext }                   from '../../utils/SearchProvider';
+import { useTypedSelector as useSelector } from '../../../../store';
+import { SearchContext }                   from '../hook';
 
 export const Pagination = memo(function Pagination() {
   const searchDriver = useContext(SearchContext);
 
   const current_page = searchDriver.params.current_page;
-  const total_pages =  useSelector(state => state.search.total_pages);
+  const total_pages  = useSelector(state => state.search.total_pages);
 
   if (!total_pages || Number(total_pages) <= 1) return null;
 
-  const curr =  current_page ? Number(current_page) : 1;
+  const curr  = current_page ? Number(current_page) : 1;
   const first = 1;
-  const prev =  curr - 1;
-  const next =  curr + 1;
-  const last =  Number(total_pages);
+  const prev  = curr - 1;
+  const next  = curr + 1;
+  const last  = Number(total_pages);
 
   return (
     <div className="pagination">
