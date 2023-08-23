@@ -1,12 +1,12 @@
 
 
-export const createPlan = (planInfo: PublicPlanInfo) =>
+export const createPublicPlan = (planInfo: PublicPlanInfo) =>
   ({type: CREATE_PUBLIC_PLAN, planInfo});
 
-export const updatePlan = (planInfo: PublicPlanUpdateInfo) =>
+export const updatePublicPlan = (planInfo: PublicPlanUpdateInfo) =>
   ({type: UPDATE_PUBLIC_PLAN, planInfo});
 
-export const deletePlan = (plan_id: string) =>
+export const deletePublicPlan = (plan_id: string) =>
   ({type: DELETE_PUBLIC_PLAN, plan_id});
 
 

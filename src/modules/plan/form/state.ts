@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 const initialState: State = {
   isLoading:   false,
   creating:    false,
-  editingId:   null,
+  editingId:   undefined,
   publicUrl:   "",
   expandedDay: null,
   plan_name:   "",
@@ -159,7 +159,7 @@ State
 export type State = {
   isLoading:   boolean;
   creating:    boolean;
-  editingId:   number | null;
+  editingId:   string | undefined;
   publicUrl:   string;
   expandedDay: number | null;
   plan_name:   string;
@@ -218,7 +218,7 @@ type SetCreating = {
 
 type SetEditingId = {
   type: typeof actionTypes.SET_EDITING_ID;
-  id:   number | null;
+  id:   string | undefined;
 };
 
 type SetPlanName = {

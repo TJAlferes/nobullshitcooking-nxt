@@ -5,9 +5,9 @@ import { useEffect }                  from 'react';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
-} from '../../store';
-import { clickDay, load } from '../../store/plan/actions';
-import type { Recipe }    from '../../store/plan/types';
+} from '../../../../../redux';
+import { clickDay, load } from '../../../../plan/detail/state';
+import type { Recipe }    from '../../../../plan/detail/state';
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
@@ -19,20 +19,30 @@ export default function UserPrivatePlanDetail() {
 
   const dispatch = useDispatch();
 
-  const my_plans    = useSelector(state => state.data.my_plans);
-  const expandedDay = useSelector(state => state.plan.expandedDay);
-  const planName    = useSelector(state => state.plan.plan_name);
-  const planData    = useSelector(state => state.plan.plan_data);
+  const my_plans    = useSelector(state => state.userData.my_plans);
+  const expandedDay = useSelector(state => state.planDetail.expandedDay);
+  const planName    = useSelector(state => state.planDetail.plan_name);
+  const planData    = useSelector(state => state.planDetail.plan_data);
 
   useEffect(() => {
-    const getPlan = () => {
+    function getPlan() {
       window.scrollTo(0, 0);
-      const [ prev ] = my_plans.filter(p => p.plan_id === plan_id);
-      dispatch(load(prev.plan_name, prev.plan_data));
+
+      const plan = my_plans.find(p => p.plan_id === plan_id);
+
+      if (!plan) {
+        router.push('/');
+        return;
+      }
+
+      dispatch(load(plan.plan_name, plan.plan_data));
     };
 
-    if (plan_id) getPlan();
-    else router.push('/');
+    if (plan_id) {
+      getPlan();
+    } else {
+      router.push('/');
+    }
   }, []);
 
   return (

@@ -5,12 +5,13 @@ import AriaModal                                                  from 'react-ar
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 }                                           from 'uuid';
 
-import { ExpandCollapse, LoaderButton } from '../../components';
+import { ExpandCollapse } from '../../../../shared/ExpandCollapse';
+import { LoaderButton }   from '../../../../shared/LoaderButton';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
-} from '../../store';
-import type { WorkRecipe } from '../../store/data/types';
+} from '../../../../../redux';
+import type { WorkRecipe } from '../../../../shared/data/state';
 import {
   addRecipeToDay,
   removeRecipeFromDay,
@@ -21,11 +22,9 @@ import {
   setEditingId,
   setPlanName,
   setPlanData
-} from '../../store/new-plan/actions';
-import type { PlanData, Recipe }  from '../../store/new-plan/types';
-import { createPlan, updatePlan } from '../../store/user/plan/actions';
-
-const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
+} from '../../../../plan/form/state';
+import type { PlanData, Recipe }  from '../../../../plan/form/state';
+import { createPrivatePlan, updatePrivatePlan } from '../state';
 
 export default function UserPrivatePlanForm() {
   const router = useRouter();
@@ -36,16 +35,16 @@ export default function UserPrivatePlanForm() {
   const dispatch = useDispatch();
 
   const officialRecipes     = useSelector(state => state.data.recipes);
-  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
-  const my_saved_recipes    = useSelector(state => state.data.my_saved_recipes);
-  const my_private_recipes  = useSelector(state => state.data.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.data.my_public_recipes);
-  const my_plans            = useSelector(state => state.data.my_plans);
-  const expandedDay         = useSelector(state => state.newPlan.expandedDay);
-  const editingId           = useSelector(state => state.newPlan.editingId);
-  const plan_name           = useSelector(state => state.newPlan.plan_name);
-  const plan_data           = useSelector(state => state.newPlan.plan_data);
-  const message             = useSelector(state => state.user.message);
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+  const my_private_plans    = useSelector(state => state.userData.my_private_plans);
+  const expandedDay         = useSelector(state => state.planForm.expandedDay);
+  const editingId           = useSelector(state => state.planForm.editingId);
+  const plan_name           = useSelector(state => state.planForm.plan_name);
+  const plan_data           = useSelector(state => state.planForm.plan_data);
+  const message             = useSelector(state => state.system.message);
 
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
@@ -54,17 +53,26 @@ export default function UserPrivatePlanForm() {
 
   useEffect(() => {
     const getExistingPlanToEdit = () => {
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
+
       setLoading(true);
-      const [ prev ] = myPlans.filter(p => p.id === Number(id));
-      // batch these three?
-      dispatch(setEditingId(Number(prev.id)));
-      dispatch(setPlanName(prev.name));
-      dispatch(setPlanData(prev.data));
+
+      const plan = my_private_plans.find(p => p.plan_id === plan_id);
+
+      if (!plan) {
+        dispatch(clearWork());
+        dispatch(setCreating());
+        setLoading(false);
+        return;
+      }
+      // batch these three??? AND SEPARATE FROM PUBLIC PLAN FORM STATE!!!
+      dispatch(setEditingId(plan.plan_id));
+      dispatch(setPlanName(plan.plan_name));
+      dispatch(setPlanData(plan.plan_data));
       setLoading(false);
     };
 
-    if (id) {
+    if (plan_id) {
       dispatch(clearWork());
       getExistingPlanToEdit();
     } else {
@@ -93,7 +101,8 @@ export default function UserPrivatePlanForm() {
     };
   }, [message]);
 
-  const activateModal =   () => setModalActive(true);
+  const activateModal = () => setModalActive(true);
+
   const deactivateModal = () => setModalActive(false);
 
   const discardChanges = () => {
@@ -104,7 +113,7 @@ export default function UserPrivatePlanForm() {
 
   const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
 
-  const getPlanData = () => JSON.stringify(planData);  // clean/format? *** keys???
+  const getPlanData = () => JSON.stringify(plan_data);  // clean/format? *** keys???
 
   const changePlanName = (e: SyntheticEvent) => {
     const nextName = (e.target as HTMLInputElement).value.trim();
@@ -120,8 +129,8 @@ export default function UserPrivatePlanForm() {
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
   const valid = () => {
-    const validName =       planName.trim() !== "";
-    const validNameLength = planName.trim().length < 21;
+    const validName =       plan_name.trim() !== "";
+    const validNameLength = plan_name.trim().length < 21;
 
     if (!validName) {
       window.scrollTo(0, 0);
@@ -142,48 +151,69 @@ export default function UserPrivatePlanForm() {
 
   const handleSubmit = () => {
     if (!valid()) return;
-    setLoading(true);
-    const planInfo = {name: planName, data: getPlanData()};
-    if (editingId) {
-      const planUpdateInfo = {id: editingId as number, ...planInfo};
-      dispatch(updatePlan(planUpdateInfo));
-    }
-    else dispatch(createPlan(planInfo));
-  }
 
-  const tabToList: ITabToList = {
-    "official": officialRecipes,
-    "private":  myPrivateRecipes,
-    "public":   myPublicRecipes,
-    "favorite": myFavoriteRecipes,
-    "saved":    mySavedRecipes
+    setLoading(true);
+
+    const planInfo = {
+      plan_name,
+      plan_data: getPlanData()
+    };
+
+    if (editingId) {
+      const planUpdateInfo = {
+        plan_id: editingId,
+        ...planInfo
+      };
+
+      dispatch(updatePrivatePlan(planUpdateInfo));
+    } else {
+      dispatch(createPrivatePlan(planInfo));
+    }
   };
-  const recipes: IWorkRecipe[] = tabToList[tab];
+
+  const tabToList: TabToList = {
+    "official": officialRecipes,
+    "private":  my_private_recipes,
+    "public":   my_public_recipes,
+    "favorite": my_favorite_recipes,
+    "saved":    my_saved_recipes
+  };
+  const recipes: WorkRecipe[] = tabToList[tab];
 
   return (
     <div className="one-col new-plan">
       <div className="heading">
         <h1>New Plan</h1>
+
         <p className="feedback">{feedback}</p>
+
         <div className="name">
-          <label>Plan Name:</label><input onChange={changePlanName} type="text" value={planName} />
+          <label>Plan Name:</label>
+          <input onChange={changePlanName} type="text" value={plan_name} />
         </div>
       </div>
+
       <div className="calendar">
-        <MonthlyPlan expandedDay={expandedDay} planData={planData} />
+        <MonthlyPlan expandedDay={expandedDay} plan_data={plan_data} />
+
         <div className="recipes-tabs">
-          <button className={(tab === "official") ? "--active" : ""} name="official" onClick={e => clickTab(e)}>Official</button>
-          <button className={(tab === "private") ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>My Private</button>
-          <button className={(tab === "public") ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>My Public</button>
-          <button className={(tab === "favorite") ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
-          <button className={(tab === "saved") ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
+          <button className={tab === "official" ? "--active" : ""} name="official" onClick={e => clickTab(e)}>Official</button>
+          <button className={tab === "private" ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>My Private</button>
+          <button className={tab === "public" ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>My Public</button>
+          <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
+          <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
         </div>
+
         <MemoizedRecipes expandedDay={expandedDay} recipes={recipes} />
       </div>
+
       <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
+
       <div className="finish">
         <button className="cancel-button" onClick={activateModal}>Cancel</button>
-        {modalActive
+        
+        {
+          modalActive
           ? (
             <AriaModal
               dialogClass="cancel"
@@ -201,6 +231,7 @@ export default function UserPrivatePlanForm() {
           )
           : false
         }
+
         <LoaderButton
           className="submit-button"
           id="planner-submit-button"
@@ -215,7 +246,7 @@ export default function UserPrivatePlanForm() {
   );
 }
 
-const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, planData }: MonthlyPlanProps) {
+const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, plan_data }: MonthlyPlanProps) {
   return (
     <div className="plan__monthly-plan">
       <div className="monthly-plan">
@@ -229,17 +260,17 @@ const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, planData }: Monthly
           <span>Saturday</span>
         </div>
         <div className="body">
-          {Object.keys(planData).map((recipeList, i) => (
+          {Object.keys(plan_data).map((recipeList, i) => (
             <div className="monthly-plan__body-day" key={i} >
               <div className="body-day__content">
-                <Day day={i + 1} expandedDay={expandedDay} recipes={planData[Number(recipeList)]} />
+                <Day day={i + 1} expandedDay={expandedDay} recipes={plan_data[Number(recipeList)]} />
               </div>
             </div>
           ))}
         </div>
       </div>
       <div className="expanded-day-container">
-        {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={planData[expandedDay]} />}
+        {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={plan_data[expandedDay]} />}
       </div>
     </div>
   );
@@ -252,7 +283,11 @@ const MemoizedRecipes = memo(function MemoizedRecipes({ expandedDay, recipes }: 
     <Recipes
       day={0}
       expandedDay={expandedDay}
-      recipes={recipes.map(({ id, title, recipe_image, owner_id }) => ({key: uuidv4(), id, title, recipe_image, owner_id}))}
+      recipes={
+        recipes.map(({ recipe_id, title, recipe_image, owner_id }) =>
+          ({key: uuidv4(), recipe_id, title, recipe_image, owner_id})
+        )
+      }
     />
   );
 });
@@ -428,7 +463,7 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
   );
 };
 
-interface ITabToList {
+interface TabToList {
   [index: string]: any;
   "official": WorkRecipe[];
   "private":  WorkRecipe[];
@@ -441,7 +476,7 @@ type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type MonthlyPlanProps = {
   expandedDay: number | null;
-  plan_data:    PlanData;
+  plan_data:   PlanData;
 };
 
 type MemoizedRecipesProps = {
@@ -470,6 +505,8 @@ type DragItem = {
   index: number;
   type:  string;
 };
+
+const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 //end: (item: any, monitor: DragSourceMonitor) => {
     //  if (item.day === 0) return;
