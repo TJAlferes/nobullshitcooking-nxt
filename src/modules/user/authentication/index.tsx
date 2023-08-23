@@ -3,8 +3,8 @@ import { usePathname, useRouter } from 'next/navigation';  // or useRouter from 
 import { useEffect, useState }    from 'react';
 import { useDispatch }            from 'react-redux';
 
-import { LoaderButton }                    from '../../shared/components';
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderButton }                    from '../../shared/LoaderButton';
 import { login }                           from './state';
 
 // TO DO: make Sign In button css not change color on hover while in Signing In... AKA isloading state
@@ -14,7 +14,7 @@ export default function Login() {
   const router =   useRouter();
 
   const dispatch = useDispatch();
-  const message =  useSelector(state => state.auth.message);
+  const message =  useSelector(state => state.system.message);
 
   const [ email,    setEmail ] =    useState("");
   const [ feedback, setFeedback ] = useState("");

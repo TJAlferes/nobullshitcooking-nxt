@@ -2,7 +2,7 @@ import axios from 'axios';
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                          from '../../../config/api';
-import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
+import { systemMessage, systemMessageClear } from '../../shared/system/state';
 import { actionTypes, Confirm }              from './state';
 
 const { CONFIRM } = actionTypes;

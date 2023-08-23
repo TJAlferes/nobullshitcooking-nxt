@@ -4,22 +4,23 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 import { useDispatch }                from 'react-redux';
 
-import { LoaderSpinner }                              from '../../components';
-import { useTypedSelector as useSelector }            from '../../store';
-import type { WorkRecipe }                           from '../../store/data/types';
-import { requestFriendship as userRequestFriendship } from '../../store/user/friendship/actions';
-import { endpoint }                                   from '../../utils/api';
+import { endpoint }                        from '../../../../config/api';
+import { useTypedSelector as useSelector } from '../../../../redux';
+import { LoaderSpinner }   from '../../../shared/LoaderSpinner';
+import type { WorkRecipe } from '../../../shared/data/state';
+import { requestFriendship as userRequestFriendship } from '../../private/dashboard/friends/state';
 
 export default function Profile() {
-  const router = useRouter();
-  const params = useSearchParams();
+  const router   = useRouter();
+
+  const params   = useSearchParams();
   const username = params.get('username');
 
   const dispatch = useDispatch();
-  const authname =            useSelector(state => state.auth.authname);
-  const my_friendships =       useSelector(state => state.data.my_friendships);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const message =             useSelector(state => state.user.message);
+  const authname            = useSelector(state => state.authentication.authname);
+  const my_friendships      = useSelector(state => state.userData.my_friendships);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const message             = useSelector(state => state.system.message);
 
   const [ clicked,    setClicked ] =    useState(false);
   const [ feedback,   setFeedback ] =   useState("");

@@ -3,20 +3,20 @@ import { useRouter }           from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
-import { LoaderButton }                    from '../../shared/components';
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderButton }                    from '../../shared/LoaderButton';
 import { confirm }                         from './state';
 
 export default function Confirm() {
   const router =       useRouter();
 
   const dispatch = useDispatch();
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const message =             useSelector(state => state.auth.message);  // change to state.system.message
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const message             = useSelector(state => state.system.message);
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
-  const [ feedback,         setFeedback ] =         useState("");
-  const [ loading,          setLoading ] =          useState(false);
+  const [ feedback,         setFeedback ]          = useState("");
+  const [ loading,          setLoading ]           = useState(false);
 
   const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 

@@ -1,33 +1,33 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../../config/api';
-import { getMyPlansSaga }                from '../../../shared/data/network';
-import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
+import { endpoint }                          from '../../../../config/api';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
+import { getMyPlansWorker } from '../../private/data/network';
 import { actionTypes } from './state';
 import type { CreatePublicPlan, UpdatePublicPlan, DeletePublicPlan } from './state';
 
 const { CREATE_PUBLIC_PLAN, UPDATE_PUBLIC_PLAN, DELETE_PUBLIC_PLAN } = actionTypes;
 
-export function* watchUserPublicPlan() {
+export function* publicPlanWatcher() {
   yield all([
-    takeEvery(CREATE_PUBLIC_PLAN, createPublicPlanSaga),
-    takeEvery(UPDATE_PUBLIC_PLAN, updatePublicPlanSaga),
-    takeEvery(DELETE_PUBLIC_PLAN, deletePublicPlanSaga)
+    takeEvery(CREATE_PUBLIC_PLAN, createPublicPlanWorker),
+    takeEvery(UPDATE_PUBLIC_PLAN, updatePublicPlanWorker),
+    takeEvery(DELETE_PUBLIC_PLAN, deletePublicPlanWorker)
   ]);
 }
 
-export function* createPublicPlanSaga({ planInfo }: CreatePublicPlan) {
+export function* createPublicPlanWorker({ planInfo }: CreatePublicPlan) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/public/plan/create`,
       {planInfo},
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyPlansSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyPlansWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -36,17 +36,17 @@ export function* createPublicPlanSaga({ planInfo }: CreatePublicPlan) {
   yield put(systemMessageClear());
 }
 
-export function* updatePublicPlanSaga({ planInfo }: UpdatePublicPlan) {
+export function* updatePublicPlanWorker({ planInfo }: UpdatePublicPlan) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/public/plan/update`,
       {planInfo},
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyPlansSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyPlansWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -55,9 +55,9 @@ export function* updatePublicPlanSaga({ planInfo }: UpdatePublicPlan) {
   yield put(systemMessageClear());
 }
 
-export function* deletePublicPlanSaga({ plan_id }: DeletePublicPlan) {
+export function* deletePublicPlanWorker({ plan_id }: DeletePublicPlan) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/public/plan/delete`,
       {
@@ -66,8 +66,8 @@ export function* deletePublicPlanSaga({ plan_id }: DeletePublicPlan) {
       }
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyPlansSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyPlansWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }

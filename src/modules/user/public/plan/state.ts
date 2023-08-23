@@ -1,10 +1,13 @@
-// TO DO: split into private and public
 
-export const createPlan = (planInfo: PublicPlanInfo) => ({type: CREATE_PUBLIC_PLAN, planInfo});
 
-export const updatePlan = (planInfo: PublicPlanUpdateInfo) => ({type: UPDATE_PUBLIC_PLAN, planInfo});
+export const createPlan = (planInfo: PublicPlanInfo) =>
+  ({type: CREATE_PUBLIC_PLAN, planInfo});
 
-export const deletePlan = (plan_id: string) => ({type: DELETE_PUBLIC_PLAN, plan_id});
+export const updatePlan = (planInfo: PublicPlanUpdateInfo) =>
+  ({type: UPDATE_PUBLIC_PLAN, planInfo});
+
+export const deletePlan = (plan_id: string) =>
+  ({type: DELETE_PUBLIC_PLAN, plan_id});
 
 
 

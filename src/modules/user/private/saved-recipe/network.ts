@@ -2,30 +2,30 @@ import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                          from '../../../../config/api';
-import { getMySavedRecipesSaga }             from '../../data/sagas';  // move to shared/data/network?
-import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
+import { getMySavedRecipesSaga }             from '../../private/data/network';
 import { actionTypes }                       from './state';
 import { SaveRecipe, UnsaveRecipe }          from './state';
 
 const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
 
-export function* watchUserSaveRecipe() {
+export function* saveRecipeWatcher() {
   yield all([
-    takeEvery(SAVE_RECIPE,   saveRecipeSaga),
-    takeEvery(UNSAVE_RECIPE, unsaveRecipeSaga)
+    takeEvery(SAVE_RECIPE,   saveRecipeWorker),
+    takeEvery(UNSAVE_RECIPE, unsaveRecipeWorker)
   ]);
 }
 
-export function* saveRecipeSaga({ recipe_id }: SaveRecipe) {
+export function* saveRecipeWorker({ recipe_id }: SaveRecipe) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/private/saved-recipe/create`,
       {recipe_id},
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
+    yield put(systemMessage(data.message));
     yield call(getMySavedRecipesSaga);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
@@ -35,9 +35,9 @@ export function* saveRecipeSaga({ recipe_id }: SaveRecipe) {
   yield put(systemMessageClear());
 }
 
-export function* unsaveRecipeSaga({ recipe_id }: UnsaveRecipe) {
+export function* unsaveRecipeWorker({ recipe_id }: UnsaveRecipe) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/private/saved-recipe/delete`,
       {
@@ -46,7 +46,7 @@ export function* unsaveRecipeSaga({ recipe_id }: UnsaveRecipe) {
       }
     );
 
-    yield put(systemMessage(message));
+    yield put(systemMessage(data.message));
     yield call(getMySavedRecipesSaga);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));

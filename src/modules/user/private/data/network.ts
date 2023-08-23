@@ -3,19 +3,19 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../../config/api';
 import { getInitialUserData, getUserData, actionTypes } from './state';
-import type { InitialUserData } from './state';
+import type { InitialUserData }                         from './state';
 
 const { INIT_USER } = actionTypes;
 
-export function* watchData() {
+export function* userDataWatcher() {
   yield all([
-    takeEvery(INIT_USER, getInitialUserDataSaga),
+    takeEvery(INIT_USER, getInitialUserDataWorker),
     //takeEvery(, dataGetSaga),
     //takeEvery(, dataGetSaga)
   ]);
 }
 
-export function* getInitialUserDataSaga() {
+export function* getInitialUserDataWorker() {
   try {
     const { data } = yield call(
       [axios, axios.post],
@@ -44,16 +44,16 @@ export function* getInitialUserDataSaga() {
 
 // refetches
 
-export const getMyFavoriteRecipesSaga = makeUserDataSaga("/user/favorite-recipe", "my_favorite_recipes");
-export const getMyFriendshipsSaga =     makeUserDataSaga("/user/friendship",      "my_friendships");
-export const getMyPlansSaga =           makeUserDataSaga("/user/plan",            "my_plans");
-export const getMyEquipmentSaga =       makeUserDataSaga("/user/equipment",       "my_equipment");
-export const getMyIngredientsSaga =     makeUserDataSaga("/user/ingredient",      "my_ingredients");
-export const getMyPrivateRecipesSaga =  makeUserDataSaga("/user/private/recipe",  "my_private_recipes");
-export const getMyPublicRecipesSaga =   makeUserDataSaga("/user/public/recipe",   "my_public_recipes");
-export const getMySavedRecipesSaga =    makeUserDataSaga("/user/saved-recipe",    "my_saved_recipes");
+export const getMyFavoriteRecipesWorker = makeUserDataWorker("/user/favorite-recipe", "my_favorite_recipes");
+export const getMyFriendshipsWorker     = makeUserDataWorker("/user/friendship",      "my_friendships");
+export const getMyPlansWorker           = makeUserDataWorker("/user/plan",            "my_plans");
+export const getMyEquipmentWorker       = makeUserDataWorker("/user/equipment",       "my_equipment");
+export const getMyIngredientsWorker     = makeUserDataWorker("/user/ingredient",      "my_ingredients");
+export const getMyPrivateRecipesWorker  = makeUserDataWorker("/user/private/recipe",  "my_private_recipes");
+export const getMyPublicRecipesWorker   = makeUserDataWorker("/user/public/recipe",   "my_public_recipes");
+export const getMySavedRecipesWorker    = makeUserDataWorker("/user/saved-recipe",    "my_saved_recipes");
 
-function makeUserDataSaga(path: string, key: keyof InitialUserData) {
+function makeUserDataWorker(path: string, key: keyof InitialUserData) {
   return function* () {
     try {
       const { data } = yield call(

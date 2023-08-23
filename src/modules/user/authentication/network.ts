@@ -3,9 +3,9 @@ import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }   from '../../../config/api';
 import { removeItem } from '../../general/localStorage';
-import { initUser }   from '../data/actions';
+import { initUser }   from '../../user/private/data/state';
 
-import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
+import { systemMessage, systemMessageClear } from '../../shared/system/state';
 import { authenticate, actionTypes }         from './state';
 import type { Login, Logout }                from './state';
 
