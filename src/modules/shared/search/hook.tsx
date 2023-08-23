@@ -5,7 +5,7 @@ import { createContext, useMemo }     from 'react';
 import type { ReactNode }             from 'react';
 import qs                             from 'qs';
 
-import { useTypedDispatch as useDispatch }               from '../../../store';
+import { useTypedDispatch as useDispatch }               from '../../../redux';
 import { toggleLeftNav }                                 from '../menu/state';
 import { getResults, setIndex, setSuggestions, setTerm } from './state';
 import type { SearchIndex, SearchRequest }               from './state';

@@ -3,7 +3,7 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint } from '../../../config/api';
 import { getInitialData, getData, actionTypes } from './state';
-import type { InitialData } from './state';
+import type { InitialData }                     from './state';
 
 const { INIT } = actionTypes;
 

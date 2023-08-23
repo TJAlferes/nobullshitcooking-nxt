@@ -1,4 +1,4 @@
-import type { RootState } from '../store';
+import type { RootState } from '../../redux';
 
 export function getItem(key: string) {
   if (typeof window === 'undefined') {

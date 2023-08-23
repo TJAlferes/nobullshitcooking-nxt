@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
-} from '../../../../store';
+} from '../../../../redux';
 import { LeftNav }       from '../../../shared/menu';
 import { toggleLeftNav } from '../../../shared/menu/state';
 import { Search }        from '../../../shared/search';
@@ -18,8 +18,8 @@ export function Header() {
 
   const dispatch = useDispatch();
 
-  const authname            = useSelector(state => state.auth.authname);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+  const authname            = useSelector(state => state.authentication.authname);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
   const theme               = useSelector(state => state.theme.theme);
 
   const click = () => dispatch(toggleLeftNav());

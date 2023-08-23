@@ -7,14 +7,14 @@ import type { GetResults, GetSuggestions }         from './state';
 
 const { GET_SUGGESTIONS, GET_RESULTS } = actionTypes;
 
-export function* watchSearch() {
+export function* searchWatcher() {
   yield all([
-    takeLatest(GET_SUGGESTIONS, getSuggestionsSaga),  // debounces when combined with the 'delay' below
-    takeLatest(GET_RESULTS,     getResultsSaga)       // debounces when combined with the 'delay' below
+    takeLatest(GET_SUGGESTIONS, getSuggestionsWorker),  // debounces when combined with the 'delay' below
+    takeLatest(GET_RESULTS,     getResultsWorker)       // debounces when combined with the 'delay' below
   ]);
 }
 
-export function* getSuggestionsSaga(action: GetSuggestions) {
+export function* getSuggestionsWorker(action: GetSuggestions) {
   try {
 
     yield delay(1250);  // debounces when combined with the 'takeLatest' above
@@ -33,7 +33,7 @@ export function* getSuggestionsSaga(action: GetSuggestions) {
   } catch (err) {}
 }
 
-export function* getResultsSaga(action: GetResults) {
+export function* getResultsWorker(action: GetResults) {
   try {
 
     yield delay(250);  // debounces when combined with the 'takeLatest' above

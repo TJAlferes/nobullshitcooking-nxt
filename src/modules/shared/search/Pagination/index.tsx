@@ -2,16 +2,19 @@
 
 import { memo, useContext } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../../store';
+import { useTypedSelector as useSelector } from '../../../../redux';
 import { SearchContext }                   from '../hook';
 
 export const Pagination = memo(function Pagination() {
   const searchDriver = useContext(SearchContext);
 
   const current_page = searchDriver.params.current_page;
-  const total_pages  = useSelector(state => state.search.total_pages);
 
-  if (!total_pages || Number(total_pages) <= 1) return null;
+  const total_pages = useSelector(state => state.search.total_pages);
+
+  if (!total_pages || Number(total_pages) <= 1) {
+    return null;
+  }
 
   const curr  = current_page ? Number(current_page) : 1;
   const first = 1;

@@ -3,14 +3,14 @@
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactElement }      from 'react';
 
-import { useTypedSelector as useSelector } from '../../../store';
-import { LoaderSpinner }                   from '../../shared/components';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
 
 export function RouteGuard({ children }: Props) {
   const router   = useRouter();
   const pathname = usePathname();
 
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
 
   const authenticatedRoutes = [
     '/chat',

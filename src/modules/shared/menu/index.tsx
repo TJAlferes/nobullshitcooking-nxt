@@ -5,8 +5,8 @@ import { usePathname }                    from 'next/navigation';
 import { useContext, useState }           from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
-import { useTypedSelector as useSelector } from '../../../store';
-import { ExpandCollapse }                  from '../components';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { ExpandCollapse }                  from '../ExpandCollapse';
 import { SearchContext }                   from '../search/hook';
 import type { SearchIndex }                from '../search/state';
 
@@ -92,8 +92,8 @@ export function LeftNav() {
 }
 
 function NavLinks() {
-  const authname            = useSelector(state => state.auth.authname);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+  const authname            = useSelector(state => state.authentication.authname);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
 
   return (
     <>

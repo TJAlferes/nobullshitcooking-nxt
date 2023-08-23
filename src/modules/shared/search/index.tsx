@@ -6,7 +6,7 @@ import { useContext, useState, useRef } from 'react';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector }
-from '../../../store';
+from '../../../redux';
 import { SearchContext }                                     from './hook';
 import { getSuggestions, setSuggestions, setIndex, setTerm } from './state';
 import type { SearchIndex }                                  from './state';
@@ -19,13 +19,14 @@ export function Search() {
 
   const [ searchIndexChanged, setSearchIndexChanged ] = useState(false);  // useRef?
 
-  const inputRef =           useRef<HTMLInputElement>(null);
+  const inputRef           = useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
-  const mouseIsOverRef =     useRef<boolean>(false);
+  const mouseIsOverRef     = useRef<boolean>(false);
 
-  const dispatch =    useDispatch();
-  const index =       useSelector(state => state.search.index);
-  const term =        useSelector(state => state.search.term);
+  const dispatch = useDispatch();
+
+  const index       = useSelector(state => state.search.index);
+  const term        = useSelector(state => state.search.term);
   const suggestions = useSelector(state => state.search.suggestions);
 
   let capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"

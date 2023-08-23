@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../store';
+import { useTypedSelector as useSelector } from '../../../redux';
 
 export function ThemeProvider({ children }: Props) {
   const theme = useSelector(state => state.theme.theme);

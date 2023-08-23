@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter }      from 'next/router';
 
 import { Header } from './Header';
 import { Main }   from './Main';
@@ -16,6 +16,7 @@ export function Layout({ children }: Props) {
   if (authPage) {
     return <>{children}</>;
   }
+  
   return (
     <div id="layout">
       <Header />

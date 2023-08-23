@@ -7,7 +7,16 @@ export function StarRating ({ onChange, rating, readOnly = false }: Props) {
 
   return (
     <span className="star-rating">
-      {[1, 2, 3, 4, 5].map(i => <Star full={i <= (override || rating || 0)} index={i} key={i} readOnly={readOnly} setOverride={setOverride} setRating={onChange} />)}
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star
+          full={i <= (override || rating || 0)}
+          index={i}
+          key={i}
+          readOnly={readOnly}
+          setOverride={setOverride}
+          setRating={onChange}
+        />
+      ))}
     </span>
   );
 }
