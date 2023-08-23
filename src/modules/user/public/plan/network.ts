@@ -1,29 +1,27 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../config/api';
-import { getMyPlansSaga }                from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { endpoint }                      from '../../../../config/api';
+import { getMyPlansSaga }                from '../../../shared/data/network';
+import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
 import { actionTypes } from './state';
-import type { CreatePlan, UpdatePlan, DeletePlan } from './state';
+import type { CreatePublicPlan, UpdatePublicPlan, DeletePublicPlan } from './state';
 
-// TO DO: split into private and public
+const { CREATE_PUBLIC_PLAN, UPDATE_PUBLIC_PLAN, DELETE_PUBLIC_PLAN } = actionTypes;
 
-const { CREATE_PLAN, UPDATE_PLAN, DELETE_PLAN } = actionTypes;
-
-export function* watchPlan() {
+export function* watchUserPublicPlan() {
   yield all([
-    takeEvery(CREATE_PLAN, createPlanSaga),
-    takeEvery(UPDATE_PLAN, updatePlanSaga),
-    takeEvery(DELETE_PLAN, deletePlanSaga)
+    takeEvery(CREATE_PUBLIC_PLAN, createPublicPlanSaga),
+    takeEvery(UPDATE_PUBLIC_PLAN, updatePublicPlanSaga),
+    takeEvery(DELETE_PUBLIC_PLAN, deletePublicPlanSaga)
   ]);
 }
 
-export function* createPlanSaga({ planInfo }: CreatePlan) {
+export function* createPublicPlanSaga({ planInfo }: CreatePublicPlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/private/plan/create`,
+      `${endpoint}/user/public/plan/create`,
       {planInfo},
       {withCredentials: true}
     );
@@ -38,11 +36,11 @@ export function* createPlanSaga({ planInfo }: CreatePlan) {
   yield put(systemMessageClear());
 }
 
-export function* updatePlanSaga({ planInfo }: UpdatePlan) {
+export function* updatePublicPlanSaga({ planInfo }: UpdatePublicPlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/private/plan/update`,
+      `${endpoint}/user/public/plan/update`,
       {planInfo},
       {withCredentials: true}
     );
@@ -57,11 +55,11 @@ export function* updatePlanSaga({ planInfo }: UpdatePlan) {
   yield put(systemMessageClear());
 }
 
-export function* deletePlanSaga({ plan_id }: DeletePlan) {
+export function* deletePublicPlanSaga({ plan_id }: DeletePublicPlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/private/plan/delete`,
+      `${endpoint}/user/public/plan/delete`,
       {
         withCredentials: true,
         data: {plan_id}

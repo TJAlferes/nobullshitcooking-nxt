@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
-} from '../../store';
+} from '../../redux';
 import {
   connect as chatConnect,
   disconnect as chatDisconnect,
@@ -24,8 +24,8 @@ export default function Chat() {
   const status   = useSelector(state => state.chat.status);
   const users    = useSelector(state => state.chat.users);
 
-  const authname      = useSelector(state => state.auth.authname);
-  const message       = useSelector(state => state.user.message);  // change to state.system.message
+  const authname      = useSelector(state => state.authentication.authname);
+  const message       = useSelector(state => state.system.message);
   const windowFocused = useSelector(state => state.window.focused);
 
   const [ debounced,     setDebounced ]     = useState(false);

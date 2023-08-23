@@ -1,45 +1,23 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                        from '../../../config/api';
-import { getMyPrivateRecipesSaga, getMyPublicRecipesSaga } from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { endpoint }                          from '../../../../config/api';
+import { getMyPublicRecipesSaga }            from '../../../shared/data/network';
+import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
 import { actionTypes } from './state';
-import type {
-  CreatePrivateRecipe,
-  UpdatePrivateRecipe,
-  DeletePrivateRecipe,
-  CreatePublicRecipe,
-  UpdatePublicRecipe,
-  DisownPublicRecipe
-} from './state';
+import type { CreatePublicRecipe, UpdatePublicRecipe, DisownPublicRecipe } from './state';
 
-// TO DO: split into private and public
-// TO DO: add PRIVATE_ to the equipment and ingredient modules just like here
+const { CREATE_PUBLIC_RECIPE, UPDATE_PUBLIC_RECIPE, DISOWN_PUBLIC_RECIPE } = actionTypes;
 
-const {
-  CREATE_PRIVATE_RECIPE,
-  UPDATE_PRIVATE_RECIPE,
-  DELETE_PRIVATE_RECIPE,
-  
-  CREATE_PUBLIC_RECIPE,
-  UPDATE_PUBLIC_RECIPE,
-  DISOWN_PUBLIC_RECIPE
-} = actionTypes;
-
-export function* watchRecipe() {
+export function* watchUserPublicRecipe() {
   yield all([
-    takeEvery(CREATE_PRIVATE_RECIPE, createRecipeSaga),
-    takeEvery(UPDATE_PRIVATE_RECIPE, updateRecipeSaga),
-    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeSaga),
-
-    takeEvery(CREATE_PUBLIC_RECIPE, createRecipeSaga),
-    takeEvery(UPDATE_PUBLIC_RECIPE, updateRecipeSaga),
+    takeEvery(CREATE_PUBLIC_RECIPE, createPublicRecipeSaga),
+    takeEvery(UPDATE_PUBLIC_RECIPE, updatePublicRecipeSaga),
     takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeSaga)
   ]);
 }
 
-export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRecipe)) {
+export function* createPublicRecipeSaga(action: CreatePublicRecipe) {
   let {
     ownership,
     recipe_type_id,
@@ -167,7 +145,7 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
 
     const { data: { message } } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/recipe/create`,
+      `${endpoint}/user/public/recipe/create`,
       {
         recipeInfo: {
           ownership,
@@ -189,28 +167,7 @@ export function* createRecipeSaga(action: (CreatePrivateRecipe | CreatePublicRec
       {withCredentials: true}
     );
     yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
     yield call(getMyPublicRecipesSaga);
-  } catch(err) {
-    yield put(systemMessage('An error occurred. Please try again.'));
-  }
-  yield delay(4000);
-  yield put(systemMessageClear());
-}
-
-export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
-  try {
-    const { data: { message } } = yield call(
-      [axios, axios.delete],
-      `${endpoint}/user/recipe/delete/private`,
-      {
-        withCredentials: true,
-        data: {recipe_id}
-      }
-    );
-
-    yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -222,7 +179,7 @@ export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/recipe/disown/public`,
+      `${endpoint}/user/public/recipe/disown`,
       {
         withCredentials: true,
         data: {recipe_id}
@@ -238,7 +195,7 @@ export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
   yield put(systemMessageClear());
 }
 
-export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRecipe)) {
+export function* updatePublicRecipeSaga(action: UpdatePublicRecipe) {
   let {
     recipe_id,
     ownership,
@@ -372,7 +329,7 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
 
     const { data: { message } } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/recipe/update`,
+      `${endpoint}/user/public/recipe/update`,
       {
         recipeInfo: {
           recipe_id,
@@ -399,7 +356,6 @@ export function* updateRecipeSaga(action: (UpdatePrivateRecipe | UpdatePublicRec
       {withCredentials: true}
     );
     yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
     yield call(getMyPublicRecipesSaga);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));

@@ -7,7 +7,7 @@ import { LoaderButton }                    from '../../shared/components';
 import { useTypedSelector as useSelector } from '../../store';
 import { confirm }                         from './state';
 
-export default function Register() {
+export default function Confirm() {
   const router =       useRouter();
 
   const dispatch = useDispatch();

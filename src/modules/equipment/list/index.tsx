@@ -3,9 +3,10 @@
 import Link                     from 'next/link';
 import { useContext, useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../store';
-import { ExpandCollapse, Pagination, ResultsPerPage } from '../../shared/components';
-import { SearchContext } from '../../shared/search';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
+import { SearchContext }                   from '../../shared/search/hook';
+import { Pagination, ResultsPerPage }      from '../../shared/search';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 

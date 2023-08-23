@@ -9,7 +9,7 @@ import type { CreateIngredient, UpdateIngredient, DeleteIngredient } from './sta
 
 const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
 
-export function* watchIngredient() {
+export function* watchUserPrivateIngredient() {
   yield all([
     takeEvery(CREATE_INGREDIENT, createIngredientSaga),
     takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),

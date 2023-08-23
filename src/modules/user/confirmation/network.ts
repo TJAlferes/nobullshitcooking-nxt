@@ -1,40 +1,43 @@
 import axios from 'axios';
-import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
+import { call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                          from '../../../config/api';
 import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
-import { actionTypes, Confirm }               from './state';
+import { actionTypes, Confirm }              from './state';
 
 const { CONFIRM } = actionTypes;
 
-export function* watchAuth() {
-  yield all([
-    takeEvery(CONFIRM, userConfirmSaga)
-  ]);
+export function* userConfirmationWatcher() {
+  yield takeEvery(CONFIRM, userConfirmWorker);
 }
 
-export function* userConfirmSaga(action: Confirm) {
+export function* userConfirmWorker(action: Confirm) {
   try {
     const { confirmation_code, router } = action;
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/confirmation`,
+      `${endpoint}/user/confirmation/confirm`,
       {userInfo: {confirmation_code}}
     );
     
-    if (message === "User account confirmed.") {
-      yield delay(2000);
-      yield put(systemMessageClear());
-      yield call(() => router.push('/login'));
-    } else {
-      yield put(systemMessage(message));
-      yield delay(4000);
-      yield put(systemMessageClear());
+    yield put(systemMessage(data.message));
+
+    if (data.message === "User account confirmed.") {
+      yield call([router, router.push], '/login');
     }
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
-    yield delay(4000);
-    yield put(systemMessageClear());
+  }
+
+  yield delay(4000);
+  yield put(systemMessageClear());
+}
+
+export function* userRequestResendWorker(action: RequestResend) {
+  try {
+
+  } catch(err) {
+
   }
 }

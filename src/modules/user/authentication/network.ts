@@ -2,7 +2,7 @@ import axios from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }   from '../../../config/api';
-import { removeItem } from '../../../utils/storage';
+import { removeItem } from '../../general/localStorage';
 import { initUser }   from '../data/actions';
 
 import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
@@ -11,30 +11,31 @@ import type { Login, Logout }                from './state';
 
 const { LOGIN, LOGOUT } = actionTypes;
 
-export function* watchAuth() {
+export function* userAuthenticationWatcher() {
   yield all([
-    takeEvery(LOGIN,  userLoginSaga),
-    takeEvery(LOGOUT, userLogoutSaga)
+    takeEvery(LOGIN,  userLoginWorker),
+    takeEvery(LOGOUT, userLogoutWorker)
   ]);
 }
 
-export function* userLoginSaga(action: Login) {
+export function* userLoginWorker(action: Login) {
   try {
     const { email, password, router } = action;
 
-    const { data: { message, username } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/authentication/login`,
-      {userInfo: {email, pass: password}},
+      {userInfo: {email, password}},
       {withCredentials: true}
     );
 
-    if (message === 'Signed in.') {
-      yield put(authenticate(username));
+    yield put(systemMessage(data.message));
+
+    if (data.message === 'Signed in.') {
+      yield put(authenticate(data.username));
       yield put(initUser());
-      yield call([router, router.push], '/dashboard');  //yield call(() => router.push('/dashboard'));
+      yield call([router, router.push], '/dashboard');
     }
-    else yield put(systemMessage(message));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -43,9 +44,9 @@ export function* userLoginSaga(action: Login) {
   yield put(systemMessageClear());
 }
 
-export function* userLogoutSaga(action: Logout) {
+export function* userLogoutWorker(action: Logout) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/authentication/logout`,
       {},
@@ -53,7 +54,7 @@ export function* userLogoutSaga(action: Logout) {
     );
 
     yield call(removeItem, 'appState');
-    yield put(systemMessage(message));
+    yield put(systemMessage(data.message));
   } catch(err) {
     yield call(removeItem, 'appState');
   }

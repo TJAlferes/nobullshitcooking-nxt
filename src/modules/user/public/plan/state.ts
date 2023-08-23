@@ -1,43 +1,43 @@
 // TO DO: split into private and public
 
-export const createPlan = (planInfo: PlanInfo) => ({type: CREATE_PLAN, planInfo});
+export const createPlan = (planInfo: PublicPlanInfo) => ({type: CREATE_PUBLIC_PLAN, planInfo});
 
-export const updatePlan = (planInfo: PlanUpdateInfo) => ({type: UPDATE_PLAN, planInfo});
+export const updatePlan = (planInfo: PublicPlanUpdateInfo) => ({type: UPDATE_PUBLIC_PLAN, planInfo});
 
-export const deletePlan = (plan_id: string) => ({type: DELETE_PLAN, plan_id});
+export const deletePlan = (plan_id: string) => ({type: DELETE_PUBLIC_PLAN, plan_id});
 
 
 
 export const actionTypes = {
-  CREATE_PLAN: 'CREATE_PLAN',
-  UPDATE_PLAN: 'UPDATE_PLAN',
-  DELETE_PLAN: 'DELETE_PLAN'
+  CREATE_PUBLIC_PLAN: 'CREATE_PUBLIC_PLAN',
+  UPDATE_PUBLIC_PLAN: 'UPDATE_PUBLIC_PLAN',
+  DELETE_PUBLIC_PLAN: 'DELETE_PUBLIC_PLAN'
 } as const;
 
-const { CREATE_PLAN, UPDATE_PLAN, DELETE_PLAN } = actionTypes;
+const { CREATE_PUBLIC_PLAN, UPDATE_PUBLIC_PLAN, DELETE_PUBLIC_PLAN } = actionTypes;
 
-export type CreatePlan = {
-  type:     typeof actionTypes.CREATE_PLAN;
-  planInfo: PlanInfo;
+export type CreatePublicPlan = {
+  type:     typeof actionTypes.CREATE_PUBLIC_PLAN;
+  planInfo: PublicPlanInfo;
 };
 
-export type UpdatePlan = {
-  type:     typeof actionTypes.UPDATE_PLAN;
-  planInfo: PlanUpdateInfo;
+export type UpdatePublicPlan = {
+  type:     typeof actionTypes.UPDATE_PUBLIC_PLAN;
+  planInfo: PublicPlanUpdateInfo;
 };
 
-export type DeletePlan = {
-  type:    typeof actionTypes.DELETE_PLAN;
+export type DeletePublicPlan = {
+  type:    typeof actionTypes.DELETE_PUBLIC_PLAN;
   plan_id: string;
 };
 
 // TO DO: move shared types to one location
 
-export type PlanInfo = {
+export type PublicPlanInfo = {
   plan_name: string;
   plan_data: string;  // TO DO: change/finish
 };
 
-export type PlanUpdateInfo = PlanInfo & {
+export type PublicPlanUpdateInfo = PublicPlanInfo & {
   plan_id: string;
 };

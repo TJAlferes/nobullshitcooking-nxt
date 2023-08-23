@@ -1,18 +1,18 @@
-import Link                           from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState }        from 'react';
-import { useDispatch }                from 'react-redux';
+import Link                    from 'next/link';
+import { useRouter }           from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch }         from 'react-redux';
 
-import { LoaderButton }                    from '../shared/components';
-import { useTypedSelector as useSelector } from '../../store';
-import { register }                from './state';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderButton }                    from '../../shared/LoaderButton';
+import { register }                        from './state';
 
 export default function Register() {
   const router =       useRouter();
 
   const dispatch = useDispatch();
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
-  const message =             useSelector(state => state.auth.message);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const message =             useSelector(state => state.system.message);
 
   const [ email,            setEmail ] =            useState("");
   const [ feedback,         setFeedback ] =         useState("");
@@ -38,10 +38,10 @@ export default function Register() {
     if (userIsAuthenticated) router.push('/dashboard');
   }, [userIsAuthenticated]);
 
-  const emailChange =            (e: SyntheticEvent) => setEmail((e.target as HTMLInputElement).value);
-  const usernameChange =         (e: SyntheticEvent) => setUsername((e.target as HTMLInputElement).value);
-  const passwordChange =         (e: SyntheticEvent) => setPassword((e.target as HTMLInputElement).value);
-  const passwordAgainChange =    (e: SyntheticEvent) => setPasswordAgain((e.target as HTMLInputElement).value);
+  const emailChange         = (e: SyntheticEvent) => setEmail((e.target as HTMLInputElement).value);
+  const usernameChange      = (e: SyntheticEvent) => setUsername((e.target as HTMLInputElement).value);
+  const passwordChange      = (e: SyntheticEvent) => setPassword((e.target as HTMLInputElement).value);
+  const passwordAgainChange = (e: SyntheticEvent) => setPasswordAgain((e.target as HTMLInputElement).value);
 
   const registerClick = () => {
     if (loading) return;

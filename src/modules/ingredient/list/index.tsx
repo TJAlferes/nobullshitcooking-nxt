@@ -3,9 +3,10 @@
 import Link                     from 'next/link';
 import { useContext, useState } from 'react';
 
-import { ExpandCollapse, Pagination, ResultsPerPage } from '../../components';
-import { useTypedSelector as useSelector }            from '../../store';
-import { SearchContext }                              from '../../utils/SearchProvider';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
+import { SearchContext }                   from '../../shared/search/hook';
+import { Pagination, ResultsPerPage }      from '../../shared/search';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
@@ -13,18 +14,26 @@ export default function IngredientList() {
   const searchDriver = useContext(SearchContext);
 
   const ingredient_types = useSelector(state => state.data.ingredient_types);
-  //const resultTerm        useSelector(state = state.search.resultTerm);
-  const results =         useSelector(state => state.search.results);
-  const total_results =    useSelector(state => state.search.total_results);
-  const total_pages =      useSelector(state => state.search.total_pages);
+  //const resultTerm       = useSelector(state = state.search.resultTerm);
+  const results          = useSelector(state => state.search.results);
+  const total_results    = useSelector(state => state.search.total_results);
+  const total_pages      = useSelector(state => state.search.total_pages);
 
-  const [ expandedFilter, setExpandedFilter ] =                 useState<string|null>(null);
-  const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>(searchDriver.params.filters?.ingredient_types ?? []);
+  const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
+
+  const [ checkedIngredientTypes, setCheckedIngredientTypes ] =
+    useState<string[]>(searchDriver.params.filters?.ingredient_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);
-      if (name === "ingredientTypes" && checkedIngredientTypes !== searchDriver.params.filters?.ingredient_types) searchDriver.setFilters(name, checkedIngredientTypes);
+
+      if (
+        name === "ingredientTypes"
+        && checkedIngredientTypes !== searchDriver.params.filters?.ingredient_types
+      ) {
+        searchDriver.setFilters(name, checkedIngredientTypes);
+      }
     } else {
       setExpandedFilter(name);
     }

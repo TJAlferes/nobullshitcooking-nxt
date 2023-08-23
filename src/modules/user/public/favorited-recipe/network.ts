@@ -9,7 +9,7 @@ import type { FavoriteRecipe, UnfavoriteRecipe } from './state';
 
 const { FAVORITE_RECIPE, UNFAVORITE_RECIPE } = actionTypes;
 
-export function* watchFavorite() {
+export function* watchUserFavoriteRecipe() {
   yield all([
     takeEvery(FAVORITE_RECIPE,   favoriteRecipeSaga),
     takeEvery(UNFAVORITE_RECIPE, unfavoriteRecipeSaga)

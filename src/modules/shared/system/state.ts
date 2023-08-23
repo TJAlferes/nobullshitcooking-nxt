@@ -2,7 +2,7 @@
 
 const initialState: State = {message: ''};
 
-export function systemMessageReducer(state = initialState, action: UserActions): State {
+export function systemReducer(state = initialState, action: UserActions): State {
   switch (action.type) {
     case SYSTEM_MESSAGE:
       return {...state, message: action.message};

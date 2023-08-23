@@ -3,21 +3,21 @@ import Link                    from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import { favoriteRecipe }                  from '../../store/user/favorite/actions';
-import { saveRecipe }                      from '../../store/user/save/actions';
-import { endpoint }                        from '../../utils/api';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderSpinner }  from '../../shared/LoaderSpinner';
+import { saveRecipe }     from '../../user/private/saved-recipe/state';
+import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
 export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
 
-  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
-  const my_private_recipes  = useSelector(state => state.data.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.data.my_public_recipes);
-  const my_saved_recipes    = useSelector(state => state.data.my_saved_recipes);
-  const message             = useSelector(state => state.user.message);
-  const userIsAuthenticated = useSelector(state => state.auth.userIsAuthenticated);
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
+  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const message             = useSelector(state => state.system.message);
+  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
 
   const [ feedback,  setFeedback ]  = useState("");
   const [ loading,   setLoading ]   = useState(false);

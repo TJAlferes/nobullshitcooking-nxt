@@ -9,7 +9,7 @@ import { SaveRecipe, UnsaveRecipe }          from './state';
 
 const { SAVE_RECIPE, UNSAVE_RECIPE } = actionTypes;
 
-export function* watchSave() {
+export function* watchUserSaveRecipe() {
   yield all([
     takeEvery(SAVE_RECIPE,   saveRecipeSaga),
     takeEvery(UNSAVE_RECIPE, unsaveRecipeSaga)

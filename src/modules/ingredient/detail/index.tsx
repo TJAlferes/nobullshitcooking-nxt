@@ -1,24 +1,28 @@
 import axios from 'axios';
 
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import type { Ingredient }                 from '../../store/data/types';
-import { endpoint }                        from '../../utils/api';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
+import type { Ingredient }                 from '../../shared/data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function IngredientDetail({ ingredient }: {ingredient: Ingredient}) {
-  const my_ingredients = useSelector(state => state.data.my_ingredients);
+  const my_ingredients = useSelector(state => state.userData.my_ingredients);
 
   const {
     ingredient_id,
     fullname,
     image_url,
     ingredient_type_name,
-    description
+    notes
   } = ingredient;
 
-  return !ingredient ? <LoaderSpinner /> : (
+  if (!ingredient) {
+    return <LoaderSpinner />;
+  }
+
+  return (
     <div className="two-col ingredient">
       <div className="two-col-left">
         <h1>{fullname}</h1>
@@ -33,8 +37,8 @@ export default function IngredientDetail({ ingredient }: {ingredient: Ingredient
           <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>
         </div>
 
-        <div className="description">
-          <b>Ingredient Description:</b>{' '}<div>{description}</div>
+        <div className="notes">
+          <b>Ingredient Notes:</b>{' '}<div>{notes}</div>
         </div>
       </div>
 

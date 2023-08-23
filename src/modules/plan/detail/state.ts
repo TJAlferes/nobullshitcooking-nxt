@@ -22,7 +22,7 @@ const clickedDay = (state: State, action: ClickDay): State => {
   return {...state, expandedDay: day};
 };
 
-export const planReducer = (state = initialState, action: Actions): State => {
+export const planDetailReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
     case CLICK_DAY: return clickedDay(state, action);
     case LOAD:      return {...state, ...{plan_name: action.plan_name, plan_data: action.plan_data}};

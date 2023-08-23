@@ -1,25 +1,23 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                      from '../../../config/api';
+import { endpoint }                      from '../../../../config/api';
 import { getMyPlansSaga }                from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
 import { actionTypes } from './state';
 import type { CreatePlan, UpdatePlan, DeletePlan } from './state';
 
-// TO DO: split into private and public
+const { CREATE_PRIVATE_PLAN, UPDATE_PRIVATE_PLAN, DELETE_PRIVATE_PLAN } = actionTypes;
 
-const { CREATE_PLAN, UPDATE_PLAN, DELETE_PLAN } = actionTypes;
-
-export function* watchPlan() {
+export function* watchUserPrivatePlan() {
   yield all([
-    takeEvery(CREATE_PLAN, createPlanSaga),
-    takeEvery(UPDATE_PLAN, updatePlanSaga),
-    takeEvery(DELETE_PLAN, deletePlanSaga)
+    takeEvery(CREATE_PRIVATE_PLAN, createPrivatePlanSaga),
+    takeEvery(UPDATE_PRIVATE_PLAN, updatePrivatePlanSaga),
+    takeEvery(DELETE_PRIVATE_PLAN, deletePrivatePlanSaga)
   ]);
 }
 
-export function* createPlanSaga({ planInfo }: CreatePlan) {
+export function* createPrivatePlanSaga({ planInfo }: CreatePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.post],
@@ -38,7 +36,7 @@ export function* createPlanSaga({ planInfo }: CreatePlan) {
   yield put(systemMessageClear());
 }
 
-export function* updatePlanSaga({ planInfo }: UpdatePlan) {
+export function* updatePrivatePlanSaga({ planInfo }: UpdatePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.put],
@@ -57,7 +55,7 @@ export function* updatePlanSaga({ planInfo }: UpdatePlan) {
   yield put(systemMessageClear());
 }
 
-export function* deletePlanSaga({ plan_id }: DeletePlan) {
+export function* deletePrivatePlanSaga({ plan_id }: DeletePlan) {
   try {
     const { data: { message } } = yield call(
       [axios, axios.delete],

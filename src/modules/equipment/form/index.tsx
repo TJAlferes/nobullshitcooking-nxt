@@ -5,8 +5,9 @@ import ReactCrop, { Crop }             from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { CropPreview, LoaderButton }        from '../../components';
-import { useTypedSelector as useSelector }  from '../../../store';
+import { CropPreview }  from '../../shared/CropPreview';
+import { LoaderButton } from '../../shared/LoaderButton';
+import { useTypedSelector as useSelector }  from '../../../redux';
 import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
 import { getCroppedImage }                  from '../../../utils/getCroppedImage';
 
@@ -21,8 +22,8 @@ export default function EquipmentForm() {
   const dispatch = useDispatch();
   //const equipment =      useSelector(state => state.data.equipment);
   const equipment_types = useSelector(state => state.data.equipment_types);
-  const my_equipment =    useSelector(state => state.data.my_equipment);
-  const message =         useSelector(state => state.user.message);
+  const my_equipment =    useSelector(state => state.userData.my_equipment);
+  const message =         useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ] =  useState(false);

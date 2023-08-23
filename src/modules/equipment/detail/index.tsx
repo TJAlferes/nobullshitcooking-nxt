@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../store';
-import { LoaderSpinner }                   from '../../shared/components';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
 import type { Equipment }                  from '../../shared/data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function EquipmentDetail({ equipment }: {equipment: Equipment}) {
-  const my_equipment = useSelector(state => state.data.my_equipment);
+  const my_equipment = useSelector(state => state.userData.my_equipment);
 
   const {
     equipment_id,
@@ -18,7 +18,9 @@ export default function EquipmentDetail({ equipment }: {equipment: Equipment}) {
     notes
   } = equipment;
 
-  if (!equipment) return <LoaderSpinner />;
+  if (!equipment) {
+    return <LoaderSpinner />;
+  }
 
   return (
     <div className="two-col equipment">

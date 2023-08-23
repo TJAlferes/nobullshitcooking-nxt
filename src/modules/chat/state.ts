@@ -1,3 +1,4 @@
+import { actionTypes as authenticationActionTypes } from '../user/authentication/state';
 import type { Logout } from '../user/authentication/state';
 
 // reducer ---------------------------------------------------------------------
@@ -207,6 +208,8 @@ const {
   RECEIVED_PRIVATE_MESSAGE,
   FAILED_PRIVATE_MESSAGE
 } = actionTypes;
+
+const { LOGOUT } = authenticationActionTypes;
 
 export type Actions =
   | Logout
