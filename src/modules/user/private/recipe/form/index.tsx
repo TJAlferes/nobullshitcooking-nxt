@@ -7,19 +7,26 @@ import { useDispatch }                 from 'react-redux';
 import { v4 as uuid }                  from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { ExpandCollapse, LoaderButton }    from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import { createPrivateRecipe, createPublicRecipe, updatePrivateRecipe, updatePublicRecipe } from '../../store/user/recipe/actions';
-import type { RequiredMethod }             from '../../store/user/recipe/types';
-import { endpoint }                        from '../../utils/api';
-import { getCroppedImage }                 from '../../utils/getCroppedImage';
-import { validRecipeInfo }                 from './validRecipeInfo';
+import { endpoint }                        from '../../../../../config/api';
+import { useTypedSelector as useSelector } from '../../../../../redux';
+import { LoaderButton }    from '../../../../shared/LoaderButton';
+import { getCroppedImage } from '../../../../shared/getCroppedImage';
+import { createPrivateRecipe, updatePrivateRecipe } from '../state';
+import type { RequiredMethod }                      from '../state';
+import { validRecipeInfo } from './validation';
 
 export default function UserPrivateRecipeForm() {
-  const router =    useRouter();
-  const params =    useSearchParams();
-  const ownership = params.get('ownership');  // TO DO: triple test
-  const recipe_id =        params.get('recipe_id');
+  const router = useRouter();
+
+  const params = useSearchParams();
+  //const ownership = params.get('ownership');  // TO DO: triple test
+  const recipe_id = params.get('recipe_id');
+
+  if (!recipe_id) {
+    router.push('/user/private/dashboard');
+    return null;
+  }
+
   // TO DO: change
   /*if (!id || !ownership) {
     router.push('/dashboard');
@@ -28,53 +35,66 @@ export default function UserPrivateRecipeForm() {
 
   const dispatch = useDispatch();
 
-  const units =               useSelector(state => state.data.units);
-  const equipment =           useSelector(state => state.data.equipment);
-  const my_equipment =        useSelector(state => state.data.my_equipment);
-  const ingredient_types =    useSelector(state => state.data.ingredient_types);
-  const ingredients =         useSelector(state => state.data.ingredients);
-  const my_ingredients =      useSelector(state => state.data.my_ingredients);
-  const recipe_types =        useSelector(state => state.data.recipe_types);
-  const cuisines =            useSelector(state => state.data.cuisines);
-  const methods =             useSelector(state => state.data.methods);
-  const recipes =             useSelector(state => state.data.recipes);
-  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
-  const my_saved_recipes =    useSelector(state => state.data.my_saved_recipes);
-  const my_private_recipes =  useSelector(state => state.data.my_private_recipes);
-  const my_public_recipes =   useSelector(state => state.data.my_public_recipes);
+  const units            = useSelector(state => state.data.units);
+  const equipment        = useSelector(state => state.data.equipment);
+  const ingredient_types = useSelector(state => state.data.ingredient_types);
+  const ingredients      = useSelector(state => state.data.ingredients);
+  const recipe_types     = useSelector(state => state.data.recipe_types);
+  const cuisines         = useSelector(state => state.data.cuisines);
+  const methods          = useSelector(state => state.data.methods);
+  const recipes          = useSelector(state => state.data.recipes);
 
-  const authname =          useSelector(state => state.auth.authname);
-  const message =           useSelector(state => state.user.message);
+  const my_equipment        = useSelector(state => state.userData.my_equipment);
+  const my_ingredients      = useSelector(state => state.userData.my_ingredients);
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+
+  //const authname = useSelector(state => state.authentication.authname);
+  const message  = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ] =  useState(false);
+  const [ loading,  setLoading ]  = useState(false);
 
-  const [ editingId,    setEditingId ] =    useState<number|null>(null);
+  const [ editingId, setEditingId ] = useState<string|undefined>(undefined);
 
-  const [ recipe_type_id, setRecipeTypeId ] = useState<number>(0);
-  const [ cuisine_id,    setCuisineId ] =    useState<number>(0);
-  const [ title,        setTitle ] =        useState("");
-  const [ description,  setDescription ] =  useState("");
-  const [ directions,   setDirections ] =   useState("");
-  const [ usedMethods,  setUsedMethods ] =  useState<Methods>({
-     1: false,  2: false,  3: false,  4: false,  5: false,  6: false,
-     7: false,  8: false,  9: false, 10: false, 11: false, 12: false,
-    13: false, 14: false, 15: false, 16: false, 17: false, 18: false,
-    19: false, 20: false, 21: false, 22: false, 23: false, 24: false
-  });
-  const [ equipmentRows, setEquipmentRows ] =   useState<EquipmentRow[]>([
-    {key: uuid(), amount: "", equipment_type_id: "", equipment_id: ""}
+  const [ recipe_type_id, setRecipeTypeId ] = useState(0);
+  const [ cuisine_id,     setCuisineId ]    = useState(0);
+  const [ title,          setTitle ]        = useState("");
+  const [ description,    setDescription ]  = useState("");
+  const [ directions,     setDirections ]   = useState("");
+
+  const [ usedMethods,  setUsedMethods ] = useState<Methods>(
+    methods.reduce((acc: {[key: number]: boolean}, curr) => {
+      acc[curr.method_id] = false;
+      return acc;
+    }, {})
+  );
+  const [ equipmentRows, setEquipmentRows ] = useState<EquipmentRow[]>([
+    {
+      key:               uuid(),
+      amount:            "",
+      equipment_type_id: "",
+      equipment_id:      ""
+    }
   ]);
   const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([
-    {key: uuid(), amount: "", unit_id: "", ingredient_type_id: "", ingredient_id: ""}
+    {
+      key:                uuid(),
+      amount:             "",
+      unit_id:            "",
+      ingredient_type_id: "",
+      ingredient_id:      ""
+    }
   ]);
-  const [ subrecipeRows, setSubrecipeRows ] =   useState<SubrecipeRow[]>([]);
+  const [ subrecipeRows, setSubrecipeRows ] = useState<SubrecipeRow[]>([]);
 
   const initialCrop: Crop = {unit: 'px', x: 25, y: 25, width: 50, height: 50};  // TO DO: change to NOBSC images ratio
 
   const recipeImageRef = useRef<HTMLImageElement>();
   const [ recipePrevImage,  setRecipePrevImage ] =  useState("nobsc-recipe-default");
-  const [ recipeImage,      setRecipeImage ] =      useState<IImage>(null);
+  const [ recipeImage,      setRecipeImage ] =      useState<Image>(null);
   const [ recipeFullImage,  setRecipeFullImage ] =  useState<File | null>(null);
   const [ recipeThumbImage, setRecipeThumbImage ] = useState<File | null>(null);
   const [ recipeTinyImage,  setRecipeTinyImage ] =  useState<File | null>(null);
@@ -85,21 +105,21 @@ export default function UserPrivateRecipeForm() {
 
   const equipmentImageRef = useRef<HTMLImageElement>();
   const [ equipmentPrevImage, setEquipmentPrevImage ] = useState("nobsc-recipe-equipment-default");
-  const [ equipmentImage,     setEquipmentImage ] =     useState<IImage>(null);
+  const [ equipmentImage,     setEquipmentImage ] =     useState<Image>(null);
   const [ equipmentFullImage, setEquipmentFullImage ] = useState<File | null>(null);
   const [ equipmentCrop,      setEquipmentCrop ] =      useState<Crop>(initialCrop);
   const [ equipmentFullCrop,  setEquipmentFullCrop ] =  useState("");
 
   const ingredientsImageRef = useRef<HTMLImageElement>();
   const [ ingredientsPrevImage, setIngredientsPrevImage ] = useState("nobsc-recipe-ingredients-default");
-  const [ ingredientsImage,     setIngredientsImage ] =     useState<IImage>(null);
+  const [ ingredientsImage,     setIngredientsImage ] =     useState<Image>(null);
   const [ ingredientsFullImage, setIngredientsFullImage ] = useState<File | null>(null);
   const [ ingredientsCrop,      setIngredientsCrop ] =      useState<Crop>(initialCrop);
   const [ ingredientsFullCrop,  setIngredientsFullCrop ] =  useState("");
 
   const cookingImageRef = useRef<HTMLImageElement>();
   const [ cookingPrevImage, setCookingPrevImage ] = useState("nobsc-recipe-cooking-default");
-  const [ cookingImage,     setCookingImage ] =     useState<IImage>(null);
+  const [ cookingImage,     setCookingImage ] =     useState<Image>(null);
   const [ cookingFullImage, setCookingFullImage ] = useState<File | null>(null);
   const [ cookingCrop,      setCookingCrop ] =      useState<Crop>(initialCrop);
   const [ cookingFullCrop,  setCookingFullCrop ] =  useState("");
@@ -112,14 +132,24 @@ export default function UserPrivateRecipeForm() {
         router.push('/dashboard');
         return;
       }
+
       setLoading(true);
+
       window.scrollTo(0, 0);
-      const res = await axios.post(`${endpoint}/user/recipe/edit/${ownership}`, {recipe_id}, {withCredentials: true});
-      const recipe: IExistingRecipeToEdit = res.data.recipe;
+
+      const res = await axios.post(
+        `${endpoint}/user/private/recipe/edit`,
+        {recipe_id},
+        {withCredentials: true}
+      );
+      
+      const recipe: ExistingRecipeToEdit = res.data.recipe;
+      
       if (!recipe) {
         router.push('/dashboard');
         return;
       }
+
       const {
         recipe_type_id,
         cuisine_id,
@@ -135,6 +165,7 @@ export default function UserPrivateRecipeForm() {
         ingredients_image,
         cooking_image
       } = recipe;
+
       setEditingId(recipe.recipe_id);
       setRecipeTypeId(recipe_type_id);
       setCuisineId(cuisine_id);
@@ -173,8 +204,8 @@ export default function UserPrivateRecipeForm() {
       setLoading(false);
     }
 
-    if (mounted) {
-      if (recipe_id) getExistingRecipeToEdit();
+    if (mounted && recipe_id) {
+      getExistingRecipeToEdit();
     }
 
     return () => {
@@ -187,10 +218,13 @@ export default function UserPrivateRecipeForm() {
 
     if (isSubscribed) {
       if (message !== "") window.scrollTo(0, 0);
+
       setFeedback(message);
+
       if (message === "Recipe created." || message === "Recipe updated.") {
         setTimeout(() => router.push('/dashboard'), 3000);
       }
+
       setLoading(false);  // move ?
     }
 
@@ -199,11 +233,11 @@ export default function UserPrivateRecipeForm() {
     };
   }, [message]);
 
-  const changeRecipeType =  (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
-  const changeCuisine =     (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
-  const changeTitle =       (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
+  const changeRecipeType  = (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
+  const changeCuisine     = (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
+  const changeTitle       = (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
-  const changeDirections =  (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
+  const changeDirections  = (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
@@ -398,7 +432,7 @@ export default function UserPrivateRecipeForm() {
 
   const submit = () => {
     if (!validRecipeInfo({
-      ownership,
+      //ownership,
       recipe_type_id,
       cuisine_id,
       title,
@@ -462,70 +496,81 @@ export default function UserPrivateRecipeForm() {
     setLoading(true);
 
     if (editingId) {
-      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE RECIPE BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-      const recipeUpdateInfo = {...recipeInfo, recipe_id: editingId, recipePrevImage, equipmentPrevImage, ingredientsPrevImage, cookingPrevImage};
-      if      (ownership === "private") dispatch(updatePrivateRecipe(recipeUpdateInfo));
-      else if (ownership === "public")  dispatch(updatePublicRecipe(recipeUpdateInfo));
+      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      const recipeUpdateInfo = {
+        ...recipeInfo,
+        recipe_id: editingId,
+        recipePrevImage,
+        equipmentPrevImage,
+        ingredientsPrevImage,
+        cookingPrevImage
+      };
+      
+      dispatch(updatePrivateRecipe(recipeUpdateInfo));
     } else {
-      if      (ownership === "private") dispatch(createPrivateRecipe(recipeInfo));
-      else if (ownership === "public")  dispatch(createPublicRecipe(recipeInfo));
+      dispatch(createPrivateRecipe(recipeInfo));
     }
   };
 
   return (
     <div className="one-col new-recipe">
-      <h1>New Recipe</h1>
+      <h1>Private Recipe Create/Update Form</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Ownership</h2>
-      <ExpandCollapse>
-        <div>
-          <p>Once submitted, a recipe's ownership can't be changed.</p><br />
-
-          <p>Public:</p>
-          <p>- Anyone can view</p>
-          <p>- May only use official NOBSC equipment, ingredients, and recipes, and public recipes submitted by other users</p>
-          <p>- Can't be deleted, but can be disowned (author will be changed from "{authname}" to "Unknown")</p><br />
-
-          <p>Tip: If you're setting your recipe to public, please be sure to include all four images below.</p><br />
-
-          <p>Private:</p>
-          <p>- Only you can view</p>
-          <p>- May also use private equipment, ingredients, and recipes submitted by you</p>
-          <p>- Can be deleted</p><br />
-
-          <p>Tip: If you're still improving your recipe, make it private for now, then make a public version later.</p><br />
-        </div>
-      </ExpandCollapse>
-      <div className="ownership">
-        <span>
-          <input checked={ownership === "private"} disabled={true} name="private" type="radio" value="private" />
-          <label>Private</label>
-        </span>
-        <span>
-          <input checked={ownership === "public"} disabled={true} name="public" type="radio" value="public" />
-          <label>Public</label>
-        </span>
-      </div>
-
-      <h2>Type of Recipe</h2>
-      <select id="recipe_type_id" name="recipeType" onChange={changeRecipeType} required value={recipeTypeId}>
+      <h2>Recipe Type</h2>
+      <select
+        id="recipe_type_id"
+        name="recipeType"
+        onChange={changeRecipeType}
+        required
+        value={recipe_type_id}
+      >
         <option value=""></option>
-        {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (<option key={recipe_type_id} value={recipe_type_id}>{recipe_type_name}</option>))}
+        {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
+          <option key={recipe_type_id} value={recipe_type_id}>
+            {recipe_type_name}
+          </option>
+        ))}
       </select>
 
       <h2>Cuisine</h2>
-      <select id="cuisine_id" name="cuisine" onChange={changeCuisine} required value={cuisineId}>
+      <select
+        id="cuisine_id"
+        name="cuisine"
+        onChange={changeCuisine}
+        required
+        value={cuisine_id}
+      >
         <option value=""></option>
-        {cuisines.map(({ cuisine_id, cuisine_name }) => (<option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>))}
+        {cuisines.map(({ cuisine_id, cuisine_name }) => (
+          <option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>
+        ))}
       </select>
 
       <h2>Title</h2>
-      <input className="title" id="recipe_title" max={100} min={2} name="title" onChange={changeTitle} type="text" value={title} />
+      <input
+        className="title"
+        id="recipe_title"
+        max={100}
+        min={2}
+        name="title"
+        onChange={changeTitle}
+        type="text"
+        value={title}
+      />
 
       <h2>Description / Author Note</h2>
-      <input className="description" id="recipe_description" max={150} min={2} name="description" onChange={changeDescription} type="text" value={description} />
+      <input
+        className="description"
+        id="recipe_description"
+        max={150}
+        min={2}
+        name="description"
+        onChange={changeDescription}
+        type="text"
+        value={description}
+      />
 
       <h2>Methods</h2>
       <div className="methods">
@@ -544,11 +589,17 @@ export default function UserPrivateRecipeForm() {
 
       <div className="required-equipment">
         <h2>Equipment</h2>
+
         <div className="equipment-rows">
           {equipmentRows.map(({ key, amount, equipment_type_id, equipment_id }) => (
             <div className="recipe-row" key={key}>
               <label>Amount:</label>
-              <select name="amount" onChange={(e) => changeEquipmentRow(e, key)} required value={amount}>
+              <select
+                name="amount"
+                onChange={(e) => changeEquipmentRow(e, key)}
+                required
+                value={amount}
+              >
                 <option value=""></option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -556,28 +607,54 @@ export default function UserPrivateRecipeForm() {
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+
               <label>Type:</label>
-              <select name="type" onChange={(e) => changeEquipmentRow(e, key)} required value={equipment_type_id}>
+              <select
+                name="type"
+                onChange={(e) => changeEquipmentRow(e, key)}
+                required
+                value={equipment_type_id}
+              >
                 <option value=""></option>
                 <option value="2">Preparing</option>
                 <option value="3">Cooking</option>
               </select>
+
               <label>Equipment:</label>
-              <select name="equipment" onChange={(e) => changeEquipmentRow(e, key)} required value={equipment_id}>
+              <select
+                name="equipment"
+                onChange={(e) => changeEquipmentRow(e, key)}
+                required
+                value={equipment_id}
+              >
                 <option value=""></option>
-                {availableEquipment
-                  .filter(e => e.equipment_type_id == equipment_type_id)
-                  .map((e, index) => <option key={index} value={e.equipment_id}>{e.equipment_name}</option>)}
+                {
+                  availableEquipment
+                    .filter(e => e.equipment_type_id == equipment_type_id)
+                    .map((e, index) => (
+                      <option key={index} value={e.equipment_id}>
+                        {e.equipment_name}
+                      </option>
+                    ))
+                }
               </select>
-              <button className="--remove" onClick={() => removeEquipmentRow(key)}>Remove</button>
+
+              <button
+                className="--remove"
+                onClick={() => removeEquipmentRow(key)}
+              >Remove</button>
             </div>
           ))}
         </div>
-        <button className="--add-row" onClick={addEquipmentRow}>Add Equipment</button>
+
+        <button className="--add-row" onClick={addEquipmentRow}>
+          Add Equipment
+        </button>
       </div>
 
       <div className="required-ingredients">
         <h2>Ingredients</h2>
+
         {/* TO DO: Add brand and variety */}
         <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, unit_id, ingredient_type_id, ingredient_id }) => (
@@ -595,34 +672,68 @@ export default function UserPrivateRecipeForm() {
               />
 
               <label>Unit:</label>
-              <select name="unit" onChange={(e) => changeIngredientRow(e, key)} required value={unit_id}>
+              <select
+                name="unit"
+                onChange={(e) => changeIngredientRow(e, key)}
+                required
+                value={unit_id}
+              >
                 <option value=""></option>
-                {units.map((u, index) => <option key={index} value={u.unit_id}>{u.unit_name}</option>)}
+                {units.map((u, index) => (
+                  <option key={index} value={u.unit_id}>{u.unit_name}</option>
+                ))}
               </select>
 
               <label>Type:</label>
-              <select name="type" onChange={(e) => changeIngredientRow(e, key)} required value={ingredient_type_id}>
+              <select
+                name="type"
+                onChange={(e) => changeIngredientRow(e, key)}
+                required
+                value={ingredient_type_id}
+              >
                 <option value=""></option>
-                {ingredient_types.map((i, index) => (<option key={index} value={i.ingredient_type_id}>{i.ingredient_type_name}</option>))}
+                {ingredient_types.map((i, index) => (
+                  <option key={index} value={i.ingredient_type_id}>
+                    {i.ingredient_type_name}
+                  </option>
+                ))}
               </select>
 
               <label>Ingredient:</label>
-              <select name="ingredient" onChange={(e) => changeIngredientRow(e, key)} required value={ingredient_id}>
+              <select
+                name="ingredient"
+                onChange={(e) => changeIngredientRow(e, key)}
+                required
+                value={ingredient_id}
+              >
                 <option value=""></option>
-                {availableIngredients
-                  .filter(i => i.ingredient_type_id == ingredient_type_id)
-                  .map((i, index) => <option key={index} value={i.ingredient_id}>{i.ingredient_name}</option>)}
+                {
+                  availableIngredients
+                    .filter(i => i.ingredient_type_id == ingredient_type_id)
+                    .map((i, index) => (
+                      <option key={index} value={i.ingredient_id}>
+                        {i.ingredient_name}
+                      </option>
+                    ))
+                }
               </select>
 
-              <button className="--remove" onClick={() => removeIngredientRow(key)}>Remove</button>
+              <button
+                className="--remove"
+                onClick={() => removeIngredientRow(key)}
+              >Remove</button>
             </div>
           ))}
         </div>
-        <button className="--add-row" onClick={addIngredientRow}>Add Ingredient</button>
+
+        <button className="--add-row" onClick={addIngredientRow}>
+          Add Ingredient
+        </button>
       </div>
 
       <div className="required-subrecipes">
         <h2>Subrecipes</h2>
+
         <div className="subrecipe-rows">
           {subrecipeRows.map(s => (
             <div className="recipe-row" key={s.key}>
@@ -639,172 +750,305 @@ export default function UserPrivateRecipeForm() {
               />
               
               <label>Unit:</label>
-              <select name="unit" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.unit_id}>
+              <select
+                name="unit"
+                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                required
+                value={s.unit_id}
+              >
                 <option value=""></option>
-                {units.map((u, index) => <option key={index} value={u.unit_id}>{u.unit_name}</option>)}
+                {units.map((u, index) => (
+                  <option key={index} value={u.unit_id}>{u.unit_name}</option>
+                ))}
               </select>
               
               <label>Type:</label>
-              <select name="type" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.type}>
+              <select
+                name="type"
+                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                required
+                value={s.recipe_type_id}
+              >
                 <option value=""></option>
-                {recipe_types.map((r, index) => <option key={index} value={r.recipe_type_id}>{r.recipe_type_name}</option>)}
+                {recipe_types.map((r, index) => (
+                  <option key={index} value={r.recipe_type_id}>
+                    {r.recipe_type_name}
+                  </option>
+                ))}
               </select>
               
               <label>Cuisine:</label>
-              <select name="cuisine" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.cuisine}>
+              <select
+                name="cuisine"
+                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                required
+                value={s.cuisine_id}
+              >
                 <option value=""></option>
-                {cuisines.map((c, index) => <option key={index} value={c.cuisine_id}>{c.cuisine_name}</option>)}
+                {cuisines.map((c, index) => (
+                  <option key={index} value={c.cuisine_id}>
+                    {c.cuisine_name}
+                  </option>
+                ))}
               </select>
               
               <label>Subrecipe:</label>
-              <select className="--subrecipe" name="subrecipe" onChange={(e) => changeSubrecipeRow(e, s.key)} required value={s.subrecipe_id}>
+              <select
+                className="--subrecipe"
+                name="subrecipe"
+                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                required
+                value={s.subrecipe_id}
+              >
                 <option value=""></option>
-                {availableRecipes
-                  .filter(r => r.recipe_type_id == s.type)
-                  .filter(r => r.cuisine_id == s.cuisine)
-                  .map((r, index) => <option key={index} value={r.recipe_id}>{r.title}</option>)}
+                {
+                  availableRecipes
+                    .filter(r => r.recipe_type_id == s.recipe_type_id)
+                    .filter(r => r.cuisine_id == s.cuisine_id)
+                    .map((r, index) => (
+                      <option key={index} value={r.recipe_id}>{r.title}</option>
+                    ))
+                }
               </select>
               
-              <button className="--remove" onClick={() => removeSubrecipeRow(s.key)}>Remove</button>
+              <button
+                className="--remove"
+                onClick={() => removeSubrecipeRow(s.key)}
+              >Remove</button>
             </div>
           ))}
         </div>
-        <button className="--add-row" onClick={addSubrecipeRow}>Add Subrecipe</button>
+
+        <button className="--add-row" onClick={addSubrecipeRow}>
+          Add Subrecipe
+        </button>
       </div>
 
       <h2>Directions</h2>
-      <textarea className="directions" id="recipe_directions" name="directions" onChange={changeDirections} value={directions} />
+      <textarea
+        className="directions"
+        id="recipe_directions"
+        name="directions"
+        onChange={changeDirections}
+        value={directions}
+      />
 
       <div className="new-recipe-images">
-      <div className="recipe-image">
-        <h2>Image of Finished Recipe</h2>
+        <div className="recipe-image">
+          <h2>Image of Finished Recipe</h2>
+  
+          {!recipeImage && (
+            <div>
+              {
+                !editingId
+                ? <img src={`${url}/nobsc-recipe-default`} />
+                : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />
+              }
 
-        {!recipeImage && (
-          <div>
-            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />}
-            <h4>Change</h4>
-            <input accept="image/*" name="image-input" onChange={(e) => onSelectFile(e, "recipe")} type="file" />
-          </div>
-        )}
-
-        {recipeImage && (
-          <div>
-            <ReactCrop crop={recipeCrop} onChange={onRecipeCropChange} onComplete={onRecipeCropComplete} {...commonReactCropProps}>
-              <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
-            </ReactCrop>
-
-            <ToolTip />
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span><img className="crop-full" src={recipeFullCrop} />
-              </div>
-              <div className="crop-thumb-outer">
-                <span>Thumb Size: </span><img className="crop-thumb" src={recipeThumbCrop} />
-              </div>
-              <div className="crop-tiny-outer">
-                <span>Tiny Size: </span><img className="crop-tiny" src={recipeTinyCrop} />
-              </div>
+              <h4>Change</h4>
+              <input
+                accept="image/*"
+                name="image-input"
+                onChange={(e) => onSelectFile(e, "recipe")}
+                type="file"
+              />
             </div>
+          )}
+  
+          {recipeImage && (
+            <div>
+              <ReactCrop
+                crop={recipeCrop}
+                onChange={onRecipeCropChange}
+                onComplete={onRecipeCropComplete}
+                {...commonReactCropProps}
+              >
+                <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
+              </ReactCrop>
+  
+              <ToolTip />
+  
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={recipeFullCrop} />
+                </div>
 
-            <button className="image-cancel-button" disabled={loading} onClick={cancelRecipeImage}>Cancel</button>
-          </div>
-        )}
-      </div>
+                <div className="crop-thumb-outer">
+                  <span>Thumb Size: </span>
+                  <img className="crop-thumb" src={recipeThumbCrop} />
+                </div>
 
-      <div className="equipment-image">
-        <h2>Image of All Equipment</h2>
-
-        {!equipmentImage && (
-          <div>
-            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />}
-            <h4>Change</h4>
-            <input accept="image/*" name="equipment-image-input" onChange={(e) => onSelectFile(e, "equipment")} type="file" />
-          </div>
-        )}
-
-        {equipmentImage && (
-          <div>
-            <ReactCrop crop={equipmentCrop} onChange={onEquipmentCropChange} onComplete={onEquipmentCropComplete} {...commonReactCropProps}>
-              <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
-            </ReactCrop>
-            
-            <ToolTip />
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span><img className="crop-full" src={equipmentFullCrop} />
+                <div className="crop-tiny-outer">
+                  <span>Tiny Size: </span>
+                  <img className="crop-tiny" src={recipeTinyCrop} />
+                </div>
               </div>
+  
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelRecipeImage}
+              >Cancel</button>
             </div>
+          )}
+        </div>
 
-            <button className="image-cancel-button" disabled={loading} onClick={cancelEquipmentImage}>Cancel</button>
-          </div>
-        )}
-      </div>
+        <div className="equipment-image">
+          <h2>Image of All Equipment</h2>
+  
+          {!equipmentImage && (
+            <div>
+              {
+                !editingId
+                ? <img src={`${url}/nobsc-recipe-default`} />
+                : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />
+              }
 
-      <div className="ingredients-image">
-        <h2>Image of All Ingredients</h2>
-
-        {!ingredientsImage && (
-          <div>
-            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />}
-            <h4>Change</h4>
-            <input accept="image/*" name="ingredients-image-input" onChange={(e) => onSelectFile(e, "ingredients")} type="file" />
-          </div>
-        )}
-
-        {ingredientsImage && (
-          <div>
-            <ReactCrop crop={ingredientsCrop} onChange={onIngredientsCropChange} onComplete={onIngredientsCropComplete} {...commonReactCropProps}>
-              <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
-            </ReactCrop>
-            
-            <ToolTip />
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span><img className="crop-full" src={ingredientsFullCrop} />
+              <h4>Change</h4>
+              <input
+                accept="image/*"
+                name="equipment-image-input"
+                onChange={(e) => onSelectFile(e, "equipment")}
+                type="file"
+              />
+            </div>
+          )}
+  
+          {equipmentImage && (
+            <div>
+              <ReactCrop
+                crop={equipmentCrop}
+                onChange={onEquipmentCropChange}
+                onComplete={onEquipmentCropComplete}
+                {...commonReactCropProps}
+              >
+                <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
+              </ReactCrop>
+              
+              <ToolTip />
+  
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={equipmentFullCrop} />
+                </div>
               </div>
+  
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelEquipmentImage}
+              >Cancel</button>
             </div>
+          )}
+        </div>
 
-            <button className="image-cancel-button" disabled={loading} onClick={cancelIngredientsImage}>Cancel</button>
-          </div>
-        )}
-      </div>
+        <div className="ingredients-image">
+          <h2>Image of All Ingredients</h2>
+  
+          {!ingredientsImage && (
+            <div>
+              {
+                !editingId
+                ? <img src={`${url}/nobsc-recipe-default`} />
+                : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />
+              }
 
-      <div className="cooking-image">
-        <h2>Image of Cooking In Action</h2>
-
-        {!cookingImage && (
-          <div>
-            {!editingId ? <img src={`${url}/nobsc-recipe-default`} /> : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />}
-            <h4>Change</h4>
-            <input accept="image/*" name="cooking-image-input" onChange={(e) => onSelectFile(e, "cooking")} type="file" />
-          </div>
-        )}
-
-        {cookingImage && (
-          <div>
-            <ReactCrop crop={cookingCrop} onChange={onCookingCropChange} onComplete={onCookingCropComplete} {...commonReactCropProps}>
-              <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
-            </ReactCrop>
-            
-            <ToolTip />
-
-            <div className="crops">
-              <div className="crop-full-outer">
-                <span>Full Size: </span><img className="crop-full" src={cookingFullCrop} />
+              <h4>Change</h4>
+              <input
+                accept="image/*"
+                name="ingredients-image-input"
+                onChange={(e) => onSelectFile(e, "ingredients")}
+                type="file"
+              />
+            </div>
+          )}
+  
+          {ingredientsImage && (
+            <div>
+              <ReactCrop
+                crop={ingredientsCrop}
+                onChange={onIngredientsCropChange}
+                onComplete={onIngredientsCropComplete}
+                {...commonReactCropProps}
+              >
+                <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
+              </ReactCrop>
+              
+              <ToolTip />
+  
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={ingredientsFullCrop} />
+                </div>
               </div>
+  
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelIngredientsImage}
+              >Cancel</button>
             </div>
+          )}
+        </div>
 
-            <button className="image-cancel-button" disabled={loading} onClick={cancelCookingImage}>Cancel</button>
-          </div>
-        )}
+        <div className="cooking-image">
+          <h2>Image of Cooking In Action</h2>
+  
+          {!cookingImage && (
+            <div>
+              {
+                !editingId
+                ? <img src={`${url}/nobsc-recipe-default`} />
+                : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />
+              }
+  
+              <h4>Change</h4>
+  
+              <input
+                accept="image/*"
+                name="cooking-image-input"
+                onChange={(e) => onSelectFile(e, "cooking")}
+                type="file"
+              />
+            </div>
+          )}
+  
+          {cookingImage && (
+            <div>
+              <ReactCrop
+                crop={cookingCrop}
+                onChange={onCookingCropChange}
+                onComplete={onCookingCropComplete}
+                {...commonReactCropProps}
+              >
+                <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
+              </ReactCrop>
+              
+              <ToolTip />
+  
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={cookingFullCrop} />
+                </div>
+              </div>
+  
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelCookingImage}
+              >Cancel</button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
 
       <div className="finish">
         <Link className="cancel-button" href="/dashboard">Cancel</Link>
+
         <LoaderButton
           className="submit-button"
           id="user_submit_recipe_button"
@@ -833,25 +1077,25 @@ type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
-type IImage = string | ArrayBuffer | null;
+type Image = string | ArrayBuffer | null;
 
-export interface IExistingRecipeToEdit {
-  recipe_id:         string;
-  recipe_type_id:    number;
-  cuisine_id:        number;
-  owner_id:          number;
-  title:             string;
-  description:       string;
-  directions:        string;
+export type ExistingRecipeToEdit = {
+  recipe_id:            string;
+  recipe_type_id:       number;
+  cuisine_id:           number;
+  owner_id:             number;
+  title:                string;
+  description:          string;
+  directions:           string;
   required_methods:     ExistingRequiredMethod[];
   required_equipment:   ExistingRequiredEquipment[];
   required_ingredients: ExistingRequiredIngredient[];
   required_subrecipes:  ExistingRequiredSubrecipe[];
-  recipe_image:      string;
-  equipment_image:   string;
-  ingredients_image: string;
-  cooking_image:     string;
-}
+  recipe_image:         string;
+  equipment_image:      string;
+  ingredients_image:    string;
+  cooking_image:        string;
+};
 
 // change these too?
 
@@ -881,35 +1125,10 @@ export type ExistingRequiredSubrecipe = {
 };
 
 export type Methods = {
-  //[index: string]: any;  // ???
-  1:  boolean;
-  2:  boolean;
-  3:  boolean;
-  4:  boolean;
-  5:  boolean;
-  6:  boolean;
-  7:  boolean;
-  8:  boolean;
-  9:  boolean;
-  10: boolean;
-  11: boolean;
-  12: boolean;
-  13: boolean;
-  14: boolean;
-  15: boolean;
-  16: boolean;
-  17: boolean;
-  18: boolean;
-  19: boolean;
-  20: boolean;
-  21: boolean;
-  22: boolean;
-  23: boolean;
-  24: boolean;
+  [key: number]: boolean;
 };
 
 export type EquipmentRow = {
-  //[index: string]:   any;
   key:               string;
   amount:            string | number;
   equipment_type_id: string | number;  // (just a filter for nicer UX)
@@ -917,7 +1136,6 @@ export type EquipmentRow = {
 };
 
 export type IngredientRow = {
-  //[index: string]:    any;
   key:                string;
   amount:             string | number;
   unit_id:            string | number;
@@ -926,7 +1144,6 @@ export type IngredientRow = {
 };
 
 export type SubrecipeRow = {
-  //[index: string]: any;
   key:             string;
   amount:          string | number;
   unit_id:         string | number;

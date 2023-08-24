@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Link  from 'next/link';
 
-import { LoaderSpinner } from '../../../../components';
-import { endpoint }      from '../../../../utils/api';
-import type { Recipe }   from '../../../../types';
+import { endpoint }      from '../../../../../config/api';
+import { LoaderSpinner } from '../../../../shared/LoaderSpinner';
+import type { Recipe }   from '../../../../shared/types';
 
 export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
@@ -25,7 +25,9 @@ export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
     //cooking_image
   } = recipe;
 
-  if (!recipe) return <LoaderSpinner />;
+  if (!recipe) {
+    return <LoaderSpinner />;
+  }
 
   // TO DO: move logic out of return
   return (

@@ -2,22 +2,22 @@ import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                          from '../../../../config/api';
-import { getMyPublicRecipesSaga }            from '../../../shared/data/network';
-import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
+import { getMyPublicRecipesWorker }          from '../../../shared/data/network';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
 import { actionTypes } from './state';
 import type { CreatePublicRecipe, UpdatePublicRecipe, DisownPublicRecipe } from './state';
 
 const { CREATE_PUBLIC_RECIPE, UPDATE_PUBLIC_RECIPE, DISOWN_PUBLIC_RECIPE } = actionTypes;
 
-export function* watchUserPublicRecipe() {
+export function* publicRecipeWatcher() {
   yield all([
-    takeEvery(CREATE_PUBLIC_RECIPE, createPublicRecipeSaga),
-    takeEvery(UPDATE_PUBLIC_RECIPE, updatePublicRecipeSaga),
-    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeSaga)
+    takeEvery(CREATE_PUBLIC_RECIPE, createPublicRecipeWorker),
+    takeEvery(UPDATE_PUBLIC_RECIPE, updatePublicRecipeWorker),
+    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeWorker)
   ]);
 }
 
-export function* createPublicRecipeSaga(action: CreatePublicRecipe) {
+export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
   let {
     ownership,
     recipe_type_id,
@@ -143,7 +143,7 @@ export function* createPublicRecipeSaga(action: CreatePublicRecipe) {
     else cookingImage = "nobsc-recipe-cooking-default";
 
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/public/recipe/create`,
       {
@@ -166,18 +166,20 @@ export function* createPublicRecipeSaga(action: CreatePublicRecipe) {
       },
       {withCredentials: true}
     );
-    yield put(systemMessage(message));
-    yield call(getMyPublicRecipesSaga);
+
+    yield put(systemMessage(data.message));
+    yield call(getMyPublicRecipesWorker);  // OR put(getMyPublicRecipes()) ???
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }
 
-export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
+export function* disownPublicRecipeWorker({ recipe_id }: DisownPublicRecipe) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/public/recipe/disown`,
       {
@@ -186,16 +188,17 @@ export function* disownPublicRecipeSaga({ recipe_id }: DisownPublicRecipe) {
       }
     );
       
-    yield put(systemMessage(message));
-    yield call(getMyPublicRecipesSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyPublicRecipesWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }
 
-export function* updatePublicRecipeSaga(action: UpdatePublicRecipe) {
+export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
   let {
     recipe_id,
     ownership,
@@ -327,7 +330,7 @@ export function* updatePublicRecipeSaga(action: UpdatePublicRecipe) {
     else cookingImage = cookingPrevImage;
     
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/public/recipe/update`,
       {
@@ -355,11 +358,13 @@ export function* updatePublicRecipeSaga(action: UpdatePublicRecipe) {
       },
       {withCredentials: true}
     );
-    yield put(systemMessage(message));
-    yield call(getMyPublicRecipesSaga);
+
+    yield put(systemMessage(data.message));
+    yield call(getMyPublicRecipesWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }

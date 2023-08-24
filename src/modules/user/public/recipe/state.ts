@@ -1,14 +1,4 @@
-// TO DO: split into private and public
 // TO DO: add PRIVATE_ to the equipment and ingredient modules just like here
-
-export const createPrivateRecipe = (recipeInfo: RecipeInfo) =>
-  ({type: CREATE_PRIVATE_RECIPE, recipeInfo});
-
-export const updatePrivateRecipe = (recipeInfo: RecipeUpdateInfo) =>
-  ({type: UPDATE_PRIVATE_RECIPE, recipeInfo});
-
-export const deletePrivateRecipe = (recipe_id: string) =>
-  ({type: DELETE_PRIVATE_RECIPE, recipe_id});
 
 export const createPublicRecipe = (recipeInfo: RecipeInfo) =>
   ({type: CREATE_PUBLIC_RECIPE, recipeInfo});
@@ -22,39 +12,16 @@ export const disownPublicRecipe = (recipe_id: string) =>
 
 
 export const actionTypes = {
-  CREATE_PRIVATE_RECIPE: 'CREATE_PRIVATE_RECIPE',
-  UPDATE_PRIVATE_RECIPE: 'UPDATE_PRIVATE_RECIPE',
-  DELETE_PRIVATE_RECIPE: 'DELETE_PRIVATE_RECIPE',
-
   CREATE_PUBLIC_RECIPE: 'CREATE_PUBLIC_RECIPE',
   UPDATE_PUBLIC_RECIPE: 'UPDATE_PUBLIC_RECIPE',
   DISOWN_PUBLIC_RECIPE: 'DISOWN_PUBLIC_RECIPE'
 } as const;
 
 const {
-  CREATE_PRIVATE_RECIPE,
-  UPDATE_PRIVATE_RECIPE,
-  DELETE_PRIVATE_RECIPE,
-
   CREATE_PUBLIC_RECIPE,
   UPDATE_PUBLIC_RECIPE,
   DISOWN_PUBLIC_RECIPE
 } = actionTypes;
-
-export type CreatePrivateRecipe = {
-  type:        typeof actionTypes.CREATE_PRIVATE_RECIPE;
-  recipe_info: RecipeInfo;
-};
-
-export type UpdatePrivateRecipe = {
-  type:        typeof actionTypes.UPDATE_PRIVATE_RECIPE;
-  recipe_info: RecipeUpdateInfo;
-};
-
-export type DeletePrivateRecipe = {
-  type:      typeof actionTypes.DELETE_PRIVATE_RECIPE;
-  recipe_id: string;
-};
 
 export type CreatePublicRecipe = {
   type:        typeof actionTypes.CREATE_PUBLIC_RECIPE;

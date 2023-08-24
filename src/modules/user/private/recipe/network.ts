@@ -1,32 +1,23 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                        from '../../../config/api';
-import { getMyPrivateRecipesSaga } from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../shared/system-message/state';
+import { endpoint }                          from '../../../../config/api';
+import { getMyPrivateRecipesWorker }         from '../../../shared/data/network';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
 import { actionTypes } from './state';
-import type {
-  CreatePrivateRecipe,
-  UpdatePrivateRecipe,
-  DeletePrivateRecipe,
+import type { CreatePrivateRecipe, UpdatePrivateRecipe, DeletePrivateRecipe } from './state';
 
-} from './state';
+const { CREATE_PRIVATE_RECIPE, UPDATE_PRIVATE_RECIPE, DELETE_PRIVATE_RECIPE } = actionTypes;
 
-const {
-  CREATE_PRIVATE_RECIPE,
-  UPDATE_PRIVATE_RECIPE,
-  DELETE_PRIVATE_RECIPE,
-} = actionTypes;
-
-export function* watchUserPrivateRecipe() {
+export function* privateRecipeWatcher() {
   yield all([
-    takeEvery(CREATE_PRIVATE_RECIPE, createPrivateRecipeSaga),
-    takeEvery(UPDATE_PRIVATE_RECIPE, updatePrivateRecipeSaga),
-    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeSaga)
+    takeEvery(CREATE_PRIVATE_RECIPE, createPrivateRecipeWorker),
+    takeEvery(UPDATE_PRIVATE_RECIPE, updatePrivateRecipeWorker),
+    takeEvery(DELETE_PRIVATE_RECIPE, deletePrivateRecipeWorker)
   ]);
 }
 
-export function* createPrivateRecipeSaga(action: CreatePrivateRecipe) {
+export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
   let {
     ownership,
     recipe_type_id,
@@ -152,7 +143,7 @@ export function* createPrivateRecipeSaga(action: CreatePrivateRecipe) {
     else cookingImage = "nobsc-recipe-cooking-default";
 
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/private/recipe/create`,
       {
@@ -175,18 +166,20 @@ export function* createPrivateRecipeSaga(action: CreatePrivateRecipe) {
       },
       {withCredentials: true}
     );
-    yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
+
+    yield put(systemMessage(data.message));
+    yield call(getMyPrivateRecipesWorker);  // OR put(getMyPrivateRecipes()) ???
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }
 
-export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
+export function* deletePrivateRecipeWorker({ recipe_id }: DeletePrivateRecipe) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/private/recipe/delete`,
       {
@@ -195,16 +188,17 @@ export function* deletePrivateRecipeSaga({ recipe_id }: DeletePrivateRecipe) {
       }
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyPrivateRecipesWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }
 
-export function* updatePrivateRecipeSaga(action: UpdatePrivateRecipe) {
+export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
   let {
     recipe_id,
     ownership,
@@ -336,7 +330,7 @@ export function* updatePrivateRecipeSaga(action: UpdatePrivateRecipe) {
     else cookingImage = cookingPrevImage;
     
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/private/recipe/update`,
       {
@@ -364,11 +358,13 @@ export function* updatePrivateRecipeSaga(action: UpdatePrivateRecipe) {
       },
       {withCredentials: true}
     );
-    yield put(systemMessage(message));
-    yield call(getMyPrivateRecipesSaga);
+
+    yield put(systemMessage(data.message));
+    yield call(getMyPrivateRecipesWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
+
   yield delay(4000);
   yield put(systemMessageClear());
 }
