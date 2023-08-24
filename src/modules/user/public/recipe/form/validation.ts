@@ -1,7 +1,6 @@
-import type { EquipmentRow, IngredientRow, Methods, SubrecipeRow } from './index.page';
+import type { EquipmentRow, IngredientRow, Methods, SubrecipeRow } from '.';
 
 export function validRecipeInfo({
-  ownership,
   recipe_type_id,
   cuisine_id,
   title,
@@ -19,9 +18,6 @@ export function validRecipeInfo({
     setTimeout(() => setFeedback(""), 3000);
     return false;
   }
-
-  const validOwnership = ownership === "private" || ownership === "public";
-  if (!validOwnership) return feedback("Select ownership.");
 
   const validRecipeTypeId = recipe_type_id !== 0;
   if (!validRecipeTypeId) return feedback("Select recipe type.");
@@ -45,24 +41,33 @@ export function validRecipeInfo({
   let validEquipment = true;
   if (required_equipment.length) {
     required_equipment.map(r => {
-      if (r.amount === "" || r.equipment_id === "") validEquipment = false;
+      if (!r.equipment_id) {
+        validEquipment = false;
+      }
     });
+    
     if (!validEquipment) return feedback("Review required equipment.");
   }
 
   let validIngredients = true;
   if (required_ingredients.length) {
     required_ingredients.map(r => {
-      if (r.amount === "" || r.unit_id === "" || r.ingredient_type_id === "" || r.ingredient_id === "") validIngredients = false;
+      if (!r.ingredient_id) {
+        validIngredients = false;
+      }
     });
+
     if (!validIngredients) return feedback("Review required ingredients.");
   }
 
   let validSubrecipes = true;
   if (required_subrecipes.length) {
     required_subrecipes.map(r => {
-      if (r.amount === "" || r.unit_id === "" || r.recipe_type_id === "" || r.cuisine_id === "" || r.subrecipe_id === "") validSubrecipes = false;
+      if (!r.subrecipe_id) {
+        validSubrecipes = false;
+      }
     });
+
     if (!validSubrecipes) return feedback("Review required subrecipes.");
   }
 
@@ -72,7 +77,6 @@ export function validRecipeInfo({
 // TO DO: move all types to one location
 
 type RecipeInfo = {
-  ownership:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
   title:                string;
