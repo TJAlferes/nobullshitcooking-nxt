@@ -1,4 +1,4 @@
-// TO DO: add PRIVATE_ to the equipment and ingredient modules just like here
+
 
 export const createPrivateRecipe = (recipeInfo: RecipeInfo) =>
   ({type: CREATE_PRIVATE_RECIPE, recipeInfo});

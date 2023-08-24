@@ -122,7 +122,7 @@ export type Equipment = {
   owner_id:            number;
   equipment_type_name: string;
   equipment_name:      string;
-  description:         string;
+  notes:               string;
   image_url:           string;
 };
 
@@ -147,7 +147,7 @@ export type Ingredient = {
   ingredient_variety:   string | null;
   ingredient_name:      string;
   fullname:             string;
-  description:          string;
+  notes:                string;
   image_url:            string;
 };
 

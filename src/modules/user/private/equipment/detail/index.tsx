@@ -1,24 +1,23 @@
-import axios from 'axios';
-
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import type { Equipment }                  from '../../store/data/types';
-import { endpoint }                        from '../../utils/api';
+import { useTypedSelector as useSelector } from '../../../../../redux';
+import { LoaderSpinner }                   from '../../../../shared/LoaderSpinner';
+import type { Equipment }                  from '../../data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Equipment}) {
-  const my_equipment = useSelector(state => state.data.my_equipment);
+  const my_equipment = useSelector(state => state.userData.my_equipment);
 
   const {
     equipment_id,
     equipment_name,
     image_url,
     equipment_type_name,
-    description
+    notes
   } = equipment;
 
-  if (!equipment) return <LoaderSpinner />;
+  if (!equipment) {
+    return <LoaderSpinner />;
+  }
 
   return (
     <div className="two-col equipment">
@@ -35,8 +34,8 @@ export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Eq
           <b>Equipment Type:</b>{' '}<span>{equipment_type_name}</span>
         </div>
 
-        <div className="description">
-          <b>Equipment Description:</b>{' '}<div>{description}</div>
+        <div className="notes">
+          <b>Equipment Notes:</b>{' '}<div>{notes}</div>
         </div>
       </div>
 
@@ -44,38 +43,3 @@ export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Eq
     </div>
   );
 }
-
-function slugify(name: string) {
-  return name
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
-export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/equipment/names`);
-
-  const paths = response.data.map((equipment: {name: string}) => ({
-    params: {
-      name: slugify(equipment.name)
-    }
-  }));
-
-  return {paths, fallback: false};
-}
-
-export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/equipment/${params.equipment_name}`);
-
-  return {
-    props: {
-      equipment: response.data
-    }
-  };
-}
-
-type StaticProps = {
-  params: {
-    equipment_name: string;
-  };
-};

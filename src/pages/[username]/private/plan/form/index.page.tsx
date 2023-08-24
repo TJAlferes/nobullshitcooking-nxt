@@ -1,6 +1,14 @@
-import axios from 'axios';
+import dynamic from 'next/dynamic';
 
-import UserPrivatePlanForm from '../../../../../modules/user/private/plan/form';
+import { LoaderSpinner } from '../../../../../modules/shared/LoaderSpinner';
+
+const UserPrivatePlanForm = dynamic(
+  () => import('../../../../../modules/user/private/plan/form'),
+  {
+    loading: () => <LoaderSpinner />,
+    ssr: false
+  }
+);
 
 export default function UserPrivatePlanFormPage() {
   return <UserPrivatePlanForm />;
