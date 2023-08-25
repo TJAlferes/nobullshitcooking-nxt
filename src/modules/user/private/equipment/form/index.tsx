@@ -5,35 +5,35 @@ import ReactCrop, { Crop }             from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { CropPreview, LoaderButton }        from '../../components';
-import { useTypedSelector as useSelector }  from '../../store';
-import { createEquipment, updateEquipment } from '../../store/user/equipment/actions';
-import { getCroppedImage }                  from '../../utils/getCroppedImage';
+import { useTypedSelector as useSelector }  from '../../../../../redux';
+import { CropPreview }                      from '../../../../shared/CropPreview';
+import { LoaderButton }                     from '../../../../shared/LoaderButton';
+import { getCroppedImage }                  from '../../../../shared/getCroppedImage';
+import { createEquipment, updateEquipment } from '../state';
 
 export default function UserPrivateEquipmentForm() {
   const router = useRouter();
+
   const params = useSearchParams();
   const equipment_id = params.get('equipment_id');
 
   const dispatch = useDispatch();
-  //const equipment =      useSelector(state => state.data.equipment);
   const equipment_types = useSelector(state => state.data.equipment_types);
-  const my_equipment =    useSelector(state => state.data.my_equipment);
-  const message =         useSelector(state => state.user.message);
+  const my_equipment    = useSelector(state => state.userData.my_equipment);
+  const message         = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ] =  useState(false);
+  const [ loading,  setLoading ]  = useState(false);
 
-  const [ editingId,   setEditingId ] =             useState<string | null>(null);  // is this even needed?
-  const [ equipment_type_id, setEquipmentTypeId ] = useState<number>(0);  // null?
+  const [ equipment_type_id, setEquipmentTypeId ] = useState(0);  // null?
   const [ equipment_name,    setEquipmentName ]   = useState("");
-  const [ description, setDescription ] =           useState("");
-  const [ prevImage,   setPrevImage ] =             useState("nobsc-equipment-default");
-  const [ image,       setImage ] =                 useState<string | ArrayBuffer | null>(null);
-  const [ fullImage,   setFullImage ] =             useState<File | null>(null);
-  const [ tinyImage,   setTinyImage ] =             useState<File | null>(null);
+  const [ notes,             setNotes ]           = useState("");
+  const [ prevImage,         setPrevImage ]       = useState("nobsc-equipment-default");
+  const [ image,             setImage ]           = useState<string | ArrayBuffer | null>(null);
+  const [ fullImage,         setFullImage ]       = useState<File | null>(null);
+  const [ tinyImage,         setTinyImage ]       = useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
+  const [ crop,     setCrop ]     = useState<Crop>(initialCrop);
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -49,19 +49,20 @@ export default function UserPrivateEquipmentForm() {
       }
       
       setLoading(true);
+
       window.scrollTo(0, 0);
-      const [ prev ] = my_equipment.filter(e => e.equipment_id === equipment_id);
-      if (!prev) {
+
+      const equipment = my_equipment.find(e => e.equipment_id === equipment_id);
+      if (!equipment) {
         router.push('/dashboard');
         setLoading(false);
         return;
       }
-      
-      setEditingId(prev.equipment_id);  // is this even needed?
-      setEquipmentTypeId(prev.equipment_type_id);
-      setEquipmentName(prev.equipment_name);
-      setDescription(prev.description);
-      setPrevImage(prev.image_url);
+
+      setEquipmentTypeId(equipment.equipment_type_id);
+      setEquipmentName(equipment.equipment_name);
+      setNotes(equipment.notes);
+      setPrevImage(equipment.image_url);
 
       setLoading(false);
     };
@@ -86,9 +87,9 @@ export default function UserPrivateEquipmentForm() {
     };
   }, [message]);
 
-  const changeType =        (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
-  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
+  const changeType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
+  const changeNotes = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -109,8 +110,8 @@ export default function UserPrivateEquipmentForm() {
     setTinyImage(tiny.final);
   };
 
-  const onImageLoaded =  (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
-  const onCropChange =   (crop: Crop) => setCrop(crop);
+  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
+  const onCropChange   = (crop: Crop) => setCrop(crop);
   const onCropComplete = (crop: Crop) => makeCrops(crop);
 
   const cancelImage = () => {
@@ -138,25 +139,41 @@ export default function UserPrivateEquipmentForm() {
       return false;
     }
 
-    const validDescription = description.trim() !== "";
-    if (!validDescription) {
+    const validNotes = notes.trim() !== "";
+    if (!validNotes) {
       window.scrollTo(0, 0);
-      setFeedback("Check description.");
+      setFeedback("Check notes.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
 
-    return validTypeId && validName && validDescription;
+    return validTypeId && validName && validNotes;
   };
 
-  // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
+
     setLoading(true);
-    const equipmentInfo = {equipment_type_id, equipment_name, description, image, fullImage, tinyImage};
-    if (editingId) {
-      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE EQUIPMENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-      const equipmentUpdateInfo = {equipment_id: editingId, prevImage, ...equipmentInfo};
+
+    const equipmentInfo = {
+      equipment_type_id,
+      equipment_name,
+      notes,
+      image,
+      fullImage,
+      tinyImage
+    };
+
+    if (equipment_id) {
+      // TO DO: AUTHORIZE ON BACK END
+      // MAKE SURE THEY OWN THE INGREDIENT
+      // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3
+      const equipmentUpdateInfo = {
+        equipment_id,
+        prevImage,
+        ...equipmentInfo
+      };
+
       dispatch(updateEquipment(equipmentUpdateInfo));
     } else {
       dispatch(createEquipment(equipmentInfo));
@@ -165,30 +182,37 @@ export default function UserPrivateEquipmentForm() {
   
   return (
     <div className="one-col new-equipment">
-      <h1>New Equipment</h1>
+      <h1>Create/Edit Private Equipment</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Type of Equipment</h2>
+      <h2>Equipment Type</h2>
       <select name="equipmentType" onChange={changeType} required value={equipment_type_id}>
         <option value=""></option>
         {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
-          <option key={equipment_type_id} value={equipment_type_id}>{equipment_type_name}</option>
+          <option key={equipment_type_id} value={equipment_type_id}>
+            {equipment_type_name}
+          </option>
         ))}
       </select>
 
       <h2>Name</h2>
       <input className="name" onChange={changeName} type="text" value={equipment_name} />
 
-      <h2>Description</h2>
-      <textarea className="description" onChange={changeDescription} value={description} />
+      <h2>Notes</h2>
+      <textarea className="notes" onChange={changeNotes} value={notes} />
 
       <div>
         <h2>Image of Equipment</h2>
 
         {!image && (
           <div>
-            {!editingId ? <img src={`${dir}/nobsc-equipment-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
+            {
+              !equipment_id
+              ? <img src={`${dir}/nobsc-equipment-default`} />
+              : prevImage && <img src={`${dir}/${prevImage}`} />
+            }
+            
             <h4>Change</h4>
             <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
@@ -206,7 +230,13 @@ export default function UserPrivateEquipmentForm() {
             >
               <img onLoad={onImageLoaded} src={image as string} />
             </ReactCrop>
-            <CropPreview cancelImage={cancelImage} fullCrop={fullCrop} loading={loading} tinyCrop={tinyCrop} />
+
+            <CropPreview
+              cancelImage={cancelImage}
+              fullCrop={fullCrop}
+              loading={loading}
+              tinyCrop={tinyCrop}
+            />
           </div>
         )}
       </div>
@@ -227,5 +257,13 @@ export default function UserPrivateEquipmentForm() {
     </div>
   );
 }
+
+const initialCrop: Crop = {
+  unit:   'px',
+  x:      25,
+  y:      25,
+  width:  50,
+  height: 50
+};
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;

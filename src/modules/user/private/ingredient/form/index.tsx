@@ -5,36 +5,35 @@ import ReactCrop, { Crop }             from "react-image-crop";
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { CropPreview, LoaderButton }          from '../../components';
-import { useTypedSelector as useSelector }    from '../../store';
-import { createIngredient, updateIngredient } from '../../store/user/ingredient/actions';
-import { getCroppedImage }                    from '../../utils/getCroppedImage';
+import { useTypedSelector as useSelector }    from '../../../../../redux';
+import { CropPreview }                        from '../../../../shared/CropPreview';
+import { LoaderButton }                       from '../../../../shared/LoaderButton';
+import { getCroppedImage }                    from '../../../../shared/getCroppedImage';
+import { createIngredient, updateIngredient } from '../state';
 
 export default function UserPrivateIngredientForm() {
   const router = useRouter();
+
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');
 
   const dispatch = useDispatch();
-  //const ingredients =     useSelector(state => state.data.ingredients);
   const ingredient_types = useSelector(state => state.data.ingredient_types);
-  const my_ingredients =   useSelector(state => state.data.my_ingredients);
-  const message =          useSelector(state => state.user.message);
+  const my_ingredients   = useSelector(state => state.userData.my_ingredients);
+  const message          = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ] =  useState(false);
+  const [ loading,  setLoading ]  = useState(false);
 
-  const ingredient_id                               = params.get('ingredient_id');
-  const [ editing_id,         setEditingId ]        = useState<string|null>(null);
   const [ ingredient_type_id, setIngredientTypeId ] = useState(0);
   const [ ingredient_name,    setIngredientName ]   = useState("");
-  const [ description, setDescription ] = useState("");
-  const [ prevImage,   setPrevImage ] =   useState("nobsc-ingredient-default");
-  const [ image,       setImage ] =       useState<string | ArrayBuffer | null>(null);
-  const [ fullImage,   setFullImage ] =   useState<File | null>(null);
-  const [ tinyImage,   setTinyImage ] =   useState<File | null>(null);
+  const [ notes,              setNotes ]            = useState("");
+  const [ prevImage,          setPrevImage ]        = useState("nobsc-ingredient-default");
+  const [ image,              setImage ]            = useState<string | ArrayBuffer | null>(null);
+  const [ fullImage,          setFullImage ]        = useState<File | null>(null);
+  const [ tinyImage,          setTinyImage ]        = useState<File | null>(null);
 
-  const [ crop,     setCrop ] =     useState<Crop>({unit: 'px', x: 25, y: 25, width: 50, height: 50});
+  const [ crop, setCrop ]         = useState<Crop>(initialCrop);
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -50,19 +49,20 @@ export default function UserPrivateIngredientForm() {
       }
 
       setLoading(true);
+
       window.scrollTo(0, 0);
-      const [ prev ] = my_ingredients.filter(i => i.ingredient_id === ingredient_id);
-      if (!prev) {
+
+      const ingredient = my_ingredients.find(i => i.ingredient_id === ingredient_id);
+      if (!ingredient) {
         router.push('/dashboard');
         setLoading(false);
         return;
       }
 
-      setEditingId(prev.ingredient_id);
-      setIngredientTypeId(prev.ingredient_type_id);
-      setIngredientName(prev.ingredient_name);
-      setDescription(prev.description);
-      setPrevImage(prev.image_url);
+      setIngredientTypeId(ingredient.ingredient_type_id);
+      setIngredientName(ingredient.ingredient_name);
+      setNotes(ingredient.notes);
+      setPrevImage(ingredient.image_url);
       
       setLoading(false);
     };
@@ -87,9 +87,9 @@ export default function UserPrivateIngredientForm() {
     };
   }, [message]);
 
-  const changeType =        (e: SyntheticEvent) => setTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName =        (e: SyntheticEvent) => setName((e.target as HTMLInputElement).value);
-  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
+  const changeType  = (e: SyntheticEvent) => setIngredientTypeId(Number((e.target as HTMLInputElement).value));
+  const changeName  = (e: SyntheticEvent) => setIngredientName((e.target as HTMLInputElement).value);
+  const changeNotes = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -110,8 +110,8 @@ export default function UserPrivateIngredientForm() {
     setTinyImage(tiny.final);
   };
 
-  const onImageLoaded =  (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
-  const onCropChange =   (crop: Crop) => setCrop(crop);
+  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
+  const onCropChange   = (crop: Crop) => setCrop(crop);
   const onCropComplete = (crop: Crop) => makeCrops(crop);
 
   const cancelImage = () => {
@@ -139,25 +139,41 @@ export default function UserPrivateIngredientForm() {
       return false;
     }
 
-    const validDescription = description.trim() !== "";
-    if (!validDescription) {
+    const validNotes = notes.trim() !== "";
+    if (!validNotes) {
       window.scrollTo(0, 0);
-      setFeedback("Check description.");
+      setFeedback("Check notes.");
       setTimeout(() => setFeedback(""), 3000);
       return false;
     }
 
-    return validTypeId && validName && validDescription;
+    return validTypeId && validName && validNotes;
   };
 
-  // TO DO: remove inner prefixes
   const submit = () => {
     if (!valid()) return;
+
     setLoading(true);
-    const ingredientInfo = {ingredient_type_id, ingredient_name, description, image, fullImage, tinyImage};
-    if (editing_id) {
-      // TO DO: AUTHORIZE THEM ON THE BACK END, MAKE SURE THEY ACTUALLY DO OWN THE INGREDIENT BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-      const ingredientUpdateInfo = {ingredient_id: editing_id, prevImage, ...ingredientInfo};
+
+    const ingredientInfo = {
+      ingredient_type_id,
+      ingredient_name,
+      notes,
+      image,
+      fullImage,
+      tinyImage
+    };
+
+    if (ingredient_id) {
+      // TO DO: AUTHORIZE ON BACK END
+      // MAKE SURE THEY OWN THE INGREDIENT
+      // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3
+      const ingredientUpdateInfo = {
+        ingredient_id,
+        prevImage,
+        ...ingredientInfo
+      };
+
       dispatch(updateIngredient(ingredientUpdateInfo));
     } else {
       dispatch(createIngredient(ingredientInfo));
@@ -166,28 +182,37 @@ export default function UserPrivateIngredientForm() {
 
   return (
     <div className="one-col new-ingredient">
-      <h1>New Ingredient</h1>
+      <h1>Create/Edit Private Ingredient</h1>
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Type of Ingredient</h2>
-      <select name="ingredientType" onChange={changeType} required value={typeId}>
+      <h2>Ingredient Type</h2>
+      <select name="ingredientType" onChange={changeType} required value={ingredient_type_id}>
         <option value=""></option>
-        {ingredientTypes.map(({ id, name }) => (<option key={id} value={id}>{name}</option>))}
+        {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
+          <option key={ingredient_type_id} value={ingredient_type_id}>
+            {ingredient_type_name}
+          </option>
+        ))}
       </select>
 
       <h2>Name</h2>
-      <input className="name" onChange={changeName} type="text" value={name} />
+      <input className="name" onChange={changeName} type="text" value={ingredient_name} />
 
-      <h2>Description</h2>
-      <textarea className="description" onChange={changeDescription} value={description} />
+      <h2>Notes</h2>
+      <textarea className="notes" onChange={changeNotes} value={notes} />
 
       <div>
         <h2>Image of Ingredient</h2>
 
         {!image && (
           <div>
-            {!editingId ? <img src={`${dir}/nobsc-ingredient-default`} /> : prevImage && <img src={`${dir}/${prevImage}`} />}
+            {
+              !ingredient_id
+              ? <img src={`${dir}/nobsc-ingredient-default`} />
+              : prevImage && <img src={`${dir}/${prevImage}`} />
+            }
+            
             <h4>Change</h4>
             <input accept="image/*" onChange={onSelectFile} type="file" />
           </div>
@@ -205,7 +230,13 @@ export default function UserPrivateIngredientForm() {
             >
               <img onLoad={onImageLoaded} src={image as string} />
             </ReactCrop>
-            <CropPreview cancelImage={cancelImage} fullCrop={fullCrop} loading={loading} tinyCrop={tinyCrop} />
+
+            <CropPreview
+              cancelImage={cancelImage}
+              fullCrop={fullCrop}
+              loading={loading}
+              tinyCrop={tinyCrop}
+            />
           </div>
         )}
       </div>
@@ -226,5 +257,13 @@ export default function UserPrivateIngredientForm() {
     </div>
   );
 }
+
+const initialCrop: Crop = {
+  unit:   'px',
+  x:      25,
+  y:      25,
+  width:  50,
+  height: 50
+};
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;

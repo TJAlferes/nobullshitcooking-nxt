@@ -10,6 +10,9 @@ import { Pagination, ResultsPerPage }      from '../../shared/search';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
 
+// list of search results
+// ONLY contains Official Ingredients
+// DOES NOT contain Private User Ingredients
 export default function IngredientList() {
   const searchDriver = useContext(SearchContext);
 
@@ -26,16 +29,16 @@ export default function IngredientList() {
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
-      setExpandedFilter(null);
+      setExpandedFilter(null);  // close the dropdown
 
-      if (
-        name === "ingredientTypes"
-        && checkedIngredientTypes !== searchDriver.params.filters?.ingredient_types
-      ) {
+      // if needed, re-search with updated filters
+      const { filters } = searchDriver.params;
+
+      if (name === "ingredientTypes" && checkedIngredientTypes !== filters?.ingredient_types) {
         searchDriver.setFilters(name, checkedIngredientTypes);
       }
     } else {
-      setExpandedFilter(name);
+      setExpandedFilter(name);  // open the dropdown
     }
   };
 
@@ -92,7 +95,11 @@ export default function IngredientList() {
           {
             results
               ? results.map(i => (
-                <Link className="search-results-list-item" href={`/ingredient?fullname=${i.fullname}`} key={i.id}>
+                <Link
+                  className="search-results-list-item"
+                  href={`/ingredient?fullname=${i.fullname}`}
+                  key={i.id}
+                >
                   <img src="/images/dev/peas-280-172.jpg" />
                   <h3>{i.fullname}</h3>
                   <div className="type">{i.ingredient_type_name}</div>

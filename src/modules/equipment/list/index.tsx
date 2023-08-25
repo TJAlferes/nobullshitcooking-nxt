@@ -10,6 +10,9 @@ import { Pagination, ResultsPerPage }      from '../../shared/search';
 
 //const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
 
+// list of search results
+// ONLY contains Official Equipment
+// DOES NOT contain Private User Equipment
 export default function EquipmentList() {
   const searchDriver = useContext(SearchContext);
 
@@ -26,12 +29,12 @@ export default function EquipmentList() {
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
-      setExpandedFilter(null);
+      setExpandedFilter(null);  // close the dropdown
 
-      if (
-        name === "equipmentTypes"
-        && checkedEquipmentTypes !== searchDriver.params.filters?.equipment_types
-      ) {
+      // if needed, re-search with updated filters
+      const { filters } = searchDriver.params;
+
+      if (name === "equipmentTypes" && checkedEquipmentTypes !== filters?.equipment_types) {
         searchDriver.setFilters(name, checkedEquipmentTypes);
       }
     } else {
@@ -92,7 +95,11 @@ export default function EquipmentList() {
           {
             results
               ? results.map(e => (
-                <Link className="search-results-list-item" href={`/equipment?name=${e.equipment_name}`} key={e.id}>
+                <Link
+                  className="search-results-list-item"
+                  href={`/equipment?name=${e.equipment_name}`}
+                  key={e.id}
+                >
                   <img src="/images/dev/knife-280-172.jpg" />
                   <h3>{e.equipment_name}</h3>
                   <div className="type">{e.equipment_type_name}</div>
