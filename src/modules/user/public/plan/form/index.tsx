@@ -128,9 +128,7 @@ export default function UserPublicPlanForm() {
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
   const valid = () => {
-    const validName =       plan_name.trim() !== "";
-    const validNameLength = plan_name.trim().length < 21;
-
+    const validName = plan_name.trim() !== "";
     if (!validName) {
       window.scrollTo(0, 0);
       setFeedback("You forgot to name your plan...");
@@ -138,6 +136,7 @@ export default function UserPublicPlanForm() {
       return false;
     }
 
+    const validNameLength = plan_name.trim().length < 21;
     if (!validNameLength) {
       window.scrollTo(0, 0);
       setFeedback("Please keep your plan name under 20 characters");
@@ -256,35 +255,43 @@ const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, plan_data }: Monthl
           <span>Friday</span>
           <span>Saturday</span>
         </div>
+
         <div className="body">
           {Object.keys(plan_data).map((recipeList, i) => (
             <div className="monthly-plan__body-day" key={i} >
               <div className="body-day__content">
-                <Day day={i + 1} expandedDay={expandedDay} recipes={plan_data[Number(recipeList)]} />
+                <Day
+                  day={i + 1}
+                  expandedDay={expandedDay}
+                  recipes={plan_data[Number(recipeList)]}
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
+
       <div className="expanded-day-container">
-        {expandedDay && <ExpandedDay day={expandedDay} expandedDay={expandedDay} recipes={plan_data[expandedDay]} />}
+        {expandedDay && (
+          <ExpandedDay
+            day={expandedDay}
+            expandedDay={expandedDay}
+            recipes={plan_data[expandedDay]}
+          />
+        )}
       </div>
     </div>
   );
 });
 
 const MemoizedRecipes = memo(function MemoizedRecipes({ expandedDay, recipes }: MemoizedRecipesProps) {
-  // Even though recipe.id and recipe.owner_id are not used when creating/editing a plan (NewPlan-),
-  // they are set at this stage because they are used when viewing a plan (Plan-)
+  // Even though recipe.recipe_id and recipe.owner_id are not used when creating/editing a plan (PlanForm),
+  // they are set at this stage because they are used when viewing a plan (PlanDetail)
   return (
     <Recipes
       day={0}
       expandedDay={expandedDay}
-      recipes={
-        recipes.map(({ recipe_id, title, recipe_image, owner_id }) =>
-          ({key: uuidv4(), recipe_id, title, recipe_image, owner_id})
-        )
-      }
+      recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
     />
   );
 });
@@ -314,11 +321,20 @@ function Day({ day, expandedDay, recipes }: DayProps) {
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
-    accept:  Types.PLANNER_RECIPE,
-    collect: (monitor: DropTargetMonitor) => ({canDrop: monitor.canDrop(), isOver: monitor.isOver()}),
+    accept: Types.PLANNER_RECIPE,
+
+    collect: (monitor: DropTargetMonitor) => ({
+      canDrop: monitor.canDrop(),
+      isOver:  monitor.isOver()
+    }),
+
     drop({ day }: DayProps, monitor: DropTargetMonitor<any, any>) {
       const draggedRecipe = monitor.getItem();
-      if (day !== draggedRecipe.day) dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+
+      if (day !== draggedRecipe.day) {
+        dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+      }
+
       return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
     }
   }));
@@ -329,7 +345,11 @@ function Day({ day, expandedDay, recipes }: DayProps) {
 
   //drop(ref);
 
-  return (day === expandedDay) ? null : (
+  if (day === expandedDay) {
+    return null;
+  }
+
+  return (
     <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
       <span className="date">{day}</span>
       {recipes && recipes.map((recipe, i) => (
@@ -353,11 +373,20 @@ function ExpandedDay({ day, expandedDay, recipes }: DayProps) {
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
-    accept:  Types.PLANNER_RECIPE,
-    collect: (monitor: DropTargetMonitor) => ({canDrop: monitor.canDrop(), isOver: monitor.isOver()}),
+    accept: Types.PLANNER_RECIPE,
+
+    collect: (monitor: DropTargetMonitor) => ({
+      canDrop: monitor.canDrop(),
+      isOver:  monitor.isOver()
+    }),
+
     drop({ day, expandedDay }: DayProps, monitor: DropTargetMonitor<any, any>) {
       const draggedRecipe = monitor.getItem();
-      if (expandedDay !== draggedRecipe.day) dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+
+      if (expandedDay !== draggedRecipe.day) {
+        dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+      }
+
       return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
     }
   }));
@@ -383,9 +412,14 @@ function Recipes({ day, expandedDay, recipes }: DayProps) {
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ , drop ] = useDrop(() => ({
-    accept:  Types.PLANNER_RECIPE,
-    collect: (monitor: DropTargetMonitor) => ({canDrop: monitor.canDrop(), isOver:  monitor.isOver()}),
-    drop:    ({ day }: DayProps) => ({listId: day})
+    accept: Types.PLANNER_RECIPE,
+
+    collect: (monitor: DropTargetMonitor) => ({
+      canDrop: monitor.canDrop(),
+      isOver:  monitor.isOver()
+    }),
+
+    drop: ({ day }: DayProps) => ({listId: day})
   }));
 
   //drop(ref);
@@ -393,7 +427,15 @@ function Recipes({ day, expandedDay, recipes }: DayProps) {
   return (
     <div className="new-plan-recipes" ref={drop}>
       {recipes && recipes.map((recipe, i) => (
-        <Recipe day={day} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
+        <Recipe
+          day={day}
+          expandedDay={expandedDay}
+          id={recipe.key}
+          index={i}
+          key={recipe.key}
+          listId={day}
+          recipe={recipe}
+        />
       ))}
     </div>
   );
@@ -404,21 +446,35 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const url = "https://s3.amazonaws.com/nobsc-user-recipe";
-
   const [ , drag ] = useDrag({
     collect: (monitor: any) => ({isDragging: monitor.isDragging()}),
+
     end(dropResult: any, monitor: DragSourceMonitor) {
       const item: RecipeProps = monitor.getItem();
+
       if (item.day === 0) return;
-      if (dropResult && (dropResult.listId !== item.day)) dispatch(removeRecipeFromDay(item.day, item.index));
+
+      if (dropResult && (dropResult.listId !== item.day)) {
+        dispatch(removeRecipeFromDay(item.day, item.index));
+      }
     },
-    item: {day, id, index, key: recipe.key, listId, recipe, type: Types.PLANNER_RECIPE},
+
+    item: {
+      day,
+      id,
+      index,
+      key: recipe.key,
+      listId,
+      recipe,
+      type: Types.PLANNER_RECIPE
+    },
+
     type: Types.PLANNER_RECIPE
   });
 
   const [ , drop ] = useDrop({
     accept: Types.PLANNER_RECIPE,
+
     hover(item: DragItem, monitor: DropTargetMonitor<any, any>) {  // TO DO: improve "any, any"
       if (!item) return;  // ?
       if (!ref.current) return;
@@ -427,20 +483,20 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
       const sourceDay = monitor.getItem().day;  //item.day;
       if (sourceDay !== expandedDay) return;
 
-      const dragIndex = item.index;
+      const dragIndex  = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;  // Don't replace items with themselves
 
       // The rectangular dimensions of the Recipe item being hovered over
-      const rectangle = ref.current?.getBoundingClientRect();
-      const mouseLocation = monitor.getClientOffset();
-      const verticalCenter = (rectangle.bottom - rectangle.top) / 2;
+      const rectangle       = ref.current?.getBoundingClientRect();
+      const mouseLocation   = monitor.getClientOffset();
+      const verticalCenter  = (rectangle.bottom - rectangle.top) / 2;
       const distanceFromTop = (mouseLocation as XYCoord).y - rectangle.top;
 
       const draggingDown = dragIndex < hoverIndex;
-      const draggingUp = dragIndex > hoverIndex;
-      const aboveCenter = distanceFromTop < verticalCenter;
-      const belowCenter = distanceFromTop > verticalCenter;
+      const draggingUp   = dragIndex > hoverIndex;
+      const aboveCenter  = distanceFromTop < verticalCenter;
+      const belowCenter  = distanceFromTop > verticalCenter;
       // Only move when the mouse has crossed the vertical center
       if (draggingDown && aboveCenter) return;
       if (draggingUp && belowCenter) return;
@@ -451,6 +507,8 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
   });
 
   drag(drop(ref));
+
+  const url = "https://s3.amazonaws.com/nobsc-user-recipe";  // fix
 
   return (
     <div className="new-plan-recipe" key={key} ref={ref}>
@@ -472,7 +530,7 @@ type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type MonthlyPlanProps = {
   expandedDay: number | null;
-  plan_data:    PlanData;
+  plan_data:   PlanData;
 };
 
 type MemoizedRecipesProps = {

@@ -1,24 +1,25 @@
-import axios from 'axios';
-
-import { LoaderSpinner }                   from '../../components';
-import { useTypedSelector as useSelector } from '../../store';
-import type { Ingredient }                 from '../../store/data/types';
-import { endpoint }                        from '../../utils/api';
+import { useTypedSelector as useSelector } from '../../../../../redux';
+import { LoaderSpinner }                   from '../../../../shared/LoaderSpinner';
+import type { Ingredient }                 from '../../data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
 export default function UserPrivateIngredientDetail({ ingredient }: {ingredient: Ingredient}) {
-  const my_ingredients = useSelector(state => state.data.my_ingredients);
+  const my_ingredients = useSelector(state => state.userData.my_ingredients);
 
   const {
     ingredient_id,
     fullname,
     image_url,
     ingredient_type_name,
-    description
+    notes
   } = ingredient;
 
-  return !ingredient ? <LoaderSpinner /> : (
+  if (!ingredient) {
+    return <LoaderSpinner />;
+  }
+
+  return (
     <div className="two-col ingredient">
       <div className="two-col-left">
         <h1>{fullname}</h1>
@@ -33,8 +34,8 @@ export default function UserPrivateIngredientDetail({ ingredient }: {ingredient:
           <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>
         </div>
 
-        <div className="description">
-          <b>Ingredient Description:</b>{' '}<div>{description}</div>
+        <div className="notes">
+          <b>Equipment Notes:</b>{' '}<div>{notes}</div>
         </div>
       </div>
 
@@ -42,38 +43,3 @@ export default function UserPrivateIngredientDetail({ ingredient }: {ingredient:
     </div>
   );
 }
-
-function slugify(fullname: string) {
-  return fullname
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
-export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/ingredient/fullnames`);
-
-  const paths = response.data.map((ingredient: {fullname: string}) => ({
-    params: {
-      fullname: slugify(ingredient.fullname)
-    }
-  }));
-
-  return {paths, fallback: false};
-}
-
-export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/ingredient/${params.fullname}`);
-
-  return {
-    props: {
-      ingredient: response.data
-    }
-  };
-}
-
-type StaticProps = {
-  params: {
-    fullname: string;
-  };
-};

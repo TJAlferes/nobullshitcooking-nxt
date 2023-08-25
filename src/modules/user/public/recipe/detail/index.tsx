@@ -1,16 +1,12 @@
-import axios                   from 'axios';
 import Link                    from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
-import { endpoint } from '../../../../../config/api';
 import { useTypedSelector as useSelector } from '../../../../../redux';
-
-import { LoaderSpinner } from '../../../../shared/LoaderSpinner';
-import type { Recipe }   from '../../../../shared/types';
-
-import { saveRecipe }     from '../../../private/saved-recipe/state';
-import { favoriteRecipe } from '../../favorited-recipe/state';
+import { LoaderSpinner }                   from '../../../../shared/LoaderSpinner';
+import type { Recipe }                     from '../../../../shared/types';
+import { saveRecipe }                      from '../../../private/saved-recipe/state';
+import { favoriteRecipe }                  from '../../favorited-recipe/state';
 
 export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
@@ -49,11 +45,13 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   // move to 'useFeedback' ?
   useEffect(() => {
     let isSubscribed = true;
+
     if (isSubscribed) {
       if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
       setLoading(false);
     }
+
     return () => {
       isSubscribed = false;
     };
@@ -215,22 +213,3 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
     </div>
   );
 }
-
-export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.get(
-    `${endpoint}/user/recipe/public/${params.username}/${params.title}`  // change to user/public/recipe ???
-  );  // public user recipe
-
-  return {
-    props: {
-      recipe: response.data
-    }
-  };
-}
-
-type ServerSideProps = {
-  params: {
-    username: string;
-    title:    string;
-  };
-};

@@ -2,7 +2,7 @@ import axios                   from 'axios';
 
 import { endpoint }           from '../../../../../config/api';
 import PublicUserRecipeDetail from '../../../../../modules/user/public/recipe/detail';
-import type { Recipe }        from '../../../../../modules/user/public/recipe/detail';  // move to modules/shared/types ???
+import type { Recipe }        from '../../../../../modules/shared/types';
 
 export default function PublicUserRecipeDetailPage({ recipe }: {recipe: Recipe}) {
   return <PublicUserRecipeDetail recipe={recipe} />
@@ -10,7 +10,7 @@ export default function PublicUserRecipeDetailPage({ recipe }: {recipe: Recipe})
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const response = await axios.get(
-    `${endpoint}/user/recipe/public/${params.username}/${params.title}`  // change to user/public/recipe ???
+    `${endpoint}/user/public/recipe/${params.username}/${params.title}`
   );  // public user recipe
 
   return {

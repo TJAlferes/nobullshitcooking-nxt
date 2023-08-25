@@ -68,7 +68,7 @@ export default function UserPrivateIngredientForm() {
     };
 
     if (ingredient_id) getExistingIngredientToEdit();
-  }, []);
+  }, []);  // do this in getServerSideProps???
 
   useEffect(() => {
     let isSubscribed = true;

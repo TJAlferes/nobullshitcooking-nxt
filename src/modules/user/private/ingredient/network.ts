@@ -1,31 +1,31 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../../config/api';
-import { getMyIngredientsSaga }              from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { endpoint }                          from '../../../../config/api';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
+import { getMyIngredientsWorker }            from '../data/network';
 import { actionTypes } from './state';
-import type { CreateIngredient, UpdateIngredient, DeleteIngredient } from './state';
+import type { CreatePrivateIngredient, UpdatePrivateIngredient, DeletePrivateIngredient } from './state';
 
-const { CREATE_INGREDIENT, UPDATE_INGREDIENT, DELETE_INGREDIENT } = actionTypes;
+const { CREATE_PRIVATE_INGREDIENT, UPDATE_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = actionTypes;
 
-export function* watchUserPrivateIngredient() {
+export function* privateIngredientWatcher() {
   yield all([
-    takeEvery(CREATE_INGREDIENT, createIngredientSaga),
-    takeEvery(UPDATE_INGREDIENT, updateIngredientSaga),
-    takeEvery(DELETE_INGREDIENT, deleteIngredientSaga)
+    takeEvery(CREATE_PRIVATE_INGREDIENT, createPrivateIngredientWorker),
+    takeEvery(UPDATE_PRIVATE_INGREDIENT, updatePrivateIngredientWorker),
+    takeEvery(DELETE_PRIVATE_INGREDIENT, deletePrivateIngredientWorker)
   ]);
 }
 
-export function* createIngredientSaga(action: CreateIngredient) {
+export function* createPrivateIngredientWorker(action: CreatePrivateIngredient) {
   let {
     ingredient_type_id,
     ingredient_name,
-    description,
+    notes,
     image,
     fullImage,
     tinyImage
-  } = action.ingredientInfo;
+  } = action.ingredient_info;
 
   try {
     if (fullImage && tinyImage) {
@@ -36,40 +36,29 @@ export function* createIngredientSaga(action: CreateIngredient) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        fullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-      
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        tinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, fullImage);
+      yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
       image = fullName;
     }
     else image = 'nobsc-ingredient-default';
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/private/ingredient/create`,
       {
         ingredientInfo: {
           ingredient_type_id,
           ingredient_name,
-          description,
+          notes,
           image
         }
       },
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyIngredientsSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyIngredientsWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -78,17 +67,17 @@ export function* createIngredientSaga(action: CreateIngredient) {
   yield put(systemMessageClear());
 }
 
-export function* updateIngredientSaga(action: UpdateIngredient) {
+export function* updatePrivateIngredientWorker(action: UpdatePrivateIngredient) {
   let {
     ingredient_id,
     ingredient_type_id,
     ingredient_name,
-    description,
+    notes,
     prevImage,
     image,
     fullImage,
     tinyImage
-  } = action.ingredientInfo;
+  } = action.ingredient_info;
 
   try {
     if (fullImage && tinyImage) {
@@ -99,25 +88,14 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        fullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        tinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, fullImage);
+      yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
       image = fullName;
     }
     else image = prevImage;
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/private/ingredient/update`,
       {
@@ -125,7 +103,7 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
           ingredient_id,
           ingredient_type_id,
           ingredient_name,
-          description,
+          notes,
           prevImage,
           image
         }
@@ -133,8 +111,8 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyIngredientsSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyIngredientsWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -143,9 +121,9 @@ export function* updateIngredientSaga(action: UpdateIngredient) {
   yield put(systemMessageClear());
 }
 
-export function* deleteIngredientSaga({ ingredient_id }: DeleteIngredient) {
+export function* deletePrivateIngredientWorker({ ingredient_id }: DeletePrivateIngredient) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/private/ingredient/delete`,
       {
@@ -154,12 +132,16 @@ export function* deleteIngredientSaga({ ingredient_id }: DeleteIngredient) {
       }
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyIngredientsSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyIngredientsWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
   yield put(systemMessageClear());
+}
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }

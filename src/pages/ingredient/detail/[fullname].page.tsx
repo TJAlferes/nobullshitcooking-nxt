@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import { endpoint }        from '../../../config/api';
-import type { Ingredient } from '../../../modules/shared/types';
 import IngredientDetail    from "../../../modules/ingredient/detail";
+import type { Ingredient } from '../../../modules/shared/data/state';
 
 export default function IngredientDetailPage({ ingredient }: {ingredient: Ingredient}) {
   return <IngredientDetail ingredient={ingredient} />;
@@ -24,7 +24,10 @@ export async function getStaticPaths() {
     }
   }));
 
-  return {paths, fallback: false};
+  return {
+    paths,
+    fallback: false
+  };
 }
 
 export async function getStaticProps({ params }: StaticProps) {

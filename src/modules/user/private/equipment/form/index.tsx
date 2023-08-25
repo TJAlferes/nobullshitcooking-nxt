@@ -68,7 +68,7 @@ export default function UserPrivateEquipmentForm() {
     };
 
     if (equipment_id) getExistingEquipmentToEdit();
-  }, []);
+  }, []);  // do this in getServerSideProps???
 
   useEffect(() => {
     let isSubscribed = true;

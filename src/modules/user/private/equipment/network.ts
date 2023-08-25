@@ -1,31 +1,31 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }           from '../../../config/api';
-import { getMyEquipmentSaga } from '../../data/sagas';
-import { systemMessage, systemMessageClear } from '../../../modules/shared/system-message/state';
+import { endpoint }                          from '../../../../config/api';
+import { systemMessage, systemMessageClear } from '../../../shared/system/state';
+import { getMyEquipmentWorker }              from '../data/network';
 import { actionTypes } from './state';
-import type { CreateEquipment, UpdateEquipment, DeleteEquipment } from './state';
+import type { CreatePrivateEquipment, UpdatePrivateEquipment, DeletePrivateEquipment } from './state';
 
-const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
+const { CREATE_PRIVATE_EQUIPMENT, UPDATE_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = actionTypes;
 
-export function* watchUserPrivateEquipment() {
+export function* privateEquipmentWatcher() {
   yield all([
-    takeEvery(CREATE_EQUIPMENT, createEquipmentSaga),
-    takeEvery(UPDATE_EQUIPMENT, updateEquipmentSaga),
-    takeEvery(DELETE_EQUIPMENT, deleteEquipmentSaga)
+    takeEvery(CREATE_PRIVATE_EQUIPMENT, createPrivateEquipmentWorker),
+    takeEvery(UPDATE_PRIVATE_EQUIPMENT, updatePrivateEquipmentWorker),
+    takeEvery(DELETE_PRIVATE_EQUIPMENT, deletePrivateEquipmentWorker)
   ]);
 }
 
-export function* createEquipmentSaga(action: CreateEquipment) {
+export function* createPrivateEquipmentWorker(action: CreatePrivateEquipment) {
   let {
     equipment_type_id,
     equipment_name,
-    description,
+    notes,
     image,
     fullImage,
     tinyImage
-  } = action.equipmentInfo;
+  } = action.equipment_info;
 
   try {
     if (fullImage && tinyImage) {
@@ -36,40 +36,29 @@ export function* createEquipmentSaga(action: CreateEquipment) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        fullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-      
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        tinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, fullImage);
+      yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
       image = fullName;
     }
     else image = 'nobsc-equipment-default';
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/private/equipment/create`,
       {
         equipmentInfo: {
           equipment_type_id,
           equipment_name,
-          description,
+          notes,
           image
         }
       },
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyEquipmentSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyEquipmentWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -78,17 +67,17 @@ export function* createEquipmentSaga(action: CreateEquipment) {
   yield put(systemMessageClear());
 }
 
-export function* updateEquipmentSaga(action: UpdateEquipment) {
+export function* updatePrivateEquipmentWorker(action: UpdatePrivateEquipment) {
   let {
     equipment_id,
     equipment_type_id,
     equipment_name,
-    description,
+    notes,
     prevImage,
     image,
     fullImage,
     tinyImage
-  } = action.equipmentInfo;
+  } = action.equipment_info;
 
   try {
     if (fullImage && tinyImage) {
@@ -99,25 +88,14 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        fullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-      
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        tinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, fullImage);
+      yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
       image = fullName;
     }
     else image = prevImage;
 
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/private/equipment/update`,
       {
@@ -125,7 +103,7 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
           equipment_id,
           equipment_type_id,
           equipment_name,
-          description,
+          notes,
           prevImage,
           image
         }
@@ -133,8 +111,8 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyEquipmentSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyEquipmentWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -143,9 +121,9 @@ export function* updateEquipmentSaga(action: UpdateEquipment) {
   yield put(systemMessageClear());
 }
 
-export function* deleteEquipmentSaga({ equipment_id }: DeleteEquipment) {
+export function* deletePrivateEquipmentWorker({ equipment_id }: DeletePrivateEquipment) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/private/equipment/delete`,
       {
@@ -154,12 +132,16 @@ export function* deleteEquipmentSaga({ equipment_id }: DeleteEquipment) {
       }
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyEquipmentSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyEquipmentWorker);
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
 
   yield delay(4000);
   yield put(systemMessageClear());
+}
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }

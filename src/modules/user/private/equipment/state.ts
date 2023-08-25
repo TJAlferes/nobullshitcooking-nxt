@@ -1,36 +1,36 @@
 
 
-export const createEquipment = (equipmentInfo: EquipmentInfo) =>
-  ({type: CREATE_EQUIPMENT, equipmentInfo});
+export const createPrivateEquipment = (equipmentInfo: EquipmentInfo) =>
+  ({type: CREATE_PRIVATE_EQUIPMENT, equipmentInfo});
 
-export const updateEquipment = (equipmentInfo: EquipmentUpdateInfo) =>
-  ({type: UPDATE_EQUIPMENT, equipmentInfo});
+export const updatePrivateEquipment = (equipmentInfo: EquipmentUpdateInfo) =>
+  ({type: UPDATE_PRIVATE_EQUIPMENT, equipmentInfo});
 
-export const deleteEquipment = (equipment_id: string) =>
-  ({type: DELETE_EQUIPMENT, equipment_id});
+export const deletePrivateEquipment = (equipment_id: string) =>
+  ({type: DELETE_PRIVATE_EQUIPMENT, equipment_id});
 
 
 
 export const actionTypes = {
-  CREATE_EQUIPMENT: 'CREATE_EQUIPMENT',
-  UPDATE_EQUIPMENT: 'UPDATE_EQUIPMENT',
-  DELETE_EQUIPMENT: 'DELETE_EQUIPMENT'
+  CREATE_PRIVATE_EQUIPMENT: 'CREATE_PRIVATE_EQUIPMENT',
+  UPDATE_PRIVATE_EQUIPMENT: 'UPDATE_PRIVATE_EQUIPMENT',
+  DELETE_PRIVATE_EQUIPMENT: 'DELETE_PRIVATE_EQUIPMENT'
 } as const;
 
-const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
+const { CREATE_PRIVATE_EQUIPMENT, UPDATE_PRIVATE_EQUIPMENT, DELETE_PRIVATE_EQUIPMENT } = actionTypes;
 
-export type CreateEquipment = {
-  type:           typeof actionTypes.CREATE_EQUIPMENT;
+export type CreatePrivateEquipment = {
+  type:           typeof actionTypes.CREATE_PRIVATE_EQUIPMENT;
   equipment_info: EquipmentInfo;
 };
 
-export type UpdateEquipment = {
-  type:           typeof actionTypes.UPDATE_EQUIPMENT;
+export type UpdatePrivateEquipment = {
+  type:           typeof actionTypes.UPDATE_PRIVATE_EQUIPMENT;
   equipment_info: EquipmentUpdateInfo;
 };
 
-export type DeleteEquipment = {
-  type:         typeof actionTypes.DELETE_EQUIPMENT;
+export type DeletePrivateEquipment = {
+  type:         typeof actionTypes.DELETE_PRIVATE_EQUIPMENT;
   equipment_id: string;
 };
 

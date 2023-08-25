@@ -103,7 +103,6 @@ function Day({ day, recipes }: DayProps) {
   return (
     <div className="day" onClick={handleClickDay}>
       <span className="date">{day}</span>
-
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
   );
@@ -117,7 +116,6 @@ function ExpandedDay({ day, recipes }: DayProps) {
   return (
     <div className="expanded-day" onClick={handleClickDay}>
       <span className="date">{day}</span>
-      
       {recipes.map(recipe => <Recipe recipe={recipe} />)}
     </div>
   );

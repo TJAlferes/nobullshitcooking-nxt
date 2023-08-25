@@ -19,7 +19,6 @@ export function* privateRecipeWatcher() {
 
 export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
   let {
-    ownership,
     recipe_type_id,
     cuisine_id,
     title,
@@ -53,35 +52,17 @@ export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
       } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe'},
+        {subBucket: 'recipe'},  // 'private-recipe' ???
         {withCredentials: true}
       );
       
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        recipeFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
-      yield call(
-        [axios, axios.put],
-        thumbSignature,
-        recipeThumbImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        recipeTinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, recipeFullImage);
+      yield call(uploadImageToAWSS3, thumbSignature, recipeThumbImage);
+      yield call(uploadImageToAWSS3, tinySignature, recipeTinyImage);
 
       recipeImage = fullName;
     }
     else recipeImage = "nobsc-recipe-default";
-
 
     if (equipmentFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -91,17 +72,11 @@ export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        equipmentFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, equipmentFullImage);
 
       equipmentImage = fullName;
     }
     else equipmentImage = "nobsc-recipe-equipment-default";
-
 
     if (ingredientsFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -111,17 +86,11 @@ export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        ingredientsFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, ingredientsFullImage);
 
       ingredientsImage = fullName;
     }
     else ingredientsImage = "nobsc-recipe-ingredients-default";
-
 
     if (cookingFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -131,24 +100,17 @@ export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        cookingFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, cookingFullImage);
 
       cookingImage = fullName;
     }
     else cookingImage = "nobsc-recipe-cooking-default";
-
 
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/private/recipe/create`,
       {
         recipeInfo: {
-          ownership,
           recipe_type_id,
           cuisine_id,
           title,
@@ -177,31 +139,9 @@ export function* createPrivateRecipeWorker(action: CreatePrivateRecipe) {
   yield put(systemMessageClear());
 }
 
-export function* deletePrivateRecipeWorker({ recipe_id }: DeletePrivateRecipe) {
-  try {
-    const { data } = yield call(
-      [axios, axios.delete],
-      `${endpoint}/user/private/recipe/delete`,
-      {
-        withCredentials: true,
-        data: {recipe_id}
-      }
-    );
-
-    yield put(systemMessage(data.message));
-    yield call(getMyPrivateRecipesWorker);
-  } catch(err) {
-    yield put(systemMessage('An error occurred. Please try again.'));
-  }
-
-  yield delay(4000);
-  yield put(systemMessageClear());
-}
-
 export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
   let {
     recipe_id,
-    ownership,
     recipe_type_id,
     cuisine_id,
     title,
@@ -243,32 +183,13 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        recipeFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
-      yield call(
-        [axios, axios.put],
-        thumbSignature,
-        recipeThumbImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
-      yield call(
-        [axios, axios.put],
-        tinySignature,
-        recipeTinyImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
-
+      yield call(uploadImageToAWSS3, fullSignature, recipeFullImage);
+      yield call(uploadImageToAWSS3, thumbSignature, recipeThumbImage);
+      yield call(uploadImageToAWSS3, tinySignature, recipeTinyImage);
 
       recipeImage = fullName;
     }
     else recipeImage = recipePrevImage;
-
 
     if (equipmentFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -278,17 +199,11 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        equipmentFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, equipmentFullImage);
 
       equipmentImage = fullName;
     }
     else equipmentImage = equipmentPrevImage;
-
 
     if (ingredientsFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -298,17 +213,11 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        ingredientsFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, ingredientsFullImage);
 
       ingredientsImage = fullName;
     }
     else ingredientsImage = ingredientsPrevImage;
-
 
     if (cookingFullImage) {
       const { data: { fullName, fullSignature } } = yield call(
@@ -318,17 +227,11 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
         {withCredentials: true}
       );
 
-      yield call(
-        [axios, axios.put],
-        fullSignature,
-        cookingFullImage,
-        {headers: {'Content-Type': 'image/jpeg'}}
-      );
+      yield call(uploadImageToAWSS3, fullSignature, cookingFullImage);
 
       cookingImage = fullName;
     }
     else cookingImage = cookingPrevImage;
-    
 
     const { data } = yield call(
       [axios, axios.put],
@@ -336,7 +239,6 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
       {
         recipeInfo: {
           recipe_id,
-          ownership,
           recipe_type_id,
           cuisine_id,
           title,
@@ -367,4 +269,29 @@ export function* updatePrivateRecipeWorker(action: UpdatePrivateRecipe) {
 
   yield delay(4000);
   yield put(systemMessageClear());
+}
+
+export function* deletePrivateRecipeWorker({ recipe_id }: DeletePrivateRecipe) {
+  try {
+    const { data } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/private/recipe/delete`,
+      {
+        withCredentials: true,
+        data: {recipe_id}
+      }
+    );
+
+    yield put(systemMessage(data.message));
+    yield call(getMyPrivateRecipesWorker);
+  } catch(err) {
+    yield put(systemMessage('An error occurred. Please try again.'));
+  }
+
+  yield delay(4000);
+  yield put(systemMessageClear());
+}
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }

@@ -11,7 +11,7 @@ import { SearchContext }                   from '../../shared/search/hook';
 //const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
 // list of search results
-// ONLY contains Official Recipes and Public User Recipes
+// ONLY contains Official Recipes (and Public User Recipes???)
 // DOES NOT contain Private User Recipes
 export default function RecipeList() {
   const renders = useRef(0);
