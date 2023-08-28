@@ -1,5 +1,5 @@
 import type { Store }     from 'redux';
-import { all, takeEvery } from 'redux-saga/effects';
+import { all, call, takeEvery } from 'redux-saga/effects';
 import { io }             from 'socket.io-client';
 import type { Socket }    from 'socket.io-client';
 
@@ -22,7 +22,7 @@ import {
 } from './state';
 import type { Message, JoinRoom, SendMessage, SendPrivateMessage } from './state';
 
-const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   `${endpoint}`,
   {
     autoConnect:     false,
@@ -30,7 +30,7 @@ const socket: Socket<IServerToClientEvents, IClientToServerEvents> = io(
   }
 );
 
-export function chatInit(store: Store) {
+export function setupChat(store: Store) {
   if (typeof window === 'undefined') return;
   const { dispatch } = store;
 
@@ -61,39 +61,37 @@ export function chatInit(store: Store) {
   socket.on('PrivateMessage',       (message) =>  dispatch(receivedPrivateMessage(message)));
   socket.on('FailedPrivateMessage', (feedback) => dispatch(failedPrivateMessage(feedback)));
 
-  console.log("chatInit called and ran");
+  console.log("setupChat called and ran.");
 }
 
-// Sagas
+// TO DO: channels?
 
-// call([socket, socket.method(), ...args])? channels?
-
-export function* connectSaga() {
-  socket.connect();
+export function* connectWorker() {  // no action?
+  yield call([socket, socket.connect]);
 }
 
-export function* disconnectSaga() {
-  socket.disconnect();
+export function* disconnectWorker() {  // no action?
+  yield call([socket, socket.disconnect]);
 }
 
-export function* joinRoomSaga({ room }: JoinRoom) {
-  socket.emit('JoinRoom', room);
+export function* joinRoomWorker({ room }: JoinRoom) {
+  yield call([socket, socket.emit], 'JoinRoom', room);
 }
 
-export function* sendMessageSaga({ text }: SendMessage) {
-  socket.emit('SendMessage', text);
+export function* sendMessageWorker({ text }: SendMessage) {
+  yield call([socket, socket.emit], 'SendMessage', text);
 }
 
-export function* sendPrivateMessageSaga({ text, to }: SendPrivateMessage) {
-  socket.emit('SendPrivateMessage', text, to);
+export function* sendPrivateMessageWorker({ text, to }: SendPrivateMessage) {
+  yield call([socket, socket.emit], 'SendPrivateMessage', text, to);
 }
 
-export function* updateOnlineSaga(status: string) {  // TO DO: give this an action?
+export function* updateOnlineWorker(status: string) {  // TO DO: give this an action?
   if (status === "connected") socket.emit('GetOnlineFriends');
   //TO DO: if (status === "disconnected") socket.emit('AppearOfflineTo');  // or in separate function?
 }
 
-interface IClientToServerEvents {
+interface ClientToServerEvents {
   GetOnlineFriends:   () =>                         void;
   GetUsersInRoom:     (room: string) =>             void;
   JoinRoom:           (room: string) =>             void;
@@ -104,7 +102,7 @@ interface IClientToServerEvents {
 }
 
 // TO DO: question everything: do you need a saga? do you need the event/state in redux? do you need the event/state at all?
-interface IServerToClientEvents {
+interface ServerToClientEvents {
   OnlineFriends:        (friends: string[]) =>             void;
   FriendCameOnline:     (friend: string) =>                void;
   FriendWentOffline:    (friend: string) =>                void;
@@ -118,18 +116,23 @@ interface IServerToClientEvents {
 }
 
 const { LOGOUT } = authActionTypes;
-const { CONNECT, DISCONNECT, JOIN_ROOM, SEND_MESSAGE, SEND_PRIVATE_MESSAGE } = chatActionTypes
 
-// takeLatest?
-export function* watchChat() {
+const {
+  CONNECT,
+  DISCONNECT,
+  JOIN_ROOM,
+  SEND_MESSAGE,
+  SEND_PRIVATE_MESSAGE
+} = chatActionTypes
+
+// takeLatest???
+export function* chatWatcher() {
   yield all([
-    takeEvery(CONNECT,              connectSaga),
-    takeEvery(DISCONNECT,           disconnectSaga),
-    takeEvery(LOGOUT,               disconnectSaga),
-
-    takeEvery(JOIN_ROOM,            joinRoomSaga),
-
-    takeEvery(SEND_MESSAGE,         sendMessageSaga),
-    takeEvery(SEND_PRIVATE_MESSAGE, sendPrivateMessageSaga)
+    takeEvery(CONNECT,              connectWorker),
+    takeEvery(DISCONNECT,           disconnectWorker),
+    takeEvery(LOGOUT,               disconnectWorker),
+    takeEvery(JOIN_ROOM,            joinRoomWorker),
+    takeEvery(SEND_MESSAGE,         sendMessageWorker),
+    takeEvery(SEND_PRIVATE_MESSAGE, sendPrivateMessageWorker)
   ]);
 }

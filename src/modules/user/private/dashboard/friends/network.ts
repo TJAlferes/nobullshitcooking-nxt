@@ -1,10 +1,10 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../../config/api';
-import { updateOnlineSaga }                  from '../../chat/network';
-import { getMyFriendshipsSaga }              from '../../data/network';  // move to shared/data/network ?
-import { systemMessage, systemMessageClear } from '../../shared/system-message/state';
+import { endpoint }                          from '../../../../../config/api';
+//import { updateOnlineWorker }                from '../../../../chat/network';
+import { systemMessage, systemMessageClear } from '../../../../shared/system/state';
+import { getMyFriendshipsWorker }            from '../../data/network';
 import { actionTypes } from './state';
 import type {
   RequestFriendship,
@@ -26,22 +26,27 @@ const {
 
 export function* watchFriendship() {
   yield all([
-    takeEvery(REQUEST_FRIENDSHIP, requestFriendshipSaga),
-    takeEvery(ACCEPT_FRIENDSHIP,  acceptFriendshipSaga),
-    takeEvery(REJECT_FRIENDSHIP,  rejectFriendshipSaga),
-    takeEvery(DELETE_FRIENDSHIP,  deleteFriendshipSaga),
-    takeEvery(BLOCK_USER,         blockUserSaga),
-    takeEvery(UNBLOCK_USER,       unblockUserSaga)
+    takeEvery(REQUEST_FRIENDSHIP, requestFriendshipWorker),
+    takeEvery(ACCEPT_FRIENDSHIP,  acceptFriendshipWorker),
+    takeEvery(REJECT_FRIENDSHIP,  rejectFriendshipWorker),
+    takeEvery(DELETE_FRIENDSHIP,  deleteFriendshipWorker),
+    takeEvery(BLOCK_USER,         blockUserWorker),
+    takeEvery(UNBLOCK_USER,       unblockUserWorker)
   ]);
 }
 
 const error = 'An error occurred. Please try again.';
 
-export function* requestFriendshipSaga({ friend }: RequestFriendship) {
+export function* requestFriendshipWorker({ friend }: RequestFriendship) {
   try {
-    const { data: { message } } = yield call([axios, axios.post], `${endpoint}/user/friendship/create`, {friend}, {withCredentials: true});
+    const { data } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/friendship/create`,
+      {friend},
+      {withCredentials: true}
+    );
 
-    yield put(systemMessage(message));
+    yield put(systemMessage(data.message));
   } catch(err) {
     yield put(systemMessage(error));
   }
@@ -50,13 +55,18 @@ export function* requestFriendshipSaga({ friend }: RequestFriendship) {
   yield put(systemMessageClear());
 }
 
-export function* acceptFriendshipSaga({ friend }: AcceptFriendship) {
+export function* acceptFriendshipWorker({ friend }: AcceptFriendship) {
   try {
-    const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/friendship/accept`, {friend}, {withCredentials: true});
+    const { data } = yield call(
+      [axios, axios.put],
+      `${endpoint}/user/friendship/accept`,
+      {friend},
+      {withCredentials: true}
+    );
 
-    yield put(systemMessage(message));
-    yield call(getMyFriendshipsSaga);
-    yield call(() => updateOnlineSaga("connected"));  // chat ??? why make them go online?
+    yield put(systemMessage(data.message));
+    yield call(getMyFriendshipsWorker);  // yield put(getMyFriendships());
+    //yield call(() => updateOnlineWorker("connected"));  // chat ??? why make them go online?
   } catch(err) {
     yield put(systemMessage(error));
   }
@@ -65,12 +75,17 @@ export function* acceptFriendshipSaga({ friend }: AcceptFriendship) {
   yield put(systemMessageClear());
 }
 
-export function* rejectFriendshipSaga({ friend }: RejectFriendship) {
+export function* rejectFriendshipWorker({ friend }: RejectFriendship) {
   try {
-    const { data: { message } } = yield call([axios, axios.put], `${endpoint}/user/friendship/reject`, {friend}, {withCredentials: true});
+    const { data } = yield call(
+      [axios, axios.put],
+      `${endpoint}/user/friendship/reject`,
+      {friend},
+      {withCredentials: true}
+    );
 
-    yield put(systemMessage(message));
-    yield call(getMyFriendshipsSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyFriendshipsWorker);
   } catch(err) {
     yield put(systemMessage(error));
   }
@@ -79,13 +94,20 @@ export function* rejectFriendshipSaga({ friend }: RejectFriendship) {
   yield put(systemMessageClear());
 }
 
-export function* deleteFriendshipSaga({ friend }: DeleteFriendship) {
+export function* deleteFriendshipWorker({ friend }: DeleteFriendship) {
   try {
-    const { data: { message } } = yield call([axios, axios.delete], `${endpoint}/user/friendship/delete`, {withCredentials: true, data: {friend}});
+    const { data } = yield call(
+      [axios, axios.delete],
+      `${endpoint}/user/friendship/delete`,
+      {
+        withCredentials: true,
+        data: {friend}
+      }
+    );
 
-    yield put(systemMessage(message));
-    yield call(getMyFriendshipsSaga);
-    yield call(() => updateOnlineSaga("disconnected"));  // chat ??? don't make them actually go offline
+    yield put(systemMessage(data.message));
+    yield call(getMyFriendshipsWorker);
+    //yield call(() => updateOnlineWorker("disconnected"));  // chat ??? don't make them actually go offline
   } catch(err) {
     yield put(systemMessage(error));
   }
@@ -94,18 +116,18 @@ export function* deleteFriendshipSaga({ friend }: DeleteFriendship) {
   yield put(systemMessageClear());
 }
 
-export function* blockUserSaga({ friend }: BlockUser) {
+export function* blockUserWorker({ friend }: BlockUser) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/friendship/block`,
       {friend},
       {withCredentials: true}
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyFriendshipsSaga);
-    yield call(() => updateOnlineSaga("disconnected"));  // chat ??? don't make them actually go offline
+    yield put(systemMessage(data.message));
+    yield call(getMyFriendshipsWorker);
+    //yield call(() => updateOnlineWorker("disconnected"));  // chat ??? don't make them actually go offline
   } catch(err) {
     yield put(systemMessage(error));
   }
@@ -114,9 +136,9 @@ export function* blockUserSaga({ friend }: BlockUser) {
   yield put(systemMessageClear());
 }
 
-export function* unblockUserSaga({ friend }: UnblockUser) {
+export function* unblockUserWorker({ friend }: UnblockUser) {
   try {
-    const { data: { message } } = yield call(
+    const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/friendship/unblock`,
       {
@@ -125,8 +147,8 @@ export function* unblockUserSaga({ friend }: UnblockUser) {
       }
     );
 
-    yield put(systemMessage(message));
-    yield call(getMyFriendshipsSaga);
+    yield put(systemMessage(data.message));
+    yield call(getMyFriendshipsWorker);
   } catch(err) {
     yield put(systemMessage(error));
   }

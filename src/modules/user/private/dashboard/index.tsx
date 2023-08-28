@@ -5,31 +5,33 @@ import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { useTypedSelector as useSelector }         from '../../store';
-import { submitAvatar }                            from '../../store/user/avatar/actions';
-import { unfavoriteRecipe }                        from '../../store/user/favorite/actions';
-import { deleteEquipment }                         from '../../store/user/equipment/actions';
-import { deleteIngredient }                        from '../../store/user/ingredient/actions';
-import { deletePlan }                              from '../../store/user/plan/actions';
-import { deletePrivateRecipe, disownPublicRecipe } from '../../store/user/recipe/actions';
-import { unsaveRecipe }                            from '../../store/user/save/actions';
-import { getCroppedImage }                         from '../../utils/getCroppedImage';
+import { useTypedSelector as useSelector } from '../../../../redux';
+import { getCroppedImage }                 from '../../../shared/getCroppedImage';
+import { unfavoriteRecipe }                from '../../public/favorited-recipe/state';
+import { deletePublicPlan }                from '../../public/plan/state';
+import { disownPublicRecipe }              from '../../public/recipe/state';
+import { deletePrivateEquipment }          from '../equipment/state';
+import { deletePrivateIngredient }         from '../ingredient/state';
+import { deletePrivatePlan }               from '../plan/state';
+import { deletePrivateRecipe }             from '../recipe/state';
+import { unsaveRecipe }                    from '../saved-recipe/state';
+import { submitAvatar }                    from './settings/state';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
 
-  const my_favorite_recipes = useSelector(state => state.data.my_favorite_recipes);
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
   //const my_friends
-  const my_plans            = useSelector(state => state.data.my_plans);
-  const my_equipment        = useSelector(state => state.data.my_equipment);
-  const my_ingredients      = useSelector(state => state.data.my_ingredients);
-  const my_private_recipes  = useSelector(state => state.data.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.data.my_public_recipes);
-  const my_saved_recipes    = useSelector(state => state.data.my_saved_recipes);
-  const authname            = useSelector(state => state.auth.authname);
-  const creatingPlan        = useSelector(state => state.planner.creating);
-  const editingId           = useSelector(state => state.planner.editingId);
-  const message             = useSelector(state => state.user.message);
+  const my_plans            = useSelector(state => state.userData.my_plans);
+  const my_equipment        = useSelector(state => state.userData.my_equipment);
+  const my_ingredients      = useSelector(state => state.userData.my_ingredients);
+  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const authname            = useSelector(state => state.authentication.authname);
+  const creatingPlan        = useSelector(state => state.planForm.creating);
+  //const editingId           = useSelector(state => state.planForm.editingId);
+  const message             = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
@@ -44,13 +46,7 @@ export default function Dashboard() {
   const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
   const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
 
-  const [ crop, setCrop ] = useState<Crop>({
-    unit:   'px',
-    x:      25,
-    y:      25,
-    width:  50,
-    height: 50
-  });
+  const [ crop, setCrop ] = useState<Crop>(initialCrop);
   const [ fullCrop, setFullCrop ] = useState("");
   const [ tinyCrop, setTinyCrop ] = useState("");
 
@@ -673,6 +669,14 @@ function Subtabs({ subTab, subTabClick }: SubtabsProps) {
     </div>
   );
 }
+
+const initialCrop: Crop = {
+  unit:   'px',
+  x:      25,
+  y:      25,
+  width:  50,
+  height: 50
+};
 
 type TabsProps = {
   tab:      string;

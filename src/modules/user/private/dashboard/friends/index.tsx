@@ -2,7 +2,7 @@ import Link                    from 'next/link';
 import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
-import { useTypedSelector as useSelector } from '../../store';
+import { useTypedSelector as useSelector } from '../../../../../redux';
 import {
   acceptFriendship  as userAcceptFriendship,
   blockUser         as userBlockUser,
@@ -15,9 +15,9 @@ import {
 // Just make this a Dashboard tab
 export default function Friends() {
   const dispatch = useDispatch();
-  const authname =       useSelector(state => state.auth.authname);
-  const my_friendships = useSelector(state => state.data.my_friendships);
-  const message =        useSelector(state => state.user.message);
+  const authname =       useSelector(state => state.authentication.authname);
+  const my_friendships = useSelector(state => state.userData.my_friendships);
+  const message =        useSelector(state => state.system.message);
 
   const [ feedback,   setFeedback ] =   useState("");
   const [ loading,    setLoading ] =    useState(false);
