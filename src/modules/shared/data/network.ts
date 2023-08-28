@@ -2,21 +2,27 @@ import axios                         from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                             from '../../../config/api';
-import { getInitialData, getData, actionTypes } from './state';
+import { setInitialData, setData, actionTypes } from './state';
 import type { InitialData }                     from './state';
 
-const { INIT } = actionTypes;
+const { GET_INITIAL_DATA } = actionTypes;
 
 export function* dataWatcher() {
   yield all([
-    takeEvery(INIT, getInitialDataWorker)
+    takeEvery(GET_INITIAL_DATA, getInitialDataWorker)
   ]);
 }
 
 export function* getInitialDataWorker() {
   try {
-    const { data } = yield call([axios, axios.get], `${endpoint}/initial-data`);
-    yield put(getInitialData(data));
+
+    const { data } = yield call(
+      [axios, axios.get],
+      `${endpoint}/initial-data`
+    );
+
+    yield put(setInitialData(data));  // rename to set?
+
   } catch (err) {}
 }
 
@@ -37,7 +43,7 @@ function createDataWorker(path: string, key: keyof InitialData) {
   return function* () {
     try {
       const { data } = yield call([axios, axios.get], `${endpoint}${path}`);
-      yield put(getData(key, data));
+      yield put(setData(key, data));
     } catch (err) {}
   }
 }

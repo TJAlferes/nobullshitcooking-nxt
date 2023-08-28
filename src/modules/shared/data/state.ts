@@ -21,7 +21,7 @@ export function dataReducer(state = initialState, action: AnyAction): State {
     case HYDRATE:
       return {...state, ...action['payload'].data};  // sufficient?
 
-    case GET_INITIAL_DATA:
+    case SET_INITIAL_DATA:
       return {
         ...state,
         cuisines:         action['initialData'].cuisines,
@@ -36,7 +36,7 @@ export function dataReducer(state = initialState, action: AnyAction): State {
         recipe_types:     action['initialData'].recipe_types
       };
 
-    case GET_DATA:
+    case SET_DATA:
       return {...state, [action['data'].key]: action['data'].value};
     
     default: return state;
@@ -45,26 +45,36 @@ export function dataReducer(state = initialState, action: AnyAction): State {
 
 
 
-export const init = () => ({type: INIT});
+export const getInitialData = () => ({type: GET_INITIAL_DATA});
 
-export const getInitialData = (initialData: InitialData) =>
-  ({type: GET_INITIAL_DATA, initialData});
+export const setInitialData = (initialData: InitialData) => ({
+  type: SET_INITIAL_DATA,
+  initialData
+});
 
-export const getData = (key: keyof InitialData, value: Partial<InitialData>) =>
-  ({type: GET_DATA, data: {key, value}});
+export const setData = (
+  key: keyof InitialData,
+  value: Partial<InitialData>
+) => ({
+  type: SET_DATA,
+  data: {
+    key,
+    value
+  }
+});
 
 
 
 export const actionTypes = {
-  INIT:             'INIT',
   GET_INITIAL_DATA: 'GET_INITIAL_DATA',
-  GET_DATA:         'GET_DATA',
+  SET_INITIAL_DATA: 'SET_INITIAL_DATA',
+  SET_DATA:         'SET_DATA',
 } as const;
 
 const {
-  INIT,
   GET_INITIAL_DATA,
-  GET_DATA,
+  SET_INITIAL_DATA,
+  SET_DATA,
 } = actionTypes;
 
 export type State = InitialData;
@@ -83,28 +93,26 @@ export type InitialData = {
 };
 
 export type Actions =
-  | Init
   | GetInitialData
-  | GetData;
+  | SetInitialData
+  | SetData;
 
-export type Init = {
-  type: typeof actionTypes.INIT;
+export type GetInitialData = {
+  type: typeof actionTypes.GET_INITIAL_DATA;
 };
 
-export type GetInitialData = {         
-  type:        typeof actionTypes.GET_INITIAL_DATA;
+export type SetInitialData = {         
+  type:        typeof actionTypes.SET_INITIAL_DATA;
   initialData: InitialData;
 };
 
-export type GetData = {
-  type: typeof actionTypes.GET_DATA;
+export type SetData = {
+  type: typeof actionTypes.SET_DATA;
   data: {
     key:   keyof InitialData;
     value: Partial<InitialData>;
   };
 };
-
-
 
 // TO DO: move shared types to one location
 

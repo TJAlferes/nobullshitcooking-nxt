@@ -2,14 +2,14 @@ import axios                         from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 
 import { endpoint }                                     from '../../../../config/api';
-import { getInitialUserData, getUserData, actionTypes } from './state';
+import { setInitialUserData, setUserData, actionTypes } from './state';
 import type { InitialUserData }                         from './state';
 
-const { INIT_USER } = actionTypes;
+const { GET_INITIAL_USER_DATA } = actionTypes;
 
 export function* userDataWatcher() {
   yield all([
-    takeEvery(INIT_USER, getInitialUserDataWorker)
+    takeEvery(GET_INITIAL_USER_DATA, getInitialUserDataWorker)
   ]);
 }
 
@@ -23,7 +23,7 @@ export function* getInitialUserDataWorker() {
       {withCredentials: true}
     );
 
-    yield put(getInitialUserData(data));
+    yield put(setInitialUserData(data));  // rename to set???
 
   } catch (err: any) {
 
@@ -67,7 +67,7 @@ function createUserDataWorker(path: string, key: keyof InitialUserData) {
         {withCredentials: true}
       );
 
-      yield put(getUserData(key, data));
+      yield put(setUserData(key, data));
     } catch (err) {}
   }
 }

@@ -11,7 +11,7 @@ import { windowReducer }                                 from '../modules/genera
 import { loadFromLocalStorage, saveToLocalStorage }      from '../modules/general/localStorage';
 
 import { dataWatcher }        from '../modules/shared/data/network';
-import { dataReducer, init }  from '../modules/shared/data/state';  // TO DO: rename, "init" is way too vague
+import { dataReducer, getInitialData }  from '../modules/shared/data/state';
 import { geolocationReducer } from '../modules/shared/geolocation/state';
 import { menuReducer }        from '../modules/shared/menu/state';
 import { searchWatcher }      from '../modules/shared/search/network';
@@ -30,7 +30,7 @@ import { authenticationReducer }     from '../modules/user/authentication/state'
 import { friendshipWatcher }        from '../modules/user/private/dashboard/friends/network';
 import { settingsWatcher }      from '../modules/user/private/dashboard/settings/network';
 import { userDataWatcher }          from '../modules/user/private/data/network';
-import { userDataReducer, initUser } from '../modules/user/private/data/state';
+import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
 import { privateEquipmentWatcher }  from '../modules/user/private/equipment/network';
 import { privateIngredientWatcher } from '../modules/user/private/ingredient/network';
 import { privatePlanWatcher }       from '../modules/user/private/plan/network';
@@ -104,7 +104,7 @@ export const wrapper = createWrapper<SagaStore>(makeStore, {debug: false});
 export function staticProps() {
   return wrapper.getStaticProps(
     store => async (context) => {
-      store.dispatch(init());
+      store.dispatch(getInitialData());
       store.dispatch(END);
       await (store as SagaStore).sagaTask?.toPromise();
       return {props: {}};

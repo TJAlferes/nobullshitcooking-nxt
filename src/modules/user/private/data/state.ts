@@ -20,7 +20,7 @@ export function userDataReducer(state = initialState, action: AnyAction): State 
     case HYDRATE:
       return {...state, ...action['payload'].data};  // sufficient?
 
-    case GET_INITIAL_USER_DATA:
+    case SET_INITIAL_USER_DATA:
       return {
         ...state,
         my_friendships:         action['initialUserData'].my_friendships,
@@ -34,7 +34,7 @@ export function userDataReducer(state = initialState, action: AnyAction): State 
         my_saved_recipes:       action['initialUserData'].my_saved_recipes
       };
 
-    case GET_USER_DATA:
+    case SET_USER_DATA:
       return {...state, [action['userData'].key]: action['userData'].value};
     
     default: return state;
@@ -43,28 +43,36 @@ export function userDataReducer(state = initialState, action: AnyAction): State 
 
 
 
-export const initUser = () => ({type: INIT_USER});
+export const getInitialUserData = () => ({type: GET_INITIAL_USER_DATA});
 
-export const getInitialUserData = (initialUserData: InitialUserData) =>
-  ({type: GET_INITIAL_USER_DATA, initialUserData});
+export const setInitialUserData = (initialUserData: InitialUserData) => ({
+  type: SET_INITIAL_USER_DATA,
+  initialUserData
+});
 
-export const getUserData = (
+export const setUserData = (
   key:   keyof InitialUserData,
   value: Partial<InitialUserData>
-) => ({type: GET_USER_DATA, data: {key, value}});
+) => ({
+  type: SET_USER_DATA,
+  data: {
+    key,
+    value
+  }
+});
 
 
 
 export const actionTypes = {
-  INIT_USER:             'INIT_USER',
   GET_INITIAL_USER_DATA: 'GET_INITIAL_USER_DATA',
-  GET_USER_DATA:         'GET_USER_DATA'
+  SET_INITIAL_USER_DATA: 'SET_INITIAL_USER_DATA',
+  SET_USER_DATA:         'SET_USER_DATA'
 } as const;
 
 const {
-  INIT_USER,
   GET_INITIAL_USER_DATA,
-  GET_USER_DATA
+  SET_INITIAL_USER_DATA,
+  SET_USER_DATA
 } = actionTypes;
 
 export type State = InitialUserData;
@@ -82,21 +90,21 @@ export type InitialUserData = {
 };
 
 export type Actions =
-  | InitUser
   | GetInitialUserData
-  | GetUserData;
-
-export type InitUser = {
-  type: typeof actionTypes.INIT_USER;
-};
+  | SetInitialUserData
+  | SetUserData;
 
 export type GetInitialUserData = {
-  type:            typeof actionTypes.GET_INITIAL_USER_DATA;
+  type: typeof actionTypes.GET_INITIAL_USER_DATA;
+};
+
+export type SetInitialUserData = {
+  type:            typeof actionTypes.SET_INITIAL_USER_DATA;
   initialUserData: InitialUserData;
 };
 
-export type GetUserData = {
-  type: typeof actionTypes.GET_USER_DATA;
+export type SetUserData = {
+  type: typeof actionTypes.SET_USER_DATA;
   userData: {
     key:   keyof InitialUserData;
     value: Partial<InitialUserData>;
