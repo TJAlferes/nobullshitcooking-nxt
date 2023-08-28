@@ -18,12 +18,11 @@ export default function Chat() {
   const dispatch = useDispatch();
 
   // move some of this down in the component tree?
-  const room     = useSelector(state => state.chat.room);
-  const messages = useSelector(state => state.chat.messages);
-  const friends  = useSelector(state => state.chat.friends);
-  const status   = useSelector(state => state.chat.status);
-  const users    = useSelector(state => state.chat.users);
-
+  const room          = useSelector(state => state.chat.room);
+  const messages      = useSelector(state => state.chat.messages);
+  const friends       = useSelector(state => state.chat.friends);
+  const status        = useSelector(state => state.chat.status);
+  const users         = useSelector(state => state.chat.users);
   const authname      = useSelector(state => state.authentication.authname);
   const message       = useSelector(state => state.system.message);
   const windowFocused = useSelector(state => state.window.focused);

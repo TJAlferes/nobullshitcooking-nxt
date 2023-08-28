@@ -18,8 +18,8 @@ import { searchWatcher }      from '../modules/shared/search/network';
 import { searchReducer }      from '../modules/shared/search/state';
 import { systemReducer }      from '../modules/shared/system/state';
 
-import { chatInit, chatWatcher } from '../modules/chat/network';  // TO DO: rename
-import { chatReducer }           from '../modules/chat/state';
+import { setupChat, chatWatcher } from '../modules/chat/network';
+import { chatReducer }            from '../modules/chat/state';
 
 import { planDetailReducer } from '../modules/plan/detail/state';
 import { planFormReducer }   from '../modules/plan/form/state';  // split into user/private and user/public ???
@@ -28,7 +28,7 @@ import { userAuthenticationWatcher } from '../modules/user/authentication/networ
 import { authenticationReducer }     from '../modules/user/authentication/state';
 
 import { friendshipWatcher }        from '../modules/user/private/dashboard/friends/network';
-import { userSettingsWatcher }      from '../modules/user/private/dashboard/settings/network';
+import { settingsWatcher }      from '../modules/user/private/dashboard/settings/network';
 import { userDataWatcher }          from '../modules/user/private/data/network';
 import { userDataReducer, initUser } from '../modules/user/private/data/state';
 import { privateEquipmentWatcher }  from '../modules/user/private/equipment/network';
@@ -42,7 +42,7 @@ import { publicRecipeWatcher }   from '../modules/user/public/recipe/network'
 import { favoriteRecipeWatcher } from '../modules/user/public/favorited-recipe/network';
 
 function makeStore(context: Context) {
-  const persistedState = (typeof window !== 'undefined') ? loadFromLocalStorage() : {};
+  const persistedState = typeof window !== 'undefined' ? loadFromLocalStorage() : {};
   const sagaMiddleware = createSagaMiddleware();
 
   const options: ConfigureStoreOptions = {
@@ -55,11 +55,11 @@ function makeStore(context: Context) {
 
   (store as SagaStore).sagaTask = sagaMiddleware.run(rootSaga);
 
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return store;
 
   store.subscribe(() => saveToLocalStorage(store.getState()));
 
-  chatInit(store);  // start socket.io
+  setupChat(store);  // start socket.io
 
   initWindowBlurHandler(store);
   initWindowFocusHandler(store);
@@ -85,7 +85,7 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield fork(userAuthenticationWatcher);
-  yield fork(userSettingsWatcher);
+  yield fork(settingsWatcher);
   yield fork(chatWatcher);
   yield fork(dataWatcher);
   yield fork(privateEquipmentWatcher);

@@ -67,6 +67,14 @@ type Load = {
 
 // TO DO: move shared types to one location
 
+export type PlanDataView = PlanRecipeView[][];
+
+export type PlanRecipeView = {
+  image_url: string;
+  title:     string;
+  recipe_id: string;
+};
+
 // url
 export type Recipe = {
   key:          string;

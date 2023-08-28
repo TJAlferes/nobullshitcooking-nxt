@@ -6,17 +6,14 @@ import update from 'immutability-helper';
 
 const initialState: State = {
   isLoading:   false,
-  creating:    false,
-  editingId:   undefined,
-  publicUrl:   "",
+  //creating:    false,
+  //editingId:   undefined,
+  //publicUrl:   "",
   expandedDay: null,
   plan_name:   "",
-  plan_data: {
-    1: [],  2: [],  3: [],  4: [],  5: [],  6: [],  7: [],
-    8: [],  9: [], 10: [], 11: [], 12: [], 13: [], 14: [],
-   15: [], 16: [], 17: [], 18: [], 19: [], 20: [], 21: [],
-   22: [], 23: [], 24: [], 25: [], 26: [], 27: [], 28: []
- }
+  plan_data: [
+    [], [], [], [], [], [], []
+  ]
 };
 
 const clickedDay = (state: State, action: ClickDay): State => {
@@ -31,13 +28,13 @@ const clickedDay = (state: State, action: ClickDay): State => {
 const addedRecipeToDay = (state: State, action: AddRecipeToDay): State => {
   const { day, recipe } = action;
 
-  return update(state, {
-    plan_data: {
-      [day]: {
-        $push: [recipe]
-      }
-    }
-  });
+  return {
+    ...state,
+    plan_data: [
+      ...state.plan_data,
+      state.plan_data[day] = [...(state.plan_data[day]), recipe]
+    ]
+  };
 };
 
 const removedRecipeFromDay = (state: State, action: RemoveRecipeFromDay): State => {
@@ -88,9 +85,9 @@ export const planFormReducer = (state = initialState, action: Actions): State =>
     case REORDER_RECIPE_IN_DAY:  return reorderedRecipeInDay(state, action);
 
     case CLEAR_WORK:             return {...state, ...initialState};
-    case SET_CREATING:           return {...state, creating: true};
+    //case SET_CREATING:           return {...state, creating: true};
     case SET_PLAN_NAME:          return {...state, plan_name: action.name};
-    case SET_EDITING_ID:         return {...state, editingId: action.id};
+    //case SET_EDITING_ID:         return {...state, editingId: action.id};
     case SET_PLAN_DATA:          return {...state, ...{plan_data: action.data}};  // sufficient?
 
     //case PUBLIC_LOAD_FROM_URL: return publicLoadedFromUrl(state, action);
@@ -108,8 +105,8 @@ export const removeRecipeFromDay = (day: number, index: number) =>            ({
 export const reorderRecipeInDay  = (dragIndex: number, hoverIndex: number) => ({type: REORDER_RECIPE_IN_DAY, dragIndex, hoverIndex});
 
 export const clearWork    = () =>               ({type: CLEAR_WORK});
-export const setCreating  = () =>               ({type: SET_CREATING});
-export const setEditingId = (id: number) =>     ({type: SET_EDITING_ID, id});
+//export const setCreating  = () =>               ({type: SET_CREATING});
+//export const setEditingId = (id: number) =>     ({type: SET_EDITING_ID, id});
 export const setPlanName  = (name: string) =>   ({type: SET_PLAN_NAME, name});
 export const setPlanData  = (data: PlanData) => ({type: SET_PLAN_DATA, data});
 
@@ -125,8 +122,8 @@ export const actionTypes = {
   REORDER_RECIPE_IN_DAY:  'REORDER_RECIPE_IN_DAY',
 
   CLEAR_WORK:             'CLEAR_WORK',
-  SET_CREATING:           'SET_CREATING',
-  SET_EDITING_ID:         'SET_EDITING_ID',
+  //SET_CREATING:           'SET_CREATING',
+  //SET_EDITING_ID:         'SET_EDITING_ID',
   SET_PLAN_NAME:          'SET_PLAN_NAME',
   SET_PLAN_DATA:          'SET_PLAN_DATA',
 
@@ -141,38 +138,24 @@ const {
   REORDER_RECIPE_IN_DAY,
 
   CLEAR_WORK,
-  SET_CREATING,
+  //SET_CREATING,
+  //SET_EDITING_ID,
   SET_PLAN_NAME,
-  SET_EDITING_ID,
   SET_PLAN_DATA,
 
   //PUBLIC_LOAD_FROM_URL,
   //PUBLIC_SAVE_TO_URL,
 } = actionTypes;
 
-/*
-
-State
-
-*/
-
 export type State = {
   isLoading:   boolean;
-  creating:    boolean;
-  editingId:   string | undefined;
-  publicUrl:   string;
+  //creating:    boolean;
+  //editingId:   string | undefined;
+  //publicUrl:   string;
   expandedDay: number | null;
   plan_name:   string;
   plan_data:   PlanData;
 };
-
-
-
-/*
-
-Actions
-
-*/
 
 export type Actions =
   | ClickDay
@@ -180,8 +163,8 @@ export type Actions =
   | RemoveRecipeFromDay
   | ReorderRecipeInDay
   | ClearWork
-  | SetCreating
-  | SetEditingId
+  //| SetCreating
+  //| SetEditingId
   | SetPlanName
   | SetPlanData;
 
@@ -193,7 +176,7 @@ export type ClickDay = {
 export type AddRecipeToDay = {
   type:   typeof actionTypes.ADD_RECIPE_TO_DAY;
   day:    number;
-  recipe: Recipe;
+  recipe: PlanRecipe;
 };
 
 export type RemoveRecipeFromDay = {
@@ -212,14 +195,14 @@ type ClearWork = {
   type: typeof actionTypes.CLEAR_WORK;
 };
 
-type SetCreating = {
+/*type SetCreating = {
   type: typeof actionTypes.SET_CREATING;
 };
 
 type SetEditingId = {
   type: typeof actionTypes.SET_EDITING_ID;
   id:   string | undefined;
-};
+};*/
 
 type SetPlanName = {
   type: typeof actionTypes.SET_PLAN_NAME;
@@ -231,17 +214,15 @@ type SetPlanData = {
   data: PlanData;
 };
 
-
-
 // TO DO: move shared types to one location
 
-export interface PlanData {
-  [index: number|string]: any;
-   1: Recipe[];  2: Recipe[];  3: Recipe[];  4: Recipe[];  5: Recipe[];  6: Recipe[];  7: Recipe[];
-   8: Recipe[];  9: Recipe[]; 10: Recipe[]; 11: Recipe[]; 12: Recipe[]; 13: Recipe[]; 14: Recipe[];
-  15: Recipe[]; 16: Recipe[]; 17: Recipe[]; 18: Recipe[]; 19: Recipe[]; 20: Recipe[]; 21: Recipe[];
-  22: Recipe[]; 23: Recipe[]; 24: Recipe[]; 25: Recipe[]; 26: Recipe[]; 27: Recipe[]; 28: Recipe[];
-}
+export type PlanData = PlanRecipe[][];
+
+export type PlanRecipe = {
+  image_url: string;
+  title:     string;
+  recipe_id: string;
+};
 
 export type Recipe = {
   key:          string;

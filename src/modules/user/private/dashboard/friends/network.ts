@@ -24,7 +24,7 @@ const {
   UNBLOCK_USER
 } = actionTypes;
 
-export function* watchFriendship() {
+export function* friendshipWatcher() {
   yield all([
     takeEvery(REQUEST_FRIENDSHIP, requestFriendshipWorker),
     takeEvery(ACCEPT_FRIENDSHIP,  acceptFriendshipWorker),

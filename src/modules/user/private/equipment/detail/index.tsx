@@ -1,11 +1,12 @@
 import { useTypedSelector as useSelector } from '../../../../../redux';
 import { LoaderSpinner }                   from '../../../../shared/LoaderSpinner';
-import type { Equipment }                  from '../../data/state';
+import type { EquipmentView }              from '../../data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Equipment}) {
-  const my_equipment = useSelector(state => state.userData.my_equipment);
+// pick one (probably redux)
+export default function UserPrivateEquipmentDetail({ equipment }: {equipment: EquipmentView}) {
+  const my_private_equipment = useSelector(state => state.userData.my_private_equipment);
 
   const {
     equipment_id,
@@ -25,9 +26,7 @@ export default function UserPrivateEquipmentDetail({ equipment }: {equipment: Eq
         <h1>{equipment_name}</h1>
 
         <div className="image">
-          {my_equipment.find(e => e.equipment_id === equipment_id)
-            ? <img src={`${url}user-equipment/${image_url}`} />
-            : <img src={`${url}images-01/equipment/${image_url}.jpg`} />}
+          <img src={`${url}user-equipment/${image_url}`} />
         </div>
 
         <div className="type">

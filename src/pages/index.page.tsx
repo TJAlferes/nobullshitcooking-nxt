@@ -1,5 +1,5 @@
-import { Home }        from '../modules/shared/components';
-import { staticProps } from '../store';
+import { Home }        from "../modules/general/home";
+import { staticProps } from '../redux';
 
 export default function IndexPage() {
   return <Home />;

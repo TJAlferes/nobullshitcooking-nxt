@@ -1,22 +1,21 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import type { PlanData } from '../new-plan/types';
-
-// TO DO: move into shared/data, and split into user/private/data
+import type { PlanDataView } from '../../../plan/detail/state';
 
 const initialState: State = {
-  my_favorite_recipes: [],
-  my_friendships:      [],
-  my_plans:            [],  // TO DO: split into private and public
-  my_equipment:        [],  // TO DO: explicitly name my_private_equipment
-  my_ingredients:      [],  // TO DO: explicitly name my_private_ingredients
-  my_private_recipes:  [],
-  my_public_recipes:   [],
-  my_saved_recipes:    []
+  my_friendships:         [],
+  my_public_plans:        [],
+  my_public_recipes:      [],
+  my_favorite_recipes:    [],
+  my_private_equipment:   [],
+  my_private_ingredients: [],
+  my_private_plans:       [],
+  my_private_recipes:     [],
+  my_saved_recipes:       []
 };
 
-export const userDataReducer = (state = initialState, action: AnyAction): State => {
+export function userDataReducer(state = initialState, action: AnyAction): State {
   switch (action.type) {
     case HYDRATE:
       return {...state, ...action['payload'].data};  // sufficient?
@@ -24,14 +23,15 @@ export const userDataReducer = (state = initialState, action: AnyAction): State 
     case GET_INITIAL_USER_DATA:
       return {
         ...state,
-        my_public_recipes:   action['initialUserData'].myPublicRecipes,
-        my_equipment:        action['initialUserData'].myEquipment,
-        my_ingredients:      action['initialUserData'].myIngredients,
-        my_private_recipes:  action['initialUserData'].myPrivateRecipes,
-        my_favorite_recipes: action['initialUserData'].myFavoriteRecipes,
-        my_saved_recipes:    action['initialUserData'].mySavedRecipes,
-        my_plans:            action['initialUserData'].myPlans,
-        my_friendships:      action['initialUserData'].myFriendships
+        my_friendships:         action['initialUserData'].my_friendships,
+        my_public_plans:        action['initialUserData'].my_public_plans,
+        my_public_recipes:      action['initialUserData'].my_public_recipes,
+        my_favorite_recipes:    action['initialUserData'].my_favorite_recipes,
+        my_private_equipment:   action['initialUserData'].my_private_equipment,
+        my_private_ingredients: action['initialUserData'].my_private_ingredients,
+        my_private_plans:       action['initialUserData'].my_private_plans,
+        my_private_recipes:     action['initialUserData'].my_private_recipes,
+        my_saved_recipes:       action['initialUserData'].my_saved_recipes
       };
 
     case GET_USER_DATA:
@@ -70,14 +70,15 @@ const {
 export type State = InitialUserData;
 
 export type InitialUserData = {
-  my_favorite_recipes: WorkRecipe[];
-  my_friendships:      Friendship[];
-  my_plans:            Plan[];
-  my_equipment:        Equipment[];
-  my_ingredients:      Ingredient[];
-  my_private_recipes:  WorkRecipe[];
-  my_public_recipes:   WorkRecipe[];
-  my_saved_recipes:    WorkRecipe[];
+  my_friendships:         FriendshipView[];
+  my_public_plans:        PlanView[];
+  my_public_recipes:      RecipeOverview[];
+  my_favorite_recipes:    RecipeOverview[];
+  my_private_equipment:   EquipmentView[];
+  my_private_ingredients: IngredientView[];
+  my_private_plans:       PlanView[];
+  my_private_recipes:     RecipeOverview[];
+  my_saved_recipes:       RecipeOverview[];
 };
 
 export type Actions =
@@ -102,21 +103,9 @@ export type GetUserData = {
   };
 };
 
-
-
 // TO DO: move shared types to one location
 
-// TO DO: rename most of these
-
-export type Cuisine = {
-  cuisine_id:     number;
-  cuisine_name:   string;
-  continent_code: string;
-  country_code:   string;
-  country_name:   string;
-};
-
-export type Equipment = {
+export type EquipmentView = {
   equipment_id:        string;
   equipment_type_id:   number;
   owner_id:            number;
@@ -126,19 +115,14 @@ export type Equipment = {
   image_url:           string;
 };
 
-export type EquipmentType = {
-  equipment_type_id:   number;
-  equipment_type_name: string;
-};
-
-export type Friendship = {
+export type FriendshipView = {
   user_id:  number;
   username: string;
   avatar:   string;
   status:   string;
 };
 
-export type Ingredient = {
+export type IngredientView = {
   ingredient_id:        string;
   ingredient_type_id:   number;
   owner_id:             number;
@@ -151,37 +135,17 @@ export type Ingredient = {
   image_url:            string;
 };
 
-export type IngredientType = {
-  ingredient_type_id:   number;
-  ingredient_type_name: string;
-};
-
-export type Unit = {
-  unit_id:   number;
-  unit_name: string;
-};
-
-export type Method = {
-  method_id:   number;
-  method_name: string;
-};
-
-export type Plan = {
+export type PlanView = {
   plan_id:   string;
   plan_name: string;
-  plan_data: PlanData;
+  plan_data: PlanDataView;
 };
 
-export type WorkRecipe = {
+export type RecipeOverview = {
   recipe_id:      string;
   owner_id:       number;
   recipe_type_id: number;
   cuisine_id:     number;
   title:          string;
   recipe_image:   string;
-};
-
-export type RecipeType = {
-  recipe_type_id:   number;
-  recipe_type_name: string;
 };

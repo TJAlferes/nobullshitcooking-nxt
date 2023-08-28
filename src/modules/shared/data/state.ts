@@ -1,9 +1,7 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import type { PlanData } from '../new-plan/types';
-
-// TO DO: move into shared/data, and split into user/private/data
+import type { PlanDataView } from '../../plan/detail/state';
 
 const initialState: State = {
   cuisines:         [],
@@ -13,11 +11,12 @@ const initialState: State = {
   ingredient_types: [],
   units:            [],
   methods:          [],
+  plans:            [],
   recipes:          [],
   recipe_types:     [],
 };
 
-export const dataReducer = (state = initialState, action: AnyAction): State => {
+export function dataReducer(state = initialState, action: AnyAction): State {
   switch (action.type) {
     case HYDRATE:
       return {...state, ...action['payload'].data};  // sufficient?
@@ -27,13 +26,14 @@ export const dataReducer = (state = initialState, action: AnyAction): State => {
         ...state,
         cuisines:         action['initialData'].cuisines,
         equipment:        action['initialData'].equipment,
-        equipment_types:  action['initialData'].equipmentTypes,
+        equipment_types:  action['initialData'].equipment_types,
         ingredients:      action['initialData'].ingredients,
-        ingredient_types: action['initialData'].ingredientTypes,
+        ingredient_types: action['initialData'].ingredient_types,
         units:            action['initialData'].measurements,
         methods:          action['initialData'].methods,
+        plans:            action['initialData'].plans,
         recipes:          action['initialData'].recipes,
-        recipe_types:     action['initialData'].recipeTypes
+        recipe_types:     action['initialData'].recipe_types
       };
 
     case GET_DATA:
@@ -45,7 +45,7 @@ export const dataReducer = (state = initialState, action: AnyAction): State => {
 
 
 
-export const init =     () => ({type: INIT});
+export const init = () => ({type: INIT});
 
 export const getInitialData = (initialData: InitialData) =>
   ({type: GET_INITIAL_DATA, initialData});
@@ -70,15 +70,16 @@ const {
 export type State = InitialData;
 
 export type InitialData = {
-  cuisines:         Cuisine[];
-  equipment:        Equipment[];
-  equipment_types:  EquipmentType[];
-  ingredients:      Ingredient[];
-  units:            Unit[];
-  methods:          Method[];
-  ingredient_types: IngredientType[];
-  recipes:          WorkRecipe[];
-  recipe_types:     RecipeType[];
+  cuisines:         CuisineView[];
+  equipment:        EquipmentView[];
+  equipment_types:  EquipmentTypeView[];
+  ingredients:      IngredientView[];
+  ingredient_types: IngredientTypeView[];
+  units:            UnitView[];
+  methods:          MethodView[];
+  plans:            PlanView[];
+  recipes:          RecipeOverview[];
+  recipe_types:     RecipeTypeView[];
 };
 
 export type Actions =
@@ -107,9 +108,7 @@ export type GetData = {
 
 // TO DO: move shared types to one location
 
-// TO DO: rename most of these
-
-export type Cuisine = {
+export type CuisineView = {
   cuisine_id:     number;
   cuisine_name:   string;
   continent_code: string;
@@ -117,7 +116,7 @@ export type Cuisine = {
   country_name:   string;
 };
 
-export type Equipment = {
+export type EquipmentView = {
   equipment_id:        string;
   equipment_type_id:   number;
   owner_id:            number;
@@ -127,19 +126,12 @@ export type Equipment = {
   image_url:           string;
 };
 
-export type EquipmentType = {
+export type EquipmentTypeView = {
   equipment_type_id:   number;
   equipment_type_name: string;
 };
 
-export type Friendship = {
-  user_id:  number;
-  username: string;
-  avatar:   string;
-  status:   string;
-};
-
-export type Ingredient = {
+export type IngredientView = {
   ingredient_id:        string;
   ingredient_type_id:   number;
   owner_id:             number;
@@ -152,28 +144,28 @@ export type Ingredient = {
   image_url:            string;
 };
 
-export type IngredientType = {
+export type IngredientTypeView = {
   ingredient_type_id:   number;
   ingredient_type_name: string;
 };
 
-export type Unit = {
+export type UnitView = {
   unit_id:   number;
   unit_name: string;
 };
 
-export type Method = {
+export type MethodView = {
   method_id:   number;
   method_name: string;
 };
 
-export type Plan = {
+export type PlanView = {
   plan_id:   string;
   plan_name: string;
-  plan_data: PlanData;
+  plan_data: PlanDataView;
 };
 
-export type WorkRecipe = {
+export type RecipeOverview = {
   recipe_id:      string;
   owner_id:       number;
   recipe_type_id: number;
@@ -182,7 +174,7 @@ export type WorkRecipe = {
   recipe_image:   string;
 };
 
-export type RecipeType = {
+export type RecipeTypeView = {
   recipe_type_id:   number;
   recipe_type_name: string;
 };
