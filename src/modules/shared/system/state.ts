@@ -1,15 +1,14 @@
 // reducer ---------------------------------------------------------------------
 
-const initialState: State = {message: ''};
+const initialState: State = {
+  message: ''
+};
 
 export function systemReducer(state = initialState, action: UserActions): State {
   switch (action.type) {
-    case SYSTEM_MESSAGE:
-      return {...state, message: action.message};
-    case SYSTEM_MESSAGE_CLEAR:
-      return {...state, message: ''};
-    default:
-      return state;
+    case SYSTEM_MESSAGE:       return {...state, message: action.message};
+    case SYSTEM_MESSAGE_CLEAR: return {...state, message: ''};
+    default:                   return state;
   }
 }
 

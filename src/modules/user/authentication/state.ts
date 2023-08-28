@@ -5,21 +5,17 @@ import type { AnyAction } from 'redux';
 // reducer ---------------------------------------------------------------------
 
 const initialState: State = {
-  authname: '',
-  userIsAuthenticated: false
+  authname: ''  // username of authenticated user
 };
 
 export function authenticationReducer(state = initialState, action: AnyAction): State {
   switch (action.type) {
-    case HYDRATE:
-      return {...state, ...action['payload'].auth};
-    case AUTHENTICATE:
-      return {...state, userIsAuthenticated: true, authname: action['authname']};
+    case HYDRATE:      return {...state, ...action['payload'].auth};
+    case AUTHENTICATE: return {...state, authname: action['authname']};
     //case RESET:
     case LOGOUT:
       return {...state, ...initialState};
-    default:
-      return state;
+    default: return state;
   }
 };
 
@@ -46,9 +42,8 @@ export const logout = () => ({type: LOGOUT});
 // types -----------------------------------------------------------------------
 
 export type State = {
-  authname:            string;
-  userIsAuthenticated: boolean;
-}
+  authname: string;
+};
 
 export const actionTypes = {
   AUTHENTICATE:  'AUTHENTICATE',

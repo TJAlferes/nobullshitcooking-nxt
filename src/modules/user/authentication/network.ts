@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }   from '../../../config/api';
-import { removeItem } from '../../general/localStorage';
-import { initUser }   from '../../user/private/data/state';
-
+import { endpoint }                          from '../../../config/api';
+import { removeItem }                        from '../../general/localStorage';
 import { systemMessage, systemMessageClear } from '../../shared/system/state';
+import { getInitialUserData }                from '../private/data/state';
 import { authenticate, actionTypes }         from './state';
 import type { Login, Logout }                from './state';
 
 const { LOGIN, LOGOUT } = actionTypes;
+
+// WHY DOES THIS NEED TO BE IN REDUX?
 
 export function* userAuthenticationWatcher() {
   yield all([
@@ -33,7 +34,7 @@ export function* userLoginWorker(action: Login) {
 
     if (data.message === 'Signed in.') {
       yield put(authenticate(data.username));
-      yield put(initUser());
+      yield put(getInitialUserData());
       yield call([router, router.push], '/dashboard');
     }
   } catch(err) {

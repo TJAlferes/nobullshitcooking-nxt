@@ -7,6 +7,8 @@ import { actionTypes, Register }             from './state';
 
 const { REGISTER } = actionTypes;
 
+// WHY DOES THIS NEED TO BE IN REDUX?
+
 export function* userRegistrationWatcher() {
   yield takeEvery(REGISTER, userRegisterWorker);
 }

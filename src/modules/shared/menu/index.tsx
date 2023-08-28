@@ -92,15 +92,14 @@ export function LeftNav() {
 }
 
 function NavLinks() {
-  const authname            = useSelector(state => state.authentication.authname);
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const authname = useSelector(state => state.authentication.authname);
 
   return (
     <>
       <NavLink text="Home" to="/" />
       <hr />
 
-      {userIsAuthenticated && (
+      {authname !== '' && (
         <>
           <NavLink text={authname} to="/dashboard" />
           <NavLink text="Chat"     to="/chat" />

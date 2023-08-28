@@ -4,7 +4,7 @@ import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 import { endpoint }                          from '../../../../../config/api';
 //import { updateOnlineWorker }                from '../../../../chat/network';
 import { systemMessage, systemMessageClear } from '../../../../shared/system/state';
-import { getMyFriendshipsWorker }            from '../../data/network';
+import { getMyFriendshipsWorker }            from '../../data/network';  // TO DO: more proper to put action, and then invoke worker from watcher
 import { actionTypes } from './state';
 import type {
   RequestFriendship,

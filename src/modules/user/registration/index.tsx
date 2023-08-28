@@ -8,20 +8,18 @@ import { LoaderButton }                    from '../../shared/LoaderButton';
 import { register }                        from './state';
 
 export default function Register() {
-  const router =       useRouter();
+  const router = useRouter();
 
   const dispatch = useDispatch();
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
-  const message =             useSelector(state => state.system.message);
+  const authname = useSelector(state => state.authentication.authname);
+  const message  = useSelector(state => state.system.message);
 
-  const [ email,            setEmail ] =            useState("");
-  const [ feedback,         setFeedback ] =         useState("");
-  const [ loading,          setLoading ] =          useState(false);
-  const [ password,         setPassword ] =         useState("");
-  const [ passwordAgain,    setPasswordAgain ] =    useState("");
-  const [ username,         setUsername ] =         useState("");
-
-  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
+  const [ email,         setEmail ]         = useState("");
+  const [ feedback,      setFeedback ]      = useState("");
+  const [ loading,       setLoading ]       = useState(false);
+  const [ password,      setPassword ]      = useState("");
+  const [ passwordAgain, setPasswordAgain ] = useState("");
+  const [ username,      setUsername ]      = useState("");
 
   useEffect(() => {
     let isSubscribed = true;
@@ -35,8 +33,8 @@ export default function Register() {
   }, [message]);
 
   useEffect(() => {
-    if (userIsAuthenticated) router.push('/dashboard');
-  }, [userIsAuthenticated]);
+    if (authname !== '') router.push('/dashboard');
+  }, [authname]);
 
   const emailChange         = (e: SyntheticEvent) => setEmail((e.target as HTMLInputElement).value);
   const usernameChange      = (e: SyntheticEvent) => setUsername((e.target as HTMLInputElement).value);
@@ -47,6 +45,7 @@ export default function Register() {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     setLoading(true);
+    // WHY DOES THIS NEED TO BE IN REDUX?
     dispatch(register(email, password, username, router));  // do you really need to pass the router here?
   };
 
@@ -64,6 +63,8 @@ export default function Register() {
     && password.length > 5
     && password == passwordAgain
   );  // TO DO: do most of this in HTML
+
+  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
   
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>

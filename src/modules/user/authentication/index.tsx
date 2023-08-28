@@ -11,17 +11,15 @@ import { login }                           from './state';
 
 export default function Login() {
   const pathname = usePathname();
-  const router =   useRouter();
-
+  const router   = useRouter();
   const dispatch = useDispatch();
-  const message =  useSelector(state => state.system.message);
 
-  const [ email,    setEmail ] =    useState("");
+  const message = useSelector(state => state.system.message);
+
+  const [ email,    setEmail ]    = useState("");
   const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ] =  useState(false);
+  const [ loading,  setLoading ]  = useState(false);
   const [ password, setPassword ] = useState("");
-
-  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
   useEffect(() => {
     let isSubscribed = true;
@@ -42,6 +40,7 @@ export default function Login() {
     if (loading) return;
     if (!validateLoginInfo()) return;
     setLoading(true);
+    // WHY DOES THIS NEED TO BE IN REDUX?
     if (pathname === "/login") dispatch(login(email, password, router));
   }
 
@@ -50,10 +49,13 @@ export default function Login() {
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
+    // WHY DOES THIS NEED TO BE IN REDUX?
     if (pathname === "/login") dispatch(login(email, password, router));
   }
 
   const validateLoginInfo = () => (email.length > 4 && password.length > 5);
+
+  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
 
   return (
     <div className="login" onKeyUp={e => loginKeyUp(e)}>

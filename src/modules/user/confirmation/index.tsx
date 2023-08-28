@@ -8,17 +8,15 @@ import { LoaderButton }                    from '../../shared/LoaderButton';
 import { confirm }                         from './state';
 
 export default function Confirm() {
-  const router =       useRouter();
-
+  const router   = useRouter();
   const dispatch = useDispatch();
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
-  const message             = useSelector(state => state.system.message);
+
+  const authname = useSelector(state => state.authentication.authname);
+  const message  = useSelector(state => state.system.message);
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
-  const [ feedback,         setFeedback ]          = useState("");
-  const [ loading,          setLoading ]           = useState(false);
-
-  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
+  const [ feedback,          setFeedback ]         = useState("");
+  const [ loading,           setLoading ]          = useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -32,8 +30,8 @@ export default function Confirm() {
   }, [message]);
 
   useEffect(() => {
-    if (userIsAuthenticated) router.push('/dashboard');
-  }, [userIsAuthenticated]);
+    if (authname !== '') router.push('/dashboard');
+  }, [authname]);
 
   const confirmationCodeChange = (e: SyntheticEvent) => setConfirmationCode((e.target as HTMLInputElement).value);
 
@@ -53,6 +51,8 @@ export default function Confirm() {
   };
 
   const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
+
+  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
   
   return (
     <div className="register" onKeyUp={e => confirmKeyUp(e)}>
