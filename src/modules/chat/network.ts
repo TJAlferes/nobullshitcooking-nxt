@@ -110,9 +110,9 @@ interface ServerToClientEvents {
   UsersInRoomRefetched: (users: string[], room: string) => void;
   UserJoinedRoom:       (user: string) =>                  void;
   UserLeftRoom:         (user: string) =>                  void;
-  Message:              (message: Message) =>              void;  // rename to MessageSent
-  PrivateMessage:       (message: Message) =>              void;  // rename to PrivateMessageSent
-  FailedPrivateMessage: (feedback: string) =>              void;
+  MessageSent:          (message: Message) =>              void;
+  PrivateMessageSent:   (message: Message) =>              void;
+  PrivateMessageFailed: (feedback: string) =>              void;
 }
 
 const { LOGOUT } = authActionTypes;
