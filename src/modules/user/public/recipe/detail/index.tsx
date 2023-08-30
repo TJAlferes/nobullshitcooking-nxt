@@ -16,7 +16,7 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const message             = useSelector(state => state.system.message);
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const authname            = useSelector(state => state.authentication.authname);
 
   const [ feedback,  setFeedback ]  = useState("");
   const [ loading,   setLoading ]   = useState(false);
@@ -58,7 +58,7 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   }, [message]);
 
   const favorite = () => {
-    if (!userIsAuthenticated) return;
+    if (!authname) return;
     if (favorited) return;
     setFavorited(true);
     setLoading(true);
@@ -66,7 +66,7 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   };
 
   const save = () => {
-    if (!userIsAuthenticated) return;
+    if (!authname) return;
     if (saved) return;
     setSaved(true);
     setLoading(true);
@@ -88,7 +88,7 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
         <div className="save-area">
           {
             (
-              userIsAuthenticated
+              authname
               && !my_private_recipes.find(r => r.recipe_id === recipe_id)
               && !my_public_recipes.find(r => r.recipe_id === recipe_id)
             )

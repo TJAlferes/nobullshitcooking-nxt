@@ -1,4 +1,4 @@
-import type { EquipmentRow, IngredientRow, Methods, SubrecipeRow } from '.';
+import type { RequiredMethod, RequiredEquipment, RequiredIngredient, RequiredSubrecipe } from '.';
 
 export function validRecipeInfo({
   recipe_type_id,
@@ -23,7 +23,7 @@ export function validRecipeInfo({
   if (!validRecipeTypeId) return feedback("Select recipe type.");
 
   const validCuisineId = cuisine_id !== 0;
-  if (!validCuisineId) return feedback("Select cuisine.");  // TO DO: custom cuisine
+  if (!validCuisineId) return feedback("Select cuisine.");
 
   const validTitle = title.trim() !== "";
   if (!validTitle) return feedback("Enter title.");
@@ -34,8 +34,7 @@ export function validRecipeInfo({
   const validDirections = directions.trim() !== "";
   if (!validDirections) return feedback("Enter directions.");
 
-  const validMethods = Object.values(required_methods).filter(m => m === true);
-  //validMethods.length < 1
+  const validMethods = required_methods.length < 1;
   if (!validMethods) return feedback("Select required method(s).");
 
   let validEquipment = true;
@@ -82,9 +81,9 @@ type RecipeInfo = {
   title:                string;
   description:          string;
   directions:           string;
-  required_methods:     Methods;
-  required_equipment:   EquipmentRow[];
-  required_ingredients: IngredientRow[];
-  required_subrecipes:  SubrecipeRow[];
+  required_methods:     RequiredMethod[];
+  required_equipment:   RequiredEquipment[];
+  required_ingredients: RequiredIngredient[];
+  required_subrecipes:  RequiredSubrecipe[];
   setFeedback:          (feedback: string) => void;
 };
