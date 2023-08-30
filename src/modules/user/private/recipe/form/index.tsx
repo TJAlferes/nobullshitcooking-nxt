@@ -9,11 +9,11 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }                                 from '../../../../../config/api';
 import { useTypedSelector as useSelector }          from '../../../../../redux';
+import { validRecipeInfo }                          from '../../../../recipe/form/validation';
+import { NOBSC_USER_ID, UNKNOWN_USER_ID }           from '../../../../shared/constants';
 import { LoaderButton }                             from '../../../../shared/LoaderButton';
 import { getCroppedImage }                          from '../../../../shared/getCroppedImage';
 import { createPrivateRecipe, updatePrivateRecipe } from '../state';
-import type { RequiredMethod }                      from '../state';
-import { validRecipeInfo }                          from './validation';
 
 export default function UserPrivateRecipeForm() {
   const router = useRouter();
@@ -32,13 +32,14 @@ export default function UserPrivateRecipeForm() {
   const methods          = useSelector(state => state.data.methods);
   const recipes          = useSelector(state => state.data.recipes);
 
-  const my_equipment        = useSelector(state => state.userData.my_equipment);
-  const my_ingredients      = useSelector(state => state.userData.my_ingredients);
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+  const my_private_equipment   = useSelector(state => state.userData.my_private_equipment);
+  const my_private_ingredients = useSelector(state => state.userData.my_private_ingredients);
+  const my_favorite_recipes    = useSelector(state => state.userData.my_favorite_recipes);
+  const my_saved_recipes       = useSelector(state => state.userData.my_saved_recipes);
+  const my_private_recipes     = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes      = useSelector(state => state.userData.my_public_recipes);
 
+  const authname = useSelector(state => state.authentication.authname);
   const message  = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
@@ -59,14 +60,6 @@ export default function UserPrivateRecipeForm() {
   const [ equipmentRows,  setEquipmentRows ]  = useState<EquipmentRow[]>([pristineEquipmentRow]);
   const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([pristineIngredientRow]);
   const [ subrecipeRows,  setSubrecipeRows ]  = useState<SubrecipeRow[]>([]);
-
-  const initialCrop: Crop = {
-    unit:   'px',
-    x:      25,
-    y:      25,
-    width:  50,
-    height: 50
-  };  // TO DO: change to NOBSC images ratio
 
   const recipeImageRef = useRef<HTMLImageElement>();
   const [ recipePrevImage,  setRecipePrevImage ] =  useState("nobsc-recipe-default");
@@ -105,12 +98,11 @@ export default function UserPrivateRecipeForm() {
 
     async function getExistingRecipeToEdit() {
       if (!recipe_id) {
-        router.push('/dashboard');
+        router.push(`/${authname}/private/dashboard`);
         return;
       }
 
       setLoading(true);
-
       window.scrollTo(0, 0);
 
       const res = await axios.post(
@@ -120,9 +112,8 @@ export default function UserPrivateRecipeForm() {
       );
       
       const recipe: ExistingRecipeToEdit = res.data.recipe;
-      
       if (!recipe) {
-        router.push('/dashboard');
+        router.push(`/${authname}/private/dashboard`);
         return;
       }
 
@@ -149,11 +140,9 @@ export default function UserPrivateRecipeForm() {
       setDirections(directions);
       setUsedMethods(prevState => {
         const nextState = {...prevState};
-
         required_methods?.map(({ method_id }) => {
           nextState[method_id] = true;
         });
-
         return nextState;
       });
       setEquipmentRows(required_equipment.map(r => ({...r, key: uuid()})));
@@ -167,8 +156,15 @@ export default function UserPrivateRecipeForm() {
       setLoading(false);
     }
 
-    if (mounted && recipe_id) {
-      getExistingRecipeToEdit();
+    if (mounted) {
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
+
+      if (recipe_id) {
+        getExistingRecipeToEdit();
+      }
     }
 
     return () => {
@@ -185,7 +181,7 @@ export default function UserPrivateRecipeForm() {
       setFeedback(message);
 
       if (message === "Recipe created." || message === "Recipe updated.") {
-        setTimeout(() => router.push('/dashboard'), 3000);
+        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
       }
 
       setLoading(false);  // move ?
@@ -240,9 +236,14 @@ export default function UserPrivateRecipeForm() {
     setSubrecipeRows(newRows);
   };
 
-  const addEquipmentRow  = () => setEquipmentRows([...equipmentRows, pristineEquipmentRow]);
-  const addIngredientRow = () => setIngredientRows([...ingredientRows, pristineIngredientRow]);
-  const addSubrecipeRow  = () => setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow]);
+  const addEquipmentRow  = () =>
+    setEquipmentRows([...equipmentRows, pristineEquipmentRow]);
+
+  const addIngredientRow = () =>
+    setIngredientRows([...ingredientRows, pristineIngredientRow]);
+
+  const addSubrecipeRow  = () =>
+    setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow]);
 
   const removeEquipmentRow = (rowKey: string) =>
     setEquipmentRows(equipmentRows.filter(row => row.key !== rowKey));
@@ -253,14 +254,32 @@ export default function UserPrivateRecipeForm() {
   const removeSubrecipeRow = (rowKey: string) =>
     setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
   
-  const availableEquipment   = [...equipment, ...my_equipment];
-  const availableIngredients = [...ingredients, ...my_ingredients];
+  const availableEquipment   = [...equipment, ...my_private_equipment];
+
+  const availableIngredients = [...ingredients, ...my_private_ingredients];
+
   const availableRecipes = [
     ...recipes,
     ...(my_favorite_recipes.length ? my_favorite_recipes : []),  // TO DO: make sure they can't be the author
     ...(my_saved_recipes.length    ? my_saved_recipes    : []),  // TO DO: make sure they can't be the author
-    ...(my_private_recipes.length  ? (recipe_id && recipe_id !== 0 ? my_private_recipes.filter(r => r.recipe_id != recipe_id) : my_private_recipes) : []),  // TO DO: change to "000..." ???
-    ...(my_public_recipes.length   ? (recipe_id && recipe_id !== 0 ? my_public_recipes.filter(r => r.recipe_id != recipe_id)  : my_public_recipes)  : [])   // TO DO: change to "000..." ???
+    ...(
+      my_private_recipes.length 
+      ? (
+        recipe_id
+        ? my_private_recipes.filter(r => r.recipe_id != recipe_id)
+        : my_private_recipes
+      )
+      : []
+    ),
+    ...(
+      my_public_recipes.length
+      ? (
+        recipe_id
+        ? my_public_recipes.filter(r => r.recipe_id != recipe_id)
+        : my_public_recipes
+      )
+      : []
+    )
   ];
 
   /*
@@ -268,22 +287,6 @@ export default function UserPrivateRecipeForm() {
   Images
 
   */
-
-  const url = "https://s3.amazonaws.com/nobsc-user-recipe";
-
-  const commonReactCropProps = {
-    aspect:    1,
-    className: "crop-tool",
-    disabled:  true,
-    locked:    true,
-    maxHeight: 172,
-    maxWidth:  280,
-    minHeight: 172,
-    minWidth:  280,
-    style: {
-      minHeight: "300px"
-    }
-  };
   
   const makeCookingCrops = async (crop: Crop) => {
     if (!cookingImageRef.current) return;
@@ -387,43 +390,41 @@ export default function UserPrivateRecipeForm() {
   */
 
   const submit = () => {
+    const getCheckedMethods = () => {
+      return Object.keys(usedMethods)
+        .filter(key => usedMethods[parseInt(key)] === true)
+        .map(key => ({method_id: parseInt(key)}));
+    };
+
+    const getRequiredEquipment = () => equipmentRows.map(e => ({
+      amount:       e.amount,
+      equipment_id: e.equipment_id
+    }));
+
+    const getRequiredIngredients = () => ingredientRows.map(i => ({
+      amount:        i.amount,
+      unit_id:       i.unit_id,
+      ingredient_id: i.ingredient_id
+    }));
+
+    const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
+      amount:       s.amount,
+      unit_id:      s.unit_id,
+      subrecipe_id: s.subrecipe_id
+    }));
+
     if (!validRecipeInfo({
       recipe_type_id,
       cuisine_id,
       title,
       description,
       directions,
-      required_methods:     usedMethods,  // why not just use getCheckedMethods() ???
-      required_equipment:   equipmentRows,
-      required_ingredients: ingredientRows,
-      required_subrecipes:  subrecipeRows,
+      required_methods:     getCheckedMethods(),
+      required_equipment:   getRequiredEquipment(),
+      required_ingredients: getRequiredIngredients(),
+      required_subrecipes:  getRequiredSubrecipes(),
       setFeedback
     })) return;
-
-    const getCheckedMethods = () => {
-      const checkedMethods: RequiredMethod[] = [];
-      Object.entries(usedMethods).forEach(([ key, value ]) => {
-        if (value === true) checkedMethods.push({method_id: Number(key)});
-      });
-      return checkedMethods;
-    };
-
-    const getRequiredEquipment = () => equipmentRows.map(e => ({
-      amount:       Number(e.amount),
-      equipment_id: e.equipment_id
-    }));  // bug ?
-
-    const getRequiredIngredients = () => ingredientRows.map(i => ({
-      amount:  Number(i.amount),
-      unit_id: Number(i.unit_id),
-      ingredient_id: i.ingredient_id
-    }));  // bug ?
-
-    const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
-      amount:       Number(s.amount),
-      unit_id:      Number(s.unit_id),
-      subrecipe_id: s.subrecipe_id
-    }));  // bug ?
 
     const recipeInfo = {
       recipe_type_id,
@@ -450,7 +451,8 @@ export default function UserPrivateRecipeForm() {
     setLoading(true);
 
     if (recipe_id) {
-      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
+      // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
       const recipeUpdateInfo = {
         ...recipeInfo,
         recipe_id,
@@ -480,7 +482,7 @@ export default function UserPrivateRecipeForm() {
         required
         value={recipe_type_id}
       >
-        <option value=""></option>
+        <option value={0}>Select type</option>
         {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
           <option key={recipe_type_id} value={recipe_type_id}>
             {recipe_type_name}
@@ -496,7 +498,7 @@ export default function UserPrivateRecipeForm() {
         required
         value={cuisine_id}
       >
-        <option value=""></option>
+        <option value={0}>Select cuisine</option>
         {cuisines.map(({ cuisine_id, cuisine_name }) => (
           <option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>
         ))}
@@ -554,12 +556,12 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={amount}
               >
-                <option value=""></option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+                <option value={0}>Select amount (optional)</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
               </select>
 
               <label>Type:</label>
@@ -569,9 +571,9 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={equipment_type_id}
               >
-                <option value=""></option>
-                <option value="2">Preparing</option>
-                <option value="3">Cooking</option>
+                <option value={0}>Select type</option>
+                <option value={2}>Preparing</option>
+                <option value={3}>Cooking</option>
               </select>
 
               <label>Equipment:</label>
@@ -581,7 +583,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={equipment_id}
               >
-                <option value=""></option>
+                <option value="">Select equipment</option>
                 {
                   availableEquipment
                     .filter(e => e.equipment_type_id == equipment_type_id)
@@ -623,6 +625,7 @@ export default function UserPrivateRecipeForm() {
                 step="any"
                 type="number"
                 value={amount}
+                placeholder='Enter amount (optional)'
               />
 
               <label>Unit:</label>
@@ -632,7 +635,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={unit_id}
               >
-                <option value=""></option>
+                <option value={0}>Select unit (optional)</option>
                 {units.map((u, index) => (
                   <option key={index} value={u.unit_id}>{u.unit_name}</option>
                 ))}
@@ -645,7 +648,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={ingredient_type_id}
               >
-                <option value=""></option>
+                <option value={0}>Select type</option>
                 {ingredient_types.map((i, index) => (
                   <option key={index} value={i.ingredient_type_id}>
                     {i.ingredient_type_name}
@@ -660,7 +663,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={ingredient_id}
               >
-                <option value=""></option>
+                <option value="">Select ingredient</option>
                 {
                   availableIngredients
                     .filter(i => i.ingredient_type_id == ingredient_type_id)
@@ -701,6 +704,7 @@ export default function UserPrivateRecipeForm() {
                 step="any"
                 type="number"
                 value={s.amount}
+                placeholder='Enter amount (optional)'
               />
               
               <label>Unit:</label>
@@ -710,7 +714,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={s.unit_id}
               >
-                <option value=""></option>
+                <option value={0}>Select unit (optional)</option>
                 {units.map((u, index) => (
                   <option key={index} value={u.unit_id}>{u.unit_name}</option>
                 ))}
@@ -723,7 +727,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={s.recipe_type_id}
               >
-                <option value=""></option>
+                <option value={0}>Select type</option>
                 {recipe_types.map((r, index) => (
                   <option key={index} value={r.recipe_type_id}>
                     {r.recipe_type_name}
@@ -738,7 +742,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={s.cuisine_id}
               >
-                <option value=""></option>
+                <option value={0}>Select cuisine</option>
                 {cuisines.map((c, index) => (
                   <option key={index} value={c.cuisine_id}>
                     {c.cuisine_name}
@@ -754,7 +758,7 @@ export default function UserPrivateRecipeForm() {
                 required
                 value={s.subrecipe_id}
               >
-                <option value=""></option>
+                <option value="">Select subrecipe</option>
                 {
                   availableRecipes
                     .filter(r => r.recipe_type_id == s.recipe_type_id)
@@ -960,7 +964,6 @@ export default function UserPrivateRecipeForm() {
               }
   
               <h4>Change</h4>
-  
               <input
                 accept="image/*"
                 name="cooking-image-input"
@@ -1001,7 +1004,9 @@ export default function UserPrivateRecipeForm() {
       </div>
 
       <div className="finish">
-        <Link className="cancel-button" href="/dashboard">Cancel</Link>
+        <Link className="cancel-button" href={`/${authname}/private/dashboard`}>
+          Cancel
+        </Link>
 
         <LoaderButton
           className="submit-button"
@@ -1027,27 +1032,51 @@ function ToolTip() {
 
 const pristineEquipmentRow = {
   key:               uuid(),
-  amount:            "",
-  equipment_type_id: "",
+  amount:            0,
+  equipment_type_id: 0,
   equipment_id:      ""
 };
 
 const pristineIngredientRow = {
   key:                uuid(),
-  amount:             "",
-  unit_id:            "",
-  ingredient_type_id: "",
+  amount:             0,
+  unit_id:            0,
+  ingredient_type_id: 0,
   ingredient_id:      ""
 };
 
 const pristineSubrecipeRow = {
   key:            uuid(),
-  amount:         "",
-  unit_id:        "",
-  recipe_type_id: "",
-  cuisine_id:     "",
+  amount:         0,
+  unit_id:        0,
+  recipe_type_id: 0,
+  cuisine_id:     0,
   subrecipe_id:   ""
 };
+
+const initialCrop: Crop = {
+  unit:   'px',
+  x:      25,
+  y:      25,
+  width:  50,
+  height: 50
+};  // TO DO: change to NOBSC images ratio
+
+const commonReactCropProps = {
+  aspect:    1,
+  className: "crop-tool",
+  disabled:  true,
+  locked:    true,
+  maxHeight: 172,
+  maxWidth:  280,
+  minHeight: 172,
+  minWidth:  280,
+  style: {
+    minHeight: "300px"
+  }
+};
+
+const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 // TO DO: move types to one location
 
@@ -1061,7 +1090,7 @@ export type ExistingRecipeToEdit = {
   recipe_id:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
-  owner_id:             number;
+  owner_id:             string;
   title:                string;
   description:          string;
   directions:           string;
@@ -1075,29 +1104,40 @@ export type ExistingRecipeToEdit = {
   cooking_image:        string;
 };
 
-export type ExistingRequiredMethod = {
+export type RequiredMethod = {
   method_id: number;
 };
 
-export type ExistingRequiredEquipment = {
-  amount:            number | undefined;
+export type RequiredEquipment = {
+  amount:       number;
+  equipment_id: string;
+};
+
+export type RequiredIngredient = {
+  amount:        number;
+  unit_id:       number;
+  ingredient_id: string;
+};
+
+export type RequiredSubrecipe = {
+  amount:       number;
+  unit_id:      number;
+  subrecipe_id: string;
+};
+
+export type ExistingRequiredMethod = RequiredMethod;
+
+export type ExistingRequiredEquipment = RequiredEquipment & {
   equipment_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-  equipment_id:      string;
 };
 
-export type ExistingRequiredIngredient = {
-  amount:             number | undefined;
-  unit_id:            number | undefined;
+export type ExistingRequiredIngredient = RequiredIngredient & {
   ingredient_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-  ingredient_id:      string;
 };
 
-export type ExistingRequiredSubrecipe = {
-  amount:         number | undefined;
-  unit_id:        number | undefined;
+export type ExistingRequiredSubrecipe = RequiredSubrecipe & {
   recipe_type_id: number;  // (just a filter for nicer UX, not stored in DB)
   cuisine_id:     number;  // (just a filter for nicer UX, not stored in DB)
-  subrecipe_id:   string;  // recipe_id or subrecipe_id ???
 };
 
 export type Methods = {

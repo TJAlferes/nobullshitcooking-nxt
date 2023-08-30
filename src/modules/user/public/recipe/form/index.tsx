@@ -9,10 +9,11 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }                               from '../../../../../config/api';
 import { useTypedSelector as useSelector }        from '../../../../../redux';
+import { validRecipeInfo }                        from '../../../../recipe/form/validation';
+import { NOBSC_USER_ID, UNKNOWN_USER_ID }         from '../../../../shared/constants';
 import { LoaderButton }                           from '../../../../shared/LoaderButton';
 import { getCroppedImage }                        from '../../../../shared/getCroppedImage';
 import { createPublicRecipe, updatePublicRecipe } from '../state';
-import { validRecipeInfo }                        from './validation';
 
 export default function UserPublicRecipeForm() {
   const router = useRouter();
@@ -35,6 +36,7 @@ export default function UserPublicRecipeForm() {
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
 
+  const authname = useSelector(state => state.authentication.authname);
   const message  = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
@@ -93,12 +95,11 @@ export default function UserPublicRecipeForm() {
 
     async function getExistingRecipeToEdit() {
       if (!recipe_id) {
-        router.push('/dashboard');
+        router.push(`/${authname}/private/dashboard`);
         return;
       }
 
       setLoading(true);
-
       window.scrollTo(0, 0);
 
       const res = await axios.post(
@@ -108,9 +109,8 @@ export default function UserPublicRecipeForm() {
       );
       
       const recipe: ExistingRecipeToEdit = res.data.recipe;
-
       if (!recipe) {
-        router.push('/dashboard');
+        router.push(`/${authname}/private/dashboard`);
         return;
       }
 
@@ -137,11 +137,9 @@ export default function UserPublicRecipeForm() {
       setDirections(directions);
       setUsedMethods(prevState => {
         const nextState = {...prevState};
-
         required_methods?.map(({ method_id }) => {
           nextState[method_id] = true;
         });
-
         return nextState;
       });
       setEquipmentRows(required_equipment.map(r => ({...r, key: uuid()})));
@@ -155,8 +153,15 @@ export default function UserPublicRecipeForm() {
       setLoading(false);
     }
 
-    if (mounted && recipe_id) {
-      getExistingRecipeToEdit();
+    if (mounted) {
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
+
+      if (recipe_id) {
+        getExistingRecipeToEdit();
+      }
     }
 
     return () => {
@@ -173,7 +178,7 @@ export default function UserPublicRecipeForm() {
       setFeedback(message);
 
       if (message === "Recipe created." || message === "Recipe updated.") {
-        setTimeout(() => router.push('/dashboard'), 3000);
+        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
       }
 
       setLoading(false);  // move ?
@@ -246,11 +251,16 @@ export default function UserPublicRecipeForm() {
   const removeSubrecipeRow = (rowKey: string) =>
     setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
   
-  const availableEquipment = [...equipment, ...my_equipment];  // TO DO: SPLIT OFF, make appropriate for Private and Public
+  // IMPORTANT: note that my_private_equipment are NOT allowed in a public recipe
+  // This must also be checked on the backend server
+  const availableEquipment = equipment;
 
-  const availableIngredients = [...ingredients, ...my_ingredients];  // TO DO: SPLIT OFF, make appropriate for Private and Public
+  // IMPORTANT: note that my_private_ingredients are NOT allowed in a public recipe
+  // This must also be checked on the backend server
+  const availableIngredients = ingredients;
 
-  // TO DO: SPLIT OFF, make appropriate for Private and Public
+  // IMPORTANT: note that my_private_recipes are NOT allowed in a public recipe
+  // This must also be checked on the backend server
   const availableRecipes = [
     ...recipes,
     ...(my_favorite_recipes.length ? my_favorite_recipes : []),  // TO DO: make sure they can't be the author
@@ -258,12 +268,12 @@ export default function UserPublicRecipeForm() {
     ...(
       my_public_recipes.length
       ? (
-        editingId && recipe_id !== 0
+        recipe_id
         ? my_public_recipes.filter(r => r.recipe_id != recipe_id)
         : my_public_recipes
       )
       : []
-    )   // TO DO: change to "000..." ???
+    )
   ];
 
   /*
@@ -374,19 +384,6 @@ export default function UserPublicRecipeForm() {
   */
 
   const submit = () => {
-    if (!validRecipeInfo({
-      recipe_type_id,
-      cuisine_id,
-      title,
-      description,
-      directions,
-      required_methods:     getCheckedMethods(),
-      required_equipment:   getRequiredEquipment(),
-      required_ingredients: getRequiredIngredients(),
-      required_subrecipes:  getRequiredSubrecipes(),
-      setFeedback
-    })) return;
-
     const getCheckedMethods = () => {
       return Object.keys(usedMethods)
         .filter(key => usedMethods[parseInt(key)] === true)
@@ -409,6 +406,19 @@ export default function UserPublicRecipeForm() {
       unit_id:      s.unit_id,
       subrecipe_id: s.subrecipe_id
     }));
+
+    if (!validRecipeInfo({
+      recipe_type_id,
+      cuisine_id,
+      title,
+      description,
+      directions,
+      required_methods:     getCheckedMethods(),
+      required_equipment:   getRequiredEquipment(),
+      required_ingredients: getRequiredIngredients(),
+      required_subrecipes:  getRequiredSubrecipes(),
+      setFeedback
+    })) return;
 
     const recipeInfo = {
       recipe_type_id,
@@ -435,7 +445,8 @@ export default function UserPublicRecipeForm() {
     setLoading(true);
 
     if (recipe_id) {
-      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
+      // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
       const recipeUpdateInfo = {
         ...recipeInfo,
         recipe_id,
@@ -465,7 +476,7 @@ export default function UserPublicRecipeForm() {
         required
         value={recipe_type_id}
       >
-        <option value=""></option>
+        <option value={0}>Select type</option>
         {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
           <option key={recipe_type_id} value={recipe_type_id}>
             {recipe_type_name}
@@ -481,7 +492,7 @@ export default function UserPublicRecipeForm() {
         required
         value={cuisine_id}
       >
-        <option value=""></option>
+        <option value={0}>Select cuisine</option>
         {cuisines.map(({ cuisine_id, cuisine_name }) => (
           <option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>
         ))}
@@ -539,7 +550,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={amount}
               >
-                <option value={0}>Optional</option>
+                <option value={0}>Select amount (optional)</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
@@ -554,7 +565,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={equipment_type_id}
               >
-                <option value={0}>Required</option>
+                <option value={0}>Select type</option>
                 <option value={2}>Preparing</option>
                 <option value={3}>Cooking</option>
               </select>
@@ -566,7 +577,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={equipment_id}
               >
-                <option value="">Required</option>
+                <option value="">Select equipment</option>
                 {
                   availableEquipment
                     .filter(e => e.equipment_type_id == equipment_type_id)
@@ -629,7 +640,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={ingredient_type_id}
               >
-                <option value={0}>Select type (required)</option>
+                <option value={0}>Select type</option>
                 {ingredient_types.map((i, index) => (
                   <option key={index} value={i.ingredient_type_id}>
                     {i.ingredient_type_name}
@@ -644,7 +655,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={ingredient_id}
               >
-                <option value="">Select ingredient (required)</option>
+                <option value="">Select ingredient</option>
                 {
                   availableIngredients
                     .filter(i => i.ingredient_type_id == ingredient_type_id)
@@ -706,7 +717,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={s.recipe_type_id}
               >
-                <option value={0}>Select type (required)</option>
+                <option value={0}>Select type</option>
                 {recipe_types.map((r, index) => (
                   <option key={index} value={r.recipe_type_id}>
                     {r.recipe_type_name}
@@ -721,7 +732,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={s.cuisine_id}
               >
-                <option value={0}>Select cuisine (required)</option>
+                <option value={0}>Select cuisine</option>
                 {cuisines.map((c, index) => (
                   <option key={index} value={c.cuisine_id}>
                     {c.cuisine_name}
@@ -737,7 +748,7 @@ export default function UserPublicRecipeForm() {
                 required
                 value={s.subrecipe_id}
               >
-                <option value="">Select subrecipe (required)</option>
+                <option value="">Select subrecipe</option>
                 {
                   availableRecipes
                     .filter(r => r.recipe_type_id == s.recipe_type_id)
@@ -983,7 +994,9 @@ export default function UserPublicRecipeForm() {
       </div>
 
       <div className="finish">
-        <Link className="cancel-button" href="/dashboard">Cancel</Link>
+        <Link className="cancel-button" href={`/${authname}/private/dashboard`}>
+          Cancel
+        </Link>
 
         <LoaderButton
           className="submit-button"
@@ -1067,7 +1080,7 @@ export type ExistingRecipeToEdit = {
   recipe_id:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
-  owner_id:             number;
+  owner_id:             string;
   title:                string;
   description:          string;
   directions:           string;
