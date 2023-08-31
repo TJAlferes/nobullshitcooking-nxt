@@ -12,7 +12,6 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
   const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const message             = useSelector(state => state.system.message);
@@ -89,7 +88,6 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
           {
             (
               authname
-              && !my_private_recipes.find(r => r.recipe_id === recipe_id)
               && !my_public_recipes.find(r => r.recipe_id === recipe_id)
             )
             ? (

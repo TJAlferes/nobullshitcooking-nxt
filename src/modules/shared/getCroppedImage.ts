@@ -54,5 +54,8 @@ export async function getCroppedImage(
     }, 'image/jpeg', 1);
   });
 
-  return {preview, final};
+  return {
+    preview,
+    final
+  };
 }

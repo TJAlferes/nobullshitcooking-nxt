@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { endpoint }      from '../../../../../config/api';
+import { endpoint }            from '../../../../../config/api';
+import type { Recipe }         from '../../../../../modules/shared/types';
 import UserPrivateRecipeDetail from '../../../../../modules/user/private/recipe/detail';
-import type { Recipe }   from '../../../../../modules/user/private/recipe/detail';  // move to modules/shared/types ???
 
-export default function UserPrivateRecipeDetailPage({ recipe }: {recipe: Recipe}) {
+export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
   return <UserPrivateRecipeDetail recipe={recipe} />
 }
 
@@ -31,6 +31,10 @@ export async function getServerSideProps({ params }: ServerSideProps) {
     }
   };
 }
+
+type Props = {
+  recipe: Recipe;
+};
 
 type ServerSideProps = {
   params: {

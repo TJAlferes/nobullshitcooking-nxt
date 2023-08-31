@@ -4,7 +4,7 @@ import { endpoint }    from '../../../config/api';
 import RecipeDetail    from '../../../modules/recipe/detail';
 import type { Recipe } from '../../../modules/recipe/detail';
 
-export default function RecipeDetailPage({ recipe }: {recipe: Recipe}) {
+export default function RecipeDetailPage({ recipe }: Props) {
   return <RecipeDetail recipe={recipe} />;
 }
 
@@ -46,6 +46,10 @@ export async function getStaticProps({ params }: StaticProps) {
     }
   };
 }
+
+type Props = {
+  recipe: Recipe;
+};
 
 type StaticProps = {
   params: {

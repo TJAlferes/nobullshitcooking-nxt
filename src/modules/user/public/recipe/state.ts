@@ -51,16 +51,21 @@ export type RecipeInfo = {
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
-  //recipeImage:          string | ArrayBuffer | null;
+
+  //recipeImage:          string | ArrayBuffer | null;  // should be only string when given to action creator???
   //recipeFullImage:      File | null;
   //recipeThumbImage:     File | null;
   //recipeTinyImage:      File | null;
+
   //equipmentImage:       string | ArrayBuffer | null;
   //equipmentFullImage:   File | null;
+
   //ingredientsImage:     string | ArrayBuffer | null;
   //ingredientsFullImage: File | null;
+
   //cookingImage:         string | ArrayBuffer | null;
   //cookingFullImage:     File | null;
+
   //video:                string;
 };
 

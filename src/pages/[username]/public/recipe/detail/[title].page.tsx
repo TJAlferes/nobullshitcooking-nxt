@@ -1,17 +1,17 @@
 import axios                   from 'axios';
 
 import { endpoint }           from '../../../../../config/api';
-import PublicUserRecipeDetail from '../../../../../modules/user/public/recipe/detail';
 import type { Recipe }        from '../../../../../modules/shared/types';
+import PublicUserRecipeDetail from '../../../../../modules/user/public/recipe/detail';
 
-export default function PublicUserRecipeDetailPage({ recipe }: {recipe: Recipe}) {
+export default function PublicUserRecipeDetailPage({ recipe }: Props) {
   return <PublicUserRecipeDetail recipe={recipe} />
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const response = await axios.get(
     `${endpoint}/user/public/recipe/${params.username}/${params.title}`
-  );  // public user recipe
+  );
 
   return {
     props: {
@@ -19,6 +19,10 @@ export async function getServerSideProps({ params }: ServerSideProps) {
     }
   };
 }
+
+type Props = {
+  recipe: Recipe;
+};
 
 type ServerSideProps = {
   params: {

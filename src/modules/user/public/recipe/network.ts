@@ -52,7 +52,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
       } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe'},  // 'public-recipe' ???
+        {subfolder: 'public/recipe/'},
         {withCredentials: true}
       );
       
@@ -68,7 +68,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.put],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-equipment'},
+        {subfolder: 'public/recipe-equipment/'},
         {withCredentials: true}
       );
 
@@ -82,7 +82,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-ingredients'},
+        {subfolder: 'public/recipe-ingredients/'},
         {withCredentials: true}
       );
 
@@ -96,7 +96,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-cooking'},
+        {subfolder: 'public/recipe-cooking/'},
         {withCredentials: true}
       );
 
@@ -179,7 +179,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
       } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe'},
+        {subfolder: 'public/recipe/'},
         {withCredentials: true}
       );
 
@@ -195,7 +195,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-equipment'},
+        {subfolder: 'public/recipe-equipment/'},
         {withCredentials: true}
       );
 
@@ -209,7 +209,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-ingredients'},
+        {subfolder: 'public/recipe-ingredients/'},
         {withCredentials: true}
       );
 
@@ -223,7 +223,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
       const { data: { fullName, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'recipe-cooking'},
+        {subfolder: 'public/recipe-cooking/'},
         {withCredentials: true}
       );
 

@@ -1,7 +1,5 @@
-import axios from 'axios';
 import Link  from 'next/link';
 
-import { endpoint }      from '../../../../../config/api';
 import { LoaderSpinner } from '../../../../shared/LoaderSpinner';
 import type { Recipe }   from '../../../../shared/types';
 
@@ -118,34 +116,3 @@ export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
     </div>
   );
 }
-
-export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.post(
-    `${endpoint}/user/recipe/private/one`,
-    {username: params.username, title: params.title},
-    {withCredentials: true}
-  );  // private user recipe
-
-  if (response.status === 401) {
-    return {
-      props: {},
-      redirect: {
-        permanent: false,
-        destination: "/login"
-      }
-    };
-  }
-
-  return {
-    props: {
-      recipe: response.data
-    }
-  };
-}
-
-type ServerSideProps = {
-  params: {
-    username: string;
-    title:    string;
-  };
-};

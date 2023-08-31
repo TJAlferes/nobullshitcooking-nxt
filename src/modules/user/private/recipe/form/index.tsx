@@ -10,7 +10,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { endpoint }                                 from '../../../../../config/api';
 import { useTypedSelector as useSelector }          from '../../../../../redux';
 import { validRecipeInfo }                          from '../../../../recipe/form/validation';
-import { NOBSC_USER_ID, UNKNOWN_USER_ID }           from '../../../../shared/constants';
 import { LoaderButton }                             from '../../../../shared/LoaderButton';
 import { getCroppedImage }                          from '../../../../shared/getCroppedImage';
 import { createPrivateRecipe, updatePrivateRecipe } from '../state';

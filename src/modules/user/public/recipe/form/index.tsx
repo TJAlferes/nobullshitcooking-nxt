@@ -10,7 +10,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { endpoint }                               from '../../../../../config/api';
 import { useTypedSelector as useSelector }        from '../../../../../redux';
 import { validRecipeInfo }                        from '../../../../recipe/form/validation';
-import { NOBSC_USER_ID, UNKNOWN_USER_ID }         from '../../../../shared/constants';
 import { LoaderButton }                           from '../../../../shared/LoaderButton';
 import { getCroppedImage }                        from '../../../../shared/getCroppedImage';
 import { createPublicRecipe, updatePublicRecipe } from '../state';
@@ -292,6 +291,7 @@ export default function UserPublicRecipeForm() {
 
   const makeEquipmentCrops = async (crop: Crop) => {
     if (!equipmentImageRef.current) return;
+    // TO DO: 560 by 344 px for full ???
     const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop);
     if (!full) return;
     setEquipmentFullCrop(full.preview);
