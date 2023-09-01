@@ -7,7 +7,7 @@ import { LoaderSpinner }  from '../../shared/LoaderSpinner';
 import { saveRecipe }     from '../../user/private/saved-recipe/state';
 import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
-export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
+export default function RecipeDetail({ recipe }: Props) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
@@ -15,7 +15,7 @@ export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
   const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const message             = useSelector(state => state.system.message);
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const authname            = useSelector(state => state.authentication.authname);
 
   const [ feedback,  setFeedback ]  = useState("");
   const [ loading,   setLoading ]   = useState(false);
@@ -55,7 +55,7 @@ export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
   }, [message]);
 
   const favorite = () => {
-    if (!userIsAuthenticated) return;
+    if (!authname) return;
     if (favorited) return;
     setFavorited(true);
     setLoading(true);
@@ -63,7 +63,7 @@ export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
   };
 
   const save = () => {
-    if (!userIsAuthenticated) return;
+    if (!authname) return;
     if (saved) return;
     setSaved(true);
     setLoading(true);
@@ -84,7 +84,7 @@ export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
         <div className="save-area">
           {
             (
-              userIsAuthenticated
+              authname
               && !my_private_recipes.find(r => r.recipe_id === recipe_id)
               && !my_public_recipes.find(r => r.recipe_id === recipe_id)
             )
@@ -210,15 +210,16 @@ export default function RecipeDetail({ recipe }: {recipe: Recipe}) {
   );
 }
 
-// TO DO: move types to one location
+type Props = {
+  recipe: RecipeDetailView;
+};
 
-export interface Recipe {
+export type RecipeDetailView = {
   recipe_id:         string;
   recipe_type_id:    number;
   cuisine_id:        number;
   author_id:         string;  // should this be exposed??? use author (username) instead?
   owner_id:          string;  // should this be exposed??? use owner (username) instead?
-
   title:             string;
   recipe_type_name:  string;
   cuisine_name:      string;
@@ -228,37 +229,13 @@ export interface Recipe {
   active_time:       string;
   total_time:        string;
   directions:        string;
-
   image_url:         string;
   recipe_image:      string;
   equipment_image:   string;
   ingredients_image: string;
   cooking_image:     string;
-  //video:             string;
-
   required_methods:     RequiredMethod[];
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
-}
-
-type RequiredMethod = {
-  method_name: string;
-};
-
-type RequiredEquipment = {
-  amount?:        number;
-  equipment_name: string;
-};
-
-type RequiredIngredient = {
-  amount?:         number;
-  unit_name?:      string;
-  ingredient_name: string;
-};
-
-type RequiredSubrecipe = {
-  amount?:         number;
-  unit_name?:      string;
-  subrecipe_title: string;
 };

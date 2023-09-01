@@ -1,9 +1,9 @@
 import Link  from 'next/link';
 
-import { LoaderSpinner } from '../../../../shared/LoaderSpinner';
-import type { Recipe }   from '../../../../shared/types';
+import type { RecipeDetailView } from '../../../../recipe/detail';
+import { LoaderSpinner }         from '../../../../shared/LoaderSpinner';
 
-export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
+export default function UserPrivateRecipeDetail({ recipe }: Props) {
   //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
   const {
     recipe_id,
@@ -116,3 +116,7 @@ export default function UserPrivateRecipeDetail({ recipe }: {recipe: Recipe}) {
     </div>
   );
 }
+
+type Props = {
+  recipe: RecipeDetailView;
+};

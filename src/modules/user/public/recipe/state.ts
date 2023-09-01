@@ -1,10 +1,12 @@
+import { RecipeUpload, RecipeUpdateUpload } from "../../../shared/types";
 
 
-export const createPublicRecipe = (recipeInfo: RecipeInfo) =>
-  ({type: CREATE_PUBLIC_RECIPE, recipeInfo});
 
-export const updatePublicRecipe = (recipeInfo: RecipeUpdateInfo) =>
-  ({type: UPDATE_PUBLIC_RECIPE, recipeInfo});
+export const createPublicRecipe = (recipe_upload: RecipeUpload) =>
+  ({type: CREATE_PUBLIC_RECIPE, recipe_upload});
+
+export const updatePublicRecipe = (recipe_update_upload: RecipeUpdateUpload) =>
+  ({type: UPDATE_PUBLIC_RECIPE, recipe_update_upload});
 
 export const disownPublicRecipe = (recipe_id: string) =>
   ({type: DISOWN_PUBLIC_RECIPE, recipe_id});
@@ -24,71 +26,16 @@ const {
 } = actionTypes;
 
 export type CreatePublicRecipe = {
-  type:        typeof actionTypes.CREATE_PUBLIC_RECIPE;
-  recipe_info: RecipeInfo;
+  type:          typeof actionTypes.CREATE_PUBLIC_RECIPE;
+  recipe_upload: RecipeUpload;
 };
 
 export type UpdatePublicRecipe = {
-  type:        typeof actionTypes.UPDATE_PUBLIC_RECIPE;
-  recipe_info: RecipeUpdateInfo;
+  type:                 typeof actionTypes.UPDATE_PUBLIC_RECIPE;
+  recipe_update_upload: RecipeUpdateUpload;
 };
 
 export type DisownPublicRecipe = {
   type:      typeof actionTypes.DISOWN_PUBLIC_RECIPE;
   recipe_id: string;
-};
-
-// TO DO: move shared types to one location
-
-export type RecipeInfo = {
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  title:                string;
-  description:          string;
-  directions:           string;
-  required_methods:     RequiredMethod[];
-  required_equipment:   RequiredEquipment[];
-  required_ingredients: RequiredIngredient[];
-  required_subrecipes:  RequiredSubrecipe[];
-  recipeImage:          string | ArrayBuffer | null;  // should be only string when given to action creator???
-  recipeFullImage:      File | null;
-  recipeThumbImage:     File | null;
-  recipeTinyImage:      File | null;
-  equipmentImage:       string | ArrayBuffer | null;
-  equipmentFullImage:   File | null;
-  ingredientsImage:     string | ArrayBuffer | null;
-  ingredientsFullImage: File | null;
-  cookingImage:         string | ArrayBuffer | null;
-  cookingFullImage:     File | null;
-  //video:                string;
-};
-
-export type RecipeUpdateInfo = RecipeInfo & {
-  recipe_id:            string;
-  recipePrevImage:      string;
-  equipmentPrevImage:   string;
-  ingredientsPrevImage: string;
-  cookingPrevImage:     string;
-  //prevVideo:            string;
-};
-
-export type RequiredMethod = {
-  method_id: number;
-};
-
-export type RequiredEquipment = {
-  amount?:      number;
-  equipment_id: string;
-};
-
-export type RequiredIngredient = {
-  amount?:       number;
-  unit_id?:      number;
-  ingredient_id: string;
-};
-
-export type RequiredSubrecipe = {
-  amount?:      number;
-  unit_id?:     number;
-  subrecipe_id: string;
 };

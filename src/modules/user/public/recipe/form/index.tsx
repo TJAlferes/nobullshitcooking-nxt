@@ -9,7 +9,20 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }                               from '../../../../../config/api';
 import { useTypedSelector as useSelector }        from '../../../../../redux';
-import { validRecipeInfo }                        from '../../../../recipe/form/validation';
+import {
+  ToolTip,
+  pristineEquipmentRow,
+  pristineIngredientRow,
+  pristineSubrecipeRow,
+  initialCrop,
+  commonReactCropProps,
+  ExistingRecipeToEdit,
+  Methods,
+  EquipmentRow,
+  IngredientRow,
+  SubrecipeRow,
+  isValidRecipeUpload
+} from '../../../../recipe/form';
 import { LoaderButton }                           from '../../../../shared/LoaderButton';
 import { getCroppedImage }                        from '../../../../shared/getCroppedImage';
 import { createPublicRecipe, updatePublicRecipe } from '../state';
@@ -57,41 +70,45 @@ export default function UserPublicRecipeForm() {
   const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([pristineIngredientRow]);
   const [ subrecipeRows,  setSubrecipeRows ]  = useState<SubrecipeRow[]>([]);
 
+  const [ previousRecipeImage, setPreviousRecipeImage ] = useState("default");
+  const [ recipeMediumImage,   setRecipeMediumImage ]   = useState<File | null>(null);
+  const [ recipeThumbImage,    setRecipeThumbImage ]    = useState<File | null>(null);
+  const [ recipeTinyImage,     setRecipeTinyImage ]     = useState<File | null>(null);
+  const [ recipeImageCaption,  setRecipeImageCaption ]  = useState("");
+
+  const [ previousEquipmentImage, setPreviousEquipmentImage ] = useState("default");
+  const [ equipmentMediumImage,   setEquipmentMediumImage ]   = useState<File | null>(null);
+  const [ equipmentImageCaption,  setEquipmentImageCaption ]  = useState("");
+
+  const [ previousIngredientsImage, setPreviousIngredientsImage ] = useState("default");
+  const [ ingredientsMediumImage,   setIngredientsMediumImage ]   = useState<File | null>(null);
+  const [ ingredientsImageCaption,  setIngredientsImageCaption ]  = useState("");
+
+  const [ previousCookingImage, setPreviousCookingImage ] = useState("default");
+  const [ cookingMediumImage,   setCookingMediumImage ]   = useState<File | null>(null);
+  const [ cookingImageCaption,  setCookingImageCaption ]  = useState("");
+
   const recipeImageRef = useRef<HTMLImageElement>();
-  const [ recipePrevImage,  setRecipePrevImage ] =  useState("nobsc-recipe-default");
-  const [ recipeImage,      setRecipeImage ] =      useState<Image>(null);
-  const [ recipeFullImage,  setRecipeFullImage ] =  useState<File | null>(null);
-  const [ recipeThumbImage, setRecipeThumbImage ] = useState<File | null>(null);
-  const [ recipeTinyImage,  setRecipeTinyImage ] =  useState<File | null>(null);
-  const [ recipeCrop,       setRecipeCrop ] =       useState<Crop>(initialCrop);
-  const [ recipeFullCrop,   setRecipeFullCrop ] =   useState("");
-  const [ recipeThumbCrop,  setRecipeThumbCrop ] =  useState("");
-  const [ recipeTinyCrop,   setRecipeTinyCrop ] =   useState("");
-  const [ recipeImageCaption, setRecipeImageCaption ] = useState("");
+  const [ recipeImage,              setRecipeImage ]              = useState<Image>(null);
+  const [ recipeCrop,               setRecipeCrop ]               = useState<Crop>(initialCrop);
+  const [ recipeMediumImagePreview, setRecipeMediumImagePreview ] = useState("");
+  const [ recipeThumbImagePreview,  setRecipeThumbImagePreview ]  = useState("");
+  const [ recipeTinyImagePreview,   setRecipeTinyImagePreview ]   = useState("");
 
   const equipmentImageRef = useRef<HTMLImageElement>();
-  const [ equipmentPrevImage, setEquipmentPrevImage ] = useState("nobsc-recipe-equipment-default");
-  const [ equipmentImage,     setEquipmentImage ] =     useState<Image>(null);
-  const [ equipmentFullImage, setEquipmentFullImage ] = useState<File | null>(null);
-  const [ equipmentCrop,      setEquipmentCrop ] =      useState<Crop>(initialCrop);
-  const [ equipmentFullCrop,  setEquipmentFullCrop ] =  useState("");
-  const [ equipmentImageCaption, setEquipmentImageCaption ] = useState("");
+  const [ equipmentImage,              setEquipmentImage ]              = useState<Image>(null);
+  const [ equipmentCrop,               setEquipmentCrop ]               = useState<Crop>(initialCrop);
+  const [ equipmentMediumImagePreview, setEquipmentMediumImagePreview ] = useState("");
 
   const ingredientsImageRef = useRef<HTMLImageElement>();
-  const [ ingredientsPrevImage, setIngredientsPrevImage ] = useState("nobsc-recipe-ingredients-default");
-  const [ ingredientsImage,     setIngredientsImage ] =     useState<Image>(null);
-  const [ ingredientsFullImage, setIngredientsFullImage ] = useState<File | null>(null);
-  const [ ingredientsCrop,      setIngredientsCrop ] =      useState<Crop>(initialCrop);
-  const [ ingredientsFullCrop,  setIngredientsFullCrop ] =  useState("");
-  const [ ingredientsImageCaption, setIngredientsImageCaption ] = useState("");
+  const [ ingredientsImage,              setIngredientsImage ]              = useState<Image>(null);
+  const [ ingredientsCrop,               setIngredientsCrop ]               = useState<Crop>(initialCrop);
+  const [ ingredientsMediumImagePreview, setIngredientsMediumImagePreview ] = useState("");
 
   const cookingImageRef = useRef<HTMLImageElement>();
-  const [ cookingPrevImage, setCookingPrevImage ] = useState("nobsc-recipe-cooking-default");
-  const [ cookingImage,     setCookingImage ] =     useState<Image>(null);
-  const [ cookingFullImage, setCookingFullImage ] = useState<File | null>(null);
-  const [ cookingCrop,      setCookingCrop ] =      useState<Crop>(initialCrop);
-  const [ cookingFullCrop,  setCookingFullCrop ] =  useState("");
-  const [ cookingImageCaption, setCookingImageCaption ] = useState("");
+  const [ cookingImage,              setCookingImage ]              = useState<Image>(null);
+  const [ cookingCrop,               setCookingCrop ]               = useState<Crop>(initialCrop);
+  const [ cookingMediumImagePreview, setCookingMediumImagePreview ] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -148,10 +165,14 @@ export default function UserPublicRecipeForm() {
       setEquipmentRows(required_equipment.map(r => ({...r, key: uuid()})));
       setIngredientRows(required_ingredients.map(r => ({...r, key: uuid()})));
       setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuid()})));
-      setRecipePrevImage(recipe_image);
-      setEquipmentPrevImage(equipment_image);
-      setIngredientsPrevImage(ingredients_image);
-      setCookingPrevImage(cooking_image);
+      setPreviousRecipeImage(recipe_image.image_url);
+      setPreviousEquipmentImage(equipment_image.image_url);
+      setPreviousIngredientsImage(ingredients_image.image_url);
+      setPreviousCookingImage(cooking_image.image_url);
+      setRecipeImageCaption(recipe_image.caption);
+      setEquipmentImageCaption(equipment_image.caption);
+      setIngredientsImageCaption(ingredients_image.caption);
+      setCookingImageCaption(cooking_image.caption);
 
       setLoading(false);
     }
@@ -197,15 +218,23 @@ export default function UserPublicRecipeForm() {
   const changeTitle       = (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
   const changeDirections  = (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
-  const changeRecipeImageCaption = (e: SyntheticEvent) => setRecipeImageCaption((e.target as HTMLInputElement).value);
-  const changeEquipmentImageCaption = (e: SyntheticEvent) => setEquipmentImageCaption((e.target as HTMLInputElement).value);
-  const changeIngredientsImageCaption = (e: SyntheticEvent) => setIngredientsImageCaption((e.target as HTMLInputElement).value);
-  const changeCookingImageCaption = (e: SyntheticEvent) => setCookingImageCaption((e.target as HTMLInputElement).value);
+
+  const changeRecipeImageCaption = (e: SyntheticEvent) =>
+    setRecipeImageCaption((e.target as HTMLInputElement).value);
+
+  const changeEquipmentImageCaption = (e: SyntheticEvent) =>
+    setEquipmentImageCaption((e.target as HTMLInputElement).value);
+
+  const changeIngredientsImageCaption = (e: SyntheticEvent) =>
+    setIngredientsImageCaption((e.target as HTMLInputElement).value);
+
+  const changeCookingImageCaption = (e: SyntheticEvent) =>
+    setCookingImageCaption((e.target as HTMLInputElement).value);
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
-    setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
-  };  // TO DO: FIX
+    setUsedMethods(prevState => ({...prevState, [id]: !prevState[parseInt(id)]}));
+  };
 
   const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(equipmentRows);
@@ -216,7 +245,7 @@ export default function UserPublicRecipeForm() {
     if (!obj) return;
     obj[name] = value;
     setEquipmentRows(newRows);
-  };  // TO DO: FIX
+  };
 
   const changeIngredientRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(ingredientRows);
@@ -227,7 +256,7 @@ export default function UserPublicRecipeForm() {
     if (!obj) return;
     obj[name] = value;
     setIngredientRows(newRows);
-  };  // TO DO: FIX
+  };
 
   const changeSubrecipeRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(subrecipeRows);
@@ -238,7 +267,7 @@ export default function UserPublicRecipeForm() {
     if (!obj) return;
     obj[name] = value;
     setSubrecipeRows(newRows);
-  };  // TO DO: FIX
+  };
 
   const addEquipmentRow  = () =>
     setEquipmentRows([...equipmentRows, pristineEquipmentRow]);
@@ -291,39 +320,38 @@ export default function UserPublicRecipeForm() {
   
   const makeCookingCrops = async (crop: Crop) => {
     if (!cookingImageRef.current) return;
-    const full = await getCroppedImage(280, 172, cookingImageRef.current, crop);
+    const full = await getCroppedImage(560, 346, cookingImageRef.current, crop);
     if (!full) return;
-    setCookingFullCrop(full.preview);
-    setCookingFullImage(full.final);
+    setCookingMediumImagePreview(full.preview);
+    setCookingMediumImage(full.final);
   };
 
   const makeEquipmentCrops = async (crop: Crop) => {
     if (!equipmentImageRef.current) return;
-    // TO DO: 560 by 344 px also???
-    const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop);
+    const full = await getCroppedImage(560, 346, equipmentImageRef.current, crop);  // was 280, 172
     if (!full) return;
-    setEquipmentFullCrop(full.preview);
-    setEquipmentFullImage(full.final);
+    setEquipmentMediumImagePreview(full.preview);
+    setEquipmentMediumImage(full.final);
   };
 
   const makeIngredientsCrops = async (crop: Crop) => {
     if (!ingredientsImageRef.current) return;
-    const full = await getCroppedImage(280, 172, ingredientsImageRef.current, crop);
+    const full = await getCroppedImage(560, 346, ingredientsImageRef.current, crop);
     if (!full) return;
-    setIngredientsFullCrop(full.preview);
-    setIngredientsFullImage(full.final);
+    setIngredientsMediumImagePreview(full.preview);
+    setIngredientsMediumImage(full.final);
   };
 
   const makeRecipeCrops = async (crop: Crop) => {
     if (!recipeImageRef.current) return;
-    const full =  await getCroppedImage(280, 172, recipeImageRef.current, crop);
+    const full =  await getCroppedImage(560, 346, recipeImageRef.current, crop);
     const thumb = await getCroppedImage(100, 62,  recipeImageRef.current, crop);
     const tiny =  await getCroppedImage(28,  18,  recipeImageRef.current, crop);
     if (!full || !thumb || !tiny) return;
-    setRecipeFullCrop(full.preview);
-    setRecipeThumbCrop(thumb.preview);
-    setRecipeTinyCrop(tiny.preview);
-    setRecipeFullImage(full.final);
+    setRecipeMediumImagePreview(full.preview);
+    setRecipeThumbImagePreview(thumb.preview);
+    setRecipeTinyImagePreview(tiny.preview);
+    setRecipeMediumImage(full.final);
     setRecipeThumbImage(thumb.final);
     setRecipeTinyImage(tiny.final);
   };
@@ -358,29 +386,29 @@ export default function UserPublicRecipeForm() {
   };
 
   const cancelCookingImage = () => {
-    setCookingFullCrop("");
+    setCookingMediumImagePreview("");
     setCookingImage(null);
-    setCookingFullImage(null);
+    setCookingMediumImage(null);
   };
 
   const cancelEquipmentImage = () => {
-    setEquipmentFullCrop("");
+    setEquipmentMediumImagePreview("");
     setEquipmentImage(null);
-    setEquipmentFullImage(null);
+    setEquipmentMediumImage(null);
   };
 
   const cancelIngredientsImage = () => {
-    setIngredientsFullCrop("");
+    setIngredientsMediumImagePreview("");
     setIngredientsImage(null);
-    setIngredientsFullImage(null);
+    setIngredientsMediumImage(null);
   };
 
   const cancelRecipeImage = () => {
-    setRecipeFullCrop("");
-    setRecipeThumbCrop("");
-    setRecipeTinyCrop("");
+    setRecipeMediumImagePreview("");
+    setRecipeThumbImagePreview("");
+    setRecipeTinyImagePreview("");
     setRecipeImage(null);
-    setRecipeFullImage(null);
+    setRecipeMediumImage(null);
     setRecipeThumbImage(null);
     setRecipeTinyImage(null);
   };
@@ -415,7 +443,7 @@ export default function UserPublicRecipeForm() {
       subrecipe_id: s.subrecipe_id
     }));
 
-    if (!validRecipeInfo({
+    if (!isValidRecipeUpload({
       recipe_type_id,
       cuisine_id,
       title,
@@ -438,27 +466,27 @@ export default function UserPublicRecipeForm() {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
-      recipe_image_info: {
+      recipe_image: {
         name:    "default",
         caption: recipeImageCaption,
-        medium:  recipeFullImage,
+        medium:  recipeMediumImage,
         thumb:   recipeThumbImage,
         tiny:    recipeTinyImage
       },
-      equipment_image_info: {
+      equipment_image: {
         name:    "default",
         caption: equipmentImageCaption,
-        medium:  equipmentFullImage
+        medium:  equipmentMediumImage
       },
-      ingredients_image_info: {
+      ingredients_image: {
         name:    "default",
         caption: ingredientsImageCaption,
-        medium:  ingredientsFullImage
+        medium:  ingredientsMediumImage
       },
-      cooking_image_info: {
+      cooking_image: {
         name:    "default",
         caption: cookingImageCaption,
-        medium:  cookingFullImage
+        medium:  cookingMediumImage
       }
     };
 
@@ -470,10 +498,10 @@ export default function UserPublicRecipeForm() {
       const recipeUpdateInfo = {
         ...recipeInfo,
         recipe_id,
-        recipePrevImage,
-        equipmentPrevImage,
-        ingredientsPrevImage,
-        cookingPrevImage
+        previousRecipeImage,
+        previousEquipmentImage,
+        previousIngredientsImage,
+        previousCookingImage
       };
 
       dispatch(updatePublicRecipe(recipeUpdateInfo));
@@ -810,7 +838,7 @@ export default function UserPublicRecipeForm() {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : recipePrevImage && <img src={`${url}/${recipePrevImage}`} />
+                : previousRecipeImage && <img src={`${url}/${previousRecipeImage}`} />
               }
 
               <h4>Change</h4>
@@ -839,17 +867,17 @@ export default function UserPublicRecipeForm() {
               <div className="crops">
                 <div className="crop-full-outer">
                   <span>Full Size: </span>
-                  <img className="crop-full" src={recipeFullCrop} />
+                  <img className="crop-full" src={recipeMediumImagePreview} />
                 </div>
 
                 <div className="crop-thumb-outer">
                   <span>Thumb Size: </span>
-                  <img className="crop-thumb" src={recipeThumbCrop} />
+                  <img className="crop-thumb" src={recipeThumbImagePreview} />
                 </div>
 
                 <div className="crop-tiny-outer">
                   <span>Tiny Size: </span>
-                  <img className="crop-tiny" src={recipeTinyCrop} />
+                  <img className="crop-tiny" src={recipeTinyImagePreview} />
                 </div>
               </div>
 
@@ -881,7 +909,7 @@ export default function UserPublicRecipeForm() {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : equipmentPrevImage && <img src={`${url}-equipment/${equipmentPrevImage}`} />
+                : previousEquipmentImage && <img src={`${url}-equipment/${previousEquipmentImage}`} />
               }
 
               <h4>Change</h4>
@@ -910,7 +938,7 @@ export default function UserPublicRecipeForm() {
               <div className="crops">
                 <div className="crop-full-outer">
                   <span>Full Size: </span>
-                  <img className="crop-full" src={equipmentFullCrop} />
+                  <img className="crop-full" src={equipmentMediumImagePreview} />
                 </div>
               </div>
 
@@ -942,7 +970,7 @@ export default function UserPublicRecipeForm() {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : ingredientsPrevImage && <img src={`${url}-ingredients/${ingredientsPrevImage}`} />
+                : previousIngredientsImage && <img src={`${url}-ingredients/${previousIngredientsImage}`} />
               }
 
               <h4>Change</h4>
@@ -971,7 +999,7 @@ export default function UserPublicRecipeForm() {
               <div className="crops">
                 <div className="crop-full-outer">
                   <span>Full Size: </span>
-                  <img className="crop-full" src={ingredientsFullCrop} />
+                  <img className="crop-full" src={ingredientsMediumImagePreview} />
                 </div>
               </div>
 
@@ -1003,7 +1031,7 @@ export default function UserPublicRecipeForm() {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : cookingPrevImage && <img src={`${url}-cooking/${cookingPrevImage}`} />
+                : previousCookingImage && <img src={`${url}-cooking/${previousCookingImage}`} />
               }
   
               <h4>Change</h4>
@@ -1032,7 +1060,7 @@ export default function UserPublicRecipeForm() {
               <div className="crops">
                 <div className="crop-full-outer">
                   <span>Full Size: </span>
-                  <img className="crop-full" src={cookingFullCrop} />
+                  <img className="crop-full" src={cookingMediumImagePreview} />
                 </div>
               </div>
 
@@ -1076,60 +1104,6 @@ export default function UserPublicRecipeForm() {
   );
 }
 
-function ToolTip() {
-  return (
-    <span className="crop-tool-tip">
-      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
-    </span>
-  );
-}
-
-const pristineEquipmentRow = {
-  key:               uuid(),
-  amount:            0,
-  equipment_type_id: 0,
-  equipment_id:      ""
-};
-
-const pristineIngredientRow = {
-  key:                uuid(),
-  amount:             0,
-  unit_id:            0,
-  ingredient_type_id: 0,
-  ingredient_id:      ""
-};
-
-const pristineSubrecipeRow = {
-  key:            uuid(),
-  amount:         0,
-  unit_id:        0,
-  recipe_type_id: 0,
-  cuisine_id:     0,
-  subrecipe_id:   ""
-};
-
-const initialCrop: Crop = {
-  unit:   'px',
-  x:      25,
-  y:      25,
-  width:  50,
-  height: 50
-};  // TO DO: change to NOBSC images ratio
-
-const commonReactCropProps = {
-  aspect:    1,
-  className: "crop-tool",
-  disabled:  true,
-  locked:    true,
-  maxHeight: 172,
-  maxWidth:  280,
-  minHeight: 172,
-  minWidth:  280,
-  style: {
-    minHeight: "300px"
-  }
-};
-
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 // TO DO: move types to one location
@@ -1139,73 +1113,3 @@ type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type Image = string | ArrayBuffer | null;
-
-export type ExistingRecipeToEdit = {
-  recipe_id:            string;
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  owner_id:             string;
-  title:                string;
-  description:          string;
-  directions:           string;
-  required_methods:     ExistingRequiredMethod[];
-  required_equipment:   ExistingRequiredEquipment[];
-  required_ingredients: ExistingRequiredIngredient[];
-  required_subrecipes:  ExistingRequiredSubrecipe[];
-  recipe_image:         string;
-  equipment_image:      string;
-  ingredients_image:    string;
-  cooking_image:        string;
-};
-
-export type RequiredMethod = {
-  method_id: number;
-};
-
-export type RequiredEquipment = {
-  amount:       number;
-  equipment_id: string;
-};
-
-export type RequiredIngredient = {
-  amount:        number;
-  unit_id:       number;
-  ingredient_id: string;
-};
-
-export type RequiredSubrecipe = {
-  amount:       number;
-  unit_id:      number;
-  subrecipe_id: string;
-};
-
-export type ExistingRequiredMethod = RequiredMethod;
-
-export type ExistingRequiredEquipment = RequiredEquipment & {
-  equipment_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type ExistingRequiredIngredient = RequiredIngredient & {
-  ingredient_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type ExistingRequiredSubrecipe = RequiredSubrecipe & {
-  recipe_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-  cuisine_id:     number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type Methods = {
-  [key: number]: boolean;
-};
-
-export type EquipmentRow = ExistingRequiredEquipment & {
-  key: string;
-};
-
-export type IngredientRow = ExistingRequiredIngredient & {
-  key: string;
-};
-
-export type SubrecipeRow = ExistingRequiredSubrecipe & {
-  key: string;
-};

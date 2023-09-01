@@ -28,61 +28,57 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
     required_equipment,
     required_ingredients,
     required_subrecipes,
-    recipe_image_info,
-    equipment_image_info,
-    ingredients_image_info,
-    cooking_image_info
+    recipe_image,
+    equipment_image,
+    ingredients_image,
+    cooking_image
   } = action.recipe_info;
 
   try {
-    if (recipe_image_info.medium && recipe_image_info.thumb && recipe_image_info.tiny) {
-      const {
-        data: {
-          filename, fullSignature, thumbSignature, tinySignature
-        }
-      } = yield call(
+    if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
+      const { data: { filename, fullSignature, thumbSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe/'},
         {withCredentials: true}
       );
-      yield call(uploadImageToAWSS3, fullSignature, recipe_image_info.medium);
-      yield call(uploadImageToAWSS3, thumbSignature, recipe_image_info.thumb);
-      yield call(uploadImageToAWSS3, tinySignature, recipe_image_info.tiny);
-      recipe_image_info.name = filename;
+      yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
+      yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
+      yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
+      recipe_image.name = filename;
     }
 
-    if (equipment_image_info.medium) {
+    if (equipment_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.put],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-equipment/'},
         {withCredentials: true}
       );
-      yield call(uploadImageToAWSS3, fullSignature, equipment_image_info.medium);
-      equipment_image_info.name = filename;
+      yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
+      equipment_image.name = filename;
     }
 
-    if (ingredients_image_info.medium) {
+    if (ingredients_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-ingredients/'},
         {withCredentials: true}
       );
-      yield call(uploadImageToAWSS3, fullSignature, ingredients_image_info.medium);
-      ingredients_image_info.name = filename;
+      yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
+      ingredients_image.name = filename;
     }
 
-    if (cooking_image_info.medium) {
+    if (cooking_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-cooking/'},
         {withCredentials: true}
       );
-      yield call(uploadImageToAWSS3, fullSignature, cooking_image_info.medium);
-      cooking_image_info.name = filename;
+      yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
+      cooking_image.name = filename;
     }
 
     const { data } = yield call(
@@ -99,10 +95,10 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
           required_equipment,
           required_ingredients,
           required_subrecipes,
-          recipe_image_info,
-          equipment_image_info,
-          ingredients_image_info,
-          cooking_image_info
+          recipe_image,
+          equipment_image,
+          ingredients_image,
+          cooking_image
         }
       },
       {withCredentials: true}

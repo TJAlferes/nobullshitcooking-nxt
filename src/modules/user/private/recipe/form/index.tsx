@@ -9,7 +9,20 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }                                 from '../../../../../config/api';
 import { useTypedSelector as useSelector }          from '../../../../../redux';
-import { validRecipeInfo }                          from '../../../../recipe/form/validation';
+import {
+  ToolTip,
+  pristineEquipmentRow,
+  pristineIngredientRow,
+  pristineSubrecipeRow,
+  initialCrop,
+  commonReactCropProps,
+  ExistingRecipeToEdit,
+  Methods,
+  EquipmentRow,
+  IngredientRow,
+  SubrecipeRow,
+  isValidRecipeUpload
+} from '../../../../recipe/form';
 import { LoaderButton }                             from '../../../../shared/LoaderButton';
 import { getCroppedImage }                          from '../../../../shared/getCroppedImage';
 import { createPrivateRecipe, updatePrivateRecipe } from '../state';
@@ -199,7 +212,7 @@ export default function UserPrivateRecipeForm() {
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
-    setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
+    setUsedMethods(prevState => ({...prevState, [id]: !prevState[parseInt(id)]}));
   };
 
   const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
@@ -412,7 +425,7 @@ export default function UserPrivateRecipeForm() {
       subrecipe_id: s.subrecipe_id
     }));
 
-    if (!validRecipeInfo({
+    if (!isValidRecipeUpload({
       recipe_type_id,
       cuisine_id,
       title,
@@ -1021,60 +1034,6 @@ export default function UserPrivateRecipeForm() {
   );
 }
 
-function ToolTip() {
-  return (
-    <span className="crop-tool-tip">
-      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
-    </span>
-  );
-}
-
-const pristineEquipmentRow = {
-  key:               uuid(),
-  amount:            0,
-  equipment_type_id: 0,
-  equipment_id:      ""
-};
-
-const pristineIngredientRow = {
-  key:                uuid(),
-  amount:             0,
-  unit_id:            0,
-  ingredient_type_id: 0,
-  ingredient_id:      ""
-};
-
-const pristineSubrecipeRow = {
-  key:            uuid(),
-  amount:         0,
-  unit_id:        0,
-  recipe_type_id: 0,
-  cuisine_id:     0,
-  subrecipe_id:   ""
-};
-
-const initialCrop: Crop = {
-  unit:   'px',
-  x:      25,
-  y:      25,
-  width:  50,
-  height: 50
-};  // TO DO: change to NOBSC images ratio
-
-const commonReactCropProps = {
-  aspect:    1,
-  className: "crop-tool",
-  disabled:  true,
-  locked:    true,
-  maxHeight: 172,
-  maxWidth:  280,
-  minHeight: 172,
-  minWidth:  280,
-  style: {
-    minHeight: "300px"
-  }
-};
-
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 // TO DO: move types to one location
@@ -1084,73 +1043,3 @@ type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 
 type Image = string | ArrayBuffer | null;
-
-export type ExistingRecipeToEdit = {
-  recipe_id:            string;
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  owner_id:             string;
-  title:                string;
-  description:          string;
-  directions:           string;
-  required_methods:     ExistingRequiredMethod[];
-  required_equipment:   ExistingRequiredEquipment[];
-  required_ingredients: ExistingRequiredIngredient[];
-  required_subrecipes:  ExistingRequiredSubrecipe[];
-  recipe_image:         string;
-  equipment_image:      string;
-  ingredients_image:    string;
-  cooking_image:        string;
-};
-
-export type RequiredMethod = {
-  method_id: number;
-};
-
-export type RequiredEquipment = {
-  amount:       number;
-  equipment_id: string;
-};
-
-export type RequiredIngredient = {
-  amount:        number;
-  unit_id:       number;
-  ingredient_id: string;
-};
-
-export type RequiredSubrecipe = {
-  amount:       number;
-  unit_id:      number;
-  subrecipe_id: string;
-};
-
-export type ExistingRequiredMethod = RequiredMethod;
-
-export type ExistingRequiredEquipment = RequiredEquipment & {
-  equipment_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type ExistingRequiredIngredient = RequiredIngredient & {
-  ingredient_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type ExistingRequiredSubrecipe = RequiredSubrecipe & {
-  recipe_type_id: number;  // (just a filter for nicer UX, not stored in DB)
-  cuisine_id:     number;  // (just a filter for nicer UX, not stored in DB)
-};
-
-export type Methods = {
-  [key: number]: boolean;
-};
-
-export type EquipmentRow = ExistingRequiredEquipment & {
-  key: string;
-};
-
-export type IngredientRow = ExistingRequiredIngredient & {
-  key: string;
-};
-
-export type SubrecipeRow = ExistingRequiredSubrecipe & {
-  key: string;
-};

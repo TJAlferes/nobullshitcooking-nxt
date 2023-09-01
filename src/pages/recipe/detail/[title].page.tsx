@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { endpoint }    from '../../../config/api';
-import RecipeDetail    from '../../../modules/recipe/detail';
-import type { Recipe } from '../../../modules/recipe/detail';
+import { endpoint }              from '../../../config/api';
+import type { RecipeDetailView } from '../../../modules/recipe/detail';
+import RecipeDetail              from '../../../modules/recipe/detail';
 
 export default function RecipeDetailPage({ recipe }: Props) {
   return <RecipeDetail recipe={recipe} />;
@@ -48,7 +48,7 @@ export async function getStaticProps({ params }: StaticProps) {
 }
 
 type Props = {
-  recipe: Recipe;
+  recipe: RecipeDetailView;
 };
 
 type StaticProps = {

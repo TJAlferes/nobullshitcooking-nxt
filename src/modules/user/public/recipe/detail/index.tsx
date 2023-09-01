@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch }         from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../../../redux';
-import { LoaderSpinner }                   from '../../../../shared/LoaderSpinner';
-import type { Recipe }                     from '../../../../shared/types';
-import { saveRecipe }                      from '../../../private/saved-recipe/state';
-import { favoriteRecipe }                  from '../../favorited-recipe/state';
+import type { RecipeDetailView } from '../../../../recipe/detail';
+import { LoaderSpinner }         from '../../../../shared/LoaderSpinner';
+import { saveRecipe }            from '../../../private/saved-recipe/state';
+import { favoriteRecipe }        from '../../favorited-recipe/state';
 
-export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
+export default function UserPublicRecipeDetail({ recipe }: Props) {
   const dispatch = useDispatch();
 
   const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
@@ -211,3 +211,7 @@ export default function UserPublicRecipeDetail({ recipe }: {recipe: Recipe}) {
     </div>
   );
 }
+
+type Props = {
+  recipe: RecipeDetailView;
+};
