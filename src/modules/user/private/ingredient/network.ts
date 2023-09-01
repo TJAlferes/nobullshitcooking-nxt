@@ -29,17 +29,17 @@ export function* createPrivateIngredientWorker(action: CreatePrivateIngredient) 
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+      const { data: { filename, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'ingredient'},
+        {subfolder: 'private/ingredient/'},
         {withCredentials: true}
       );
 
       yield call(uploadImageToAWSS3, fullSignature, fullImage);
       yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
-      image = fullName;
+      image = filename;
     }
     else image = 'nobsc-ingredient-default';
 
@@ -81,17 +81,17 @@ export function* updatePrivateIngredientWorker(action: UpdatePrivateIngredient) 
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+      const { data: { filename, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'ingredient'},
+        {subfolder: 'private/ingredient/'},
         {withCredentials: true}
       );
 
       yield call(uploadImageToAWSS3, fullSignature, fullImage);
       yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
-      image = fullName;
+      image = filename;
     }
     else image = prevImage;
 

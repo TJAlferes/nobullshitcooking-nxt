@@ -67,6 +67,7 @@ export default function UserPublicRecipeForm() {
   const [ recipeFullCrop,   setRecipeFullCrop ] =   useState("");
   const [ recipeThumbCrop,  setRecipeThumbCrop ] =  useState("");
   const [ recipeTinyCrop,   setRecipeTinyCrop ] =   useState("");
+  const [ recipeImageCaption, setRecipeImageCaption ] = useState("");
 
   const equipmentImageRef = useRef<HTMLImageElement>();
   const [ equipmentPrevImage, setEquipmentPrevImage ] = useState("nobsc-recipe-equipment-default");
@@ -74,6 +75,7 @@ export default function UserPublicRecipeForm() {
   const [ equipmentFullImage, setEquipmentFullImage ] = useState<File | null>(null);
   const [ equipmentCrop,      setEquipmentCrop ] =      useState<Crop>(initialCrop);
   const [ equipmentFullCrop,  setEquipmentFullCrop ] =  useState("");
+  const [ equipmentImageCaption, setEquipmentImageCaption ] = useState("");
 
   const ingredientsImageRef = useRef<HTMLImageElement>();
   const [ ingredientsPrevImage, setIngredientsPrevImage ] = useState("nobsc-recipe-ingredients-default");
@@ -81,6 +83,7 @@ export default function UserPublicRecipeForm() {
   const [ ingredientsFullImage, setIngredientsFullImage ] = useState<File | null>(null);
   const [ ingredientsCrop,      setIngredientsCrop ] =      useState<Crop>(initialCrop);
   const [ ingredientsFullCrop,  setIngredientsFullCrop ] =  useState("");
+  const [ ingredientsImageCaption, setIngredientsImageCaption ] = useState("");
 
   const cookingImageRef = useRef<HTMLImageElement>();
   const [ cookingPrevImage, setCookingPrevImage ] = useState("nobsc-recipe-cooking-default");
@@ -88,6 +91,7 @@ export default function UserPublicRecipeForm() {
   const [ cookingFullImage, setCookingFullImage ] = useState<File | null>(null);
   const [ cookingCrop,      setCookingCrop ] =      useState<Crop>(initialCrop);
   const [ cookingFullCrop,  setCookingFullCrop ] =  useState("");
+  const [ cookingImageCaption, setCookingImageCaption ] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -193,11 +197,15 @@ export default function UserPublicRecipeForm() {
   const changeTitle       = (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
   const changeDirections  = (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
+  const changeRecipeImageCaption = (e: SyntheticEvent) => setRecipeImageCaption((e.target as HTMLInputElement).value);
+  const changeEquipmentImageCaption = (e: SyntheticEvent) => setEquipmentImageCaption((e.target as HTMLInputElement).value);
+  const changeIngredientsImageCaption = (e: SyntheticEvent) => setIngredientsImageCaption((e.target as HTMLInputElement).value);
+  const changeCookingImageCaption = (e: SyntheticEvent) => setCookingImageCaption((e.target as HTMLInputElement).value);
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
     setUsedMethods(prevState => ({...prevState, [id]: !prevState[id]}));
-  };
+  };  // TO DO: FIX
 
   const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(equipmentRows);
@@ -208,18 +216,18 @@ export default function UserPublicRecipeForm() {
     if (!obj) return;
     obj[name] = value;
     setEquipmentRows(newRows);
-  };
+  };  // TO DO: FIX
 
   const changeIngredientRow = (e: SyntheticEvent, rowKey: string) => {
-    const newRows =     Array.from(ingredientRows);
-    const elToUpdate =  newRows.findIndex(el => el.key === rowKey);
-    const name =        (e.target as HTMLInputElement).name;
-    const value =       (e.target as HTMLInputElement).value;
+    const newRows =    Array.from(ingredientRows);
+    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
+    const name =       (e.target as HTMLInputElement).name;
+    const value =      (e.target as HTMLInputElement).value;
     const obj =        newRows[elToUpdate];
     if (!obj) return;
     obj[name] = value;
     setIngredientRows(newRows);
-  };
+  };  // TO DO: FIX
 
   const changeSubrecipeRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(subrecipeRows);
@@ -230,7 +238,7 @@ export default function UserPublicRecipeForm() {
     if (!obj) return;
     obj[name] = value;
     setSubrecipeRows(newRows);
-  };
+  };  // TO DO: FIX
 
   const addEquipmentRow  = () =>
     setEquipmentRows([...equipmentRows, pristineEquipmentRow]);
@@ -291,7 +299,7 @@ export default function UserPublicRecipeForm() {
 
   const makeEquipmentCrops = async (crop: Crop) => {
     if (!equipmentImageRef.current) return;
-    // TO DO: 560 by 344 px for full ???
+    // TO DO: 560 by 344 px also???
     const full = await getCroppedImage(280, 172, equipmentImageRef.current, crop);
     if (!full) return;
     setEquipmentFullCrop(full.preview);
@@ -430,16 +438,28 @@ export default function UserPublicRecipeForm() {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
-      //recipeImage,
-      //recipeFullImage,
-      //recipeThumbImage,
-      //recipeTinyImage,
-      //equipmentImage,
-      //equipmentFullImage,
-      //ingredientsImage,
-      //ingredientsFullImage,
-      //cookingImage,
-      //cookingFullImage
+      recipe_image_info: {
+        name:    "default",
+        caption: recipeImageCaption,
+        medium:  recipeFullImage,
+        thumb:   recipeThumbImage,
+        tiny:    recipeTinyImage
+      },
+      equipment_image_info: {
+        name:    "default",
+        caption: equipmentImageCaption,
+        medium:  equipmentFullImage
+      },
+      ingredients_image_info: {
+        name:    "default",
+        caption: ingredientsImageCaption,
+        medium:  ingredientsFullImage
+      },
+      cooking_image_info: {
+        name:    "default",
+        caption: cookingImageCaption,
+        medium:  cookingFullImage
+      }
     };
 
     setLoading(true);
@@ -832,6 +852,17 @@ export default function UserPublicRecipeForm() {
                   <img className="crop-tiny" src={recipeTinyCrop} />
                 </div>
               </div>
+
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={changeRecipeImageCaption}
+                type="text"
+                value={recipeImageCaption}
+              />
   
               <button
                 className="image-cancel-button"
@@ -882,6 +913,17 @@ export default function UserPublicRecipeForm() {
                   <img className="crop-full" src={equipmentFullCrop} />
                 </div>
               </div>
+
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={changeEquipmentImageCaption}
+                type="text"
+                value={equipmentImageCaption}
+              />
   
               <button
                 className="image-cancel-button"
@@ -932,6 +974,17 @@ export default function UserPublicRecipeForm() {
                   <img className="crop-full" src={ingredientsFullCrop} />
                 </div>
               </div>
+
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={changeIngredientsImageCaption}
+                type="text"
+                value={ingredientsImageCaption}
+              />
   
               <button
                 className="image-cancel-button"
@@ -982,6 +1035,17 @@ export default function UserPublicRecipeForm() {
                   <img className="crop-full" src={cookingFullCrop} />
                 </div>
               </div>
+
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={changeCookingImageCaption}
+                type="text"
+                value={cookingImageCaption}
+              />
   
               <button
                 className="image-cancel-button"

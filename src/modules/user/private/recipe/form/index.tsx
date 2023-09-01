@@ -435,16 +435,16 @@ export default function UserPrivateRecipeForm() {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
-      //recipeImage,
-      //recipeFullImage,
-      //recipeThumbImage,
-      //recipeTinyImage,
-      //equipmentImage,
-      //equipmentFullImage,
-      //ingredientsImage,
-      //ingredientsFullImage,
-      //cookingImage,
-      //cookingFullImage
+      recipeImage,
+      recipeFullImage,
+      recipeThumbImage,
+      recipeTinyImage,
+      equipmentImage,
+      equipmentFullImage,
+      ingredientsImage,
+      ingredientsFullImage,
+      cookingImage,
+      cookingFullImage
     };
 
     setLoading(true);

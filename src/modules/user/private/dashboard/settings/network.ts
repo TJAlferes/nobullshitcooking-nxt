@@ -18,17 +18,17 @@ export function* submitAvatarWorker({ full_avatar, tiny_avatar }: SubmitAvatar) 
     let avatarUrl;
 
     if (full_avatar && tiny_avatar) {
-      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+      const { data: { filename, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'avatar'},
+        {subfolder: 'public/avatar/'},
         {withCredentials: true}
       );
 
       yield call(uploadImageToAWSS3, fullSignature, full_avatar);
       yield call(uploadImageToAWSS3, tinySignature, tiny_avatar);
 
-      avatarUrl = fullName;
+      avatarUrl = filename;
     }
     else avatarUrl = "nobsc-user-default";
 

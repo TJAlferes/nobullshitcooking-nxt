@@ -170,10 +170,13 @@ export type PlanRecipe = {
   recipe_id: string;
 };
 
-export type Recipe = {
-  key:          string;
-  recipe_id:    string;
-  title:        string;
-  recipe_image: string;
-  owner_id:     string;
+export type RecipeOverview = {
+  recipe_id: string;
+  owner_id:  string;
+  title:     string;
+  image_url: string;
+};
+
+export type DayRecipe = RecipeOverview & {
+  key: string;
 };

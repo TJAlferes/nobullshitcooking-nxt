@@ -28,26 +28,17 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
     required_equipment,
     required_ingredients,
     required_subrecipes,
-    recipeImage,
-    recipeFullImage,
-    recipeThumbImage,
-    recipeTinyImage,
-    equipmentImage,
-    equipmentFullImage,
-    ingredientsImage,
-    ingredientsFullImage,
-    cookingImage,
-    cookingFullImage
+    recipe_image_info,
+    equipment_image_info,
+    ingredients_image_info,
+    cooking_image_info
   } = action.recipe_info;
 
   try {
-    if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
+    if (recipe_image_info.medium && recipe_image_info.thumb && recipe_image_info.tiny) {
       const {
         data: {
-          fullName,
-          fullSignature,
-          thumbSignature,
-          tinySignature
+          filename, fullSignature, thumbSignature, tinySignature
         }
       } = yield call(
         [axios, axios.post],
@@ -55,56 +46,44 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
         {subfolder: 'public/recipe/'},
         {withCredentials: true}
       );
-      
-      yield call(uploadImageToAWSS3, fullSignature, recipeFullImage);
-      yield call(uploadImageToAWSS3, thumbSignature, recipeThumbImage);
-      yield call(uploadImageToAWSS3, tinySignature, recipeTinyImage);
-
-      recipeImage = fullName;
+      yield call(uploadImageToAWSS3, fullSignature, recipe_image_info.medium);
+      yield call(uploadImageToAWSS3, thumbSignature, recipe_image_info.thumb);
+      yield call(uploadImageToAWSS3, tinySignature, recipe_image_info.tiny);
+      recipe_image_info.name = filename;
     }
-    else recipeImage = "nobsc-recipe-default";
 
-    if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+    if (equipment_image_info.medium) {
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.put],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-equipment/'},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, equipmentFullImage);
-
-      equipmentImage = fullName;
+      yield call(uploadImageToAWSS3, fullSignature, equipment_image_info.medium);
+      equipment_image_info.name = filename;
     }
-    else equipmentImage = "nobsc-recipe-equipment-default";
 
-    if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+    if (ingredients_image_info.medium) {
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-ingredients/'},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, ingredientsFullImage);
-
-      ingredientsImage = fullName;
+      yield call(uploadImageToAWSS3, fullSignature, ingredients_image_info.medium);
+      ingredients_image_info.name = filename;
     }
-    else ingredientsImage = "nobsc-recipe-ingredients-default";
 
-    if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+    if (cooking_image_info.medium) {
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-cooking/'},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, cookingFullImage);
-
-      cookingImage = fullName;
+      yield call(uploadImageToAWSS3, fullSignature, cooking_image_info.medium);
+      cooking_image_info.name = filename;
     }
-    else cookingImage = "nobsc-recipe-cooking-default";
 
     const { data } = yield call(
       [axios, axios.post],
@@ -120,10 +99,10 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
           required_equipment,
           required_ingredients,
           required_subrecipes,
-          recipeImage,
-          equipmentImage,
-          ingredientsImage,
-          cookingImage
+          recipe_image_info,
+          equipment_image_info,
+          ingredients_image_info,
+          cooking_image_info
         }
       },
       {withCredentials: true}
@@ -171,7 +150,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
     if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
       const {
         data: {
-          fullName,
+          filename,
           fullSignature,
           thumbSignature,
           tinySignature
@@ -187,12 +166,12 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
       yield call(uploadImageToAWSS3, thumbSignature, recipeThumbImage);
       yield call(uploadImageToAWSS3, tinySignature, recipeTinyImage);
 
-      recipeImage = fullName;
+      recipeImage = filename;
     }
     else recipeImage = recipePrevImage;
 
     if (equipmentFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-equipment/'},
@@ -201,12 +180,12 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
 
       yield call(uploadImageToAWSS3, fullSignature, equipmentFullImage);
 
-      equipmentImage = fullName;
+      equipmentImage = filename;
     }
     else equipmentImage = equipmentPrevImage;
 
     if (ingredientsFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-ingredients/'},
@@ -215,12 +194,12 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
 
       yield call(uploadImageToAWSS3, fullSignature, ingredientsFullImage);
 
-      ingredientsImage = fullName;
+      ingredientsImage = filename;
     }
     else ingredientsImage = ingredientsPrevImage;
 
     if (cookingFullImage) {
-      const { data: { fullName, fullSignature } } = yield call(
+      const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
         {subfolder: 'public/recipe-cooking/'},
@@ -229,7 +208,7 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
 
       yield call(uploadImageToAWSS3, fullSignature, cookingFullImage);
 
-      cookingImage = fullName;
+      cookingImage = filename;
     }
     else cookingImage = cookingPrevImage;
 

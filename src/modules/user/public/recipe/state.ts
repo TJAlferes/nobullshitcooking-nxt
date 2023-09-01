@@ -41,7 +41,6 @@ export type DisownPublicRecipe = {
 // TO DO: move shared types to one location
 
 export type RecipeInfo = {
-  ownership:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
   title:                string;
@@ -51,30 +50,25 @@ export type RecipeInfo = {
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
-
-  //recipeImage:          string | ArrayBuffer | null;  // should be only string when given to action creator???
-  //recipeFullImage:      File | null;
-  //recipeThumbImage:     File | null;
-  //recipeTinyImage:      File | null;
-
-  //equipmentImage:       string | ArrayBuffer | null;
-  //equipmentFullImage:   File | null;
-
-  //ingredientsImage:     string | ArrayBuffer | null;
-  //ingredientsFullImage: File | null;
-
-  //cookingImage:         string | ArrayBuffer | null;
-  //cookingFullImage:     File | null;
-
+  recipeImage:          string | ArrayBuffer | null;  // should be only string when given to action creator???
+  recipeFullImage:      File | null;
+  recipeThumbImage:     File | null;
+  recipeTinyImage:      File | null;
+  equipmentImage:       string | ArrayBuffer | null;
+  equipmentFullImage:   File | null;
+  ingredientsImage:     string | ArrayBuffer | null;
+  ingredientsFullImage: File | null;
+  cookingImage:         string | ArrayBuffer | null;
+  cookingFullImage:     File | null;
   //video:                string;
 };
 
 export type RecipeUpdateInfo = RecipeInfo & {
   recipe_id:            string;
-  //recipePrevImage:      string;
-  //equipmentPrevImage:   string;
-  //ingredientsPrevImage: string;
-  //cookingPrevImage:     string;
+  recipePrevImage:      string;
+  equipmentPrevImage:   string;
+  ingredientsPrevImage: string;
+  cookingPrevImage:     string;
   //prevVideo:            string;
 };
 

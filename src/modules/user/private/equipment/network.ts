@@ -29,17 +29,17 @@ export function* createPrivateEquipmentWorker(action: CreatePrivateEquipment) {
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+      const { data: { filename, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'equipment'},
+        {subfolder: 'private/equipment/'},
         {withCredentials: true}
       );
 
       yield call(uploadImageToAWSS3, fullSignature, fullImage);
       yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
-      image = fullName;
+      image = filename;
     }
     else image = 'nobsc-equipment-default';
 
@@ -81,17 +81,17 @@ export function* updatePrivateEquipmentWorker(action: UpdatePrivateEquipment) {
 
   try {
     if (fullImage && tinyImage) {
-      const { data: { fullName, fullSignature, tinySignature } } = yield call(
+      const { data: { filename, fullSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subBucket: 'equipment'},
+        {subfolder: 'private/equipment/'},
         {withCredentials: true}
       );
 
       yield call(uploadImageToAWSS3, fullSignature, fullImage);
       yield call(uploadImageToAWSS3, tinySignature, tinyImage);
 
-      image = fullName;
+      image = filename;
     }
     else image = prevImage;
 
