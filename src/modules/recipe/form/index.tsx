@@ -11,9 +11,8 @@ import { endpoint }                        from '../../../config/api';
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderButton }                    from '../../shared/LoaderButton';
 import { getCroppedImage }                 from '../../shared/getCroppedImage';
-//import { createOfficialRecipe, updateOfficialRecipe } from '../state';
-import { createPrivateRecipe, updatePrivateRecipe } from '../../user/private/recipe/state';
-import { createPublicRecipe, updatePublicRecipe }   from '../../user/public/recipe/state';
+import type { Ownership }                  from '../../shared/types';
+import { createRecipe, updateRecipe }      from '../state';
 
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
@@ -30,7 +29,6 @@ export default function RecipeForm({ ownership }: Props) {
   const authname         = useSelector(state => state.authentication.authname);
   const message          = useSelector(state => state.system.message);
   const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
-  const { uploadFn, uploadUpdateFn } = useAllowedActions(ownership);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
@@ -51,21 +49,21 @@ export default function RecipeForm({ ownership }: Props) {
   const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([pristineIngredientRow]);
   const [ subrecipeRows,  setSubrecipeRows ]  = useState<SubrecipeRow[]>([]);
 
-  const [ previousRecipeImage, setPreviousRecipeImage ] = useState("default");
+  const [ previousRecipeImageFilename, setPreviousRecipeImageFilename ] = useState("");
   const [ recipeMediumImage,   setRecipeMediumImage ]   = useState<File | null>(null);
   const [ recipeThumbImage,    setRecipeThumbImage ]    = useState<File | null>(null);
   const [ recipeTinyImage,     setRecipeTinyImage ]     = useState<File | null>(null);
   const [ recipeImageCaption,  setRecipeImageCaption ]  = useState("");
 
-  const [ previousEquipmentImage, setPreviousEquipmentImage ] = useState("default");
+  const [ previousEquipmentImageFilename, setPreviousEquipmentImageFilename ] = useState("");
   const [ equipmentMediumImage,   setEquipmentMediumImage ]   = useState<File | null>(null);
   const [ equipmentImageCaption,  setEquipmentImageCaption ]  = useState("");
 
-  const [ previousIngredientsImage, setPreviousIngredientsImage ] = useState("default");
+  const [ previousIngredientsImageFilename, setPreviousIngredientsImageFilename ] = useState("");
   const [ ingredientsMediumImage,   setIngredientsMediumImage ]   = useState<File | null>(null);
   const [ ingredientsImageCaption,  setIngredientsImageCaption ]  = useState("");
 
-  const [ previousCookingImage, setPreviousCookingImage ] = useState("default");
+  const [ previousCookingImageFilename, setPreviousCookingImageFilename ] = useState("");
   const [ cookingMediumImage,   setCookingMediumImage ]   = useState<File | null>(null);
   const [ cookingImageCaption,  setCookingImageCaption ]  = useState("");
 
@@ -143,13 +141,13 @@ export default function RecipeForm({ ownership }: Props) {
         });
         return nextState;
       });
-      setEquipmentRows(required_equipment.map(r => ({...r, key: uuid()})));
-      setIngredientRows(required_ingredients.map(r => ({...r, key: uuid()})));
-      setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuid()})));
-      setPreviousRecipeImage(recipe_image.image_url);
-      setPreviousEquipmentImage(equipment_image.image_url);
-      setPreviousIngredientsImage(ingredients_image.image_url);
-      setPreviousCookingImage(cooking_image.image_url);
+      setEquipmentRows(required_equipment.map(r => ({...r, key: uuidv4()})));
+      setIngredientRows(required_ingredients.map(r => ({...r, key: uuidv4()})));
+      setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuidv4()})));
+      setPreviousRecipeImageFilename(recipe_image.image_url);  // so... .filename then???
+      setPreviousEquipmentImageFilename(equipment_image.image_url);
+      setPreviousIngredientsImageFilename(ingredients_image.image_url);
+      setPreviousCookingImageFilename(cooking_image.image_url);
       setRecipeImageCaption(recipe_image.caption);
       setEquipmentImageCaption(equipment_image.caption);
       setIngredientsImageCaption(ingredients_image.caption);
@@ -408,45 +406,39 @@ export default function RecipeForm({ ownership }: Props) {
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
       recipe_image: {
-        name:    "default",
+        filename: recipe_id ? "default": previousRecipeImageFilename,  // URL ???
         caption: recipeImageCaption,
         medium:  recipeMediumImage,
         thumb:   recipeThumbImage,
         tiny:    recipeTinyImage
       },
       equipment_image: {
-        name:    "default",
-        caption: equipmentImageCaption,
-        medium:  equipmentMediumImage
+        filename: recipe_id ? "default" : previousEquipmentImageFilename,
+        caption:  equipmentImageCaption,
+        medium:   equipmentMediumImage
       },
       ingredients_image: {
-        name:    "default",
-        caption: ingredientsImageCaption,
-        medium:  ingredientsMediumImage
+        filename: recipe_id ? "default" : previousIngredientsImageFilename,
+        caption:  ingredientsImageCaption,
+        medium:   ingredientsMediumImage
       },
       cooking_image: {
-        name:    "default",
-        caption: cookingImageCaption,
-        medium:  cookingMediumImage
+        filename: recipe_id ? "default" : previousCookingImageFilename,
+        caption:  cookingImageCaption,
+        medium:   cookingMediumImage
       }
     };
 
     setLoading(true);
 
+    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
+    // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+
     if (recipe_id) {
-      // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
-      // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-      const recipeUpdateUpload = {
-        ...recipeUpload,
-        recipe_id,
-        previousRecipeImage,
-        previousEquipmentImage,
-        previousIngredientsImage,
-        previousCookingImage
-      };
-      dispatch(uploadUpdateFn!(recipeUpdateUpload));
+      const recipeUpdateUpload = {recipe_id, ...recipeUpload};
+      dispatch(updateRecipe(ownership, recipeUpdateUpload));
     } else {
-      dispatch(uploadFn!(recipeUpload));
+      dispatch(createRecipe(ownership, recipeUpload));
     }
   };
 
@@ -789,7 +781,7 @@ export default function RecipeForm({ ownership }: Props) {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousRecipeImage && <img src={`${url}/${previousRecipeImage}`} />
+                : previousRecipeImageFilename && <img src={`${url}/${previousRecipeImageFilename}`} />
               }
 
               <h4>Change</h4>
@@ -860,7 +852,7 @@ export default function RecipeForm({ ownership }: Props) {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousEquipmentImage && <img src={`${url}-equipment/${previousEquipmentImage}`} />
+                : previousEquipmentImageFilename && <img src={`${url}-equipment/${previousEquipmentImageFilename}`} />
               }
 
               <h4>Change</h4>
@@ -921,7 +913,7 @@ export default function RecipeForm({ ownership }: Props) {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousIngredientsImage && <img src={`${url}-ingredients/${previousIngredientsImage}`} />
+                : previousIngredientsImageFilename && <img src={`${url}-ingredients/${previousIngredientsImageFilename}`} />
               }
 
               <h4>Change</h4>
@@ -982,7 +974,7 @@ export default function RecipeForm({ ownership }: Props) {
               {
                 !recipe_id
                 ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousCookingImage && <img src={`${url}-cooking/${previousCookingImage}`} />
+                : previousCookingImageFilename && <img src={`${url}-cooking/${previousCookingImageFilename}`} />
               }
   
               <h4>Change</h4>
@@ -1059,8 +1051,6 @@ type Props = {
   ownership: Ownership;
 };
 
-type Ownership = "offical" | "private" | "public";
-
 function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
   const equipment              = useSelector(state => state.data.equipment);
   const ingredients            = useSelector(state => state.data.ingredients);
@@ -1121,21 +1111,6 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
     allowedIngredients,
     allowedRecipes
   };
-}
-
-function useAllowedActions(ownership: Ownership) {
-  let uploadFn;
-  let uploadUpdateFn;
-  //if (ownership === "offical") {}
-  if (ownership === "private") {
-    uploadFn       = createPrivateRecipe;
-    uploadUpdateFn = updatePrivateRecipe;
-  }
-  if (ownership === "public") {
-    uploadFn       = createPublicRecipe;
-    uploadUpdateFn = updatePublicRecipe;
-  }
-  return {uploadFn, uploadUpdateFn};
 }
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";

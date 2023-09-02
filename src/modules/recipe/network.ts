@@ -1,23 +1,24 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../../../config/api';
-import { getMyPublicRecipesWorker }          from '../../../shared/data/network';
-import { systemMessage, systemMessageClear } from '../../../shared/system/state';
+import { endpoint }                          from '../../config/api';
+import { systemMessage, systemMessageClear } from '../shared/system/state';
+//import { getMyRecipes } 
+import { getMyPrivateRecipesWorker, getMyPublicRecipesWorker } from '../user/private/data/network';
 import { actionTypes } from './state';
-import type { CreatePublicRecipe, UpdatePublicRecipe, DisownPublicRecipe } from './state';
+import type { CreateRecipe, UpdateRecipe, DeleteRecipe } from './state';
 
-const { CREATE_PUBLIC_RECIPE, UPDATE_PUBLIC_RECIPE, DISOWN_PUBLIC_RECIPE } = actionTypes;
+const { CREATE_RECIPE, UPDATE_RECIPE, DELETE_RECIPE } = actionTypes;
 
-export function* publicRecipeWatcher() {
+export function* recipeWatcher() {
   yield all([
-    takeEvery(CREATE_PUBLIC_RECIPE, createPublicRecipeWorker),
-    takeEvery(UPDATE_PUBLIC_RECIPE, updatePublicRecipeWorker),
-    takeEvery(DISOWN_PUBLIC_RECIPE, disownPublicRecipeWorker)
+    takeEvery(CREATE_RECIPE, createRecipeWorker),
+    takeEvery(UPDATE_RECIPE, updateRecipeWorker),
+    takeEvery(DELETE_RECIPE, deleteRecipeWorker)
   ]);
 }
 
-export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
+export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) {
   let {
     recipe_type_id,
     cuisine_id,
@@ -32,58 +33,58 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
     equipment_image,
     ingredients_image,
     cooking_image
-  } = action.recipe_info;
+  } = recipe_upload;
 
   try {
     if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
       const { data: { filename, fullSignature, thumbSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe/'},
+        {subfolder: `${ownership}/recipe/`},
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
-      recipe_image.name = filename;
+      recipe_image.filename = filename;
     }
 
     if (equipment_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.put],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-equipment/'},
+        {subfolder: `${ownership}/recipe-equipment/`},
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
-      equipment_image.name = filename;
+      equipment_image.filename = filename;
     }
 
     if (ingredients_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-ingredients/'},
+        {subfolder: `${ownership}/recipe-ingredients/`},
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
-      ingredients_image.name = filename;
+      ingredients_image.filename = filename;
     }
 
     if (cooking_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-cooking/'},
+        {subfolder: `${ownership}/recipe-cooking/`},
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
-      cooking_image.name = filename;
+      cooking_image.filename = filename;
     }
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/public/recipe/create`,
+      `${endpoint}/user/${ownership}/recipe/create`,
       {
         recipeInfo: {
           recipe_type_id,
@@ -105,7 +106,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
     );
 
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);  // OR put(getMyPublicRecipes()) ???
+    yield call(getMyPublicRecipesWorker);  // OR put(getMyRecipes(ownership))
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -114,7 +115,7 @@ export function* createPublicRecipeWorker(action: CreatePublicRecipe) {
   yield put(systemMessageClear());
 }
 
-export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
+export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateRecipe) {
   let {
     recipe_id,
     recipe_type_id,
@@ -126,91 +127,62 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
     required_equipment,
     required_ingredients,
     required_subrecipes,
-    recipeImage,
-    recipeFullImage,
-    recipePrevImage,
-    recipeThumbImage,
-    recipeTinyImage,
-    equipmentImage,
-    equipmentFullImage,
-    equipmentPrevImage,
-    ingredientsImage,
-    ingredientsFullImage,
-    ingredientsPrevImage,
-    cookingImage,
-    cookingFullImage,
-    cookingPrevImage
-  } = action.recipe_info;
+    recipe_image,
+    equipment_image,
+    ingredients_image,
+    cooking_image
+  } = recipe_update_upload;
 
   try {
-    if (recipeFullImage && recipeThumbImage && recipeTinyImage) {
-      const {
-        data: {
-          filename,
-          fullSignature,
-          thumbSignature,
-          tinySignature
-        }
-      } = yield call(
+    if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
+      const { data: { filename, fullSignature, thumbSignature, tinySignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe/'},
+        {subfolder: `${ownership}/recipe/`},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, recipeFullImage);
-      yield call(uploadImageToAWSS3, thumbSignature, recipeThumbImage);
-      yield call(uploadImageToAWSS3, tinySignature, recipeTinyImage);
-
-      recipeImage = filename;
+      yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
+      yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
+      yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
+      recipe_image.filename = filename;
     }
-    else recipeImage = recipePrevImage;
 
-    if (equipmentFullImage) {
+    if (equipment_image.medium) {
+      const { data: { filename, fullSignature } } = yield call(
+        [axios, axios.put],
+        `${endpoint}/user/signed-url`,
+        {subfolder: `${ownership}/recipe-equipment/`},
+        {withCredentials: true}
+      );
+      yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
+      equipment_image.filename = filename;
+    }
+
+    if (ingredients_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-equipment/'},
+        {subfolder: `${ownership}/recipe-ingredients/`},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, equipmentFullImage);
-
-      equipmentImage = filename;
+      yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
+      ingredients_image.filename = filename;
     }
-    else equipmentImage = equipmentPrevImage;
 
-    if (ingredientsFullImage) {
+    if (cooking_image.medium) {
       const { data: { filename, fullSignature } } = yield call(
         [axios, axios.post],
         `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-ingredients/'},
+        {subfolder: `${ownership}/recipe-cooking/`},
         {withCredentials: true}
       );
-
-      yield call(uploadImageToAWSS3, fullSignature, ingredientsFullImage);
-
-      ingredientsImage = filename;
+      yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
+      cooking_image.filename = filename;
     }
-    else ingredientsImage = ingredientsPrevImage;
-
-    if (cookingFullImage) {
-      const { data: { filename, fullSignature } } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/signed-url`,
-        {subfolder: 'public/recipe-cooking/'},
-        {withCredentials: true}
-      );
-
-      yield call(uploadImageToAWSS3, fullSignature, cookingFullImage);
-
-      cookingImage = filename;
-    }
-    else cookingImage = cookingPrevImage;
 
     const { data } = yield call(
       [axios, axios.put],
-      `${endpoint}/user/public/recipe/update`,
+      `${endpoint}/user/${ownership}/recipe/update`,
       {
         recipeInfo: {
           recipe_id,
@@ -223,21 +195,17 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
           required_equipment,
           required_ingredients,
           required_subrecipes,
-          recipeImage,
-          recipePrevImage,
-          equipmentImage,
-          equipmentPrevImage,
-          ingredientsImage,
-          ingredientsPrevImage,
-          cookingImage,
-          cookingPrevImage
+          recipe_image,
+          equipment_image,
+          ingredients_image,
+          cooking_image
         }
       },
       {withCredentials: true}
     );
 
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);
+    yield call(getMyPublicRecipesWorker);  // put(getMyRecipes(ownership));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -246,11 +214,13 @@ export function* updatePublicRecipeWorker(action: UpdatePublicRecipe) {
   yield put(systemMessageClear());
 }
 
-export function* disownPublicRecipeWorker({ recipe_id }: DisownPublicRecipe) {
+export function* deleteRecipeWorker({ ownership, recipe_id }: DeleteRecipe) {
+  const server_action = ownership === "private" ? "delete" : "disown";
+
   try {
     const { data } = yield call(
       [axios, axios.delete],
-      `${endpoint}/user/public/recipe/disown`,
+      `${endpoint}/user/${ownership}/recipe/${server_action}`,
       {
         withCredentials: true,
         data: {recipe_id}
@@ -258,7 +228,7 @@ export function* disownPublicRecipeWorker({ recipe_id }: DisownPublicRecipe) {
     );
       
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);
+    yield call(getMyPublicRecipesWorker);  // put(getMyRecipes(ownership));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
