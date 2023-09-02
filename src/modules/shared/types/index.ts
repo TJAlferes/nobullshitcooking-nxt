@@ -1,1 +1,1 @@
-export type Ownership = "offical" | "private" | "public";
+export type Ownership = "official" | "private" | "public";

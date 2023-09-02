@@ -40,9 +40,9 @@ export type DeleteRecipe = {
 };
 
 type RecipeUpload = {
-
+  // TO DO: finish
 };
 
 type RecipeUpdateUpload = RecipeUpload & {
-
+  // TO DO: finish
 };

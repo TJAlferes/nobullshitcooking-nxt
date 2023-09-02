@@ -1,11 +1,10 @@
 import axios                                from 'axios';
 import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../config/api';
-import { systemMessage, systemMessageClear } from '../shared/system/state';
-//import { getMyRecipes } 
-import { getMyPrivateRecipesWorker, getMyPublicRecipesWorker } from '../user/private/data/network';
-import { actionTypes } from './state';
+import { endpoint }                                      from '../../config/api';
+import { systemMessage, systemMessageClear }             from '../shared/system/state';
+import { getMyRecipes }                                  from '../user/private/data/state';
+import { actionTypes }                                   from './state';
 import type { CreateRecipe, UpdateRecipe, DeleteRecipe } from './state';
 
 const { CREATE_RECIPE, UPDATE_RECIPE, DELETE_RECIPE } = actionTypes;
@@ -106,7 +105,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
     );
 
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);  // OR put(getMyRecipes(ownership))
+    yield put(getMyRecipes(ownership));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -205,7 +204,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
     );
 
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);  // put(getMyRecipes(ownership));
+    yield put(getMyRecipes(ownership));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }
@@ -228,7 +227,7 @@ export function* deleteRecipeWorker({ ownership, recipe_id }: DeleteRecipe) {
     );
       
     yield put(systemMessage(data.message));
-    yield call(getMyPublicRecipesWorker);  // put(getMyRecipes(ownership));
+    yield put(getMyRecipes(ownership));
   } catch(err) {
     yield put(systemMessage('An error occurred. Please try again.'));
   }

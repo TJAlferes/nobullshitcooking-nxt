@@ -1,15 +1,17 @@
 import axios                         from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                                     from '../../../../config/api';
-import { setInitialUserData, setUserData, actionTypes } from './state';
-import type { InitialUserData }                         from './state';
+import { endpoint }                                       from '../../../../config/api';
+import { setInitialUserData, setUserData, actionTypes }   from './state';
+import type { GetMyPlans, GetMyRecipes, InitialUserData } from './state';
 
-const { GET_INITIAL_USER_DATA } = actionTypes;
+const { GET_INITIAL_USER_DATA, GET_MY_PLANS, GET_MY_RECIPES } = actionTypes;
 
 export function* userDataWatcher() {
   yield all([
-    takeEvery(GET_INITIAL_USER_DATA, getInitialUserDataWorker)
+    takeEvery(GET_INITIAL_USER_DATA, getInitialUserDataWorker),
+    takeEvery(GET_MY_PLANS,          getMyPlansWorker),
+    takeEvery(GET_MY_RECIPES,        getMyRecipesWorker)
   ]);
 }
 
@@ -18,7 +20,7 @@ export function* getInitialUserDataWorker() {
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/data-init`,
+      `${endpoint}/user/initial-data`,
       {},
       {withCredentials: true}
     );
@@ -47,15 +49,23 @@ export function* getInitialUserDataWorker() {
 
 // refetches
 
+// /all ???
+
 export const getMyFriendshipsWorker        = createUserDataWorker("/user/friendship",         "my_friendships");
-export const getMyFavoriteRecipesWorker    = createUserDataWorker("/user/favorite-recipe",    "my_favorite_recipes");
-export const getMyPublicPlansWorker        = createUserDataWorker("/user/public/plan",        "my_public_plans");
-export const getMyPublicRecipesWorker      = createUserDataWorker("/user/public/recipe",      "my_public_recipes");
 export const getMyPrivateEquipmentWorker   = createUserDataWorker("/user/private/equipment",  "my_private_equipment");
 export const getMyPrivateIngredientsWorker = createUserDataWorker("/user/private/ingredient", "my_private_ingredients");
-export const getMyPrivatePlansWorker       = createUserDataWorker("/user/private/plan",       "my_private_plans");
-export const getMyPrivateRecipesWorker     = createUserDataWorker("/user/private/recipe",     "my_private_recipes");
+export const getMyFavoriteRecipesWorker    = createUserDataWorker("/user/favorite-recipe",    "my_favorite_recipes");
 export const getMySavedRecipesWorker       = createUserDataWorker("/user/saved-recipe",       "my_saved_recipes");
+
+export const getMyPlansWorker = ({ ownership }: GetMyPlans) => {
+  if (ownership == 'official') return;
+  return createUserDataWorker(`/user/${ownership}/plan`, `my_${ownership}_plans`);
+};
+
+export const getMyRecipesWorker = ({ ownership }: GetMyRecipes) => {
+  if (ownership == 'official') return;
+  return createUserDataWorker(`/user/${ownership}/recipe`, `my_${ownership}_recipes`);
+};
 
 function createUserDataWorker(path: string, key: keyof InitialUserData) {
   return function* () {

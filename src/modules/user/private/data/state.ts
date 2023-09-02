@@ -2,6 +2,7 @@ import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
 import type { PlanDataView } from '../../../plan/detail/state';
+import type { Ownership } from '../../../shared/types';
 
 const initialState: State = {
   my_friendships:         [],
@@ -45,6 +46,16 @@ export function userDataReducer(state = initialState, action: AnyAction): State 
 
 export const getInitialUserData = () => ({type: GET_INITIAL_USER_DATA});
 
+export const getMyPlans = (ownership: Ownership) => ({
+  type: GET_MY_PLANS,
+  ownership
+});
+
+export const getMyRecipes = (ownership: Ownership) => ({
+  type: GET_MY_RECIPES,
+  ownership
+});
+
 export const setInitialUserData = (initialUserData: InitialUserData) => ({
   type: SET_INITIAL_USER_DATA,
   initialUserData
@@ -65,14 +76,18 @@ export const setUserData = (
 
 export const actionTypes = {
   GET_INITIAL_USER_DATA: 'GET_INITIAL_USER_DATA',
+  GET_MY_PLANS:          'GET_MY_PLANS',
+  GET_MY_RECIPES:        'GET_MY_RECIPES',
   SET_INITIAL_USER_DATA: 'SET_INITIAL_USER_DATA',
   SET_USER_DATA:         'SET_USER_DATA'
 } as const;
 
 const {
   GET_INITIAL_USER_DATA,
+  GET_MY_PLANS,
+  GET_MY_RECIPES,
   SET_INITIAL_USER_DATA,
-  SET_USER_DATA
+  SET_USER_DATA,
 } = actionTypes;
 
 export type State = InitialUserData;
@@ -91,11 +106,23 @@ export type InitialUserData = {
 
 export type Actions =
   | GetInitialUserData
+  | GetMyPlans
+  | GetMyRecipes
   | SetInitialUserData
   | SetUserData;
 
 export type GetInitialUserData = {
   type: typeof actionTypes.GET_INITIAL_USER_DATA;
+};
+
+export type GetMyPlans = {
+  type:      typeof actionTypes.GET_MY_PLANS;
+  ownership: Ownership;
+};
+
+export type GetMyRecipes = {
+  type:      typeof actionTypes.GET_MY_RECIPES;
+  ownership: Ownership;
 };
 
 export type SetInitialUserData = {
