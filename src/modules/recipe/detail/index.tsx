@@ -7,24 +7,14 @@ import { LoaderSpinner }  from '../../shared/LoaderSpinner';
 import { saveRecipe }     from '../../user/private/saved-recipe/state';
 import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
-export default function RecipeDetail({ recipe }: Props) {
-  const dispatch = useDispatch();
-
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
-  const message             = useSelector(state => state.system.message);
-  const authname            = useSelector(state => state.authentication.authname);
-
-  const [ feedback,  setFeedback ]  = useState("");
-  const [ loading,   setLoading ]   = useState(false);
-  const [ favorited, setFavorited ] = useState(false);
-  const [ saved,     setSaved ]     = useState(false);
-
-  //const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+export default function RecipeDetail({ recipe, ownership}: Props) {
+  if (!recipe) {
+    return <LoaderSpinner />;
+  }
+  
   const {
     recipe_id,
+    author_id,
     author,
     title,
     description,
@@ -41,92 +31,13 @@ export default function RecipeDetail({ recipe }: Props) {
     cooking_image
   } = recipe;
 
-  // move to 'useFeedback' ?
-  useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  const favorite = () => {
-    if (!authname) return;
-    if (favorited) return;
-    setFavorited(true);
-    setLoading(true);
-    dispatch(favoriteRecipe(recipe_id));
-  };
-
-  const save = () => {
-    if (!authname) return;
-    if (saved) return;
-    setSaved(true);
-    setLoading(true);
-    dispatch(saveRecipe(recipe_id));
-  };
-
-  if (!recipe) return <LoaderSpinner />;
-
   // TO DO: move logic out of return
   return (
     <div className="two-col">
       <div className="two-col-left recipe">
-
         <h1>{title}</h1>
 
-        <p className="feedback">{feedback}</p>
-
-        <div className="save-area">
-          {
-            (
-              authname
-              && !my_private_recipes.find(r => r.recipe_id === recipe_id)
-              && !my_public_recipes.find(r => r.recipe_id === recipe_id)
-            )
-            ? (
-              <>
-                {
-                  my_favorite_recipes.find(r => r.recipe_id === recipe_id)
-                  ? <span>Favorited</span>
-                  : (
-                    !favorited
-                    ? (
-                      <button
-                        className="--save"
-                        disabled={loading}
-                        name="favorite-button"
-                        onClick={favorite}
-                      >Favorite</button>
-                    )
-                    : <span>Favorited</span>
-                  )
-                }
-                {
-                  my_saved_recipes.find(r => r.recipe_id === recipe_id)
-                  ? <span>Saved</span>
-                  : (
-                    !saved
-                    ? (
-                      <button
-                        className="--save"
-                        disabled={loading}
-                        name="save-button"
-                        onClick={save}
-                      >Save</button>
-                    )
-                    : <span>Saved</span>
-                  )
-                }
-              </>
-            )
-            : false
-          }
-        </div>
+        <SaveArea recipe_id={recipe_id} author_id={author_id} ownership={ownership} />
 
         <div className="image">
           <img src="/images/dev/sushi-280-172.jpg" />
@@ -211,8 +122,11 @@ export default function RecipeDetail({ recipe }: Props) {
 }
 
 type Props = {
-  recipe: RecipeDetailView;
+  recipe:    RecipeDetailView;
+  ownership: Ownership;
 };
+
+type Ownership = "offical" | "private" | "public";
 
 export type RecipeDetailView = {
   recipe_id:         string;
@@ -238,4 +152,99 @@ export type RecipeDetailView = {
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
+};
+
+const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+
+function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
+  if (ownership === "private") return false;  // null? fragment?
+
+  const dispatch = useDispatch();
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const message             = useSelector(state => state.system.message);
+  const authname            = useSelector(state => state.authentication.authname);
+
+  const [ feedback,  setFeedback ]  = useState("");
+  const [ loading,   setLoading ]   = useState(false);
+
+  const [ favorited, setFavorited ] = useState(false);
+  const [ saved,     setSaved ]     = useState(false);
+
+  if (!authname) return false;  // null? fragment?
+  if (authname === author_id) return false;  // cannot favorite/save your own recipe
+
+  // move to 'useFeedback' ?
+  useEffect(() => {
+    let isSubscribed = true;
+    if (isSubscribed) {
+      if (message !== "") window.scrollTo(0, 0);
+      setFeedback(message);
+      setLoading(false);
+    }
+    return () => {
+      isSubscribed = false;
+    };
+  }, [message]);
+
+  const favorite = () => {
+    if (favorited) return;
+    setFavorited(true);
+    setLoading(true);
+    dispatch(favoriteRecipe(recipe_id));
+  };
+
+  const save = () => {
+    if (saved) return;
+    setSaved(true);
+    setLoading(true);
+    dispatch(saveRecipe(recipe_id));
+  };
+
+  return (
+    <>
+      <p className="feedback">{feedback}</p>
+
+      <div className="save-area">
+        {
+          my_favorite_recipes.find(r => r.recipe_id === recipe_id)
+          ? <span>Favorited</span>
+          : (
+            !favorited
+            ? (
+              <button
+                className="--save"
+                disabled={loading}
+                name="favorite-button"
+                onClick={favorite}
+              >Favorite</button>
+            )
+            : <span>Favorited</span>
+          )
+        }
+        {
+          my_saved_recipes.find(r => r.recipe_id === recipe_id)
+          ? <span>Saved</span>
+          : (
+            !saved
+            ? (
+              <button
+                className="--save"
+                disabled={loading}
+                name="save-button"
+                onClick={save}
+              >Save</button>
+            )
+            : <span>Saved</span>
+          )
+        }
+      </div>
+    </>
+  );
+}
+
+type SaveAreaProps = {
+  ownership: Ownership;
+  recipe_id: string;
+  author_id: string;
 };
