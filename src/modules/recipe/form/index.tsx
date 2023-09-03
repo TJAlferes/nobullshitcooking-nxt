@@ -37,6 +37,8 @@ export default function RecipeForm({ ownership }: Props) {
   const [ cuisine_id,     setCuisineId ]    = useState(0);
   const [ title,          setTitle ]        = useState("");
   const [ description,    setDescription ]  = useState("");
+  const [ active_time,    setActiveTime  ]  = useState("");
+  const [ total_time,     setTotalTime   ]  = useState("");
   const [ directions,     setDirections ]   = useState("");
 
   const [ usedMethods,  setUsedMethods ] = useState<Methods>(
@@ -118,6 +120,8 @@ export default function RecipeForm({ ownership }: Props) {
         cuisine_id,
         title,
         description,
+        active_time,
+        total_time,
         directions,
         required_equipment,
         required_ingredients,
@@ -133,6 +137,8 @@ export default function RecipeForm({ ownership }: Props) {
       setCuisineId(cuisine_id);
       setTitle(title);
       setDescription(description);
+      setActiveTime(active_time);
+      setTotalTime(total_time);
       setDirections(directions);
       setUsedMethods(prevState => {
         const nextState = {...prevState};
@@ -193,6 +199,8 @@ export default function RecipeForm({ ownership }: Props) {
   const changeCuisine     = (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
   const changeTitle       = (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
   const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
+  const changeActiveTime  = (e: SyntheticEvent) => setActiveTime((e.target as HTMLInputElement).value);
+  const changeTotalTime   = (e: SyntheticEvent) => setTotalTime((e.target as HTMLInputElement).value);
   const changeDirections  = (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
 
   const changeRecipeImageCaption = (e: SyntheticEvent) =>
@@ -387,6 +395,8 @@ export default function RecipeForm({ ownership }: Props) {
       cuisine_id,
       title,
       description,
+      active_time,
+      total_time,
       directions,
       required_methods:     getCheckedMethods(),
       required_equipment:   getRequiredEquipment(),
@@ -400,6 +410,8 @@ export default function RecipeForm({ ownership }: Props) {
       cuisine_id,
       title,
       description,
+      active_time,
+      total_time,
       directions,
       required_methods:     getCheckedMethods(),
       required_equipment:   getRequiredEquipment(),
@@ -408,6 +420,8 @@ export default function RecipeForm({ ownership }: Props) {
       recipe_image: {
         image_filename: recipe_id ? "default": previousRecipeImageFilename,
         caption:        recipeImageCaption,
+        type:           1,
+        order:          1,
         medium:         recipeMediumImage,
         thumb:          recipeThumbImage,
         tiny:           recipeTinyImage
@@ -415,16 +429,22 @@ export default function RecipeForm({ ownership }: Props) {
       equipment_image: {
         image_filename: recipe_id ? "default" : previousEquipmentImageFilename,
         caption:        equipmentImageCaption,
+        type:           2,
+        order:          1,
         medium:         equipmentMediumImage
       },
       ingredients_image: {
         image_filename: recipe_id ? "default" : previousIngredientsImageFilename,
         caption:        ingredientsImageCaption,
+        type:           3,
+        order:          1,
         medium:         ingredientsMediumImage
       },
       cooking_image: {
         image_filename: recipe_id ? "default" : previousCookingImageFilename,
         caption:        cookingImageCaption,
+        type:           4,
+        order:          1,
         medium:         cookingMediumImage
       }
     };
@@ -509,8 +529,26 @@ export default function RecipeForm({ ownership }: Props) {
         min={2}
         name="description"
         onChange={changeDescription}
-        type="text"
+        type="time"
         value={description}
+      />
+
+      <h2>Active Time</h2>
+      <input
+        className="time"
+        name="active_time"
+        onChange={changeActiveTime}
+        type="time"
+        value={active_time}
+      />
+
+      <h2>Total Time</h2>
+      <input
+        className="time"
+        name="total_time"
+        onChange={changeTotalTime}
+        type=""
+        value={total_time}
       />
 
       <h2>Methods</h2>
@@ -1180,6 +1218,8 @@ export function isValidRecipeUpload({
   cuisine_id,
   title,
   description,
+  active_time,
+  total_time,
   directions,
   required_methods,
   required_equipment,
@@ -1187,6 +1227,31 @@ export function isValidRecipeUpload({
   required_subrecipes,
   setFeedback
 }: IsValidRecipeUploadParams): boolean {
+  function validateAndFormatTime(time: string) {
+    // validate
+    const [ hours, minutes ] = time.split(':');
+  
+    const parsedHours = hours ? parseInt(hours): 0;
+    const parsedMinutes = minutes ? parseInt(minutes) : 0;
+  
+    if (isNaN(parsedHours) || isNaN(parsedMinutes)) {
+      return false;
+    }
+  
+    if (parsedHours < 0 || parsedHours > 23 || parsedMinutes < 0 || parsedMinutes > 59) {
+      return false;
+    }
+  
+    // format
+    // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)
+    const formattedHours   = parsedHours.toString().padStart(2, '0');
+    const formattedMinutes = parsedMinutes.toString().padStart(2, '0');
+
+    time = `${formattedHours}:${formattedMinutes}`;
+  
+    return true;
+  }
+
   function feedback(message: string) {
     window.scrollTo(0, 0);
     setFeedback(message);
@@ -1205,6 +1270,12 @@ export function isValidRecipeUpload({
 
   const validDescription = description.trim() !== "";
   if (!validDescription) return feedback("Enter description.");
+
+  const validActiveTime = validateAndFormatTime(active_time);
+  if (!validActiveTime) return feedback('Invalid time.');
+
+  const validTotalTime = validateAndFormatTime(total_time);
+  if (!validTotalTime) return feedback('Invalid time.');
 
   const validDirections = directions.trim() !== "";
   if (!validDirections) return feedback("Enter directions.");
@@ -1253,6 +1324,8 @@ type IsValidRecipeUploadParams = {
   cuisine_id:           number;
   title:                string;
   description:          string;
+  active_time:          string;
+  total_time:           string;
   directions:           string;
   required_methods:     RequiredMethod[];
   required_equipment:   RequiredEquipment[];
@@ -1343,6 +1416,8 @@ export type SubrecipeRow = ExistingRequiredSubrecipe & {
 type ImageInfo = {
   image_filename: string;
   caption:        string;
+  type:           number;
+  order:         number;
 };
 
 type ImageUpload = ImageInfo & {
