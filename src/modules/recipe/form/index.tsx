@@ -144,10 +144,10 @@ export default function RecipeForm({ ownership }: Props) {
       setEquipmentRows(required_equipment.map(r => ({...r, key: uuidv4()})));
       setIngredientRows(required_ingredients.map(r => ({...r, key: uuidv4()})));
       setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuidv4()})));
-      setPreviousRecipeImageFilename(recipe_image.filename);
-      setPreviousEquipmentImageFilename(equipment_image.filename);
-      setPreviousIngredientsImageFilename(ingredients_image.filename);
-      setPreviousCookingImageFilename(cooking_image.filename);
+      setPreviousRecipeImageFilename(recipe_image.image_filename);
+      setPreviousEquipmentImageFilename(equipment_image.image_filename);
+      setPreviousIngredientsImageFilename(ingredients_image.image_filename);
+      setPreviousCookingImageFilename(cooking_image.image_filename);
       setRecipeImageCaption(recipe_image.caption);
       setEquipmentImageCaption(equipment_image.caption);
       setIngredientsImageCaption(ingredients_image.caption);
@@ -406,26 +406,26 @@ export default function RecipeForm({ ownership }: Props) {
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
       recipe_image: {
-        filename: recipe_id ? "default": previousRecipeImageFilename,  // URL ???
-        caption: recipeImageCaption,
-        medium:  recipeMediumImage,
-        thumb:   recipeThumbImage,
-        tiny:    recipeTinyImage
+        image_filename: recipe_id ? "default": previousRecipeImageFilename,
+        caption:        recipeImageCaption,
+        medium:         recipeMediumImage,
+        thumb:          recipeThumbImage,
+        tiny:           recipeTinyImage
       },
       equipment_image: {
-        filename: recipe_id ? "default" : previousEquipmentImageFilename,
-        caption:  equipmentImageCaption,
-        medium:   equipmentMediumImage
+        image_filename: recipe_id ? "default" : previousEquipmentImageFilename,
+        caption:        equipmentImageCaption,
+        medium:         equipmentMediumImage
       },
       ingredients_image: {
-        filename: recipe_id ? "default" : previousIngredientsImageFilename,
-        caption:  ingredientsImageCaption,
-        medium:   ingredientsMediumImage
+        image_filename: recipe_id ? "default" : previousIngredientsImageFilename,
+        caption:        ingredientsImageCaption,
+        medium:         ingredientsMediumImage
       },
       cooking_image: {
-        filename: recipe_id ? "default" : previousCookingImageFilename,
-        caption:  cookingImageCaption,
-        medium:   cookingMediumImage
+        image_filename: recipe_id ? "default" : previousCookingImageFilename,
+        caption:        cookingImageCaption,
+        medium:         cookingMediumImage
       }
     };
 
@@ -652,7 +652,7 @@ export default function RecipeForm({ ownership }: Props) {
                     .filter(i => i.ingredient_type_id == ingredient_type_id)
                     .map((i, index) => (
                       <option key={index} value={i.ingredient_id}>
-                        {i.ingredient_name}
+                        {i.fullname}
                       </option>
                     ))
                 }
@@ -1283,26 +1283,27 @@ export type RequiredSubrecipe = {
 };
 
 type ExistingImage = {
-  filename: string;
-  caption:  string;
+  image_filename: string;
+  caption:        string;
 };
 
 export type ExistingRecipeToEdit = {
   recipe_id:            string;
   recipe_type_id:       number;
   cuisine_id:           number;
-  owner_id:             string;
   title:                string;
   description:          string;
+  active_time:          string;
+  total_time:           string;
   directions:           string;
-  required_methods:     ExistingRequiredMethod[];
-  required_equipment:   ExistingRequiredEquipment[];
-  required_ingredients: ExistingRequiredIngredient[];
-  required_subrecipes:  ExistingRequiredSubrecipe[];
   recipe_image:         ExistingImage;
   equipment_image:      ExistingImage;
   ingredients_image:    ExistingImage;
   cooking_image:        ExistingImage;
+  required_methods:     ExistingRequiredMethod[];
+  required_equipment:   ExistingRequiredEquipment[];
+  required_ingredients: ExistingRequiredIngredient[];
+  required_subrecipes:  ExistingRequiredSubrecipe[];
 };
 
 export type ExistingRequiredMethod = RequiredMethod;
@@ -1340,9 +1341,9 @@ export type SubrecipeRow = ExistingRequiredSubrecipe & {
 };
 
 type ImageUpload = {
-  filename: string;
-  caption:  string;
-  medium:   File | null;
+  image_filename: string;
+  caption:        string;
+  medium:         File | null;
 };
 
 export type RecipeUpload = {

@@ -38,7 +38,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
-      recipe_image.filename = filename;
+      recipe_image.image_filename = filename;
     }
 
     if (equipment_image.medium) {
@@ -49,7 +49,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
-      equipment_image.filename = filename;
+      equipment_image.image_filename = filename;
     }
 
     if (ingredients_image.medium) {
@@ -60,7 +60,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
-      ingredients_image.filename = filename;
+      ingredients_image.image_filename = filename;
     }
 
     if (cooking_image.medium) {
@@ -71,7 +71,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
-      cooking_image.filename = filename;
+      cooking_image.image_filename = filename;
     }
 
     const { data } = yield call(
@@ -112,7 +112,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
-      recipe_image.filename = filename;
+      recipe_image.image_filename = filename;
     }
 
     if (equipment_image.medium) {
@@ -123,7 +123,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
-      equipment_image.filename = filename;
+      equipment_image.image_filename = filename;
     }
 
     if (ingredients_image.medium) {
@@ -134,7 +134,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
-      ingredients_image.filename = filename;
+      ingredients_image.image_filename = filename;
     }
 
     if (cooking_image.medium) {
@@ -145,7 +145,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
         {withCredentials: true}
       );
       yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
-      cooking_image.filename = filename;
+      cooking_image.image_filename = filename;
     }
 
     const { data } = yield call(

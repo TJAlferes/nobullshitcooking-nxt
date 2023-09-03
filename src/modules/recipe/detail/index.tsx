@@ -145,21 +145,21 @@ type Props = {
 type Ownership = "offical" | "private" | "public";
 
 export type RecipeDetailView = {
-  recipe_id:         string;
-  author_id:         string;
-  author:            string;
-  author_avatar:     ImageView;
-  recipe_type_name:  string;
-  cuisine_name:      string;
-  title:             string;
-  description:       string;
-  active_time:       string;
-  total_time:        string;
-  directions:        string;
-  recipe_image:      ImageWithCaptionView;
-  equipment_image:   ImageWithCaptionView;
-  ingredients_image: ImageWithCaptionView;
-  cooking_image:     ImageWithCaptionView;
+  recipe_id:            string;
+  author_id:            string;
+  author:               string;
+  author_avatar:        ImageView;
+  recipe_type_name:     string;
+  cuisine_name:         string;
+  title:                string;
+  description:          string;
+  active_time:          string;
+  total_time:           string;
+  directions:           string;
+  recipe_image:         ImageWithCaptionView;
+  equipment_image:      ImageWithCaptionView;
+  ingredients_image:    ImageWithCaptionView;
+  cooking_image:        ImageWithCaptionView;
   required_methods:     RequiredMethodView[];
   required_equipment:   RequiredEquipmentView[];
   required_ingredients: RequiredIngredientView[];
