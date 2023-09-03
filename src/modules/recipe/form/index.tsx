@@ -1351,6 +1351,8 @@ export type RecipeUpload = {
   cuisine_id:           number;
   title:                string;
   description:          string;
+  active_time:          string;
+  total_time:           string;
   directions:           string;
   required_methods:     RequiredMethod[];
   required_equipment:   RequiredEquipment[];
