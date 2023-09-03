@@ -19,15 +19,6 @@ export function* recipeWatcher() {
 
 export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) {
   let {
-    recipe_type_id,
-    cuisine_id,
-    title,
-    description,
-    directions,
-    required_methods,
-    required_equipment,
-    required_ingredients,
-    required_subrecipes,
     recipe_image,
     equipment_image,
     ingredients_image,
@@ -35,6 +26,8 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
   } = recipe_upload;
 
   try {
+    // upload any images to AWS S3, then insert info into MySQL
+
     if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
       const { data: { filename, fullSignature, thumbSignature, tinySignature } } = yield call(
         [axios, axios.post],
@@ -84,23 +77,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/${ownership}/recipe/create`,
-      {
-        recipeInfo: {
-          recipe_type_id,
-          cuisine_id,
-          title,
-          description,
-          directions,
-          required_methods,
-          required_equipment,
-          required_ingredients,
-          required_subrecipes,
-          recipe_image,
-          equipment_image,
-          ingredients_image,
-          cooking_image
-        }
-      },
+      {recipe_upload},
       {withCredentials: true}
     );
 
@@ -116,16 +93,6 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
 
 export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateRecipe) {
   let {
-    recipe_id,
-    recipe_type_id,
-    cuisine_id,
-    title,
-    description,
-    directions,
-    required_methods,
-    required_equipment,
-    required_ingredients,
-    required_subrecipes,
     recipe_image,
     equipment_image,
     ingredients_image,
@@ -133,6 +100,8 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
   } = recipe_update_upload;
 
   try {
+    // upload any images to AWS S3, then insert info into MySQL
+
     if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
       const { data: { filename, fullSignature, thumbSignature, tinySignature } } = yield call(
         [axios, axios.post],
@@ -182,24 +151,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
     const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/${ownership}/recipe/update`,
-      {
-        recipeInfo: {
-          recipe_id,
-          recipe_type_id,
-          cuisine_id,
-          title,
-          description,
-          directions,
-          required_methods,
-          required_equipment,
-          required_ingredients,
-          required_subrecipes,
-          recipe_image,
-          equipment_image,
-          ingredients_image,
-          cooking_image
-        }
-      },
+      {recipe_update_upload},
       {withCredentials: true}
     );
 

@@ -1,4 +1,5 @@
-import type { Ownership } from "../shared/types";
+import type { Ownership }                        from "../shared/types";
+import type { RecipeUpload, RecipeUpdateUpload } from "./form";
 
 export const createRecipe = (ownership: Ownership, recipe_upload: RecipeUpload) =>
   ({type: CREATE_RECIPE, ownership, recipe_upload});
@@ -37,12 +38,4 @@ export type DeleteRecipe = {
   type:      typeof actionTypes.DELETE_RECIPE;
   ownership: Ownership
   recipe_id: string;
-};
-
-type RecipeUpload = {
-  // TO DO: finish
-};
-
-type RecipeUpdateUpload = RecipeUpload & {
-  // TO DO: finish
 };

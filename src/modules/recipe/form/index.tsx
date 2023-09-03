@@ -144,10 +144,10 @@ export default function RecipeForm({ ownership }: Props) {
       setEquipmentRows(required_equipment.map(r => ({...r, key: uuidv4()})));
       setIngredientRows(required_ingredients.map(r => ({...r, key: uuidv4()})));
       setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuidv4()})));
-      setPreviousRecipeImageFilename(recipe_image.image_url);  // so... .filename then???
-      setPreviousEquipmentImageFilename(equipment_image.image_url);
-      setPreviousIngredientsImageFilename(ingredients_image.image_url);
-      setPreviousCookingImageFilename(cooking_image.image_url);
+      setPreviousRecipeImageFilename(recipe_image.filename);
+      setPreviousEquipmentImageFilename(equipment_image.filename);
+      setPreviousIngredientsImageFilename(ingredients_image.filename);
+      setPreviousCookingImageFilename(cooking_image.filename);
       setRecipeImageCaption(recipe_image.caption);
       setEquipmentImageCaption(equipment_image.caption);
       setIngredientsImageCaption(ingredients_image.caption);
@@ -1261,8 +1261,6 @@ type IsValidRecipeUploadParams = {
   setFeedback:          (feedback: string) => void;
 };
 
-
-
 export type RequiredMethod = {
   method_id: number;
 };
@@ -1284,7 +1282,10 @@ export type RequiredSubrecipe = {
   subrecipe_id: string;
 };
 
-
+type ExistingImage = {
+  filename: string;
+  caption:  string;
+};
 
 export type ExistingRecipeToEdit = {
   recipe_id:            string;
@@ -1298,10 +1299,10 @@ export type ExistingRecipeToEdit = {
   required_equipment:   ExistingRequiredEquipment[];
   required_ingredients: ExistingRequiredIngredient[];
   required_subrecipes:  ExistingRequiredSubrecipe[];
-  recipe_image:         string;
-  equipment_image:      string;
-  ingredients_image:    string;
-  cooking_image:        string;
+  recipe_image:         ExistingImage;
+  equipment_image:      ExistingImage;
+  ingredients_image:    ExistingImage;
+  cooking_image:        ExistingImage;
 };
 
 export type ExistingRequiredMethod = RequiredMethod;
@@ -1318,8 +1319,6 @@ export type ExistingRequiredSubrecipe = RequiredSubrecipe & {
   recipe_type_id: number;  // (just a filter for nicer UX, not stored in DB)
   cuisine_id:     number;  // (just a filter for nicer UX, not stored in DB)
 };
-
-
 
 export type Methods = {
   [key: number]: boolean;
@@ -1338,4 +1337,33 @@ export type IngredientRow = ExistingRequiredIngredient & {
 export type SubrecipeRow = ExistingRequiredSubrecipe & {
   [index: string]: number|string;
   key: string;
+};
+
+type ImageUpload = {
+  filename: string;
+  caption:  string;
+  medium:   File | null;
+};
+
+export type RecipeUpload = {
+  recipe_type_id:       number;
+  cuisine_id:           number;
+  title:                string;
+  description:          string;
+  directions:           string;
+  required_methods:     RequiredMethod[];
+  required_equipment:   RequiredEquipment[];
+  required_ingredients: RequiredIngredient[];
+  required_subrecipes:  RequiredSubrecipe[];
+  recipe_image:         ImageUpload & {
+    thumb: File | null;
+    tiny:  File | null;
+  },
+  equipment_image:      ImageUpload,
+  ingredients_image:    ImageUpload,
+  cooking_image:        ImageUpload
+};
+
+export type RecipeUpdateUpload = RecipeUpload & {
+  recipe_id: string;
 };

@@ -7,7 +7,7 @@ import { LoaderSpinner }  from '../../shared/LoaderSpinner';
 import { saveRecipe }     from '../../user/private/saved-recipe/state';
 import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
-export default function RecipeDetail({ recipe, ownership}: Props) {
+export default function RecipeDetail({ recipe, ownership }: Props) {
   if (!recipe) {
     return <LoaderSpinner />;
   }
@@ -31,6 +31,8 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
     cooking_image
   } = recipe;
 
+  const url = `https://s3.amazonaws.com/nobsc/user/${ownership}/recipe`;
+
   // TO DO: move logic out of return
   return (
     <div className="two-col">
@@ -40,8 +42,11 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
         <SaveArea recipe_id={recipe_id} author_id={author_id} ownership={ownership} />
 
         <div className="image">
-          <img src="/images/dev/sushi-280-172.jpg" />
-          {/*recipe_image !== "nobsc-recipe-default" ? <img src={`${url}/${recipe_image}`} /> : <div className="img-280-172"></div>*/}
+          {
+            recipe_image.image_filename !== "default"
+            ? <img src={`${url}/${author_id}/${recipe_image.image_filename}`} />
+            : <div className="img-560-346"></div>
+          }
         </div>
 
         <div className="author">
@@ -53,6 +58,8 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
             : <Link href={`/profile/${author}`}>{author}</Link>
           }
         </div>
+
+        {/* active_time total_time */}
 
         <div className="description">
           <b>Author's note:</b>{' '}<em>{description}</em>
@@ -75,8 +82,11 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
 
         <h2>Required Equipment</h2>
         <div className="equipment-image">
-          <img src="/images/dev/sushi-280-172.jpg" />
-          {/*equipment_image !== "nobsc-recipe-equipment-default" ? <img src={`${url}-equipment/${equipment_image}`} /> : <div className="img-280-172"></div>*/}
+          {
+            equipment_image.image_filename !== "default"
+            ? <img src={`${url}-equipment/${author_id}/${equipment_image.image_filename}`} />
+            : <div className="img-560-346"></div>
+          }
         </div>
         <div className="equipments">
           {required_equipment?.map(e => (
@@ -88,13 +98,16 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
 
         <h2>Required Ingredients</h2>
         <div className="ingredients-image">
-          <img src="/images/dev/sushi-280-172.jpg" />
-          {/*ingredients_image !== "nobsc-recipe-ingredients-default" ? <img src={`${url}-ingredients/${ingredients_image}`} /> : <div className="img-280-172"></div>*/}
+          {
+            ingredients_image.image_filename !== "default"
+            ? <img src={`${url}-ingredients/${author_id}/${ingredients_image.image_filename}`} />
+            : <div className="img-560-346"></div>
+          }
         </div>
         <div className="ingredients">
           {required_ingredients?.map(i => (
-            <div className="ingredient" key={i.ingredient_name}>
-              {i.amount}{' '}{i.unit_name}{' '}{i.ingredient_name}
+            <div className="ingredient" key={i.ingredient_fullname}>
+              {i.amount}{' '}{i.unit_name}{' '}{i.ingredient_fullname}
             </div>
           ))}
         </div>
@@ -110,8 +123,11 @@ export default function RecipeDetail({ recipe, ownership}: Props) {
 
         <h2>Directions</h2>
         <div className="cooking-image">
-          <img src="/images/dev/sushi-280-172.jpg" />
-          {/*cooking_image !== "nobsc-recipe-cooking-default" ? <img src={`${url}-cooking/${cooking_image}`} /> : <div className="img-280-172"></div>*/}
+          {
+            cooking_image.image_filename !== "default"
+            ? <img src={`${url}-cooking/${author_id}/${cooking_image.image_filename}`} />
+            : <div className="img-560-346"></div>
+          }
         </div>
         <div className="recipe-directions">{directions}</div>
       </div>
@@ -130,31 +146,65 @@ type Ownership = "offical" | "private" | "public";
 
 export type RecipeDetailView = {
   recipe_id:         string;
-  recipe_type_id:    number;
-  cuisine_id:        number;
-  author_id:         string;  // should this be exposed??? use author (username) instead?
-  owner_id:          string;  // should this be exposed??? use owner (username) instead?
-  title:             string;
+  author_id:         string;
+  author:            string;
+  author_avatar:     ImageView;
   recipe_type_name:  string;
   cuisine_name:      string;
-  author:            string;
-  author_avatar:     string;  // ?
+  title:             string;
   description:       string;
   active_time:       string;
   total_time:        string;
   directions:        string;
-  image_url:         string;
-  recipe_image:      string;
-  equipment_image:   string;
-  ingredients_image: string;
-  cooking_image:     string;
-  required_methods:     RequiredMethod[];
-  required_equipment:   RequiredEquipment[];
-  required_ingredients: RequiredIngredient[];
-  required_subrecipes:  RequiredSubrecipe[];
+  recipe_image:      ImageWithCaptionView;
+  equipment_image:   ImageWithCaptionView;
+  ingredients_image: ImageWithCaptionView;
+  cooking_image:     ImageWithCaptionView;
+  required_methods:     RequiredMethodView[];
+  required_equipment:   RequiredEquipmentView[];
+  required_ingredients: RequiredIngredientView[];
+  required_subrecipes:  RequiredSubrecipeView[];
 };
 
-const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+type ImageView = {
+  image_filename: string;
+};
+
+type ImageWithCaptionView = ImageView & {
+  caption: string;
+};
+
+type RequiredMethodView = {
+  //method_id:   number;
+  method_name: string;
+};
+
+type RequiredEquipmentView = {
+  amount:              number | null;
+  //equipment_type_id:   number;
+  //equipment_type_name: string;
+  //equipment_id:        string;
+  equipment_name:      string;
+};
+
+type RequiredIngredientView = {
+  amount:              number | null;
+  //unit_id:             number | null;
+  unit_name:           string | null;
+  //ingredient_type_id:  number;
+  //ingredient_id:       string;
+  ingredient_fullname: string;
+};
+
+type RequiredSubrecipeView = {
+  amount:              number | null;
+  //unit_id:             number | null;
+  unit_name:           string | null;
+  //subrecipe_type_id:   number;
+  //cuisine_id:          number;
+  //subrecipe_id:        string;
+  subrecipe_title:     string;
+};
 
 function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   if (ownership === "private") return false;  // null? fragment?
