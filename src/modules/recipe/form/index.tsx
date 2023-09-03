@@ -1340,10 +1340,13 @@ export type SubrecipeRow = ExistingRequiredSubrecipe & {
   key: string;
 };
 
-type ImageUpload = {
+type ImageInfo = {
   image_filename: string;
   caption:        string;
-  medium:         File | null;
+};
+
+type ImageUpload = ImageInfo & {
+  medium: File | null;
 };
 
 export type RecipeUpload = {

@@ -18,7 +18,7 @@ export function* recipeWatcher() {
 }
 
 export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) {
-  let {
+  const {
     recipe_image,
     equipment_image,
     ingredients_image,
@@ -39,6 +39,10 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
       recipe_image.image_filename = filename;
+      // remove Files
+      recipe_image.medium = null;
+      recipe_image.thumb  = null;
+      recipe_image.tiny   = null;
     }
 
     if (equipment_image.medium) {
@@ -50,6 +54,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       );
       yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
       equipment_image.image_filename = filename;
+      equipment_image.medium = null;
     }
 
     if (ingredients_image.medium) {
@@ -61,6 +66,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       );
       yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
       ingredients_image.image_filename = filename;
+      ingredients_image.medium = null;
     }
 
     if (cooking_image.medium) {
@@ -72,6 +78,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       );
       yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
       cooking_image.image_filename = filename;
+      cooking_image.medium = null;
     }
 
     const { data } = yield call(
@@ -113,6 +120,10 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
       recipe_image.image_filename = filename;
+      // remove Files
+      recipe_image.medium = null;
+      recipe_image.thumb  = null;
+      recipe_image.tiny   = null;
     }
 
     if (equipment_image.medium) {
@@ -124,6 +135,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
       );
       yield call(uploadImageToAWSS3, fullSignature, equipment_image.medium);
       equipment_image.image_filename = filename;
+      equipment_image.medium = null;
     }
 
     if (ingredients_image.medium) {
@@ -135,6 +147,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
       );
       yield call(uploadImageToAWSS3, fullSignature, ingredients_image.medium);
       ingredients_image.image_filename = filename;
+      ingredients_image.medium = null;
     }
 
     if (cooking_image.medium) {
@@ -146,6 +159,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
       );
       yield call(uploadImageToAWSS3, fullSignature, cooking_image.medium);
       cooking_image.image_filename = filename;
+      cooking_image.medium = null;
     }
 
     const { data } = yield call(
