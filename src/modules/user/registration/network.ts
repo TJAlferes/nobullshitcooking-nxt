@@ -5,9 +5,15 @@ import { endpoint }                          from '../../../config/api';
 import { workerHelper }                      from '../../shared/helpers';
 import { systemMessage, systemMessageClear } from '../../shared/system/state';
 import { actionTypes } from './state';
-import type { Register, UpdateEmail, UpdatePassword, UpdateUsername, DeleteUser } from './state';
+import type { Register, UpdateEmail, UpdatePassword, UpdateUsername, DeleteAccount } from './state';
 
-const { REGISTER } = actionTypes;
+const {
+  REGISTER,
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD,
+  UPDATE_USERNAME,
+  DELETE_ACCOUNT
+} = actionTypes;
 
 export function* userRegistrationWatcher() {
   yield all([
@@ -15,7 +21,7 @@ export function* userRegistrationWatcher() {
     takeEvery(UPDATE_EMAIL,    userUpdateEmailWorker),
     takeEvery(UPDATE_PASSWORD, userUpdatePasswordWorker),
     takeEvery(UPDATE_USERNAME, userUpdateUsernameWorker),
-    takeEvery(DELETE_USER,     userDeleteWorker)
+    takeEvery(DELETE_ACCOUNT,  userDeleteWorker)
   ]);
 }
 
@@ -26,7 +32,7 @@ export function* userRegisterWorker(action: Register) {
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/registration`,
+      `${endpoint}/user/create`,
       {email, password, username}
     );
 
@@ -49,7 +55,7 @@ export function* userUpdateEmailWorker(action: UpdateEmail) {
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/create`,
+      `${endpoint}/user/update-email`,
       {new_email},
       {withCredentials: true}
     );
@@ -73,7 +79,7 @@ export function* userUpdatePasswordWorker(action: UpdatePassword) {
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/create`,
+      `${endpoint}/user/update-password`,
       {new_password},
       {withCredentials: true}
     );
@@ -92,6 +98,7 @@ export function* userUpdatePasswordWorker(action: UpdatePassword) {
 }
 
 // IDK... does this workerHelper make testing harder???
+// And it's not much of an improvement anyway... you're only saving 2-3 lines of code per worker
 
 export function* userUpdateUsernameWorker(action: UpdateUsername) {
   function* fn() {
@@ -99,7 +106,7 @@ export function* userUpdateUsernameWorker(action: UpdateUsername) {
 
     const { data } = yield call(
       [axios, axios.post],
-      `${endpoint}/user/create`,
+      `${endpoint}/user/update-username`,
       {new_username},
       {withCredentials: true}
     );
@@ -114,7 +121,7 @@ export function* userUpdateUsernameWorker(action: UpdateUsername) {
   yield* workerHelper(fn);
 }
 
-export function* userDeleteWorker(action: DeleteUser) {
+export function* userDeleteWorker(action: DeleteAccount) {
   function* fn() {
     const { router } = action;
 

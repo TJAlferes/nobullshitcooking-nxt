@@ -28,6 +28,7 @@ export default function RecipeForm({ ownership }: Props) {
   const methods          = useSelector(state => state.data.methods);
   const authname         = useSelector(state => state.authentication.authname);
   const message          = useSelector(state => state.system.message);
+
   const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
 
   const [ feedback, setFeedback ] = useState("");
@@ -405,7 +406,7 @@ export default function RecipeForm({ ownership }: Props) {
       setFeedback
     })) return;
 
-    const recipeUpload = {
+    const recipe_upload = {
       recipe_type_id,
       cuisine_id,
       title,
@@ -418,7 +419,7 @@ export default function RecipeForm({ ownership }: Props) {
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
       recipe_image: {
-        image_filename: recipe_id ? "default": previousRecipeImageFilename,
+        image_filename: recipe_id ? previousRecipeImageFilename : "default",
         caption:        recipeImageCaption,
         type:           1,
         order:          1,
@@ -427,21 +428,21 @@ export default function RecipeForm({ ownership }: Props) {
         tiny:           recipeTinyImage
       },
       equipment_image: {
-        image_filename: recipe_id ? "default" : previousEquipmentImageFilename,
+        image_filename: recipe_id ? previousEquipmentImageFilename : "default",
         caption:        equipmentImageCaption,
         type:           2,
         order:          1,
         medium:         equipmentMediumImage
       },
       ingredients_image: {
-        image_filename: recipe_id ? "default" : previousIngredientsImageFilename,
+        image_filename: recipe_id ? previousIngredientsImageFilename : "default",
         caption:        ingredientsImageCaption,
         type:           3,
         order:          1,
         medium:         ingredientsMediumImage
       },
       cooking_image: {
-        image_filename: recipe_id ? "default" : previousCookingImageFilename,
+        image_filename: recipe_id ? previousCookingImageFilename : "default",
         caption:        cookingImageCaption,
         type:           4,
         order:          1,
@@ -453,12 +454,11 @@ export default function RecipeForm({ ownership }: Props) {
 
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-
     if (recipe_id) {
-      const recipeUpdateUpload = {recipe_id, ...recipeUpload};
-      dispatch(updateRecipe(ownership, recipeUpdateUpload));
+      const recipe_update_upload = {recipe_id, ...recipe_upload};
+      dispatch(updateRecipe(ownership, recipe_update_upload));
     } else {
-      dispatch(createRecipe(ownership, recipeUpload));
+      dispatch(createRecipe(ownership, recipe_upload));
     }
   };
 
@@ -474,7 +474,7 @@ export default function RecipeForm({ ownership }: Props) {
         ownership === "public"
         && recipe_id
         ? <h1>Update Public Recipe</h1>
-        : <h1>Create/ Public Recipe</h1>
+        : <h1>Create Public Recipe</h1>
       }
 
       <p className="feedback">{feedback}</p>
@@ -818,7 +818,7 @@ export default function RecipeForm({ ownership }: Props) {
             <div>
               {
                 !recipe_id
-                ? <img src={`${url}/nobsc-recipe-default`} />
+                ? <img src={`${url}/default`} />
                 : previousRecipeImageFilename && <img src={`${url}/${previousRecipeImageFilename}`} />
               }
 

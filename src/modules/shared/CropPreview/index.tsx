@@ -30,3 +30,9 @@ type Props = {
   loading:     boolean;
   tinyCrop:    string;
 };
+
+/*
+<span className="crop-tool-tip">
+  Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
+</span>
+*/

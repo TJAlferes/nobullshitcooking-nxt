@@ -13,16 +13,31 @@ export const confirm = (
   router
 });
 
+export const requestResend = (email: string, password: string) => ({
+  type: REQUEST_RESEND,
+  email,
+  password
+});
+
 // types -----------------------------------------------------------------------
 
-export const actionTypes = {CONFIRM: 'CONFIRM'} as const;
+export const actionTypes = {
+  CONFIRM:        'CONFIRM',
+  REQUEST_RESEND: 'REQUEST_RESEND'
+} as const;
 
-const { CONFIRM } = actionTypes;
+const { CONFIRM, REQUEST_RESEND } = actionTypes;
 
-export type Actions = Confirm;
+export type Actions = Confirm | RequestResend;
 
 export type Confirm = {
   type:              typeof actionTypes.CONFIRM;
   confirmation_code: string;
   router:            ReturnType<typeof useRouter>;
+};
+
+export type RequestResend = {
+  type:     typeof actionTypes.REQUEST_RESEND;
+  email:    string;
+  password: string;
 };

@@ -1,14 +1,17 @@
 import axios from 'axios';
-import { call, delay, put, takeEvery } from 'redux-saga/effects';
+import { all, call, delay, put, takeEvery } from 'redux-saga/effects';
 
-import { endpoint }                          from '../../../config/api';
-import { systemMessage, systemMessageClear } from '../../shared/system/state';
-import { actionTypes, Confirm }              from './state';
+import { endpoint }                            from '../../../config/api';
+import { systemMessage, systemMessageClear }   from '../../shared/system/state';
+import { actionTypes, Confirm, RequestResend } from './state';
 
-const { CONFIRM } = actionTypes;
+const { CONFIRM, REQUEST_RESEND } = actionTypes;
 
 export function* userConfirmationWatcher() {
-  yield takeEvery(CONFIRM, userConfirmWorker);
+  yield all([
+    takeEvery(CONFIRM,        userConfirmWorker),
+    takeEvery(REQUEST_RESEND, userRequestResendWorker)
+  ]);
 }
 
 export function* userConfirmWorker(action: Confirm) {
@@ -34,11 +37,21 @@ export function* userConfirmWorker(action: Confirm) {
   yield put(systemMessageClear());
 }
 
-// FINISH
 export function* userRequestResendWorker(action: RequestResend) {
   try {
+    const { email, password } = action;
 
+    const { data } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/confirmation/resend-confirmation-code`,
+      {email, password}
+    );
+
+    yield put(systemMessage(data.message));
   } catch(err) {
-
+    yield put(systemMessage('An error occurred. Please try again.'));
   }
+
+  yield delay(4000);
+  yield put(systemMessageClear());
 }
