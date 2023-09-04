@@ -115,7 +115,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
         `${endpoint}/user/signed-url`,
         {subfolder: `${ownership}/recipe/`},
         {withCredentials: true}
-      );
+      );  // put ???
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);

@@ -3,6 +3,7 @@
     "allowJs":                            true,
     "allowUnreachableCode":               false,
     "allowUnusedLabels":                  false,
+    "downlevelIteration":                 true,
     "esModuleInterop":                    true,
     "exactOptionalPropertyTypes":         true,
     "forceConsistentCasingInFileNames":   true,
