@@ -18,7 +18,7 @@ export function* userConfirmWorker(action: Confirm) {
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/confirmation/confirm`,
-      {userInfo: {confirmation_code}}
+      {confirmation_code}
     );
     
     yield put(systemMessage(data.message));
@@ -34,6 +34,7 @@ export function* userConfirmWorker(action: Confirm) {
   yield put(systemMessageClear());
 }
 
+// FINISH
 export function* userRequestResendWorker(action: RequestResend) {
   try {
 

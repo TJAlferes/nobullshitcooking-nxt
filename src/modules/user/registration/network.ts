@@ -20,7 +20,7 @@ export function* userRegisterWorker(action: Register) {
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/registration`,
-      {userInfo: {email, password, username}}
+      {email, password, username}
     );
 
     yield put(systemMessage(data.message));

@@ -104,7 +104,7 @@ export default function RecipeForm({ ownership }: Props) {
       window.scrollTo(0, 0);
 
       const res = await axios.post(
-        `${endpoint}/user/${ownership}/recipe/edit`,  // one instead of edit???
+        `${endpoint}/user/${ownership}/recipe/edit`,
         {recipe_id},
         {withCredentials: true}
       );
@@ -1417,7 +1417,7 @@ type ImageInfo = {
   image_filename: string;
   caption:        string;
   type:           number;
-  order:         number;
+  order:          number;
 };
 
 type ImageUpload = ImageInfo & {

@@ -26,7 +26,7 @@ export function* userLoginWorker(action: Login) {
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/authentication/login`,
-      {userInfo: {email, password}},
+      {email, password},
       {withCredentials: true}
     );
 

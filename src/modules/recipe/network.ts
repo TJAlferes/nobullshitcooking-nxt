@@ -84,7 +84,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
     const { data } = yield call(
       [axios, axios.post],
       `${endpoint}/user/${ownership}/recipe/create`,
-      {recipe_upload},
+      recipe_upload,
       {withCredentials: true}
     );
 
@@ -165,7 +165,7 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
     const { data } = yield call(
       [axios, axios.put],
       `${endpoint}/user/${ownership}/recipe/update`,
-      {recipe_update_upload},
+      recipe_update_upload,
       {withCredentials: true}
     );
 
@@ -186,10 +186,7 @@ export function* deleteRecipeWorker({ ownership, recipe_id }: DeleteRecipe) {
     const { data } = yield call(
       [axios, axios.delete],
       `${endpoint}/user/${ownership}/recipe/${server_action}`,
-      {
-        withCredentials: true,
-        data: {recipe_id}
-      }
+      {withCredentials: true, data: {recipe_id}}
     );
       
     yield put(systemMessage(data.message));

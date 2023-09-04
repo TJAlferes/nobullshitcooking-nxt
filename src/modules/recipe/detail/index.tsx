@@ -175,34 +175,23 @@ type ImageWithCaptionView = ImageView & {
 };
 
 type RequiredMethodView = {
-  //method_id:   number;
   method_name: string;
 };
 
 type RequiredEquipmentView = {
   amount:              number | null;
-  //equipment_type_id:   number;
-  //equipment_type_name: string;
-  //equipment_id:        string;
   equipment_name:      string;
 };
 
 type RequiredIngredientView = {
   amount:              number | null;
-  //unit_id:             number | null;
   unit_name:           string | null;
-  //ingredient_type_id:  number;
-  //ingredient_id:       string;
   ingredient_fullname: string;
 };
 
 type RequiredSubrecipeView = {
   amount:              number | null;
-  //unit_id:             number | null;
   unit_name:           string | null;
-  //subrecipe_type_id:   number;
-  //cuisine_id:          number;
-  //subrecipe_id:        string;
   subrecipe_title:     string;
 };
 
