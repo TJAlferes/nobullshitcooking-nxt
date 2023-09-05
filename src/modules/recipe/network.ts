@@ -38,6 +38,7 @@ export function* createRecipeWorker({ ownership, recipe_upload }: CreateRecipe) 
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
+      // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
       recipe_image.image_filename = filename;
       // remove Files
       recipe_image.medium = null;
@@ -115,10 +116,11 @@ export function* updateRecipeWorker({ ownership, recipe_update_upload }: UpdateR
         `${endpoint}/user/signed-url`,
         {subfolder: `${ownership}/recipe/`},
         {withCredentials: true}
-      );  // put ???
+      );  // axios.put ???
       yield call(uploadImageToAWSS3, fullSignature, recipe_image.medium);
       yield call(uploadImageToAWSS3, thumbSignature, recipe_image.thumb);
       yield call(uploadImageToAWSS3, tinySignature, recipe_image.tiny);
+      // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
       recipe_image.image_filename = filename;
       // remove Files
       recipe_image.medium = null;

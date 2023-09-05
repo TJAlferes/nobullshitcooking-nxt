@@ -633,8 +633,7 @@ export default function RecipeForm({ ownership }: Props) {
 
       <div className="required-ingredients">
         <h2>Ingredients</h2>
-
-        {/* TO DO: Add brand and variety */}
+        
         <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, unit_id, ingredient_type_id, ingredient_id }) => (
             <div className="recipe-row" key={key}>

@@ -6,10 +6,10 @@ import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { useTypedSelector as useSelector }  from '../../../redux';
-import { CropPreview }                      from '../../shared/CropPreview';
+//import { CropPreview }                      from '../../shared/CropPreview';
 import { LoaderButton }                     from '../../shared/LoaderButton';
 import { getCroppedImage }                  from '../../shared/getCroppedImage';
-import type { Ownership }                  from '../../shared/types';
+import type { Ownership }                   from '../../shared/types';
 import { createEquipment, updateEquipment } from '../state';
 
 export default function EquipmentForm({ ownership }: Props) {
@@ -64,8 +64,8 @@ export default function EquipmentForm({ ownership }: Props) {
       setEquipmentTypeId(equipment.equipment_type_id);
       setEquipmentName(equipment.equipment_name);
       setNotes(equipment.notes);
-      setPreviousImageFilename(equipment.image_filename);
-      setImageCaption(equipment.caption);
+      setPreviousImageFilename(equipment.image.image_filename);
+      setImageCaption(equipment.image.caption);
 
       setLoading(false);
     }
@@ -103,9 +103,10 @@ export default function EquipmentForm({ ownership }: Props) {
     };
   }, [message]);
 
-  const changeType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
-  const changeName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
-  const changeNotes = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
+  const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
+  const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
+  const changeNotes          = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
+  const changeImageCaption   = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -188,7 +189,7 @@ export default function EquipmentForm({ ownership }: Props) {
       <p className="feedback">{feedback}</p>
 
       <h2>Equipment Type</h2>
-      <select name="equipmentType" onChange={changeType} required value={equipment_type_id}>
+      <select name="equipmentType" onChange={changeEquipmentType} required value={equipment_type_id}>
         <option value={0}>Select type</option>
         {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
           <option key={equipment_type_id} value={equipment_type_id}>
@@ -198,7 +199,7 @@ export default function EquipmentForm({ ownership }: Props) {
       </select>
 
       <h2>Equipment Name</h2>
-      <input className="name" onChange={changeName} type="text" value={equipment_name} />
+      <input className="name" onChange={changeEquipmentName} type="text" value={equipment_name} />
 
       <h2>Notes</h2>
       <textarea className="notes" onChange={changeNotes} value={notes} />
@@ -227,17 +228,41 @@ export default function EquipmentForm({ ownership }: Props) {
               crop={crop}
               onChange={onCropChange}
               onComplete={onCropComplete}
-              style={{minHeight: "300px"}}
+              style={{minHeight: "280px"}}
             >
               <img onLoad={onImageLoaded} src={image as string} />
             </ReactCrop>
 
-            <CropPreview
-              cancelImage={cancelImage}
-              fullCrop={fullCrop}
-              loading={loading}
-              tinyCrop={tinyCrop}
+            <ToolTip />
+  
+            <div className="crops">
+              <div className="crop-full-outer">
+                <span>Small Size: </span>
+                <img className="crop-full" src={smallImagePreview} />
+              </div>
+
+              <div className="crop-tiny-outer">
+                <span>Tiny Size: </span>
+                <img className="crop-tiny" src={tinyImagePreview} />
+              </div>
+            </div>
+
+            <h4>Caption:</h4>
+            <input
+              className="caption"
+              max={150}
+              min={2}
+              name="caption"
+              onChange={changeImageCaption}
+              type="text"
+              value={imageCaption}
             />
+
+            <button
+              className="image-cancel-button"
+              disabled={loading}
+              onClick={cancelImage}
+            >Cancel</button>
           </div>
         )}
       </div>
@@ -283,6 +308,14 @@ type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Image = string | ArrayBuffer | null;
 
+export function ToolTip() {
+  return (
+    <span className="crop-tool-tip">
+      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
+    </span>
+  );
+}
+
 const initialCrop: Crop = {
   unit:   'px',
   x:      25,
@@ -321,4 +354,33 @@ type IsValidEquipmentUploadParams = {
   equipment_name:    string;
   notes:             string;
   setFeedback:       (feedback: string) => void;
+};
+
+export type ExistingEquipmentToEdit = {
+  equipment_id: string;
+  equipment_type_id: number;
+  equipment_name: string;
+  notes: string;
+  image: ImageInfo;
+};
+
+type ImageInfo = {
+  image_filename: string;
+  caption:        string;
+};
+
+type ImageUpload = ImageInfo & {
+  small: File | null;
+  tiny:  File | null;
+};
+
+export type EquipmentUpload = {
+  equipment_type_id: number;
+  equipment_name: string;
+  notes: string;
+  image: ImageUpload;
+};
+
+export type EquipmentUpdateUpload = EquipmentUpload & {
+  equipment_id: string;
 };

@@ -16,26 +16,22 @@ export const actionTypes = {
   DELETE_RECIPE: 'DELETE_RECIPE'
 } as const;
 
-const {
-  CREATE_RECIPE,
-  UPDATE_RECIPE,
-  DELETE_RECIPE
-} = actionTypes;
+const { CREATE_RECIPE, UPDATE_RECIPE, DELETE_RECIPE } = actionTypes;
 
 export type CreateRecipe = {
   type:          typeof actionTypes.CREATE_RECIPE;
-  ownership:     Ownership
+  ownership:     Ownership;
   recipe_upload: RecipeUpload;
 };
 
 export type UpdateRecipe = {
   type:                 typeof actionTypes.UPDATE_RECIPE;
-  ownership:            Ownership
+  ownership:            Ownership;
   recipe_update_upload: RecipeUpdateUpload;
 };
 
 export type DeleteRecipe = {
   type:      typeof actionTypes.DELETE_RECIPE;
-  ownership: Ownership
+  ownership: Ownership;
   recipe_id: string;
 };
