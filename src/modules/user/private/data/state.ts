@@ -1,7 +1,12 @@
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
-import type { PlanDataView } from '../../../plan/detail/state';
+import type {
+  EquipmentView,
+  IngredientView,
+  RecipeOverview,
+  PlanView
+} from '../../../shared/data/state';
 import type { Ownership } from '../../../shared/types';
 
 const initialState: State = {
@@ -140,47 +145,9 @@ export type SetUserData = {
 
 // TO DO: move shared types to one location
 
-export type EquipmentView = {
-  equipment_id:        string;
-  equipment_type_id:   number;
-  owner_id:            number;
-  equipment_type_name: string;
-  equipment_name:      string;
-  notes:               string;
-  image_url:           string;
-};
-
 export type FriendshipView = {
   user_id:  number;
   username: string;
   avatar:   string;
   status:   string;
-};
-
-export type IngredientView = {
-  ingredient_id:        string;
-  ingredient_type_id:   number;
-  owner_id:             number;
-  ingredient_type_name: string;
-  ingredient_brand:     string | null;
-  ingredient_variety:   string | null;
-  ingredient_name:      string;
-  fullname:             string;
-  notes:                string;
-  image_url:            string;
-};
-
-export type PlanView = {
-  plan_id:   string;
-  plan_name: string;
-  plan_data: PlanDataView;
-};
-
-export type RecipeOverview = {
-  recipe_id:      string;
-  owner_id:       number;
-  recipe_type_id: number;
-  cuisine_id:     number;
-  title:          string;
-  recipe_image:   string;
-};
+};  // FriendView ???

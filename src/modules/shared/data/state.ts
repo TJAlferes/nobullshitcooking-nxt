@@ -114,8 +114,6 @@ export type SetData = {
   };
 };
 
-// TO DO: move shared types to one location
-
 export type CuisineView = {
   cuisine_id:     number;
   cuisine_name:   string;
@@ -127,11 +125,14 @@ export type CuisineView = {
 export type EquipmentView = {
   equipment_id:        string;
   equipment_type_id:   number;
-  owner_id:            number;
+  owner_id:            string;
   equipment_type_name: string;
   equipment_name:      string;
   notes:               string;
-  image_url:           string;
+  image: {
+    image_filename: string;
+    caption:        string;
+  };
 };
 
 export type EquipmentTypeView = {
@@ -142,14 +143,17 @@ export type EquipmentTypeView = {
 export type IngredientView = {
   ingredient_id:        string;
   ingredient_type_id:   number;
-  owner_id:             number;
+  owner_id:             string;
   ingredient_type_name: string;
   ingredient_brand:     string | null;
   ingredient_variety:   string | null;
   ingredient_name:      string;
   fullname:             string;
   notes:                string;
-  image_url:            string;
+  image: {
+    image_filename: string;
+    caption:        string;
+  };
 };
 
 export type IngredientTypeView = {
@@ -169,17 +173,20 @@ export type MethodView = {
 
 export type PlanView = {
   plan_id:   string;
+  owner_id:  string;
   plan_name: string;
   plan_data: PlanDataView;
 };
 
 export type RecipeOverview = {
   recipe_id:      string;
-  owner_id:       number;
+  owner_id:       string;
   recipe_type_id: number;
   cuisine_id:     number;
   title:          string;
-  recipe_image:   string;
+  recipe_image:   {
+    image_filename: string;
+  };
 };
 
 export type RecipeTypeView = {

@@ -4,6 +4,7 @@ import { useDispatch }         from 'react-redux';
 
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderSpinner }  from '../../shared/LoaderSpinner';
+import type { Ownership } from '../../shared/types';
 import { saveRecipe }     from '../../user/private/saved-recipe/state';
 import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
@@ -141,8 +142,6 @@ type Props = {
   recipe:    RecipeDetailView;
   ownership: Ownership;
 };
-
-type Ownership = "offical" | "private" | "public";
 
 export type RecipeDetailView = {
   recipe_id:            string;

@@ -1,15 +1,13 @@
 import { LoaderSpinner }      from '../../shared/LoaderSpinner';
+import type { Ownership }     from '../../shared/types';
 import type { EquipmentView } from '../../shared/data/state';
 
-const url = "https://s3.amazonaws.com/nobsc-";
-
-export default function EquipmentDetail({ equipment }: {equipment: EquipmentView}) {
+export default function EquipmentDetail({ equipment, ownership }: Props) {
   const {
-    equipment_id,
     equipment_name,
-    image_url,
     equipment_type_name,
-    notes
+    notes,
+    image
   } = equipment;
 
   if (!equipment) {
@@ -22,7 +20,8 @@ export default function EquipmentDetail({ equipment }: {equipment: EquipmentView
         <h1>{equipment_name}</h1>
 
         <div className="image">
-          <img src={`${url}images-01/equipment/${image_url}.jpg`} />
+          <img src={`${url}/equipment/${image.image_filename}.jpg`} />
+          <span>{image.caption}</span>
         </div>
 
         <div className="type">
@@ -38,3 +37,10 @@ export default function EquipmentDetail({ equipment }: {equipment: EquipmentView
     </div>
   );
 }
+
+type Props = {
+  equipment: EquipmentView;
+  ownership: Ownership;
+};
+
+const url = "https://s3.amazonaws.com/nobsc/";

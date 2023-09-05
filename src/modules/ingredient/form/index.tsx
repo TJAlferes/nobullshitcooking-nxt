@@ -1,36 +1,38 @@
 import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ReactCrop, { Crop }             from 'react-image-crop';
+import ReactCrop, { Crop }             from "react-image-crop";
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { useTypedSelector as useSelector }  from '../../../redux';
-//import { CropPreview }                      from '../../shared/CropPreview';
-import { LoaderButton }                     from '../../shared/LoaderButton';
-import { getCroppedImage }                  from '../../shared/getCroppedImage';
+import { useTypedSelector as useSelector }    from '../../../redux';
+//import { CropPreview }                        from '../../shared/CropPreview';
+import { LoaderButton }                       from '../../shared/LoaderButton';
+import { getCroppedImage }                    from '../../shared/getCroppedImage';
 import type { Ownership }                   from '../../shared/types';
-import { createEquipment, updateEquipment } from '../state';
+import { createIngredient, updateIngredient } from '../state';
 
-export default function EquipmentForm({ ownership }: Props) {
+export default function IngredientForm({ ownership }: Props) {
   const router = useRouter();
 
   const params = useSearchParams();
-  const equipment_id = params.get('equipment_id');
+  const ingredient_id = params.get('ingredient_id');
 
   const dispatch = useDispatch();
-  const equipment_types = useSelector(state => state.data.equipment_types);
+  const ingredient_types = useSelector(state => state.data.ingredient_types);
   const authname        = useSelector(state => state.authentication.authname);
-  const message         = useSelector(state => state.system.message);
+  const message          = useSelector(state => state.system.message);
 
-  const allowedEquipment = useAllowedEquipment(ownership);
+  const allowedIngredients = useAllowedIngredients(ownership);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  const [ equipment_type_id, setEquipmentTypeId ] = useState(0);
-  const [ equipment_name,    setEquipmentName ]   = useState("");
-  const [ notes,             setNotes ]           = useState("");
+  const [ ingredient_type_id, setIngredientTypeId ] = useState(0);
+  const [ ingredient_brand, setIngredientBrand ] = useState<string|null>("");
+  const [ ingredient_variety, setIngredientVariety ] = useState<string|null>("");
+  const [ ingredient_name,    setIngredientName ]   = useState("");
+  const [ notes,              setNotes ]            = useState("");
 
   const [ previousImageFilename, setPreviousImageFilename ] = useState("");
   const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
@@ -46,27 +48,31 @@ export default function EquipmentForm({ ownership }: Props) {
   useEffect(() => {
     let mounted = true;
 
-    function getExistingEquipmentToEdit() {
-      if (!equipment_id) {
-        router.push(`/${authname}/private/dashboard`);
+    function getExistingIngredientToEdit() {
+      if (!ingredient_id) {
+        router.push('/dashboard');
         return;
       }
-      
+
       setLoading(true);
+
       window.scrollTo(0, 0);
 
-      const equipment = allowedEquipment.find(e => e.equipment_id === equipment_id);
-      if (!equipment) {
-        router.push(`/${authname}/private/dashboard`);
+      const ingredient = allowedIngredients.find(i => i.ingredient_id === ingredient_id);
+      if (!ingredient) {
+        router.push('/dashboard');
+        setLoading(false);
         return;
       }
 
-      setEquipmentTypeId(equipment.equipment_type_id);
-      setEquipmentName(equipment.equipment_name);
-      setNotes(equipment.notes);
-      setPreviousImageFilename(equipment.image.image_filename);
-      setImageCaption(equipment.image.caption);
-
+      setIngredientTypeId(ingredient.ingredient_type_id);
+      setIngredientBrand(ingredient.ingredient_brand);
+      setIngredientVariety(ingredient.ingredient_variety)
+      setIngredientName(ingredient.ingredient_name);
+      setNotes(ingredient.notes);
+      setPreviousImageFilename(ingredient.image.image_filename);
+      setImageCaption(ingredient.image.caption);
+      
       setLoading(false);
     }
 
@@ -76,8 +82,8 @@ export default function EquipmentForm({ ownership }: Props) {
         return;
       }
 
-      if (equipment_id) {
-        getExistingEquipmentToEdit();
+      if (ingredient_id) {
+        getExistingIngredientToEdit();
       }
     }
 
@@ -92,21 +98,23 @@ export default function EquipmentForm({ ownership }: Props) {
     if (isSubscribed) {
       if (message !== "") window.scrollTo(0, 0);
       setFeedback(message);
-      if (message === "Equipment created." || message === "Equipment updated.") {
-        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
+      if (message === "Ingredient created." || message === "Ingredient updated.") {
+        setTimeout(() => router.push('/dashboard'), 3000);
       }
       setLoading(false);
     }
-    
+
     return () => {
       isSubscribed = false;
     };
   }, [message]);
 
-  const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
-  const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
-  const changeNotes          = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
-  const changeImageCaption   = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
+  const changeIngredientType     = (e: SyntheticEvent) => setIngredientTypeId(Number((e.target as HTMLInputElement).value));
+  const changeIngredientBrand    = (e: SyntheticEvent) => setIngredientBrand((e.target as HTMLInputElement).value);
+  const changeIngredientVariety  = (e: SyntheticEvent) => setIngredientVariety((e.target as HTMLInputElement).value);
+  const changeIngredientName     = (e: SyntheticEvent) => setIngredientName((e.target as HTMLInputElement).value);
+  const changeNotes              = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
+  const changeImageCaption       = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -140,19 +148,25 @@ export default function EquipmentForm({ ownership }: Props) {
   };
 
   const submit = () => {
-    if (!isValidEquipmentUpload({
-      equipment_type_id,
-      equipment_name,
+    if (!isValidIngredientUpload({
+      ingredient_type_id,
+      ingredient_brand,
+      ingredient_variety,
+      ingredient_name,
+      alt_names,
       notes,
       setFeedback
     })) return;
 
-    const equipment_upload = {
-      equipment_type_id,
-      equipment_name,
+    const ingredient_upload = {
+      ingredient_type_id,
+      ingredient_brand,
+      ingredient_variety,
+      ingredient_name,
+      alt_names,
       notes,
       image: {
-        image_filename: equipment_id ? previousImageFilename : "default",
+        image_filename: ingredient_id ? previousImageFilename : "default",
         caption:        imageCaption,
         small:          smallImage,
         tiny:           tinyImage
@@ -161,56 +175,56 @@ export default function EquipmentForm({ ownership }: Props) {
 
     setLoading(true);
 
-    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
+    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE INGREDIENT
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-    if (equipment_id) {
-      const equipment_update_upload = {equipment_id, ...equipment_upload};
-      dispatch(updateEquipment(ownership, equipment_update_upload));
+    if (ingredient_id) {
+      const ingredient_update_upload = {ingredient_id, ...ingredient_upload};
+      dispatch(updateIngredient(ownership, ingredient_update_upload));
     } else {
-      dispatch(createEquipment(ownership, equipment_upload));
+      dispatch(createIngredient(ownership, ingredient_upload));
     }
   };
-  
+
   return (
-    <div className="one-col new-equipment">
+    <div className="one-col new-ingredient">
       {
         ownership === "private"
-        && equipment_id
-        ? <h1>Update Private Equipment</h1>
-        : <h1>Create Private Equipment</h1>
+        && ingredient_id
+        ? <h1>Update Private Ingredient</h1>
+        : <h1>Create Private Ingredient</h1>
       }
       {
         ownership === "official"
-        && equipment_id
-        ? <h1>Update Official Equipment</h1>
-        : <h1>Create Official Equipment</h1>
+        && ingredient_id
+        ? <h1>Update Official Ingredient</h1>
+        : <h1>Create Official Ingredient</h1>
       }
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Equipment Type</h2>
-      <select name="equipmentType" onChange={changeEquipmentType} required value={equipment_type_id}>
-        <option value={0}>Select type</option>
-        {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
-          <option key={equipment_type_id} value={equipment_type_id}>
-            {equipment_type_name}
+      <h2>Ingredient Type</h2>
+      <select name="ingredientType" onChange={changeIngredientType} required value={ingredient_type_id}>
+        <option value=""></option>
+        {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
+          <option key={ingredient_type_id} value={ingredient_type_id}>
+            {ingredient_type_name}
           </option>
         ))}
       </select>
 
-      <h2>Equipment Name</h2>
-      <input className="name" onChange={changeEquipmentName} type="text" value={equipment_name} />
+      <h2>Name</h2>
+      <input className="name" onChange={changeIngredientName} type="text" value={ingredient_name} />
 
       <h2>Notes</h2>
       <textarea className="notes" onChange={changeNotes} value={notes} />
 
-      <div className='equipment-image'>
-        <h2>Image of Equipment</h2>
+      <div>
+        <h2>Image of Ingredient</h2>
 
         {!image && (
           <div>
             {
-              !equipment_id
+              !ingredient_id
               ? <img src={`${url}/default`} />
               : previousImageFilename && <img src={`${url}/${previousImageFilename}`} />
             }
@@ -272,7 +286,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
         <LoaderButton
           className="submit-button"
-          id="create_equipment_button"
+          id="create_ingredient_button"
           isLoading={loading}
           loadingText="Creating..."
           name="submit"
@@ -288,21 +302,21 @@ type Props = {
   ownership: Ownership;
 };
 
-function useAllowedEquipment(ownership: Ownership) {
-  const equipment            = useSelector(state => state.data.equipment);
-  const my_private_equipment = useSelector(state => state.userData.my_private_equipment);
+function useAllowedIngredients(ownership: Ownership) {
+  const ingredients = useSelector(state => state.data.ingredients);
+  const my_private_ingredients   = useSelector(state => state.userData.my_private_ingredients);
 
   // must be checked server-side!!! never let random users edit official content
   if (ownership === "private") {
-    return my_private_equipment;
+    return my_private_ingredients;
   }
   if (ownership === "official") {
-    return equipment;
+    return ingredients;
   }
   return [];
 }
 
-const url = 'https://s3.amazonaws.com/nobsc-user-equipment';
+const url = ;
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
@@ -322,14 +336,17 @@ const initialCrop: Crop = {
   y:      25,
   width:  50,
   height: 50
-};  // TO DO: change to NOBSC images ratio
+};
 
-export function isValidEquipmentUpload({
-  equipment_type_id,
-  equipment_name,
+export function isValidIngredientUpload({
+  ingredient_type_id,
+  ingredient_brand,
+  ingredient_variety,
+  ingredient_name,
+  alt_names,
   notes,
   setFeedback
-}: IsValidEquipmentUploadParams) {
+}: IsValidIngredientUploadParams) {
   function feedback(message: string) {
     window.scrollTo(0, 0);
     setFeedback(message);
@@ -337,31 +354,41 @@ export function isValidEquipmentUpload({
     return false;
   }
 
-  const validEquipmentTypeId = equipment_type_id !== 0;
-  if (!validEquipmentTypeId) return feedback("Select equipment type.");
+  const validIngredientTypeId = ingredient_type_id !== 0;
+  if (!validIngredientTypeId) return feedback("Select ingredient type.");
 
-  const validEquipmentName = equipment_name.trim() !== "";
-  if (!validEquipmentName) return feedback("Enter equipment name.");
+  //const validIngredientBrand = ingredient_brand.trim() !== "";
+  //const validIngredientVariety = ingredient_variety.trim() !== "";
+
+  const validIngredientName = ingredient_name.trim() !== "";
+  if (!validIngredientName) return feedback("Enter ingredient name.");
+
+  //const validAltNames = alt_names
 
   const validNotes = notes.trim() !== "";
   if (!validNotes) return feedback("Enter notes.");
 
   return true;
+}
+
+type IsValidIngredientUploadParams = {
+  ingredient_type_id: number;
+  ingredient_brand:   string;  // | null
+  ingredient_variety: string;  // | null
+  ingredient_name:    string;
+  alt_names:          string[];
+  notes:              string;
+  setFeedback:        (feedback: string) => void;
 };
 
-type IsValidEquipmentUploadParams = {
-  equipment_type_id: number;
-  equipment_name:    string;
-  notes:             string;
-  setFeedback:       (feedback: string) => void;
-};
-
-export type ExistingEquipmentToEdit = {
-  equipment_id:      string;
-  equipment_type_id: number;
-  equipment_name:    string;
-  notes:             string;
-  image:             ImageInfo;
+export type ExistingIngredientToEdit = {
+  ingredient_id:      string;
+  ingredient_type_id: number;
+  ingredient_brand:   string;  // | null
+  ingredient_variety: string;  // | null
+  ingredient_name:    string;
+  notes:              string;
+  image:              ImageInfo;
 };
 
 type ImageInfo = {
@@ -374,13 +401,15 @@ type ImageUpload = ImageInfo & {
   tiny:  File | null;
 };
 
-export type EquipmentUpload = {
-  equipment_type_id: number;
-  equipment_name: string;
+export type IngredientUpload = {
+  ingredient_type_id: number;
+  ingredient_brand:   string;  // | null
+  ingredient_variety: string;  // | null
+  ingredient_name:    string;
   notes: string;
   image: ImageUpload;
 };
 
-export type EquipmentUpdateUpload = EquipmentUpload & {
-  equipment_id: string;
+export type IngredientUpdateUpload = IngredientUpload & {
+  ingredient_id: string;
 };
