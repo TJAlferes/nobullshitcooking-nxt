@@ -1,12 +1,16 @@
 import axios from 'axios';
 
-import { endpoint }       from '../../../config/api';
-import EquipmentDetail    from "../../../modules/equipment/detail";
-import type { Equipment } from '../../../modules/shared/data/state';
+import { endpoint }           from '../../../config/api';
+import EquipmentDetail        from "../../../modules/equipment/detail";
+import type { EquipmentView } from '../../../modules/shared/data/state';
 
-export default function EquipmentDetailPage({ equipment }: {equipment: Equipment}) {
-  return <EquipmentDetail equipment={equipment} />;
+export default function EquipmentDetailPage({ equipment }: Props) {
+  return <EquipmentDetail ownership="official" equipment={equipment} />;
 }
+
+type Props = {
+  equipment: EquipmentView;
+};
 
 function slugify(name: string) {
   return name

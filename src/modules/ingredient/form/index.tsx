@@ -316,7 +316,7 @@ function useAllowedIngredients(ownership: Ownership) {
   return [];
 }
 
-const url = ;
+const url = 'https://s3.amazonaws.com/nobsc/';
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 

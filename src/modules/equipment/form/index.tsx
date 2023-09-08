@@ -32,6 +32,12 @@ export default function EquipmentForm({ ownership }: Props) {
   const [ equipment_name,    setEquipmentName ]   = useState("");
   const [ notes,             setNotes ]           = useState("");
 
+  /*const [ equipment_info, setEquipmentInfo ] = useState({
+    equipment_type_id: 0,
+    equipment_name:    "",
+    notes:             ""
+  });*/
+
   const [ previousImageFilename, setPreviousImageFilename ] = useState("");
   const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
   const [ tinyImage,             setTinyImage ]    = useState<File | null>(null);
@@ -302,7 +308,7 @@ function useAllowedEquipment(ownership: Ownership) {
   return [];
 }
 
-const url = 'https://s3.amazonaws.com/nobsc-user-equipment';
+const url = 'https://s3.amazonaws.com/nobsc/';
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 

@@ -5,7 +5,7 @@ import type { RecipeDetailView } from '../../../modules/recipe/detail';
 import RecipeDetail              from '../../../modules/recipe/detail';
 
 export default function RecipeDetailPage({ recipe }: Props) {
-  return <RecipeDetail recipe={recipe} />;
+  return <RecipeDetail ownership="official" recipe={recipe} />;
 }
 
 function slugify(title: string) {

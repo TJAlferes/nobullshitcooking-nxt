@@ -9,7 +9,7 @@ import type { CreatePrivateIngredient, UpdatePrivateIngredient, DeletePrivateIng
 
 const { CREATE_PRIVATE_INGREDIENT, UPDATE_PRIVATE_INGREDIENT, DELETE_PRIVATE_INGREDIENT } = actionTypes;
 
-export function* privateIngredientWatcher() {
+export function* ingredientWatcher() {
   yield all([
     takeEvery(CREATE_PRIVATE_INGREDIENT, createPrivateIngredientWorker),
     takeEvery(UPDATE_PRIVATE_INGREDIENT, updatePrivateIngredientWorker),

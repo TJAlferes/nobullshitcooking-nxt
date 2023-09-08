@@ -1,12 +1,16 @@
 import axios from 'axios';
 
-import { endpoint }        from '../../../config/api';
-import IngredientDetail    from "../../../modules/ingredient/detail";
-import type { Ingredient } from '../../../modules/shared/data/state';
+import { endpoint }            from '../../../config/api';
+import IngredientDetail        from "../../../modules/ingredient/detail";
+import type { IngredientView } from '../../../modules/shared/data/state';
 
-export default function IngredientDetailPage({ ingredient }: {ingredient: Ingredient}) {
+export default function IngredientDetailPage({ ingredient }: Props) {
   return <IngredientDetail ingredient={ingredient} />;
 }
+
+type Props = {
+  ingredient: IngredientView;
+};
 
 function slugify(fullname: string) {
   return fullname

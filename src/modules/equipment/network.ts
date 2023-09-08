@@ -9,7 +9,7 @@ import type { CreateEquipment, UpdateEquipment, DeleteEquipment } from './state'
 
 const { CREATE_EQUIPMENT, UPDATE_EQUIPMENT, DELETE_EQUIPMENT } = actionTypes;
 
-export function* privateEquipmentWatcher() {
+export function* equipmentWatcher() {
   yield all([
     takeEvery(CREATE_EQUIPMENT, createEquipmentWorker),
     takeEvery(UPDATE_EQUIPMENT, updateEquipmentWorker),

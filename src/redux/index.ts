@@ -11,7 +11,7 @@ import { windowReducer }                                 from '../modules/genera
 import { loadFromLocalStorage, saveToLocalStorage }      from '../modules/general/localStorage';
 
 import { dataWatcher }        from '../modules/shared/data/network';
-import { dataReducer, getInitialData }  from '../modules/shared/data/state';
+import { dataReducer, getInitialData } from '../modules/shared/data/state';
 import { geolocationReducer } from '../modules/shared/geolocation/state';
 import { menuReducer }        from '../modules/shared/menu/state';
 import { searchWatcher }      from '../modules/shared/search/network';
@@ -31,14 +31,14 @@ import { friendshipWatcher }        from '../modules/user/private/dashboard/frie
 import { settingsWatcher }      from '../modules/user/private/dashboard/settings/network';
 import { userDataWatcher }          from '../modules/user/private/data/network';
 import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
-import { privateEquipmentWatcher }  from '../modules/user/private/equipment/network';
-import { privateIngredientWatcher } from '../modules/user/private/ingredient/network';
+import { equipmentWatcher }  from '../modules/equipment/network';
+import { ingredientWatcher } from '../modules/ingredient/network';
 import { privatePlanWatcher }       from '../modules/user/private/plan/network';
-import { privateRecipeWatcher }     from '../modules/user/private/recipe/network';
+import { recipeWatcher }     from '../modules/recipe/network';
 import { saveRecipeWatcher }        from '../modules/user/private/saved-recipe/network';
 
 import { publicPlanWatcher }     from '../modules/user/public/plan/network';
-import { publicRecipeWatcher }   from '../modules/user/public/recipe/network'
+
 import { favoriteRecipeWatcher } from '../modules/user/public/favorited-recipe/network';
 
 function makeStore(context: Context) {
@@ -88,12 +88,12 @@ export function* rootSaga() {
   yield fork(settingsWatcher);
   yield fork(chatWatcher);
   yield fork(dataWatcher);
-  yield fork(privateEquipmentWatcher);
+  yield fork(equipmentWatcher);
   yield fork(favoriteRecipeWatcher);
   yield fork(friendshipWatcher);
-  yield fork(privateIngredientWatcher);
+  yield fork(ingredientWatcher);
   yield fork(privatePlanWatcher);
-  yield fork(privateRecipeWatcher);
+  yield fork(recipeWatcher);
   yield fork(saveRecipeWatcher);
   yield fork(searchWatcher);
   yield fork(userDataWatcher);

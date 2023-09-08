@@ -5,46 +5,38 @@ import AriaModal                                                  from 'react-ar
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 }                                           from 'uuid';
 
-import { ExpandCollapse } from '../../../../shared/ExpandCollapse';
-import { LoaderButton }   from '../../../../shared/LoaderButton';
+import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { LoaderButton }   from '../../shared/LoaderButton';
+import type { Ownership } from '../../shared/types';
 import {
   useTypedDispatch as useDispatch,
   useTypedSelector as useSelector
-} from '../../../../../redux';
-import type { WorkRecipe } from '../../../../shared/data/state';
+} from '../../../redux';
+import type { WorkRecipe } from '../../shared/data/state';
 import {
   addRecipeToDay,
   removeRecipeFromDay,
   reorderRecipeInDay,
   clickDay,
   clearWork,
-  setCreating,
-  setEditingId,
   setPlanName,
   setPlanData
-} from '../../../../plan/form/state';
-import type { PlanData, Recipe } from '../../../../plan/form/state';
-import { createPrivatePlan, updatePrivatePlan } from '../state';
+} from '../state';
+import type { PlanData, PlanRecipe } from '../state';
+import { createPlan, updatePlan } from '../state';
 
-export default function UserPrivatePlanForm() {
+export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
 
   const params  = useSearchParams();
   const plan_id = params.get('plan_id');
 
   const dispatch = useDispatch();
+  const plan_name = useSelector(state => state.planForm.plan_name);
+  const plan_data = useSelector(state => state.planForm.plan_data);
+  const message   = useSelector(state => state.system.message);
 
-  const officialRecipes     = useSelector(state => state.data.recipes);
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
-  const my_private_plans    = useSelector(state => state.userData.my_private_plans);
-  const expandedDay         = useSelector(state => state.planForm.expandedDay);
-  const editingId           = useSelector(state => state.planForm.editingId);
-  const plan_name           = useSelector(state => state.planForm.plan_name);
-  const plan_data           = useSelector(state => state.planForm.plan_data);
-  const message             = useSelector(state => state.system.message);
+  const { allowedRecipes } = useAllowedContent(ownership, plan_id);
 
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
@@ -65,8 +57,7 @@ export default function UserPrivatePlanForm() {
         setLoading(false);
         return;
       }
-      // batch these three??? AND SEPARATE FROM PUBLIC PLAN FORM STATE!!!
-      dispatch(setEditingId(plan.plan_id));
+
       dispatch(setPlanName(plan.plan_name));
       dispatch(setPlanData(plan.plan_data));
       setLoading(false);
@@ -128,51 +119,27 @@ export default function UserPrivatePlanForm() {
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
-  const valid = () => {
-    const validName = plan_name.trim() !== "";
-    if (!validName) {
-      window.scrollTo(0, 0);
-      setFeedback("You forgot to name your plan...");
-      setTimeout(() => setFeedback(""), 3000);
-      return false;
-    }
-
-    const validNameLength = plan_name.trim().length < 21;
-    if (!validNameLength) {
-      window.scrollTo(0, 0);
-      setFeedback("Please keep your plan name under 20 characters");
-      setTimeout(() => setFeedback(""), 3000);
-      return false;
-    }
-
-    return validName && validNameLength;
-  };
-
   const handleSubmit = () => {
-    if (!valid()) return;
+    if (!isValidPlan({plan_name, setFeedback})) return;
 
     setLoading(true);
 
-    const planInfo = {
+    const plan_upload = {
       plan_name,
       plan_data: getPlanData()
     };
 
-    if (editingId) {
-      const planUpdateInfo = {
-        plan_id: editingId,
-        ...planInfo
-      };
-
-      dispatch(updatePrivatePlan(planUpdateInfo));
+    if (plan_id) {
+      const plan_update_upload = {plan_id, ...plan_upload};
+      dispatch(updatePlan(ownership, plan_update_upload));
     } else {
-      dispatch(createPrivatePlan(planInfo));
+      dispatch(createPlan(ownership, plan_upload));
     }
   };
 
   const tabToList: TabToList = {
     "official": officialRecipes,
-    "private":  my_private_recipes,
+    "private":  my_private_recipes,  // only if ownership = "private"
     "public":   my_public_recipes,
     "favorite": my_favorite_recipes,
     "saved":    my_saved_recipes
@@ -244,6 +211,89 @@ export default function UserPrivatePlanForm() {
     </div>
   );
 }
+
+type Props = {
+  ownership: Ownership;
+};
+
+function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
+  const recipes             = useSelector(state => state.data.recipes);
+  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
+  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
+  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
+  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+
+  //const my_private_plans    = useSelector(state => state.userData.my_private_plans);
+
+  // EXTREMELY IMPORTANT:
+  // Note that:
+  // my_private_recipes are
+  // only allowed in a plan of "private" ownership
+  //
+  // my_public_recipes, my_favorite_recipes, and my_saved_recipes are
+  // only allowed in a plan of "private" or "public" ownership
+  //
+  // This MUST also be checked on the backend server!!!
+
+  const allowedRecipes = [
+    ...recipes,
+    ...(
+      ownership === "private"
+      ? (
+        recipe_id
+        ? my_private_recipes.filter(r => r.recipe_id != recipe_id)
+        : my_private_recipes
+      )
+      : []
+    ),
+    ...(
+      (ownership === "private" || ownership === "public")
+      ? (
+        recipe_id
+        ? my_public_recipes.filter(r => r.recipe_id != recipe_id)
+        : my_public_recipes
+      )
+      : []
+    ),
+    ...((ownership === "private" || ownership === "public") ? my_favorite_recipes : []),  // TO DO: make sure they can't be the author AND that recipe is not private
+    ...((ownership === "private" || ownership === "public") ? my_saved_recipes    : []),  // TO DO: make sure they can't be the author AND that recipe is not private
+  ];
+
+  return {allowedRecipes};
+}
+
+function isValidPlan({
+  plan_name,
+  setFeedback
+}: IsValidPlanUploadParams) {
+  function feedback(message: string) {
+    window.scrollTo(0, 0);
+    setFeedback(message);
+    setTimeout(() => setFeedback(""), 3000);
+    return false;
+  }
+
+  const validPlanName = plan_name.trim() !== "";
+  if (!validPlanName) return feedback("Enter plan name.");
+
+  return true;
+}
+
+type IsValidPlanUploadParams = {
+  plan_name:   string;
+  setFeedback: (feedback: string) => void;
+};
+
+interface TabToList {
+  [index: string]: any;
+  "official": WorkRecipe[];
+  "private":  WorkRecipe[];  // TODO: only if ownership = "private"
+  "public":   WorkRecipe[];
+  "favorite": WorkRecipe[];
+  "saved":    WorkRecipe[];
+}
+
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, plan_data }: MonthlyPlanProps) {
   return (
@@ -520,17 +570,6 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
     </div>
   );
 };
-
-interface TabToList {
-  [index: string]: any;
-  "official": WorkRecipe[];
-  "private":  WorkRecipe[];
-  "public":   WorkRecipe[];
-  "favorite": WorkRecipe[];
-  "saved":    WorkRecipe[];
-}
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type MonthlyPlanProps = {
   expandedDay: number | null;
