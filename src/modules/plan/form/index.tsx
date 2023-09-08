@@ -1,4 +1,5 @@
 import type { XYCoord }                                           from 'dnd-core';
+import update                                                     from 'immutability-helper';
 import { useSearchParams, useRouter }                             from 'next/navigation';
 import { memo, useEffect, useRef, useState }                      from 'react';
 import AriaModal                                                  from 'react-aria-modal';
@@ -13,15 +14,6 @@ import {
   useTypedSelector as useSelector
 } from '../../../redux';
 import type { WorkRecipe } from '../../shared/data/state';
-import {
-  addRecipeToDay,
-  removeRecipeFromDay,
-  reorderRecipeInDay,
-  clickDay,
-  clearWork,
-  setPlanName,
-  setPlanData
-} from '../state';
 import type { PlanData, PlanRecipe } from '../state';
 import { createPlan, updatePlan } from '../state';
 
@@ -32,14 +24,17 @@ export default function PlanForm({ ownership }: Props) {
   const plan_id = params.get('plan_id');
 
   const dispatch = useDispatch();
-  const plan_name = useSelector(state => state.planForm.plan_name);
-  const plan_data = useSelector(state => state.planForm.plan_data);
   const message   = useSelector(state => state.system.message);
 
   const { allowedRecipes } = useAllowedContent(ownership, plan_id);
 
+  const [ plan_name, setPlanName ] = useState("");
+  const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
+
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
+  //const [ is_loading,  setIsLoading ]   = useState(false);
+  const [ expandedDay, setExpandedDay ] = useState<number | null>(null);
   const [ modalActive, setModalActive ] = useState(false);
   const [ tab,         setTab ]         = useState("official");
 
@@ -52,23 +47,17 @@ export default function PlanForm({ ownership }: Props) {
       const plan = my_private_plans.find(p => p.plan_id === plan_id);
 
       if (!plan) {
-        dispatch(clearWork());
-        dispatch(setCreating());
         setLoading(false);
-        return;
+        return;  // TO DO: redirect
       }
 
-      dispatch(setPlanName(plan.plan_name));
-      dispatch(setPlanData(plan.plan_data));
+      setPlanName(plan.plan_name);
+      setPlanData(plan.plan_data);
       setLoading(false);
     };
 
     if (plan_id) {
-      dispatch(clearWork());
       getExistingPlanToEdit();
-    } else {
-      dispatch(clearWork());
-      dispatch(setCreating());
     }
   }, []);
 
@@ -98,7 +87,6 @@ export default function PlanForm({ ownership }: Props) {
 
   const discardChanges = () => {
     setModalActive(false);
-    dispatch(clearWork());
     router.push('/dashboard');
   };
 
@@ -114,10 +102,39 @@ export default function PlanForm({ ownership }: Props) {
       setTimeout(() => setFeedback(""), 3000);
       return;
     }
-    dispatch(setPlanName(nextName));
+    setPlanName(nextName);
   };
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
+
+  const clickDay = (day: number) =>
+    setExpandedDay(day === expandedDay ? null : day);
+  
+  const addRecipeToDay = (day: number, recipe: DayRecipe) => {
+    const new_plan_data = [...plan_data];  // not sufficient, go deeper? (See recipes rows)
+    new_plan_data[day - 1]?.push(recipe);
+    setPlanData(new_plan_data)
+  };
+  
+  const removeRecipeFromDay = (day: number, index: number) => {
+    const plan_data = [...state.plan_data];
+    plan_data[day - 1]?.splice(index, 1);
+    return {...state, plan_data};
+  };
+  
+  const reorderRecipeInDay = (dragIndex: number, hoverIndex: number) => {
+    if (!expandedDay ) {
+      return state;
+    }
+    const draggedRecipe = plan_data[expandedDay - 1]![dragIndex]!;
+    return update(state, {
+      plan_data: {
+        [expandedDay - 1]: {
+          $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
+        }
+      }
+    });
+  };
 
   const handleSubmit = () => {
     if (!isValidPlan({plan_name, setFeedback})) return;
@@ -606,6 +623,19 @@ type DragItem = {
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 //end: (item: any, monitor: DragSourceMonitor) => {
-    //  if (item.day === 0) return;
-    //  if (item.day !== item.listId) dispatch(removeRecipeFromDay(item.day, item.index));
-    //},
+//  if (item.day === 0) return;
+//  if (item.day !== item.listId) dispatch(removeRecipeFromDay(item.day, item.index));
+//},
+
+export type RecipeOverview = {
+  recipe_id: string;
+  owner_id:  string;
+  title:     string;
+  image_url: string;
+};
+
+export type DayRecipe = RecipeOverview & {
+  key: string;
+};
+
+export type PlanData = DayRecipe[][];
