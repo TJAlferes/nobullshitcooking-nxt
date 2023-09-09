@@ -1,25 +1,25 @@
+import axios                   from 'axios';
 import Link                    from 'next/link';
 import { useRouter }           from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
 
+import { endpoint }                        from '../../../config/api';
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderButton }                    from '../../shared/LoaderButton';
-import { register }                        from './state';
 
 export default function Register() {
   const router = useRouter();
 
-  const dispatch = useDispatch();
   const authname = useSelector(state => state.authentication.authname);
-  const message  = useSelector(state => state.system.message);
+  const message  = useSelector(state => state.system.message);  // not needed here???
 
   const [ email,         setEmail ]         = useState("");
-  const [ feedback,      setFeedback ]      = useState("");
-  const [ loading,       setLoading ]       = useState(false);
   const [ password,      setPassword ]      = useState("");
   const [ passwordAgain, setPasswordAgain ] = useState("");
   const [ username,      setUsername ]      = useState("");
+
+  const [ feedback, setFeedback ] = useState("");
+  const [ loading,  setLoading ]  = useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -30,7 +30,7 @@ export default function Register() {
     return () => {
       isSubscribed = false;
     };
-  }, [message]);
+  }, [message]);  // not needed here???
 
   useEffect(() => {
     if (authname !== '') router.push('/dashboard');
@@ -41,20 +41,40 @@ export default function Register() {
   const passwordChange      = (e: SyntheticEvent) => setPassword((e.target as HTMLInputElement).value);
   const passwordAgainChange = (e: SyntheticEvent) => setPasswordAgain((e.target as HTMLInputElement).value);
 
-  const registerClick = () => {
-    if (loading) return;
-    if (!validateRegistrationInfo()) return;
+  const register = async () => {
     setLoading(true);
-    // WHY DOES THIS NEED TO BE IN REDUX?
-    dispatch(register(email, password, username, router));  // do you really need to pass the router here?
+
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/user/create`,
+        {email, password, username}
+      );
+  
+      setFeedback(data.message);
+  
+      if (data.message === 'User account created.') {
+        // delay(4000);
+        router.push('/confirm');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    // delay(4000);
+    setFeedback("");
   };
 
-  const registerKeyUp = (e: React.KeyboardEvent) => {
+  const registerClick = async () => {
+    if (loading) return;
+    if (!validateRegistrationInfo()) return;
+    await register();
+  };
+
+  const registerKeyUp = async (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateRegistrationInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
-    setLoading(true);
-    dispatch(register(email, password, username, router));
+    await register();
   };
 
   const validateRegistrationInfo = () => (
@@ -63,8 +83,6 @@ export default function Register() {
     && password.length > 5
     && password == passwordAgain
   );  // TO DO: do most of this in HTML
-
-  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
   
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
@@ -158,3 +176,5 @@ export default function Register() {
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

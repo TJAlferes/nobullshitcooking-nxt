@@ -1,3 +1,4 @@
+/*
 import type { IData } from '../../store/planner/types';
 
 export function convertPlannerToUrl(planData: IData) {  // TO DO: validate here too
@@ -18,3 +19,4 @@ export function convertPlannerToUrl(planData: IData) {  // TO DO: validate here 
   
   return string.slice(0, -1);  // removes the last '!'
 }
+*/

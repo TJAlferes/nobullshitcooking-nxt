@@ -32,7 +32,8 @@ export default function PlanDetail({ ownership }: Props) {
         return;
       }
 
-      dispatch(load(plan.plan_name, plan.plan_data));
+      setPlanName(plan.plan_name);
+      setPlanData(plan.plan_data);
     };
 
     if (plan_id) {
@@ -101,7 +102,7 @@ const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 function Day({ day, recipes }: DayProps) {
   const dispatch = useDispatch();
 
-  const handleClickDay = () => dispatch(clickDay(day));
+  const handleClickDay = () => clickDay(day);
 
   return (
     <div className="day" onClick={handleClickDay}>
@@ -114,7 +115,7 @@ function Day({ day, recipes }: DayProps) {
 function ExpandedDay({ day, recipes }: DayProps) {
   const dispatch = useDispatch();
 
-  const handleClickDay = () => dispatch(clickDay(day));
+  const handleClickDay = () => clickDay(day);
 
   return (
     <div className="expanded-day" onClick={handleClickDay}>
@@ -159,4 +160,21 @@ type DayProps = {
 
 type RecipeProps = {
   recipe: Recipe;
+};
+
+export type PlanDataView = PlanRecipeView[][];
+
+export type PlanRecipeView = {
+  image_url: string;
+  title:     string;
+  recipe_id: string;
+};
+
+// url
+export type Recipe = {
+  key:          string;
+  recipe_id:    string;
+  owner_id:     string;
+  title:        string;
+  recipe_image: string;
 };

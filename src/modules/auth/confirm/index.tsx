@@ -1,22 +1,22 @@
+import axios                   from 'axios';
 import Link                    from 'next/link';
 import { useRouter }           from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
 
+import { endpoint }                        from '../../../config/api';
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderButton }                    from '../../shared/LoaderButton';
-import { confirm }                         from './state';
 
 export default function Confirm() {
   const router   = useRouter();
-  const dispatch = useDispatch();
 
   const authname = useSelector(state => state.authentication.authname);
   const message  = useSelector(state => state.system.message);
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
-  const [ feedback,          setFeedback ]         = useState("");
-  const [ loading,           setLoading ]          = useState(false);
+
+  const [ feedback, setFeedback ] = useState("");
+  const [ loading,  setLoading ]  = useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -33,26 +33,48 @@ export default function Confirm() {
     if (authname !== '') router.push('/dashboard');
   }, [authname]);
 
-  const confirmationCodeChange = (e: SyntheticEvent) => setConfirmationCode((e.target as HTMLInputElement).value);
+  const confirmationCodeChange = (e: SyntheticEvent) =>
+    setConfirmationCode((e.target as HTMLInputElement).value);
+  
+  const confirm = async () => {
+    setLoading(true);
 
-  const confirmClick = () => {
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/user/confirmation/confirm`,
+        {confirmation_code}
+      );
+      
+      setFeedback(data.message);
+  
+      if (data.message === "User account confirmed.") {
+        // delay(4000);
+        router.push('/login');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    // delay(4000);
+    setFeedback("");
+  };
+
+  const confirmClick = async () => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     setLoading(true);
-    dispatch(confirm(confirmation_code, router));
+    await confirm();
   };
 
-  const confirmKeyUp = (e: React.KeyboardEvent) => {
+  const confirmKeyUp = async (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
-    dispatch(confirm(confirmation_code, router));
+    await confirm();
   };
 
   const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
-
-  const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
   
   return (
     <div className="register" onKeyUp={e => confirmKeyUp(e)}>
@@ -109,3 +131,5 @@ export default function Confirm() {
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

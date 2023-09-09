@@ -1,3 +1,4 @@
+import axios                           from 'axios';
 import Link                            from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import AriaModal                       from 'react-aria-modal';
@@ -5,6 +6,7 @@ import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
+import { endpoint }                       from '../../../config/api';
 import { useTypedSelector as useSelector } from '../../../../redux';
 import { getCroppedImage }                 from '../../../shared/getCroppedImage';
 import { unfavoriteRecipe }                from '../../public/favorited-recipe/state';
@@ -42,6 +44,9 @@ export default function Dashboard() {
   const [ deleteName,  setDeleteName ]  = useState("");
   const [ modalActive, setModalActive ] = useState(false);
 
+  const [ new_email,    setNewEmail ]    = useState("");
+  const [ new_password, setNewPassword ] = useState("");
+  const [ new_username, setNewUsername ] = useState("");
   const [ avatar,     setAvatar ]     = useState<string | ArrayBuffer | null>(null);
   const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
   const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
@@ -76,6 +81,98 @@ export default function Dashboard() {
 
   const tabClick = (e: React.SyntheticEvent<EventTarget>) =>
     setTab((e.target as HTMLInputElement).name);
+
+  const updateEmail = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/user/update-email`,
+        {new_email},
+        {withCredentials: true}
+      );
+  
+      setFeedback(data.message);
+  
+      if (data.message === 'Email updated.') {
+        router.push('/dashboard');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    //delay(4000);
+    setFeedback("")
+  };
+
+  const updatePassword = async () => {
+    setLoading(true);
+    try {
+      const { data } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/update-password`,
+        {new_password},
+        {withCredentials: true}
+      );
+  
+      yield put(systemMessage(data.message));
+  
+      if (data.message === 'Password updated.') {
+        yield call([router, router.push], '/user/dashboard');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    //delay(4000);
+    setFeedback("")
+  };
+
+  const updateUsername = async () => {
+    setLoading(true);
+    try {
+
+    const { data } = yield call(
+      [axios, axios.post],
+      `${endpoint}/user/update-username`,
+      {new_username},
+      {withCredentials: true}
+    );
+
+    yield put(systemMessage(data.message));
+
+    if (data.message === 'Email updated.') {
+      yield call([router, router.push], '/user/dashboard');
+    }
+  } catch(err) {
+    setFeedback('An error occurred. Please try again.');
+  }
+
+  //delay(4000);
+  setFeedback("")
+  };
+
+  const deleteAccount = async () => {
+    setLoading(true);
+    try {
+      const { status } = await axios.delete(
+        `${endpoint}/user/delete`,
+        {withCredentials: true}
+      );
+  
+      setFeedback(data.message));
+  
+      if (status === 204) {
+        setFeedback('User account deleted.');
+        // log them out here (clear localStorage and sessionStorage)
+        router.push('/home');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("")
+  };
 
   const getApplicationNode = (): Element | Node =>
     document.getElementById('root') as Element | Node;
@@ -154,9 +251,44 @@ export default function Dashboard() {
 
   const onCropComplete = (crop: Crop) => makeCrops(crop);
 
-  const uploadAvatar = () => {
+  const uploadAvatar = async () => {
     setLoading(true);
-    dispatch(submitAvatar(fullAvatar, tinyAvatar));
+    try {
+      let avatarUrl;
+  
+      if (avatar.small && avatar.tiny) {
+        const { data: { filename, fullSignature, tinySignature } } = await axios.post(
+          `${endpoint}/user/signed-url`,
+          {subfolder: 'public/avatar/'},
+          {withCredentials: true}
+        );
+  
+        await uploadImageToAWSS3(fullSignature, full_avatar);
+        await uploadImageToAWSS3(tinySignature, tiny_avatar);
+  
+        avatar.image_filename = filename;
+      }
+  
+      const { data } = yield call(
+        [axios, axios.post],
+        `${endpoint}/user/auth/set-avatar`,
+        {avatar: avatarUrl},
+        {withCredentials: true}
+      );
+  
+      setFeedback(data.message);
+  
+      if (data.message === 'Avatar set.') {
+        //elay(2000);
+        //systemMessageClear();
+        location.reload();  // ?  // refresh/update respective list
+      }
+    } catch (err) {
+      yield put(systemMessage('An error occurred. Please try again.'));
+    }
+  
+    yield delay(4000);
+    yield put(systemMessageClear());
   };
 
   const unfavorite = (recipe_id: string) => {
@@ -176,6 +308,10 @@ export default function Dashboard() {
       <p className="feedback">{feedback}</p>
 
       {!avatar && <Tabs tab={tab} tabClick={tabClick} />}
+
+      {
+        tab === "settings" && (<></>)
+      }
 
       {(tab === "avatar") && (
         <>
@@ -668,6 +804,10 @@ function Subtabs({ subTab, subTabClick }: SubtabsProps) {
       >{"Saved"}</button>
     </div>
   );
+}
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }
 
 const initialCrop: Crop = {

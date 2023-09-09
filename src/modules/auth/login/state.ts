@@ -1,4 +1,3 @@
-import type { useRouter } from 'next/navigation';
 import { HYDRATE }        from 'next-redux-wrapper';  // DITCH IF POSSIBLE
 import type { AnyAction } from 'redux';
 
@@ -26,19 +25,6 @@ export const authenticate = (authname: string) => ({
   authname
 });
 
-export const login = (
-  email:    string,
-  password: string,
-  router:   ReturnType<typeof useRouter>
-) => ({
-  type: LOGIN,
-  email,
-  password,
-  router
-});
-
-export const logout = () => ({type: LOGOUT});
-
 // types -----------------------------------------------------------------------
 
 export type State = {
@@ -46,30 +32,14 @@ export type State = {
 };
 
 export const actionTypes = {
-  AUTHENTICATE:  'AUTHENTICATE',
-  LOGIN:         'LOGIN',
-  LOGOUT:        'LOGOUT',
+  AUTHENTICATE:  'AUTHENTICATE'
 } as const;
 
-const { AUTHENTICATE, LOGIN, LOGOUT } = actionTypes;
+const { AUTHENTICATE } = actionTypes;
 
-export type Actions =
-| Authenticate
-| Login
-| Logout;
+export type Actions = Authenticate;
 
 export type Authenticate = {
   type:     typeof AUTHENTICATE;
   authname: string;
-};
-
-export type Login = {
-  type:     typeof LOGIN;
-  email:    string;
-  password: string;
-  router:   ReturnType<typeof useRouter>;
-};
-
-export type Logout = {
-  type: typeof LOGOUT;
 };
