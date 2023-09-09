@@ -15,6 +15,9 @@ export default function Confirm() {
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
 
+  const [ email,    setEmail ]    = useState("");
+  const [ password, setPassword ] = useState("");
+
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
@@ -35,13 +38,19 @@ export default function Confirm() {
 
   const confirmationCodeChange = (e: SyntheticEvent) =>
     setConfirmationCode((e.target as HTMLInputElement).value);
+
+  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
+    setEmail((e.target as HTMLInputElement).value);
+
+  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
+    setPassword((e.target as HTMLInputElement).value);
   
   const confirm = async () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post(
-        `${endpoint}/user/confirmation/confirm`,
+      const { data } = await axios.patch(
+        `${endpoint}/auth/confirm`,
         {confirmation_code}
       );
       
@@ -51,6 +60,24 @@ export default function Confirm() {
         // delay(4000);
         router.push('/login');
       }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    // delay(4000);
+    setFeedback("");
+  };
+
+  const requestResend = async () => {
+    setLoading(true);
+
+    try {
+      const { data } = await axios.get(
+        `${endpoint}/auth/resend-confirmation-code`,
+        {email, password}
+      );
+  
+      yield put(systemMessage(data.message));
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
@@ -75,6 +102,7 @@ export default function Confirm() {
   };
 
   const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
+  const validateResendInfo = () => (email.length > 4 && password.length > 5);
   
   return (
     <div className="register" onKeyUp={e => confirmKeyUp(e)}>
@@ -114,6 +142,34 @@ export default function Confirm() {
           onClick={confirmClick}
           onKeyUp={confirmKeyUp}
           text="Confirm"
+        />
+
+        <p>Can't find your confirmation code? Enter your email and password</p>
+        <label>Email</label>
+        <input
+          autoComplete="email"
+          autoFocus
+          disabled={loading}
+          id="email"
+          maxLength={50}
+          name="email"
+          onChange={emailChange}
+          size={20}
+          type="text"
+          value={email}
+        />
+
+        <label>Password</label>
+        <input
+          autoComplete="current-password"
+          disabled={loading}
+          id="password"
+          maxLength={20}
+          name="password"
+          onChange={passwordChange}
+          size={20}
+          type="password"
+          value={password}
         />
       </form>
 

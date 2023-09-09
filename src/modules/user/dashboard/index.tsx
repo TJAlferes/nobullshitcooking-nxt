@@ -6,18 +6,15 @@ import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                       from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../../redux';
-import { getCroppedImage }                 from '../../../shared/getCroppedImage';
-import { unfavoriteRecipe }                from '../../public/favorited-recipe/state';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
+import { getCroppedImage }                 from '../../shared/getCroppedImage';
 import { deletePublicPlan }                from '../../public/plan/state';
 import { disownPublicRecipe }              from '../../public/recipe/state';
 import { deletePrivateEquipment }          from '../equipment/state';
 import { deletePrivateIngredient }         from '../ingredient/state';
 import { deletePrivatePlan }               from '../plan/state';
 import { deletePrivateRecipe }             from '../recipe/state';
-import { unsaveRecipe }                    from '../saved-recipe/state';
-import { submitAvatar }                    from './settings/state';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -32,7 +29,6 @@ export default function Dashboard() {
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const authname            = useSelector(state => state.authentication.authname);
   const creatingPlan        = useSelector(state => state.planForm.creating);
-  //const editingId           = useSelector(state => state.planForm.editingId);
   const message             = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
@@ -85,8 +81,8 @@ export default function Dashboard() {
   const updateEmail = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post(
-        `${endpoint}/user/update-email`,
+      const { data } = await axios.patch(
+        `${endpoint}/users/${authname}/update-email`,
         {new_email},
         {withCredentials: true}
       );
@@ -107,9 +103,8 @@ export default function Dashboard() {
   const updatePassword = async () => {
     setLoading(true);
     try {
-      const { data } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/update-password`,
+      const { data } = await axios.patch(
+        `${endpoint}/users/${authname}/update-password`,
         {new_password},
         {withCredentials: true}
       );
@@ -117,7 +112,7 @@ export default function Dashboard() {
       yield put(systemMessage(data.message));
   
       if (data.message === 'Password updated.') {
-        yield call([router, router.push], '/user/dashboard');
+        router.push('/dashboard');
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
@@ -131,9 +126,8 @@ export default function Dashboard() {
     setLoading(true);
     try {
 
-    const { data } = yield call(
-      [axios, axios.post],
-      `${endpoint}/user/update-username`,
+    const { data } = await axios.patch(
+      `${endpoint}/users/${authname}/update-username`,
       {new_username},
       {withCredentials: true}
     );
@@ -141,7 +135,7 @@ export default function Dashboard() {
     yield put(systemMessage(data.message));
 
     if (data.message === 'Email updated.') {
-      yield call([router, router.push], '/user/dashboard');
+      router.push('/dashboard');
     }
   } catch(err) {
     setFeedback('An error occurred. Please try again.');
@@ -291,14 +285,40 @@ export default function Dashboard() {
     yield put(systemMessageClear());
   };
 
-  const unfavorite = (recipe_id: string) => {
+  const unfavorite = async (recipe_id: string) => {
     setLoading(true);
-    dispatch(unfavoriteRecipe(recipe_id));
+
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${auth_id}/favorite-recipes/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setFeedback(data.message);
+      //dispatch(getMyFavoriteRecipes());
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
-  const unsave = (recipe_id: string) => {
+  const unsave = async (recipe_id: string) => {
     setLoading(true);
-    dispatch(unsaveRecipe(recipe_id));
+
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${auth_id}/saved-recipes/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setFeedback(data.message);
+      //dispatch(getMyFavoriteRecipes());
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
   return (

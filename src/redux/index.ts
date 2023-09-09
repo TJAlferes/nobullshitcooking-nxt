@@ -27,19 +27,14 @@ import { planFormReducer }   from '../modules/plan/form/state';  // split into u
 import { userAuthenticationWatcher } from '../modules/user/authentication/network';
 import { authenticationReducer }     from '../modules/user/authentication/state';
 
-import { friendshipWatcher }        from '../modules/user/private/dashboard/friends/network';
-import { settingsWatcher }      from '../modules/user/private/dashboard/settings/network';
 import { userDataWatcher }          from '../modules/user/private/data/network';
 import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
 import { equipmentWatcher }  from '../modules/equipment/network';
 import { ingredientWatcher } from '../modules/ingredient/network';
 import { privatePlanWatcher }       from '../modules/user/private/plan/network';
 import { recipeWatcher }     from '../modules/recipe/network';
-import { saveRecipeWatcher }        from '../modules/user/private/saved-recipe/network';
 
 import { publicPlanWatcher }     from '../modules/user/public/plan/network';
-
-import { favoriteRecipeWatcher } from '../modules/user/public/favorited-recipe/network';
 
 function makeStore(context: Context) {
   const persistedState = typeof window !== 'undefined' ? loadFromLocalStorage() : {};
@@ -85,16 +80,12 @@ export const rootReducer = combineReducers({
 
 export function* rootSaga() {
   yield fork(userAuthenticationWatcher);
-  yield fork(settingsWatcher);
   yield fork(chatWatcher);
   yield fork(dataWatcher);
   yield fork(equipmentWatcher);
-  yield fork(favoriteRecipeWatcher);
-  yield fork(friendshipWatcher);
   yield fork(ingredientWatcher);
   yield fork(privatePlanWatcher);
   yield fork(recipeWatcher);
-  yield fork(saveRecipeWatcher);
   yield fork(searchWatcher);
   yield fork(userDataWatcher);
 }

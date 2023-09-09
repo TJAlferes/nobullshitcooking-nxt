@@ -1,12 +1,11 @@
+import axios                   from 'axios';
 import Link                    from 'next/link';
 import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
 
+import { endpoint }                        from '../../../config/api';
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderSpinner }  from '../../shared/LoaderSpinner';
 import type { Ownership } from '../../shared/types';
-import { saveRecipe }     from '../../user/private/saved-recipe/state';
-import { favoriteRecipe } from '../../user/public/favorited-recipe/state';
 
 export default function RecipeDetail({ recipe, ownership }: Props) {
   if (!recipe) {
@@ -197,7 +196,6 @@ type RequiredSubrecipeView = {
 function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   if (ownership === "private") return false;  // null? fragment?
 
-  const dispatch = useDispatch();
   const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
   const message             = useSelector(state => state.system.message);
@@ -225,18 +223,44 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
     };
   }, [message]);
 
-  const favorite = () => {
+  const favorite = async () => {
     if (favorited) return;
-    setFavorited(true);
     setLoading(true);
-    dispatch(favoriteRecipe(recipe_id));
+
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/users/${auth_id}/favorite-recipes/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setFavorited(true);
+      setFeedback(data.message);
+      //dispatch(getMyFavoriteRecipes());
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
-  const save = () => {
+  const save = async () => {
     if (saved) return;
-    setSaved(true);
     setLoading(true);
-    dispatch(saveRecipe(recipe_id));
+
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/users/${auth_id}/saved-recipes/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setSaved(true);
+      setFeedback(data.message);
+      //dispatch(getMyFavoriteRecipes());
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
   return (
