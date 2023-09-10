@@ -2,13 +2,11 @@ import axios                          from 'axios';
 import Link                           from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
-import { useDispatch }                from 'react-redux';
 
-import { endpoint }                        from '../../../../config/api';
-import { useTypedSelector as useSelector } from '../../../../redux';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderSpinner }   from '../../../shared/LoaderSpinner';
 import type { WorkRecipe } from '../../../shared/data/state';
-import { requestFriendship as userRequestFriendship } from '../../private/dashboard/friends/state';
 
 export default function Profile() {
   const router   = useRouter();
@@ -16,7 +14,6 @@ export default function Profile() {
   const params   = useSearchParams();
   const username = params.get('username');
 
-  const dispatch = useDispatch();
   const authname            = useSelector(state => state.authentication.authname);
   const my_friendships      = useSelector(state => state.userData.my_friendships);
   const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
@@ -64,11 +61,29 @@ export default function Profile() {
     getUserProfile(username);
   }, []);
 
-  const requestFriendship = () => {
+  const requestFriendship = async () => {
+    if (loading) return;
     if (!username) return;
+    const friendname = username.trim();
+    if (friendname === authname) return;
+
     setClicked(true);
     setLoading(true);
-    dispatch(userRequestFriendship(username));
+
+    try {
+      const { data } = await axios.post(
+        `${endpoint}/users/${authname}/friendships`,
+        {friendname},
+        {withCredentials: true}
+      );
+
+      setFeedback(data.message);
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
   const changeTab = (value: string) => setTab(value);
@@ -79,14 +94,20 @@ export default function Profile() {
 
       <p className="feedback">{feedback}</p>
 
-      {userAvatar !== "nobsc-user-default" && <img src={`${url}/nobsc-user-avatars/${userAvatar}`} />}
+      {userAvatar !== "nobsc-user-default" && (
+        <img src={`${url}/nobsc-user-avatars/${userAvatar}`} />
+      )}
       
       <div className="friend-request-outer">
         {userIsAuthenticated && username !== authname
           ? (my_friendships.find(f => f.username === username)
             ? <span>Friends</span>
             : (!clicked
-              ? <button disabled={loading} onClick={requestFriendship}>Send Friend Request</button>
+              ? (
+                <button disabled={loading} onClick={requestFriendship}>
+                  Send Friend Request
+                </button>
+              )
               : <span>Friend Request Sent</span>
             )
           )
@@ -97,8 +118,15 @@ export default function Profile() {
       <h2>Recipes</h2>
       
       <div className="tabs">
-        <button className={tab === "public" ? "--active" : ""}   onClick={() => changeTab("public")}>Public</button>
-        <button className={tab === "favorite" ? "--active" : ""} onClick={() => changeTab("favorite")}>Favorite</button>
+        <button
+          className={tab === "public" ? "--active" : ""}
+          onClick={() => changeTab("public")}
+        >Public</button>
+
+        <button
+          className={tab === "favorite" ? "--active" : ""}
+          onClick={() => changeTab("favorite")}
+        >Favorite</button>
       </div>
 
       {tab === "favorite" && (

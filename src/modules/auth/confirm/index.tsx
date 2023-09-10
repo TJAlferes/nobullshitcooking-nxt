@@ -72,12 +72,12 @@ export default function Confirm() {
     setLoading(true);
 
     try {
-      const { data } = await axios.get(
+      const { data } = await axios.patch(
         `${endpoint}/auth/resend-confirmation-code`,
         {email, password}
       );
   
-      yield put(systemMessage(data.message));
+      setFeedback(data.message);
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
@@ -99,6 +99,20 @@ export default function Confirm() {
     if (e.key && (e.key !== "Enter")) return;
     setLoading(true);
     await confirm();
+  };
+
+  const requestResendClick = async () => {
+    if (loading) return;
+    if (!validateResendInfo()) return;
+    setLoading(true);
+    await requestResend();
+  };
+
+  const requestResendKeyUp = async (e: React.KeyboardEvent) => {
+    if (loading) return;
+    if (!validateResendInfo()) return;
+    setLoading(true);
+    await requestResend();
   };
 
   const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
@@ -144,7 +158,8 @@ export default function Confirm() {
           text="Confirm"
         />
 
-        <p>Can't find your confirmation code? Enter your email and password</p>
+        <p>Can't find your confirmation code? We can email you a new one:</p>
+
         <label>Email</label>
         <input
           autoComplete="email"
@@ -170,6 +185,18 @@ export default function Confirm() {
           size={20}
           type="password"
           value={password}
+        />
+
+        <LoaderButton
+          className="request-resend-confirmation-code"
+          disabled={!validateConfirmationCode()}
+          id="request-resend-confirmation-code"
+          isLoading={loading}
+          loadingText="Resending..."
+          name="submit"
+          onClick={requestResendClick}
+          onKeyUp={requestResendKeyUp}
+          text="Request Resend"
         />
       </form>
 

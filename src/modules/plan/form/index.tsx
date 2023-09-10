@@ -15,7 +15,6 @@ import {
 } from '../../../redux';
 import type { WorkRecipe } from '../../shared/data/state';
 import type { PlanData, PlanRecipe } from '../state';
-import { createPlan, updatePlan } from '../state';
 
 export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
@@ -136,7 +135,7 @@ export default function PlanForm({ ownership }: Props) {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isValidPlan({plan_name, setFeedback})) return;
 
     setLoading(true);
@@ -148,9 +147,38 @@ export default function PlanForm({ ownership }: Props) {
 
     if (plan_id) {
       const plan_update_upload = {plan_id, ...plan_upload};
-      dispatch(updatePlan(ownership, plan_update_upload));
+
+      try {
+        const { data } = await axios.patch(
+          `${endpoint}/users/${user_id}/${ownership}-plans`,
+          plan_update_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        //dispatch(getMyPlans(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     } else {
-      dispatch(createPlan(ownership, plan_upload));
+      try {
+        const { data } = await axios.post(
+          `${endpoint}/users/${user_id}/${ownership}-plans`,
+          plan_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        //dispatch(getMyPlans(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     }
   };
 

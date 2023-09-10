@@ -109,7 +109,7 @@ export default function Dashboard() {
         {withCredentials: true}
       );
   
-      yield put(systemMessage(data.message));
+      setFeedback(data.message);
   
       if (data.message === 'Password updated.') {
         router.push('/dashboard');
@@ -124,36 +124,37 @@ export default function Dashboard() {
 
   const updateUsername = async () => {
     setLoading(true);
+
     try {
+      const { data } = await axios.patch(
+        `${endpoint}/users/${authname}/update-username`,
+        {new_username},
+        {withCredentials: true}
+      );
 
-    const { data } = await axios.patch(
-      `${endpoint}/users/${authname}/update-username`,
-      {new_username},
-      {withCredentials: true}
-    );
+      setFeedback(data.message);
 
-    yield put(systemMessage(data.message));
-
-    if (data.message === 'Email updated.') {
-      router.push('/dashboard');
+      if (data.message === 'Email updated.') {
+        router.push('/dashboard');
+      }
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
     }
-  } catch(err) {
-    setFeedback('An error occurred. Please try again.');
-  }
 
-  //delay(4000);
-  setFeedback("")
+    //delay(4000);
+    setFeedback("")
   };
 
   const deleteAccount = async () => {
     setLoading(true);
+
     try {
       const { status } = await axios.delete(
         `${endpoint}/user/delete`,
         {withCredentials: true}
       );
   
-      setFeedback(data.message));
+      setFeedback(data.message);
   
       if (status === 204) {
         setFeedback('User account deleted.');
@@ -191,32 +192,98 @@ export default function Dashboard() {
     setTinyAvatar(null);
   };
 
-  const deleteUserPlan = () => {
-    if (!deleteId) return;
+  const deletePlan = async (plan_id: string) => {
     setLoading(true);
-    dispatch(deletePlan(deleteId));
+
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${user_id}/private-plans/${plan_id}`,
+        {withCredentials: true}
+      );
+
+      setFeedback(data.message);
+
+      //yield call(getMyEquipmentWorker);
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
-  const deletePrivateEquipment = (equipment_id: string) => {
+  const deleteEquipment = async (equipment_id: string) => {
     setLoading(true);
-    dispatch(deleteEquipment(equipment_id));
+
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${user_id}/private-equipment/${equipment_id}`,
+        {withCredentials: true}
+      );
+
+      setFeedback(data.message);
+
+      //dispatch(getMyEquipment("private"));
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
-  const deletePrivateIngredient = (ingredient_id: string) => {
+  const deleteIngredient = async (ingredient_id: string) => {
     setLoading(true);
-    dispatch(deleteIngredient(ingredient_id));
+
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${user_id}/private-ingredients/${ingredient_id}`,
+        {withCredentials: true}
+      );
+
+      setFeedback(data.message);
+
+      //dispatch(getMyIngredients("private"));
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+
+    //delay(4000);
+    setFeedback("");
   };
 
-  const deleteRecipe = () => {
-    if (!deleteId) return;
+  const deletePrivateRecipe = async (recipe_id: string) => {
     setLoading(true);
-    dispatch(deletePrivateRecipe(deleteId));
+    try {
+      const { data } = await axios.delete(
+        `${endpoint}/users/${user_id}/private-recipe/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setFeedback(data.message);
+      //dispatch(getMyRecipes("private"));
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    //delay(4000);
+    setFeedback("");
   };
 
-  const disownRecipe = () => {
-    if (!deleteId) return;
+  const disownPublicRecipe = async (recipe_id: string) => {
     setLoading(true);
-    dispatch(disownPublicRecipe(deleteId));
+    try {
+      const { data } = await axios.patch(
+        `${endpoint}/users/${user_id}/public-recipe/${recipe_id}`,
+        {withCredentials: true}
+      );
+      setFeedback(data.message);
+      //dispatch(getMyRecipes("private"));
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+  
+    //delay(4000);
+    setFeedback("");
   };
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,8 +315,6 @@ export default function Dashboard() {
   const uploadAvatar = async () => {
     setLoading(true);
     try {
-      let avatarUrl;
-  
       if (avatar.small && avatar.tiny) {
         const { data: { filename, fullSignature, tinySignature } } = await axios.post(
           `${endpoint}/user/signed-url`,
@@ -413,23 +478,9 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Plans</h2>
   
-          {(!creatingPlan && !editingId) && (
-            <Link href="/new-plan" className="new-entity">
-              Create New Plan
-            </Link>
-          )}
-
-          {( creatingPlan && !editingId) && (
-            <Link href="/new-plan" className="new-entity">
-              Finish Creating Plan
-            </Link>
-          )}
-
-          {(!creatingPlan &&  editingId) && (
-            <Link href={`/new-plan/${editingId}`} className="new-entity">
-              Finish Updating Plan
-            </Link>
-          )}
+          <Link href="/plan/form`" className="new-entity">
+            Create New Plan
+          </Link>
   
           {modalActive
             ? (
@@ -448,7 +499,7 @@ export default function Dashboard() {
                   No
                 </button>
 
-                <button className="--action" onClick={deleteUserPlan}>
+                <button className="--action" onClick={deletePlan}>
                   Yes, Delete Plan
                 </button>
               </AriaModal>
@@ -463,13 +514,13 @@ export default function Dashboard() {
                   <Link href={`/user-plan/${p.plan_id}`}>{p.plan_name}</Link>
                 </span>
 
-                {(!creatingPlan && !editingId) && (
+                {!creatingPlan && (
                   <span className="action">
                     <Link href={`/new-plan/${p.plan_id}`}>Edit</Link>
                   </span>
                 )}
 
-                {(!creatingPlan && !editingId) && (
+                {!creatingPlan && (
                   <span
                     className="delete"
                     onClick={() => activateModal(p.plan_id, p.plan_name)}

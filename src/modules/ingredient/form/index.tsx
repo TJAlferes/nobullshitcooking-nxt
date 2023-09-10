@@ -1,16 +1,16 @@
+import axios                           from 'axios';
 import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from "react-image-crop";
-import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { useTypedSelector as useSelector }    from '../../../redux';
-//import { CropPreview }                        from '../../shared/CropPreview';
-import { LoaderButton }                       from '../../shared/LoaderButton';
-import { getCroppedImage }                    from '../../shared/getCroppedImage';
-import type { Ownership }                   from '../../shared/types';
-import { createIngredient, updateIngredient } from '../state';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
+//import { CropPreview }                     from '../../shared/CropPreview';
+import { LoaderButton }                    from '../../shared/LoaderButton';
+import { getCroppedImage }                 from '../../shared/getCroppedImage';
+import type { Ownership }                  from '../../shared/types';
 
 export default function IngredientForm({ ownership }: Props) {
   const router = useRouter();
@@ -18,7 +18,6 @@ export default function IngredientForm({ ownership }: Props) {
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');
 
-  const dispatch = useDispatch();
   const ingredient_types = useSelector(state => state.data.ingredient_types);
   const authname        = useSelector(state => state.authentication.authname);
   const message          = useSelector(state => state.system.message);
@@ -147,7 +146,7 @@ export default function IngredientForm({ ownership }: Props) {
     setTinyImage(null);
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!isValidIngredientUpload({
       ingredient_type_id,
       ingredient_brand,
@@ -179,9 +178,65 @@ export default function IngredientForm({ ownership }: Props) {
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
     if (ingredient_id) {
       const ingredient_update_upload = {ingredient_id, ...ingredient_upload};
-      dispatch(updateIngredient(ownership, ingredient_update_upload));
+      const { image } = ingredient_update_upload;
+    
+      try {
+        if (image.small && image.tiny) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: 'private/ingredient/'},
+            {withCredentials: true}
+          );
+    
+          await uploadImageToAWSS3(data.fullSignature, image.small);
+          await uploadImageToAWSS3(data.tinySignature, image.tiny);
+    
+          image.image_filename = data.filename;
+        }
+    
+        const { data } = await axios.patch(
+          `${endpoint}/users/${user_id}/private-ingredients/${ingredient_id}`,
+          ingredient_update_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        //dispatch(getMyIngredients(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     } else {
-      dispatch(createIngredient(ownership, ingredient_upload));
+      const { image } = ingredient_upload;
+    
+      try {
+        if (image.small && image.tiny) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: 'private/ingredient/'},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, image.small);
+          await uploadImageToAWSS3(data.tinySignature, image.tiny);
+          image.image_filename = data.filename;
+        }
+    
+        const { data } = await axios.post(
+          `${endpoint}/users/${user_id}/private-ingredients`,
+          ingredient_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        //dispatch(getMyIngredients(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     }
   };
 
@@ -413,3 +468,7 @@ export type IngredientUpload = {
 export type IngredientUpdateUpload = IngredientUpload & {
   ingredient_id: string;
 };
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
+}

@@ -1,16 +1,17 @@
+import axios                           from 'axios';
 import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from 'react-image-crop';
-import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { useTypedSelector as useSelector }  from '../../../redux';
-//import { CropPreview }                      from '../../shared/CropPreview';
-import { LoaderButton }                     from '../../shared/LoaderButton';
-import { getCroppedImage }                  from '../../shared/getCroppedImage';
-import type { Ownership }                   from '../../shared/types';
-import { createEquipment, updateEquipment } from '../state';
+import { endpoint }                        from '../../../config/api';
+import { useTypedSelector as useSelector } from '../../../redux';
+//import { CropPreview }                     from '../../shared/CropPreview';
+import { LoaderButton }                    from '../../shared/LoaderButton';
+import { getCroppedImage }                 from '../../shared/getCroppedImage';
+import type { Ownership }                  from '../../shared/types';
+//import { getMyPrivateEquipmentWorker }     from '../user/private/data/network';
 
 export default function EquipmentForm({ ownership }: Props) {
   const router = useRouter();
@@ -18,7 +19,6 @@ export default function EquipmentForm({ ownership }: Props) {
   const params = useSearchParams();
   const equipment_id = params.get('equipment_id');
 
-  const dispatch = useDispatch();
   const equipment_types = useSelector(state => state.data.equipment_types);
   const authname        = useSelector(state => state.authentication.authname);
   const message         = useSelector(state => state.system.message);
@@ -145,7 +145,7 @@ export default function EquipmentForm({ ownership }: Props) {
     setTinyImage(null);
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!isValidEquipmentUpload({
       equipment_type_id,
       equipment_name,
@@ -171,9 +171,70 @@ export default function EquipmentForm({ ownership }: Props) {
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
     if (equipment_id) {
       const equipment_update_upload = {equipment_id, ...equipment_upload};
-      dispatch(updateEquipment(ownership, equipment_update_upload));
+
+      const { image } = equipment_update_upload;
+
+      try {
+        if (image.small && image.tiny) {
+          const { data: { filename, fullSignature, tinySignature } } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/equipment/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(fullSignature, image.small);
+          await uploadImageToAWSS3(tinySignature, image.tiny);
+          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
+          image.image_filename = filename;
+          image.small = null;
+          image.tiny  = null;
+        }
+
+        const { data } = await axios.patch(
+          `${endpoint}/users/${user_id}/${ownership}-equipment/${equipment_id}`,
+          equipment_update_upload,
+          {withCredentials: true}
+        );
+
+        setFeedback(data.message);
+        //yield call(getMyEquipmentWorker);
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+
+      //delay(4000);
+      setFeedback("");
     } else {
-      dispatch(createEquipment(ownership, equipment_upload));
+      const { image } = equipment_upload;
+
+      try {
+        if (image.small && image.tiny) {
+          const { data: { filename, fullSignature, tinySignature } } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/equipment/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(fullSignature, image.small);
+          await uploadImageToAWSS3(tinySignature, image.tiny);
+          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
+          image.image_filename = filename;
+          image.small = null;
+          image.tiny  = null;
+        }
+
+        const { data } = await axios.post(
+          `${endpoint}/users/${user_id}/${ownership}-equipment`,
+          equipment_upload,
+          {withCredentials: true}
+        );
+
+        setFeedback(data.message);
+        //yield call(getMyEquipmentWorker);
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+
+      //delay(4000);
+      setFeedback("");
     }
   };
   
@@ -390,3 +451,7 @@ export type EquipmentUpload = {
 export type EquipmentUpdateUpload = EquipmentUpload & {
   equipment_id: string;
 };
+
+function uploadImageToAWSS3(signature: any, image: any) {
+  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
+}

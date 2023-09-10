@@ -12,7 +12,7 @@ import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderButton }                    from '../../shared/LoaderButton';
 import { getCroppedImage }                 from '../../shared/getCroppedImage';
 import type { Ownership }                  from '../../shared/types';
-import { createRecipe, updateRecipe }      from '../state';
+import { getMyRecipes }                    from '../../user/data/state';
 
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
@@ -367,7 +367,7 @@ export default function RecipeForm({ ownership }: Props) {
     setRecipeTinyImage(null);
   };
 
-  const submit = () => {
+  const submit = async () => {
     const getCheckedMethods = () => {
       return Object.keys(usedMethods)
         .filter(key => usedMethods[parseInt(key)] === true)
@@ -456,9 +456,155 @@ export default function RecipeForm({ ownership }: Props) {
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
     if (recipe_id) {
       const recipe_update_upload = {recipe_id, ...recipe_upload};
-      dispatch(updateRecipe(ownership, recipe_update_upload));
+      const {
+        recipe_image,
+        equipment_image,
+        ingredients_image,
+        cooking_image
+      } = recipe_update_upload;
+    
+      try {
+        // upload any images to AWS S3, then insert info into MySQL
+    
+        if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
+          await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
+          await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
+          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
+          recipe_image.image_filename = data.filename;
+          // remove Files
+          recipe_image.medium = null;
+          recipe_image.thumb  = null;
+          recipe_image.tiny   = null;
+        }
+    
+        if (equipment_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-equipment/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
+          equipment_image.image_filename = data.filename;
+          equipment_image.medium = null;
+        }
+    
+        if (ingredients_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-ingredients/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
+          ingredients_image.image_filename = data.filename;
+          ingredients_image.medium = null;
+        }
+    
+        if (cooking_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-cooking/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
+          cooking_image.image_filename = data.filename;
+          cooking_image.medium = null;
+        }
+    
+        const { data } = await axios.patch(
+          `${endpoint}/users/${user_id}/${ownership}-recipes/${recipe_id}`,
+          recipe_update_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        dispatch(getMyRecipes(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     } else {
-      dispatch(createRecipe(ownership, recipe_upload));
+      const {
+        recipe_image,
+        equipment_image,
+        ingredients_image,
+        cooking_image
+      } = recipe_upload;
+    
+      try {
+        // upload any images to AWS S3, then insert info into MySQL
+    
+        if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
+          await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
+          await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
+          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
+          recipe_image.image_filename = data.filename;
+          // remove Files
+          recipe_image.medium = null;
+          recipe_image.thumb  = null;
+          recipe_image.tiny   = null;
+        }
+    
+        if (equipment_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-equipment/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
+          equipment_image.image_filename = data.filename;
+          equipment_image.medium = null;
+        }
+    
+        if (ingredients_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-ingredients/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
+          ingredients_image.image_filename = data.filename;
+          ingredients_image.medium = null;
+        }
+    
+        if (cooking_image.medium) {
+          const { data } = await axios.post(
+            `${endpoint}/user/signed-url`,
+            {subfolder: `${ownership}/recipe-cooking/`},
+            {withCredentials: true}
+          );
+          await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
+          cooking_image.image_filename = data.filename;
+          cooking_image.medium = null;
+        }
+    
+        const { data } = await axios.post(
+          `${endpoint}/users/${user_id}/${ownership}-recipes/${recipe_id}`,
+          recipe_upload,
+          {withCredentials: true}
+        );
+    
+        setFeedback(data.message);
+        dispatch(getMyRecipes(ownership));
+      } catch(err) {
+        setFeedback('An error occurred. Please try again.');
+      }
+    
+      //delay(4000);
+      setFeedback("");
     }
   };
 
@@ -1447,3 +1593,7 @@ export type RecipeUpload = {
 export type RecipeUpdateUpload = RecipeUpload & {
   recipe_id: string;
 };
+
+async function uploadImageToAWSS3(signature: any, image: any) {
+  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
+}

@@ -1,10 +1,12 @@
 import { useTypedSelector as useSelector } from '../../../redux';
 import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
-import type { Ingredient }                 from '../../shared/data/state';
+import type { Ownership }     from '../../shared/types';
+import type { IngredientView }             from '../../shared/data/state';
 
 const url = "https://s3.amazonaws.com/nobsc-";
 
-export default function IngredientDetail({ ingredient }: {ingredient: Ingredient}) {
+export default function IngredientDetail({ ownership, ingredient }: Props) {
+  // TO DO: FINISH THIS
   const my_ingredients = useSelector(state => state.userData.my_ingredients);
 
   const {
@@ -43,3 +45,8 @@ export default function IngredientDetail({ ingredient }: {ingredient: Ingredient
     </div>
   );
 }
+
+type Props = {
+  ownership:  Ownership;
+  ingredient: IngredientView;
+};
