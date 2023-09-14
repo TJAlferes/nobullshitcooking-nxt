@@ -4,9 +4,18 @@ import { createContext, useMemo }     from 'react';
 import type { ReactNode }             from 'react';
 import qs                             from 'qs';
 
-import { endpoint } from '../../../config/api';
-import { useTypedDispatch as useDispatch }   from '../../../redux';
-import type { SearchIndex, SearchRequest }   from './state';
+import { endpoint }                        from '../../../config/api';
+import { setItem }                         from '../../general/localStorage';
+import type { SearchIndex, SearchRequest } from './state';
+
+// WHY IS THIS CONTEXT EVEN NEEDED?
+// JUST READ STATE STRAIGHT FROM URL, WRITE STATE STRAIGHT TO URL
+
+// general/Layout/Header/Search
+// shared/menu                   move into general/Layout/Header/LeftNav???
+// equipment/list
+// ingredient/list
+// recipe/list
 
 export const SearchContext = createContext({} as UseSearch);
 
@@ -25,7 +34,6 @@ type SearchProviderProps = {
 };
 
 function useSearch() {
-  const dispatch     = useDispatch();
   const router       = useRouter();
   const searchParams = useSearchParams();
 
@@ -33,20 +41,20 @@ function useSearch() {
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
   }, [searchParams]);
 
-  const search = async (searchIndexChanged?: boolean, index: string, term?: string) => {
+  const search = async (searchIndexChanged?: boolean, term?: string) => {
     if (searchIndexChanged)       delete params.filters;
     if (term)                     params.term             = term;
     if (!params.current_page)     params.current_page     = "1";
     if (!params.results_per_page) params.results_per_page = "20";
     //await delay(250);  // debounce
     const search_params = qs.stringify(params);
-    const idx = index === "equipment" ? "equipments" : index;
+    const { index } = params;
     try {
-      const { data } = await axios.get(
+      const response = await axios.get(
         `${endpoint}/search/find/${index}?${search_params}`
       );
-      //dispatch(setResults(data.found));  // TO DO: put into localStorage
-      router.push(`/${idx}?${search_params}`);
+      setItem('found', response.data);
+      router.push(`/${index}/list/?${search_params}`);
     } catch (err) {}
   };
 
@@ -69,12 +77,12 @@ function useSearch() {
   };
 
   const setPreFilters = (
-    //searchIndex:  SearchIndex,
+    searchIndex:  SearchIndex,
     filterName:   string,
     filterValues: string[]
   ) => {
     delete params.term;
-    //dispatch(setIndex(searchIndex));
+    params.index = searchIndex;  // move???
     delete params.filters;
     setFilters(filterName, filterValues);
   };  // used in leftnav links
@@ -85,30 +93,14 @@ function useSearch() {
     search();
   };
 
-  const changeResultsPerPage = (e: SyntheticEvent) => {
-    const value = (e.target as HTMLInputElement).value;
-    params.current_page = "1";
-    params.results_per_page = `${value}`;
-    search();
-  };
-
-  const goToPage = (page: number) => {
-    params.current_page = `${page}`;
-    search();
-  };
-
   return {
     params,
     search,
     setFilters,
     setPreFilters,
-    clearFilters,
-    changeResultsPerPage,
-    goToPage
+    clearFilters
   };
 }
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 export type UseSearch = {
   params:               SearchRequest;
@@ -116,52 +108,4 @@ export type UseSearch = {
   setFilters:           (filterName: string, filterValues: string[]) =>                           void;
   setPreFilters:        (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
   clearFilters:         (filterName: string) =>                                                   void;
-  changeResultsPerPage: (e: SyntheticEvent) =>                                                    void;
-  goToPage:             (page: number) =>                                                         void;
 };  // interface???
-
-//console.log("previousPathname: ", previousPathname);
-//console.log("comingFromSearchResultsPage: ", comingFromSearchResultsPage);
-
-/*function usePreviousPathname() {
-  const pathname = usePathname();
-
-  const ref = useRef<string|null>(null);
-
-  useEffect(() => {
-    ref.current = pathname;
-  }, [pathname]);
-
-  return ref.current;
-};*/
-
-/*const addFilter = (filterName: string, filterValue: string) => {
-    if (params.filters) {
-      if (params.filters[filterName]) {
-        if (params.filters[filterName]?.includes(filterValue)) return;
-        params.filters[filterName]?.push(filterValue);
-      } else {
-        params.filters[filterName] = [filterValue];
-      }
-    } else {
-      params.filters = {
-        [filterName]: [filterValue]
-      };
-    }
-    params.currentPage = "1";
-    search();
-  };
-
-  const removeFilter = (filterName: string, filterValue: string) => {
-    if (!params.filters) return;
-    if (!params.filters[filterName]) return;
-    if (!params.filters[filterName]?.includes(filterValue)) return;
-    const removed = (params.filters?.[filterName]?.filter(v => v !== filterValue)) as string[];
-    if (removed.length) params.filters[filterName] = removed;
-    else delete params.filters[filterName];
-    params.currentPage = "1";
-    search();
-  };*/
-
-  /*addFilter,
-    removeFilter,*/

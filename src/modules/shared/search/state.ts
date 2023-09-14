@@ -1,20 +1,17 @@
 const initialState: State = {
-  loading: false,
   // search request state:  // move these into URL
-  current_page:     "1",
-  results_per_page: "20",
-  sorts:            {},
-  filters:          {
-    equipment_types:  [],
+  index: "recipes",
+  term: "",
+  filters: {
+    equipment_types: [],
     ingredient_types: [],
-    recipe_types:     [],
-    methods:          [],
-    cuisines:         [],
+    recipe_types: [],
+    methods: [],
+    cuisines: [],
   },
-  // search response state:  // move these into localStorage (or at least useState) (IndexDB later on if needed)
-  results:       [],
-  total_results: 0,
-  total_pages:   0
+  sorts: {},
+  current_page: "1",
+  results_per_page: "20"
 };
 
 export function searchReducer(state = initialState, action: Actions): State {
@@ -28,31 +25,6 @@ export function searchReducer(state = initialState, action: Actions): State {
           [action.key]: action.values
         }
       };
-    case ADD_FILTER: {
-      const values = state.filters?.[action.key];
-      if (values === undefined) return state;
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          [action.key]: [
-            ...(values),
-            action.value
-          ]
-        }
-      };
-    };
-    case REMOVE_FILTER: {
-      const values = state.filters?.[action.key];
-      if (values === undefined) return state;
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          [action.key]: values.filter(v => v !== action.value)
-        }
-      };
-    };
     case SET_SORTS:
       return {
         ...state,
@@ -63,13 +35,6 @@ export function searchReducer(state = initialState, action: Actions): State {
       };
     case SET_CURRENT_PAGE:     return {...state, current_page: action.current_page};
     case SET_RESULTS_PER_PAGE: return {...state, results_per_page: action.results_per_page};
-    case SET_RESULTS:
-      return {
-        ...state,
-        results:       action.found.results,
-        total_results: action.found.total_results,
-        total_pages:   action.found.total_pages
-      };
     default:              return state;
   }
 };
@@ -84,18 +49,6 @@ export const setFilters = (key: FilterKey, values: string[]) => ({
   type: SET_FILTERS,
   key,
   values
-});
-
-export const addFilter = (key: FilterKey, value: string) => ({
-  type: ADD_FILTER,
-  key,
-  value
-});
-
-export const removeFilter = (key: FilterKey, value: string) => ({
-  type: REMOVE_FILTER,
-  key,
-  value
 });
 
 export const setSorts = (col: string, direction: SortDirection) => ({
@@ -114,45 +67,33 @@ export const setResultsPerPage = (resultsPerPage: string) => ({
   resultsPerPage
 });
 
-export const setResults = (found: SearchResponse) => ({type: SET_RESULTS, found});
-
 
 
 export const actionTypes = {
   RESET:                'RESET',
   SET_FILTERS:          'SET_FILTERS',
-  ADD_FILTER:           'ADD_FILTER',
-  REMOVE_FILTER:        'REMOVE_FILTER',
   SET_SORTS:            'SET_SORTS',
   SET_CURRENT_PAGE:     'SET_CURRENT_PAGE',
-  SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE',
-  SET_RESULTS:          'SET_RESULTS'
+  SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE'
 } as const;
 
 const {
   RESET,
   SET_FILTERS,
-  ADD_FILTER,
-  REMOVE_FILTER,
   SET_SORTS,
   SET_CURRENT_PAGE,
-  SET_RESULTS_PER_PAGE,
-  SET_RESULTS
+  SET_RESULTS_PER_PAGE
 } = actionTypes;
 
-export type State = SearchRequest & SearchResponse & {
-  loading: boolean;
-};
+export type State = SearchRequest;
 
 // TO DO: move shared types to one location
 
 export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";  // "pages" | "posts" | 
 
 export type SearchRequest = {
-  term?:             string;
-  current_page?:     string;
-  results_per_page?: string;
-  sorts?:            {};
+  index: SearchIndex;
+  term?: string;
   filters?:          {
     [index: string]:   string[];
     equipment_types?:  string[];
@@ -161,6 +102,9 @@ export type SearchRequest = {
     methods?:          string[];
     cuisines?:         string[];
   };
+  sorts?:            {};
+  current_page?:     string;
+  results_per_page?: string;
 };
 
 // TO DO: move?
@@ -215,12 +159,9 @@ export type SortDirection = "asc" | "desc" | "none";
 export type Actions = 
   | Reset
   | SetFilters
-  | AddFilter
-  | RemoveFilter
   | SetSorts
   | SetCurrentPage
-  | SetResultsPerPage
-  | SetResults;
+  | SetResultsPerPage;
 
 export type Reset = {
   type: typeof actionTypes.RESET;
@@ -230,18 +171,6 @@ export type SetFilters = {
   type:    typeof actionTypes.SET_FILTERS;
   key:     string;
   values:  string[];
-};
-
-export type AddFilter = {
-  type:   typeof actionTypes.ADD_FILTER;
-  key:    string;
-  value:  string;
-};
-
-export type RemoveFilter = {
-  type:   typeof actionTypes.REMOVE_FILTER;
-  key:    string;
-  value:  string;
 };
 
 export type SetSorts = {
@@ -258,9 +187,4 @@ export type SetCurrentPage = {
 export type SetResultsPerPage = {
   type:             typeof actionTypes.SET_RESULTS_PER_PAGE;
   results_per_page: string;
-};
-
-export type SetResults = {
-  type:  typeof actionTypes.SET_RESULTS;
-  found: SearchResponse;
 };
