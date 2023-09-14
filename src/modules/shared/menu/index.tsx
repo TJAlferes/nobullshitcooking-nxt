@@ -1,5 +1,3 @@
-'use client';
-
 import Link                               from 'next/link';
 import { usePathname }                    from 'next/navigation';
 import { useContext, useState }           from 'react';
@@ -10,14 +8,12 @@ import { ExpandCollapse }                  from '../ExpandCollapse';
 import { SearchContext }                   from '../search/hook';
 import type { SearchIndex }                from '../search/state';
 
-export function LeftNav() {
-  const searchDriver = useContext(SearchContext);
-
-  const leftNav = useSelector(state => state.menu.leftNav);
+export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
+  const { setPreFilters } = useContext(SearchContext);
 
   const [ active, setActive ] = useState<string|null>(null);
 
-  return !leftNav ? null : (
+  return !isLeftNavOpen ? null : (
     <>
       <div className="shadow"></div>
 
@@ -40,7 +36,14 @@ export function LeftNav() {
                 <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
                   <Link
                     href="#"
-                    onClick={() => searchDriver.setPreFilters(item.searchIndex as SearchIndex, item.filterName, item.filterValues)}
+                    onClick={() => {
+                      setPreFilters(
+                        item.searchIndex as SearchIndex,
+                        item.filterName,
+                        item.filterValues
+                      );
+                      setIsLeftNavOpen(false);
+                    }}
                   >
                     {item.name}
                   </Link>
@@ -70,16 +73,26 @@ export function LeftNav() {
                   </div>
                 )}
               >
-                {submenuItems.filter(subitem => subitem.parent === item.name).map(subitem => (
-                  <div className="submenu-item">
-                    <Link
-                      href="#"
-                      onClick={() => searchDriver.setPreFilters(subitem.searchIndex as SearchIndex, subitem.filterName, subitem.filterValues)}
-                    >
-                      {item.name}
-                    </Link>
-                  </div>
-                ))}
+                {submenuItems
+                  .filter(subitem => subitem.parent === item.name)
+                  .map(subitem => (
+                    <div className="submenu-item">
+                      <Link
+                        href="#"
+                        onClick={() => {
+                          setPreFilters(
+                            subitem.searchIndex as SearchIndex,
+                            subitem.filterName,
+                            subitem.filterValues
+                          );
+                          setIsLeftNavOpen(false);
+                        }}
+                      >
+                        {item.name}
+                      </Link>
+                    </div>
+                  ))
+                }
               </ExpandCollapse>
             </>
           ))}
@@ -90,6 +103,11 @@ export function LeftNav() {
     </>
   );
 }
+
+type Props = {
+  isLeftNavOpen:    boolean;
+  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 function NavLinks() {
   const authname = useSelector(state => state.authentication.authname);

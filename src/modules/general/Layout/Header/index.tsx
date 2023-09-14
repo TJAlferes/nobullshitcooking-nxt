@@ -1,6 +1,7 @@
 import axios         from 'axios';
 import Link          from 'next/link';
 import { useRouter } from 'next/router';
+import { useState }  from 'react';
 
 import { endpoint } from '../../../../config/api';
 import {
@@ -8,9 +9,8 @@ import {
   useTypedSelector as useSelector
 } from '../../../../redux';
 import { LeftNav }       from '../../../shared/menu';
-import { toggleLeftNav } from '../../../shared/menu/state';
 import { Search }        from '../../../shared/search';
-import { systemMessage } from '../../shared/system/state';
+//import { systemMessage } from '../../shared/system/state';
 import { dark, light }   from '../../ThemeProvider/state';
 import { removeItem }    from '../../localStorage';
 
@@ -22,8 +22,9 @@ export function Header() {
   const authname            = useSelector(state => state.authentication.authname);
   const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
   const theme               = useSelector(state => state.theme.theme);
+  const [ isLeftNavOpen, setIsLeftNavOpen ] = useState(false);
 
-  const click = () => dispatch(toggleLeftNav());
+  const click = () => setIsLeftNavOpen(prev => !prev);
 
   const logout = async () => {
     if (!userIsAuthenticated) return;
@@ -63,18 +64,26 @@ export function Header() {
 
       <div className="user-nav">
         {theme === 'light'
-          ? <span className="mode" onClick={() => dispatch(dark())}><i className="moon">☾</i> Night</span>
-          : <span className="mode" onClick={() => dispatch(light())}><i className="sun">☀︎</i> Day</span>
+          ? (
+            <span className="mode" onClick={() => dispatch(dark())}>
+              <i className="moon">☾</i> Night
+            </span>
+          )
+          : (
+            <span className="mode" onClick={() => dispatch(light())}>
+              <i className="sun">☀︎</i> Day
+            </span>
+          )
         }
         <Link href="/help">Help</Link>
-        {!userIsAuthenticated && <Link href="/register">Create Account</Link>}
-        {!userIsAuthenticated && <Link href="/login">Sign In</Link>}
-        {userIsAuthenticated && <Link href="/dashboard">{`Hello, ${authname}`}</Link>}
-        {userIsAuthenticated && <span className="logout" onClick={logout}>Sign Out</span>}
+        {!userIsAuthenticated ? <Link href="/register">Create Account</Link> : false}
+        {!userIsAuthenticated ? <Link href="/login">Sign In</Link> : false}
+        {userIsAuthenticated ? <Link href="/dashboard">{`Hello, ${authname}`}</Link> : false}
+        {userIsAuthenticated ? <span className="logout" onClick={logout}>Sign Out</span> : false}
         <Link href="/cart">Cart</Link>
       </div>
       
-      <LeftNav />
+      <LeftNav isLeftNavOpen={isLeftNavOpen} setIsLeftNavOpen={setIsLeftNavOpen} />
     </header>
   );
 }

@@ -2,11 +2,11 @@ import axios                            from 'axios';
 import type { ChangeEvent }             from 'react';
 import { useContext, useState, useRef } from 'react';
 
-import { endpoint }         from '../../../config/api';
-import { SearchContext }    from './hook';
+import { endpoint }       from '../../../config/api';
+import { SearchContext }  from './hook';
 import type { SearchIndex, SuggestionView } from './state';
-export { Pagination }       from './Pagination';
-export { ResultsPerPage }   from './ResultsPerPage';
+export { Pagination }     from './Pagination';
+export { ResultsPerPage } from './ResultsPerPage';
 
 export function Search() {
   const searchDriver = useContext(SearchContext);

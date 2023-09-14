@@ -12,8 +12,6 @@ import { loadFromLocalStorage, saveToLocalStorage }      from '../modules/genera
 
 import { geolocationReducer } from '../modules/shared/geolocation/state';
 
-import { menuReducer }        from '../modules/shared/menu/state';
-
 import { searchWatcher }      from '../modules/shared/search/network';
 import { searchReducer }      from '../modules/shared/search/state';
 
@@ -61,7 +59,6 @@ export const rootReducer = combineReducers({
   chat:           chatReducer,
   data:           dataReducer,
   geolocation:    geolocationReducer,
-  menu:           menuReducer,
   search:         searchReducer,
   //ssr:            ssrReducer,
   system:         systemReducer,

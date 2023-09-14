@@ -6,7 +6,6 @@ import qs                             from 'qs';
 
 import { endpoint } from '../../../config/api';
 import { useTypedDispatch as useDispatch }   from '../../../redux';
-import { toggleLeftNav }                     from '../menu/state';
 import type { SearchIndex, SearchRequest }   from './state';
 
 export const SearchContext = createContext({} as UseSearch);
@@ -76,7 +75,6 @@ function useSearch() {
   ) => {
     delete params.term;
     //dispatch(setIndex(searchIndex));
-    dispatch(toggleLeftNav());
     delete params.filters;
     setFilters(filterName, filterValues);
   };  // used in leftnav links
