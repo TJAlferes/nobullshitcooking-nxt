@@ -5,26 +5,19 @@ import type { Action, Store }                                                  f
 import createSagaMiddleware, { END, Task }                                     from 'redux-saga';
 import { fork }                                                                from 'redux-saga/effects';
 
+// move theme into Context ???
 import { themeReducer }                                  from '../modules/general/ThemeProvider/state';
 import { initWindowBlurHandler, initWindowFocusHandler } from '../modules/general/window';
 import { windowReducer }                                 from '../modules/general/window/state';
 import { loadFromLocalStorage, saveToLocalStorage }      from '../modules/general/localStorage';
-
 import { geolocationReducer } from '../modules/shared/geolocation/state';
-
-import { searchWatcher }      from '../modules/shared/search/network';
-import { searchReducer }      from '../modules/shared/search/state';
-
 import { systemReducer }      from '../modules/shared/system/state';
-
 import { dataWatcher }                         from '../modules/shared/data/network';
 import { dataReducer, getInitialData }         from '../modules/shared/data/state';
-
 import { userDataWatcher }                     from '../modules/user/private/data/network';
 import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
-
+// move authname into Context ???
 import { authenticationReducer }               from '../modules/user/authentication/state';
-
 import { setupChat, chatWatcher } from '../modules/chat/network';
 import { chatReducer }            from '../modules/chat/state';
 
@@ -59,7 +52,6 @@ export const rootReducer = combineReducers({
   chat:           chatReducer,
   data:           dataReducer,
   geolocation:    geolocationReducer,
-  search:         searchReducer,
   //ssr:            ssrReducer,
   system:         systemReducer,
   theme:          themeReducer,
@@ -70,7 +62,6 @@ export const rootReducer = combineReducers({
 export function* rootSaga() {
   yield fork(chatWatcher);
   yield fork(dataWatcher);
-  yield fork(searchWatcher);
   yield fork(userDataWatcher);
 }
 

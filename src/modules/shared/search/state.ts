@@ -1,5 +1,5 @@
-const initialState: State = {
-  // search request state:  // move these into URL
+/*{
+  // search request state
   index: "recipes",
   term: "",
   filters: {
@@ -12,84 +12,17 @@ const initialState: State = {
   sorts: {},
   current_page: "1",
   results_per_page: "20"
-};
+}*/
 
-export function searchReducer(state = initialState, action: Actions): State {
-  switch (action.type) {
-    case RESET:     return {...state, ...initialState};
-    case SET_FILTERS:
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          [action.key]: action.values
-        }
-      };
-    case SET_SORTS:
-      return {
-        ...state,
-        sorts: {
-          ...state.sorts,
-          [action.col]: action.direction
-        }
-      };
-    case SET_CURRENT_PAGE:     return {...state, current_page: action.current_page};
-    case SET_RESULTS_PER_PAGE: return {...state, results_per_page: action.results_per_page};
-    default:              return state;
-  }
-};
+// TO DO: move stuff
 
-
-
-// TO DO: clean up action that are not needed
-
-export const reset = () => ({type: RESET});
-
-export const setFilters = (key: FilterKey, values: string[]) => ({
-  type: SET_FILTERS,
-  key,
-  values
-});
-
-export const setSorts = (col: string, direction: SortDirection) => ({
-  type: SET_SORTS,
-  col,
-  direction
-});
-
-export const setCurrentPage = (currentPage: string) => ({
-  type: SET_CURRENT_PAGE,
-  currentPage
-});
-
-export const setResultsPerPage = (resultsPerPage: string) => ({
-  type: SET_RESULTS_PER_PAGE,
-  resultsPerPage
-});
-
-
-
-export const actionTypes = {
-  RESET:                'RESET',
-  SET_FILTERS:          'SET_FILTERS',
-  SET_SORTS:            'SET_SORTS',
-  SET_CURRENT_PAGE:     'SET_CURRENT_PAGE',
-  SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE'
-} as const;
-
-const {
-  RESET,
-  SET_FILTERS,
-  SET_SORTS,
-  SET_CURRENT_PAGE,
-  SET_RESULTS_PER_PAGE
-} = actionTypes;
-
-export type State = SearchRequest;
-
-// TO DO: move shared types to one location
-
-export type SearchIndex = "recipes" | "ingredients" | "equipment" | "products";  // "pages" | "posts" | 
+export type SearchIndex =
+  | "recipes"
+  | "ingredients"
+  | "equipment"
+  | "products";
+  //| "pages"
+  //| "posts";
 
 export type SearchRequest = {
   index: SearchIndex;
@@ -147,7 +80,13 @@ export type Filter = {
   values: string[];   //["Main"]       ["Stew"]  ["AFG"]
 };
 
-export type FilterKey = "equipmentTypes" | "ingredientTypes" | "recipeTypes" | "methods" | "cuisines";
+export type FilterKey =
+  | "equipmentTypes"
+  | "ingredientTypes"
+  | "recipeTypes"
+  | "methods"
+  | "cuisines";
+
 
 export type Sort = {
   col:       string;  // CAREFUL of overlaps
@@ -156,35 +95,7 @@ export type Sort = {
 
 export type SortDirection = "asc" | "desc" | "none";
 
-export type Actions = 
-  | Reset
-  | SetFilters
-  | SetSorts
-  | SetCurrentPage
-  | SetResultsPerPage;
-
-export type Reset = {
-  type: typeof actionTypes.RESET;
-};
-
-export type SetFilters = {
-  type:    typeof actionTypes.SET_FILTERS;
-  key:     string;
-  values:  string[];
-};
-
 export type SetSorts = {
-  type:      typeof actionTypes.SET_SORTS;
   col:       string;
   direction: string;
-};
-
-export type SetCurrentPage = {
-  type:         typeof actionTypes.SET_CURRENT_PAGE;
-  current_page: string;
-};
-
-export type SetResultsPerPage = {
-  type:             typeof actionTypes.SET_RESULTS_PER_PAGE;
-  results_per_page: string;
-};
+};  // TO DO: move (and rename to SetSortsParams ???)

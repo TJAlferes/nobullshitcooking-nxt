@@ -1,15 +1,15 @@
-import axios                            from 'axios';
-import type { ChangeEvent }             from 'react';
-import { useContext, useState, useRef } from 'react';
+import axios                from 'axios';
+import type { ChangeEvent } from 'react';
+import { useState, useRef } from 'react';
 
 import { endpoint }       from '../../../config/api';
-import { SearchContext }  from './hook';
-import type { SearchIndex, SuggestionView } from './state';
+import { useSearch }      from './hook';
 export { Pagination }     from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
+import type { SearchIndex, SuggestionView } from './state';
 
 export function Search() {
-  const searchDriver = useContext(SearchContext);
+  const searchDriver = useSearch();
 
   const [ searchIndexChanged, setSearchIndexChanged ] = useState(false);  // useRef?
 

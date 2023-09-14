@@ -1,35 +1,29 @@
-import Link                                       from 'next/link';
-import { Fragment, useContext, useState, useRef } from 'react';
+import Link                           from 'next/link';
+import { Fragment, useState, useRef } from 'react';
 
 import { useTypedSelector as useSelector } from '../../../redux';
+import { getItem }                         from '../../general/localStorage';
 import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage }      from '../../shared/search';
-import { SearchContext }                   from '../../shared/search/hook';
+import { useSearch }                       from '../../shared/search/hook';
 
-//const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
-
-// list of search results -- ONLY contains Official Recipes
-// TO DO: make a filter to toggle include/exclude Public User Recipes)
-// DOES NOT contain Private User Recipes
+// list of search results  TO DO: make a filter to toggle include/exclude Public User Recipes)
 export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
-  const searchDriver = useContext(SearchContext);
+  const searchDriver = useSearch();
 
   const recipe_types = useSelector(state => state.data.recipe_types);
   const methods      = useSelector(state => state.data.methods);
   const cuisines     = useSelector(state => state.data.cuisines);
   const cuisineGroups = [
-    {continent: "Africa",   cuisines: [...(cuisines.filter(c => c.continent_code === "AF"))]},
-    {continent: "Americas", cuisines: [...(cuisines.filter(c => c.continent_code === "AM"))]},
-    {continent: "Asia",     cuisines: [...(cuisines.filter(c => c.continent_code === "AS"))]},
-    {continent: "Europe",   cuisines: [...(cuisines.filter(c => c.continent_code === "EU"))]},
-    {continent: "Oceania",  cuisines: [...(cuisines.filter(c => c.continent_code === "OC"))]}
+    {continent: "Africa",   cuisines: cuisines.filter(c => c.continent_code === "AF")},
+    {continent: "Americas", cuisines: cuisines.filter(c => c.continent_code === "AM")},
+    {continent: "Asia",     cuisines: cuisines.filter(c => c.continent_code === "AS")},
+    {continent: "Europe",   cuisines: cuisines.filter(c => c.continent_code === "EU")},
+    {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
   ];  // TO DO: improve this (Array.reduce?)
-  //const resultTerm       useSelector(state = state.search.resultTerm);
-  const results       = useSelector(state => state.search.results);
-  const total_results = useSelector(state => state.search.total_results);
-  const total_pages   = useSelector(state => state.search.total_pages);
+  const { results, total_results, total_pages } = getItem("found");
 
   const [ expandedFilter,     setExpandedFilter ]     = useState<string|null>(null);
   const [ checkedRecipeTypes, setCheckedRecipeTypes ] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);
@@ -225,3 +219,5 @@ r.recipe_image !== "nobsc-recipe-default"
   ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
   : <div className="image-default-100-62"></div>
 */
+
+//const url = "https://s3.amazonaws.com/nobsc-user-recipe/";

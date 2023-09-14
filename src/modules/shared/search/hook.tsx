@@ -1,7 +1,6 @@
 import axios                          from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createContext, useMemo }     from 'react';
-import type { ReactNode }             from 'react';
+import { useMemo }                    from 'react';
 import qs                             from 'qs';
 
 import { endpoint }                        from '../../../config/api';
@@ -17,23 +16,7 @@ import type { SearchIndex, SearchRequest } from './state';
 // ingredient/list
 // recipe/list
 
-export const SearchContext = createContext({} as UseSearch);
-
-export function SearchProvider({ children }: SearchProviderProps) {
-  const searchDriver = useSearch();
-
-  return (
-    <SearchContext.Provider value={searchDriver}>
-      {children}
-    </SearchContext.Provider>
-  );
-}
-
-type SearchProviderProps = {
-  children: ReactNode;
-};
-
-function useSearch() {
+export function useSearch() {
   const router       = useRouter();
   const searchParams = useSearchParams();
 
