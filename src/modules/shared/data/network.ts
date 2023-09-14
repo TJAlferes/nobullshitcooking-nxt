@@ -7,6 +7,8 @@ import type { InitialData }                     from './state';
 
 const { GET_INITIAL_DATA } = actionTypes;
 
+// TO DO: move this to a Next.js getInitialProps on your index page (some of it -- other of it move to specific pages)
+
 export function* dataWatcher() {
   yield all([
     takeEvery(GET_INITIAL_DATA, getInitialDataWorker)
@@ -21,7 +23,7 @@ export function* getInitialDataWorker() {
       `${endpoint}/initial-data`
     );
 
-    yield put(setInitialData(data));  // rename to set?
+    yield put(setInitialData(data));
 
   } catch (err) {}
 }
@@ -35,8 +37,8 @@ export const getIngredientsWorker     = createDataWorker("/ingredient",      "in
 export const getIngredientTypesWorker = createDataWorker("/ingredient-type", "ingredient_types");
 export const getUnitsWorker           = createDataWorker("/unit",            "units");
 export const getMethodsWorker         = createDataWorker("/method",          "methods");
-export const getPlansWorker           = createDataWorker("/plan",            "plans")
-export const getRecipesWorker         = createDataWorker("/recipe",          "recipes");
+//export const getPlansWorker           = createDataWorker("/plan",            "plans")     // TO DO: GET RID OF THIS
+//export const getRecipesWorker         = createDataWorker("/recipe",          "recipes");  // TO DO: GET RID OF THIS
 export const getRecipeTypesWorker     = createDataWorker("/recipe-type",     "recipe_types");
 
 function createDataWorker(path: string, key: keyof InitialData) {

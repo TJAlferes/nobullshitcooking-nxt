@@ -10,31 +10,25 @@ import { initWindowBlurHandler, initWindowFocusHandler } from '../modules/genera
 import { windowReducer }                                 from '../modules/general/window/state';
 import { loadFromLocalStorage, saveToLocalStorage }      from '../modules/general/localStorage';
 
-import { dataWatcher }        from '../modules/shared/data/network';
-import { dataReducer, getInitialData } from '../modules/shared/data/state';
 import { geolocationReducer } from '../modules/shared/geolocation/state';
+
 import { menuReducer }        from '../modules/shared/menu/state';
+
 import { searchWatcher }      from '../modules/shared/search/network';
 import { searchReducer }      from '../modules/shared/search/state';
+
 import { systemReducer }      from '../modules/shared/system/state';
+
+import { dataWatcher }                         from '../modules/shared/data/network';
+import { dataReducer, getInitialData }         from '../modules/shared/data/state';
+
+import { userDataWatcher }                     from '../modules/user/private/data/network';
+import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
+
+import { authenticationReducer }               from '../modules/user/authentication/state';
 
 import { setupChat, chatWatcher } from '../modules/chat/network';
 import { chatReducer }            from '../modules/chat/state';
-
-import { planDetailReducer } from '../modules/plan/detail/state';
-import { planFormReducer }   from '../modules/plan/form/state';  // split into user/private and user/public ???
-
-import { userAuthenticationWatcher } from '../modules/user/authentication/network';
-import { authenticationReducer }     from '../modules/user/authentication/state';
-
-import { userDataWatcher }          from '../modules/user/private/data/network';
-import { userDataReducer, getInitialUserData } from '../modules/user/private/data/state';
-import { equipmentWatcher }  from '../modules/equipment/network';
-import { ingredientWatcher } from '../modules/ingredient/network';
-import { privatePlanWatcher }       from '../modules/user/private/plan/network';
-import { recipeWatcher }     from '../modules/recipe/network';
-
-import { publicPlanWatcher }     from '../modules/user/public/plan/network';
 
 function makeStore(context: Context) {
   const persistedState = typeof window !== 'undefined' ? loadFromLocalStorage() : {};
@@ -68,8 +62,6 @@ export const rootReducer = combineReducers({
   data:           dataReducer,
   geolocation:    geolocationReducer,
   menu:           menuReducer,
-  planDetail:     planDetailReducer,
-  planForm:       planFormReducer,
   search:         searchReducer,
   //ssr:            ssrReducer,
   system:         systemReducer,
@@ -79,13 +71,8 @@ export const rootReducer = combineReducers({
 });
 
 export function* rootSaga() {
-  yield fork(userAuthenticationWatcher);
   yield fork(chatWatcher);
   yield fork(dataWatcher);
-  yield fork(equipmentWatcher);
-  yield fork(ingredientWatcher);
-  yield fork(privatePlanWatcher);
-  yield fork(recipeWatcher);
   yield fork(searchWatcher);
   yield fork(userDataWatcher);
 }

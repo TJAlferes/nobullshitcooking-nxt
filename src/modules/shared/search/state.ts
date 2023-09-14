@@ -1,12 +1,6 @@
-import type { useRouter } from 'next/navigation';
-
-
-
 const initialState: State = {
   loading: false,
-  index:   "recipes",
-  // search request state:
-  term:             "",
+  // search request state:  // move these into URL
   current_page:     "1",
   results_per_page: "20",
   sorts:            {},
@@ -17,19 +11,15 @@ const initialState: State = {
     methods:          [],
     cuisines:         [],
   },
-  // search response state:
+  // search response state:  // move these into localStorage (or at least useState) (IndexDB later on if needed)
   results:       [],
   total_results: 0,
-  total_pages:   0,
-  // autosuggest response state:
-  suggestions:   []
+  total_pages:   0
 };
 
 export function searchReducer(state = initialState, action: Actions): State {
   switch (action.type) {
     case RESET:     return {...state, ...initialState};
-    case SET_INDEX: return {...state, index: action.index};
-    case SET_TERM:  return {...state, term: action.term};
     case SET_FILTERS:
       return {
         ...state,
@@ -80,7 +70,6 @@ export function searchReducer(state = initialState, action: Actions): State {
         total_results: action.found.total_results,
         total_pages:   action.found.total_pages
       };
-    case SET_SUGGESTIONS: return {...state, suggestions: action.suggestions};
     default:              return state;
   }
 };
@@ -90,17 +79,6 @@ export function searchReducer(state = initialState, action: Actions): State {
 // TO DO: clean up action that are not needed
 
 export const reset = () => ({type: RESET});
-
-export const setIndex = (index: SearchIndex) => ({type: SET_INDEX, index});
-
-export const setTerm = (term: string) => ({type: SET_TERM, term});
-
-export const getSuggestions = (term: string) => ({type: GET_SUGGESTIONS, term});
-
-export const setSuggestions = (suggestions: Suggestion[]) => ({
-  type: SET_SUGGESTIONS,
-  suggestions
-});
 
 export const setFilters = (key: FilterKey, values: string[]) => ({
   type: SET_FILTERS,
@@ -136,55 +114,34 @@ export const setResultsPerPage = (resultsPerPage: string) => ({
   resultsPerPage
 });
 
-export const getResults = (
-  searchParams: string,
-  router:       ReturnType<typeof useRouter>
-) => ({
-  type: GET_RESULTS,
-  searchParams,
-  router
-});
-
 export const setResults = (found: SearchResponse) => ({type: SET_RESULTS, found});
 
 
 
 export const actionTypes = {
   RESET:                'RESET',
-  SET_INDEX:            'SET_INDEX',
-  SET_TERM:             'SET_TERM',
   SET_FILTERS:          'SET_FILTERS',
   ADD_FILTER:           'ADD_FILTER',
   REMOVE_FILTER:        'REMOVE_FILTER',
   SET_SORTS:            'SET_SORTS',
   SET_CURRENT_PAGE:     'SET_CURRENT_PAGE',
   SET_RESULTS_PER_PAGE: 'SET_RESULTS_PER_PAGE',
-  GET_RESULTS:          'GET_RESULTS',
-  GET_SUGGESTIONS:      'GET_SUGGESTIONS',
-  SET_RESULTS:          'SET_RESULTS',
-  SET_SUGGESTIONS:      'SET_SUGGESTIONS'
+  SET_RESULTS:          'SET_RESULTS'
 } as const;
 
 const {
   RESET,
-  SET_INDEX,
-  SET_TERM,
   SET_FILTERS,
   ADD_FILTER,
   REMOVE_FILTER,
   SET_SORTS,
   SET_CURRENT_PAGE,
   SET_RESULTS_PER_PAGE,
-  GET_RESULTS,
-  GET_SUGGESTIONS,
-  SET_RESULTS,
-  SET_SUGGESTIONS
+  SET_RESULTS
 } = actionTypes;
 
 export type State = SearchRequest & SearchResponse & {
-  loading:     boolean;
-  index:       SearchIndex;
-  suggestions: Suggestion[];
+  loading: boolean;
 };
 
 // TO DO: move shared types to one location
@@ -229,7 +186,7 @@ export type IngredientCard = {
   name:                 string;
 };
 
-export type Suggestion = {
+export type SuggestionView = {
   id:     string;
   text:   string;
   image?: string;
@@ -257,31 +214,16 @@ export type SortDirection = "asc" | "desc" | "none";
 
 export type Actions = 
   | Reset
-  | SetIndex
-  | SetTerm
   | SetFilters
   | AddFilter
   | RemoveFilter
   | SetSorts
   | SetCurrentPage
   | SetResultsPerPage
-  | GetResults
-  | GetSuggestions
-  | SetResults
-  | SetSuggestions;
+  | SetResults;
 
 export type Reset = {
   type: typeof actionTypes.RESET;
-};
-
-export type SetIndex = {
-  type:  typeof actionTypes.SET_INDEX;
-  index: SearchIndex;
-};
-
-export type SetTerm = {
-  type: typeof actionTypes.SET_TERM;
-  term: string;
 };
 
 export type SetFilters = {
@@ -318,23 +260,7 @@ export type SetResultsPerPage = {
   results_per_page: string;
 };
 
-export type GetResults = {
-  type:          typeof actionTypes.GET_RESULTS;
-  search_params: string;
-  router:        ReturnType<typeof useRouter>;
-};
-
-export type GetSuggestions = {
-  type: typeof actionTypes.GET_SUGGESTIONS;
-  term: string;
-};
-
 export type SetResults = {
   type:  typeof actionTypes.SET_RESULTS;
   found: SearchResponse;
-};
-
-export type SetSuggestions = {
-  type:        typeof actionTypes.SET_SUGGESTIONS;
-  suggestions: Suggestion[];
 };

@@ -1,18 +1,12 @@
-'use client';
-
+import axios                            from 'axios';
 import type { ChangeEvent }             from 'react';
 import { useContext, useState, useRef } from 'react';
 
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector }
-from '../../../redux';
-import { SearchContext }                                     from './hook';
-import { getSuggestions, setSuggestions, setIndex, setTerm } from './state';
-import type { SearchIndex }                                  from './state';
-
-export { Pagination }     from './Pagination';
-export { ResultsPerPage } from './ResultsPerPage';
+import { endpoint }         from '../../../config/api';
+import { SearchContext }    from './hook';
+import type { SearchIndex, SuggestionView } from './state';
+export { Pagination }       from './Pagination';
+export { ResultsPerPage }   from './ResultsPerPage';
 
 export function Search() {
   const searchDriver = useContext(SearchContext);
@@ -23,27 +17,32 @@ export function Search() {
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef     = useRef<boolean>(false);
 
-  const dispatch = useDispatch();
+  const [ index,       setIndex ]       = useState("recipes");  // index AKA prefilter AKA database table
+  const [ term,        setTerm ]        = useState("");
+  const [ suggestions, setSuggestions ] = useState<SuggestionView[]>([]);
 
-  const index       = useSelector(state => state.search.index);
-  const term        = useSelector(state => state.search.term);
-  const suggestions = useSelector(state => state.search.suggestions);
-
-  let capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
+  const capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
-    dispatch(setIndex(e.target.value as SearchIndex));
+    setIndex(e.target.value as SearchIndex);
     setSearchIndexChanged(true);
   };
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    dispatch(setTerm(value));
-    if (value.length > 2) {
-      if (autosuggestionsRef.current) autosuggestionsRef.current.style.display = "block";
-      dispatch(getSuggestions(value));
+    setTerm(value);
+    if (value.length < 3) return;
+    if (autosuggestionsRef.current) {
+      autosuggestionsRef.current.style.display = "block";
     }
+    //await delay(1250);  // debounce
+    try {
+      const { data } = await axios.get(
+        `${endpoint}/search/autosuggest/${index}?term=${term}`
+      );
+      setSuggestions(data.found);
+    } catch (err) {}
   };
 
   const submitSearch = () => {
@@ -51,24 +50,30 @@ export function Search() {
   };
 
   const selectSuggestion = (suggestion: string) => {
-    dispatch(setTerm(suggestion));
-    dispatch(setSuggestions([]));
+    setTerm(suggestion);  // just search right away?
+    setSuggestions([]);
   };
 
   const initSearchInputBlurHandler = () => {
     if (typeof window === 'undefined')   return;
     if (typeof document === 'undefined') return;
+
     mouseIsOverRef.current = false;
     if (!autosuggestionsRef.current) return;
     if (!inputRef.current) return;
+
     autosuggestionsRef.current.onmouseover = function() {
       mouseIsOverRef.current = true;
     };
+
     autosuggestionsRef.current.onmouseout = function() {
       mouseIsOverRef.current = false;
     };
+
     inputRef.current.onblur = function() {
-      if (mouseIsOverRef.current === false && autosuggestionsRef.current) autosuggestionsRef.current.style.display = "none";
+      if (mouseIsOverRef.current === false && autosuggestionsRef.current) {
+        autosuggestionsRef.current.style.display = "none";
+      }
     };
   };
   
@@ -91,7 +96,13 @@ export function Search() {
       </div>
 
       <div className="insert">
-        <input ref={inputRef} id="search-input" onFocus={onInputChange} onChange={onInputChange} value={term} />
+        <input
+          ref={inputRef}
+          id="search-input"
+          onFocus={onInputChange}
+          onChange={onInputChange}
+          value={term}
+        />
 
         <div className="magnifying-glass" onClick={submitSearch}>
           <span></span>
@@ -100,7 +111,10 @@ export function Search() {
         <div ref={autosuggestionsRef} className="autosuggestions">
           <ul>
             {suggestions.map(suggestion => (
-              <li key={suggestion.id} onClick={() => selectSuggestion(suggestion.text)}>{suggestion.text}</li>
+              <li
+                key={suggestion.id}
+                onClick={() => selectSuggestion(suggestion.text)}
+              >{suggestion.text}</li>
             ))}
           </ul>
         </div>

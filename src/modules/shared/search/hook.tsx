@@ -1,14 +1,13 @@
-'use client';
-
+import axios                          from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createContext, useMemo }     from 'react';
 import type { ReactNode }             from 'react';
 import qs                             from 'qs';
 
-import { useTypedDispatch as useDispatch }               from '../../../redux';
-import { toggleLeftNav }                                 from '../menu/state';
-import { getResults, setIndex, setSuggestions, setTerm } from './state';
-import type { SearchIndex, SearchRequest }               from './state';
+import { endpoint } from '../../../config/api';
+import { useTypedDispatch as useDispatch }   from '../../../redux';
+import { toggleLeftNav }                     from '../menu/state';
+import type { SearchIndex, SearchRequest }   from './state';
 
 export const SearchContext = createContext({} as UseSearch);
 
@@ -35,13 +34,21 @@ function useSearch() {
     return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
   }, [searchParams]);
 
-  const search = (searchIndexChanged?: boolean, term?: string) => {
+  const search = async (searchIndexChanged?: boolean, index: string, term?: string) => {
     if (searchIndexChanged)       delete params.filters;
     if (term)                     params.term             = term;
     if (!params.current_page)     params.current_page     = "1";
     if (!params.results_per_page) params.results_per_page = "20";
-    dispatch(setSuggestions([]));
-    dispatch(getResults(qs.stringify(params), router));
+    //await delay(250);  // debounce
+    const search_params = qs.stringify(params);
+    const idx = index === "equipment" ? "equipments" : index;
+    try {
+      const { data } = await axios.get(
+        `${endpoint}/search/find/${index}?${search_params}`
+      );
+      //dispatch(setResults(data.found));  // TO DO: put into localStorage
+      router.push(`/${idx}?${search_params}`);
+    } catch (err) {}
   };
 
   const setFilters = (filterName: string, filterValues: string[]) => {
@@ -63,17 +70,16 @@ function useSearch() {
   };
 
   const setPreFilters = (
-    searchIndex:  SearchIndex,
+    //searchIndex:  SearchIndex,
     filterName:   string,
     filterValues: string[]
   ) => {
-    dispatch(setTerm(""));
     delete params.term;
-    dispatch(setIndex(searchIndex));
+    //dispatch(setIndex(searchIndex));
     dispatch(toggleLeftNav());
     delete params.filters;
     setFilters(filterName, filterValues);
-  };
+  };  // used in leftnav links
 
   const clearFilters = (filterName: string) => {
     delete params['filters']?.[filterName];

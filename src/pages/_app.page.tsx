@@ -29,3 +29,24 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
     </ReduxProvider>
   );
 }
+/*
+function MyApp({ Component, pageProps, data }) {
+  return <Component {...pageProps} data={data} />;
+}
+
+MyApp.getInitialProps = async ({ Component, ctx }) => {
+  // Data fetching logic
+  const response = await fetch('https://api.example.com/data');
+  const data = await response.json();
+
+  // Pass the fetched data to all pages as a prop
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps, data };
+};
+
+export default MyApp;
+*/

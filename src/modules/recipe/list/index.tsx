@@ -1,5 +1,3 @@
-'use client';
-
 import Link                                       from 'next/link';
 import { Fragment, useContext, useState, useRef } from 'react';
 
@@ -10,8 +8,8 @@ import { SearchContext }                   from '../../shared/search/hook';
 
 //const url = "https://s3.amazonaws.com/nobsc-user-recipe/";
 
-// list of search results
-// ONLY contains Official Recipes (and Public User Recipes???)
+// list of search results -- ONLY contains Official Recipes
+// TO DO: make a filter to toggle include/exclude Public User Recipes)
 // DOES NOT contain Private User Recipes
 export default function RecipeList() {
   const renders = useRef(0);
@@ -27,7 +25,7 @@ export default function RecipeList() {
     {continent: "Asia",     cuisines: [...(cuisines.filter(c => c.continent_code === "AS"))]},
     {continent: "Europe",   cuisines: [...(cuisines.filter(c => c.continent_code === "EU"))]},
     {continent: "Oceania",  cuisines: [...(cuisines.filter(c => c.continent_code === "OC"))]}
-  ];  // TO DO: improve this
+  ];  // TO DO: improve this (Array.reduce?)
   //const resultTerm       useSelector(state = state.search.resultTerm);
   const results       = useSelector(state => state.search.results);
   const total_results = useSelector(state => state.search.total_results);
