@@ -1,6 +1,5 @@
 import axios                          from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo }                    from 'react';
 import qs                             from 'qs';
 
 import { endpoint }                        from '../../../config/api';
@@ -20,9 +19,7 @@ export function useSearch() {
   const router       = useRouter();
   const searchParams = useSearchParams();
 
-  const params = useMemo(() => {
-    return qs.parse(searchParams.toString()) as SearchRequest;  // TO DO: clean searchParams so that it matches SearchRequest
-  }, [searchParams]);
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const search = async (searchIndexChanged?: boolean, term?: string) => {
     if (searchIndexChanged)       delete params.filters;

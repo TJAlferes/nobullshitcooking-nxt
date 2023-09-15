@@ -5,4 +5,4 @@ export default function IndexPage() {
   return <Home />;
 }
 
-export const getStaticProps = staticProps();
+export const getStaticProps = staticProps();  // TO DO: remove

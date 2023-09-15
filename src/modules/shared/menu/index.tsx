@@ -1,17 +1,17 @@
 import Link                               from 'next/link';
 import { usePathname }                    from 'next/navigation';
-import { useContext, useState }           from 'react';
+import { useState }                       from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
 import { useTypedSelector as useSelector } from '../../../redux';
 import { ExpandCollapse }                  from '../ExpandCollapse';
-import { SearchContext }                   from '../search/hook';
+import { useSearch }                       from '../search/hook';
 import type { SearchIndex }                from '../search/state';
 
 export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
-  const { setPreFilters } = useContext(SearchContext);
+  const { setPreFilters } = useSearch();
 
-  const [ active, setActive ] = useState<string|null>(null);
+  const [ active, setActive ] = useState<string | null>(null);
 
   return !isLeftNavOpen ? null : (
     <>

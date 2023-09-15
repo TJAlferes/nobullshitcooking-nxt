@@ -26,6 +26,7 @@ export function Search() {
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
     setIndex(e.target.value as SearchIndex);
+    
     setSearchIndexChanged(true);
   };
 

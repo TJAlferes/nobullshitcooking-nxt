@@ -1,26 +1,17 @@
-'use client';
-
-import Link                     from 'next/link';
-import { useContext, useState } from 'react';
+import Link         from 'next/link';
+import { useState } from 'react';
 
 import { useTypedSelector as useSelector } from '../../../redux';
+import { getItem }                         from '../../general/localStorage';
 import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
-import { SearchContext }                   from '../../shared/search/hook';
+import { useSearch }                       from '../../shared/search/hook';
 import { Pagination, ResultsPerPage }      from '../../shared/search';
 
-//const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";
-
-// list of search results
-// ONLY contains Official Equipment
-// DOES NOT contain Private User Equipment
 export default function EquipmentList() {
-  const searchDriver = useContext(SearchContext);
+  const searchDriver = useSearch();
 
   const equipment_types = useSelector(state => state.data.equipment_types);
-  //const resultTerm      = useSelector(state = state.search.resultTerm);
-  const results         = useSelector(state => state.search.results);
-  const total_results   = useSelector(state => state.search.total_results);
-  const total_pages     = useSelector(state => state.search.total_pages);
+  const { results, total_results, total_pages } = getItem("found");
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
 
@@ -117,3 +108,5 @@ export default function EquipmentList() {
     </div>
   );
 }
+
+//const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";

@@ -7,7 +7,6 @@ import '../../styles/styles.css';
 import { Layout }         from '../modules/general/Layout';
 import { RouteGuard }     from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
 import { ThemeProvider }  from '../modules/general/ThemeProvider';  // TO DO: rename to Theme
-import { SearchProvider } from '../modules/shared/search/hook';  // TO DO: delete
 import { wrapper }        from '../redux';  // TO DO: delete if possible
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
@@ -16,15 +15,13 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
   return (
     <ReduxProvider store={store}>
       <DndProvider options={HTML5toTouch}>
-        <SearchProvider>
-          <RouteGuard>
-            <ThemeProvider>
-              <Layout>
-                <Component {...props.pageProps} />
-              </Layout>
-            </ThemeProvider>
-          </RouteGuard>
-        </SearchProvider>
+        <RouteGuard>
+          <ThemeProvider>
+            <Layout>
+              <Component {...props.pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </RouteGuard>
       </DndProvider>
     </ReduxProvider>
   );
