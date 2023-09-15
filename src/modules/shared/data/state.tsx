@@ -1,9 +1,47 @@
+import { createContext, useContext, useReducer }    from 'react';
+import type { Dispatch, SetStateAction, ReactNode } from 'react';
 import { HYDRATE }        from 'next-redux-wrapper';
 import type { AnyAction } from 'redux';
 
 import type { PlanDataView } from '../../plan/detail/state';
 
-const initialState: State = {
+export const DataContext = createContext<InitialData | null>(null);
+
+export const DataDispatchContext = createContext<Dispatch<SetStateAction<InitialData>> | null>(null);
+
+export function DataProvider({ children }: DataProviderProps) {
+  const [ data, dispatch ] = useReducer(dataReducer, initialData);
+
+  return (
+    <DataContext.Provider value={data}>
+      <DataDispatchContext.Provider value={dispatch}>
+        {children}
+      </DataDispatchContext.Provider>
+    </DataContext.Provider>
+  );
+}
+
+type DataProviderProps = {
+  children: ReactNode;
+};
+
+export function useData() {
+  const data = useContext(DataContext);
+  if (!data) {
+    throw new Error("No data context");
+  }
+  return data;
+}
+
+export function useDataDispatch() {
+  const dispatch = useContext(DataDispatchContext);
+  if (!dispatch) {
+    throw new Error("No data dispatch context");
+  }
+  return dispatch;
+}
+
+const initialData: InitialData = {
   cuisines:         [],
   equipment:        [],
   equipment_types:  [],
@@ -11,10 +49,12 @@ const initialState: State = {
   ingredient_types: [],
   units:            [],
   methods:          [],
-  plans:            [],
-  recipes:          [],
+  //plans:            [],
+  //recipes:          [],
   recipe_types:     [],
 };
+
+// TO DO: migrate to React's useReducer and useContext, follow their docs
 
 export function dataReducer(state = initialState, action: AnyAction): State {
   switch (action.type) {
@@ -31,8 +71,8 @@ export function dataReducer(state = initialState, action: AnyAction): State {
         ingredient_types: action['initialData'].ingredient_types,
         units:            action['initialData'].measurements,
         methods:          action['initialData'].methods,
-        plans:            action['initialData'].plans,
-        recipes:          action['initialData'].recipes,
+        //plans:            action['initialData'].plans,
+        //recipes:          action['initialData'].recipes,
         recipe_types:     action['initialData'].recipe_types
       };
 
@@ -44,8 +84,6 @@ export function dataReducer(state = initialState, action: AnyAction): State {
 };
 
 
-
-export const getInitialData = () => ({type: GET_INITIAL_DATA});
 
 export const setInitialData = (initialData: InitialData) => ({
   type: SET_INITIAL_DATA,
@@ -87,19 +125,14 @@ export type InitialData = {
   ingredient_types: IngredientTypeView[];
   units:            UnitView[];
   methods:          MethodView[];
-  plans:            PlanView[];
-  recipes:          RecipeOverview[];
+  //plans:            PlanView[];
+  //recipes:          RecipeOverview[];
   recipe_types:     RecipeTypeView[];
 };
 
 export type Actions =
-  | GetInitialData
   | SetInitialData
   | SetData;
-
-export type GetInitialData = {
-  type: typeof actionTypes.GET_INITIAL_DATA;
-};
 
 export type SetInitialData = {         
   type:        typeof actionTypes.SET_INITIAL_DATA;

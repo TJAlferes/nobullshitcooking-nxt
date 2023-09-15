@@ -67,17 +67,6 @@ export function* rootSaga() {
 
 export const wrapper = createWrapper<SagaStore>(makeStore, {debug: false});
 
-export function staticProps() {
-  return wrapper.getStaticProps(
-    store => async (context) => {
-      store.dispatch(getInitialData());
-      store.dispatch(END);
-      await (store as SagaStore).sagaTask?.toPromise();
-      return {props: {}};
-    }
-  );
-}
-
 export const useTypedDispatch: () => AppDispatch = useDispatch;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
