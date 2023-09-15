@@ -1,7 +1,5 @@
 import { createContext, useContext, useReducer }    from 'react';
 import type { Dispatch, SetStateAction, ReactNode } from 'react';
-import { HYDRATE }        from 'next-redux-wrapper';
-import type { AnyAction } from 'redux';
 
 import type { PlanDataView } from '../../plan/detail/state';
 
@@ -54,68 +52,48 @@ const initialData: InitialData = {
   recipe_types:     [],
 };
 
-// TO DO: migrate to React's useReducer and useContext, follow their docs
-
-export function dataReducer(state = initialState, action: AnyAction): State {
+export function dataReducer(data, action) {
   switch (action.type) {
-    case HYDRATE:
-      return {...state, ...action['payload'].data};  // sufficient?
-
-    case SET_INITIAL_DATA:
+    case 'set_initial_data': {  // is this needed anymore?
       return {
-        ...state,
-        cuisines:         action['initialData'].cuisines,
-        equipment:        action['initialData'].equipment,
-        equipment_types:  action['initialData'].equipment_types,
-        ingredients:      action['initialData'].ingredients,
-        ingredient_types: action['initialData'].ingredient_types,
-        units:            action['initialData'].measurements,
-        methods:          action['initialData'].methods,
-        //plans:            action['initialData'].plans,
-        //recipes:          action['initialData'].recipes,
-        recipe_types:     action['initialData'].recipe_types
+        ...data,
+        cuisines:         action.cuisines,
+        equipment:        action.equipment,
+        equipment_types:  action.equipment_types,
+        ingredients:      action.ingredients,
+        ingredient_types: action.ingredient_types,
+        units:            action.measurements,
+        methods:          action.methods,
+        //plans:            action.plans,
+        //recipes:          action.recipes,
+        recipe_types:     action.recipe_types
       };
-
-    case SET_DATA:
-      return {...state, [action['data'].key]: action['data'].value};
-    
-    default: return state;
+    }
+    case 'set_data': {
+      return {
+        ...data,
+        [action.key]: action.value
+      };
+    }
+    default: {
+      throw new Error("Unknown action: ", action.type);
+    }
   }
 };
 
-
-
 export const setInitialData = (initialData: InitialData) => ({
-  type: SET_INITIAL_DATA,
-  initialData
+  type: 'set_initial_data',
+  ...initialData
 });
 
 export const setData = (
   key: keyof InitialData,
   value: Partial<InitialData>
 ) => ({
-  type: SET_DATA,
-  data: {
-    key,
-    value
-  }
+  type: 'set_data',
+  key,
+  value
 });
-
-
-
-export const actionTypes = {
-  GET_INITIAL_DATA: 'GET_INITIAL_DATA',
-  SET_INITIAL_DATA: 'SET_INITIAL_DATA',
-  SET_DATA:         'SET_DATA',
-} as const;
-
-const {
-  GET_INITIAL_DATA,
-  SET_INITIAL_DATA,
-  SET_DATA,
-} = actionTypes;
-
-export type State = InitialData;
 
 export type InitialData = {
   cuisines:         CuisineView[];
@@ -134,17 +112,14 @@ export type Actions =
   | SetInitialData
   | SetData;
 
-export type SetInitialData = {         
-  type:        typeof actionTypes.SET_INITIAL_DATA;
-  initialData: InitialData;
+export type SetInitialData = InitialData & {         
+  type: 'set_initial_data';
 };
 
 export type SetData = {
-  type: typeof actionTypes.SET_DATA;
-  data: {
-    key:   keyof InitialData;
-    value: Partial<InitialData>;
-  };
+  type: 'set_data';
+  key:   keyof InitialData;
+  value: Partial<InitialData>;
 };
 
 export type CuisineView = {

@@ -1,35 +1,23 @@
-import axios                      from 'axios';
-import Link                       from 'next/link';
-import { useRouter }              from 'next/navigation';  // or 'next/router' ???
-import { useEffect, useState }    from 'react';
-import { useDispatch }            from 'react-redux';
+import axios           from 'axios';
+import Link            from 'next/link';
+import { useRouter }   from 'next/navigation';
+import { useState }    from 'react';
+import { useDispatch } from 'react-redux';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderButton }                    from '../../shared/LoaderButton';
+import { endpoint }     from '../../../config/api';
+import { LoaderButton } from '../../shared/LoaderButton';
+import { useSetAuthname } from '..';
 
 export default function Login() {
   const router   = useRouter();
   const dispatch = useDispatch();
-
-  const message = useSelector(state => state.system.message);  // not needed here???
+  const setAuthname = useSetAuthname();
 
   const [ email,    setEmail ]    = useState("");
   const [ password, setPassword ] = useState("");
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
-
-  useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);  // not needed here???
 
   const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
     setEmail((e.target as HTMLInputElement).value);
@@ -50,8 +38,8 @@ export default function Login() {
       setFeedback(data.message);
   
       if (data.message === 'Signed in.') {
-        dispatch(authenticate(data.username));
-        dispatch(setInitialUserData());
+        setAuthname(data.username);
+        dispatch(setInitialUserData());  // setItem('user_data', data.user_data);
         router.push('/dashboard');
       }
     } catch(err) {

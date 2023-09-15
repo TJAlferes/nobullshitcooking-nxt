@@ -4,32 +4,26 @@ import { useRouter } from 'next/router';
 import { useState }  from 'react';
 
 import { endpoint } from '../../../../config/api';
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector
-} from '../../../../redux';
+import { useAuthname } from '../../../auth';
+import { useTheme, useSetTheme } from '../../theme';
 import { LeftNav }       from '../../../shared/menu';
 import { Search }        from '../../../shared/search';
-//import { systemMessage } from '../../shared/system/state';
-import { dark, light }   from '../../ThemeProvider/state';
 import { removeItem }    from '../../localStorage';
 
 export function Header() {
-  const router = useRouter();
+  const router   = useRouter();
+  const authname = useAuthname();
+  const theme    = useTheme();
+  const setTheme = useSetTheme();
 
-  const dispatch = useDispatch();
-
-  const authname            = useSelector(state => state.authentication.authname);
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
-  const theme               = useSelector(state => state.theme.theme);
   const [ isLeftNavOpen, setIsLeftNavOpen ] = useState(false);
 
   const click = () => setIsLeftNavOpen(prev => !prev);
 
   const logout = async () => {
-    if (!userIsAuthenticated) return;
+    if (!authname) return;
     try {
-      const { data } = await axios.post(
+      await axios.post(
         `${endpoint}/user/authentication/logout`,
         {},
         {withCredentials: true}
@@ -65,21 +59,33 @@ export function Header() {
       <div className="user-nav">
         {theme === 'light'
           ? (
-            <span className="mode" onClick={() => dispatch(dark())}>
+            <span className="mode" onClick={() => setTheme("dark")}>
               <i className="moon">☾</i> Night
             </span>
           )
           : (
-            <span className="mode" onClick={() => dispatch(light())}>
+            <span className="mode" onClick={() => setTheme("light")}>
               <i className="sun">☀︎</i> Day
             </span>
           )
         }
         <Link href="/help">Help</Link>
-        {!userIsAuthenticated ? <Link href="/register">Create Account</Link> : false}
-        {!userIsAuthenticated ? <Link href="/login">Sign In</Link> : false}
-        {userIsAuthenticated ? <Link href="/dashboard">{`Hello, ${authname}`}</Link> : false}
-        {userIsAuthenticated ? <span className="logout" onClick={logout}>Sign Out</span> : false}
+
+        {!authname
+          ? (
+            <>
+              <Link href="/register">Create Account</Link>}
+              <Link href="/login">Sign In</Link>
+            </>
+          )
+          : (
+            <>
+              <Link href="/dashboard">{`Hello, ${authname}`}</Link>
+              <span className="logout" onClick={logout}>Sign Out</span>
+            </>
+          )
+        }
+
         <Link href="/cart">Cart</Link>
       </div>
       

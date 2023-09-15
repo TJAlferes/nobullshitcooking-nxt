@@ -1,6 +1,6 @@
 import axios                   from 'axios';
 import { useEffect, useState } from 'react';
-import { DndProvider }         from 'react-dnd-multi-backend';
+import { DndProvider }         from 'react-dnd-multi-backend';  // TO DO: move DOWN, to plan
 import { Provider }            from 'react-redux';
 import { HTML5toTouch }        from 'rdndmb-html5-to-touch';
 import type { AppProps }       from 'next/app';
@@ -10,7 +10,8 @@ import { endpoint }       from '../config/api';
 import { setItem }        from '../modules/general/localStorage';
 import { Layout }         from '../modules/general/Layout';
 import { RouteGuard }     from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
-import { ThemeProvider }  from '../modules/general/ThemeProvider';  // TO DO: rename to Theme
+import { AuthnameProvider } from '../modules/auth/index';
+import { ThemeProvider }  from '../modules/general/theme';
 import { wrapper }        from '../redux';  // TO DO: delete if possible
 
 export default function NOBSCApp({ Component, ...rest }: AppProps) {
@@ -33,15 +34,17 @@ export default function NOBSCApp({ Component, ...rest }: AppProps) {
 
   return (
     <Provider store={store}>
-      <DndProvider options={HTML5toTouch}>
-        <RouteGuard>
-          <ThemeProvider>
-            <Layout>
-              <Component {...props.pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </RouteGuard>
-      </DndProvider>
+      <AuthnameProvider>
+        <DndProvider options={HTML5toTouch}>
+          <RouteGuard>
+            <ThemeProvider>
+              <Layout>
+                <Component {...props.pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </RouteGuard>
+        </DndProvider>
+      </AuthnameProvider>
     </Provider>
   );
 }
