@@ -1,13 +1,11 @@
 import { actionTypes as authenticationActionTypes } from '../user/authentication/state';
 import type { Logout } from '../user/authentication/state';
 
-// reducer ---------------------------------------------------------------------
-
 // CONSIDER: normalize state (use objects/maps, not arrays), see Nir Kofman's action patterns
 // TO DO: reserve/disable the username "messengerstatus"!
 
 const initialState: State = {
-  status:   "disconnected",
+  connected: false,
   room:     "",
   messages: [],
   users:    [],
@@ -16,12 +14,12 @@ const initialState: State = {
 
 export const chatReducer = (state = initialState, action: Actions): State => {
   switch (action.type) {
-    case CONNECTED:
-      return {...state, status: "connected"};
+    case "connected":
+      return {...state, connected: true};
 
-    case DISCONNECTED:
+    case "disconnected":
     case LOGOUT:
-      return {...state, status: "disconnected"};
+      return {...state, connected: false};
     
     case ONLINE_FRIENDS:
       return {...state, friends: action.friends};
@@ -84,18 +82,11 @@ export const chatReducer = (state = initialState, action: Actions): State => {
   }
 };
 
-// action creators -------------------------------------------------------------
-
 // TO DO: you can still localize here, but let database create the timestamps
 
 function getTime() {
   return `${(new Date).toLocaleTimeString()}`;
 }
-
-export const connect      = () => ({type: CONNECT});
-export const connected    = () => ({type: CONNECTED});
-export const disconnect   = () => ({type: DISCONNECT});
-export const disconnected = () => ({type: DISCONNECTED});
 
 export const onlineFriends = (friends: string[]) =>
   ({type: ONLINE_FRIENDS, friends});
@@ -136,12 +127,10 @@ export const receivedPrivateMessage = (message: Message) =>
 export const failedPrivateMessage = (feedback: string) =>
   ({type: FAILED_PRIVATE_MESSAGE, feedback, ts: getTime()});
 
-// types -----------------------------------------------------------------------
-
 // TO DO: double-check times
 
 export type State = {
-  status:   string;
+  connected: boolean;
   room:     string;
   messages: MessageWithClientTimestamp[];
   users:    string[];

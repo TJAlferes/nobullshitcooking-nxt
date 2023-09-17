@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 import {
   useTypedDispatch as useDispatch,
@@ -12,47 +12,56 @@ import {
   sendPrivateMessage
 } from './state';
 import type { MessageWithClientTimestamp } from './state';
+import { useAuthname } from '../auth';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
   const dispatch = useDispatch();
+  const authname = useAuthname();
 
-  // move some of this down in the component tree?
+  // TO DO: chat useReducer and useChat (useContext(ChatContext))
+  const [ chat, dispatch ] = useReducer();
+  const connected     = useSelector(state => state.chat.connected);
   const room          = useSelector(state => state.chat.room);
   const messages      = useSelector(state => state.chat.messages);
   const friends       = useSelector(state => state.chat.friends);
-  const status        = useSelector(state => state.chat.status);
   const users         = useSelector(state => state.chat.users);
-  const authname      = useSelector(state => state.authentication.authname);
-  const message       = useSelector(state => state.system.message);
-  const windowFocused = useSelector(state => state.window.focused);
 
-  const [ debounced,     setDebounced ]     = useState(false);
   const [ feedback,      setFeedback ]      = useState("");
+  const [ windowFocused, setWindowFocused ] = useState(true);
+  const [ loading,       setLoading ]       = useState(false);
+  const [ debounced,     setDebounced ]     = useState(false);
+  const [ spamCount,     setSpamCount ]     = useState(1);
+  const [ peopleTab,     setPeopleTab ]     = useState("Room");
   const [ focusedFriend, setFocusedFriend ] = useState<string>();
   const [ focusedUser,   setFocusedUser ]   = useState<string>();
-  const [ loading,       setLoading ]       = useState(false);
-  const [ messageToSend, setMessageToSend ] = useState("");
-  //const [ mobileTab,     setMobileTab ]     = useState("Messages");
-  const [ peopleTab,     setPeopleTab ]     = useState("Room");
   const [ roomToEnter,   setRoomToEnter ]   = useState("");
-  const [ spamCount,     setSpamCount ]     = useState(1);
+  const [ messageToSend, setMessageToSend ] = useState("");
 
   const messagesRef = useRef<HTMLUListElement>(null);
 
   const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
   useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0,0);
-      setFeedback(message);
-      setLoading(false);
+    let mounted = false;
+    if (mounted) {
+      setupChat(store);
     }
     return () => {
-      isSubscribed = false;
+      mounted = true;
     };
-  }, [message]);
+  }, []);
+  
+  window.onblur = function() {
+    setWindowFocused(false);
+  };
+
+  window.onfocus = function() {
+    const favicon = document.getElementById('nobsc-favicon') as HTMLLinkElement | null;
+    if (!favicon) return;
+    favicon.href = "/nobsc-normal-favicon.png";
+    setWindowFocused(true);
+  };
 
   useEffect(() => {
     const setAlertFavicon = () => {
@@ -82,7 +91,7 @@ export default function Chat() {
       }
     };
 
-    if (windowFocused === false) setAlertFavicon();
+    if (!windowFocused) setAlertFavicon();
     autoScroll();
   }, [messages]);
 
@@ -92,7 +101,6 @@ export default function Chat() {
   const changeMessageInput = (e: SyntheticEvent) =>
     setMessageToSend((e.target as HTMLInputElement).value.trim());
   
-  //const changeMobileTab = (value: string) => setMobileTab(value);
   const changePeopleTab = (value: string) => setPeopleTab(value);
   
   const changeRoom = () => {
@@ -204,9 +212,9 @@ export default function Chat() {
         <div className="chat-options">
           <button
             disabled={loading}
-            onClick={status === "connected" ? disconnect : connect}
+            onClick={connected ? disconnect : connect}
           >
-            {status === "connected" ? "Disconnect" : "Connect"}
+            {connected ? "Disconnect" : "Connect"}
           </button>
 
           <div className="current-room">
@@ -217,7 +225,7 @@ export default function Chat() {
             <label>Go To Room:</label>
 
             <input
-              disabled={(status !== "connected") || loading}
+              disabled={!connected || loading}
               name="change-room-input"
               onChange={changeRoomInput}
               type="text"
@@ -225,7 +233,7 @@ export default function Chat() {
             />
 
             <button
-              disabled={(status !== "connected") || loading}
+              disabled={!connected || loading}
               onClick={changeRoom}
             >Enter</button>
           </div>
@@ -243,7 +251,7 @@ export default function Chat() {
             </ul>
 
             <input
-              disabled={status !== "connected"}
+              disabled={!connected}
               name="chat-input"
               onChange={changeMessageInput}
               onKeyUp={e => send(e)}
@@ -268,13 +276,21 @@ export default function Chat() {
             {peopleTab === "Room" && (
               <ul className="chat-persons">
                 {users && users.map(user => (
-                  <li className="chat-person" key={user} onClick={() => focusUser(user)}>
+                  <li
+                    className="chat-person"
+                    key={user}
+                    onClick={() => focusUser(user)}
+                  >
                     <img src={`${url}/${user}-tiny`} />
 
                     <span>{user}</span>
 
                     {focusedUser && focusedUser === user && (
-                      <div className="person-tooltip"><button onClick={() => startPrivateMessage(user)}>Whisper</button></div>
+                      <div className="person-tooltip">
+                        <button onClick={() => startPrivateMessage(user)}>
+                          Whisper
+                        </button>
+                      </div>
                     )}
                   </li>
                 ))}
@@ -284,13 +300,21 @@ export default function Chat() {
             {peopleTab === "Friends" && (
               <ul className="chat-persons">
                 {friends && friends.map(friend => (
-                  <li className="chat-person" key={friend} onClick={() => focusFriend(friend)}>
+                  <li
+                    className="chat-person"
+                    key={friend}
+                    onClick={() => focusFriend(friend)}
+                  >
                     <img src={`${url}/${friend}-tiny`} />
 
                     <span>{friend}</span>
 
                     {focusedFriend && focusedFriend === friend && (
-                      <div className="person-tooltip"><button onClick={() => startPrivateMessage(friend)}>Whisper</button></div>
+                      <div className="person-tooltip">
+                        <button onClick={() => startPrivateMessage(friend)}>
+                          Whisper
+                        </button>
+                      </div>
                     )}
                   </li>
                 ))}
@@ -299,51 +323,6 @@ export default function Chat() {
           </div>
         </div>
       </div>
-
-      {/*<div className="chat-mobile">
-        <p className="feedback">{feedback}</p>
-        <div className="chat-mobile-tabs">
-          <button className={mobileTab === "Messages" ? "--current" : ""} onClick={() => changeMobileTab("Messages")}>Messages</button>
-          <button className={mobileTab === "People" ? "--current" : ""}   onClick={() => changeMobileTab("People")}>People</button>
-          <button className={mobileTab === "Options" ? "--current" : ""}  onClick={() => changeMobileTab("Options")}>Options</button>
-        </div>
-        {mobileTab === "Options" && (
-          <OptionsView
-            changeRoom={changeRoom}
-            changeRoomInput={changeRoomInput}
-            connect={connect}
-            disconnect={disconnect}
-            loading={loading}
-            room={room}
-            roomToEnter={roomToEnter}
-            status={status}
-          />
-        )}
-        {mobileTab === "Messages" && (
-          <MessagesView
-            authname={authname}
-            changeMessageInput={changeMessageInput}
-            messages={messages}
-            messagesRef={messagesRef}
-            messageToSend={messageToSend}
-            send={send}
-            status={status}
-          />
-        )}
-        {mobileTab === "People" && (
-          <PeopleView
-            changePeopleTab={changePeopleTab}
-            focusedFriend={focusedFriend}
-            focusFriend={focusFriend}
-            focusedUser={focusedUser}
-            focusUser={focusUser}
-            friends={friends}
-            peopleTab={peopleTab}
-            startPrivateMessage={startPrivateMessage}
-            users={users}
-          />
-        )}
-      </div>*/}
     </div>
   );
 }
