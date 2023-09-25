@@ -3,14 +3,14 @@
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactElement }      from 'react';
 
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
+import { useAuthname }   from '../../auth';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
 
 export function RouteGuard({ children }: Props) {
   const router   = useRouter();
   const pathname = usePathname();
 
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
+  const authname = useAuthname();
 
   const authenticatedRoutes = [
     '/chat',
@@ -23,7 +23,7 @@ export function RouteGuard({ children }: Props) {
   ];
   const authenticatedRoute = pathname && authenticatedRoutes.includes(pathname);
 
-  if (authenticatedRoute && !userIsAuthenticated) {
+  if (authenticatedRoute && !authname) {
     router.push('/login');
     return <LoaderSpinner />;
   }
@@ -35,7 +35,7 @@ export function RouteGuard({ children }: Props) {
   ];
   const unauthenticatedRoute = pathname && unauthenticatedRoutes.includes(pathname);
 
-  if (unauthenticatedRoute && userIsAuthenticated) {
+  if (unauthenticatedRoute && authname) {
     router.push('/');
     return <LoaderSpinner />;
   }

@@ -3,10 +3,11 @@ import { usePathname }                    from 'next/navigation';
 import { useState }                       from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
-import { useTypedSelector as useSelector } from '../../../redux';
-import { ExpandCollapse }                  from '../ExpandCollapse';
-import { useSearch }                       from '../search/hook';
-import type { SearchIndex }                from '../search/state';
+import { useAuthname }      from '../../auth';
+import { useTheme }         from '../../general/theme';
+import { ExpandCollapse }   from '../ExpandCollapse';
+import { useSearch }        from '../search/hook';
+import type { SearchIndex } from '../search/state';
 
 export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
   const { setPreFilters } = useSearch();
@@ -110,7 +111,7 @@ type Props = {
 };
 
 function NavLinks() {
-  const authname = useSelector(state => state.authentication.authname);
+  const authname = useAuthname();
 
   return (
     <>
@@ -139,7 +140,7 @@ function NavLinks() {
 
 function NavLink({ text, to }: NavLinkProps) {
   const pathname = usePathname();
-  const theme    = useSelector(state => state.theme.theme);
+  const theme    = useTheme();
 
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
 

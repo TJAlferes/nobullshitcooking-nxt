@@ -74,7 +74,7 @@ export function Header() {
         {!authname
           ? (
             <>
-              <Link href="/register">Create Account</Link>}
+              <Link href="/register">Create Account</Link>
               <Link href="/login">Sign In</Link>
             </>
           )

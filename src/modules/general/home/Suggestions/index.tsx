@@ -1,37 +1,24 @@
-import axios           from 'axios';
-import { useEffect }   from 'react';
-import { useDispatch } from 'react-redux';
-
-import { useTypedSelector as useSelector } from '../../../../redux';
-import { geoAddress, geoLatitude, geoLongitude, geoNearbyStoresClicked } from '../../../shared/geolocation/state';
-
-const googleMapsAPIKeyOne = 'AIzaSyCULKDLxoF9O413jjvF5Ot2xXXMdgz0Eag';  // renew
-const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
-const geoUrl              = 'https://maps.googleapis.com/maps/api/geocode/json';
-const mapUrl              = 'https://www.google.com/maps/embed/v1/search';
+import axios                   from 'axios';
+import { useEffect, useState } from 'react';
 
 export function Suggestions() {
-  const dispatch = useDispatch();
-
-  const address             = useSelector(state => state.geolocation.address);  // why do these need to be in redux again?
-  const latitude            = useSelector(state => state.geolocation.latitude);
-  const longitude           = useSelector(state => state.geolocation.longitude);
-  const nearbyStoresClicked = useSelector(state => state.geolocation.nearbyStoresClicked);
+  const [ latitude, setLatitude ]   = useState("");
+  const [ longitude, setLongitude ] = useState("");
+  const [ address, setAddress ]     = useState("");
+  const [ nearbyStoresClicked, setNearbyStoresClicked ] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
     async function getAddress() {
-      if (latitude === "" || longitude === "") {
-        return;
-      }
+      if (latitude === "" || longitude === "") return;
 
       const res = await axios.get(
         `${geoUrl}?latlng=${latitude},${longitude}&key=${googleMapsAPIKeyTwo}`
       );
 
       if (res.data) {
-        dispatch(geoAddress(res.data.results[3].formatted_address));
+        setAddress(res.data.results[3].formatted_address);
       }
     }
 
@@ -44,13 +31,13 @@ export function Suggestions() {
 
   const getLocation = async () => {
     navigator.geolocation.getCurrentPosition(function(position) {
-      dispatch(geoLatitude(`${position.coords.latitude}`));
-      dispatch(geoLongitude(`${position.coords.longitude}`));
+      setLatitude(`${position.coords.latitude}`);
+      setLongitude(`${position.coords.longitude}`);
     });
   };
 
-  const handleShowNearbyStoresClick = () => {
-    dispatch(geoNearbyStoresClicked(true));
+  const showNearbyStores = () => {
+    setNearbyStoresClicked(true);
     getLocation();
   };
 
@@ -71,7 +58,7 @@ export function Suggestions() {
               style={{border: "0 none"}}
             ></iframe>
           ))
-          : <button onClick={handleShowNearbyStoresClick}>Show Nearby Stores</button>
+          : <button onClick={showNearbyStores}>Show Nearby Stores</button>
         }
       </div>
       <hr />
@@ -89,3 +76,8 @@ export function Suggestions() {
     </div>
   );
 }
+
+const googleMapsAPIKeyOne = 'AIzaSyCULKDLxoF9O413jjvF5Ot2xXXMdgz0Eag';  // renew
+const googleMapsAPIKeyTwo = 'AIzaSyA1caERqL2MD4rv2YmbJ139ToyxgT61v6w';
+const geoUrl              = 'https://maps.googleapis.com/maps/api/geocode/json';
+const mapUrl              = 'https://www.google.com/maps/embed/v1/search';

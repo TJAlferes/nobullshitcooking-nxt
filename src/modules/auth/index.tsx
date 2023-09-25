@@ -19,16 +19,16 @@ export function AuthnameProvider({ children }: {children?: ReactNode}) {
 
 export function useAuthname() {
   const authname = useContext(AuthnameContext);
-  if (!authname) {
-    throw new Error("No authname context");
-  }
+  //if (!authname) {
+  //  throw new Error("No authname context");
+  //}
   return authname;
 }
 
 export function useSetAuthname() {
   const setAuthname = useContext(SetAuthnameContext);
-  if (!setAuthname) {
-    throw new Error("No setAuthname context");
-  }
+  //if (!setAuthname) {
+  //  throw new Error("No setAuthname context");
+  //}
   return setAuthname;
 }
