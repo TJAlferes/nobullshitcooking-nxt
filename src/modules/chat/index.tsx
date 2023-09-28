@@ -1,31 +1,31 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector
-} from '../../redux';
-import {
-  connect as chatConnect,
-  disconnect as chatDisconnect,
-  joinRoom,
-  sendMessage,
-  sendPrivateMessage
-} from './state';
-import type { MessageWithClientTimestamp } from './state';
-import { useAuthname } from '../auth';
+import { useAuthname }      from '../auth';
+import { getItem, setItem } from '../general/localStorage';
+import { getSocket } from './network';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
-  const dispatch = useDispatch();
   const authname = useAuthname();
+  const socket   = getSocket();
 
-  // TO DO: chat useReducer and useChat (useContext(ChatContext))
-  const [ chat, dispatch ] = useReducer();
-  const connected     = useSelector(state => state.chat.connected);
-  const room          = useSelector(state => state.chat.room);
-  const messages      = useSelector(state => state.chat.messages);
-  const friends       = useSelector(state => state.chat.friends);
-  const users         = useSelector(state => state.chat.users);
+  //friends
+  
+  // *** TO DO: when they logout, disconnect them from chat (BOTH here and on backend redis)
+  const [ connected, setConnected ] = useState(socket.connected);
+
+  const current_private_conversation = "";  //user_id;
+  const private_conversations = [];
+  const private_chatmessages = [];
+
+  const current_chatgroup = "";
+  const chatgroups = [];
+  const chatgroup_users = [];
+  
+  const current_chatroom =  "";
+  const chatrooms = [];
+  const chatroom_users = [];
+  const chatmessages = [];
 
   const [ feedback,      setFeedback ]      = useState("");
   const [ windowFocused, setWindowFocused ] = useState(true);
@@ -40,17 +40,51 @@ export default function Chat() {
 
   const messagesRef = useRef<HTMLUListElement>(null);
 
-  const url = "https://s3.amazonaws.com/nobsc-user-avatars";
-
   useEffect(() => {
-    let mounted = false;
-    if (mounted) {
-      setupChat(store);
+    function onConnect() {
+      setItem("connected", true);
+      setConnected(true);
     }
+
+    function onDisconnect() {
+      setItem("connected", false);
+      setConnected(false);
+    }
+
+    function onReconnect() {
+      if (current_chatgroup) {
+        socket.emit('RejoinGroup', current_chatgroup);  // should also get the users
+      }
+      if (current_chatroom) {
+        socket.emit('RejoinRoom', current_chatroom);  // should also get the users
+      }
+    }
+
+    function onFooEvent(value) {
+      
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.io.on('reconnect', onReconnect);
+    socket.on('OnlineFriends',        (friends) => onlineFriends(friends));
+    socket.on('FriendCameOnline',     (friend) =>  friendCameOnline(friend));
+    socket.on('FriendWentOffline',    (friend) =>  friendWentOffline(friend));
+    socket.on('UsersInRoom',          (users, room) => joinedRoom(users, room));
+    socket.on('UsersInRoomRefetched', (users, room) => rejoinedRoom(users, room));
+    socket.on('UserJoinedRoom',       (user) => userJoinedRoom(user));
+    socket.on('UserLeftRoom',         (user) => userLeftRoom(user));
+    socket.on('Message',              (message) =>  receivedMessage(message));
+    socket.on('PrivateMessage',       (message) =>  receivedPrivateMessage(message));
+    socket.on('FailedPrivateMessage', (feedback) => failedPrivateMessage(feedback));
+
     return () => {
-      mounted = true;
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+      socket.io.off('reconnect', onReconnect);
+      //socket.off;
     };
-  }, []);
+  }, [socket]);
   
   window.onblur = function() {
     setWindowFocused(false);
@@ -95,6 +129,28 @@ export default function Chat() {
     autoScroll();
   }, [messages]);
 
+  const connect = () => socket.connect();
+
+  const disconnect = () => socket.disconnect();
+
+  const joinRoom = (room: string) => {
+    socket.emit('JoinRoom', room);
+  };
+  
+  const sendMessage = (text: string) => {
+    socket.emit('SendMessage', text);
+  };
+  
+  const sendPrivateMessage = (text: string, to: string) => {
+    socket.emit('SendPrivateMessage', text, to);
+  };
+  
+  const updateOnline = (status: string) => {
+    if (status === "connected") socket.emit('GetOnlineFriends');
+    //TO DO:  // or in separate function?
+    //if (status === "disconnected") socket.emit('AppearOfflineTo');
+  };
+
   const changeRoomInput = (e: SyntheticEvent) =>
     setRoomToEnter((e.target as HTMLInputElement).value.trim());
 
@@ -125,18 +181,6 @@ export default function Chat() {
     dispatch(joinRoom(trimmedRoom));
     setRoomToEnter("");
     preventSpam();
-    setLoading(false);
-  };
-
-  const connect = () => {
-    setLoading(true);
-    dispatch(chatConnect());
-    setLoading(false);
-  };
-
-  const disconnect = () => {
-    setLoading(true);
-    dispatch(chatDisconnect());
     setLoading(false);
   };
 
@@ -358,4 +402,58 @@ function formattedMessage(authname: string, { kind, from, to, text }: MessageWit
   );  // received
 };
 
+// TO DO: you can still localize here, but let database create the timestamps
+function getTime() {
+  return `${(new Date).toLocaleTimeString()}`;
+}
+
+const url = "https://s3.amazonaws.com/nobsc-user-avatars";
+
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
+type PrivateConversation = {
+  user_id:  string;
+  username: string;
+};
+
+type PrivateChatmessageView = {
+  chatmessage_id: string;
+  receiver_id:    string;
+  sender_id:      string;
+  sendername:     string;
+  content:        string;
+};
+
+type ChatgroupView = {
+  chatgroup_id:   string;
+  chatgroup_name: string;
+};
+
+type ChatgroupUserView = {
+  chatgroup_id: string;
+  username:     string;
+  is_admin:     boolean;
+  is_muted:     boolean;
+};
+
+type ChatroomView = {
+  chatroom_id:   string;
+  chatgroup_id:  string;
+  chatroom_name: string;
+};
+
+type ChatroomUserView = {
+  chatgroup_id: string;
+  chatroom_id:  string;
+  username:     string;
+  is_admin:     boolean;
+  is_muted:     boolean;
+};
+
+type ChatMessageView = {
+  chatmessage_id: string;
+  chatroom_id:    string;
+  sender_id:      string;
+  sendername:     string;
+  content:        string;
+};
