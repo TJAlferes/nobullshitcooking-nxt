@@ -1,13 +1,17 @@
-import { useEffect, useReducer, useRef, useState } from 'react';
+import axios                           from 'axios';
+import { useEffect, useRef, useState } from 'react';
 
+import { endpoint }         from '../../config/api';
 import { useAuthname }      from '../auth';
 import { getItem, setItem } from '../general/localStorage';
-import { getSocket } from './network';
+import { getSocket }        from './socket';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
   const authname = useAuthname();
   const socket   = getSocket();
+
+  const [ newChatgroupName, setNewChatgroupName ] = useState("");
 
   //friends
   
@@ -128,6 +132,23 @@ export default function Chat() {
     if (!windowFocused) setAlertFavicon();
     autoScroll();
   }, [messages]);
+
+  const changeNewChatgroupName = (e: ChangeEvent) => setNewChatgroupName(e.target.value);
+
+  const createChatgroup = async () => {
+    try {
+      const response = await axios.post(
+        `${endpoint}/chatgroups`,
+        {chatgroup_name: newChatgroupName},
+        {withCredentials: true}
+      );
+      setFeedback(response.data.message);
+    } catch (err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+    //delay(4000);
+    setFeedback("");
+  };
 
   const connect = () => socket.connect();
 
@@ -260,6 +281,14 @@ export default function Chat() {
           >
             {connected ? "Disconnect" : "Connect"}
           </button>
+
+          <input
+            className="new_chatgroup_name"
+            onChange={changeNewChatgroupName}
+            type="text"
+            value={newChatgroupName}
+          />
+          <button onClick={createChatgroup}>Create Chatgroup</button>
 
           <div className="current-room">
             <label>Current Room:</label><span>{room}</span>
@@ -409,6 +438,7 @@ function getTime() {
 
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type PrivateConversation = {
