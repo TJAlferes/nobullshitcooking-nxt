@@ -9,10 +9,10 @@ import { endpoint }         from '../config/api';
 import { setItem }          from '../modules/general/localStorage';
 import { Layout }           from '../modules/general/Layout';
 import { RouteGuard }       from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
-import { AuthnameProvider } from '../modules/auth/index';
 import { ThemeProvider }    from '../modules/general/theme';
 import { DataProvider }     from '../modules/shared/data/state';
 import { UserDataProvider } from '../modules/user/data/state';
+import { StoreProvider } from '../store';
 
 export default function NOBSCApp({ Component, pageProps }: AppProps) {
   const [ data, setData ] = useState(false);
@@ -34,7 +34,7 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <AuthnameProvider>
+    <StoreProvider>
       <UserDataProvider>
         <DataProvider>
           <DndProvider options={HTML5toTouch}>
@@ -48,6 +48,6 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
           </DndProvider>
         </DataProvider>
       </UserDataProvider>
-    </AuthnameProvider>
+    </StoreProvider>
   );
 }
