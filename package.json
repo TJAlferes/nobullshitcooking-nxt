@@ -32,6 +32,7 @@
     "react-image-crop": "^10.1.5",
     "socket.io-client": "^4.7.1",
     "tslib": "^2.6.0",
+    "use-context-selector": "^1.4.1",
     "uuid": "^9.0.0",
     "uuid-with-v6": "^2.0.0"
   },
