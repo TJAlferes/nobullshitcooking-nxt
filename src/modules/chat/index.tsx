@@ -11,8 +11,6 @@ export default function Chat() {
   const authname = useAuthname();
   const socket   = getSocket();
 
-  const [ newChatgroupName, setNewChatgroupName ] = useState("");
-
   //friends
   
   // *** TO DO: when they logout, disconnect them from chat (BOTH here and on backend redis)
@@ -23,7 +21,7 @@ export default function Chat() {
   const private_chatmessages = [];
 
   const current_chatgroup = "";
-  const chatgroups = [];
+  const chatgroups: ChatgroupView[] = [];
   const chatgroup_users = [];
   
   const current_chatroom =  "";
@@ -90,6 +88,8 @@ export default function Chat() {
     };
   }, [socket]);
   
+  // put these into useEffect to cleanup?
+  
   window.onblur = function() {
     setWindowFocused(false);
   };
@@ -132,23 +132,6 @@ export default function Chat() {
     if (!windowFocused) setAlertFavicon();
     autoScroll();
   }, [messages]);
-
-  const changeNewChatgroupName = (e: ChangeEvent) => setNewChatgroupName(e.target.value);
-
-  const createChatgroup = async () => {
-    try {
-      const response = await axios.post(
-        `${endpoint}/chatgroups`,
-        {chatgroup_name: newChatgroupName},
-        {withCredentials: true}
-      );
-      setFeedback(response.data.message);
-    } catch (err) {
-      setFeedback('An error occurred. Please try again.');
-    }
-    //delay(4000);
-    setFeedback("");
-  };
 
   const connect = () => socket.connect();
 
@@ -282,13 +265,15 @@ export default function Chat() {
             {connected ? "Disconnect" : "Connect"}
           </button>
 
-          <input
-            className="new_chatgroup_name"
-            onChange={changeNewChatgroupName}
-            type="text"
-            value={newChatgroupName}
-          />
-          <button onClick={createChatgroup}>Create Chatgroup</button>
+          <div className="chatgroups">
+            <h2>Chatgroups</h2>
+            
+            {chatgroups.map(c => (
+              <div className="chatgroup" key={c.chatgroup_id}>
+                {c.chatgroup_name}
+              </div>
+            ))}
+          </div>
 
           <div className="current-room">
             <label>Current Room:</label><span>{room}</span>
@@ -456,6 +441,7 @@ type PrivateChatmessageView = {
 
 type ChatgroupView = {
   chatgroup_id:   string;
+  owner_id:       string;
   chatgroup_name: string;
 };
 

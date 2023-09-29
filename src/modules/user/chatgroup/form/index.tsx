@@ -5,34 +5,27 @@ import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }        from '../../../config/api';
-import { useAuthname }     from '../../auth';
-import { LoaderButton }    from '../../shared/LoaderButton';
-import { getCroppedImage } from '../../shared/getCroppedImage';
-import type { Ownership }  from '../../shared/types';
+import { endpoint }        from '../../../../config/api';
+import { useAuthname }     from '../../../auth';
+import { LoaderButton }    from '../../../shared/LoaderButton';
+import { getCroppedImage } from '../../../shared/getCroppedImage';
 
-export default function EquipmentForm({ ownership }: Props) {
+export default function ChatgroupForm() {
   const router = useRouter();
 
   const params = useSearchParams();
-  const equipment_id = params.get('equipment_id');
+  const chatgroup_id = params.get('chatgroup_id');
 
-  const equipment_types = useSelector(state => state.data.equipment_types);
   const authname = useAuthname();
-
-  const allowedEquipment = useAllowedEquipment(ownership);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  const [ equipment_type_id, setEquipmentTypeId ] = useState(0);
-  const [ equipment_name,    setEquipmentName ]   = useState("");
-  const [ notes,             setNotes ]           = useState("");
+  const [ chatgroup_name, setChatgroupName ] = useState("");
 
   const [ previousImageFilename, setPreviousImageFilename ] = useState("");
   const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
   const [ tinyImage,             setTinyImage ]    = useState<File | null>(null);
-  const [ imageCaption,          setImageCaption ] = useState("");
 
   const imageRef = useRef<HTMLImageElement>();
   const [ image,             setImage ]             = useState<Image>(null);
@@ -43,26 +36,25 @@ export default function EquipmentForm({ ownership }: Props) {
   useEffect(() => {
     let mounted = true;
 
-    function getExistingEquipmentToEdit() {
-      if (!equipment_id) {
-        router.push(`/${authname}/private/dashboard`);
+    async function getExistingChatgroupToEdit() {
+      if (!chatgroup_id) {
+        router.push(`/dashboard`);
         return;
       }
       
       setLoading(true);
       window.scrollTo(0, 0);
 
-      const equipment = allowedEquipment.find(e => e.equipment_id === equipment_id);
-      if (!equipment) {
-        router.push(`/${authname}/private/dashboard`);
+      const chatgroups = await axios.get(
+        `${endpoint}/users/${authname}/chatgroups/${chatgroup_id}`
+      );
+      if (!chatgroups) {
+        router.push(`/dashboard`);
         return;
       }
 
-      setEquipmentTypeId(equipment.equipment_type_id);
-      setEquipmentName(equipment.equipment_name);
-      setNotes(equipment.notes);
-      setPreviousImageFilename(equipment.image.image_filename);
-      setImageCaption(equipment.image.caption);
+      setChatgroupName(chatgroup.chatgroup_name);
+      setPreviousImageFilename(chatgroup.image.image_filename);
 
       setLoading(false);
     }
@@ -73,8 +65,8 @@ export default function EquipmentForm({ ownership }: Props) {
         return;
       }
 
-      if (equipment_id) {
-        getExistingEquipmentToEdit();
+      if (chatgroup_id) {
+        getExistingChatgroupToEdit();
       }
     }
 
@@ -83,27 +75,8 @@ export default function EquipmentForm({ ownership }: Props) {
     };
   }, []);  // do this in getServerSideProps???
 
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      if (message === "Equipment created." || message === "Equipment updated.") {
-        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
-      }
-      setLoading(false);
-    }
-    
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
-  const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
-  const changeNotes          = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
-  const changeImageCaption   = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
+  const changeChatgroupName = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setChatgroupName(e.target.value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -137,20 +110,13 @@ export default function EquipmentForm({ ownership }: Props) {
   };
 
   const submit = async () => {
-    if (!isValidEquipmentUpload({
-      equipment_type_id,
-      equipment_name,
-      notes,
-      setFeedback
-    })) return;
+    if (!isValidChatgroupUpload({chatgroup_name, setFeedback})) return;
 
-    const equipment_upload = {
-      equipment_type_id,
-      equipment_name,
-      notes,
+    const chatgroup_upload = {
+      chatgroup_name,
       image: {
-        image_filename: equipment_id ? previousImageFilename : "default",
-        caption:        imageCaption,
+        image_filename: chatgroup_id ? previousImageFilename : "default",
+        caption:        "",
         small:          smallImage,
         tiny:           tinyImage
       }
@@ -158,16 +124,18 @@ export default function EquipmentForm({ ownership }: Props) {
 
     setLoading(true);
 
-    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
+    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE CHATGROUP
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-    if (equipment_id) {
-      const equipment_update_upload = {equipment_id, ...equipment_upload};
-      const { image } = equipment_update_upload;
+    if (chatgroup_id) {
+      const chatgroup_update_upload = {chatgroup_id, ...chatgroup_upload};
+
+      const { image } = chatgroup_update_upload;
+
       try {
         if (image.small && image.tiny) {
           const { data: { filename, fullSignature, tinySignature } } = await axios.post(
             `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/equipment/`},
+            {subfolder: `chatgroup/`},
             {withCredentials: true}
           );
           await uploadImageToAWSS3(fullSignature, image.small);
@@ -178,24 +146,24 @@ export default function EquipmentForm({ ownership }: Props) {
           image.tiny  = null;
         }
         const { data } = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
-          equipment_update_upload,
+          `${endpoint}/users/${authname}/chatgroups/${chatgroup_id}`,
+          chatgroup_update_upload,
           {withCredentials: true}
         );
         setFeedback(data.message);
-        //await getMyEquipment();
+        //await getMyChatgroups();
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
       //delay(4000);
       setFeedback("");
     } else {
-      const { image } = equipment_upload;
+      const { image } = chatgroup_upload;
       try {
         if (image.small && image.tiny) {
           const { data: { filename, fullSignature, tinySignature } } = await axios.post(
             `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/equipment/`},
+            {subfolder: `chatgroup/`},
             {withCredentials: true}
           );
           await uploadImageToAWSS3(fullSignature, image.small);
@@ -206,8 +174,8 @@ export default function EquipmentForm({ ownership }: Props) {
           image.tiny  = null;
         }
         const { data } = await axios.post(
-          `${endpoint}/users/${authname}/${ownership}-equipment`,
-          equipment_upload,
+          `${endpoint}/users/${authname}/chatgroups`,
+          chatgroup_upload,
           {withCredentials: true}
         );
         setFeedback(data.message);
@@ -219,39 +187,20 @@ export default function EquipmentForm({ ownership }: Props) {
       setFeedback("");
     }
   };
-  
+
   return (
-    <div className="one-col equipment-form">
-      {
-        ownership === "private"
-        && equipment_id
-        ? <h1>Update Private Equipment</h1>
-        : <h1>Create Private Equipment</h1>
-      }
-      {
-        ownership === "official"
-        && equipment_id
-        ? <h1>Update Official Equipment</h1>
-        : <h1>Create Official Equipment</h1>
-      }
+    <div className="one-col chatgroup-form">
+      {chatgroup_id ? <h1>Update Chatgroup</h1> : <h1>Create Chatgroup</h1>}
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Equipment Type</h2>
-      <select name="equipmentType" onChange={changeEquipmentType} required value={equipment_type_id}>
-        <option value={0}>Select type</option>
-        {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
-          <option key={equipment_type_id} value={equipment_type_id}>
-            {equipment_type_name}
-          </option>
-        ))}
-      </select>
-
       <h2>Equipment Name</h2>
-      <input className="name" onChange={changeEquipmentName} type="text" value={equipment_name} />
-
-      <h2>Notes</h2>
-      <textarea className="notes" onChange={changeNotes} value={notes} />
+      <input
+        className="name"
+        onChange={changeChatgroupName}
+        type="text"
+        value={chatgroup_name}
+      />
 
       <div className='equipment-image'>
         <h2>Image of Equipment</h2>
@@ -259,7 +208,7 @@ export default function EquipmentForm({ ownership }: Props) {
         {!image && (
           <div>
             {
-              !equipment_id
+              !chatgroup_id
               ? <img src={`${url}/default`} />
               : previousImageFilename && <img src={`${url}/${previousImageFilename}`} />
             }
@@ -296,17 +245,6 @@ export default function EquipmentForm({ ownership }: Props) {
               </div>
             </div>
 
-            <h4>Caption:</h4>
-            <input
-              className="caption"
-              max={150}
-              min={2}
-              name="caption"
-              onChange={changeImageCaption}
-              type="text"
-              value={imageCaption}
-            />
-
             <button
               className="image-cancel-button"
               disabled={loading}
@@ -326,29 +264,11 @@ export default function EquipmentForm({ ownership }: Props) {
           loadingText="Creating..."
           name="submit"
           onClick={submit}
-          text="Create"
+          text="Submit"
         />
       </div>
     </div>
   );
-}
-
-type Props = {
-  ownership: Ownership;
-};
-
-function useAllowedEquipment(ownership: Ownership) {
-  const equipment            = useSelector(state => state.data.equipment);
-  const my_private_equipment = useSelector(state => state.userData.my_private_equipment);
-
-  // must be checked server-side!!! never let random users edit official content
-  if (ownership === "private") {
-    return my_private_equipment;
-  }
-  if (ownership === "official") {
-    return equipment;
-  }
-  return [];
 }
 
 const url = 'https://s3.amazonaws.com/nobsc/';
@@ -373,12 +293,10 @@ const initialCrop: Crop = {
   height: 50
 };  // TO DO: change to NOBSC images ratio
 
-export function isValidEquipmentUpload({
-  equipment_type_id,
-  equipment_name,
-  notes,
+export function isValidChatgroupUpload({
+  chatgroup_name,
   setFeedback
-}: IsValidEquipmentUploadParams) {
+}: IsValidChatgroupUploadParams) {
   function feedback(message: string) {
     window.scrollTo(0, 0);
     setFeedback(message);
@@ -386,23 +304,15 @@ export function isValidEquipmentUpload({
     return false;
   }
 
-  const validEquipmentTypeId = equipment_type_id !== 0;
-  if (!validEquipmentTypeId) return feedback("Select equipment type.");
-
-  const validEquipmentName = equipment_name.trim() !== "";
-  if (!validEquipmentName) return feedback("Enter equipment name.");
-
-  const validNotes = notes.trim() !== "";
-  if (!validNotes) return feedback("Enter notes.");
+  const validChatgroupName = chatgroup_name.trim() !== "";
+  if (!validChatgroupName) return feedback("Enter chatgroup name.");
 
   return true;
-};
+}
 
-type IsValidEquipmentUploadParams = {
-  equipment_type_id: number;
-  equipment_name:    string;
-  notes:             string;
-  setFeedback:       (feedback: string) => void;
+type IsValidChatgroupUploadParams = {
+  chatgroup_name: string;
+  setFeedback:    (feedback: string) => void;
 };
 
 type ImageInfo = {
@@ -415,15 +325,13 @@ type ImageUpload = ImageInfo & {
   tiny:  File | null;
 };
 
-export type EquipmentUpload = {
-  equipment_type_id: number;
-  equipment_name: string;
-  notes: string;
-  image: ImageUpload;
+export type ChatgroupUpload = {
+  chatgroup_name: string;
+  image:          ImageUpload;
 };
 
-export type EquipmentUpdateUpload = EquipmentUpload & {
-  equipment_id: string;
+export type ChatgroupUpdateUpload = ChatgroupUpload & {
+  chatgroup_id: string;
 };
 
 async function uploadImageToAWSS3(signature: any, image: any) {

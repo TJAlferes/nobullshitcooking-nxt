@@ -5,12 +5,12 @@ import { HTML5toTouch }        from 'rdndmb-html5-to-touch';
 import type { AppProps }       from 'next/app';
 
 import '../../styles/styles.css';
-import { endpoint }       from '../config/api';
-import { setItem }        from '../modules/general/localStorage';
-import { Layout }         from '../modules/general/Layout';
-import { RouteGuard }     from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
+import { endpoint }         from '../config/api';
+import { setItem }          from '../modules/general/localStorage';
+import { Layout }           from '../modules/general/Layout';
+import { RouteGuard }       from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
 import { AuthnameProvider } from '../modules/auth/index';
-import { ThemeProvider }  from '../modules/general/theme';
+import { ThemeProvider }    from '../modules/general/theme';
 
 export default function NOBSCApp({ Component, pageProps }: AppProps) {
   const [ data, setData ] = useState(false);

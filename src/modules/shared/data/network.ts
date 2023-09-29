@@ -1,26 +1,25 @@
-import axios         from 'axios';
-import { call, put } from 'redux-saga/effects';
+import axios from 'axios';
 
-import { endpoint }         from '../../../config/api';
-import { setData }          from './state';
-import type { InitialData } from './state';
+import { endpoint } from '../../../config/api';
+import { setItem }  from '../../general/localStorage';
+import type { Data } from './state';
 
 // refetches
 
-export const getCuisinesWorker        = createDataWorker("/cuisine",         "cuisines");  // needed in 3 - 4 places, just get there if navigated to instead of here???
-export const getEquipmentsWorker      = createDataWorker("/equipment",       "equipment");  //
-export const getEquipmentTypesWorker  = createDataWorker("/equipment-type",  "equipment_types");
-export const getIngredientsWorker     = createDataWorker("/ingredient",      "ingredients");  //
-export const getIngredientTypesWorker = createDataWorker("/ingredient-type", "ingredient_types");
-export const getUnitsWorker           = createDataWorker("/unit",            "units");
-export const getMethodsWorker         = createDataWorker("/method",          "methods");
-export const getRecipeTypesWorker     = createDataWorker("/recipe-type",     "recipe_types");
+export const getCuisines        = createDataFetcher("/cuisines",         "cuisines");  // needed in 3 - 4 places, just get there if navigated to instead of here???
+export const getEquipments      = createDataFetcher("/equipment",        "equipment");  //
+export const getEquipmentTypes  = createDataFetcher("/equipment-types",  "equipment_types");
+export const getIngredients     = createDataFetcher("/ingredients",      "ingredients");  //
+export const getIngredientTypes = createDataFetcher("/ingredient-types", "ingredient_types");
+export const getUnits           = createDataFetcher("/units",            "units");
+export const getMethods         = createDataFetcher("/methods",          "methods");
+export const getRecipeTypes     = createDataFetcher("/recipe-types",     "recipe_types");
 
-function createDataWorker(path: string, key: keyof InitialData) {
-  return function* () {
+function createDataFetcher(path: string, key: keyof Data) {
+  return async function () {
     try {
-      const { data } = yield call([axios, axios.get], `${endpoint}${path}`);
-      yield put(setData(key, data));
+      const { data } = await axios.get(`${endpoint}${path}`);
+      setItem(key, data);
     } catch (err) {}
   }
 }

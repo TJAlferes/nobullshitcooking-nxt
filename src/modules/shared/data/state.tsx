@@ -1,11 +1,9 @@
-import { createContext, useContext, useReducer }    from 'react';
-import type { Dispatch, SetStateAction, ReactNode } from 'react';
+import { createContext, useContext, useReducer } from 'react';
+import type { Dispatch, SetStateAction, ReactNode, Reducer } from 'react';
 
-import type { PlanDataView } from '../../plan/detail/state';
+export const DataContext = createContext<Data | null>(null);
 
-export const DataContext = createContext<InitialData | null>(null);
-
-export const DataDispatchContext = createContext<Dispatch<SetStateAction<InitialData>> | null>(null);
+export const DataDispatchContext = createContext<Dispatch<SetStateAction<Data>> | null>(null);
 
 export function DataProvider({ children }: DataProviderProps) {
   const [ data, dispatch ] = useReducer(dataReducer, initialData);
@@ -39,7 +37,7 @@ export function useDataDispatch() {
   return dispatch;
 }
 
-const initialData: InitialData = {
+const initialData: Data = {
   cuisines:         [],
   equipment:        [],
   equipment_types:  [],
@@ -47,12 +45,10 @@ const initialData: InitialData = {
   ingredient_types: [],
   units:            [],
   methods:          [],
-  //plans:            [],
-  //recipes:          [],
-  recipe_types:     [],
+  recipe_types:     []
 };
 
-export function dataReducer(data, action) {
+export const dataReducer: Reducer<State, Action> = (data, action) => {
   switch (action.type) {
     case 'set_initial_data': {  // is this needed anymore?
       return {
@@ -62,10 +58,8 @@ export function dataReducer(data, action) {
         equipment_types:  action.equipment_types,
         ingredients:      action.ingredients,
         ingredient_types: action.ingredient_types,
-        units:            action.measurements,
+        units:            action.units,
         methods:          action.methods,
-        //plans:            action.plans,
-        //recipes:          action.recipes,
         recipe_types:     action.recipe_types
       };
     }
@@ -76,26 +70,25 @@ export function dataReducer(data, action) {
       };
     }
     default: {
-      throw new Error("Unknown action: ", action.type);
+      throw new Error("Unknown action");
     }
   }
 };
 
-export const setInitialData = (initialData: InitialData) => ({
+export const setInitialData = (initialData: Data) => ({
   type: 'set_initial_data',
   ...initialData
 });
 
-export const setData = (
-  key: keyof InitialData,
-  value: Partial<InitialData>
-) => ({
+export const setData = (key: keyof Data, value: Partial<Data>) => ({
   type: 'set_data',
   key,
   value
 });
 
-export type InitialData = {
+type State = Data;
+
+export type Data = {
   cuisines:         CuisineView[];
   equipment:        EquipmentView[];
   equipment_types:  EquipmentTypeView[];
@@ -103,23 +96,19 @@ export type InitialData = {
   ingredient_types: IngredientTypeView[];
   units:            UnitView[];
   methods:          MethodView[];
-  //plans:            PlanView[];
-  //recipes:          RecipeOverview[];
   recipe_types:     RecipeTypeView[];
 };
 
-export type Actions =
-  | SetInitialData
-  | SetData;
+export type Action = SetInitialData | SetData;
 
-export type SetInitialData = InitialData & {         
+export type SetInitialData = Data & {         
   type: 'set_initial_data';
 };
 
 export type SetData = {
   type: 'set_data';
-  key:   keyof InitialData;
-  value: Partial<InitialData>;
+  key:   keyof Data;
+  value: Partial<Data>;
 };
 
 export type CuisineView = {
@@ -177,13 +166,6 @@ export type UnitView = {
 export type MethodView = {
   method_id:   number;
   method_name: string;
-};
-
-export type PlanView = {
-  plan_id:   string;
-  owner_id:  string;
-  plan_name: string;
-  plan_data: PlanDataView;
 };
 
 export type RecipeOverview = {

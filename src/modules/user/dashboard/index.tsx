@@ -3,11 +3,9 @@ import Link                            from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import AriaModal                       from 'react-aria-modal';
 import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
-import { useDispatch }                 from 'react-redux';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
 import { getCroppedImage }                 from '../../shared/getCroppedImage';
 import { deletePublicPlan }                from '../../public/plan/state';
 import { disownPublicRecipe }              from '../../public/recipe/state';
@@ -15,9 +13,10 @@ import { deletePrivateEquipment }          from '../equipment/state';
 import { deletePrivateIngredient }         from '../ingredient/state';
 import { deletePrivatePlan }               from '../plan/state';
 import { deletePrivateRecipe }             from '../recipe/state';
+import { useAuthname } from '../../auth';
 
 export default function Dashboard() {
-  const dispatch = useDispatch();
+  const authname = useAuthname();
 
   const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
   //const my_friends
@@ -27,9 +26,6 @@ export default function Dashboard() {
   const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
   const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
   const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
-  const authname            = useSelector(state => state.authentication.authname);
-  const creatingPlan        = useSelector(state => state.planForm.creating);
-  const message             = useSelector(state => state.system.message);
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
@@ -192,62 +188,65 @@ export default function Dashboard() {
     setTinyAvatar(null);
   };
 
+  const deleteChatGroup = async (chatgroup_name: string) => {
+    try {
+      const response = await axios.delete(
+        `${endpoint}/users/${authname}/chatgroups/${chatgroup_name}`,
+        {withCredentials: true}
+      );
+      setFeedback(response.data.message);
+    } catch (err) {
+      setFeedback('An error occurred. Please try again.');
+    }
+    //delay(4000);
+    setFeedback("");
+  };
+
   const deletePlan = async (plan_id: string) => {
     setLoading(true);
-
     try {
       const { data } = await axios.delete(
         `${endpoint}/users/${user_id}/private-plans/${plan_id}`,
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-
       //yield call(getMyEquipmentWorker);
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };
 
   const deleteEquipment = async (equipment_id: string) => {
     setLoading(true);
-
     try {
       const { data } = await axios.delete(
         `${endpoint}/users/${user_id}/private-equipment/${equipment_id}`,
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-
       //dispatch(getMyEquipment("private"));
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };
 
   const deleteIngredient = async (ingredient_id: string) => {
     setLoading(true);
-
     try {
       const { data } = await axios.delete(
         `${endpoint}/users/${user_id}/private-ingredients/${ingredient_id}`,
         {withCredentials: true}
       );
-
       setFeedback(data.message);
 
       //dispatch(getMyIngredients("private"));
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };
@@ -264,7 +263,6 @@ export default function Dashboard() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     //delay(4000);
     setFeedback("");
   };
@@ -281,7 +279,6 @@ export default function Dashboard() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     //delay(4000);
     setFeedback("");
   };
