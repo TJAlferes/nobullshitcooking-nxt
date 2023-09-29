@@ -11,6 +11,8 @@ import { Layout }           from '../modules/general/Layout';
 import { RouteGuard }       from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
 import { AuthnameProvider } from '../modules/auth/index';
 import { ThemeProvider }    from '../modules/general/theme';
+import { DataProvider }     from '../modules/shared/data/state';
+import { UserDataProvider } from '../modules/user/data/state';
 
 export default function NOBSCApp({ Component, pageProps }: AppProps) {
   const [ data, setData ] = useState(false);
@@ -19,7 +21,9 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
     async function getInitialData() {
       try {
         const response = await axios.get(`${endpoint}/initial-data`);
-        setItem("appState", response.data);  // still keep in redux too???
+        for (const [ key, value ] of Object.entries(response.data)) {
+          setItem(key, value);
+        }
         setData(true);
       } catch (err) {}
     }
@@ -31,15 +35,19 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
 
   return (
     <AuthnameProvider>
-      <DndProvider options={HTML5toTouch}>
-        <RouteGuard>
-          <ThemeProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </RouteGuard>
-      </DndProvider>
+      <UserDataProvider>
+        <DataProvider>
+          <DndProvider options={HTML5toTouch}>
+            <RouteGuard>
+              <ThemeProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </RouteGuard>
+          </DndProvider>
+        </DataProvider>
+      </UserDataProvider>
     </AuthnameProvider>
   );
 }

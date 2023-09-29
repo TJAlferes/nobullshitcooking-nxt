@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { endpoint } from '../../../config/api';
 import { setItem }  from '../../general/localStorage';
-import type { InitialUserData } from './state';
+import type { UserData } from './state';
 import type { Ownership } from '../../shared/types';
 
 export async function getInitialUserData() {
@@ -12,7 +12,7 @@ export async function getInitialUserData() {
       {},
       {withCredentials: true}
     );
-    for (const [key, value] of Object.entries(data)) {
+    for (const [ key, value ] of Object.entries(data)) {
       setItem(key, value);
     }
   } catch (err: any) {
@@ -50,7 +50,7 @@ export const getMyRecipes = (ownership: Ownership) => {
   return createUserDataFetcher(`/user/${ownership}/recipe`, `my_${ownership}_recipes`);
 };
 
-function createUserDataFetcher(path: string, key: keyof InitialUserData) {
+function createUserDataFetcher(path: string, key: keyof UserData) {
   return async function () {
     try {
       const { data } = await axios.post(

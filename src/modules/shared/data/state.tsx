@@ -1,9 +1,9 @@
 import { createContext, useContext, useReducer } from 'react';
-import type { Dispatch, SetStateAction, ReactNode, Reducer } from 'react';
+import type { Dispatch, ReactNode, Reducer } from 'react';
 
 export const DataContext = createContext<Data | null>(null);
 
-export const DataDispatchContext = createContext<Dispatch<SetStateAction<Data>> | null>(null);
+export const DataDispatchContext = createContext<Dispatch<Action> | null>(null);
 
 export function DataProvider({ children }: DataProviderProps) {
   const [ data, dispatch ] = useReducer(dataReducer, initialData);
