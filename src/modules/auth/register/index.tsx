@@ -3,15 +3,14 @@ import Link                    from 'next/link';
 import { useRouter }           from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderButton }                    from '../../shared/LoaderButton';
+import { endpoint }     from '../../../config/api';
+import { useAuth }      from '../../../store';
+import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Register() {
   const router = useRouter();
 
-  const authname = useSelector(state => state.authentication.authname);
-  const message  = useSelector(state => state.system.message);  // not needed here???
+  const { authname } = useAuth();
 
   const [ email,         setEmail ]         = useState("");
   const [ password,      setPassword ]      = useState("");
@@ -22,36 +21,22 @@ export default function Register() {
   const [ loading,  setLoading ]  = useState(false);
 
   useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);  // not needed here???
-
-  useEffect(() => {
     if (authname !== '') router.push('/dashboard');
   }, [authname]);
 
-  const emailChange         = (e: SyntheticEvent) => setEmail((e.target as HTMLInputElement).value);
-  const usernameChange      = (e: SyntheticEvent) => setUsername((e.target as HTMLInputElement).value);
-  const passwordChange      = (e: SyntheticEvent) => setPassword((e.target as HTMLInputElement).value);
-  const passwordAgainChange = (e: SyntheticEvent) => setPasswordAgain((e.target as HTMLInputElement).value);
+  const emailChange         = (e: ChangeEvent) => setEmail(e.target.value);
+  const usernameChange      = (e: ChangeEvent) => setUsername(e.target.value);
+  const passwordChange      = (e: ChangeEvent) => setPassword(e.target.value);
+  const passwordAgainChange = (e: ChangeEvent) => setPasswordAgain(e.target.value);
 
   const register = async () => {
     setLoading(true);
-
     try {
       const { data } = await axios.post(
         `${endpoint}/user/create`,
         {email, password, username}
       );
-  
       setFeedback(data.message);
-  
       if (data.message === 'User account created.') {
         // delay(4000);
         router.push('/confirm');
@@ -59,7 +44,6 @@ export default function Register() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     // delay(4000);
     setFeedback("");
   };
@@ -175,6 +159,6 @@ export default function Register() {
   );
 }
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
+
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

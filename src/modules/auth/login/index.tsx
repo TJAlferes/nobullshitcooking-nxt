@@ -1,17 +1,16 @@
-import axios           from 'axios';
-import Link            from 'next/link';
-import { useRouter }   from 'next/navigation';
-import { useState }    from 'react';
-import { useDispatch } from 'react-redux';
+import axios         from 'axios';
+import Link          from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState }  from 'react';
 
 import { endpoint }     from '../../../config/api';
+import { useAuth }      from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
-import { useSetAuthname } from '..';
 
 export default function Login() {
-  const router   = useRouter();
-  const dispatch = useDispatch();
-  const setAuthname = useSetAuthname();
+  const router = useRouter();
+
+  const { login } = useAuth();
 
   const [ email,    setEmail ]    = useState("");
   const [ password, setPassword ] = useState("");
@@ -19,27 +18,20 @@ export default function Login() {
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setEmail((e.target as HTMLInputElement).value);
+  const emailChange    = (e: ChangeEvent) => setEmail(e.target.value);
+  const passwordChange = (e: ChangeEvent) => setPassword(e.target.value);
 
-  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setPassword((e.target as HTMLInputElement).value);
-
-  const login = async () => {
+  const loginHandler = async () => {
     setLoading(true);
-
     try {
       const { data } = await axios.post(
         `${endpoint}/user/authentication/login`,
         {email, password},
         {withCredentials: true}
       );
-  
       setFeedback(data.message);
-  
       if (data.message === 'Signed in.') {
-        setAuthname(data.username);
-        dispatch(setInitialUserData());  // setItem('user_data', data.user_data);
+        login(data);
         router.push('/dashboard');
       }
     } catch(err) {
@@ -54,14 +46,14 @@ export default function Login() {
     e.preventDefault();
     if (loading) return;
     if (!validateLoginInfo()) return;
-    login();
+    loginHandler();
   }
 
   const loginKeyUp = (e: React.KeyboardEvent) => {
     if (loading) return;
     if (!validateLoginInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
-    login();
+    loginHandler();
   }
 
   const validateLoginInfo = () => (email.length > 4 && password.length > 5);
@@ -122,3 +114,5 @@ export default function Login() {
 }
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
+
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

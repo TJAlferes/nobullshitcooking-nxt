@@ -3,18 +3,16 @@ import Link                    from 'next/link';
 import { useRouter }           from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderButton }                    from '../../shared/LoaderButton';
+import { endpoint }     from '../../../config/api';
+import { useAuth }      from '../../../store';
+import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Confirm() {
-  const router   = useRouter();
+  const router = useRouter();
 
-  const authname = useSelector(state => state.authentication.authname);
-  const message  = useSelector(state => state.system.message);
+  const { authname } = useAuth();
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
-
   const [ email,    setEmail ]    = useState("");
   const [ password, setPassword ] = useState("");
 
@@ -22,40 +20,21 @@ export default function Confirm() {
   const [ loading,  setLoading ]  = useState(false);
 
   useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  useEffect(() => {
     if (authname !== '') router.push('/dashboard');
   }, [authname]);
 
-  const confirmationCodeChange = (e: SyntheticEvent) =>
-    setConfirmationCode((e.target as HTMLInputElement).value);
-
-  const emailChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setEmail((e.target as HTMLInputElement).value);
-
-  const passwordChange = (e: React.SyntheticEvent<EventTarget>) =>
-    setPassword((e.target as HTMLInputElement).value);
+  const confirmationCodeChange = (e: ChangeEvent) => setConfirmationCode(e.target.value);
+  const emailChange            = (e: ChangeEvent) => setEmail(e.target.value);
+  const passwordChange         = (e: ChangeEvent) => setPassword(e.target.value);
   
   const confirm = async () => {
     setLoading(true);
-
     try {
       const { data } = await axios.patch(
         `${endpoint}/auth/confirm`,
         {confirmation_code}
       );
-      
       setFeedback(data.message);
-  
       if (data.message === "User account confirmed.") {
         // delay(4000);
         router.push('/login');
@@ -63,25 +42,21 @@ export default function Confirm() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     // delay(4000);
     setFeedback("");
   };
 
   const requestResend = async () => {
     setLoading(true);
-
     try {
       const { data } = await axios.patch(
         `${endpoint}/auth/resend-confirmation-code`,
         {email, password}
       );
-  
       setFeedback(data.message);
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     // delay(4000);
     setFeedback("");
   };
@@ -213,6 +188,6 @@ export default function Confirm() {
   );
 }
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
+
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

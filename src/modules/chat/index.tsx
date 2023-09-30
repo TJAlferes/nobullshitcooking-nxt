@@ -3,10 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { endpoint }         from '../../config/api';
 import { useAuth, useChat } from '../../store';
-import { getItem, setItem } from '../general/localStorage';
 import { getSocket }        from './socket';
 
-// TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
   const socket = getSocket();
   const { authname } = useAuth();
@@ -53,12 +51,10 @@ export default function Chat() {
 
   useEffect(() => {
     function onConnect() {
-      setItem("connected", true);
       setConnected(true);
     }
 
     function onDisconnect() {
-      setItem("connected", false);
       setConnected(false);
     }
 
@@ -96,49 +92,52 @@ export default function Chat() {
       //socket.off;
     };
   }, [socket]);
-  
-  // put these into useEffect to cleanup?
-  
-  window.onblur = function() {
-    setWindowFocused(false);
-  };
-
-  window.onfocus = function() {
-    const favicon = document.getElementById('nobsc-favicon') as HTMLLinkElement | null;
-    if (!favicon) return;
-    favicon.href = "/nobsc-normal-favicon.png";
-    setWindowFocused(true);
-  };
 
   useEffect(() => {
-    const setAlertFavicon = () => {
-      const nobscFavicon = document.getElementById('nobsc-favicon') as HTMLLinkElement;
-      nobscFavicon.href = "/icons/alert.png";
-    };
+    function onBlur() {
+      setWindowFocused(false);
+    }
+  
+    function onFocus() {
+      const favicon = document.getElementById('nobsc-favicon') as HTMLLinkElement;
+      favicon.href = "/nobsc-normal-favicon.png";
+      setWindowFocused(true);
+    }
+  
+    window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
 
-    const autoScroll = () => {  // TO DO: fix no longer auto scrolling after spam debounce
+    return () => {
+      window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
+
+  useEffect(() => {
+    function autoScroll() {  // TO DO: fix no longer auto scrolling after spam debounce
       if (!messagesRef || !messagesRef.current) return;
 
-      const newestMessage: HTMLUListElement = messagesRef.current.lastElementChild as HTMLUListElement;
+      const newestMessage = messagesRef.current.lastElementChild as HTMLUListElement;
       if (!newestMessage) return;
 
       const containerHeight = messagesRef.current.scrollHeight;
 
-      const newestMessageHeight =
-        newestMessage.offsetHeight
-        + parseInt(getComputedStyle(newestMessage).marginBottom);
+      const newestMessageHeight = newestMessage.offsetHeight +
+        parseInt(getComputedStyle(newestMessage).marginBottom);
 
-      const scrollOffset =
-        messagesRef.current.scrollTop
-        + messagesRef.current.offsetHeight;
+      const scrollOffset = messagesRef.current.scrollTop +
+        messagesRef.current.offsetHeight;
 
       // cancels autoscroll if user is scrolling up through older messages
       if ((containerHeight - newestMessageHeight) <= scrollOffset) {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
-    };
+    }
 
-    if (!windowFocused) setAlertFavicon();
+    if (!windowFocused) {
+      const nobscFavicon = document.getElementById('nobsc-favicon') as HTMLLinkElement;
+      nobscFavicon.href = "/icons/alert.png";
+    }
     autoScroll();
   }, [messages]);
 
@@ -164,11 +163,9 @@ export default function Chat() {
     //if (status === "disconnected") socket.emit('AppearOfflineTo');
   };
 
-  const changeRoomInput = (e: SyntheticEvent) =>
-    setRoomToEnter((e.target as HTMLInputElement).value.trim());
+  const changeRoomInput = (e: ChangeEvent) => setRoomToEnter(e.target.value.trim());
 
-  const changeMessageInput = (e: SyntheticEvent) =>
-    setMessageToSend((e.target as HTMLInputElement).value.trim());
+  const changeMessageInput = (e: ChangeEvent) => setMessageToSend(e.target.value.trim());
   
   const changePeopleTab = (value: string) => setPeopleTab(value);
   
@@ -426,11 +423,10 @@ function formattedMessage(authname: string, { kind, from, to, text }: MessageWit
 };
 
 // TO DO: you can still localize here, but let database create the timestamps
-function getTime() {
-  return `${(new Date).toLocaleTimeString()}`;
+function getTime(time: Date) {
+  return `${time.toLocaleTimeString()}`;
 }
 
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
