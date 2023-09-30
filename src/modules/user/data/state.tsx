@@ -116,19 +116,3 @@ export type SetUserData = {
   key:   keyof UserData;
   value: Partial<UserData>;
 };
-
-// TO DO: move shared types to one location
-
-export type FriendshipView = {
-  user_id:  number;
-  username: string;
-  avatar:   string;
-  status:   string;
-};  // FriendView ???
-
-export type PlanView = {
-  plan_id:   string;
-  owner_id:  string;
-  plan_name: string;
-  plan_data: PlanDataView;
-};

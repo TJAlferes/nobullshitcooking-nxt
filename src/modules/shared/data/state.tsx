@@ -111,63 +111,6 @@ export type SetData = {
   value: Partial<Data>;
 };
 
-export type CuisineView = {
-  cuisine_id:     number;
-  cuisine_name:   string;
-  continent_code: string;
-  country_code:   string;
-  country_name:   string;
-};
-
-export type EquipmentView = {
-  equipment_id:        string;
-  equipment_type_id:   number;
-  owner_id:            string;
-  equipment_type_name: string;
-  equipment_name:      string;
-  notes:               string;
-  image: {
-    image_filename: string;
-    caption:        string;
-  };
-};
-
-export type EquipmentTypeView = {
-  equipment_type_id:   number;
-  equipment_type_name: string;
-};
-
-export type IngredientView = {
-  ingredient_id:        string;
-  ingredient_type_id:   number;
-  owner_id:             string;
-  ingredient_type_name: string;
-  ingredient_brand:     string | null;
-  ingredient_variety:   string | null;
-  ingredient_name:      string;
-  fullname:             string;
-  notes:                string;
-  image: {
-    image_filename: string;
-    caption:        string;
-  };
-};
-
-export type IngredientTypeView = {
-  ingredient_type_id:   number;
-  ingredient_type_name: string;
-};
-
-export type UnitView = {
-  unit_id:   number;
-  unit_name: string;
-};
-
-export type MethodView = {
-  method_id:   number;
-  method_name: string;
-};
-
 export type RecipeOverview = {
   recipe_id:      string;
   owner_id:       string;
@@ -177,9 +120,4 @@ export type RecipeOverview = {
   recipe_image:   {
     image_filename: string;
   };
-};
-
-export type RecipeTypeView = {
-  recipe_type_id:   number;
-  recipe_type_name: string;
 };
