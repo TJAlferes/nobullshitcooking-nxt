@@ -3,8 +3,8 @@ import { usePathname }                    from 'next/navigation';
 import { useState }                       from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
-import { useAuthname }      from '../../auth';
-import { useTheme }         from '../../general/theme';
+import { useAuth }          from '../../../store';
+import { useTheme }         from '../../../store';
 import { ExpandCollapse }   from '../ExpandCollapse';
 import { useSearch }        from '../search/hook';
 import type { SearchIndex } from '../search/state';
@@ -111,7 +111,7 @@ type Props = {
 };
 
 function NavLinks() {
-  const authname = useAuthname();
+  const { authname } = useAuth();
 
   return (
     <>
@@ -140,7 +140,7 @@ function NavLinks() {
 
 function NavLink({ text, to }: NavLinkProps) {
   const pathname = usePathname();
-  const theme    = useTheme();
+  const { theme } = useTheme();
 
   const backgroundColor = theme === "light" ? "#ddd" : "#444";
 

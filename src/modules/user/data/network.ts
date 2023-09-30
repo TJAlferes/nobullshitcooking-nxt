@@ -5,6 +5,8 @@ import { setItem }  from '../../general/localStorage';
 import type { UserData } from './state';
 import type { Ownership } from '../../shared/types';
 
+// move to an api.ts ???
+
 export async function getInitialUserData() {
   try {
     const { data } = await axios.post(

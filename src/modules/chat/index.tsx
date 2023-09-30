@@ -2,33 +2,42 @@ import axios                           from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 import { endpoint }         from '../../config/api';
-import { useAuthname }      from '../auth';
+import { useAuth, useChat } from '../../store';
 import { getItem, setItem } from '../general/localStorage';
 import { getSocket }        from './socket';
 
 // TO DO: fix no longer auto scrolling after spam debounce
 export default function Chat() {
-  const authname = useAuthname();
-  const socket   = getSocket();
+  const socket = getSocket();
+  const { authname } = useAuth();
+  const {
+    connected,
+    setConnected,
 
-  //friends
+    current_private_conversation,
+    setCurrentPrivateConversation,
+    private_conversations,
+    setPrivateConversations,
+    private_chatmessages,
+    setPrivateChatMessages,
+
+    current_chatgroup,
+    setCurrentChatgroup,
+    chatgroups,
+    setChatgroups,
+    chatgroup_users,
+    setChatgroupUsers,
+
+    current_chatroom,
+    setCurrentChatroom,
+    chatrooms,
+    setChatrooms,
+    chatroom_users,
+    setChatroomUsers,
+    chatmessages,
+    setChatmessages
+  } = useChat();
   
-  // *** TO DO: when they logout, disconnect them from chat (BOTH here and on backend redis)
-  const [ connected, setConnected ] = useState(socket.connected);
-
-  const current_private_conversation = "";  //user_id;
-  const private_conversations = [];
-  const private_chatmessages = [];
-
-  const current_chatgroup = "";
-  const chatgroups: ChatgroupView[] = [];
-  const chatgroup_users = [];
-  
-  const current_chatroom =  "";
-  const chatrooms = [];
-  const chatroom_users = [];
-  const chatmessages = [];
-
   const [ feedback,      setFeedback ]      = useState("");
   const [ windowFocused, setWindowFocused ] = useState(true);
   const [ loading,       setLoading ]       = useState(false);
@@ -425,51 +434,3 @@ const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
-type PrivateConversation = {
-  user_id:  string;
-  username: string;
-};
-
-type PrivateChatmessageView = {
-  chatmessage_id: string;
-  receiver_id:    string;
-  sender_id:      string;
-  sendername:     string;
-  content:        string;
-};
-
-type ChatgroupView = {
-  chatgroup_id:   string;
-  owner_id:       string;
-  chatgroup_name: string;
-};
-
-type ChatgroupUserView = {
-  chatgroup_id: string;
-  username:     string;
-  is_admin:     boolean;
-  is_muted:     boolean;
-};
-
-type ChatroomView = {
-  chatroom_id:   string;
-  chatgroup_id:  string;
-  chatroom_name: string;
-};
-
-type ChatroomUserView = {
-  chatgroup_id: string;
-  chatroom_id:  string;
-  username:     string;
-  is_admin:     boolean;
-  is_muted:     boolean;
-};
-
-type ChatMessageView = {
-  chatmessage_id: string;
-  chatroom_id:    string;
-  sender_id:      string;
-  sendername:     string;
-  content:        string;
-};

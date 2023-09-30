@@ -4,6 +4,8 @@ import { endpoint } from '../../../config/api';
 import { setItem }  from '../../general/localStorage';
 import type { Data } from './state';
 
+// move to an api.ts ???
+
 // refetches
 
 export const getCuisines        = createDataFetcher("/cuisines",         "cuisines");  // needed in 3 - 4 places, just get there if navigated to instead of here???

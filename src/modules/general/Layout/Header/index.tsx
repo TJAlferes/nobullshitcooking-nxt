@@ -3,24 +3,22 @@ import Link          from 'next/link';
 import { useRouter } from 'next/router';
 import { useState }  from 'react';
 
-import { endpoint } from '../../../../config/api';
-import { useAuthname } from '../../../auth';
-import { useTheme, useSetTheme } from '../../theme';
-import { LeftNav }       from '../../../shared/menu';
-import { Search }        from '../../../shared/search';
-import { removeItem }    from '../../localStorage';
+import { endpoint }          from '../../../../config/api';
+import { useAuth, useTheme } from '../../../../store';
+import { LeftNav }           from '../../../shared/menu';
+import { Search }            from '../../../shared/search';
 
 export function Header() {
-  const router   = useRouter();
-  const authname = useAuthname();
-  const theme    = useTheme();
-  const setTheme = useSetTheme();
+  const router = useRouter();
+
+  const { authname, logout } = useAuth();
+  const { theme, setTheme }  = useTheme();
 
   const [ isLeftNavOpen, setIsLeftNavOpen ] = useState(false);
 
   const click = () => setIsLeftNavOpen(prev => !prev);
 
-  const logout = async () => {
+  const logoutHandler = async () => {
     if (!authname) return;
     try {
       await axios.post(
@@ -28,15 +26,10 @@ export function Header() {
         {},
         {withCredentials: true}
       );
-  
-      removeItem('appState');  // sufficient enough to clear redux store???
-      //systemMessage(data.message);
+      logout();
     } catch(err) {
-      removeItem('appState');
+      localStorage.clear();
     }
-  
-    //delay(4000);
-    //systemMessageClear();
     router.push('/');
   };
 
@@ -81,7 +74,7 @@ export function Header() {
           : (
             <>
               <Link href="/dashboard">{`Hello, ${authname}`}</Link>
-              <span className="logout" onClick={logout}>Sign Out</span>
+              <span className="logout" onClick={logoutHandler}>Sign Out</span>
             </>
           )
         }
