@@ -11,42 +11,29 @@ export function RouteGuard({ children }: Props) {
   const { authname } = useAuth();
 
   const authenticatedRoutes = [
-    '/chat',
     '/dashboard',
     '/friends',
-    '/new-equipment',
-    '/new-ingredient',
-    //'/new-recipe',
-    '/new-plan'
+    '/chat',
+    '/equipment/form',
+    '/ingredients/form',
+    '/recipes/form',
+    '/plans/form',
+    '/chatgroups/form'
   ];
-  const authenticatedRoute = pathname && authenticatedRoutes.includes(pathname);
-
-  if (authenticatedRoute && !authname) {
+  const authenticatedRoute = authenticatedRoutes.includes(pathname);
+  const unauthenticated = authname === "";
+  if (authenticatedRoute && unauthenticated) {
     router.push('/login');
     return <LoaderSpinner />;
   }
 
-  const unauthenticatedRoutes = [
-    '/register',
-    '/verify',
-    '/login'
-  ];
-  const unauthenticatedRoute = pathname && unauthenticatedRoutes.includes(pathname);
-
-  if (unauthenticatedRoute && authname) {
+  const unauthenticatedRoutes = ['/register', '/confirm', '/login'];
+  const unauthenticatedRoute = unauthenticatedRoutes.includes(pathname);
+  const authenticated = authname !== "";
+  if (unauthenticatedRoute && authenticated) {
     router.push('/');
     return <LoaderSpinner />;
   }
-
-  /*const searchRoutes = [
-    "/equipments",
-    "/ingredients",
-    "/products",
-    "/recipes"
-  ];
-  const searchRoute = pathname && searchRoutes.includes(pathname);
-
-  if (!searchRoute ) //dispatch(reset());*/
 
   return children;
 }

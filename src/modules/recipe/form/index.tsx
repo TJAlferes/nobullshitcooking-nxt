@@ -3,16 +3,15 @@ import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
-import { useDispatch }                 from 'react-redux';
 import { v4 as uuidv4 }                from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderButton }                    from '../../shared/LoaderButton';
-import { getCroppedImage }                 from '../../shared/getCroppedImage';
-import type { Ownership }                  from '../../shared/types';
-import { getMyRecipes }                    from '../../user/data/state';
+import { endpoint }                      from '../../../config/api';
+import { useAuth, useData, useUserData } from '../../../store';
+import { LoaderButton }                  from '../../shared/LoaderButton';
+import { getCroppedImage }               from '../../shared/getCroppedImage';
+import type { Ownership }                from '../../shared/types';
+//import { getMyRecipes }                  from '../../user/data/state';
 
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
@@ -20,14 +19,8 @@ export default function RecipeForm({ ownership }: Props) {
   const params = useSearchParams();
   const recipe_id = params.get('recipe_id');
 
-  const dispatch = useDispatch();
-  const units            = useSelector(state => state.data.units);
-  const ingredient_types = useSelector(state => state.data.ingredient_types);
-  const recipe_types     = useSelector(state => state.data.recipe_types);
-  const cuisines         = useSelector(state => state.data.cuisines);
-  const methods          = useSelector(state => state.data.methods);
-  const authname         = useSelector(state => state.authentication.authname);
-  const message          = useSelector(state => state.system.message);
+  const { authname } = useAuth();
+  const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
 
   const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
 
@@ -97,7 +90,7 @@ export default function RecipeForm({ ownership }: Props) {
 
     async function getExistingRecipeToEdit() {
       if (!recipe_id) {
-        router.push(`/${authname}/private/dashboard`);
+        router.push(`/dashboard`);
         return;
       }
 
@@ -105,14 +98,14 @@ export default function RecipeForm({ ownership }: Props) {
       window.scrollTo(0, 0);
 
       const res = await axios.post(
-        `${endpoint}/user/${ownership}/recipe/edit`,
+        `${endpoint}/users/${authname}/${ownership}-recipes/edit`,
         {recipe_id},
         {withCredentials: true}
-      );
+      );  // .get???
       
       const recipe: ExistingRecipeToEdit = res.data.recipe;
       if (!recipe) {
-        router.push(`/${authname}/private/dashboard`);
+        router.push(`/dashboard`);
         return;
       }
 
@@ -178,23 +171,6 @@ export default function RecipeForm({ ownership }: Props) {
       mounted = false;
     };
   }, []);
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      if (message === "Recipe created." || message === "Recipe updated.") {
-        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
-      }
-      setLoading(false);  // move ???
-    }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
 
   const changeRecipeType  = (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
   const changeCuisine     = (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
@@ -517,13 +493,16 @@ export default function RecipeForm({ ownership }: Props) {
         }
     
         const { data } = await axios.patch(
-          `${endpoint}/users/${user_id}/${ownership}-recipes/${recipe_id}`,
+          `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
           recipe_update_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
-        dispatch(getMyRecipes(ownership));
+        if (data.message === "Recipe created." || data.message === "Recipe updated.") {
+          setTimeout(() => router.push(`/dashboard`), 3000);
+        }
+        //await getMyRecipes(ownership);
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
@@ -592,13 +571,16 @@ export default function RecipeForm({ ownership }: Props) {
         }
     
         const { data } = await axios.post(
-          `${endpoint}/users/${user_id}/${ownership}-recipes/${recipe_id}`,
+          `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
           recipe_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
-        dispatch(getMyRecipes(ownership));
+        if (data.message === "Recipe created." || data.message === "Recipe updated.") {
+          setTimeout(() => router.push(`/dashboard`), 3000);
+        }
+        //await getMyRecipes(ownership);
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }

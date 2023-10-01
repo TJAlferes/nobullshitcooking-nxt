@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react';
 import { useRouter }      from 'next/router';
 
-import { useTheme } from '../theme';
+import { useTheme } from '../../../store';
 import { Header }   from './Header';
 import { Main }     from './Main';
 import { Footer }   from './Footer';
 
 export function Layout({ children }: Props) {
   const { pathname } = useRouter();
-  const theme        = useTheme();
+  
+  const { theme } = useTheme();
 
   const authPage = pathname.match(/\/login/)
     || pathname.match(/\/register/)

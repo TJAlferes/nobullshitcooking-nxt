@@ -3,62 +3,42 @@ import Link                           from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderSpinner }   from '../../../shared/LoaderSpinner';
-import type { WorkRecipe } from '../../../shared/data/state';
+import { endpoint }      from '../../../config/api';
+import { useAuth, useUserData } from '../../../store';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
+import type { RecipeOverview } from '../../../store';
 
 export default function Profile() {
   const router   = useRouter();
 
   const params   = useSearchParams();
   const username = params.get('username');
+  if (!username || (username.length < 6) || (username.length > 20)) {
+    router.push('/');
+    return <LoaderSpinner />;
+  }
 
-  const authname            = useSelector(state => state.authentication.authname);
-  const my_friendships      = useSelector(state => state.userData.my_friendships);
-  const userIsAuthenticated = useSelector(state => state.authentication.userIsAuthenticated);
-  const message             = useSelector(state => state.system.message);
+  const { authname } = useAuth();
+  const { my_friendships } = useUserData();
 
-  const [ clicked,    setClicked ] =    useState(false);
-  const [ feedback,   setFeedback ] =   useState("");
-  const [ loading,    setLoading ] =    useState(false);
-  const [ tab,        setTab ] =        useState("public");
   const [ userAvatar, setUserAvatar ] = useState("nobsc-user-default");
-  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState<WorkRecipe[]>([]);
-  const [ userPublicRecipes,   setUserPublicRecipes ] =   useState<WorkRecipe[]>([]);
+  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState<RecipeOverview[]>([]);
+  const [ userPublicRecipes,   setUserPublicRecipes ]   = useState<RecipeOverview[]>([]);
 
-  const url = "https://s3.amazonaws.com";
+  const [ clicked, setClicked ] = useState(false);
+  const [ tab,     setTab ]     = useState("public");
+
+  const [ feedback, setFeedback ] = useState("");
+  const [ loading,  setLoading ]  = useState(false);
 
   useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  // TO DO: getServerSideProps
-  useEffect(() => {
-    if (!username || (username.length < 6) || (username.length > 20)) {
-      router.push('/');
-      return;
-    }
-
-    // TO DO: WHAT HAPPENS IF THE USER IS NOT FOUND?
-
-    const getUserProfile = async (username: string) => {
-      const trimmed = username.trim();  // already done?
-      const res = await axios.get(`${endpoint}/user/profile/${trimmed}`);
-
-      if (res.data.avatar !== "nobsc-user-default") setUserAvatar(trimmed);  // change, use avatar from server
+    async function getProfile(username: string) {
+      const res = await axios.get(`${endpoint}/users/${username}/profile`);
+      setUserAvatar(res.data.avatar_url);
       setUserFavoriteRecipes(res.data.favorite_recipes);
       setUserPublicRecipes(res.data.public_recipes);
-    };
-
-    getUserProfile(username);
+    }  // TO DO: WHAT HAPPENS IF THE USER IS NOT FOUND?
+    getProfile(username);
   }, []);
 
   const requestFriendship = async () => {
@@ -66,22 +46,18 @@ export default function Profile() {
     if (!username) return;
     const friendname = username.trim();
     if (friendname === authname) return;
-
     setClicked(true);
     setLoading(true);
-
     try {
       const { data } = await axios.post(
         `${endpoint}/users/${authname}/friendships`,
         {friendname},
         {withCredentials: true}
       );
-
       setFeedback(data.message);
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };
@@ -99,7 +75,7 @@ export default function Profile() {
       )}
       
       <div className="friend-request-outer">
-        {userIsAuthenticated && username !== authname
+        {authname && username !== authname
           ? (my_friendships.find(f => f.username === username)
             ? <span>Friends</span>
             : (!clicked
@@ -170,3 +146,5 @@ export default function Profile() {
     </div>
   );
 }
+
+const url = "https://s3.amazonaws.com";

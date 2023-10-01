@@ -6,9 +6,6 @@ import { endpoint }                        from '../../../config/api';
 import { setItem }                         from '../../general/localStorage';
 import type { SearchIndex, SearchRequest } from './state';
 
-// WHY IS THIS CONTEXT EVEN NEEDED?
-// JUST READ STATE STRAIGHT FROM URL, WRITE STATE STRAIGHT TO URL
-
 // general/Layout/Header/Search
 // shared/menu                   move into general/Layout/Header/LeftNav???
 // equipment/list

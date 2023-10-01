@@ -5,12 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-//import { CropPreview }                     from '../../shared/CropPreview';
-import { LoaderButton }                    from '../../shared/LoaderButton';
-import { getCroppedImage }                 from '../../shared/getCroppedImage';
-import type { Ownership }                  from '../../shared/types';
+import { endpoint }                      from '../../../config/api';
+import { useAuth, useData, useUserData } from '../../../store';
+import { LoaderButton }                  from '../../shared/LoaderButton';
+import { getCroppedImage }               from '../../shared/getCroppedImage';
+import type { Ownership }                from '../../shared/types';
 
 export default function IngredientForm({ ownership }: Props) {
   const router = useRouter();
@@ -18,9 +17,8 @@ export default function IngredientForm({ ownership }: Props) {
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');
 
-  const ingredient_types = useSelector(state => state.data.ingredient_types);
-  const authname        = useSelector(state => state.authentication.authname);
-  const message          = useSelector(state => state.system.message);
+  const { authname } = useAuth();
+  const { ingredient_types } = useData();
 
   const allowedIngredients = useAllowedIngredients(ownership);
 
@@ -90,23 +88,6 @@ export default function IngredientForm({ ownership }: Props) {
       mounted = false;
     };
   }, []);  // do this in getServerSideProps???
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      if (message === "Ingredient created." || message === "Ingredient updated.") {
-        setTimeout(() => router.push('/dashboard'), 3000);
-      }
-      setLoading(false);
-    }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
 
   const changeIngredientType     = (e: SyntheticEvent) => setIngredientTypeId(Number((e.target as HTMLInputElement).value));
   const changeIngredientBrand    = (e: SyntheticEvent) => setIngredientBrand((e.target as HTMLInputElement).value);
@@ -195,13 +176,16 @@ export default function IngredientForm({ ownership }: Props) {
         }
     
         const { data } = await axios.patch(
-          `${endpoint}/users/${user_id}/private-ingredients/${ingredient_id}`,
+          `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
           ingredient_update_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
         //dispatch(getMyIngredients(ownership));
+        if (data.message === "Ingredient created." || data.message === "Ingredient updated.") {
+          setTimeout(() => router.push('/dashboard'), 3000);
+        }
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
@@ -224,13 +208,16 @@ export default function IngredientForm({ ownership }: Props) {
         }
     
         const { data } = await axios.post(
-          `${endpoint}/users/${user_id}/private-ingredients`,
+          `${endpoint}/users/${authname}/private-ingredients`,
           ingredient_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
         //dispatch(getMyIngredients(ownership));
+        if (data.message === "Ingredient created." || data.message === "Ingredient updated.") {
+          setTimeout(() => router.push('/dashboard'), 3000);
+        }
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
@@ -358,8 +345,8 @@ type Props = {
 };
 
 function useAllowedIngredients(ownership: Ownership) {
-  const ingredients = useSelector(state => state.data.ingredients);
-  const my_private_ingredients   = useSelector(state => state.userData.my_private_ingredients);
+  const { ingredients } = useData();
+  const { my_private_ingredients } = useUserData();
 
   // must be checked server-side!!! never let random users edit official content
   if (ownership === "private") {
@@ -469,6 +456,6 @@ export type IngredientUpdateUpload = IngredientUpload & {
   ingredient_id: string;
 };
 
-function uploadImageToAWSS3(signature: any, image: any) {
-  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
+async function uploadImageToAWSS3(signature: any, image: any) {
+  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }

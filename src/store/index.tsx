@@ -6,31 +6,31 @@ import { getItem, setItem }  from "../modules/general/localStorage";
 import type { PlanDataView } from "../modules/plan/detail";
 
 function store() {
-  const [ cuisines,         setCuisines ]        = useState(getItem("cuisines") || []);
-  const [ equipment,        setEquipment ]       = useState(getItem("equipment") || []);
-  const [ equipment_types,  setEquipmentTypes ]  = useState(getItem("equipment_types") || []);
-  const [ ingredients,      setIngredients ]     = useState(getItem("ingredients") || []);
-  const [ ingredient_types, setIngredientTypes ] = useState(getItem("ingredient_types") || []);
-  const [ units,            setUnits ]           = useState(getItem("units") || []);
-  const [ methods,          setMethods ]         = useState(getItem("methods") || []);
-  const [ recipe_types,     setRecipeTypes ]     = useState(getItem("recipe_types") || []);
+  const [ cuisines,         setCuisines ]        = useState<CuisineView[]>(getItem("cuisines") || []);
+  const [ equipment,        setEquipment ]       = useState<EquipmentView[]>(getItem("equipment") || []);
+  const [ equipment_types,  setEquipmentTypes ]  = useState<EquipmentTypeView[]>(getItem("equipment_types") || []);
+  const [ ingredients,      setIngredients ]     = useState<IngredientView[]>(getItem("ingredients") || []);
+  const [ ingredient_types, setIngredientTypes ] = useState<IngredientTypeView[]>(getItem("ingredient_types") || []);
+  const [ units,            setUnits ]           = useState<UnitView[]>(getItem("units") || []);
+  const [ methods,          setMethods ]         = useState<MethodView[]>(getItem("methods") || []);
+  const [ recipe_types,     setRecipeTypes ]     = useState<RecipeTypeView[]>(getItem("recipe_types") || []);
 
   const [ theme, setTheme ] = useState<Theme>(getItem("theme") || "");
 
-  const [ my_friendships,         setMyFriendships ]        = useState(getItem("my_friendships") || []);
-  const [ my_public_plans,        setMyPublicPlans ]        = useState(getItem("my_public_plans") || []);
-  const [ my_public_recipes,      setMyPublicRecipes ]      = useState(getItem("my_public_recipes") || []);
-  const [ my_favorite_recipes,    setMyFavoriteRecipes ]    = useState(getItem("my_favorite_recipes") || []);
-  const [ my_private_equipment,   setMyPrivateEquipment ]   = useState(getItem("my_private_equipment") || []);
-  const [ my_private_ingredients, setMyPrivateIngredients ] = useState(getItem("my_private_ingredients") || []);
-  const [ my_private_plans,       setMyPrivatePlans ]       = useState(getItem("my_private_plans") || []);
-  const [ my_private_recipes,     setMyPrivateRecipes ]     = useState(getItem("my_private_recipes") || []);
-  const [ my_saved_recipes,       setMySavedRecipes ]       = useState(getItem("my_saved_recipes") || []);
-  const [ my_chatgroups,          setMyChatgroups ]         = useState(getItem("my_chatgroups") || []);
+  const [ my_friendships,         setMyFriendships ]        = useState<FriendshipView[]>(getItem("my_friendships") || []);
+  const [ my_public_plans,        setMyPublicPlans ]        = useState<PlanView[]>(getItem("my_public_plans") || []);
+  const [ my_public_recipes,      setMyPublicRecipes ]      = useState<RecipeOverview[]>(getItem("my_public_recipes") || []);
+  const [ my_favorite_recipes,    setMyFavoriteRecipes ]    = useState<RecipeOverview[]>(getItem("my_favorite_recipes") || []);
+  const [ my_private_equipment,   setMyPrivateEquipment ]   = useState<EquipmentView[]>(getItem("my_private_equipment") || []);
+  const [ my_private_ingredients, setMyPrivateIngredients ] = useState<IngredientView[]>(getItem("my_private_ingredients") || []);
+  const [ my_private_plans,       setMyPrivatePlans ]       = useState<PlanView[]>(getItem("my_private_plans") || []);
+  const [ my_private_recipes,     setMyPrivateRecipes ]     = useState<RecipeOverview[]>(getItem("my_private_recipes") || []);
+  const [ my_saved_recipes,       setMySavedRecipes ]       = useState<RecipeOverview[]>(getItem("my_saved_recipes") || []);
+  const [ my_chatgroups,          setMyChatgroups ]         = useState<ChatgroupView[]>(getItem("my_chatgroups") || []);
   
-  const [ auth_id,    setAuthId ]    = useState(getItem("auth_id") || "");
-  const [ auth_email, setAuthEmail ] = useState(getItem("auth_email") || "");
-  const [ authname,   setAuthname ]  = useState(getItem("authname") || "");
+  const [ auth_id,    setAuthId ]    = useState<string>(getItem("auth_id") || "");
+  const [ auth_email, setAuthEmail ] = useState<string>(getItem("auth_email") || "");
+  const [ authname,   setAuthname ]  = useState<string>(getItem("authname") || "");
 
   const [ connected, setConnected ] = useState(false);
 

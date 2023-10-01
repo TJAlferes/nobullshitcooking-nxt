@@ -6,7 +6,7 @@ import ReactCrop, { Crop }             from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint }        from '../../../config/api';
-import { useAuthname }     from '../../auth';
+import { useAuth, useData, useUserData } from '../../../store';
 import { LoaderButton }    from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import type { Ownership }  from '../../shared/types';
@@ -17,8 +17,8 @@ export default function EquipmentForm({ ownership }: Props) {
   const params = useSearchParams();
   const equipment_id = params.get('equipment_id');
 
-  const equipment_types = useSelector(state => state.data.equipment_types);
-  const authname = useAuthname();
+  const { authname } = useAuth();
+  const { equipment_types } = useData();
 
   const allowedEquipment = useAllowedEquipment(ownership);
 
@@ -45,7 +45,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
     function getExistingEquipmentToEdit() {
       if (!equipment_id) {
-        router.push(`/${authname}/private/dashboard`);
+        router.push(`/dashboard`);
         return;
       }
       
@@ -54,7 +54,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
       const equipment = allowedEquipment.find(e => e.equipment_id === equipment_id);
       if (!equipment) {
-        router.push(`/${authname}/private/dashboard`);
+        router.push(`/dashboard`);
         return;
       }
 
@@ -82,23 +82,6 @@ export default function EquipmentForm({ ownership }: Props) {
       mounted = false;
     };
   }, []);  // do this in getServerSideProps???
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      if (message === "Equipment created." || message === "Equipment updated.") {
-        setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
-      }
-      setLoading(false);
-    }
-    
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
 
   const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
   const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
@@ -182,8 +165,12 @@ export default function EquipmentForm({ ownership }: Props) {
           equipment_update_upload,
           {withCredentials: true}
         );
+        window.scrollTo(0, 0);
         setFeedback(data.message);
         //await getMyEquipment();
+        if (data.message === "Equipment created." || data.message === "Equipment updated.") {
+          setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
+        }
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
@@ -210,8 +197,12 @@ export default function EquipmentForm({ ownership }: Props) {
           equipment_upload,
           {withCredentials: true}
         );
+        window.scrollTo(0, 0);
         setFeedback(data.message);
-        //yield call(getMyEquipmentWorker);
+        //await getMyEquipment();
+        if (data.message === "Equipment created." || data.message === "Equipment updated.") {
+          setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
+        }
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
@@ -338,8 +329,8 @@ type Props = {
 };
 
 function useAllowedEquipment(ownership: Ownership) {
-  const equipment            = useSelector(state => state.data.equipment);
-  const my_private_equipment = useSelector(state => state.userData.my_private_equipment);
+  const { equipment } = useData();
+  const { my_private_equipment } = useUserData();
 
   // must be checked server-side!!! never let random users edit official content
   if (ownership === "private") {

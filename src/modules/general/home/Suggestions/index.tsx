@@ -1,39 +1,22 @@
-import axios                   from 'axios';
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 
 export function Suggestions() {
-  const [ latitude, setLatitude ]   = useState("");
+  const [ latitude, setLatitude ] = useState("");
   const [ longitude, setLongitude ] = useState("");
-  const [ address, setAddress ]     = useState("");
+  const [ address, setAddress ] = useState("");
   const [ nearbyStoresClicked, setNearbyStoresClicked ] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    async function getAddress() {
-      if (latitude === "" || longitude === "") return;
-
-      const res = await axios.get(
-        `${geoUrl}?latlng=${latitude},${longitude}&key=${googleMapsAPIKeyTwo}`
-      );
-
-      if (res.data) {
-        setAddress(res.data.results[3].formatted_address);
-      }
-    }
-
-    getAddress();
-
-    return () => {
-      mounted = false;
-    };
-  }, [latitude, longitude]);
 
   const getLocation = async () => {
     navigator.geolocation.getCurrentPosition(function(position) {
       setLatitude(`${position.coords.latitude}`);
       setLongitude(`${position.coords.longitude}`);
     });
+    if (latitude === "" || longitude === "") return;
+    const res = await axios.get(
+      `${geoUrl}?latlng=${latitude},${longitude}&key=${googleMapsAPIKeyTwo}`
+    );
+    setAddress(res.data.results[3].formatted_address);
   };
 
   const showNearbyStores = () => {

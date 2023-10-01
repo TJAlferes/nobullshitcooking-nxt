@@ -1,5 +1,3 @@
-import type { RootState } from '../../redux';
-
 export function getItem(key: string) {
   if (typeof window === 'undefined') return;
   const item = localStorage.getItem(key);
@@ -20,25 +18,4 @@ export function removeItem(key: string) {
 export function clear() {
   if (typeof window === 'undefined') return;
   localStorage.clear();
-}
-
-export function loadFromLocalStorage() {
-  if (typeof window === 'undefined') return;
-  try {
-    const item = localStorage.getItem('appState');
-    if (!item) return undefined;
-    return JSON.parse(item);
-  } catch (err) {
-    console.log(err);
-    return undefined;
-  }
-}
-
-export function saveToLocalStorage(state: RootState) {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem('appState', JSON.stringify(state));
-  } catch (err) {
-    console.log(err);
-  }
 }
