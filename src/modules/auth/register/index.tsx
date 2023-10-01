@@ -1,16 +1,13 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/navigation';
-import { useEffect, useState } from 'react';
+import axios         from 'axios';
+import Link          from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState }  from 'react';
 
 import { endpoint }     from '../../../config/api';
-import { useAuth }      from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Register() {
   const router = useRouter();
-
-  const { authname } = useAuth();
 
   const [ email,         setEmail ]         = useState("");
   const [ password,      setPassword ]      = useState("");
@@ -20,10 +17,6 @@ export default function Register() {
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  useEffect(() => {
-    if (authname !== '') router.push('/dashboard');
-  }, [authname]);
-
   const emailChange         = (e: ChangeEvent) => setEmail(e.target.value);
   const usernameChange      = (e: ChangeEvent) => setUsername(e.target.value);
   const passwordChange      = (e: ChangeEvent) => setPassword(e.target.value);
@@ -32,12 +25,9 @@ export default function Register() {
   const register = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post(
-        `${endpoint}/user/create`,
-        {email, password, username}
-      );
-      setFeedback(data.message);
-      if (data.message === 'User account created.') {
+      const res = await axios.post(`${endpoint}/users`, {email, password, username});
+      setFeedback(res.data.message);
+      if (res.data.message === 'User account created.') {
         // delay(4000);
         router.push('/confirm');
       }
@@ -61,12 +51,7 @@ export default function Register() {
     await register();
   };
 
-  const validateRegistrationInfo = () => (
-    username.length > 1
-    && email.length > 4
-    && password.length > 5
-    && password == passwordAgain
-  );  // TO DO: do most of this in HTML
+  const validateRegistrationInfo = () => password == passwordAgain;
   
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
@@ -86,6 +71,7 @@ export default function Register() {
           autoFocus
           disabled={loading}
           id="username"
+          minLength={2}
           maxLength={20}
           name="username"
           onChange={usernameChange}
@@ -99,6 +85,7 @@ export default function Register() {
           autoComplete="email"
           disabled={loading}
           id="email"
+          minLength={5}
           maxLength={60}
           name="email"
           onChange={emailChange}
@@ -112,6 +99,7 @@ export default function Register() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
+          minLength={6}
           maxLength={20}
           name="password"
           onChange={passwordChange}

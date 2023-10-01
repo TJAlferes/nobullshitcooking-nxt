@@ -1,16 +1,14 @@
-'use client';
-
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactElement }      from 'react';
 
-import { useAuthname }   from '../../auth';
+import { useAuth } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 
 export function RouteGuard({ children }: Props) {
   const router   = useRouter();
   const pathname = usePathname();
 
-  const authname = useAuthname();
+  const { authname } = useAuth();
 
   const authenticatedRoutes = [
     '/chat',

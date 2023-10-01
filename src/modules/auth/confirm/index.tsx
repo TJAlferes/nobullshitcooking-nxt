@@ -1,27 +1,20 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useRouter }           from 'next/navigation';
-import { useEffect, useState } from 'react';
+import axios         from 'axios';
+import Link          from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState }  from 'react';
 
 import { endpoint }     from '../../../config/api';
-import { useAuth }      from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Confirm() {
   const router = useRouter();
 
-  const { authname } = useAuth();
-
   const [ confirmation_code, setConfirmationCode ] = useState("");
-  const [ email,    setEmail ]    = useState("");
-  const [ password, setPassword ] = useState("");
+  const [ email,    setEmail ]                     = useState("");
+  const [ password, setPassword ]                  = useState("");
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
-
-  useEffect(() => {
-    if (authname !== '') router.push('/dashboard');
-  }, [authname]);
 
   const confirmationCodeChange = (e: ChangeEvent) => setConfirmationCode(e.target.value);
   const emailChange            = (e: ChangeEvent) => setEmail(e.target.value);
@@ -30,12 +23,12 @@ export default function Confirm() {
   const confirm = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
-        `${endpoint}/auth/confirm`,
+      const res = await axios.patch(
+        `${endpoint}/confirm`,
         {confirmation_code}
       );
-      setFeedback(data.message);
-      if (data.message === "User account confirmed.") {
+      setFeedback(res.data.message);
+      if (res.data.message === "User account confirmed.") {
         // delay(4000);
         router.push('/login');
       }
@@ -49,11 +42,11 @@ export default function Confirm() {
   const requestResend = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
-        `${endpoint}/auth/resend-confirmation-code`,
+      const res = await axios.patch(
+        `${endpoint}/resend-confirmation-code`,
         {email, password}
       );
-      setFeedback(data.message);
+      setFeedback(res.data.message);
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }

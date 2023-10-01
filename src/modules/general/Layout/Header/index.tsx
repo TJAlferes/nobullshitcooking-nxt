@@ -21,14 +21,12 @@ export function Header() {
   const logoutHandler = async () => {
     if (!authname) return;
     try {
-      await axios.post(
-        `${endpoint}/user/authentication/logout`,
-        {},
-        {withCredentials: true}
-      );
+      await axios.post(`${endpoint}/logout`, {}, {withCredentials: true});
       logout();
     } catch(err) {
-      localStorage.clear();
+      console.log(err);
+    } finally {
+      logout();
     }
     router.push('/');
   };

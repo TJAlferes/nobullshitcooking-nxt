@@ -24,14 +24,14 @@ export default function Login() {
   const loginHandler = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post(
-        `${endpoint}/user/authentication/login`,
+      const res = await axios.post(
+        `${endpoint}/login`,
         {email, password},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-      if (data.message === 'Signed in.') {
-        login(data);
+      setFeedback(res.data.message);
+      if (res.data.message === 'Signed in.') {
+        login(res.data);
         router.push('/dashboard');
       }
     } catch(err) {
