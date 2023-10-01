@@ -313,16 +313,26 @@ export function useTheme() {
 
 export function useUserData() {
   return useContextSelector(StoreContext, (s) => ({
-    my_friendships:         s.my_friendships,
-    my_public_plans:        s.my_public_plans,
-    my_public_recipes:      s.my_public_recipes,
-    my_favorite_recipes:    s.my_favorite_recipes,
-    my_private_equipment:   s.my_private_equipment,
-    my_private_ingredients: s.my_private_ingredients,
-    my_private_plans:       s.my_private_plans,
-    my_private_recipes:     s.my_private_recipes,
-    my_saved_recipes:       s.my_saved_recipes,
-    my_chatgroups:          s.my_chatgroups
+    my_friendships:          s.my_friendships,
+    setMyFriendships:        s.setMyFriendships,
+    my_public_plans:         s.my_public_plans,
+    setMyPublicPlans:        s.setMyPublicPlans,
+    my_public_recipes:       s.my_public_recipes,
+    setMyPublicRecipes:      s.setMyPublicRecipes,
+    my_favorite_recipes:     s.my_favorite_recipes,
+    setMyFavoriteRecipes:    s.setMyFavoriteRecipes,
+    my_private_equipment:    s.my_private_equipment,
+    setMyPrivateEquipment:   s.setMyPrivateEquipment,
+    my_private_ingredients:  s.my_private_ingredients,
+    setMyPrivateIngredients: s.setMyPrivateIngredients,
+    my_private_plans:        s.my_private_plans,
+    setMyPrivatePlans:       s.setMyPrivatePlans,
+    my_private_recipes:      s.my_private_recipes,
+    setMyPrivateRecipes:     s.setMyPrivateRecipes,
+    my_saved_recipes:        s.my_saved_recipes,
+    setMySavedRecipes:       s.setMySavedRecipes,
+    my_chatgroups:           s.my_chatgroups,
+    setMyChatgroups:         s.setMyChatgroups
   }));
 }
 

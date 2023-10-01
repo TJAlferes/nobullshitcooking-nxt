@@ -1,58 +1,43 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useEffect, useState } from 'react';
-import { useDispatch }         from 'react-redux';
+import axios        from 'axios';
+import Link         from 'next/link';
+import { useState } from 'react';
 
-import { endpoint }                        from '../../../../config/api';
-import { getMyFriendshipsWorker }          from '../../data/network';  // TO DO: more proper to put action, and then invoke worker from watcher
-import { useTypedSelector as useSelector } from '../../../../redux';
+import { endpoint }             from '../../../../config/api';
+import { useAuth, useUserData } from '../../../../store';
 
-// Just make this a Dashboard tab ???
 export default function Friends() {
-  const dispatch = useDispatch();
-  const authname =       useSelector(state => state.authentication.authname);
-  const my_friendships = useSelector(state => state.userData.my_friendships);
-  const message =        useSelector(state => state.system.message);
-
-  const [ feedback,   setFeedback ] =   useState("");
-  const [ loading,    setLoading ] =    useState(false);
-  const [ tab,        setTab ] =        useState("accepted");
+  const { authname }       = useAuth();
+  const { my_friendships, setMyFriendships } = useUserData();
 
   const [ userToFind, setUsertoFind ] = useState("");
+  const [ feedback,   setFeedback ]   = useState("");
+  const [ loading,    setLoading ]    = useState(false);
+  const [ tab,        setTab ]        = useState("accepted");
 
-  useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0,0);
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
+  const url = `${endpoint}/users/${authname}/friendships`;
+
+  const getMyFriendships = async () => {
+    const { data } = await axios.get(url, {withCredentials: true});
+    setMyFriendships(data);
+  };
 
   const requestFriendship = async () => {
     if (loading) return;
     if (!validateUserToFind()) return;
-
     const friendname = userToFind.trim();
     if (friendname === authname) return;
-
     setLoading(true);
-
     try {
       const { data } = await axios.post(
-        `${endpoint}/users/${authname}/friendships`,
+        url,
         {friendname},
         {withCredentials: true}
       );
-
       setFeedback(data.message);
+      await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
     setUsertoFind("");
@@ -62,55 +47,31 @@ export default function Friends() {
     setLoading(true);
     try {
       const { data } = await axios.put(
-        `${endpoint}/users/${authname}/friendships/${friendname}`,
+        `${url}/${friendname}`,
         {status: "accept"},
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-      //dispatch(getMyFriendships());
+      await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
   };
 
-  /*const rejectFriendship = async (friendname: string) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.put(
-        `${endpoint}/users/${authname}/friendships/${friendname}`,
-        {status: "reject"},
-        {withCredentials: true}
-      );  // axios.delete ???
-
-      setFeedback(data.message);
-      //dispatch(getMyFriendships());
-    } catch(err) {
-      setFeedback(error);
-    }
-
-    //delay(4000);
-    setFeedback("");
-  };*/
-
-  // also used for rejecting??? also used for unblocking???
   const deleteFriendship = async (friendname: string) => {
     setLoading(true);
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/friendships/${friendname}`,
+        `${url}/${friendname}`,
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-      //dispatch(getMyFriendships());
+      await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
   };
@@ -118,24 +79,20 @@ export default function Friends() {
   const blockUser = async () => {
     if (loading) return;
     if (!validateUserToFind()) return;
-
     const friendname = userToFind.trim();
     if (friendname === authname) return;
-
     setLoading(true);
-
     try {
       const { data } = await axios.post(
-        `${endpoint}/users/${authname}/friendships/${friendname}`,
+        `${url}/${friendname}`,
         {status: "block"},
         {withCredentials: true}
       );
-
       setFeedback(data.message);
+      await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
     setUsertoFind("");
@@ -143,25 +100,21 @@ export default function Friends() {
 
   const unblockUser = async (friendname: string) => {
     setLoading(true);
-
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/friendships/${friendname}`,
+        `${url}/${friendname}`,
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-      //dispatch(getMyFriendships());
+      await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
   };
 
-  const inputChange = (e: SyntheticEvent) =>
-    setUsertoFind((e.target as HTMLInputElement).value);
+  const inputChange = (e: ChangeEvent) => setUsertoFind(e.target.value);
 
   const tabChange = (value: string) => setTab(value);
 
@@ -237,7 +190,7 @@ export default function Friends() {
                 className="delete"
                 disabled={loading}
                 name="reject"
-                onClick={() => rejectFriendship(f.username)}
+                onClick={() => deleteFriendship(f.username)}
               >Reject</button>
             )}
             
@@ -265,8 +218,8 @@ export default function Friends() {
   );
 };
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 const error = 'An error occurred. Please try again.';
+
+type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

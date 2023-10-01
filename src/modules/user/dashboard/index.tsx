@@ -1,31 +1,38 @@
 import axios                           from 'axios';
 import Link                            from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useRouter }                   from 'next/navigation';
+import { useRef, useState }            from 'react';
 import AriaModal                       from 'react-aria-modal';
 import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                        from '../../../config/api';
-import { getCroppedImage }                 from '../../shared/getCroppedImage';
-import { deletePublicPlan }                from '../../public/plan/state';
-import { disownPublicRecipe }              from '../../public/recipe/state';
-import { deletePrivateEquipment }          from '../equipment/state';
-import { deletePrivateIngredient }         from '../ingredient/state';
-import { deletePrivatePlan }               from '../plan/state';
-import { deletePrivateRecipe }             from '../recipe/state';
-import { useAuthname } from '../../auth';
+import { endpoint }                from '../../../config/api';
+import { useAuth, useUserData }    from '../../../store';
+import { getCroppedImage }         from '../../shared/getCroppedImage';
+import { deletePublicPlan }        from '../../public/plan/state';
+import { disownPublicRecipe }      from '../../public/recipe/state';
+import { deletePrivateEquipment }  from '../equipment/state';
+import { deletePrivateIngredient } from '../ingredient/state';
+import { deletePrivatePlan }       from '../plan/state';
+import { deletePrivateRecipe }     from '../recipe/state';
+//deleteChatgroup
 
 export default function Dashboard() {
-  const authname = useAuthname();
+  const router = useRouter();
 
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  //const my_friends
-  const my_plans            = useSelector(state => state.userData.my_plans);
-  const my_equipment        = useSelector(state => state.userData.my_equipment);
-  const my_ingredients      = useSelector(state => state.userData.my_ingredients);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const { authname } = useAuth();
+  const {
+    my_friendships,
+    my_public_plans,
+    my_public_recipes,
+    my_favorite_recipes,
+    my_private_equipment,
+    my_private_ingredients,
+    my_private_plans,
+    my_private_recipes,
+    my_saved_recipes,
+    my_chatgroups
+  } = useUserData();
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
@@ -49,30 +56,8 @@ export default function Dashboard() {
 
   const imageRef = useRef<HTMLImageElement | null>();
 
-  const avatarUrl = "https://s3.amazonaws.com/nobsc-user-avatars";
-  const recipeUrl = "https://s3.amazonaws.com/nobsc-user-recipe";
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-
-      deactivateModal();
-      setFeedback(message);
-      setLoading(false);
-    }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
-  const subTabClick = (e: React.SyntheticEvent<EventTarget>) =>
-    setSubTab((e.target as HTMLInputElement).name);
-
-  const tabClick = (e: React.SyntheticEvent<EventTarget>) =>
-    setTab((e.target as HTMLInputElement).name);
+  const subTabClick = (e: React.SyntheticEvent<EventTarget>) => setSubTab((e.target as HTMLInputElement).name);
+  const tabClick    = (e: React.SyntheticEvent<EventTarget>) => setTab((e.target as HTMLInputElement).name);
 
   const updateEmail = async () => {
     setLoading(true);
@@ -82,16 +67,13 @@ export default function Dashboard() {
         {new_email},
         {withCredentials: true}
       );
-  
       setFeedback(data.message);
-  
       if (data.message === 'Email updated.') {
         router.push('/dashboard');
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     //delay(4000);
     setFeedback("")
   };
@@ -104,54 +86,44 @@ export default function Dashboard() {
         {new_password},
         {withCredentials: true}
       );
-  
       setFeedback(data.message);
-  
       if (data.message === 'Password updated.') {
         router.push('/dashboard');
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     //delay(4000);
     setFeedback("")
   };
 
   const updateUsername = async () => {
     setLoading(true);
-
     try {
       const { data } = await axios.patch(
         `${endpoint}/users/${authname}/update-username`,
         {new_username},
         {withCredentials: true}
       );
-
       setFeedback(data.message);
-
       if (data.message === 'Email updated.') {
         router.push('/dashboard');
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("")
   };
 
   const deleteAccount = async () => {
     setLoading(true);
-
     try {
-      const { status } = await axios.delete(
+      const { data, status } = await axios.delete(
         `${endpoint}/user/delete`,
         {withCredentials: true}
       );
-  
       setFeedback(data.message);
-  
       if (status === 204) {
         setFeedback('User account deleted.');
         // log them out here (clear localStorage and sessionStorage)
@@ -160,13 +132,11 @@ export default function Dashboard() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("")
   };
 
-  const getApplicationNode = (): Element | Node =>
-    document.getElementById('root') as Element | Node;
+  const getApplicationNode = () => document.getElementById('root') as Element | Node;
 
   const activateModal = (id: number, name: string) => {
     setDeleteId(id);
@@ -206,7 +176,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${user_id}/private-plans/${plan_id}`,
+        `${endpoint}/users/${authname}/private-plans/${plan_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -222,7 +192,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${user_id}/private-equipment/${equipment_id}`,
+        `${endpoint}/users/${authname}/private-equipment/${equipment_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -238,11 +208,10 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${user_id}/private-ingredients/${ingredient_id}`,
+        `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
-
       //dispatch(getMyIngredients("private"));
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
@@ -255,7 +224,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${user_id}/private-recipe/${recipe_id}`,
+        `${endpoint}/users/${authname}/private-recipe/${recipe_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -271,7 +240,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const { data } = await axios.patch(
-        `${endpoint}/users/${user_id}/public-recipe/${recipe_id}`,
+        `${endpoint}/users/${authname}/public-recipe/${recipe_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -302,8 +271,7 @@ export default function Dashboard() {
     setTinyAvatar(tiny.final);
   };
 
-  const onImageLoaded = (e: SyntheticImageEvent) =>
-    imageRef.current = e.currentTarget;
+  const onImageLoaded = (e: SyntheticImageEvent) => imageRef.current = e.currentTarget;
 
   const onCropChange = (crop: PixelCrop) => setCrop(crop);
 
@@ -318,33 +286,24 @@ export default function Dashboard() {
           {subfolder: 'public/avatar/'},
           {withCredentials: true}
         );
-  
         await uploadImageToAWSS3(fullSignature, full_avatar);
         await uploadImageToAWSS3(tinySignature, tiny_avatar);
-  
         avatar.image_filename = filename;
       }
-  
-      const { data } = yield call(
-        [axios, axios.post],
-        `${endpoint}/user/auth/set-avatar`,
+      const { data } = await axios.patch(
+        `${endpoint}/users/${authname}/avatar`,
         {avatar: avatarUrl},
         {withCredentials: true}
       );
-  
       setFeedback(data.message);
-  
       if (data.message === 'Avatar set.') {
-        //elay(2000);
-        //systemMessageClear();
         location.reload();  // ?  // refresh/update respective list
       }
     } catch (err) {
-      yield put(systemMessage('An error occurred. Please try again.'));
+      setFeedback('An error occurred. Please try again.');
     }
-  
-    yield delay(4000);
-    yield put(systemMessageClear());
+    //delay(4000);
+    setFeedback("");
   };
 
   const unfavorite = async (recipe_id: string) => {
@@ -352,7 +311,7 @@ export default function Dashboard() {
 
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${auth_id}/favorite-recipes/${recipe_id}`,
+        `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -370,7 +329,7 @@ export default function Dashboard() {
 
     try {
       const { data } = await axios.delete(
-        `${endpoint}/users/${auth_id}/saved-recipes/${recipe_id}`,
+        `${endpoint}/users/${authname}/saved-recipes/${recipe_id}`,
         {withCredentials: true}
       );
       setFeedback(data.message);
@@ -874,9 +833,13 @@ function Subtabs({ subTab, subTabClick }: SubtabsProps) {
   );
 }
 
-function uploadImageToAWSS3(signature: any, image: any) {
-  axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
+async function uploadImageToAWSS3(signature: any, image: any) {
+  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }
+
+const avatarUrl = "https://s3.amazonaws.com/nobsc-user-avatars";
+
+const recipeUrl = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 const initialCrop: Crop = {
   unit:   'px',
