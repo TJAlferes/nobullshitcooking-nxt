@@ -1,16 +1,16 @@
-import axios                   from 'axios';
-import Link                    from 'next/link';
-import { useEffect, useState } from 'react';
+import axios        from 'axios';
+import Link         from 'next/link';
+import { useState } from 'react';
 
-import { endpoint }                        from '../../../config/api';
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderSpinner }  from '../../shared/LoaderSpinner';
-import type { Ownership } from '../../shared/types';
+import { endpoint }             from '../../../config/api';
+import { useAuth, useUserData } from '../../../store';
+import { LoaderSpinner }        from '../../shared/LoaderSpinner';
+import type { Ownership }       from '../../shared/types';
 
 export default function RecipeDetail({ recipe, ownership }: Props) {
   if (!recipe) {
     return <LoaderSpinner />;
-  }
+  }  // .....what???
   
   const {
     recipe_id,
@@ -196,10 +196,8 @@ type RequiredSubrecipeView = {
 function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   if (ownership === "private") return false;  // null? fragment?
 
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
-  const message             = useSelector(state => state.system.message);
-  const authname            = useSelector(state => state.authentication.authname);
+  const { authname } = useAuth();
+  const { my_favorite_recipes, my_saved_recipes } = useUserData();
 
   const [ feedback,  setFeedback ]  = useState("");
   const [ loading,   setLoading ]   = useState(false);
@@ -210,35 +208,21 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   if (!authname) return false;  // null? fragment?
   if (authname === author_id) return false;  // cannot favorite/save your own recipe
 
-  // move to 'useFeedback' ?
-  useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      setLoading(false);
-    }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
-
   const favorite = async () => {
     if (favorited) return;
     setLoading(true);
-
     try {
       const { data } = await axios.post(
-        `${endpoint}/users/${auth_id}/favorite-recipes/${recipe_id}`,
+        `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`,
         {withCredentials: true}
       );
       setFavorited(true);
+      window.scrollTo(0, 0);
       setFeedback(data.message);
-      //dispatch(getMyFavoriteRecipes());
+      //await getMyFavoriteRecipes();
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };
@@ -246,19 +230,18 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   const save = async () => {
     if (saved) return;
     setLoading(true);
-
     try {
       const { data } = await axios.post(
-        `${endpoint}/users/${auth_id}/saved-recipes/${recipe_id}`,
+        `${endpoint}/users/${authname}/saved-recipes/${recipe_id}`,
         {withCredentials: true}
       );
       setSaved(true);
+      window.scrollTo(0, 0);
       setFeedback(data.message);
-      //dispatch(getMyFavoriteRecipes());
+      //await getMySavedRecipes();
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     //delay(4000);
     setFeedback("");
   };

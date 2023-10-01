@@ -1,19 +1,18 @@
-import type { XYCoord }                                           from 'dnd-core';
-import update                                                     from 'immutability-helper';
-import { useSearchParams, useRouter }                             from 'next/navigation';
-import { memo, useEffect, useRef, useState }                      from 'react';
-import AriaModal                                                  from 'react-aria-modal';
+import axios from 'axios';
+import type { XYCoord } from 'dnd-core';
+import update from 'immutability-helper';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { memo, useEffect, useRef, useState } from 'react';
+import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-import { v4 as uuidv4 }                                           from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
+import { endpoint } from '../../../config/api';
+import { useAuth, useData, useUserData } from '../../../store';
+import type { RecipeOverview } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
-import { LoaderButton }   from '../../shared/LoaderButton';
+import { LoaderButton } from '../../shared/LoaderButton';
 import type { Ownership } from '../../shared/types';
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector
-} from '../../../redux';
-import type { WorkRecipe } from '../../shared/data/state';
 import type { PlanData, PlanRecipe } from '../state';
 
 export default function PlanForm({ ownership }: Props) {
@@ -22,8 +21,7 @@ export default function PlanForm({ ownership }: Props) {
   const params  = useSearchParams();
   const plan_id = params.get('plan_id');
 
-  const dispatch = useDispatch();
-  const message   = useSelector(state => state.system.message);
+  const { authname } = useAuth();
 
   const { allowedRecipes } = useAllowedContent(ownership, plan_id);
 
@@ -40,16 +38,12 @@ export default function PlanForm({ ownership }: Props) {
   useEffect(() => {
     const getExistingPlanToEdit = () => {
       window.scrollTo(0, 0);
-
       setLoading(true);
-
       const plan = my_private_plans.find(p => p.plan_id === plan_id);
-
       if (!plan) {
         setLoading(false);
         return;  // TO DO: redirect
       }
-
       setPlanName(plan.plan_name);
       setPlanData(plan.plan_data);
       setLoading(false);
@@ -59,26 +53,6 @@ export default function PlanForm({ ownership }: Props) {
       getExistingPlanToEdit();
     }
   }, []);
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    if (isSubscribed) {
-      if (message !== "") window.scrollTo(0, 0);
-      setFeedback(message);
-      if (message === "Plan created." || message === "Plan updated.") {
-        setTimeout(() => {
-          dispatch(clearWork());
-          router.push('/dashboard');
-        }, 3000);
-      }
-      setLoading(false);
-    }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [message]);
 
   const activateModal = () => setModalActive(true);
 
@@ -137,46 +111,48 @@ export default function PlanForm({ ownership }: Props) {
 
   const handleSubmit = async () => {
     if (!isValidPlan({plan_name, setFeedback})) return;
-
     setLoading(true);
-
     const plan_upload = {
       plan_name,
       plan_data: getPlanData()
     };
-
     if (plan_id) {
       const plan_update_upload = {plan_id, ...plan_upload};
-
       try {
         const { data } = await axios.patch(
-          `${endpoint}/users/${user_id}/${ownership}-plans`,
+          `${endpoint}/users/${authname}/${ownership}-plans`,
           plan_update_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
-        //dispatch(getMyPlans(ownership));
+        if (data.message === "Plan updated.") {
+          setTimeout(() => router.push('/dashboard'), 3000);
+        }
+        setFeedback(data.message);
+        //await getMyPlans(ownership);
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
-    
       //delay(4000);
       setFeedback("");
     } else {
       try {
         const { data } = await axios.post(
-          `${endpoint}/users/${user_id}/${ownership}-plans`,
+          `${endpoint}/users/${authname}/${ownership}-plans`,
           plan_upload,
           {withCredentials: true}
         );
-    
+        window.scrollTo(0, 0);
         setFeedback(data.message);
-        //dispatch(getMyPlans(ownership));
+        if (data.message === "Plan created.") {
+          setTimeout(() => router.push('/dashboard'), 3000);
+        }
+        setFeedback(data.message);
+        //await getMyPlans(ownership);
       } catch(err) {
         setFeedback('An error occurred. Please try again.');
       }
-    
       //delay(4000);
       setFeedback("");
     }
@@ -262,11 +238,12 @@ type Props = {
 };
 
 function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
-  const recipes             = useSelector(state => state.data.recipes);
-  const my_private_recipes  = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes   = useSelector(state => state.userData.my_public_recipes);
-  const my_favorite_recipes = useSelector(state => state.userData.my_favorite_recipes);
-  const my_saved_recipes    = useSelector(state => state.userData.my_saved_recipes);
+  const {
+    my_private_recipes,
+    my_public_recipes,
+    my_favorite_recipes,
+    my_saved_recipes
+  } = useUserData();
 
   //const my_private_plans    = useSelector(state => state.userData.my_private_plans);
 
@@ -281,7 +258,7 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
   // This MUST also be checked on the backend server!!!
 
   const allowedRecipes = [
-    ...recipes,
+    //...recipes,
     ...(
       ownership === "private"
       ? (
@@ -415,7 +392,6 @@ function ToolTip() {
 
 // TO DO: limit the max number of recipes per day -- wrap this in memo ? -- check your ref usage
 function Day({ day, expandedDay, recipes }: DayProps) {
-  const dispatch = useDispatch();
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
@@ -467,7 +443,6 @@ function Day({ day, expandedDay, recipes }: DayProps) {
 
 // TO DO: wrap this in memo?
 function ExpandedDay({ day, expandedDay, recipes }: DayProps) {
-  const dispatch = useDispatch();
   //const ref = useRef<HTMLDivElement>(null);
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
@@ -540,8 +515,6 @@ function Recipes({ day, expandedDay, recipes }: DayProps) {
 }
 
 function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProps) {
-  const dispatch = useDispatch();
-
   const ref = useRef<HTMLDivElement>(null);
 
   const [ , drag ] = useDrag({

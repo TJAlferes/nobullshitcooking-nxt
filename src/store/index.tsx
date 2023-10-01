@@ -489,12 +489,12 @@ type LoginParams = {
   auth_email:             string;
   authname:               string;
   my_friendships:         FriendshipView[];
-  my_public_plans:        PlanDataView[];
+  my_public_plans:        PlanView[];
   my_public_recipes:      RecipeOverview[];
   my_favorite_recipes:    RecipeOverview[];
   my_private_equipment:   EquipmentView[];
   my_private_ingredients: IngredientView[];
-  my_private_plans:       PlanDataView[];
+  my_private_plans:       PlanView[];
   my_private_recipes:     RecipeOverview[];
   my_saved_recipes:       RecipeOverview[];
   my_chatgroups:          ChatgroupView[];

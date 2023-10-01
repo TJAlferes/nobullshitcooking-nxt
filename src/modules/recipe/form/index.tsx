@@ -2,6 +2,7 @@ import axios                           from 'axios';
 import Link                            from 'next/link';
 import { useSearchParams, useRouter }  from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import type { ChangeEvent }            from 'react';
 import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
 import { v4 as uuidv4 }                from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -172,25 +173,18 @@ export default function RecipeForm({ ownership }: Props) {
     };
   }, []);
 
-  const changeRecipeType  = (e: SyntheticEvent) => setRecipeTypeId(Number((e.target as HTMLInputElement).value));
-  const changeCuisine     = (e: SyntheticEvent) => setCuisineId(Number((e.target as HTMLInputElement).value));
-  const changeTitle       = (e: SyntheticEvent) => setTitle((e.target as HTMLInputElement).value);
-  const changeDescription = (e: SyntheticEvent) => setDescription((e.target as HTMLInputElement).value);
-  const changeActiveTime  = (e: SyntheticEvent) => setActiveTime((e.target as HTMLInputElement).value);
-  const changeTotalTime   = (e: SyntheticEvent) => setTotalTime((e.target as HTMLInputElement).value);
-  const changeDirections  = (e: SyntheticEvent) => setDirections((e.target as HTMLInputElement).value);
+  const changeRecipeType  = (e: ChangeEvent<HTMLSelectElement>) => setRecipeTypeId(Number(e.target.value));
+  const changeCuisine     = (e: ChangeEvent<HTMLSelectElement>) => setCuisineId(Number(e.target.value));
+  const changeTitle       = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
+  const changeDescription = (e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value);
+  const changeActiveTime  = (e: ChangeEvent<HTMLInputElement>) => setActiveTime(e.target.value);
+  const changeTotalTime   = (e: ChangeEvent<HTMLInputElement>) => setTotalTime(e.target.value);
+  const changeDirections  = (e: ChangeEvent<HTMLTextAreaElement>) => setDirections(e.target.value);
 
-  const changeRecipeImageCaption = (e: SyntheticEvent) =>
-    setRecipeImageCaption((e.target as HTMLInputElement).value);
-
-  const changeEquipmentImageCaption = (e: SyntheticEvent) =>
-    setEquipmentImageCaption((e.target as HTMLInputElement).value);
-
-  const changeIngredientsImageCaption = (e: SyntheticEvent) =>
-    setIngredientsImageCaption((e.target as HTMLInputElement).value);
-
-  const changeCookingImageCaption = (e: SyntheticEvent) =>
-    setCookingImageCaption((e.target as HTMLInputElement).value);
+  const changeRecipeImageCaption      = (e: ChangeEvent<HTMLInputElement>) => setRecipeImageCaption(e.target.value);
+  const changeEquipmentImageCaption   = (e: ChangeEvent<HTMLInputElement>) => setEquipmentImageCaption(e.target.value);
+  const changeIngredientsImageCaption = (e: ChangeEvent<HTMLInputElement>) => setIngredientsImageCaption(e.target.value);
+  const changeCookingImageCaption     = (e: ChangeEvent<HTMLInputElement>) => setCookingImageCaption(e.target.value);
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
@@ -1217,15 +1211,15 @@ type Props = {
 };
 
 function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
-  const equipment              = useSelector(state => state.data.equipment);
-  const ingredients            = useSelector(state => state.data.ingredients);
-  const recipes                = useSelector(state => state.data.recipes);
-  const my_private_equipment   = useSelector(state => state.userData.my_private_equipment);
-  const my_private_ingredients = useSelector(state => state.userData.my_private_ingredients);
-  const my_private_recipes     = useSelector(state => state.userData.my_private_recipes);
-  const my_public_recipes      = useSelector(state => state.userData.my_public_recipes);
-  const my_favorite_recipes    = useSelector(state => state.userData.my_favorite_recipes);
-  const my_saved_recipes       = useSelector(state => state.userData.my_saved_recipes);
+  const { equipment, ingredients } = useData();
+  const {
+    my_private_equipment,
+    my_private_ingredients,
+    my_private_recipes,
+    my_public_recipes,
+    my_favorite_recipes,
+    my_saved_recipes
+  }= useUserData();
 
   // EXTREMELY IMPORTANT:
   // Note that:
@@ -1248,7 +1242,7 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
   ];
 
   const allowedRecipes = [
-    ...recipes,
+    //...recipes,
     ...(
       ownership === "private"
       ? (
@@ -1280,7 +1274,6 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
 
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
-type ChangeEvent =         React.ChangeEvent<HTMLInputElement>;
 type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
 

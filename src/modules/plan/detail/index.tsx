@@ -1,11 +1,8 @@
 import Link                           from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect }                  from 'react';
+import { useEffect, useState }        from 'react';
 
-import {
-  useTypedDispatch as useDispatch,
-  useTypedSelector as useSelector
-} from '../../../redux';
+import { useUserData } from '../../../store';
 import { Ownership } from '../../shared/types';
 
 export default function PlanDetail({ ownership }: Props) {
@@ -14,24 +11,20 @@ export default function PlanDetail({ ownership }: Props) {
   const params  = useSearchParams();
   const plan_id = params.get('plan_id');
 
-  const dispatch = useDispatch();
+  const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
-  const my_plans    = useSelector(state => state.userData.my_plans);
-  const expandedDay = useSelector(state => state.planDetail.expandedDay);
+  const [ expandedDay, setExpandedDay ] = useState();
   const planName    = useSelector(state => state.planDetail.plan_name);
   const planData    = useSelector(state => state.planDetail.plan_data);
 
   useEffect(() => {
     function getPlan() {
       window.scrollTo(0, 0);
-
       const plan = my_plans.find(p => p.plan_id === plan_id);
-
       if (!plan) {
         router.push('/');
         return;
       }
-
       setPlanName(plan.plan_name);
       setPlanData(plan.plan_data);
     };
@@ -100,8 +93,6 @@ type Props = {
 const url = "https://s3.amazonaws.com/nobsc-user-recipe";
 
 function Day({ day, recipes }: DayProps) {
-  const dispatch = useDispatch();
-
   const handleClickDay = () => clickDay(day);
 
   return (
@@ -113,8 +104,6 @@ function Day({ day, recipes }: DayProps) {
 }
 
 function ExpandedDay({ day, recipes }: DayProps) {
-  const dispatch = useDispatch();
-
   const handleClickDay = () => clickDay(day);
 
   return (
