@@ -218,8 +218,6 @@ export default function Friends() {
   );
 };
 
-const url = "https://s3.amazonaws.com/nobsc-user-avatars";
-
 const error = 'An error occurred. Please try again.';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

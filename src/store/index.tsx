@@ -28,8 +28,9 @@ function store() {
   const [ my_saved_recipes,       setMySavedRecipes ]       = useState(getItem("my_saved_recipes") || []);
   const [ my_chatgroups,          setMyChatgroups ]         = useState(getItem("my_chatgroups") || []);
   
-  const [ auth_id,  setAuthId ]   = useState(getItem("auth_id") || "");
-  const [ authname, setAuthname ] = useState(getItem("authname") || "");
+  const [ auth_id,    setAuthId ]    = useState(getItem("auth_id") || "");
+  const [ auth_email, setAuthEmail ] = useState(getItem("auth_email") || "");
+  const [ authname,   setAuthname ]  = useState(getItem("authname") || "");
 
   const [ connected, setConnected ] = useState(false);
 
@@ -146,6 +147,14 @@ function store() {
     }, []),
 
     auth_id,
+    // They cannot change their auth_id (user_id). It is set once when they login.
+    // They can, however, change their email, username, and password from their dashboard user account settings.
+    // (Their password, of course, is never sent from the server, so no need to store it here.)
+    auth_email,
+    setAuthEmail: useCallback((auth_email: string) => {
+      setAuthEmail(auth_email);
+      setItem("auth_email", auth_email);
+    }, []),
     authname,
     setAuthname: useCallback((authname: string) => {
       setAuthname(authname);
@@ -214,6 +223,8 @@ function store() {
     login: useCallback((params: LoginParams) => {
       setAuthId(params.auth_id);
       setItem("auth_id", params.auth_id);
+      setAuthEmail(params.auth_email);
+      setItem("auth_email", params.auth_email);
       setAuthname(params.authname);
       setItem("authname", params.authname);
 
@@ -239,6 +250,9 @@ function store() {
       setItem("my_chatgroups", params.my_chatgroups);
     }, []),
     logout: useCallback(() => {
+      sessionStorage.clear();
+      localStorage.clear();
+      
       setCuisines([]);
       setEquipment([]);
       setEquipmentTypes([]);
@@ -262,6 +276,7 @@ function store() {
       setMyChatgroups([]);
 
       setAuthId("");
+      setAuthEmail("");
       setAuthname("");
 
       setConnected(false);
@@ -275,8 +290,6 @@ function store() {
       setChatrooms([]);
       setChatroomUsers([]);
       setChatmessages([]);
-      
-      localStorage.clear();
     }, [])
   };
 }
@@ -338,11 +351,13 @@ export function useUserData() {
 
 export function useAuth() {
   return useContextSelector(StoreContext, (s) => ({
-    auth_id:     s.auth_id,
-    authname:    s.authname,
-    setAuthname: s.setAuthname,
-    login:       s.login,
-    logout:      s.logout,
+    auth_id:      s.auth_id,
+    auth_email:   s.auth_email,
+    setAuthEmail: s.setAuthEmail,
+    authname:     s.authname,
+    setAuthname:  s.setAuthname,
+    login:        s.login,
+    logout:       s.logout
   }));
 }
 
@@ -471,6 +486,7 @@ export type PlanView = {
 
 type LoginParams = {
   auth_id:                string;
+  auth_email:             string;
   authname:               string;
   my_friendships:         FriendshipView[];
   my_public_plans:        PlanDataView[];

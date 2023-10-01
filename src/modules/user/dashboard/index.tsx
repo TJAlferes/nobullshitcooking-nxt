@@ -1,37 +1,29 @@
-import axios                           from 'axios';
-import Link                            from 'next/link';
-import { useRouter }                   from 'next/navigation';
-import { useRef, useState }            from 'react';
-import AriaModal                       from 'react-aria-modal';
-import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
+import axios                          from 'axios';
+import Link                           from 'next/link';
+import { useRouter }                  from 'next/navigation';
+import { useRef, useState }           from 'react';
+import AriaModal                      from 'react-aria-modal';
+import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                from '../../../config/api';
-import { useAuth, useUserData }    from '../../../store';
-import { getCroppedImage }         from '../../shared/getCroppedImage';
-import { deletePublicPlan }        from '../../public/plan/state';
-import { disownPublicRecipe }      from '../../public/recipe/state';
-import { deletePrivateEquipment }  from '../equipment/state';
-import { deletePrivateIngredient } from '../ingredient/state';
-import { deletePrivatePlan }       from '../plan/state';
-import { deletePrivateRecipe }     from '../recipe/state';
-//deleteChatgroup
+import { endpoint }             from '../../../config/api';
+import { useAuth, useUserData } from '../../../store';
+import { getCroppedImage }      from '../../shared/getCroppedImage';
 
 export default function Dashboard() {
   const router = useRouter();
 
-  const { authname } = useAuth();
+  const { auth_email, setAuthEmail, authname, setAuthname, logout } = useAuth();
   const {
-    my_friendships,
-    my_public_plans,
-    my_public_recipes,
-    my_favorite_recipes,
-    my_private_equipment,
-    my_private_ingredients,
-    my_private_plans,
-    my_private_recipes,
-    my_saved_recipes,
-    my_chatgroups
+    my_public_plans,        setMyPublicPlans,
+    my_public_recipes,      setMyPublicRecipes,
+    my_favorite_recipes,    setMyFavoriteRecipes,
+    my_private_equipment,   setMyPrivateEquipment,
+    my_private_ingredients, setMyPrivateIngredients,
+    my_private_plans,       setMyPrivatePlans,
+    my_private_recipes,     setMyPrivateRecipes,
+    my_saved_recipes,       setMySavedRecipes,
+    my_chatgroups,          setMyChatgroups
   } = useUserData();
 
   const [ feedback, setFeedback ] = useState("");
@@ -62,78 +54,75 @@ export default function Dashboard() {
   const updateEmail = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
+      const res = await axios.patch(
         `${endpoint}/users/${authname}/update-email`,
         {new_email},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-      if (data.message === 'Email updated.') {
+      setFeedback(res.data.message);
+      if (res.data.message === 'Email updated.') {
+        setAuthEmail(new_email);
         router.push('/dashboard');
       }
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
-    setFeedback("")
+    setFeedback("");
   };
 
   const updatePassword = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
+      const res = await axios.patch(
         `${endpoint}/users/${authname}/update-password`,
         {new_password},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-      if (data.message === 'Password updated.') {
-        router.push('/dashboard');
-      }
+      setFeedback(res.data.message);
+      if (res.data.message === 'Password updated.') router.push('/dashboard');
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
-    setFeedback("")
+    setFeedback("");
   };
 
   const updateUsername = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.patch(
+      const res = await axios.patch(
         `${endpoint}/users/${authname}/update-username`,
         {new_username},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-      if (data.message === 'Email updated.') {
+      setFeedback(res.data.message);
+      if (res.data.message === 'Email updated.') {
+        setAuthname(new_username);
         router.push('/dashboard');
       }
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
-    setFeedback("")
+    setFeedback("");
   };
 
   const deleteAccount = async () => {
     setLoading(true);
     try {
-      const { data, status } = await axios.delete(
-        `${endpoint}/user/delete`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      if (status === 204) {
+      const res = await axios.delete(`${endpoint}/users/${authname}`, {withCredentials: true});
+      setFeedback(res.data.message);
+      if (res.status === 204) {
         setFeedback('User account deleted.');
-        // log them out here (clear localStorage and sessionStorage)
+        logout();
         router.push('/home');
       }
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
-    setFeedback("")
+    setFeedback("");
   };
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
@@ -158,79 +147,31 @@ export default function Dashboard() {
     setTinyAvatar(null);
   };
 
-  const deleteChatGroup = async (chatgroup_name: string) => {
+  const deleteChatGroup = async (chatgroup_id: string) => {
+    setLoading(true);
+    const url = `${endpoint}/users/${authname}/chatgroups`;
     try {
-      const response = await axios.delete(
-        `${endpoint}/users/${authname}/chatgroups/${chatgroup_name}`,
-        {withCredentials: true}
-      );
-      setFeedback(response.data.message);
+      const res1 = await axios.delete(`${url}/${chatgroup_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyChatgroups(res2.data);
     } catch (err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
     setFeedback("");
   };
 
-  const deletePlan = async (plan_id: string) => {
+  const deletePublicPlan = async (plan_id: string) => {
     setLoading(true);
+    const url = `${endpoint}/users/${authname}/public-plans`
     try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/private-plans/${plan_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //yield call(getMyEquipmentWorker);
+      const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPublicPlans(res2.data);
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
-    }
-    //delay(4000);
-    setFeedback("");
-  };
-
-  const deleteEquipment = async (equipment_id: string) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/private-equipment/${equipment_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyEquipment("private"));
-    } catch(err) {
-      setFeedback('An error occurred. Please try again.');
-    }
-    //delay(4000);
-    setFeedback("");
-  };
-
-  const deleteIngredient = async (ingredient_id: string) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyIngredients("private"));
-    } catch(err) {
-      setFeedback('An error occurred. Please try again.');
-    }
-    //delay(4000);
-    setFeedback("");
-  };
-
-  const deletePrivateRecipe = async (recipe_id: string) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/private-recipe/${recipe_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyRecipes("private"));
-    } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
     setFeedback("");
@@ -238,15 +179,74 @@ export default function Dashboard() {
 
   const disownPublicRecipe = async (recipe_id: string) => {
     setLoading(true);
+    const url = `${endpoint}/users/${authname}/public-recipes/${recipe_id}`;
     try {
-      const { data } = await axios.patch(
-        `${endpoint}/users/${authname}/public-recipe/${recipe_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyRecipes("private"));
+      const res1 = await axios.patch(`${url}/${recipe_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPublicRecipes(res2.data);
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
+    }
+    //delay(4000);
+    setFeedback("");
+  };
+
+  const deletePrivateEquipment = async (equipment_id: string) => {
+    setLoading(true);
+    const url = `${endpoint}/users/${authname}/private-equipment`;
+    try {
+      const res1 = await axios.delete(`${url}/${equipment_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPrivateEquipment(res2.data);
+    } catch(err) {
+      setFeedback(error);
+    }
+    //delay(4000);
+    setFeedback("");
+  };
+
+  const deletePrivateIngredient = async (ingredient_id: string) => {
+    setLoading(true);
+    const url = `${endpoint}/users/${authname}/private-ingredients`
+    try {
+      const res1 = await axios.delete(`${url}/${ingredient_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPrivateIngredients(res2.data);
+    } catch(err) {
+      setFeedback(error);
+    }
+    //delay(4000);
+    setFeedback("");
+  };
+
+  const deletePrivatePlan = async (plan_id: string) => {
+    setLoading(true);
+    const url = `${endpoint}/users/${authname}/private-plans`
+    try {
+      const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPrivatePlans(res2.data);
+    } catch(err) {
+      setFeedback(error);
+    }
+    //delay(4000);
+    setFeedback("");
+  };
+
+  const deletePrivateRecipe = async (recipe_id: string) => {
+    setLoading(true);
+    const url = `${endpoint}/users/${authname}/private-recipes`;
+    try {
+      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyPrivateRecipes(res2.data);
+    } catch(err) {
+      setFeedback(error);
     }
     //delay(4000);
     setFeedback("");
@@ -300,7 +300,7 @@ export default function Dashboard() {
         location.reload();  // ?  // refresh/update respective list
       }
     } catch (err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
     //delay(4000);
     setFeedback("");
@@ -308,36 +308,30 @@ export default function Dashboard() {
 
   const unfavorite = async (recipe_id: string) => {
     setLoading(true);
-
+    const url = `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`;
     try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyFavoriteRecipes());
+      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMyFavoriteRecipes(res2.data);
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
   };
 
   const unsave = async (recipe_id: string) => {
     setLoading(true);
-
+    const url = `${endpoint}/users/${authname}/saved-recipes/${recipe_id}`
     try {
-      const { data } = await axios.delete(
-        `${endpoint}/users/${authname}/saved-recipes/${recipe_id}`,
-        {withCredentials: true}
-      );
-      setFeedback(data.message);
-      //dispatch(getMyFavoriteRecipes());
+      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      setFeedback(res1.data.message);
+      const res2 = await axios.get(url, {withCredentials: true});
+      setMySavedRecipes(res2.data);
     } catch(err) {
-      setFeedback('An error occurred. Please try again.');
+      setFeedback(error);
     }
-
     //delay(4000);
     setFeedback("");
   };
@@ -836,6 +830,8 @@ function Subtabs({ subTab, subTabClick }: SubtabsProps) {
 async function uploadImageToAWSS3(signature: any, image: any) {
   await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }
+
+const error = 'An error occurred. Please try again.';
 
 const avatarUrl = "https://s3.amazonaws.com/nobsc-user-avatars";
 
