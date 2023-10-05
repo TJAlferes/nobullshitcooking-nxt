@@ -24,34 +24,32 @@ export default function Register() {
 
   const register = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.post(`${endpoint}/users`, {email, password, username});
-      setFeedback(res.data.message);
-      if (res.data.message === 'User account created.') {
-        // delay(4000);
-        router.push('/confirm');
+      if (res.status === 201) {
+        setFeedback('User account created.');
+        setTimeout(() => router.push('/confirm'), 4000);
+      } else {
+        setFeedback(res.data.error);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-    // delay(4000);
-    setFeedback("");
+    setLoading(false);
+    setTimeout(() => setFeedback(""), 4000);
   };
 
   const registerClick = async () => {
     if (loading) return;
-    if (!validateRegistrationInfo()) return;
     await register();
   };
 
   const registerKeyUp = async (e: React.KeyboardEvent) => {
     if (loading) return;
-    if (!validateRegistrationInfo()) return;
     if (e.key && (e.key !== "Enter")) return;
     await register();
   };
-
-  const validateRegistrationInfo = () => password == passwordAgain;
   
   return (
     <div className="register" onKeyUp={e => registerKeyUp(e)}>
@@ -71,7 +69,7 @@ export default function Register() {
           autoFocus
           disabled={loading}
           id="username"
-          minLength={2}
+          minLength={6}
           maxLength={20}
           name="username"
           onChange={usernameChange}
@@ -89,7 +87,7 @@ export default function Register() {
           maxLength={60}
           name="email"
           onChange={emailChange}
-          size={20}
+          size={60}
           type="email"
           value={email}
         />
@@ -100,10 +98,10 @@ export default function Register() {
           disabled={loading}
           id="password"
           minLength={6}
-          maxLength={20}
+          maxLength={60}
           name="password"
           onChange={passwordChange}
-          size={20}
+          size={60}
           type="password"
           value={password}
         />
@@ -113,17 +111,18 @@ export default function Register() {
           autoComplete="current-password"
           disabled={loading}
           id="passwordAgain"
-          maxLength={20}
+          minLength={6}
+          maxLength={60}
           name="passwordAgain"
           onChange={passwordAgainChange}
-          size={20}
+          size={60}
           type="password"
           value={passwordAgain}
         />
         
         <LoaderButton
           className="create-account"
-          disabled={!validateRegistrationInfo()}
+          disabled={password !== passwordAgain}
           id="create_account"
           isLoading={loading}
           loadingText="Creating Account..."

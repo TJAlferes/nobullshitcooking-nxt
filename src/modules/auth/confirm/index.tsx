@@ -10,6 +10,7 @@ export default function Confirm() {
   const router = useRouter();
 
   const [ confirmation_code, setConfirmationCode ] = useState("");
+  
   const [ email,    setEmail ]                     = useState("");
   const [ password, setPassword ]                  = useState("");
 
@@ -22,69 +23,58 @@ export default function Confirm() {
   
   const confirm = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(
-        `${endpoint}/confirm`,
-        {confirmation_code}
-      );
-      setFeedback(res.data.message);
-      if (res.data.message === "User account confirmed.") {
-        // delay(4000);
-        router.push('/login');
+      const res = await axios.patch(`${endpoint}/confirm`, {confirmation_code});
+      if (res.status === 204) {
+        setFeedback("User account confirmed.");
+        setTimeout(() => router.push('/login'), 4000);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-    // delay(4000);
-    setFeedback("");
+    setLoading(false);
+    setTimeout(() => setFeedback(""), 4000);
   };
 
   const requestResend = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(
-        `${endpoint}/resend-confirmation-code`,
-        {email, password}
-      );
-      setFeedback(res.data.message);
+      const res = await axios.patch(`${endpoint}/resend-confirmation-code`, {email, password});
+      if (res.status === 204) {
+        setFeedback("Confirmation code re-sent.");
+      } else {
+        setFeedback(res.data.error);
+      }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-    // delay(4000);
-    setFeedback("");
+    setLoading(false);
+    setTimeout(() => setFeedback(""), 4000);
   };
 
   const confirmClick = async () => {
     if (loading) return;
-    if (!validateConfirmationCode()) return;
-    setLoading(true);
     await confirm();
   };
 
   const confirmKeyUp = async (e: React.KeyboardEvent) => {
     if (loading) return;
-    if (!validateConfirmationCode()) return;
     if (e.key && (e.key !== "Enter")) return;
-    setLoading(true);
     await confirm();
   };
 
   const requestResendClick = async () => {
     if (loading) return;
-    if (!validateResendInfo()) return;
-    setLoading(true);
     await requestResend();
   };
 
   const requestResendKeyUp = async (e: React.KeyboardEvent) => {
     if (loading) return;
-    if (!validateResendInfo()) return;
-    setLoading(true);
+    if (e.key && (e.key !== "Enter")) return;
     await requestResend();
   };
-
-  const validateConfirmationCode = () => confirmation_code.length > 1;  // ???
-  const validateResendInfo = () => (email.length > 4 && password.length > 5);
   
   return (
     <div className="register" onKeyUp={e => confirmKeyUp(e)}>
@@ -104,10 +94,11 @@ export default function Confirm() {
           autoFocus
           disabled={loading}
           id="confirmationCode"
-          maxLength={20}
+          maxLength={36}
+          minLength={36}
           name="confirmationCode"
           onChange={confirmationCodeChange}
-          size={20}
+          size={36}
           type="text"
           value={confirmation_code}
         />
@@ -116,7 +107,7 @@ export default function Confirm() {
 
         <LoaderButton
           className="verify-confirmation-code"
-          disabled={!validateConfirmationCode()}
+          disabled={confirmation_code.length !== 36}
           id="verify_confirmation_code"
           isLoading={loading}
           loadingText="Confirming..."
@@ -134,10 +125,11 @@ export default function Confirm() {
           autoFocus
           disabled={loading}
           id="email"
-          maxLength={50}
+          maxLength={60}
+          minLength={5}
           name="email"
           onChange={emailChange}
-          size={20}
+          size={60}
           type="text"
           value={email}
         />
@@ -147,17 +139,22 @@ export default function Confirm() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
-          maxLength={20}
+          maxLength={60}
+          minLength={6}
           name="password"
           onChange={passwordChange}
-          size={20}
+          size={60}
           type="password"
           value={password}
         />
 
         <LoaderButton
           className="request-resend-confirmation-code"
-          disabled={!validateConfirmationCode()}
+          disabled={email.length < 5
+            || email.length > 60
+            || password.length < 6
+            || password.length > 60
+          }
           id="request-resend-confirmation-code"
           isLoading={loading}
           loadingText="Resending..."

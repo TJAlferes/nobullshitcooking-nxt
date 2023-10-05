@@ -23,23 +23,25 @@ export default function Login() {
 
   const loginHandler = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.post(
         `${endpoint}/login`,
         {email, password},
         {withCredentials: true}
       );
-      setFeedback(res.data.message);
-      if (res.data.message === 'Signed in.') {
+      if (res.status === 201) {
         login(res.data);
-        router.push('/dashboard');
+        setFeedback('Logged in.');
+        setTimeout(() => router.push('/dashboard'));
+      } else {
+        setFeedback(res.data.error);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
-    //delay(4000);
-    setFeedback("");
+    setLoading(false);
+    setTimeout(() => setFeedback(""), 4000);
   };
 
   const loginClick = (e: React.MouseEvent) => {
@@ -102,11 +104,11 @@ export default function Login() {
           disabled={!validateLoginInfo()}
           id="login-button"
           isLoading={loading}
-          loadingText="Signing In..."
+          loadingText="Logging In..."
           name="submit"
           onClick={loginClick}
           onKeyUp={loginKeyUp}
-          text="Sign In"
+          text="Login"
         />
       </form>
     </div>
