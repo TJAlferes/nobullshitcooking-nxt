@@ -98,61 +98,45 @@ export default function RecipeForm({ ownership }: Props) {
       setLoading(true);
       window.scrollTo(0, 0);
 
-      const res = await axios.post(
-        `${endpoint}/users/${authname}/${ownership}-recipes/edit`,
-        {recipe_id},
+      const res = await axios.get(
+        `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}/edit`,
         {withCredentials: true}
-      );  // .get???
+      );
       
-      const recipe: ExistingRecipeToEdit = res.data.recipe;
+      const recipe: ExistingRecipeToEdit = res.data;
       if (!recipe) {
         router.push(`/dashboard`);
         return;
       }
 
-      const {
-        recipe_type_id,
-        cuisine_id,
-        title,
-        description,
-        active_time,
-        total_time,
-        directions,
-        required_equipment,
-        required_ingredients,
-        required_methods,
-        required_subrecipes,
-        recipe_image,
-        equipment_image,
-        ingredients_image,
-        cooking_image
-      } = recipe;
+      setRecipeTypeId(recipe.recipe_type_id);
+      setCuisineId(recipe.cuisine_id);
+      setTitle(recipe.title);
+      setDescription(recipe.description);
+      setActiveTime(recipe.active_time);
+      setTotalTime(recipe.total_time);
+      setDirections(recipe.directions);
 
-      setRecipeTypeId(recipe_type_id);
-      setCuisineId(cuisine_id);
-      setTitle(title);
-      setDescription(description);
-      setActiveTime(active_time);
-      setTotalTime(total_time);
-      setDirections(directions);
       setUsedMethods(prevState => {
         const nextState = {...prevState};
-        required_methods?.map(({ method_id }) => {
+        recipe.required_methods?.map(({ method_id }) => {
           nextState[method_id] = true;
         });
         return nextState;
       });
-      setEquipmentRows(required_equipment.map(r => ({...r, key: uuidv4()})));
-      setIngredientRows(required_ingredients.map(r => ({...r, key: uuidv4()})));
-      setSubrecipeRows(required_subrecipes.map(r => ({...r, key: uuidv4()})));
-      setPreviousRecipeImageFilename(recipe_image.image_filename);
-      setPreviousEquipmentImageFilename(equipment_image.image_filename);
-      setPreviousIngredientsImageFilename(ingredients_image.image_filename);
-      setPreviousCookingImageFilename(cooking_image.image_filename);
-      setRecipeImageCaption(recipe_image.caption);
-      setEquipmentImageCaption(equipment_image.caption);
-      setIngredientsImageCaption(ingredients_image.caption);
-      setCookingImageCaption(cooking_image.caption);
+      setEquipmentRows(recipe.required_equipment.map(r => ({...r, key: uuidv4()})));
+      setIngredientRows(recipe.required_ingredients.map(r => ({...r, key: uuidv4()})));
+      setSubrecipeRows(recipe.required_subrecipes.map(r => ({...r, key: uuidv4()})));
+
+      setPreviousRecipeImageFilename(recipe.recipe_image.image_filename);
+      setPreviousEquipmentImageFilename(recipe.equipment_image.image_filename);
+      setPreviousIngredientsImageFilename(recipe.ingredients_image.image_filename);
+      setPreviousCookingImageFilename(recipe.cooking_image.image_filename);
+
+      setRecipeImageCaption(recipe.recipe_image.caption);
+      setEquipmentImageCaption(recipe.equipment_image.caption);
+      setIngredientsImageCaption(recipe.ingredients_image.caption);
+      setCookingImageCaption(recipe.cooking_image.caption);
 
       setLoading(false);
     }
@@ -337,29 +321,30 @@ export default function RecipeForm({ ownership }: Props) {
     setRecipeTinyImage(null);
   };
 
+  const getCheckedMethods = () => Object.keys(usedMethods)
+    .filter(key => usedMethods[parseInt(key)] === true)
+    .map(key => ({method_id: parseInt(key)}));
+
+  const getRequiredEquipment = () => equipmentRows.map(e => ({
+    amount:       e.amount,
+    equipment_id: e.equipment_id
+  }));
+
+  const getRequiredIngredients = () => ingredientRows.map(i => ({
+    amount:        i.amount,
+    unit_id:       i.unit_id,
+    ingredient_id: i.ingredient_id
+  }));
+
+  const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
+    amount:       s.amount,
+    unit_id:      s.unit_id,
+    subrecipe_id: s.subrecipe_id
+  }));
+
   const submit = async () => {
-    const getCheckedMethods = () => {
-      return Object.keys(usedMethods)
-        .filter(key => usedMethods[parseInt(key)] === true)
-        .map(key => ({method_id: parseInt(key)}));
-    };
-
-    const getRequiredEquipment = () => equipmentRows.map(e => ({
-      amount:       e.amount,
-      equipment_id: e.equipment_id
-    }));
-
-    const getRequiredIngredients = () => ingredientRows.map(i => ({
-      amount:        i.amount,
-      unit_id:       i.unit_id,
-      ingredient_id: i.ingredient_id
-    }));
-
-    const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
-      amount:       s.amount,
-      unit_id:      s.unit_id,
-      subrecipe_id: s.subrecipe_id
-    }));
+    setLoading(true);
+    window.scrollTo(0, 0);
 
     if (!isValidRecipeUpload({
       recipe_type_id,
@@ -420,168 +405,105 @@ export default function RecipeForm({ ownership }: Props) {
       }
     };
 
-    setLoading(true);
-
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-    if (recipe_id) {
-      const recipe_update_upload = {recipe_id, ...recipe_upload};
-      const {
-        recipe_image,
-        equipment_image,
-        ingredients_image,
-        cooking_image
-      } = recipe_update_upload;
+    const {
+      recipe_image,
+      equipment_image,
+      ingredients_image,
+      cooking_image
+    } = recipe_upload;
     
-      try {
-        // upload any images to AWS S3, then insert info into MySQL
+    // upload any images to AWS S3, then insert info into MySQL
+    try {
+      if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
+        const { data } = await axios.post(
+          `${endpoint}/user/signed-url`,
+          {subfolder: `${ownership}/recipe/`},
+          {withCredentials: true}
+        );
+        await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
+        await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
+        await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
+        // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
+        recipe_image.image_filename = data.filename;
+        // remove Files
+        recipe_image.medium = null;
+        recipe_image.thumb  = null;
+        recipe_image.tiny   = null;
+      }
     
-        if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
-          await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
-          await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
-          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
-          recipe_image.image_filename = data.filename;
-          // remove Files
-          recipe_image.medium = null;
-          recipe_image.thumb  = null;
-          recipe_image.tiny   = null;
-        }
+      if (equipment_image.medium) {
+        const { data } = await axios.post(
+          `${endpoint}/user/signed-url`,
+          {subfolder: `${ownership}/recipe-equipment/`},
+          {withCredentials: true}
+        );
+        await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
+        equipment_image.image_filename = data.filename;
+        equipment_image.medium = null;
+      }
     
-        if (equipment_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-equipment/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
-          equipment_image.image_filename = data.filename;
-          equipment_image.medium = null;
-        }
+      if (ingredients_image.medium) {
+        const { data } = await axios.post(
+          `${endpoint}/user/signed-url`,
+          {subfolder: `${ownership}/recipe-ingredients/`},
+          {withCredentials: true}
+        );
+        await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
+        ingredients_image.image_filename = data.filename;
+        ingredients_image.medium = null;
+      }
     
-        if (ingredients_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-ingredients/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
-          ingredients_image.image_filename = data.filename;
-          ingredients_image.medium = null;
-        }
-    
-        if (cooking_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-cooking/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
-          cooking_image.image_filename = data.filename;
-          cooking_image.medium = null;
-        }
-    
-        const { data } = await axios.patch(
+      if (cooking_image.medium) {
+        const { data } = await axios.post(
+          `${endpoint}/user/signed-url`,
+          {subfolder: `${ownership}/recipe-cooking/`},
+          {withCredentials: true}
+        );
+        await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
+        cooking_image.image_filename = data.filename;
+        cooking_image.medium = null;
+      }
+
+      if (recipe_id) {
+        // updating
+        const recipe_update_upload = {recipe_id, ...recipe_upload};
+        const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
           recipe_update_upload,
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        if (data.message === "Recipe created." || data.message === "Recipe updated.") {
-          setTimeout(() => router.push(`/dashboard`), 3000);
+        if (res.status === 204) {
+          setFeedback("Recipe updated.");
+          await getMyRecipes(ownership);
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-        //await getMyRecipes(ownership);
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
-      }
-    
-      //delay(4000);
-      setFeedback("");
-    } else {
-      const {
-        recipe_image,
-        equipment_image,
-        ingredients_image,
-        cooking_image
-      } = recipe_upload;
-    
-      try {
-        // upload any images to AWS S3, then insert info into MySQL
-    
-        if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
-          await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
-          await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
-          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
-          recipe_image.image_filename = data.filename;
-          // remove Files
-          recipe_image.medium = null;
-          recipe_image.thumb  = null;
-          recipe_image.tiny   = null;
-        }
-    
-        if (equipment_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-equipment/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
-          equipment_image.image_filename = data.filename;
-          equipment_image.medium = null;
-        }
-    
-        if (ingredients_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-ingredients/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
-          ingredients_image.image_filename = data.filename;
-          ingredients_image.medium = null;
-        }
-    
-        if (cooking_image.medium) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/recipe-cooking/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
-          cooking_image.image_filename = data.filename;
-          cooking_image.medium = null;
-        }
-    
-        const { data } = await axios.post(
+      } else {
+        //creating
+        const res = await axios.post(
           `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
           recipe_upload,
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        if (data.message === "Recipe created." || data.message === "Recipe updated.") {
-          setTimeout(() => router.push(`/dashboard`), 3000);
+        if (res.status === 201) {
+          setFeedback("Recipe created.");
+          await getMyRecipes(ownership);
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-        //await getMyRecipes(ownership);
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
       }
-    
-      //delay(4000);
-      setFeedback("");
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
     }
+
+    setTimeout(() => {
+      setFeedback("");
+      setLoading(false);
+    }, 4000);
   };
 
   return (
@@ -699,7 +621,7 @@ export default function RecipeForm({ ownership }: Props) {
                 name="amount"
                 onChange={(e) => changeEquipmentRow(e, key)}
                 required
-                value={amount}
+                value={amount ?? ""}
               >
                 <option value={0}>Select amount (optional)</option>
                 <option value={1}>1</option>
@@ -767,7 +689,7 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => changeIngredientRow(e, key)}
                 step="any"
                 type="number"
-                value={amount}
+                value={amount ?? ""}
                 placeholder='Enter amount (optional)'
               />
 
@@ -775,7 +697,7 @@ export default function RecipeForm({ ownership }: Props) {
               <select
                 name="unit"
                 onChange={(e) => changeIngredientRow(e, key)}
-                value={unit_id}
+                value={unit_id ?? ""}
               >
                 <option value={0}>Select unit (optional)</option>
                 {units.map((u, index) => (
@@ -844,7 +766,7 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => changeSubrecipeRow(e, s.key)}
                 step="any"
                 type="number"
-                value={s.amount}
+                value={s.amount ?? ""}
                 placeholder='Enter amount (optional)'
               />
               
@@ -852,7 +774,7 @@ export default function RecipeForm({ ownership }: Props) {
               <select
                 name="unit"
                 onChange={(e) => changeSubrecipeRow(e, s.key)}
-                value={s.unit_id}
+                value={s.unit_id ?? ""}
               >
                 <option value={0}>Select unit (optional)</option>
                 {units.map((u, index) => (
@@ -1459,19 +1381,19 @@ export type RequiredMethod = {
 };
 
 export type RequiredEquipment = {
-  amount:       number;
+  amount:       number | null;
   equipment_id: string;
 };
 
 export type RequiredIngredient = {
-  amount:        number;
-  unit_id:       number;
+  amount:        number | null;
+  unit_id:       number | null;
   ingredient_id: string;
 };
 
 export type RequiredSubrecipe = {
-  amount:       number;
-  unit_id:      number;
+  amount:       number | null;
+  unit_id:      number | null;
   subrecipe_id: string;
 };
 
@@ -1519,17 +1441,17 @@ export type Methods = {
 };
 
 export type EquipmentRow = ExistingRequiredEquipment & {
-  [index: string]: number|string;
+  [index: string]: number|string|null;
   key: string;
 };
 
 export type IngredientRow = ExistingRequiredIngredient & {
-  [index: string]: number|string;
+  [index: string]: number|string|null;
   key: string;
 };
 
 export type SubrecipeRow = ExistingRequiredSubrecipe & {
-  [index: string]: number|string;
+  [index: string]: number|string|null;
   key: string;
 };
 
