@@ -19,6 +19,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
   const { authname } = useAuth();
   const { equipment_types } = useData();
+  const { setMyPrivateEquipment } = useUserData();
 
   const allowedEquipment = useAllowedEquipment(ownership);
 
@@ -83,6 +84,11 @@ export default function EquipmentForm({ ownership }: Props) {
     };
   }, []);  // do this in getServerSideProps???
 
+  const getMyPrivateEquipment = async () => {
+    const res = await axios.get(`${endpoint}/users/${authname}/private-equipment`, {withCredentials: true});
+    setMyPrivateEquipment(res.data);
+  };
+
   const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
   const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
   const changeNotes          = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
@@ -120,6 +126,9 @@ export default function EquipmentForm({ ownership }: Props) {
   };
 
   const submit = async () => {
+    setLoading(true);
+    window.scrollTo(0, 0);
+
     if (!isValidEquipmentUpload({
       equipment_type_id,
       equipment_name,
@@ -139,76 +148,61 @@ export default function EquipmentForm({ ownership }: Props) {
       }
     };
 
-    setLoading(true);
-
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-    if (equipment_id) {
-      const equipment_update_upload = {equipment_id, ...equipment_upload};
-      const { image } = equipment_update_upload;
-      try {
-        if (image.small && image.tiny) {
-          const { data: { filename, fullSignature, tinySignature } } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/equipment/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(fullSignature, image.small);
-          await uploadImageToAWSS3(tinySignature, image.tiny);
-          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
-          image.image_filename = filename;
-          image.small = null;
-          image.tiny  = null;
-        }
-        const { data } = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
-          equipment_update_upload,
+    
+    // upload any images to AWS S3, then insert info into MySQL
+    const { image } = equipment_upload;
+    try {
+      if (image.small && image.tiny) {
+        const { data } = await axios.post(
+          `${endpoint}/signed-url`,
+          {subfolder: `${ownership}/equipment/`},
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        //await getMyEquipment();
-        if (data.message === "Equipment created." || data.message === "Equipment updated.") {
-          setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
-        }
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
+        await uploadImageToAWSS3(data.smallSignature, image.small);
+        await uploadImageToAWSS3(data.tinySignature, image.tiny);
+        image.image_filename = data.filename;
+        image.small = null;
+        image.tiny  = null;
       }
-      //delay(4000);
-      setFeedback("");
-    } else {
-      const { image } = equipment_upload;
-      try {
-        if (image.small && image.tiny) {
-          const { data: { filename, fullSignature, tinySignature } } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: `${ownership}/equipment/`},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(fullSignature, image.small);
-          await uploadImageToAWSS3(tinySignature, image.tiny);
-          // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
-          image.image_filename = filename;
-          image.small = null;
-          image.tiny  = null;
+
+      const editing = equipment_id !== null;
+      if (editing) {
+        const res = await axios.patch(
+          `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
+          {equipment_id, ...equipment_upload},
+          {withCredentials: true}
+        );
+        if (res.status === 204) {
+          setFeedback("Equipment updated.");
+          await getMyPrivateEquipment();
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-        const { data } = await axios.post(
+      } else {
+        const res = await axios.post(
           `${endpoint}/users/${authname}/${ownership}-equipment`,
           equipment_upload,
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        //await getMyEquipment();
-        if (data.message === "Equipment created." || data.message === "Equipment updated.") {
-          setTimeout(() => router.push(`/${authname}/private/dashboard`), 3000);
+        if (res.status === 201) {
+          setFeedback("Equipment created.");
+          await getMyPrivateEquipment();
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
       }
-      //delay(4000);
-      setFeedback("");
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
     }
+
+    setTimeout(() => {
+      setFeedback("");
+      setLoading(false);
+    }, 4000);
   };
   
   return (

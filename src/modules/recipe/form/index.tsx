@@ -12,7 +12,6 @@ import { useAuth, useData, useUserData } from '../../../store';
 import { LoaderButton }                  from '../../shared/LoaderButton';
 import { getCroppedImage }               from '../../shared/getCroppedImage';
 import type { Ownership }                from '../../shared/types';
-//import { getMyRecipes }                  from '../../user/data/state';
 
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
@@ -22,6 +21,7 @@ export default function RecipeForm({ ownership }: Props) {
 
   const { authname } = useAuth();
   const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
+  const { setMyPublicRecipes, setMyPrivateRecipes } = useUserData();
 
   const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
 
@@ -156,6 +156,16 @@ export default function RecipeForm({ ownership }: Props) {
       mounted = false;
     };
   }, []);
+
+  const getMyRecipes = async () => {
+    if (ownership === "public") {
+      const res = await axios.get(`${endpoint}/users/${authname}/public-recipes`);
+      setMyPublicRecipes(res.data);
+    } else if (ownership === "private") {
+      const res = await axios.get(`${endpoint}/users/${authname}/private-recipes`, {withCredentials: true});
+      setMyPrivateRecipes(res.data);
+    }
+  };
 
   const changeRecipeType  = (e: ChangeEvent<HTMLSelectElement>) => setRecipeTypeId(Number(e.target.value));
   const changeCuisine     = (e: ChangeEvent<HTMLSelectElement>) => setCuisineId(Number(e.target.value));
@@ -325,6 +335,8 @@ export default function RecipeForm({ ownership }: Props) {
     .filter(key => usedMethods[parseInt(key)] === true)
     .map(key => ({method_id: parseInt(key)}));
 
+  // TO DO: map "" to null here?
+
   const getRequiredEquipment = () => equipmentRows.map(e => ({
     amount:       e.amount,
     equipment_id: e.equipment_id
@@ -373,6 +385,7 @@ export default function RecipeForm({ ownership }: Props) {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
+      // TO DO: how can they reset image_filename to "default"? Do they even need this ability?
       recipe_image: {
         image_filename: recipe_id ? previousRecipeImageFilename : "default",
         caption:        recipeImageCaption,
@@ -407,27 +420,25 @@ export default function RecipeForm({ ownership }: Props) {
 
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
+
+    // upload any images to AWS S3, then insert info into MySQL
     const {
       recipe_image,
       equipment_image,
       ingredients_image,
       cooking_image
     } = recipe_upload;
-    
-    // upload any images to AWS S3, then insert info into MySQL
     try {
       if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
         const { data } = await axios.post(
-          `${endpoint}/user/signed-url`,
+          `${endpoint}/signed-url`,
           {subfolder: `${ownership}/recipe/`},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.fullSignature, recipe_image.medium);
+        await uploadImageToAWSS3(data.mediumSignature, recipe_image.medium);
         await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
         await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
-        // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
         recipe_image.image_filename = data.filename;
-        // remove Files
         recipe_image.medium = null;
         recipe_image.thumb  = null;
         recipe_image.tiny   = null;
@@ -435,54 +446,52 @@ export default function RecipeForm({ ownership }: Props) {
     
       if (equipment_image.medium) {
         const { data } = await axios.post(
-          `${endpoint}/user/signed-url`,
+          `${endpoint}/signed-url`,
           {subfolder: `${ownership}/recipe-equipment/`},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.fullSignature, equipment_image.medium);
+        await uploadImageToAWSS3(data.mediumSignature, equipment_image.medium);
         equipment_image.image_filename = data.filename;
         equipment_image.medium = null;
       }
     
       if (ingredients_image.medium) {
         const { data } = await axios.post(
-          `${endpoint}/user/signed-url`,
+          `${endpoint}/signed-url`,
           {subfolder: `${ownership}/recipe-ingredients/`},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.fullSignature, ingredients_image.medium);
+        await uploadImageToAWSS3(data.mediumSignature, ingredients_image.medium);
         ingredients_image.image_filename = data.filename;
         ingredients_image.medium = null;
       }
     
       if (cooking_image.medium) {
         const { data } = await axios.post(
-          `${endpoint}/user/signed-url`,
+          `${endpoint}/signed-url`,
           {subfolder: `${ownership}/recipe-cooking/`},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.fullSignature, cooking_image.medium);
+        await uploadImageToAWSS3(data.mediumSignature, cooking_image.medium);
         cooking_image.image_filename = data.filename;
         cooking_image.medium = null;
       }
 
-      if (recipe_id) {
-        // updating
-        const recipe_update_upload = {recipe_id, ...recipe_upload};
+      const editing = recipe_id !== null;
+      if (editing) {
         const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
-          recipe_update_upload,
+          {recipe_id, ...recipe_upload},
           {withCredentials: true}
         );
         if (res.status === 204) {
           setFeedback("Recipe updated.");
-          await getMyRecipes(ownership);
+          await getMyRecipes();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {
           setFeedback(res.data.error);
         }
       } else {
-        //creating
         const res = await axios.post(
           `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
           recipe_upload,
@@ -490,7 +499,7 @@ export default function RecipeForm({ ownership }: Props) {
         );
         if (res.status === 201) {
           setFeedback("Recipe created.");
-          await getMyRecipes(ownership);
+          await getMyRecipes();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {
           setFeedback(res.data.error);
@@ -1163,6 +1172,7 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
     ...(ownership === "private" ? my_private_ingredients : [])
   ];
 
+  // TO DO: let them search official recipes here
   const allowedRecipes = [
     //...recipes,
     ...(

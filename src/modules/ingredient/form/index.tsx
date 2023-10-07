@@ -19,6 +19,7 @@ export default function IngredientForm({ ownership }: Props) {
 
   const { authname } = useAuth();
   const { ingredient_types } = useData();
+  const { setMyPrivateIngredients } = useUserData();
 
   const allowedIngredients = useAllowedIngredients(ownership);
 
@@ -89,6 +90,11 @@ export default function IngredientForm({ ownership }: Props) {
     };
   }, []);  // do this in getServerSideProps???
 
+  const getMyPrivateIngredients = async () => {
+    const res = await axios.get(`${endpoint}/users/${authname}/private-ingredients`, {withCredentials: true});
+    setMyPrivateIngredients(res.data);
+  };
+
   const changeIngredientType     = (e: SyntheticEvent) => setIngredientTypeId(Number((e.target as HTMLInputElement).value));
   const changeIngredientBrand    = (e: SyntheticEvent) => setIngredientBrand((e.target as HTMLInputElement).value);
   const changeIngredientVariety  = (e: SyntheticEvent) => setIngredientVariety((e.target as HTMLInputElement).value);
@@ -128,6 +134,9 @@ export default function IngredientForm({ ownership }: Props) {
   };
 
   const submit = async () => {
+    setLoading(true);
+    window.scrollTo(0, 0);
+
     if (!isValidIngredientUpload({
       ingredient_type_id,
       ingredient_brand,
@@ -153,78 +162,61 @@ export default function IngredientForm({ ownership }: Props) {
       }
     };
 
-    setLoading(true);
-
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE INGREDIENT
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-    if (ingredient_id) {
-      const ingredient_update_upload = {ingredient_id, ...ingredient_upload};
-      const { image } = ingredient_update_upload;
-    
-      try {
-        if (image.small && image.tiny) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: 'private/ingredient/'},
-            {withCredentials: true}
-          );
-    
-          await uploadImageToAWSS3(data.fullSignature, image.small);
-          await uploadImageToAWSS3(data.tinySignature, image.tiny);
-    
-          image.image_filename = data.filename;
-        }
-    
-        const { data } = await axios.patch(
-          `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
-          ingredient_update_upload,
+
+    // upload any images to AWS S3, then insert info into MySQL
+    const { image } = ingredient_upload;
+    try {
+      if (image.small && image.tiny) {
+        const { data } = await axios.post(
+          `${endpoint}/signed-url`,
+          {subfolder: 'private/ingredient/'},
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        //dispatch(getMyIngredients(ownership));
-        if (data.message === "Ingredient created." || data.message === "Ingredient updated.") {
-          setTimeout(() => router.push('/dashboard'), 3000);
-        }
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
+        await uploadImageToAWSS3(data.smallSignature, image.small);
+        await uploadImageToAWSS3(data.tinySignature, image.tiny);
+        image.image_filename = data.filename;
+        image.small = null;
+        image.tiny  = null;
       }
-    
-      //delay(4000);
-      setFeedback("");
-    } else {
-      const { image } = ingredient_upload;
-    
-      try {
-        if (image.small && image.tiny) {
-          const { data } = await axios.post(
-            `${endpoint}/user/signed-url`,
-            {subfolder: 'private/ingredient/'},
-            {withCredentials: true}
-          );
-          await uploadImageToAWSS3(data.fullSignature, image.small);
-          await uploadImageToAWSS3(data.tinySignature, image.tiny);
-          image.image_filename = data.filename;
+
+      const editing = ingredient_id !== null;
+      if (editing) {
+        const res = await axios.patch(
+          `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
+          {ingredient_id, ...ingredient_upload},
+          {withCredentials: true}
+        );
+        if (res.status === 204) {
+          setFeedback("Ingredient updated.");
+          await getMyPrivateIngredients();
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-    
-        const { data } = await axios.post(
+      } else {
+        const res = await axios.post(
           `${endpoint}/users/${authname}/private-ingredients`,
           ingredient_upload,
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        //dispatch(getMyIngredients(ownership));
-        if (data.message === "Ingredient created." || data.message === "Ingredient updated.") {
-          setTimeout(() => router.push('/dashboard'), 3000);
+        if (res.status === 201) {
+          setFeedback("Ingredient created.");
+          await getMyPrivateIngredients();
+          setTimeout(() => router.push(`/dashboard`), 4000);
+        } else {
+          setFeedback(res.data.error);
         }
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
       }
-    
-      //delay(4000);
-      setFeedback("");
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
     }
+  
+    setTimeout(() => {
+      setFeedback("");
+      setLoading(false);
+    }, 4000);
   };
 
   return (
