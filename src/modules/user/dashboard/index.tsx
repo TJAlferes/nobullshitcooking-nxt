@@ -13,7 +13,12 @@ import { getCroppedImage }      from '../../shared/getCroppedImage';
 export default function Dashboard() {
   const router = useRouter();
 
-  const { auth_email, setAuthEmail, authname, setAuthname, logout } = useAuth();
+  const {
+    auth_email, setAuthEmail,
+    authname, setAuthname,
+    auth_avatar, setAuthAvatar,
+    logout
+  } = useAuth();
   const {
     my_public_plans,        setMyPublicPlans,
     my_public_recipes,      setMyPublicRecipes,
@@ -38,13 +43,14 @@ export default function Dashboard() {
   const [ new_email,    setNewEmail ]    = useState("");
   const [ new_password, setNewPassword ] = useState("");
   const [ new_username, setNewUsername ] = useState("");
-  const [ avatar,     setAvatar ]     = useState<string | ArrayBuffer | null>(null);
-  const [ fullAvatar, setFullAvatar ] = useState<File | null>(null);
-  const [ tinyAvatar, setTinyAvatar ] = useState<File | null>(null);
 
-  const [ crop, setCrop ] = useState<Crop>(initialCrop);
-  const [ fullCrop, setFullCrop ] = useState("");
-  const [ tinyCrop, setTinyCrop ] = useState("");
+  const [ avatar,     setAvatar ]        = useState<string | ArrayBuffer | null>(null);
+  const [ small_avatar, setSmallAvatar ] = useState<File | null>(null);
+  const [ tiny_avatar, setTinyAvatar ]   = useState<File | null>(null);
+
+  const [ crop, setCrop ]           = useState<Crop>(initialCrop);
+  const [ smallCrop, setSmallCrop ] = useState("");
+  const [ tinyCrop, setTinyCrop ]   = useState("");
 
   const imageRef = useRef<HTMLImageElement | null>();
 
@@ -53,76 +59,97 @@ export default function Dashboard() {
 
   const updateEmail = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.patch(
         `${endpoint}/users/${authname}/update-email`,
         {new_email},
         {withCredentials: true}
       );
-      setFeedback(res.data.message);
-      if (res.data.message === 'Email updated.') {
+      if (res.status === 204) {
+        setFeedback("Email updated.")
         setAuthEmail(new_email);
-        router.push('/dashboard');
+        setTimeout(() => router.push('/dashboard'), 3000);
+      } else {
+        setFeedback(res.data.message);
       }
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const updatePassword = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.patch(
         `${endpoint}/users/${authname}/update-password`,
         {new_password},
         {withCredentials: true}
       );
-      setFeedback(res.data.message);
-      if (res.data.message === 'Password updated.') router.push('/dashboard');
-    } catch(err) {
+      if (res.status === 204) {
+        setFeedback("Password updated.")
+        setTimeout(() => router.push('/dashboard'), 3000);
+      } else {
+        setFeedback(res.data.message);
+      }
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const updateUsername = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.patch(
         `${endpoint}/users/${authname}/update-username`,
         {new_username},
         {withCredentials: true}
       );
-      setFeedback(res.data.message);
-      if (res.data.message === 'Email updated.') {
+      if (res.status === 204) {
+        setFeedback("Username updated.")
         setAuthname(new_username);
-        router.push('/dashboard');
+        setTimeout(() => router.push('/dashboard'), 3000);
+      } else {
+        setFeedback(res.data.message);
       }
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const deleteAccount = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
       const res = await axios.delete(`${endpoint}/users/${authname}`, {withCredentials: true});
-      setFeedback(res.data.message);
       if (res.status === 204) {
         setFeedback('User account deleted.');
         logout();
         router.push('/home');
+      } else {
+        setFeedback(res.data.message);
       }
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
@@ -140,14 +167,14 @@ export default function Dashboard() {
   };
 
   const cancelAvatar = () => {
-    setFullCrop("");
+    setSmallCrop("");
     setTinyCrop("");
     setAvatar(null)
-    setFullAvatar(null);
+    setSmallAvatar(null);
     setTinyAvatar(null);
   };
 
-  const deleteChatGroup = async (chatgroup_id: string) => {
+  /*const deleteChatGroup = async (chatgroup_id: string) => {
     setLoading(true);
     const url = `${endpoint}/users/${authname}/chatgroups`;
     try {
@@ -158,98 +185,118 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
-  };
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
+  };*/
 
-  const deletePublicPlan = async (plan_id: string) => {
+  const unattributePublicPlan = async (plan_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/public-plans`
     try {
       const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPublicPlans(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
-  const disownPublicRecipe = async (recipe_id: string) => {
+  const unattributePublicRecipe = async (recipe_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/public-recipes/${recipe_id}`;
     try {
       const res1 = await axios.patch(`${url}/${recipe_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPublicRecipes(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const deletePrivateEquipment = async (equipment_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/private-equipment`;
     try {
       const res1 = await axios.delete(`${url}/${equipment_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPrivateEquipment(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const deletePrivateIngredient = async (ingredient_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/private-ingredients`
     try {
       const res1 = await axios.delete(`${url}/${ingredient_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPrivateIngredients(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const deletePrivatePlan = async (plan_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/private-plans`
     try {
       const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPrivatePlans(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const deletePrivateRecipe = async (recipe_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/private-recipes`;
     try {
       const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
       setFeedback(res1.data.message);
       const res2 = await axios.get(url, {withCredentials: true});
       setMyPrivateRecipes(res2.data);
-    } catch(err) {
+    } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,12 +309,12 @@ export default function Dashboard() {
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
-    const full = await getCroppedImage(250, 250, imageRef.current, crop);
+    const small = await getCroppedImage(250, 250, imageRef.current, crop);
     const tiny = await getCroppedImage(25,  25,  imageRef.current, crop);
-    if (!full || !tiny) return;
-    setFullCrop(full.preview);
+    if (!small || !tiny) return;
+    setSmallCrop(small.preview);
     setTinyCrop(tiny.preview);
-    setFullAvatar(full.final);
+    setSmallAvatar(small.final);
     setTinyAvatar(tiny.final);
   };
 
@@ -279,31 +326,38 @@ export default function Dashboard() {
 
   const uploadAvatar = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
-      if (avatar.small && avatar.tiny) {
-        const { data: { filename, fullSignature, tinySignature } } = await axios.post(
+      let new_avatar = "";
+      if (small_avatar && tiny_avatar) {
+        const { data } = await axios.post(
           `${endpoint}/user/signed-url`,
           {subfolder: 'public/avatar/'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(fullSignature, full_avatar);
-        await uploadImageToAWSS3(tinySignature, tiny_avatar);
-        avatar.image_filename = filename;
+        await uploadImageToAWSS3(data.smallSignature, small_avatar);
+        await uploadImageToAWSS3(data.tinySignature, tiny_avatar);
+        new_avatar = data.filename;
       }
-      const { data } = await axios.patch(
+      const res = await axios.patch(
         `${endpoint}/users/${authname}/avatar`,
-        {avatar: avatarUrl},
+        {new_avatar},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-      if (data.message === 'Avatar set.') {
-        location.reload();  // ?  // refresh/update respective list
+      if (res.status === 204) {
+        setFeedback("Avatar updated.");
+        setAuthAvatar(new_avatar);
+        setTimeout(() => router.push(`/dashboard`), 3000);
+      } else {
+        setFeedback(res.data.message);
       }
     } catch (err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const unfavorite = async (recipe_id: string) => {
@@ -359,12 +413,12 @@ export default function Dashboard() {
               <div className="avatar-crops">
                 <div className="--full">
                   <span>Full Size: </span>
-                  <img src={`${avatarUrl}/${authname}`} />
+                  <img src={`${avatarUrl}/${auth_avatar}`} />
                 </div>
 
                 <div className="--tiny">
                   <span>Tiny Size: </span>
-                  <img src={`${avatarUrl}/${authname}-tiny`} />
+                  <img src={`${avatarUrl}/${auth_avatar}-tiny`} />
                 </div>
               </div>
       
@@ -397,7 +451,7 @@ export default function Dashboard() {
               <div className="avatar-crops">
                 <div className="--full">
                   <span>Full Size: </span>
-                  <img src={fullCrop} />
+                  <img src={smallCrop} />
                 </div>
 
                 <div className="--tiny">
