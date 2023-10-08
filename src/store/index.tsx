@@ -31,6 +31,7 @@ function store() {
   const [ auth_id,    setAuthId ]    = useState<string>(getItem("auth_id") || "");
   const [ auth_email, setAuthEmail ] = useState<string>(getItem("auth_email") || "");
   const [ authname,   setAuthname ]  = useState<string>(getItem("authname") || "");
+  const [ auth_avatar, setAuthAvatar ] = useState<string>(getItem("auth_avatar") || "");
 
   const [ connected, setConnected ] = useState(false);
 
@@ -50,7 +51,7 @@ function store() {
   return {
     cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
-      setCuisines(cuisines);
+      setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
       setItem("cuisines", cuisines);
     }, []),
     equipment,
@@ -148,7 +149,7 @@ function store() {
 
     auth_id,
     // They cannot change their auth_id (user_id). It is set once when they login.
-    // They can, however, change their email, username, and password from their dashboard user account settings.
+    // They can, however, change their email, username (authname), password, and avatar from their dashboard user account settings.
     // (Their password, of course, is never sent from the server, so no need to store it here.)
     auth_email,
     setAuthEmail: useCallback((auth_email: string) => {
@@ -159,6 +160,11 @@ function store() {
     setAuthname: useCallback((authname: string) => {
       setAuthname(authname);
       setItem("authname", authname);
+    }, []),
+    auth_avatar,
+    setAuthAvatar: useCallback((auth_avatar: string) => {
+      setAuthAvatar(auth_avatar);
+      setItem("auth_avatar", auth_avatar);
     }, []),
 
     connected,
@@ -278,6 +284,7 @@ function store() {
       setAuthId("");
       setAuthEmail("");
       setAuthname("");
+      setAuthAvatar("");
 
       setConnected(false);
       setCurrentPrivateConversation("");
@@ -351,13 +358,16 @@ export function useUserData() {
 
 export function useAuth() {
   return useContextSelector(StoreContext, (s) => ({
-    auth_id:      s.auth_id,
-    auth_email:   s.auth_email,
-    setAuthEmail: s.setAuthEmail,
-    authname:     s.authname,
-    setAuthname:  s.setAuthname,
-    login:        s.login,
-    logout:       s.logout
+    auth_id:       s.auth_id,
+    auth_email:    s.auth_email,
+    setAuthEmail:  s.setAuthEmail,
+    authname:      s.authname,
+    setAuthname:   s.setAuthname,
+    auth_avatar:   s.auth_avatar,
+    setAuthAvatar: s.setAuthAvatar,
+    
+    login:         s.login,
+    logout:        s.logout
   }));
 }
 

@@ -28,7 +28,7 @@ export default function Dashboard() {
     my_private_plans,       setMyPrivatePlans,
     my_private_recipes,     setMyPrivateRecipes,
     my_saved_recipes,       setMySavedRecipes,
-    my_chatgroups,          setMyChatgroups
+    //my_chatgroups,          setMyChatgroups
   } = useUserData();
 
   const [ feedback, setFeedback ] = useState("");
@@ -36,7 +36,7 @@ export default function Dashboard() {
 
   const [ tab,         setTab ]         = useState("avatar");
   const [ subTab,      setSubTab ]      = useState("private");
-  const [ deleteId,    setDeleteId ]    = useState<number | undefined>();
+  const [ deleteId,    setDeleteId ]    = useState("");
   const [ deleteName,  setDeleteName ]  = useState("");
   const [ modalActive, setModalActive ] = useState(false);
 
@@ -154,14 +154,14 @@ export default function Dashboard() {
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
 
-  const activateModal = (id: number, name: string) => {
+  const activateModal = (id: string, name: string) => {
     setDeleteId(id);
     setDeleteName(name);
     setModalActive(true);
   };
 
   const deactivateModal = () => {
-    setDeleteId(undefined);
+    setDeleteId("");
     setDeleteName("");
     setModalActive(false);
   };
@@ -176,6 +176,7 @@ export default function Dashboard() {
 
   /*const deleteChatGroup = async (chatgroup_id: string) => {
     setLoading(true);
+    window.scrollTo(0, 0);
     const url = `${endpoint}/users/${authname}/chatgroups`;
     try {
       const res1 = await axios.delete(`${url}/${chatgroup_id}`, {withCredentials: true});
@@ -197,9 +198,14 @@ export default function Dashboard() {
     const url = `${endpoint}/users/${authname}/public-plans`
     try {
       const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPublicPlans(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Public plan unattributed.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPublicPlans(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -212,12 +218,17 @@ export default function Dashboard() {
   const unattributePublicRecipe = async (recipe_id: string) => {
     setLoading(true);
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${authname}/public-recipes/${recipe_id}`;
+    const url = `${endpoint}/users/${authname}/public-recipes`;
     try {
       const res1 = await axios.patch(`${url}/${recipe_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPublicRecipes(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Public recipe unattributed.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPublicRecipes(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -233,9 +244,14 @@ export default function Dashboard() {
     const url = `${endpoint}/users/${authname}/private-equipment`;
     try {
       const res1 = await axios.delete(`${url}/${equipment_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPrivateEquipment(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Private equipment deleted.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPrivateEquipment(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -251,9 +267,14 @@ export default function Dashboard() {
     const url = `${endpoint}/users/${authname}/private-ingredients`
     try {
       const res1 = await axios.delete(`${url}/${ingredient_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPrivateIngredients(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Private ingredient deleted.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPrivateIngredients(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -269,9 +290,14 @@ export default function Dashboard() {
     const url = `${endpoint}/users/${authname}/private-plans`
     try {
       const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPrivatePlans(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Private plan deleted.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPrivatePlans(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -287,9 +313,14 @@ export default function Dashboard() {
     const url = `${endpoint}/users/${authname}/private-recipes`;
     try {
       const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyPrivateRecipes(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Private recipe deleted.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyPrivateRecipes(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch (err) {
       setFeedback(error);
     }
@@ -331,7 +362,7 @@ export default function Dashboard() {
       let new_avatar = "";
       if (small_avatar && tiny_avatar) {
         const { data } = await axios.post(
-          `${endpoint}/user/signed-url`,
+          `${endpoint}/signed-url`,
           {subfolder: 'public/avatar/'},
           {withCredentials: true}
         );
@@ -362,32 +393,48 @@ export default function Dashboard() {
 
   const unfavorite = async (recipe_id: string) => {
     setLoading(true);
-    const url = `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`;
+    window.scrollTo(0, 0);
+    const url = `${endpoint}/users/${authname}/favorite-recipes`;
     try {
       const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMyFavoriteRecipes(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Recipe unfavorited.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMyFavoriteRecipes(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch(err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   const unsave = async (recipe_id: string) => {
     setLoading(true);
-    const url = `${endpoint}/users/${authname}/saved-recipes/${recipe_id}`
+    window.scrollTo(0, 0);
+    const url = `${endpoint}/users/${authname}/saved-recipes`
     try {
       const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      setMySavedRecipes(res2.data);
+      if (res1.status === 204) {
+        setFeedback("Recipe unsaved.");
+        const res2 = await axios.get(url, {withCredentials: true});
+        setMySavedRecipes(res2.data);
+        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+      } else {
+        setFeedback(res1.data.message);
+      }
     } catch(err) {
       setFeedback(error);
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setLoading(false);
+      setFeedback("");
+    }, 3000);
   };
 
   return (
@@ -497,13 +544,13 @@ export default function Dashboard() {
                 titleText="Cancel?"
                 underlayClickExits={false}
               >
-                <p>{'Delete Plan: '}{deleteName}{' ?'}</p>
+                <p>{'Delete Private Plan: '}{deleteName}{' ?'}</p>
 
                 <button className="--cancel" onClick={deactivateModal}>
-                  No
+                  Cancel
                 </button>
 
-                <button className="--action" onClick={deletePlan}>
+                <button className="--action" onClick={() => deletePrivatePlan(deleteId)}>
                   Yes, Delete Plan
                 </button>
               </AriaModal>
@@ -511,25 +558,21 @@ export default function Dashboard() {
             : false
           }
   
-          {my_plans.length
-            ? my_plans.map(p => (
+          {my_private_plans.length
+            ? my_private_plans.map(p => (
               <div className="dashboard-item" key={p.plan_id}>
                 <span className="name">
                   <Link href={`/user-plan/${p.plan_id}`}>{p.plan_name}</Link>
                 </span>
 
-                {!creatingPlan && (
-                  <span className="action">
-                    <Link href={`/new-plan/${p.plan_id}`}>Edit</Link>
-                  </span>
-                )}
+                <span className="action">
+                  <Link href={`/new-plan/${p.plan_id}`}>Edit</Link>
+                </span>
 
-                {!creatingPlan && (
-                  <span
-                    className="delete"
-                    onClick={() => activateModal(p.plan_id, p.plan_name)}
-                  >Delete</span>
-                )}
+                <span
+                  className="delete"
+                  onClick={() => activateModal(p.plan_id, p.plan_name)}
+                >Delete</span>
               </div>
             ))
             : <div className="no-content">You haven't created any plans yet.</div>
@@ -556,13 +599,13 @@ export default function Dashboard() {
                 titleText="Cancel?"
                 underlayClickExits={false}
               >
-                <p>{'Delete Recipe: '}{deleteName}{' ?'}</p>
+                <p>{'Delete Private Recipe: '}{deleteName}{' ?'}</p>
 
                 <button className="--cancel" onClick={deactivateModal}>
-                  No
+                  Cancel
                 </button>
 
-                <button className="--action" onClick={deleteRecipe}>
+                <button className="--action" onClick={() => deletePrivateRecipe(deleteId)}>
                   Yes, Delete Recipe
                 </button>
               </AriaModal>
@@ -576,8 +619,8 @@ export default function Dashboard() {
             ? my_private_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} />
+                  {r.recipe_image.image_filename !== "nobsc-recipe-default"
+                    ? <img src={`${recipeUrl}/${r.recipe_image.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
@@ -620,14 +663,15 @@ export default function Dashboard() {
                 titleText="Cancel?"
                 underlayClickExits={false}
               >
-                <p>{'Disown Recipe: '}{deleteName}{' ?'}</p>
+                <p>{'Unattribute Recipe: '}{deleteName}{' ?'}</p>
+                <p>Author will be renamed to "Unknown" and you will no longer control this recipe.</p>
 
                 <button className="--cancel" onClick={deactivateModal}>
-                  No
+                  Cancel
                 </button>
 
-                <button className="--action" onClick={disownRecipe}>
-                  Yes, Disown Recipe
+                <button className="--action" onClick={() => unattributePublicRecipe(deleteId)}>
+                  Yes, Unattribute Recipe
                 </button>
               </AriaModal>
             )
@@ -640,8 +684,8 @@ export default function Dashboard() {
             ? my_public_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} />
+                  {r.recipe_image.image_filename !== "nobsc-recipe-default"
+                    ? <img src={`${recipeUrl}/${r.recipe_image.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
@@ -657,7 +701,7 @@ export default function Dashboard() {
                 <span
                   className="delete"
                   onClick={() => activateModal(r.recipe_id, r.title)}
-                >Disown</span>
+                >Unattribute</span>
               </div>
             ))
             : <div className="no-content">You haven't created any public recipes yet.</div>
@@ -675,8 +719,8 @@ export default function Dashboard() {
             ? my_favorite_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} />
+                  {r.recipe_image.image_filename !== "nobsc-recipe-default"
+                    ? <img src={`${recipeUrl}/${r.recipe_image.image_filename}-tiny`} />
                     : <div className="img--28-18"></div>
                   }
                 </span>
@@ -706,8 +750,8 @@ export default function Dashboard() {
             ? my_saved_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.recipe_image !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.recipe_image}-tiny`} />
+                  {r.recipe_image.image_filename !== "nobsc-recipe-default"
+                    ? <img src={`${recipeUrl}/${r.recipe_image.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
@@ -735,12 +779,12 @@ export default function Dashboard() {
             Create New Ingredient
           </Link>
 
-          {my_ingredients.length
-            ? my_ingredients.map(i => (
+          {my_private_ingredients.length
+            ? my_private_ingredients.map(i => (
               <div className="dashboard-item" key={i.ingredient_id}>
                 <span className="tiny">
-                  {i.image_url !== "nobsc-ingredient-default"
-                    ? <img src={`${recipeUrl}/${i.image_url}-tiny`} />
+                  {i.image.image_filename !== "nobsc-ingredient-default"
+                    ? <img src={`${recipeUrl}/${i.image.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
@@ -776,12 +820,12 @@ export default function Dashboard() {
             Create New Equipment
           </Link>
 
-          {my_equipment.length
-            ? my_equipment.map(e => (
+          {my_private_equipment.length
+            ? my_private_equipment.map(e => (
               <div className="dashboard-item" key={e.equipment_id}>
                 <span className="tiny">
-                  {e.image_url !== "nobsc-equipment-default"
-                    ? <img src={`${recipeUrl}/${e.image_url}-tiny`} />
+                  {e.image.image_filename !== "nobsc-equipment-default"
+                    ? <img src={`${recipeUrl}/${e.image.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
