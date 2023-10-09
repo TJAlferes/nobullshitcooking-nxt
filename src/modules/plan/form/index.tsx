@@ -3,7 +3,7 @@ import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, MouseEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +34,6 @@ export default function PlanForm({ ownership }: Props) {
 
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
-  const [ expandedDay, setExpandedDay ] = useState<number | null>(null);
   const [ modalActive, setModalActive ] = useState(false);
   const [ tab,         setTab ]         = useState("official");
 
@@ -109,8 +108,6 @@ export default function PlanForm({ ownership }: Props) {
   const changePlanName = (e: ChangeEvent<HTMLInputElement>) => setPlanName(e.target.value);
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
-
-  const clickDay = (day: number) => setExpandedDay(day === expandedDay ? null : day);
   
   const addRecipeToDay = (day: number, recipe: DayRecipe) => {
     const new_plan_data = [...plan_data];  // not sufficient, go deeper?
@@ -125,12 +122,9 @@ export default function PlanForm({ ownership }: Props) {
   };
   
   const reorderRecipeInDay = (dragIndex: number, hoverIndex: number) => {
-    if (!expandedDay ) {
-      return state;
-    }
-    const draggedRecipe = plan_data[expandedDay - 1]![dragIndex]!;
+    const draggedRecipe = plan_data[day - 1]![dragIndex]!;
     return update(plan_data, {
-      [expandedDay - 1]: {
+      [day - 1]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
@@ -223,8 +217,6 @@ export default function PlanForm({ ownership }: Props) {
       </div>
 
       <div className="calendar">
-        <MonthlyPlan expandedDay={expandedDay} plan_data={plan_data} />
-
         <div className="recipes-tabs">
           <button className={tab === "official" ? "--active" : ""} name="official" onClick={e => clickTab(e)}>Official</button>
           <button className={tab === "private" ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>My Private</button>
@@ -232,8 +224,43 @@ export default function PlanForm({ ownership }: Props) {
           <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
           <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
         </div>
+        {
+          /*
+          Even though recipe.recipe_id and recipe.owner_id are not used when creating/editing a plan (PlanForm),
+          they are set at this stage because they are used when viewing a plan (PlanDetail)
+          */
+        }
+        <Recipes
+          day={0}
+          recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
+        />
 
-        <MemoizedRecipes expandedDay={expandedDay} recipes={recipes} />
+        <div className="plan__monthly-plan">
+          <div className="monthly-plan">
+            <div className="header">
+              <span>Sunday</span>
+              <span>Monday</span>
+              <span>Tuesday</span>
+              <span>Wednesday</span>
+              <span>Thursday</span>
+              <span>Friday</span>
+              <span>Saturday</span>
+            </div>
+
+            <div className="body">
+              {Object.keys(plan_data).map((recipeList, i) => (
+                <div className="monthly-plan__body-day" key={i} >
+                  <div className="body-day__content">
+                    <Day
+                      day={i + 1}
+                      recipes={plan_data[Number(recipeList)]}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
@@ -329,7 +356,10 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
 function isValidPlan({
   plan_name,
   setFeedback
-}: IsValidPlanUploadParams) {
+}: {
+  plan_name:   string;
+  setFeedback: (feedback: string) => void;
+}) {
   function feedback(message: string) {
     window.scrollTo(0, 0);
     setFeedback(message);
@@ -343,11 +373,6 @@ function isValidPlan({
   return true;
 }
 
-type IsValidPlanUploadParams = {
-  plan_name:   string;
-  setFeedback: (feedback: string) => void;
-};
-
 interface TabToList {
   [index: string]: any;
   "official": RecipeOverview[];
@@ -358,60 +383,6 @@ interface TabToList {
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
-const MonthlyPlan = memo(function MonthlyPlan({ expandedDay, plan_data }: MonthlyPlanProps) {
-  return (
-    <div className="plan__monthly-plan">
-      <div className="monthly-plan">
-        <div className="header">
-          <span>Sunday</span>
-          <span>Monday</span>
-          <span>Tuesday</span>
-          <span>Wednesday</span>
-          <span>Thursday</span>
-          <span>Friday</span>
-          <span>Saturday</span>
-        </div>
-
-        <div className="body">
-          {Object.keys(plan_data).map((recipeList, i) => (
-            <div className="monthly-plan__body-day" key={i} >
-              <div className="body-day__content">
-                <Day
-                  day={i + 1}
-                  expandedDay={expandedDay}
-                  recipes={plan_data[Number(recipeList)]}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="expanded-day-container">
-        {expandedDay && (
-          <ExpandedDay
-            day={expandedDay}
-            expandedDay={expandedDay}
-            recipes={plan_data[expandedDay]}
-          />
-        )}
-      </div>
-    </div>
-  );
-});
-
-const MemoizedRecipes = memo(function MemoizedRecipes({ expandedDay, recipes }: MemoizedRecipesProps) {
-  // Even though recipe.recipe_id and recipe.owner_id are not used when creating/editing a plan (PlanForm),
-  // they are set at this stage because they are used when viewing a plan (PlanDetail)
-  return (
-    <Recipes
-      day={0}
-      expandedDay={expandedDay}
-      recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
-    />
-  );
-});
 
 function ToolTip() {
   return (
@@ -432,38 +403,37 @@ function ToolTip() {
   );
 }
 
-// TO DO: limit the max number of recipes per day -- wrap this in memo ? -- check your ref usage
-function Day({ day, expandedDay, recipes }: DayProps) {
-  //const ref = useRef<HTMLDivElement>(null);
-
+function Day({ day, recipes }: DayProps) {  // TO DO: limit the max number of recipes per day to 7
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
-    accept: Types.PLANNER_RECIPE,
+    accept: 'RECIPE',
 
     collect: (monitor: DropTargetMonitor) => ({
       canDrop: monitor.canDrop(),
       isOver:  monitor.isOver()
     }),
 
+    /*
+    drop(item, monitor): Optional.
+    Called when a compatible item is dropped on the target.
+    You may either return undefined, or a plain object.
+    If you return an object, it is going to become the drop result and will be available to the drag source in its endDrag method as monitor.getDropResult().
+    This is useful in case you want to perform different actions depending on which target received the drop.
+    If you have nested drop targets, you can test whether a nested target has already handled drop by checking monitor.didDrop() and monitor.getDropResult().
+    Both this method and the source's endDrag method are good places to fire Flux actions.
+    This method will not be called if canDrop() is defined and returns false.
+    */
     drop({ day }: DayProps, monitor: DropTargetMonitor<any, any>) {
       const draggedRecipe = monitor.getItem();
-
       if (day !== draggedRecipe.day) {
         addRecipeToDay(day, draggedRecipe.recipe);
       }
-
-      return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
+      return {day};
     }
   }));
 
   const color = (isOver && canDrop) ? "--green" : "--white";
 
   const handleClickDay = () => clickDay(day);
-
-  //drop(ref);
-
-  if (day === expandedDay) {
-    return null;
-  }
 
   return (
     <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
@@ -471,11 +441,8 @@ function Day({ day, expandedDay, recipes }: DayProps) {
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           day={day}
-          expandedDay={expandedDay}
-          id={recipe.key}
           index={i}
           key={recipe.key}
-          listId={day}
           recipe={recipe}
         />
       ))}
@@ -483,72 +450,25 @@ function Day({ day, expandedDay, recipes }: DayProps) {
   );
 }
 
-// TO DO: wrap this in memo?
-function ExpandedDay({ day, expandedDay, recipes }: DayProps) {
-  //const ref = useRef<HTMLDivElement>(null);
-
-  const [ { canDrop, isOver }, drop ] = useDrop(() => ({
-    accept: Types.PLANNER_RECIPE,
-
-    collect: (monitor: DropTargetMonitor) => ({
-      canDrop: monitor.canDrop(),
-      isOver:  monitor.isOver()
-    }),
-
-    drop({ day, expandedDay }: DayProps, monitor: DropTargetMonitor<any, any>) {
-      const draggedRecipe = monitor.getItem();
-
-      if (expandedDay !== draggedRecipe.day) {
-        addRecipeToDay(day, draggedRecipe.recipe);
-      }
-
-      return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
-    }
-  }));
-  
-  const color = (isOver && canDrop) ? "--green" : "--white";
-
-  const handleClickDay = () => clickDay(day);
-
-  //drop(ref);
-
-  return (
-    <div className={`expanded-day${color}`} onClick={handleClickDay} ref={drop}>
-      <span className="date">{day}</span>
-      {recipes && recipes.map((recipe, i) => (
-        <Recipe day={day} expandedDay={expandedDay} id={recipe.key} index={i} key={recipe.key} listId={day} recipe={recipe} />
-      ))}
-    </div>
-  );
-}
-
-// TO DO: wrap this in memo ? -- id={recipe.id}
-function Recipes({ day, expandedDay, recipes }: DayProps) {
-  //const ref = useRef<HTMLDivElement>(null);
-
+function Recipes({ day, recipes }: DayProps) {
   const [ , drop ] = useDrop(() => ({
-    accept: Types.PLANNER_RECIPE,
+    accept: 'RECIPE',
 
     collect: (monitor: DropTargetMonitor) => ({
       canDrop: monitor.canDrop(),
       isOver:  monitor.isOver()
     }),
 
-    drop: ({ day }: DayProps) => ({listId: day})
+    drop: ({ day }: DayProps) => ({day})
   }));
-
-  //drop(ref);
 
   return (
     <div className="new-plan-recipes" ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           day={day}
-          expandedDay={expandedDay}
-          id={recipe.key}
           index={i}
           key={recipe.key}
-          listId={day}
           recipe={recipe}
         />
       ))}
@@ -556,45 +476,42 @@ function Recipes({ day, expandedDay, recipes }: DayProps) {
   );
 }
 
-function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProps) {
+type DayProps = {
+  day:     number;
+  recipes: DayRecipe[] | undefined;
+};
+
+function Recipe({ day, index, key, recipe }: RecipeProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [ , drag ] = useDrag({
+  const [ , drag ] = useDrag(() => ({
     collect: (monitor: any) => ({isDragging: monitor.isDragging()}),
 
     end(dropResult: any, monitor: DragSourceMonitor) {
       const item: RecipeProps = monitor.getItem();
-
       if (item.day === 0) return;
-
-      if (dropResult && (dropResult.listId !== item.day)) {
+      if (dropResult && (dropResult.day !== item.day)) {
         removeRecipeFromDay(item.day, item.index);
       }
     },
 
     item: {
       day,
-      id,
       index,
       key: recipe.key,
-      listId,
       recipe,
-      type: Types.PLANNER_RECIPE
+      type: 'RECIPE'
     },
 
-    type: Types.PLANNER_RECIPE
-  });
+    type: 'RECIPE'
+  }));
 
   const [ , drop ] = useDrop({
-    accept: Types.PLANNER_RECIPE,
+    accept: 'RECIPE',
 
     hover(item: DragItem, monitor: DropTargetMonitor<any, any>) {  // TO DO: improve "any, any"
       if (!item) return;  // ?
       if (!ref.current) return;
-      if (day !== expandedDay) return;
-
-      const sourceDay = monitor.getItem().day;  //item.day;
-      if (sourceDay !== expandedDay) return;
 
       const dragIndex  = item.index;
       const hoverIndex = index;
@@ -629,32 +546,13 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
       <div className="text">{recipe.title}</div>
     </div>
   );
-};
-
-type MonthlyPlanProps = {
-  expandedDay: number | null;
-  plan_data:   PlanData;
-};
-
-type MemoizedRecipesProps = {
-  expandedDay: number | null;
-  recipes:     RecipeOverview[];
-};
-
-type DayProps = {
-  day:         number;
-  expandedDay: number | null;
-  recipes:     RecipeOverview[] | undefined;
-};
+}
 
 type RecipeProps = {
   day:         number;
-  expandedDay: number | null;
-  id:          string;
   index:       number;
   key:         string;
-  listId:      number;
-  recipe:      RecipeOverview;
+  recipe:      DayRecipe;
 };
 
 type DragItem = {
@@ -662,8 +560,6 @@ type DragItem = {
   index: number;
   type:  string;
 };
-
-const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
 
 export type DayRecipe = RecipeOverview & {
   key: string;
