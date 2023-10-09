@@ -3,6 +3,7 @@ import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { memo, useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
 import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,7 +14,6 @@ import type { RecipeOverview } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { LoaderButton } from '../../shared/LoaderButton';
 import type { Ownership } from '../../shared/types';
-import type { PlanData, PlanRecipe } from '../state';
 
 export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
@@ -22,6 +22,10 @@ export default function PlanForm({ ownership }: Props) {
   const plan_id = params.get('plan_id');
 
   const { authname } = useAuth();
+  const {
+    my_public_plans, setMyPublicPlans,
+    my_private_plans, setMyPrivatePlans
+  } = useUserData();
 
   const { allowedRecipes } = useAllowedContent(ownership, plan_id);
 
@@ -30,29 +34,65 @@ export default function PlanForm({ ownership }: Props) {
 
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
-  //const [ is_loading,  setIsLoading ]   = useState(false);
   const [ expandedDay, setExpandedDay ] = useState<number | null>(null);
   const [ modalActive, setModalActive ] = useState(false);
   const [ tab,         setTab ]         = useState("official");
 
   useEffect(() => {
-    const getExistingPlanToEdit = () => {
-      window.scrollTo(0, 0);
-      setLoading(true);
-      const plan = my_private_plans.find(p => p.plan_id === plan_id);
-      if (!plan) {
-        setLoading(false);
-        return;  // TO DO: redirect
+    let mounted = true;
+
+    function getExistingPlanToEdit() {
+      if (!plan_id) {
+        router.push(`/dashboard`);
+        return;
       }
+
+      setLoading(true);
+      window.scrollTo(0, 0);
+
+      let plan = null;
+      if (ownership === "public") {
+        plan = my_public_plans.find(p => p.plan_id === plan_id);
+      } else if (ownership === "private") {
+        plan = my_private_plans.find(p => p.plan_id === plan_id);
+      }
+
+      if (!plan) {
+        router.push(`/dashboard`);
+        return;
+      }
+
       setPlanName(plan.plan_name);
       setPlanData(plan.plan_data);
-      setLoading(false);
-    };
 
-    if (plan_id) {
-      getExistingPlanToEdit();
+      setLoading(false);
     }
+
+    if (mounted) {
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
+
+      if (plan_id) {
+        getExistingPlanToEdit();
+      }
+    }
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const getMyPlans = async () => {
+    if (ownership === "public") {
+      const res = await axios.get(`${endpoint}/users/${authname}/public-plans`);
+      setMyPublicPlans(res.data);
+    } else if (ownership === "private") {
+      const res = await axios.get(`${endpoint}/users/${authname}/private-plans`, {withCredentials: true});
+      setMyPrivatePlans(res.data);
+    }
+  };
 
   const activateModal = () => setModalActive(true);
 
@@ -63,36 +103,25 @@ export default function PlanForm({ ownership }: Props) {
     router.push('/dashboard');
   };
 
-  const getApplicationNode = (): Element | Node => document.getElementById('root') as Element | Node;
+  const getApplicationNode = (): Element | Node =>
+    document.getElementById('root') as Element | Node;
 
-  const getPlanData = () => JSON.stringify(plan_data);  // clean/format? *** keys???
-
-  const changePlanName = (e: SyntheticEvent) => {
-    const nextName = (e.target as HTMLInputElement).value.trim();
-    if (nextName.length > 20) {
-      window.scrollTo(0, 0);
-      setFeedback("Please keep your plan name under 20 characters");
-      setTimeout(() => setFeedback(""), 3000);
-      return;
-    }
-    setPlanName(nextName);
-  };
+  const changePlanName = (e: ChangeEvent<HTMLInputElement>) => setPlanName(e.target.value);
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
-  const clickDay = (day: number) =>
-    setExpandedDay(day === expandedDay ? null : day);
+  const clickDay = (day: number) => setExpandedDay(day === expandedDay ? null : day);
   
   const addRecipeToDay = (day: number, recipe: DayRecipe) => {
-    const new_plan_data = [...plan_data];  // not sufficient, go deeper? (See recipes rows)
+    const new_plan_data = [...plan_data];  // not sufficient, go deeper?
     new_plan_data[day - 1]?.push(recipe);
-    setPlanData(new_plan_data)
+    setPlanData(new_plan_data);
   };
   
   const removeRecipeFromDay = (day: number, index: number) => {
-    const plan_data = [...state.plan_data];
-    plan_data[day - 1]?.splice(index, 1);
-    return {...state, plan_data};
+    const new_plan_data = [...plan_data];  // not sufficient, go deeper?
+    new_plan_data[day - 1]?.splice(index, 1);
+    setPlanData(new_plan_data);
   };
   
   const reorderRecipeInDay = (dragIndex: number, hoverIndex: number) => {
@@ -100,61 +129,63 @@ export default function PlanForm({ ownership }: Props) {
       return state;
     }
     const draggedRecipe = plan_data[expandedDay - 1]![dragIndex]!;
-    return update(state, {
-      plan_data: {
-        [expandedDay - 1]: {
-          $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
-        }
+    return update(plan_data, {
+      [expandedDay - 1]: {
+        $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
   };
 
-  const handleSubmit = async () => {
-    if (!isValidPlan({plan_name, setFeedback})) return;
+  const getIncludedRecipes = () => {
+
+  };
+
+  const submit = async () => {
     setLoading(true);
+    window.scrollTo(0, 0);
+
+    if (!isValidPlan({plan_name, setFeedback})) return;
+
     const plan_upload = {
       plan_name,
-      plan_data: getPlanData()
+      included_recipes: getIncludedRecipes()
     };
-    if (plan_id) {
-      const plan_update_upload = {plan_id, ...plan_upload};
-      try {
-        const { data } = await axios.patch(
+    
+    try {
+      if (plan_id) {
+        const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-plans`,
-          plan_update_upload,
+          {plan_id, ...plan_upload},
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        if (data.message === "Plan updated.") {
+        if (res.status === 204) {
+          setFeedback("Plan updated.");
+          await getMyPlans();
           setTimeout(() => router.push('/dashboard'), 3000);
+        } else {
+          setFeedback(res.data.message);
         }
-        setFeedback(data.message);
-        //await getMyPlans(ownership);
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
-      }
-      //delay(4000);
-      setFeedback("");
-    } else {
-      try {
-        const { data } = await axios.post(
+      } else {
+        const res = await axios.post(
           `${endpoint}/users/${authname}/${ownership}-plans`,
           plan_upload,
           {withCredentials: true}
         );
-        window.scrollTo(0, 0);
-        setFeedback(data.message);
-        if (data.message === "Plan created.") {
+        if (res.status === 201) {
+          setFeedback("Plan created.");
+          await getMyPlans();
           setTimeout(() => router.push('/dashboard'), 3000);
+        } else {
+          setFeedback(res.data.message);
         }
-        setFeedback(data.message);
-        //await getMyPlans(ownership);
-      } catch(err) {
-        setFeedback('An error occurred. Please try again.');
       }
-      //delay(4000);
-      setFeedback("");
+    } catch(err) {
+      setFeedback('An error occurred. Please try again.');
+    } finally {
+      setTimeout(() => {
+        setFeedback("");
+        setLoading(false);
+      }, 3000);
     }
   };
 
@@ -165,12 +196,23 @@ export default function PlanForm({ ownership }: Props) {
     "favorite": my_favorite_recipes,
     "saved":    my_saved_recipes
   };
-  const recipes: WorkRecipe[] = tabToList[tab];
+  const recipes: RecipeOverview[] = tabToList[tab];
 
   return (
-    <div className="one-col new-plan">
+    <div className="one-col plan-form">
       <div className="heading">
-        <h1>New Plan</h1>
+        {
+          ownership === "private"
+          && plan_id
+          ? <h1>Update Private Plan</h1>
+          : <h1>Create Private Plan</h1>
+        }
+        {
+          ownership === "public"
+          && plan_id
+          ? <h1>Update Public Plan</h1>
+          : <h1>Create Public Plan</h1>
+        }
 
         <p className="feedback">{feedback}</p>
 
@@ -211,7 +253,7 @@ export default function PlanForm({ ownership }: Props) {
               titleText="Cancel?"
               underlayClickExits={false}
             >
-              <p>Cancel new plan? Changes will not be saved.</p>
+              <p>Cancel? Changes will not be saved.</p>
               <button className="cancel-cancel" onClick={deactivateModal}>No, Keep Working</button>
               <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
             </AriaModal>
@@ -223,10 +265,10 @@ export default function PlanForm({ ownership }: Props) {
           className="submit-button"
           id="planner-submit-button"
           isLoading={loading}
-          loadingText="Saving Plan..."
+          loadingText="Submit Plan..."
           name="submit"
-          onClick={handleSubmit}
-          text="Save Plan"
+          onClick={submit}
+          text="Submit Plan"
         />
       </div>
     </div>
@@ -308,11 +350,11 @@ type IsValidPlanUploadParams = {
 
 interface TabToList {
   [index: string]: any;
-  "official": WorkRecipe[];
-  "private":  WorkRecipe[];  // TODO: only if ownership = "private"
-  "public":   WorkRecipe[];
-  "favorite": WorkRecipe[];
-  "saved":    WorkRecipe[];
+  "official": RecipeOverview[];
+  "private":  RecipeOverview[];  // TODO: only if ownership = "private"
+  "public":   RecipeOverview[];
+  "favorite": RecipeOverview[];
+  "saved":    RecipeOverview[];
 }
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
@@ -406,7 +448,7 @@ function Day({ day, expandedDay, recipes }: DayProps) {
       const draggedRecipe = monitor.getItem();
 
       if (day !== draggedRecipe.day) {
-        dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+        addRecipeToDay(day, draggedRecipe.recipe);
       }
 
       return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
@@ -415,7 +457,7 @@ function Day({ day, expandedDay, recipes }: DayProps) {
 
   const color = (isOver && canDrop) ? "--green" : "--white";
 
-  const handleClickDay = () => dispatch(clickDay(day));
+  const handleClickDay = () => clickDay(day);
 
   //drop(ref);
 
@@ -457,7 +499,7 @@ function ExpandedDay({ day, expandedDay, recipes }: DayProps) {
       const draggedRecipe = monitor.getItem();
 
       if (expandedDay !== draggedRecipe.day) {
-        dispatch(addRecipeToDay(day, draggedRecipe.recipe));
+        addRecipeToDay(day, draggedRecipe.recipe);
       }
 
       return {listId: day};  // What is this? Perhaps the Recipe component doesn't need explicit listId prop
@@ -466,7 +508,7 @@ function ExpandedDay({ day, expandedDay, recipes }: DayProps) {
   
   const color = (isOver && canDrop) ? "--green" : "--white";
 
-  const handleClickDay = () => dispatch(clickDay(day));
+  const handleClickDay = () => clickDay(day);
 
   //drop(ref);
 
@@ -526,7 +568,7 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
       if (item.day === 0) return;
 
       if (dropResult && (dropResult.listId !== item.day)) {
-        dispatch(removeRecipeFromDay(item.day, item.index));
+        removeRecipeFromDay(item.day, item.index);
       }
     },
 
@@ -572,7 +614,7 @@ function Recipe({ day, expandedDay, id, index, key, listId, recipe }: RecipeProp
       if (draggingDown && aboveCenter) return;
       if (draggingUp && belowCenter) return;
 
-      dispatch(reorderRecipeInDay(dragIndex, hoverIndex));  // reorder/swap/move recipes
+      reorderRecipeInDay(dragIndex, hoverIndex);  // reorder/swap/move recipes
       item.index = hoverIndex;  // We mutate the monitor item here. Generally we avoid mutations, but here we mutate to avoid expensive index searches.
     }
   });
@@ -596,13 +638,13 @@ type MonthlyPlanProps = {
 
 type MemoizedRecipesProps = {
   expandedDay: number | null;
-  recipes:     WorkRecipe[];
+  recipes:     RecipeOverview[];
 };
 
 type DayProps = {
   day:         number;
   expandedDay: number | null;
-  recipes:     Recipe[] | undefined;
+  recipes:     RecipeOverview[] | undefined;
 };
 
 type RecipeProps = {
@@ -612,7 +654,7 @@ type RecipeProps = {
   index:       number;
   key:         string;
   listId:      number;
-  recipe:      Recipe;
+  recipe:      RecipeOverview;
 };
 
 type DragItem = {
@@ -622,18 +664,6 @@ type DragItem = {
 };
 
 const Types = {PLANNER_RECIPE: 'PLANNER_RECIPE'};
-
-//end: (item: any, monitor: DragSourceMonitor) => {
-//  if (item.day === 0) return;
-//  if (item.day !== item.listId) dispatch(removeRecipeFromDay(item.day, item.index));
-//},
-
-export type RecipeOverview = {
-  recipe_id: string;
-  owner_id:  string;
-  title:     string;
-  image_url: string;
-};
 
 export type DayRecipe = RecipeOverview & {
   key: string;

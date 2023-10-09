@@ -507,12 +507,12 @@ export default function RecipeForm({ ownership }: Props) {
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
+    } finally {
+      setTimeout(() => {
+        setFeedback("");
+        setLoading(false);
+      }, 4000);
     }
-
-    setTimeout(() => {
-      setFeedback("");
-      setLoading(false);
-    }, 4000);
   };
 
   return (
@@ -1119,7 +1119,7 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="finish">
-        <Link className="cancel-button" href={`/${authname}/private/dashboard`}>
+        <Link className="cancel-button" href={`/dashboard`}>
           Cancel
         </Link>
 
