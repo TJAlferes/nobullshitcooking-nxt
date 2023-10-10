@@ -109,31 +109,47 @@ export default function PlanForm({ ownership }: Props) {
   const changePlanName = (e: ChangeEvent<HTMLInputElement>) => setPlanName(e.target.value);
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
-  
+
   const addRecipeToDay = (day: number, recipe: DayRecipe) => {
-    const new_plan_data = [...plan_data];  // not sufficient, go deeper?
-    new_plan_data[day - 1]?.push(recipe);
+    const new_plan_data = update(plan_data, {
+      [day - 1]: {
+        $push: [recipe]
+      },
+    });
     setPlanData(new_plan_data);
   };
   
   const removeRecipeFromDay = (day: number, index: number) => {
-    const new_plan_data = [...plan_data];  // not sufficient, go deeper?
-    new_plan_data[day - 1]?.splice(index, 1);
+    const new_plan_data = update(plan_data, {
+      [day - 1]: {
+        $splice: [[index, 1]]
+      },
+    });
     setPlanData(new_plan_data);
   };
   
-  const reorderRecipeInDay = (dragIndex: number, hoverIndex: number) => {
+  const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
+    if (!day) return;
+
     const draggedRecipe = plan_data[day - 1]![dragIndex]!;
-    return update(plan_data, {
+
+    const new_plan_data = update(plan_data, {
       [day - 1]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
+
+    setPlanData(new_plan_data);
   };
 
-  const getIncludedRecipes = () => {
-
-  };
+  const getIncludedRecipes = () =>
+    plan_data.map((recipes, i) => 
+      recipes.map((recipe, j) => ({
+        recipe_id:     recipe.recipe_id,
+        day_number:    i + 1,
+        recipe_number: j + 1
+      }))
+    );
 
   const submit = async () => {
     setLoading(true);
@@ -410,7 +426,7 @@ function Recipes({
 }: {
   recipes: DayRecipe[] | undefined;
   removeRecipeFromDay: (day: number, index: number) => void;
-  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+  reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
   const [ , drop ] = useDrop(() => ({
     accept: 'RECIPE',
@@ -450,7 +466,7 @@ function Recipe({
   key: string;
   recipe: DayRecipe;
   removeRecipeFromDay: (day: number, index: number) => void;
-  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+  reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -500,7 +516,7 @@ function Recipe({
       if (draggingDown && aboveCenter) return;
       if (draggingUp && belowCenter) return;
 
-      reorderRecipeInDay(dragIndex, hoverIndex);  // reorder/swap/move recipes
+      reorderRecipeInDay(day, dragIndex, hoverIndex);  // reorder/swap/move recipes
       item.index = hoverIndex;  // We mutate the monitor item here. Generally we avoid mutations, but here we mutate to avoid expensive index searches.
     }
   });
@@ -528,7 +544,7 @@ function Day({
   recipes: DayRecipe[] | undefined;
   addRecipeToDay: (day: number, recipe: DayRecipe) => void;
   removeRecipeFromDay: (day: number, index: number) => void;
-  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+  reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {  // TO DO: limit the max number of recipes per day to 7
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: 'RECIPE',
