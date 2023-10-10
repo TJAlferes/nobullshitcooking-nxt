@@ -3,7 +3,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 
 import { useUserData } from '../../../store';
+import type { RecipeOverview } from '../../../store';
 import { Ownership } from '../../shared/types';
+import type { DayRecipe, PlanData } from '../form';
+import { NOBSC_USER_ID } from '../../shared/constants';
 
 export default function PlanDetail({ ownership }: Props) {
   const router  = useRouter();
@@ -13,10 +16,10 @@ export default function PlanDetail({ ownership }: Props) {
 
   const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
-  const [ expandedDay, setExpandedDay ] = useState();
-  const planName    = useSelector(state => state.planDetail.plan_name);
-  const planData    = useSelector(state => state.planDetail.plan_data);
+  const [ plan_name, setPlanName ] = useState("");
+  const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
 
+  // why does this need to be in a useEffect?
   useEffect(() => {
     function getPlan() {
       window.scrollTo(0, 0);
@@ -42,7 +45,7 @@ export default function PlanDetail({ ownership }: Props) {
         <h1>Plan</h1>
 
         <div className="name">
-          <label>Plan Name:</label><span>{planName}</span>
+          <label>Plan Name:</label><span>{plan_name}</span>
         </div>
       </div>
 
@@ -60,25 +63,16 @@ export default function PlanDetail({ ownership }: Props) {
             </div>
 
             <div className="body">
-              {Object.keys(planData).map((recipeList, index) => (
-                <div className="monthly-plan__body-day" key={index}>
+              {Object.keys(plan_data).map((recipeList, i) => (
+                <div className="monthly-plan__body-day" key={i}>
                   <div className="body-day__content">
-                    {(expandedDay && (index + 1) === expandedDay) && (
-                      <Day
-                        day={index + 1}
-                        recipes={planData[Number(recipeList)]}
-                      />
-                    )}
+                    <div className="day">
+                      {plan_data[Number(recipeList)]?.map(recipe => <Recipe recipe={recipe} />)}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="expanded-day-container">
-            {expandedDay && (
-              <ExpandedDay day={expandedDay} recipes={planData[expandedDay]} />
-            )}
           </div>
         </div>
       </div>
@@ -90,31 +84,6 @@ type Props = {
   ownership: Ownership;
 };
 
-const url = "https://s3.amazonaws.com/nobsc-user-recipe";
-
-function Day({ day, recipes }: DayProps) {
-  const handleClickDay = () => clickDay(day);
-
-  return (
-    <div className="day" onClick={handleClickDay}>
-      <span className="date">{day}</span>
-      {recipes.map(recipe => <Recipe recipe={recipe} />)}
-    </div>
-  );
-}
-
-function ExpandedDay({ day, recipes }: DayProps) {
-  const handleClickDay = () => clickDay(day);
-
-  return (
-    <div className="expanded-day" onClick={handleClickDay}>
-      <span className="date">{day}</span>
-      {recipes.map(recipe => <Recipe recipe={recipe} />)}
-    </div>
-  );
-}
-
-// TO DO: fix
 function Recipe({
   recipe: {
     recipe_id,
@@ -122,17 +91,19 @@ function Recipe({
     title,
     recipe_image
   }
-}: RecipeProps) {
+}: {
+  recipe: DayRecipe;
+}) {
   return (
     <div className="plan-recipe">
       <div className="image">
-        <img src={`${url}/${recipe_image}-tiny`} />
+        <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe_image.image_filename}-tiny`} />
       </div>
 
       <div className="text">
         <Link
           href={
-            Number(owner_id) === 1
+            owner_id === NOBSC_USER_ID
             ? `/recipes/${recipe_id}`
             : `/user-recipes/${recipe_id}`
           }
@@ -141,29 +112,3 @@ function Recipe({
     </div>
   );
 }
-
-type DayProps = {
-  day:     number;
-  recipes: Recipe[];
-};
-
-type RecipeProps = {
-  recipe: Recipe;
-};
-
-export type PlanDataView = PlanRecipeView[][];
-
-export type PlanRecipeView = {
-  image_url: string;
-  title:     string;
-  recipe_id: string;
-};
-
-// url
-export type Recipe = {
-  key:          string;
-  recipe_id:    string;
-  owner_id:     string;
-  title:        string;
-  recipe_image: string;
-};

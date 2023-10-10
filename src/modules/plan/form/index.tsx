@@ -37,6 +37,7 @@ export default function PlanForm({ ownership }: Props) {
   const [ modalActive, setModalActive ] = useState(false);
   const [ tab,         setTab ]         = useState("official");
 
+  // why does this need to be in a useEffect?
   useEffect(() => {
     let mounted = true;
 
@@ -224,15 +225,11 @@ export default function PlanForm({ ownership }: Props) {
           <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
           <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
         </div>
-        {
-          /*
-          Even though recipe.recipe_id and recipe.owner_id are not used when creating/editing a plan (PlanForm),
-          they are set at this stage because they are used when viewing a plan (PlanDetail)
-          */
-        }
+
         <Recipes
-          day={0}
           recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
+          removeRecipeFromDay={removeRecipeFromDay}
+          reorderRecipeInDay={reorderRecipeInDay}
         />
 
         <div className="plan__monthly-plan">
@@ -254,6 +251,9 @@ export default function PlanForm({ ownership }: Props) {
                     <Day
                       day={i + 1}
                       recipes={plan_data[Number(recipeList)]}
+                      addRecipeToDay={addRecipeToDay}
+                      removeRecipeFromDay={removeRecipeFromDay}
+                      reorderRecipeInDay={reorderRecipeInDay}
                     />
                   </div>
                 </div>
@@ -403,96 +403,65 @@ function ToolTip() {
   );
 }
 
-function Day({ day, recipes }: DayProps) {  // TO DO: limit the max number of recipes per day to 7
-  const [ { canDrop, isOver }, drop ] = useDrop(() => ({
-    accept: 'RECIPE',
-
-    collect: (monitor: DropTargetMonitor) => ({
-      canDrop: monitor.canDrop(),
-      isOver:  monitor.isOver()
-    }),
-
-    /*
-    drop(item, monitor): Optional.
-    Called when a compatible item is dropped on the target.
-    You may either return undefined, or a plain object.
-    If you return an object, it is going to become the drop result and will be available to the drag source in its endDrag method as monitor.getDropResult().
-    This is useful in case you want to perform different actions depending on which target received the drop.
-    If you have nested drop targets, you can test whether a nested target has already handled drop by checking monitor.didDrop() and monitor.getDropResult().
-    Both this method and the source's endDrag method are good places to fire Flux actions.
-    This method will not be called if canDrop() is defined and returns false.
-    */
-    drop({ day }: DayProps, monitor: DropTargetMonitor<any, any>) {
-      const draggedRecipe = monitor.getItem();
-      if (day !== draggedRecipe.day) {
-        addRecipeToDay(day, draggedRecipe.recipe);
-      }
-      return {day};
-    }
-  }));
-
-  const color = (isOver && canDrop) ? "--green" : "--white";
-
-  const handleClickDay = () => clickDay(day);
-
-  return (
-    <div className={`day${color}`} onClick={handleClickDay} ref={drop}>
-      <span className="date">{day}</span>
-      {recipes && recipes.map((recipe, i) => (
-        <Recipe
-          day={day}
-          index={i}
-          key={recipe.key}
-          recipe={recipe}
-        />
-      ))}
-    </div>
-  );
-}
-
-function Recipes({ day, recipes }: DayProps) {
+function Recipes({
+  recipes,
+  removeRecipeFromDay,
+  reorderRecipeInDay
+}: {
+  recipes: DayRecipe[] | undefined;
+  removeRecipeFromDay: (day: number, index: number) => void;
+  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+}) {
   const [ , drop ] = useDrop(() => ({
     accept: 'RECIPE',
 
     collect: (monitor: DropTargetMonitor) => ({
       canDrop: monitor.canDrop(),
       isOver:  monitor.isOver()
-    }),
-
-    drop: ({ day }: DayProps) => ({day})
+    })
   }));
 
   return (
     <div className="new-plan-recipes" ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
-          day={day}
+          day={0}
           index={i}
           key={recipe.key}
           recipe={recipe}
+          removeRecipeFromDay={removeRecipeFromDay}
+          reorderRecipeInDay={reorderRecipeInDay}
         />
       ))}
     </div>
   );
 }
 
-type DayProps = {
-  day:     number;
-  recipes: DayRecipe[] | undefined;
-};
-
-function Recipe({ day, index, key, recipe }: RecipeProps) {
+function Recipe({
+  day,
+  index,
+  key,
+  recipe,
+  removeRecipeFromDay,
+  reorderRecipeInDay
+}: {
+  day: number;
+  index: number;
+  key: string;
+  recipe: DayRecipe;
+  removeRecipeFromDay: (day: number, index: number) => void;
+  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [ , drag ] = useDrag(() => ({
     collect: (monitor: any) => ({isDragging: monitor.isDragging()}),
 
-    end(dropResult: any, monitor: DragSourceMonitor) {
-      const item: RecipeProps = monitor.getItem();
+    end(item: any, monitor: DragSourceMonitor) {
+      //const item: RecipeProps = monitor.getItem();
       if (item.day === 0) return;
-      if (dropResult && (dropResult.day !== item.day)) {
-        removeRecipeFromDay(item.day, item.index);
-      }
+      //if (dropResult && (dropResult.day !== item.day)) removeRecipeFromDay(item.day, item.index);
+      removeRecipeFromDay(item.day, item.index);
     },
 
     item: {
@@ -509,7 +478,7 @@ function Recipe({ day, index, key, recipe }: RecipeProps) {
   const [ , drop ] = useDrop({
     accept: 'RECIPE',
 
-    hover(item: DragItem, monitor: DropTargetMonitor<any, any>) {  // TO DO: improve "any, any"
+    hover(item: {index: number}, monitor: DropTargetMonitor<any, any>) {  // TO DO: improve "any, any"
       if (!item) return;  // ?
       if (!ref.current) return;
 
@@ -548,18 +517,52 @@ function Recipe({ day, index, key, recipe }: RecipeProps) {
   );
 }
 
-type RecipeProps = {
-  day:         number;
-  index:       number;
-  key:         string;
-  recipe:      DayRecipe;
-};
+function Day({
+  day,
+  recipes,
+  addRecipeToDay,
+  removeRecipeFromDay,
+  reorderRecipeInDay
+}: {
+  day: number;
+  recipes: DayRecipe[] | undefined;
+  addRecipeToDay: (day: number, recipe: DayRecipe) => void;
+  removeRecipeFromDay: (day: number, index: number) => void;
+  reorderRecipeInDay: (dragIndex: number, hoverIndex: number) => void;
+}) {  // TO DO: limit the max number of recipes per day to 7
+  const [ { canDrop, isOver }, drop ] = useDrop(() => ({
+    accept: 'RECIPE',
 
-type DragItem = {
-  id:    string;
-  index: number;
-  type:  string;
-};
+    collect: (monitor: DropTargetMonitor) => ({
+      canDrop: monitor.canDrop(),
+      isOver:  monitor.isOver()
+    }),
+
+    drop(item: any, monitor: DropTargetMonitor<any, any>) {
+      const draggedRecipe = monitor.getItem();
+      if (item.day !== draggedRecipe.day) addRecipeToDay(item.day, draggedRecipe.recipe);
+      return {day: item.day};
+    }
+  }));
+
+  const color = (isOver && canDrop) ? "--green" : "--white";
+
+  return (
+    <div className={`day${color}`} ref={drop}>
+      <span className="date">{day}</span>
+      {recipes && recipes.map((recipe, i) => (
+        <Recipe
+          day={day}
+          index={i}
+          key={recipe.key}
+          recipe={recipe}
+          removeRecipeFromDay={removeRecipeFromDay}
+          reorderRecipeInDay={reorderRecipeInDay}
+        />
+      ))}
+    </div>
+  );
+}
 
 export type DayRecipe = RecipeOverview & {
   key: string;
