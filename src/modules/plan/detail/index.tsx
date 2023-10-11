@@ -3,12 +3,12 @@ import Link                           from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 
-import { endpoint }                 from '../../../config/api';
-import { useAuth, useUserData }     from '../../../store';
-import { NOBSC_USER_ID }            from '../../shared/constants';
-import { LoaderSpinner }            from '../../shared/LoaderSpinner';
-import { Ownership }                from '../../shared/types';
-import type { DayRecipe, PlanData } from '../form';
+import { endpoint }             from '../../../config/api';
+import { useAuth, useUserData } from '../../../store';
+import type { RecipeOverview }  from '../../../store';
+import { NOBSC_USER_ID }        from '../../shared/constants';
+import { LoaderSpinner }        from '../../shared/LoaderSpinner';
+import { Ownership }            from '../../shared/types';
 
 export default function PlanDetail({ ownership }: Props) {
   const router  = useRouter();
@@ -21,7 +21,7 @@ export default function PlanDetail({ ownership }: Props) {
   const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
   const [ plan_name, setPlanName ] = useState("");
-  const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
+  const [ included_recipes, setIncludedRecipes ] = useState<RecipeOverview[][]>([[], [], [], [], [], [], []]);
 
   const [ loading, setLoading ] = useState(false);
 
@@ -58,7 +58,7 @@ export default function PlanDetail({ ownership }: Props) {
       }
 
       setPlanName(plan.plan_name);
-      setPlanData(plan.plan_data);
+      setIncludedRecipes(plan.included_recipes);
 
       setLoading(false);
     }
@@ -105,11 +105,11 @@ export default function PlanDetail({ ownership }: Props) {
             </div>
 
             <div className="body">
-              {Object.keys(plan_data).map((recipeList, i) => (
+              {included_recipes.map((recipeList, i) => (
                 <div className="monthly-plan__body-day" key={i}>
                   <div className="body-day__content">
                     <div className="day">
-                      {plan_data[Number(recipeList)]?.map(recipe => <Recipe recipe={recipe} />)}
+                      {recipeList.map(recipe => <Recipe recipe={recipe} />)}
                     </div>
                   </div>
                 </div>
@@ -129,28 +129,40 @@ type Props = {
 function Recipe({
   recipe: {
     recipe_id,
+    author_id,
+    author,
     owner_id,
     title,
     recipe_image
   }
 }: {
-  recipe: DayRecipe;
+  recipe: RecipeOverview;
 }) {
+  let url = "https://s3.amazonaws.com/nobsc/image/";
+  let path = "";
+  if (author_id !== NOBSC_USER_ID) {
+    url += "user/";
+    path += `${author}/`;
+    if (owner_id === author_id) {
+      url += "private/";
+      path += "private-";
+    } else if (owner_id === NOBSC_USER_ID) {
+      url += "public/";
+      path += "public-";
+    }
+  }
+
   return (
     <div className="plan-recipe">
       <div className="image">
-        <img src={`https://s3.amazonaws.com/nobsc-user-recipe/${recipe_image.image_filename}-tiny`} />
+        <img src={`${url}recipe/${author_id}/${recipe_image.image_filename}-tiny`} />
       </div>
 
       <div className="text">
-        <Link
-          href={
-            owner_id === NOBSC_USER_ID
-            ? `/recipes/${recipe_id}`
-            : `/user-recipes/${recipe_id}`
-          }
-        >{title}</Link>
+        <Link href={`/${path}recipes/${recipe_id}`}>{title}</Link>
       </div>
     </div>
   );
 }
+
+// slugify title and use that instead of recipe_id ???

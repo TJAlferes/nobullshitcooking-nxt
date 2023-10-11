@@ -1,9 +1,11 @@
+import axios                                 from 'axios';
 import { useState, useCallback }             from "react";
 import type { ReactNode }                    from "react";
 import { createContext, useContextSelector } from "use-context-selector";
 
-import { getItem, setItem }  from "../modules/general/localStorage";
-import type { PlanDataView } from "../modules/plan/detail";
+import { endpoint }         from '../config/api';
+import { getItem, setItem } from "../modules/general/localStorage";
+import type { Ownership }   from "../modules/shared/types";
 
 function store() {
   const [ cuisines,         setCuisines ]        = useState<CuisineView[]>(getItem("cuisines") || []);
@@ -401,6 +403,38 @@ export function useChat() {
   }));
 }
 
+// refetches
+//(don't think these will work here)
+
+export const getMyFriendships        = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/friendships`,         "my_friendships"));
+export const getMyPrivateEquipment   = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/private-equipment`,   "my_private_equipment"));
+export const getMyPrivateIngredients = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/private-ingredients`, "my_private_ingredients"));
+export const getMyFavoriteRecipes    = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/favorite-recipes`,    "my_favorite_recipes"));
+export const getMySavedRecipes       = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/saved-recipes`,       "my_saved_recipes"));
+
+export const getMyPlans = (ownership: Ownership) => {
+  if (ownership == 'official') return;
+  return useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/${ownership}-plans`, `my_${ownership}_plans`));
+};
+
+export const getMyRecipes = (ownership: Ownership) => {
+  if (ownership == 'official') return;
+  return useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/${ownership}-recipes`, `my_${ownership}_recipes`));
+};
+
+function createUserDataFetcher(path: string, key: keyof UserData) {
+  return async function () {
+    try {
+      const { data } = await axios.post(
+        `${endpoint}${path}`,
+        {},
+        {withCredentials: true}
+      );
+      setItem(key, data);
+    } catch (err) {}
+  }
+}
+
 type StoreContextProviderProps = {
   children: ReactNode;
 };
@@ -491,13 +525,10 @@ export type PlanView = {
   plan_id:   string;
   owner_id:  string;
   plan_name: string;
-  plan_data: PlanDataView;
+  included_recipes: RecipeOverview[][];
 };
 
-type LoginParams = {
-  auth_id:                string;
-  auth_email:             string;
-  authname:               string;
+type UserData = {
   my_friendships:         FriendshipView[];
   my_public_plans:        PlanView[];
   my_public_recipes:      RecipeOverview[];
@@ -508,6 +539,13 @@ type LoginParams = {
   my_private_recipes:     RecipeOverview[];
   my_saved_recipes:       RecipeOverview[];
   my_chatgroups:          ChatgroupView[];
+};
+
+type LoginParams = UserData & {
+  auth_id:     string;
+  auth_email:  string;
+  authname:    string;
+  auth_avatar: string;
 };
 
 type PrivateConversation = {

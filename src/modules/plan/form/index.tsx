@@ -5,8 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import AriaModal from 'react-aria-modal';
-import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-import { v4 as uuidv4 } from 'uuid';
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
@@ -30,7 +29,7 @@ export default function PlanForm({ ownership }: Props) {
   const allowedRecipes = useAllowedContent(ownership);
 
   const [ plan_name, setPlanName ] = useState("");
-  const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
+  const [ included_recipes, setIncludedRecipes ] = useState<RecipeOverview[][]>([[], [], [], [], [], [], []]);
 
   const [ feedback,    setFeedback ]    = useState("");
   const [ loading,     setLoading ]     = useState(false);
@@ -62,7 +61,7 @@ export default function PlanForm({ ownership }: Props) {
       }
 
       setPlanName(plan.plan_name);
-      setPlanData(plan.plan_data);
+      setIncludedRecipes(plan.included_recipes);
 
       setLoading(false);
     }
@@ -109,46 +108,37 @@ export default function PlanForm({ ownership }: Props) {
 
   const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
-  const addRecipeToDay = (day: number, recipe: DayRecipe) => {
-    const new_plan_data = update(plan_data, {
+  const addRecipeToDay = (day: number, recipe: RecipeOverview) => {
+    const new_included_recipes = update(included_recipes, {
       [day - 1]: {
         $push: [recipe]
       },
     });
-    setPlanData(new_plan_data);
+    setIncludedRecipes(new_included_recipes);
   };
   
   const removeRecipeFromDay = (day: number, index: number) => {
-    const new_plan_data = update(plan_data, {
+    const new_included_recipes = update(included_recipes, {
       [day - 1]: {
         $splice: [[index, 1]]
       },
     });
-    setPlanData(new_plan_data);
+    setIncludedRecipes(new_included_recipes);
   };
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
     if (!day) return;
 
-    const draggedRecipe = plan_data[day - 1]![dragIndex]!;
+    const draggedRecipe = included_recipes[day - 1]![dragIndex]!;
 
-    const new_plan_data = update(plan_data, {
+    const new_included_recipes = update(included_recipes, {
       [day - 1]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
 
-    setPlanData(new_plan_data);
+    setIncludedRecipes(new_included_recipes);
   };
-
-  const getIncludedRecipes = () =>
-    plan_data.map((recipes, i) => 
-      recipes.map((recipe, j) => ({
-        recipe_id:     recipe.recipe_id,
-        day_number:    i + 1,
-        recipe_number: j + 1
-      }))
-    );
 
   const submit = async () => {
     setLoading(true);
@@ -158,7 +148,13 @@ export default function PlanForm({ ownership }: Props) {
 
     const plan_upload = {
       plan_name,
-      included_recipes: getIncludedRecipes()
+      included_recipes: included_recipes.map((recipes, i) => 
+        recipes.map((recipe, j) => ({
+          recipe_id:     recipe.recipe_id,
+          day_number:    i + 1,
+          recipe_number: j + 1
+        }))
+      )
     };
     
     try {
@@ -242,7 +238,7 @@ export default function PlanForm({ ownership }: Props) {
         </div>
 
         <Recipes
-          recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
+          recipes={recipes}
           removeRecipeFromDay={removeRecipeFromDay}
           reorderRecipeInDay={reorderRecipeInDay}
         />
@@ -260,12 +256,12 @@ export default function PlanForm({ ownership }: Props) {
             </div>
 
             <div className="body">
-              {Object.keys(plan_data).map((recipeList, i) => (
+              {Object.keys(included_recipes).map((recipeList, i) => (
                 <div className="monthly-plan__body-day" key={i} >
                   <div className="body-day__content">
                     <Day
                       day={i + 1}
-                      recipes={plan_data[Number(recipeList)]}
+                      recipes={included_recipes[Number(recipeList)]}
                       addRecipeToDay={addRecipeToDay}
                       removeRecipeFromDay={removeRecipeFromDay}
                       reorderRecipeInDay={reorderRecipeInDay}
@@ -396,7 +392,7 @@ function Recipes({
   removeRecipeFromDay,
   reorderRecipeInDay
 }: {
-  recipes: DayRecipe[] | undefined;
+  recipes: RecipeOverview[] | undefined;
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
@@ -415,7 +411,6 @@ function Recipes({
         <Recipe
           day={0}
           index={i}
-          key={recipe.key}
           recipe={recipe}
           removeRecipeFromDay={removeRecipeFromDay}
           reorderRecipeInDay={reorderRecipeInDay}
@@ -428,15 +423,13 @@ function Recipes({
 function Recipe({
   day,
   index,
-  key,
   recipe,
   removeRecipeFromDay,
   reorderRecipeInDay
 }: {
   day: number;
   index: number;
-  key: string;
-  recipe: DayRecipe;
+  recipe: RecipeOverview;
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
@@ -445,7 +438,7 @@ function Recipe({
   const [ , drag ] = useDrag(() => ({
     collect: (monitor: any) => ({isDragging: monitor.isDragging()}),
 
-    end(item: any, monitor: DragSourceMonitor) {
+    end(item: any) {
       //const item: RecipeProps = monitor.getItem();
       if (item.day === 0) return;
       //if (dropResult && (dropResult.day !== item.day)) removeRecipeFromDay(item.day, item.index);
@@ -455,7 +448,6 @@ function Recipe({
     item: {
       day,
       index,
-      key: recipe.key,
       recipe,
       type: 'RECIPE'
     },
@@ -498,7 +490,7 @@ function Recipe({
   const url = "https://s3.amazonaws.com/nobsc-user-recipe";  // fix (and how to account for private/public)
 
   return (
-    <div className="new-plan-recipe" key={key} ref={ref}>
+    <div className="new-plan-recipe" key={recipe.recipe_id} ref={ref}>
       <div className="image"><img src={`${url}/${recipe.recipe_image}-tiny`} /></div>
       <div className="text">{recipe.title}</div>
     </div>
@@ -513,8 +505,8 @@ function Day({
   reorderRecipeInDay
 }: {
   day: number;
-  recipes: DayRecipe[] | undefined;
-  addRecipeToDay: (day: number, recipe: DayRecipe) => void;
+  recipes: RecipeOverview[] | undefined;
+  addRecipeToDay: (day: number, recipe: RecipeOverview) => void;
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {  // TO DO: limit the max number of recipes per day to 7
@@ -542,7 +534,6 @@ function Day({
         <Recipe
           day={day}
           index={i}
-          key={recipe.key}
           recipe={recipe}
           removeRecipeFromDay={removeRecipeFromDay}
           reorderRecipeInDay={reorderRecipeInDay}
@@ -551,9 +542,3 @@ function Day({
     </div>
   );
 }
-
-export type DayRecipe = RecipeOverview & {
-  key: string;
-};
-
-export type PlanData = DayRecipe[][];

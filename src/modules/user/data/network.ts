@@ -2,12 +2,10 @@ import axios from 'axios';
 
 import { endpoint } from '../../../config/api';
 import { setItem }  from '../../general/localStorage';
-import type { UserData } from './state';
-import type { Ownership } from '../../shared/types';
 
 // move to an api.ts ???
-// TO DO: move to store useUserDataFetcher
-// useDataFetcher
+// TO DO: move useUserDataFetcher to store
+// keep useDataFetcher here
 
 export async function getInitialUserData() {
   try {
@@ -33,36 +31,5 @@ export async function getInitialUserData() {
       console.log('Error', err.message);
     }
     console.log(err.config);
-  }
-}
-
-// refetches
-
-export const getMyFriendships        = createUserDataFetcher(`/users/${authname}/friendships`,         "my_friendships");
-export const getMyPrivateEquipment   = createUserDataFetcher(`/users/${authname}/private-equipment`,   "my_private_equipment");
-export const getMyPrivateIngredients = createUserDataFetcher(`/users/${authname}/private-ingredients`, "my_private_ingredients");
-export const getMyFavoriteRecipes    = createUserDataFetcher(`/users/${authname}/favorite-recipes`,    "my_favorite_recipes");
-export const getMySavedRecipes       = createUserDataFetcher(`/users/${authname}/saved-recipes`,       "my_saved_recipes");
-
-export const getMyPlans = (ownership: Ownership) => {
-  if (ownership == 'official') return;
-  return createUserDataFetcher(`/user/${ownership}/plan`, `my_${ownership}_plans`);
-};
-
-export const getMyRecipes = (ownership: Ownership) => {
-  if (ownership == 'official') return;
-  return createUserDataFetcher(`/user/${ownership}/recipe`, `my_${ownership}_recipes`);
-};
-
-function createUserDataFetcher(path: string, key: keyof UserData) {
-  return async function () {
-    try {
-      const { data } = await axios.post(
-        `${endpoint}${path}`,
-        {},
-        {withCredentials: true}
-      );
-      setItem(key, data);
-    } catch (err) {}
   }
 }
