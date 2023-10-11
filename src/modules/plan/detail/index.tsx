@@ -1,43 +1,85 @@
+import axios                          from 'axios';
 import Link                           from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState }        from 'react';
 
-import { useUserData } from '../../../store';
-import type { RecipeOverview } from '../../../store';
-import { Ownership } from '../../shared/types';
+import { endpoint }                 from '../../../config/api';
+import { useAuth, useUserData }     from '../../../store';
+import { NOBSC_USER_ID }            from '../../shared/constants';
+import { LoaderSpinner }            from '../../shared/LoaderSpinner';
+import { Ownership }                from '../../shared/types';
 import type { DayRecipe, PlanData } from '../form';
-import { NOBSC_USER_ID } from '../../shared/constants';
 
 export default function PlanDetail({ ownership }: Props) {
   const router  = useRouter();
 
   const params  = useSearchParams();
+  const username = params.get('username');
   const plan_id = params.get('plan_id');
 
+  const { authname } = useAuth();
   const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
   const [ plan_name, setPlanName ] = useState("");
   const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
 
-  // why does this need to be in a useEffect?
+  const [ loading, setLoading ] = useState(false);
+
   useEffect(() => {
-    function getPlan() {
+    let mounted = true;
+    async function getExistingPlanToView() {
+      if (!username || !plan_id) {
+        router.push('/');
+        return;
+      }
+
+      setLoading(true);
       window.scrollTo(0, 0);
-      const plan = my_plans.find(p => p.plan_id === plan_id);
+
+      let plan = null;
+      if (ownership === "public") {
+        if (authname) {
+          plan = my_public_plans.find(p => p.plan_id === plan_id);
+        } else {
+          const res = await axios.get(`${endpoint}/users/${username}/public-plans/${plan_id}`);
+          plan = res.data;
+        }
+      } else if (ownership === "private") {
+        if (!authname) {
+          router.push(`/404`);
+          return;
+        }
+        plan = my_private_plans.find(p => p.plan_id === plan_id);
+      }
+
       if (!plan) {
         router.push('/');
         return;
       }
+
       setPlanName(plan.plan_name);
       setPlanData(plan.plan_data);
-    };
 
-    if (plan_id) {
-      getPlan();
-    } else {
-      router.push('/');
+      setLoading(false);
     }
+
+    if (mounted) {
+      if (!username || !plan_id) {
+        router.push('/404');
+        return;
+      }
+
+      if (plan_id) {
+        getExistingPlanToView();
+      }
+    }
+
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  if (loading) return <LoaderSpinner></LoaderSpinner>;
 
   return (
     <div className="one-col plan">

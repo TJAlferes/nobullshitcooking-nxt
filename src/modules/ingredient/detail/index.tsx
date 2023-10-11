@@ -1,24 +1,32 @@
-import { useTypedSelector as useSelector } from '../../../redux';
-import { LoaderSpinner }                   from '../../shared/LoaderSpinner';
-import type { Ownership }     from '../../shared/types';
-import type { IngredientView }             from '../../shared/data/state';
+import { useRouter } from 'next/navigation';
 
-const url = "https://s3.amazonaws.com/nobsc-";
+import { useAuth }             from '../../../store';
+import type { IngredientView } from '../../../store';
+import { LoaderSpinner }       from '../../shared/LoaderSpinner';
+import type { Ownership }      from '../../shared/types';
 
 export default function IngredientDetail({ ownership, ingredient }: Props) {
-  // TO DO: FINISH THIS
-  const my_ingredients = useSelector(state => state.userData.my_ingredients);
+  const router = useRouter();
+
+  const { auth_id } = useAuth();
+
+  if (!ingredient) return <LoaderSpinner />;  // or return router.push('/404'); ???
 
   const {
-    ingredient_id,
+    owner_id,
     fullname,
-    image_url,
+    image,
     ingredient_type_name,
     notes
   } = ingredient;
 
-  if (!ingredient) {
-    return <LoaderSpinner />;
+  let url = "https://s3.amazonaws.com/nobsc/image/";
+  if (ownership === "private") {
+    if (auth_id !== owner_id) {
+      router.push('/404');
+      return;
+    }
+    url += "user/private/";
   }
 
   return (
@@ -27,9 +35,8 @@ export default function IngredientDetail({ ownership, ingredient }: Props) {
         <h1>{fullname}</h1>
 
         <div className="image">
-          {my_ingredients.find(i => i.ingredient_id === ingredient_id)
-            ? <img src={`${url}user-ingredients/${image_url}`} />
-            : <img src={`${url}images-01/ingredients/${image_url}.jpg`} />}
+          <img src={`${url}ingredient/${image.image_filename}.jpg`} />
+          <span>{image.caption}</span>
         </div>
 
         <div className="type">

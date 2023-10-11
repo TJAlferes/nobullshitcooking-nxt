@@ -6,6 +6,8 @@ import type { UserData } from './state';
 import type { Ownership } from '../../shared/types';
 
 // move to an api.ts ???
+// TO DO: move to store useUserDataFetcher
+// useDataFetcher
 
 export async function getInitialUserData() {
   try {

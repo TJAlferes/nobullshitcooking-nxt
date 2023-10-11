@@ -1,17 +1,32 @@
+import { useRouter } from 'next/navigation';
+
+import { useAuth }            from '../../../store';
+import type { EquipmentView } from '../../../store';
 import { LoaderSpinner }      from '../../shared/LoaderSpinner';
 import type { Ownership }     from '../../shared/types';
-import type { EquipmentView } from '../../shared/data/state';
 
-export default function EquipmentDetail({ equipment, ownership }: Props) {
+export default function EquipmentDetail({ ownership, equipment }: Props) {
+  const router = useRouter();
+
+  const { auth_id } = useAuth();
+
+  if (!equipment) return <LoaderSpinner />;  // or return router.push('/404'); ???
+
   const {
+    owner_id,
     equipment_name,
+    image,
     equipment_type_name,
-    notes,
-    image
+    notes
   } = equipment;
 
-  if (!equipment) {
-    return <LoaderSpinner />;
+  let url = "https://s3.amazonaws.com/nobsc/image/";
+  if (ownership === "private") {
+    if (auth_id !== owner_id) {
+      router.push('/404');
+      return;
+    }
+    url += "user/private/";
   }
 
   return (
@@ -39,8 +54,6 @@ export default function EquipmentDetail({ equipment, ownership }: Props) {
 }
 
 type Props = {
-  equipment: EquipmentView;
   ownership: Ownership;
+  equipment: EquipmentView;
 };
-
-const url = "https://s3.amazonaws.com/nobsc/";

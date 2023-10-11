@@ -1,20 +1,24 @@
-import axios        from 'axios';
-import Link         from 'next/link';
-import { useState } from 'react';
+import axios         from 'axios';
+import Link          from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState }  from 'react';
 
 import { endpoint }             from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 import { LoaderSpinner }        from '../../shared/LoaderSpinner';
 import type { Ownership }       from '../../shared/types';
 
-export default function RecipeDetail({ recipe, ownership }: Props) {
-  if (!recipe) {
-    return <LoaderSpinner />;
-  }  // .....what???
+export default function RecipeDetail({ ownership, recipe }: Props) {
+  const router = useRouter();
+
+  const { auth_id } = useAuth();
+
+  if (!recipe) return <LoaderSpinner />;  // or return router.push('/404'); ???
   
   const {
     recipe_id,
     author_id,
+    owner_id,
     author,
     title,
     description,
@@ -31,7 +35,16 @@ export default function RecipeDetail({ recipe, ownership }: Props) {
     cooking_image
   } = recipe;
 
-  const url = `https://s3.amazonaws.com/nobsc/user/${ownership}/recipe`;
+  let url = "https://s3.amazonaws.com/nobsc/image/";
+  if (ownership === "private") {
+    if (auth_id !== owner_id) {
+      router.push('/404');
+      return;
+    }
+    url += "user/private/";
+  } else if (ownership === "public") {
+    url += "user/public/";
+  }
 
   // TO DO: move logic out of return
   return (
@@ -144,6 +157,7 @@ type Props = {
 
 export type RecipeDetailView = {
   recipe_id:            string;
+  owner_id:             string;
   author_id:            string;
   author:               string;
   author_avatar:        ImageView;
@@ -211,20 +225,27 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   const favorite = async () => {
     if (favorited) return;
     setLoading(true);
+    window.scrollTo(0, 0);
     try {
-      const { data } = await axios.post(
+      const res = await axios.post(
         `${endpoint}/users/${authname}/favorite-recipes/${recipe_id}`,
         {withCredentials: true}
       );
-      setFavorited(true);
-      window.scrollTo(0, 0);
-      setFeedback(data.message);
-      //await getMyFavoriteRecipes();
+      if (res.status === 201) {
+        setFavorited(true);
+        setFeedback("Recipe favorited.");
+        await getMyFavoriteRecipes();
+      } else {
+        setFeedback(res.data.message);
+      }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback("");
+      }, 4000);
     }
-    //delay(4000);
-    setFeedback("");
   };
 
   const save = async () => {

@@ -2,14 +2,14 @@ import axios from 'axios';
 import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 
 import { endpoint } from '../../../config/api';
-import { useAuth, useData, useUserData } from '../../../store';
+import { useAuth, useUserData } from '../../../store';
 import type { RecipeOverview } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { LoaderButton } from '../../shared/LoaderButton';
@@ -27,7 +27,7 @@ export default function PlanForm({ ownership }: Props) {
     my_private_plans, setMyPrivatePlans
   } = useUserData();
 
-  const { allowedRecipes } = useAllowedContent(ownership, plan_id);
+  const allowedRecipes = useAllowedContent(ownership);
 
   const [ plan_name, setPlanName ] = useState("");
   const [ plan_data, setPlanData ] = useState<PlanData>([[], [], [], [], [], [], []]);
@@ -37,7 +37,6 @@ export default function PlanForm({ ownership }: Props) {
   const [ modalActive, setModalActive ] = useState(false);
   const [ tab,         setTab ]         = useState("official");
 
-  // why does this need to be in a useEffect?
   useEffect(() => {
     let mounted = true;
 
@@ -201,11 +200,11 @@ export default function PlanForm({ ownership }: Props) {
   };
 
   const tabToList: TabToList = {
-    "official": officialRecipes,
-    "private":  my_private_recipes,  // only if ownership = "private"
-    "public":   my_public_recipes,
-    "favorite": my_favorite_recipes,
-    "saved":    my_saved_recipes
+    //"official": officialRecipes,
+    "private":  allowedRecipes.my_private_recipes,
+    "public":   allowedRecipes.my_public_recipes,
+    "favorite": allowedRecipes.my_favorite_recipes,
+    "saved":    allowedRecipes.my_saved_recipes
   };
   const recipes: RecipeOverview[] = tabToList[tab];
 
@@ -322,7 +321,7 @@ type Props = {
   ownership: Ownership;
 };
 
-function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
+function useAllowedContent(ownership: Ownership) {
   const {
     my_private_recipes,
     my_public_recipes,
@@ -330,43 +329,16 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
     my_saved_recipes
   } = useUserData();
 
-  //const my_private_plans    = useSelector(state => state.userData.my_private_plans);
-
   // EXTREMELY IMPORTANT:
-  // Note that:
-  // my_private_recipes are
-  // only allowed in a plan of "private" ownership
-  //
-  // my_public_recipes, my_favorite_recipes, and my_saved_recipes are
-  // only allowed in a plan of "private" or "public" ownership
-  //
+  // my_private_recipes and my_saved_recipes are only allowed in private plans
   // This MUST also be checked on the backend server!!!
-
-  const allowedRecipes = [
+  return {
     //...recipes,
-    ...(
-      ownership === "private"
-      ? (
-        recipe_id
-        ? my_private_recipes.filter(r => r.recipe_id != recipe_id)
-        : my_private_recipes
-      )
-      : []
-    ),
-    ...(
-      (ownership === "private" || ownership === "public")
-      ? (
-        recipe_id
-        ? my_public_recipes.filter(r => r.recipe_id != recipe_id)
-        : my_public_recipes
-      )
-      : []
-    ),
-    ...((ownership === "private" || ownership === "public") ? my_favorite_recipes : []),  // TO DO: make sure they can't be the author AND that recipe is not private
-    ...((ownership === "private" || ownership === "public") ? my_saved_recipes    : []),  // TO DO: make sure they can't be the author AND that recipe is not private
-  ];
-
-  return {allowedRecipes};
+    my_public_recipes: (ownership === "private" || ownership === "public") ? my_public_recipes : [],
+    my_favorite_recipes: (ownership === "private" || ownership === "public") ? my_favorite_recipes : [],
+    my_private_recipes: ownership === "private" ? my_private_recipes : [],
+    my_saved_recipes: ownership === "private" ? my_saved_recipes : []
+  };
 }
 
 function isValidPlan({
@@ -391,8 +363,8 @@ function isValidPlan({
 
 interface TabToList {
   [index: string]: any;
-  "official": RecipeOverview[];
-  "private":  RecipeOverview[];  // TODO: only if ownership = "private"
+  //"official": RecipeOverview[];
+  "private":  RecipeOverview[];
   "public":   RecipeOverview[];
   "favorite": RecipeOverview[];
   "saved":    RecipeOverview[];
