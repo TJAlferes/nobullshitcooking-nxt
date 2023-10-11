@@ -133,20 +133,22 @@ function Recipe({
     author,
     owner_id,
     title,
-    recipe_image
+    image_filename
   }
 }: {
   recipe: RecipeOverview;
 }) {
   let url = "https://s3.amazonaws.com/nobsc/image/";
   let path = "";
+
   if (author_id !== NOBSC_USER_ID) {
     url += "user/";
     path += `${author}/`;
-    if (owner_id === author_id) {
+
+    if (author_id === owner_id) {
       url += "private/";
       path += "private-";
-    } else if (owner_id === NOBSC_USER_ID) {
+    } else {
       url += "public/";
       path += "public-";
     }
@@ -155,7 +157,7 @@ function Recipe({
   return (
     <div className="plan-recipe">
       <div className="image">
-        <img src={`${url}recipe/${author_id}/${recipe_image.image_filename}-tiny`} />
+        <img src={`${url}recipe/${author_id}/${image_filename}-tiny`} />
       </div>
 
       <div className="text">

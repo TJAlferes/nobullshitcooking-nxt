@@ -512,13 +512,13 @@ export type FriendshipView = {
 
 export type RecipeOverview = {
   recipe_id:      string;
+  author_id:      string;
   owner_id:       string;
   recipe_type_id: number;
   cuisine_id:     number;
   title:          string;
-  recipe_image:   {
-    image_filename: string;
-  };
+  author:         string;
+  image_filename: string;
 };
 
 export type PlanView = {

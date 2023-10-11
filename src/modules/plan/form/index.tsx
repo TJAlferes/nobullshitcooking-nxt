@@ -1,18 +1,19 @@
-import axios from 'axios';
-import type { XYCoord } from 'dnd-core';
-import update from 'immutability-helper';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import AriaModal from 'react-aria-modal';
+import axios                                   from 'axios';
+import type { XYCoord }                        from 'dnd-core';
+import update                                  from 'immutability-helper';
+import { useSearchParams, useRouter }          from 'next/navigation';
+import { useEffect, useRef, useState }         from 'react';
+import type { ChangeEvent }                    from 'react';
+import AriaModal                               from 'react-aria-modal';
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
-import { endpoint } from '../../../config/api';
+import { endpoint }             from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import type { RecipeOverview } from '../../../store';
-import { ExpandCollapse } from '../../shared/ExpandCollapse';
-import { LoaderButton } from '../../shared/LoaderButton';
-import type { Ownership } from '../../shared/types';
+import type { RecipeOverview }  from '../../../store';
+import { NOBSC_USER_ID }        from '../../shared/constants';
+import { ExpandCollapse }       from '../../shared/ExpandCollapse';
+import { LoaderButton }         from '../../shared/LoaderButton';
+import type { Ownership }       from '../../shared/types';
 
 export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
@@ -487,12 +488,33 @@ function Recipe({
 
   drag(drop(ref));
 
-  const url = "https://s3.amazonaws.com/nobsc-user-recipe";  // fix (and how to account for private/public)
+  const {
+    recipe_id,
+    author_id,
+    owner_id,
+    title,
+    image_filename
+  } = recipe;
+
+  let url = "https://s3.amazonaws.com/nobsc/image/";
+
+  if (author_id !== NOBSC_USER_ID) {
+    url += "user/";
+
+    if (author_id === owner_id) {
+      url += "private/";
+    } else {
+      url += "public/";
+    }
+  }
 
   return (
-    <div className="new-plan-recipe" key={recipe.recipe_id} ref={ref}>
-      <div className="image"><img src={`${url}/${recipe.recipe_image}-tiny`} /></div>
-      <div className="text">{recipe.title}</div>
+    <div className="new-plan-recipe" key={recipe_id} ref={ref}>
+      <div className="image">
+        <img src={`${url}recipe/${author_id}/${image_filename}-tiny`} />
+      </div>
+
+      <div className="text">{title}</div>
     </div>
   );
 }
