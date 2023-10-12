@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-import { endpoint }              from '../../../../../config/api';
-import type { RecipeDetailView } from '../../../../../modules/recipe/detail';
-import PublicUserRecipeDetail    from '../../../../../modules/user/public/recipe/detail';
+import { endpoint }              from '../../../../config/api';
+import type { RecipeDetailView } from '../../../../modules/recipe/detail';
+import UserPublicRecipeDetail    from '../../../../modules/user/public-recipe/detail';
 
-export default function PublicUserRecipeDetailPage({ recipe }: Props) {
-  return <PublicUserRecipeDetail recipe={recipe} />
+export default function UserPublicRecipeDetailPage({ recipe }: Props) {
+  return <UserPublicRecipeDetail recipe={recipe} />
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const response = await axios.get(
-    `${endpoint}/user/public/recipe/${params.username}/${params.title}`
+    `${endpoint}/users/${params.username}/public-recipes/${params.title}`
   );
 
   return {
