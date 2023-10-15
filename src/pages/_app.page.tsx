@@ -2,7 +2,7 @@ import axios                   from 'axios';
 import { useEffect, useState } from 'react';
 import { DndProvider }         from 'react-dnd-multi-backend';  // TO DO: move DOWN, to plan
 import { HTML5toTouch }        from 'rdndmb-html5-to-touch';
-import type { AppProps }       from 'next/app';
+import type { AppProps }       from 'next/app.js';
 
 import '../../styles/styles.css';
 import { endpoint }         from '../config/api';

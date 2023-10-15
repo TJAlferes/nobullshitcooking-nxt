@@ -404,7 +404,6 @@ export function useChat() {
 }
 
 // refetches
-//(don't think these will work here)
 
 export const getMyFriendships        = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/friendships`,         "my_friendships"));
 export const getMyPrivateEquipment   = useContextSelector(StoreContext, (s) => createUserDataFetcher(`/users/${s.authname}/private-equipment`,   "my_private_equipment"));
@@ -425,11 +424,7 @@ export const getMyRecipes = (ownership: Ownership) => {
 function createUserDataFetcher(path: string, key: keyof UserData) {
   return async function () {
     try {
-      const { data } = await axios.post(
-        `${endpoint}${path}`,
-        {},
-        {withCredentials: true}
-      );
+      const { data } = await axios.get(`${endpoint}${path}`, {withCredentials: true});
       setItem(key, data);
     } catch (err) {}
   }

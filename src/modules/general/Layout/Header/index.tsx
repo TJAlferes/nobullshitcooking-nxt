@@ -1,6 +1,6 @@
 import axios         from 'axios';
 import Link          from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router.js';
 import { useState }  from 'react';
 
 import { endpoint }          from '../../../../config/api';
