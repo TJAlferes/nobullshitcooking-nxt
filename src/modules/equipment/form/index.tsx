@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }        from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
-import { LoaderButton }    from '../../shared/LoaderButton';
+import { NOBSC_USER_ID } from '../../shared/constants';
+import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
-import type { Ownership }  from '../../shared/types';
+import type { Ownership } from '../../shared/types';
 
 export default function EquipmentForm({ ownership }: Props) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function EquipmentForm({ ownership }: Props) {
   const params = useSearchParams();
   const equipment_id = params.get('equipment_id');
 
-  const { authname } = useAuth();
+  const { auth_id, authname } = useAuth();
   const { equipment_types } = useData();
   const { setMyPrivateEquipment } = useUserData();
 
@@ -104,8 +105,8 @@ export default function EquipmentForm({ ownership }: Props) {
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
-    const small = await getCroppedImage(280, 172, imageRef.current, crop);
-    const tiny = await getCroppedImage(28,  18,  imageRef.current, crop);
+    const small = await getCroppedImage(280, 280, imageRef.current, crop);
+    const tiny = await getCroppedImage(28, 28, imageRef.current, crop);
     if (!small || !tiny) return;
     setSmallImagePreview(small.preview);
     setTinyImagePreview(tiny.preview);
@@ -115,7 +116,8 @@ export default function EquipmentForm({ ownership }: Props) {
 
   const onCropChange   = (crop: Crop) => setCrop(crop);
   const onCropComplete = (crop: Crop) => makeCrops(crop);
-  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
+  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) =>
+    imageRef.current = e.currentTarget;
 
   const cancelImage = () => {
     setSmallImagePreview("");
@@ -140,31 +142,24 @@ export default function EquipmentForm({ ownership }: Props) {
       equipment_type_id,
       equipment_name,
       notes,
-      image: {
-        image_filename: equipment_id ? previousImageFilename : "default",
-        caption:        imageCaption,
-        small:          smallImage,
-        tiny:           tinyImage
-      }
+      image_filename: equipment_id ? previousImageFilename : "default",
+      caption: imageCaption
     };
 
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
     
     // upload any images to AWS S3, then insert info into MySQL
-    const { image } = equipment_upload;
     try {
-      if (image.small && image.tiny) {
-        const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: `${ownership}/equipment/`},
+      if (smallImage && tinyImage) {
+        const res = await axios.post(
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'equipment'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.smallSignature, image.small);
-        await uploadImageToAWSS3(data.tinySignature, image.tiny);
-        image.image_filename = data.filename;
-        image.small = null;
-        image.tiny  = null;
+        await uploadImageToAWSS3(res.data.smallSignature, smallImage);
+        await uploadImageToAWSS3(res.data.tinySignature, tinyImage);
+        equipment_upload.image_filename = res.data.filename;
       }
 
       const editing = equipment_id !== null;
@@ -204,6 +199,8 @@ export default function EquipmentForm({ ownership }: Props) {
       setLoading(false);
     }, 4000);
   };
+
+  const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads/equipment`;
   
   return (
     <div className="one-col equipment-form">
@@ -223,7 +220,12 @@ export default function EquipmentForm({ ownership }: Props) {
       <p className="feedback">{feedback}</p>
 
       <h2>Equipment Type</h2>
-      <select name="equipmentType" onChange={changeEquipmentType} required value={equipment_type_id}>
+      <select
+        name="equipmentType"
+        onChange={changeEquipmentType}
+        required
+        value={equipment_type_id}
+      >
         <option value={0}>Select type</option>
         {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
           <option key={equipment_type_id} value={equipment_type_id}>
@@ -233,7 +235,12 @@ export default function EquipmentForm({ ownership }: Props) {
       </select>
 
       <h2>Equipment Name</h2>
-      <input className="name" onChange={changeEquipmentName} type="text" value={equipment_name} />
+      <input
+        className="name"
+        onChange={changeEquipmentName}
+        type="text"
+        value={equipment_name}
+      />
 
       <h2>Notes</h2>
       <textarea className="notes" onChange={changeNotes} value={notes} />
@@ -245,8 +252,8 @@ export default function EquipmentForm({ ownership }: Props) {
           <div>
             {
               !equipment_id
-              ? <img src={`${url}/default`} />
-              : previousImageFilename && <img src={`${url}/${previousImageFilename}`} />
+              ? <img src={`${url}/${NOBSC_USER_ID}/default`} />
+              : <img src={`${url}/${auth_id}/${previousImageFilename}`} />
             }
             
             <h4>Change</h4>
@@ -336,8 +343,6 @@ function useAllowedEquipment(ownership: Ownership) {
   return [];
 }
 
-const url = 'https://s3.amazonaws.com/nobsc/';
-
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 type Image = string | ArrayBuffer | null;
@@ -390,26 +395,19 @@ type IsValidEquipmentUploadParams = {
   setFeedback:       (feedback: string) => void;
 };
 
-type ImageInfo = {
-  image_filename: string;
-  caption:        string;
-};
-
-type ImageUpload = ImageInfo & {
-  small: File | null;
-  tiny:  File | null;
-};
-
 export type EquipmentUpload = {
   equipment_type_id: number;
-  equipment_name: string;
-  notes: string;
-  image: ImageUpload;
+  equipment_name:    string;
+  notes:             string;
+  image_filename:    string;
+  caption:           string;
 };
 
 export type EquipmentUpdateUpload = EquipmentUpload & {
   equipment_id: string;
 };
+
+export type ExistingEquipmentToEdit = EquipmentUpdateUpload;
 
 async function uploadImageToAWSS3(signature: any, image: any) {
   await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});

@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop }             from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                      from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
-import { LoaderButton }                  from '../../shared/LoaderButton';
-import { getCroppedImage }               from '../../shared/getCroppedImage';
-import type { Ownership }                from '../../shared/types';
+import { NOBSC_USER_ID } from '../../shared/constants';
+import { LoaderButton } from '../../shared/LoaderButton';
+import { getCroppedImage } from '../../shared/getCroppedImage';
+import type { Ownership } from '../../shared/types';
 
 export default function IngredientForm({ ownership }: Props) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function IngredientForm({ ownership }: Props) {
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');
 
-  const { authname } = useAuth();
+  const { auth_id, authname } = useAuth();
   const { ingredient_types } = useData();
   const { setMyPrivateIngredients } = useUserData();
 
@@ -26,11 +27,11 @@ export default function IngredientForm({ ownership }: Props) {
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  const [ ingredient_type_id, setIngredientTypeId ] = useState(0);
-  const [ ingredient_brand, setIngredientBrand ] = useState<string|null>("");
+  const [ ingredient_type_id, setIngredientTypeId ]  = useState(0);
+  const [ ingredient_brand,   setIngredientBrand ]   = useState<string|null>("");
   const [ ingredient_variety, setIngredientVariety ] = useState<string|null>("");
-  const [ ingredient_name,    setIngredientName ]   = useState("");
-  const [ notes,              setNotes ]            = useState("");
+  const [ ingredient_name,    setIngredientName ]    = useState("");
+  const [ notes,              setNotes ]             = useState("");
 
   const [ previousImageFilename, setPreviousImageFilename ] = useState("");
   const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
@@ -112,8 +113,8 @@ export default function IngredientForm({ ownership }: Props) {
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
-    const small = await getCroppedImage(280, 172, imageRef.current, crop);
-    const tiny = await getCroppedImage(28,  18,  imageRef.current, crop);
+    const small = await getCroppedImage(280, 280, imageRef.current, crop);
+    const tiny = await getCroppedImage(28, 28, imageRef.current, crop);
     if (!small || !tiny) return;
     setSmallImagePreview(small.preview);
     setTinyImagePreview(tiny.preview);
@@ -123,7 +124,8 @@ export default function IngredientForm({ ownership }: Props) {
 
   const onCropChange   = (crop: Crop) => setCrop(crop);
   const onCropComplete = (crop: Crop) => makeCrops(crop);
-  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) => imageRef.current = e.currentTarget;
+  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) =>
+    imageRef.current = e.currentTarget;
 
   const cancelImage = () => {
     setSmallImagePreview("");
@@ -152,33 +154,26 @@ export default function IngredientForm({ ownership }: Props) {
       ingredient_brand,
       ingredient_variety,
       ingredient_name,
-      alt_names,
+      //alt_names,
       notes,
-      image: {
-        image_filename: ingredient_id ? previousImageFilename : "default",
-        caption:        imageCaption,
-        small:          smallImage,
-        tiny:           tinyImage
-      }
+      image_filename: ingredient_id ? previousImageFilename : "default",
+      caption: imageCaption
     };
 
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE INGREDIENT
     // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
 
     // upload any images to AWS S3, then insert info into MySQL
-    const { image } = ingredient_upload;
     try {
-      if (image.small && image.tiny) {
+      if (smallImage && tinyImage) {
         const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: 'private/ingredient/'},
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'ingredient'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.smallSignature, image.small);
-        await uploadImageToAWSS3(data.tinySignature, image.tiny);
-        image.image_filename = data.filename;
-        image.small = null;
-        image.tiny  = null;
+        await uploadImageToAWSS3(data.smallSignature, smallImage);
+        await uploadImageToAWSS3(data.tinySignature, tinyImage);
+        ingredient_upload.image_filename = data.filename;
       }
 
       const editing = ingredient_id !== null;
@@ -219,6 +214,8 @@ export default function IngredientForm({ ownership }: Props) {
     }, 4000);
   };
 
+  const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads/ingredient`;
+
   return (
     <div className="one-col new-ingredient">
       {
@@ -237,7 +234,12 @@ export default function IngredientForm({ ownership }: Props) {
       <p className="feedback">{feedback}</p>
 
       <h2>Ingredient Type</h2>
-      <select name="ingredientType" onChange={changeIngredientType} required value={ingredient_type_id}>
+      <select
+        name="ingredientType"
+        onChange={changeIngredientType}
+        required
+        value={ingredient_type_id}
+      >
         <option value=""></option>
         {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
           <option key={ingredient_type_id} value={ingredient_type_id}>
@@ -247,20 +249,25 @@ export default function IngredientForm({ ownership }: Props) {
       </select>
 
       <h2>Name</h2>
-      <input className="name" onChange={changeIngredientName} type="text" value={ingredient_name} />
+      <input
+        className="name"
+        onChange={changeIngredientName}
+        type="text"
+        value={ingredient_name}
+      />
 
       <h2>Notes</h2>
       <textarea className="notes" onChange={changeNotes} value={notes} />
 
-      <div>
+      <div className='ingredient-image'>
         <h2>Image of Ingredient</h2>
 
         {!image && (
           <div>
             {
               !ingredient_id
-              ? <img src={`${url}/default`} />
-              : previousImageFilename && <img src={`${url}/${previousImageFilename}`} />
+              ? <img src={`${url}/${NOBSC_USER_ID}/default`} />
+              : <img src={`${url}/${auth_id}/${previousImageFilename}`} />
             }
             
             <h4>Change</h4>
@@ -415,38 +422,22 @@ type IsValidIngredientUploadParams = {
   setFeedback:        (feedback: string) => void;
 };
 
-export type ExistingIngredientToEdit = {
-  ingredient_id:      string;
-  ingredient_type_id: number;
-  ingredient_brand:   string;  // | null
-  ingredient_variety: string;  // | null
-  ingredient_name:    string;
-  notes:              string;
-  image:              ImageInfo;
-};
-
-type ImageInfo = {
-  image_filename: string;
-  caption:        string;
-};
-
-type ImageUpload = ImageInfo & {
-  small: File | null;
-  tiny:  File | null;
-};
-
 export type IngredientUpload = {
   ingredient_type_id: number;
   ingredient_brand:   string;  // | null
   ingredient_variety: string;  // | null
   ingredient_name:    string;
-  notes: string;
-  image: ImageUpload;
+  //alt_names:          string[];
+  notes:              string;
+  image_filename:     string;
+  caption:            string;
 };
 
 export type IngredientUpdateUpload = IngredientUpload & {
   ingredient_id: string;
 };
+
+export type ExistingIngredientToEdit = IngredientUpdateUpload;
 
 async function uploadImageToAWSS3(signature: any, image: any) {
   await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
