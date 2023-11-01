@@ -30,11 +30,12 @@ export default function EquipmentForm({ ownership }: Props) {
   const [ equipment_type_id, setEquipmentTypeId ] = useState(0);
   const [ equipment_name,    setEquipmentName ]   = useState("");
   const [ notes,             setNotes ]           = useState("");
+  const [ image_id,          setImageId ]         = useState("");
+  const [ image_filename,    setImageFilename ]   = useState("");
+  const [ caption,           setCaption ]         = useState("");
 
-  const [ previousImageFilename, setPreviousImageFilename ] = useState("");
   const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
   const [ tinyImage,             setTinyImage ]    = useState<File | null>(null);
-  const [ imageCaption,          setImageCaption ] = useState("");
 
   const imageRef = useRef<HTMLImageElement>();
   const [ image,             setImage ]             = useState<Image>(null);
@@ -63,8 +64,9 @@ export default function EquipmentForm({ ownership }: Props) {
       setEquipmentTypeId(equipment.equipment_type_id);
       setEquipmentName(equipment.equipment_name);
       setNotes(equipment.notes);
-      setPreviousImageFilename(equipment.image.image_filename);
-      setImageCaption(equipment.image.caption);
+      setImageId(equipment.image_id);
+      setImageFilename(equipment.image_filename);
+      setCaption(equipment.caption);
 
       setLoading(false);
     }
@@ -93,7 +95,7 @@ export default function EquipmentForm({ ownership }: Props) {
   const changeEquipmentType  = (e: SyntheticEvent) => setEquipmentTypeId(Number((e.target as HTMLInputElement).value));
   const changeEquipmentName  = (e: SyntheticEvent) => setEquipmentName((e.target as HTMLInputElement).value);
   const changeNotes          = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
-  const changeImageCaption   = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
+  const changeCaption        = (e: SyntheticEvent) => setCaption((e.target as HTMLInputElement).value);
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -142,8 +144,8 @@ export default function EquipmentForm({ ownership }: Props) {
       equipment_type_id,
       equipment_name,
       notes,
-      image_filename: equipment_id ? previousImageFilename : "default",
-      caption: imageCaption
+      image_filename: equipment_id ? image_filename : "default",  // IS THIS BEING OVERWRITTEN???
+      caption: caption
     };
 
     // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
@@ -166,7 +168,7 @@ export default function EquipmentForm({ ownership }: Props) {
       if (editing) {
         const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
-          {equipment_id, ...equipment_upload},
+          {equipment_id, image_id, ...equipment_upload},
           {withCredentials: true}
         );
         if (res.status === 204) {
@@ -253,7 +255,7 @@ export default function EquipmentForm({ ownership }: Props) {
             {
               !equipment_id
               ? <img src={`${url}/${NOBSC_USER_ID}/default`} />
-              : <img src={`${url}/${auth_id}/${previousImageFilename}`} />
+              : <img src={`${url}/${auth_id}/${image_filename}`} />
             }
             
             <h4>Change</h4>
@@ -294,9 +296,9 @@ export default function EquipmentForm({ ownership }: Props) {
               max={150}
               min={2}
               name="caption"
-              onChange={changeImageCaption}
+              onChange={changeCaption}
               type="text"
-              value={imageCaption}
+              value={caption}
             />
 
             <button
@@ -405,6 +407,7 @@ export type EquipmentUpload = {
 
 export type EquipmentUpdateUpload = EquipmentUpload & {
   equipment_id: string;
+  image_id:     string;
 };
 
 export type ExistingEquipmentToEdit = EquipmentUpdateUpload;

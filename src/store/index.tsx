@@ -449,10 +449,9 @@ export type EquipmentView = {
   equipment_type_name: string;
   equipment_name:      string;
   notes:               string;
-  image: {
-    image_filename: string;
-    caption:        string;
-  };
+  image_id:            string;
+  image_filename:      string;
+  caption:             string;
 };
 
 export type EquipmentTypeView = {
@@ -470,10 +469,9 @@ export type IngredientView = {
   ingredient_name:      string;
   fullname:             string;
   notes:                string;
-  image: {
-    image_filename: string;
-    caption:        string;
-  };
+  image_id:             string;
+  image_filename:       string;
+  caption:              string;
 };
 
 export type IngredientTypeView = {
