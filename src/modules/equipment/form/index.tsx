@@ -1,8 +1,8 @@
-import axios                           from 'axios';
-import Link                            from 'next/link';
-import { useSearchParams, useRouter }  from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ReactCrop, { Crop }             from 'react-image-crop';
+import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint } from '../../../config/api';
@@ -24,24 +24,24 @@ export default function EquipmentForm({ ownership }: Props) {
 
   const allowedEquipment = useAllowedEquipment(ownership);
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [ equipment_type_id, setEquipmentTypeId ] = useState(0);
-  const [ equipment_name,    setEquipmentName ]   = useState("");
-  const [ notes,             setNotes ]           = useState("");
-  const [ image_id,          setImageId ]         = useState("");
-  const [ image_filename,    setImageFilename ]   = useState("");
-  const [ caption,           setCaption ]         = useState("");
+  const [equipment_type_id, setEquipmentTypeId] = useState(0);
+  const [equipment_name, setEquipmentName] = useState("");
+  const [notes, setNotes] = useState("");
+  const [image_id, setImageId] = useState("");
+  const [image_filename, setImageFilename] = useState("");
+  const [caption, setCaption] = useState("");
 
-  const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
-  const [ tinyImage,             setTinyImage ]    = useState<File | null>(null);
+  const [smallImage, setSmallImage] = useState<File | null>(null);
+  const [tinyImage, setTinyImage] = useState<File | null>(null);
 
   const imageRef = useRef<HTMLImageElement>();
-  const [ image,             setImage ]             = useState<Image>(null);
-  const [ crop,              setCrop ]              = useState<Crop>(initialCrop);
-  const [ smallImagePreview, setSmallImagePreview ] = useState("");
-  const [ tinyImagePreview,  setTinyImagePreview ]  = useState("");
+  const [image, setImage] = useState<Image>(null);
+  const [crop, setCrop] = useState<Crop>(initialCrop);
+  const [smallImagePreview, setSmallImagePreview] = useState("");
+  const [tinyImagePreview, setTinyImagePreview] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -88,7 +88,10 @@ export default function EquipmentForm({ ownership }: Props) {
   }, []);  // do this in getServerSideProps???
 
   const getMyPrivateEquipment = async () => {
-    const res = await axios.get(`${endpoint}/users/${authname}/private-equipment`, {withCredentials: true});
+    const res = await axios.get(
+      `${endpoint}/users/${authname}/private-equipment`,
+      {withCredentials: true}
+    );
     setMyPrivateEquipment(res.data);
   };
 
@@ -147,9 +150,6 @@ export default function EquipmentForm({ ownership }: Props) {
       image_filename: equipment_id ? image_filename : "default",  // IS THIS BEING OVERWRITTEN???
       caption: caption
     };
-
-    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE EQUIPMENT
-    // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
     
     // upload any images to AWS S3, then insert info into MySQL
     try {
@@ -166,6 +166,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
       const editing = equipment_id !== null;
       if (editing) {
+        equipment_upload.image_id = image_id;
         const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
           {equipment_id, image_id, ...equipment_upload},

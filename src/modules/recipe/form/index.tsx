@@ -1,17 +1,18 @@
-import axios                           from 'axios';
-import Link                            from 'next/link';
-import { useSearchParams, useRouter }  from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent }            from 'react';
-import ReactCrop, { Crop, PixelCrop }  from 'react-image-crop';
-import { v4 as uuidv4 }                from 'uuid';
+import type { ChangeEvent } from 'react';
+import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
+import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }                      from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
-import { LoaderButton }                  from '../../shared/LoaderButton';
-import { getCroppedImage }               from '../../shared/getCroppedImage';
-import type { Ownership }                from '../../shared/types';
+import { NOBSC_USER_ID } from '../../shared/constants';
+import { LoaderButton } from '../../shared/LoaderButton';
+import { getCroppedImage } from '../../shared/getCroppedImage';
+import type { Ownership } from '../../shared/types';
 
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
@@ -19,72 +20,91 @@ export default function RecipeForm({ ownership }: Props) {
   const params = useSearchParams();
   const recipe_id = params.get('recipe_id');
 
-  const { authname } = useAuth();
+  const { auth_id, authname } = useAuth();
   const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
   const { setMyPublicRecipes, setMyPrivateRecipes } = useUserData();
 
   const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [ recipe_type_id, setRecipeTypeId ] = useState(0);
-  const [ cuisine_id,     setCuisineId ]    = useState(0);
-  const [ title,          setTitle ]        = useState("");
-  const [ description,    setDescription ]  = useState("");
-  const [ active_time,    setActiveTime  ]  = useState("");
-  const [ total_time,     setTotalTime   ]  = useState("");
-  const [ directions,     setDirections ]   = useState("");
-
-  const [ usedMethods,  setUsedMethods ] = useState<Methods>(
-    methods.reduce((acc: {[key: number]: boolean}, curr) => {
+  const [recipe_type_id, setRecipeTypeId] = useState(0);
+  const [cuisine_id, setCuisineId] = useState(0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [active_time, setActiveTime] = useState("");
+  const [total_time, setTotalTime] = useState("");
+  const [directions, setDirections] = useState("");
+  const [usedMethods, setUsedMethods] = useState<Methods>(
+    methods.reduce((acc: { [key: number]: boolean }, curr) => {
       acc[curr.method_id] = false;
       return acc;
     }, {})
   );
-  const [ equipmentRows,  setEquipmentRows ]  = useState<EquipmentRow[]>([pristineEquipmentRow]);
-  const [ ingredientRows, setIngredientRows ] = useState<IngredientRow[]>([pristineIngredientRow]);
-  const [ subrecipeRows,  setSubrecipeRows ]  = useState<SubrecipeRow[]>([]);
-
-  const [ previousRecipeImageFilename, setPreviousRecipeImageFilename ] = useState("");
-  const [ recipeMediumImage,   setRecipeMediumImage ]   = useState<File | null>(null);
-  const [ recipeThumbImage,    setRecipeThumbImage ]    = useState<File | null>(null);
-  const [ recipeTinyImage,     setRecipeTinyImage ]     = useState<File | null>(null);
-  const [ recipeImageCaption,  setRecipeImageCaption ]  = useState("");
-
-  const [ previousEquipmentImageFilename, setPreviousEquipmentImageFilename ] = useState("");
-  const [ equipmentMediumImage,   setEquipmentMediumImage ]   = useState<File | null>(null);
-  const [ equipmentImageCaption,  setEquipmentImageCaption ]  = useState("");
-
-  const [ previousIngredientsImageFilename, setPreviousIngredientsImageFilename ] = useState("");
-  const [ ingredientsMediumImage,   setIngredientsMediumImage ]   = useState<File | null>(null);
-  const [ ingredientsImageCaption,  setIngredientsImageCaption ]  = useState("");
-
-  const [ previousCookingImageFilename, setPreviousCookingImageFilename ] = useState("");
-  const [ cookingMediumImage,   setCookingMediumImage ]   = useState<File | null>(null);
-  const [ cookingImageCaption,  setCookingImageCaption ]  = useState("");
+  const [equipmentRows, setEquipmentRows] = useState<EquipmentRow[]>([pristineEquipmentRow]);
+  const [ingredientRows, setIngredientRows] = useState<IngredientRow[]>([pristineIngredientRow]);
+  const [subrecipeRows, setSubrecipeRows] = useState<SubrecipeRow[]>([]);
 
   const recipeImageRef = useRef<HTMLImageElement>();
-  const [ recipeImage,              setRecipeImage ]              = useState<Image>(null);
-  const [ recipeCrop,               setRecipeCrop ]               = useState<Crop>(initialCrop);
-  const [ recipeMediumImagePreview, setRecipeMediumImagePreview ] = useState("");
-  const [ recipeThumbImagePreview,  setRecipeThumbImagePreview ]  = useState("");
-  const [ recipeTinyImagePreview,   setRecipeTinyImagePreview ]   = useState("");
+  const [recipeImageState, setRecipeImageState] = useState<ImageState>({
+    image: null,
+    crop: initialCrop,
+    mediumPreview: "",
+    thumbPreview: "",
+    tinyPreview: ""
+  });
+  const [recipeMediumImage, setRecipeMediumImage] = useState<File | null>(null);
+  const [recipeThumbImage, setRecipeThumbImage] = useState<File | null>(null);
+  const [recipeTinyImage, setRecipeTinyImage] = useState<File | null>(null);
+  const [recipe_image, setRecipeImage] = useState({
+    image_id: "",
+    image_filename: "",
+    caption: "",
+    type: 1
+  });
 
   const equipmentImageRef = useRef<HTMLImageElement>();
-  const [ equipmentImage,              setEquipmentImage ]              = useState<Image>(null);
-  const [ equipmentCrop,               setEquipmentCrop ]               = useState<Crop>(initialCrop);
-  const [ equipmentMediumImagePreview, setEquipmentMediumImagePreview ] = useState("");
+  const [equipmentImageState, setEquipmentImageState] = useState<ImageState>({
+    image: null,
+    crop: initialCrop,
+    mediumPreview: ""
+  });
+  const [equipmentMediumImage, setEquipmentMediumImage] = useState<File | null>(null);
+  const [equipment_image, setEquipmentImage] = useState({
+    image_id: "",
+    image_filename: "",
+    caption: "",
+    type: 2
+  });
 
   const ingredientsImageRef = useRef<HTMLImageElement>();
-  const [ ingredientsImage,              setIngredientsImage ]              = useState<Image>(null);
-  const [ ingredientsCrop,               setIngredientsCrop ]               = useState<Crop>(initialCrop);
-  const [ ingredientsMediumImagePreview, setIngredientsMediumImagePreview ] = useState("");
+  const [ingredientsImageState, setIngredientsImageState] = useState<ImageState>({
+    image: null,
+    crop: initialCrop,
+    mediumPreview: ""
+  });
+  const [ingredientsMediumImage, setIngredientsMediumImage] = useState<File | null>(null);
+  const [ingredients_image, setIngredientsImage] = useState({
+    image_id: "",
+    image_filename: "",
+    caption: "",
+    type: 3
+  });
 
   const cookingImageRef = useRef<HTMLImageElement>();
-  const [ cookingImage,              setCookingImage ]              = useState<Image>(null);
-  const [ cookingCrop,               setCookingCrop ]               = useState<Crop>(initialCrop);
-  const [ cookingMediumImagePreview, setCookingMediumImagePreview ] = useState("");
+  const [cookingImageState, setCookingImageState] = useState<ImageState>({
+    image: null,
+    crop: initialCrop,
+    mediumPreview: ""
+  });
+  const [cookingMediumImage, setCookingMediumImage] = useState<File | null>(null);
+  const [cooking_image, setCookingImage] = useState({
+    image_id: "",
+    image_filename: "",
+    caption: "",
+    type: 4
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -116,7 +136,6 @@ export default function RecipeForm({ ownership }: Props) {
       setActiveTime(recipe.active_time);
       setTotalTime(recipe.total_time);
       setDirections(recipe.directions);
-
       setUsedMethods(prevState => {
         const nextState = {...prevState};
         recipe.required_methods?.map(({ method_id }) => {
@@ -127,16 +146,10 @@ export default function RecipeForm({ ownership }: Props) {
       setEquipmentRows(recipe.required_equipment.map(r => ({...r, key: uuidv4()})));
       setIngredientRows(recipe.required_ingredients.map(r => ({...r, key: uuidv4()})));
       setSubrecipeRows(recipe.required_subrecipes.map(r => ({...r, key: uuidv4()})));
-
-      setPreviousRecipeImageFilename(recipe.recipe_image.image_filename);
-      setPreviousEquipmentImageFilename(recipe.equipment_image.image_filename);
-      setPreviousIngredientsImageFilename(recipe.ingredients_image.image_filename);
-      setPreviousCookingImageFilename(recipe.cooking_image.image_filename);
-
-      setRecipeImageCaption(recipe.recipe_image.caption);
-      setEquipmentImageCaption(recipe.equipment_image.caption);
-      setIngredientsImageCaption(recipe.ingredients_image.caption);
-      setCookingImageCaption(recipe.cooking_image.caption);
+      setRecipeImage({...recipe_image, ...recipe.recipe_image});
+      setEquipmentImage({...equipment_image, ...recipe.equipment_image});
+      setIngredientsImage({...ingredients_image, ...recipe.ingredients_image});
+      setCookingImage({...cooking_image, ...recipe.cooking_image});
 
       setLoading(false);
     }
@@ -162,7 +175,10 @@ export default function RecipeForm({ ownership }: Props) {
       const res = await axios.get(`${endpoint}/users/${authname}/public-recipes`);
       setMyPublicRecipes(res.data);
     } else if (ownership === "private") {
-      const res = await axios.get(`${endpoint}/users/${authname}/private-recipes`, {withCredentials: true});
+      const res = await axios.get(
+        `${endpoint}/users/${authname}/private-recipes`,
+        {withCredentials: true}
+      );
       setMyPrivateRecipes(res.data);
     }
   };
@@ -175,10 +191,17 @@ export default function RecipeForm({ ownership }: Props) {
   const changeTotalTime   = (e: ChangeEvent<HTMLInputElement>) => setTotalTime(e.target.value);
   const changeDirections  = (e: ChangeEvent<HTMLTextAreaElement>) => setDirections(e.target.value);
 
-  const changeRecipeImageCaption      = (e: ChangeEvent<HTMLInputElement>) => setRecipeImageCaption(e.target.value);
-  const changeEquipmentImageCaption   = (e: ChangeEvent<HTMLInputElement>) => setEquipmentImageCaption(e.target.value);
-  const changeIngredientsImageCaption = (e: ChangeEvent<HTMLInputElement>) => setIngredientsImageCaption(e.target.value);
-  const changeCookingImageCaption     = (e: ChangeEvent<HTMLInputElement>) => setCookingImageCaption(e.target.value);
+  const changeRecipeImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
+    setRecipeImage({...recipe_image, caption: e.target.value});
+
+  const changeEquipmentImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
+    setEquipmentImage({...equipment_image, caption: e.target.value});
+
+  const changeIngredientsImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
+    setIngredientsImage({...ingredients_image, caption: e.target.value});
+
+  const changeCookingImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
+    setCookingImage({...cooking_image, caption: e.target.value});
 
   const changeMethods = (e: SyntheticEvent) => {
     const id = (e.target as HTMLInputElement).id;
@@ -236,99 +259,134 @@ export default function RecipeForm({ ownership }: Props) {
   const removeSubrecipeRow = (rowKey: string) =>
     setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
   
-  const makeCookingCrops = async (crop: Crop) => {
-    if (!cookingImageRef.current) return;
-    const full = await getCroppedImage(560, 346, cookingImageRef.current, crop);
-    if (!full) return;
-    setCookingMediumImagePreview(full.preview);
-    setCookingMediumImage(full.final);
-  };
-
-  const makeEquipmentCrops = async (crop: Crop) => {
-    if (!equipmentImageRef.current) return;
-    const full = await getCroppedImage(560, 346, equipmentImageRef.current, crop);  // was 280, 172
-    if (!full) return;
-    setEquipmentMediumImagePreview(full.preview);
-    setEquipmentMediumImage(full.final);
-  };
-
-  const makeIngredientsCrops = async (crop: Crop) => {
-    if (!ingredientsImageRef.current) return;
-    const full = await getCroppedImage(560, 346, ingredientsImageRef.current, crop);
-    if (!full) return;
-    setIngredientsMediumImagePreview(full.preview);
-    setIngredientsMediumImage(full.final);
-  };
-
-  const makeRecipeCrops = async (crop: Crop) => {
-    if (!recipeImageRef.current) return;
-    const full =  await getCroppedImage(560, 346, recipeImageRef.current, crop);
-    const thumb = await getCroppedImage(100, 62,  recipeImageRef.current, crop);
-    const tiny =  await getCroppedImage(28,  18,  recipeImageRef.current, crop);
-    if (!full || !thumb || !tiny) return;
-    setRecipeMediumImagePreview(full.preview);
-    setRecipeThumbImagePreview(thumb.preview);
-    setRecipeTinyImagePreview(tiny.preview);
-    setRecipeMediumImage(full.final);
-    setRecipeThumbImage(thumb.final);
-    setRecipeTinyImage(tiny.final);
-  };
-
-  const onCookingCropChange =     (crop: PixelCrop) => setCookingCrop(crop);
-  const onEquipmentCropChange =   (crop: PixelCrop) => setEquipmentCrop(crop);
-  const onIngredientsCropChange = (crop: PixelCrop) => setIngredientsCrop(crop);
-  const onRecipeCropChange =      (crop: PixelCrop) => setRecipeCrop(crop);
-
-  // remove these ???
-  const onCookingCropComplete =     (crop: Crop) => makeCookingCrops(crop);
-  const onEquipmentCropComplete =   (crop: Crop) => makeEquipmentCrops(crop);
-  const onIngredientsCropComplete = (crop: Crop) => makeIngredientsCrops(crop);
-  const onRecipeCropComplete =      (crop: Crop) => makeRecipeCrops(crop);
-
-  const onCookingImageLoaded =     (e: SyntheticImageEvent) => cookingImageRef.current = e.currentTarget;
-  const onEquipmentImageLoaded =   (e: SyntheticImageEvent) => equipmentImageRef.current = e.currentTarget;
-  const onIngredientsImageLoaded = (e: SyntheticImageEvent) => ingredientsImageRef.current = e.currentTarget;
-  const onRecipeImageLoaded =      (e: SyntheticImageEvent) => recipeImageRef.current = e.currentTarget;
-  
   const onSelectFile = (e: ChangeEvent, type: string) => {
     const target = e.target as HTMLInputElement;
     if (!(target.files && target.files.length > 0)) return;
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-      if (type === "cooking")     setCookingImage(reader.result);
-      if (type === "equipment")   setEquipmentImage(reader.result);
-      if (type === "ingredients") setIngredientsImage(reader.result);
-      if (type === "recipe")      setRecipeImage(reader.result);
+      if (type === "recipe") {
+        setRecipeImageState({...recipeImageState, image: reader.result});
+      }
+      if (type === "equipment") {
+        setEquipmentImageState({...equipmentImageState, image: reader.result});
+      }
+      if (type === "ingredients") {
+        setIngredientsImageState({...ingredientsImageState, image: reader.result});
+      }
+      if (type === "cooking") {
+        setCookingImageState({...cookingImageState, image: reader.result});
+      }
     });
     reader.readAsDataURL(target.files[0] as Blob);
   };
 
-  const cancelCookingImage = () => {
-    setCookingMediumImagePreview("");
-    setCookingImage(null);
-    setCookingMediumImage(null);
+  const onRecipeImageLoaded = (e: SyntheticImageEvent) =>
+    recipeImageRef.current = e.currentTarget;
+  
+  const onEquipmentImageLoaded = (e: SyntheticImageEvent) =>
+    equipmentImageRef.current = e.currentTarget;
+
+  const onIngredientsImageLoaded = (e: SyntheticImageEvent) =>
+    ingredientsImageRef.current = e.currentTarget;
+  
+  const onCookingImageLoaded = (e: SyntheticImageEvent) =>
+    cookingImageRef.current = e.currentTarget;
+  
+  const onRecipeCropChange = (crop: PixelCrop) =>
+    setRecipeImageState({...recipeImageState, crop});
+
+  const onEquipmentCropChange = (crop: PixelCrop) =>
+    setEquipmentImageState({...equipmentImageState, crop});
+
+  const onIngredientsCropChange = (crop: PixelCrop) =>
+    setIngredientsImageState({...ingredientsImageState, crop});
+
+  const onCookingCropChange = (crop: PixelCrop) =>
+    setCookingImageState({...cookingImageState, crop});
+  
+  const onRecipeCropComplete = async (crop: Crop) => {
+    if (!recipeImageRef.current) return;
+    const medium =  await getCroppedImage(560, 560, recipeImageRef.current, crop);
+    const thumb = await getCroppedImage(100, 100, recipeImageRef.current, crop);
+    const tiny =  await getCroppedImage(28, 28, recipeImageRef.current, crop);
+    if (!medium || !thumb || !tiny) return;
+    setRecipeImageState({
+      ...recipeImageState,
+      mediumPreview: medium.preview,
+      thumbPreview: thumb.preview,
+      tinyPreview: tiny.preview
+    });
+    setRecipeMediumImage(medium.final);
+    setRecipeThumbImage(thumb.final);
+    setRecipeTinyImage(tiny.final);
+  };
+
+  const onEquipmentCropComplete = async (crop: Crop) => {
+    if (!equipmentImageRef.current) return;
+    const medium = await getCroppedImage(560, 560, equipmentImageRef.current, crop);
+    if (!medium) return;
+    setEquipmentImageState({...equipmentImageState, mediumPreview: medium.preview});
+    setEquipmentMediumImage(medium.final);
+  };
+
+  const onIngredientsCropComplete = async (crop: Crop) => {
+    if (!ingredientsImageRef.current) return;
+    const medium = await getCroppedImage(560, 560, ingredientsImageRef.current, crop);
+    if (!medium) return;
+    setIngredientsImageState({...ingredientsImageState, mediumPreview: medium.preview});
+    setIngredientsMediumImage(medium.final);
+  };
+
+  const onCookingCropComplete = async (crop: Crop) => {
+    if (!cookingImageRef.current) return;
+    const medium = await getCroppedImage(560, 560, cookingImageRef.current, crop);
+    if (!medium) return;
+    setCookingImageState({...cookingImageState, mediumPreview: medium.preview});
+    setCookingMediumImage(medium.final);
+  };
+
+  const cancelRecipeImage = () => {
+    setRecipeImageState({
+      ...recipeImageState,
+      image: null,
+      //crop
+      mediumPreview: "",
+      thumbPreview: "",
+      tinyPreview: ""
+    });
+    setRecipeMediumImage(null);
+    setRecipeThumbImage(null);
+    setRecipeTinyImage(null);
   };
 
   const cancelEquipmentImage = () => {
-    setEquipmentMediumImagePreview("");
-    setEquipmentImage(null);
+    setEquipmentImageState({
+      ...equipmentImageState,
+      image: null,
+      //crop
+      mediumPreview: ""
+    });
     setEquipmentMediumImage(null);
   };
 
   const cancelIngredientsImage = () => {
-    setIngredientsMediumImagePreview("");
-    setIngredientsImage(null);
+    setIngredientsImageState({
+      ...ingredientsImageState,
+      image: null,
+      //crop
+      mediumPreview: ""
+    });
     setIngredientsMediumImage(null);
   };
 
-  const cancelRecipeImage = () => {
-    setRecipeMediumImagePreview("");
-    setRecipeThumbImagePreview("");
-    setRecipeTinyImagePreview("");
-    setRecipeImage(null);
-    setRecipeMediumImage(null);
-    setRecipeThumbImage(null);
-    setRecipeTinyImage(null);
+  const cancelCookingImage = () => {
+    setCookingImageState({
+      ...cookingImageState,
+      image: null,
+      //crop
+      mediumPreview: ""
+    });
+    setCookingMediumImage(null);
   };
 
   const getCheckedMethods = () => Object.keys(usedMethods)
@@ -386,101 +444,60 @@ export default function RecipeForm({ ownership }: Props) {
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
       // TO DO: how can they reset image_filename to "default"? Do they even need this ability?
-      recipe_image: {
-        image_filename: recipe_id ? previousRecipeImageFilename : "default",
-        caption:        recipeImageCaption,
-        type:           1,
-        order:          1,
-        medium:         recipeMediumImage,
-        thumb:          recipeThumbImage,
-        tiny:           recipeTinyImage
-      },
-      equipment_image: {
-        image_filename: recipe_id ? previousEquipmentImageFilename : "default",
-        caption:        equipmentImageCaption,
-        type:           2,
-        order:          1,
-        medium:         equipmentMediumImage
-      },
-      ingredients_image: {
-        image_filename: recipe_id ? previousIngredientsImageFilename : "default",
-        caption:        ingredientsImageCaption,
-        type:           3,
-        order:          1,
-        medium:         ingredientsMediumImage
-      },
-      cooking_image: {
-        image_filename: recipe_id ? previousCookingImageFilename : "default",
-        caption:        cookingImageCaption,
-        type:           4,
-        order:          1,
-        medium:         cookingMediumImage
-      }
-    };
-
-    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE RECIPE
-    // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-
-    // upload any images to AWS S3, then insert info into MySQL
-    const {
       recipe_image,
       equipment_image,
       ingredients_image,
       cooking_image
-    } = recipe_upload;
+    };
+
+    // upload any images to AWS S3, then insert info into MySQL
     try {
-      if (recipe_image.medium && recipe_image.thumb && recipe_image.tiny) {
-        const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: `${ownership}/recipe/`},
+      if (recipeMediumImage && recipeThumbImage && recipeTinyImage) {
+        const res = await axios.post(
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.mediumSignature, recipe_image.medium);
-        await uploadImageToAWSS3(data.thumbSignature, recipe_image.thumb);
-        await uploadImageToAWSS3(data.tinySignature, recipe_image.tiny);
-        recipe_image.image_filename = data.filename;
-        recipe_image.medium = null;
-        recipe_image.thumb  = null;
-        recipe_image.tiny   = null;
+        await uploadImageToAWSS3(res.data.mediumSignature, recipeMediumImage);
+        await uploadImageToAWSS3(res.data.thumbSignature, recipeThumbImage);
+        await uploadImageToAWSS3(res.data.tinySignature, recipeTinyImage);
+        recipe_upload.recipe_image.image_filename = res.data.filename;
       }
     
-      if (equipment_image.medium) {
-        const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: `${ownership}/recipe-equipment/`},
+      if (equipmentMediumImage) {
+        const res = await axios.post(
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-equipment'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.mediumSignature, equipment_image.medium);
-        equipment_image.image_filename = data.filename;
-        equipment_image.medium = null;
+        await uploadImageToAWSS3(res.data.mediumSignature, equipmentMediumImage);
+        recipe_upload.equipment_image.image_filename = res.data.filename;
       }
     
-      if (ingredients_image.medium) {
-        const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: `${ownership}/recipe-ingredients/`},
+      if (ingredientsMediumImage) {
+        const res = await axios.post(
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-ingredients'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.mediumSignature, ingredients_image.medium);
-        ingredients_image.image_filename = data.filename;
-        ingredients_image.medium = null;
+        await uploadImageToAWSS3(res.data.mediumSignature, ingredientsMediumImage);
+        recipe_upload.ingredients_image.image_filename = res.data.filename;
       }
     
-      if (cooking_image.medium) {
-        const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: `${ownership}/recipe-cooking/`},
+      if (cookingMediumImage) {
+        const res = await axios.post(
+          `${endpoint}/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-cooking'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.mediumSignature, cooking_image.medium);
-        cooking_image.image_filename = data.filename;
-        cooking_image.medium = null;
+        await uploadImageToAWSS3(res.data.mediumSignature, cookingMediumImage);
+        recipe_upload.cooking_image.image_filename = res.data.filename;
       }
 
       const editing = recipe_id !== null;
       if (editing) {
         const res = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
+          `${endpoint}/users/${authname}/${ownership}-recipes`,
           {recipe_id, ...recipe_upload},
           {withCredentials: true}
         );
@@ -493,7 +510,7 @@ export default function RecipeForm({ ownership }: Props) {
         }
       } else {
         const res = await axios.post(
-          `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}`,
+          `${endpoint}/users/${authname}/${ownership}-recipes`,
           recipe_upload,
           {withCredentials: true}
         );
@@ -515,8 +532,10 @@ export default function RecipeForm({ ownership }: Props) {
     }
   };
 
+  const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads`;
+
   return (
-    <div className="one-col new-recipe">
+    <div className="one-col recipe-form">
       {
         ownership === "private"
         && recipe_id
@@ -862,259 +881,241 @@ export default function RecipeForm({ ownership }: Props) {
         value={directions}
       />
 
-      <div className="new-recipe-images">
+      <div className="recipe-form-images">
         <div className="recipe-image">
           <h2>Image of Finished Recipe</h2>
-  
-          {!recipeImage && (
-            <div>
-              {
-                !recipe_id
-                ? <img src={`${url}/default`} />
-                : previousRecipeImageFilename && <img src={`${url}/${previousRecipeImageFilename}`} />
-              }
-
-              <h4>Change</h4>
-              <input
-                accept="image/*"
-                name="image-input"
-                onChange={(e) => onSelectFile(e, "recipe")}
-                type="file"
-              />
-            </div>
-          )}
-  
-          {recipeImage && (
-            <div>
-              <ReactCrop
-                crop={recipeCrop}
-                onChange={onRecipeCropChange}
-                onComplete={onRecipeCropComplete}
-                {...commonReactCropProps}
-              >
-                <img onLoad={onRecipeImageLoaded} src={recipeImage as string} />
-              </ReactCrop>
-  
-              <ToolTip />
-  
-              <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={recipeMediumImagePreview} />
+          {
+            !recipeImageState.image
+            ? (
+              <>
+                {
+                  !recipe_id
+                  ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
+                  : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />
+                }
+                <h4>Change</h4>
+                <input
+                  accept="image/*"
+                  name="image-input"
+                  onChange={(e) => onSelectFile(e, "recipe")}
+                  type="file"
+                />
+              </>
+            )
+            : (
+              <>
+                <ReactCrop
+                  crop={recipeImageState.crop}
+                  onChange={onRecipeCropChange}
+                  onComplete={onRecipeCropComplete}
+                  {...commonReactCropProps}
+                >
+                  <img onLoad={onRecipeImageLoaded} src={recipeImageState.image as string} />
+                </ReactCrop>
+                <ToolTip />
+                <div className="crops">
+                  <div className="crop-full-outer">
+                    <span>Full Size: </span>
+                    <img className="crop-full" src={recipeImageState.mediumPreview} />
+                  </div>
+                  <div className="crop-thumb-outer">
+                    <span>Thumb Size: </span>
+                    <img className="crop-thumb" src={recipeImageState.thumbPreview} />
+                  </div>
+                  <div className="crop-tiny-outer">
+                    <span>Tiny Size: </span>
+                    <img className="crop-tiny" src={recipeImageState.tinyPreview} />
+                  </div>
                 </div>
-
-                <div className="crop-thumb-outer">
-                  <span>Thumb Size: </span>
-                  <img className="crop-thumb" src={recipeThumbImagePreview} />
-                </div>
-
-                <div className="crop-tiny-outer">
-                  <span>Tiny Size: </span>
-                  <img className="crop-tiny" src={recipeTinyImagePreview} />
-                </div>
-              </div>
-
-              <h4>Caption:</h4>
-              <input
-                className="caption"
-                max={150}
-                min={2}
-                name="caption"
-                onChange={changeRecipeImageCaption}
-                type="text"
-                value={recipeImageCaption}
-              />
-  
-              <button
-                className="image-cancel-button"
-                disabled={loading}
-                onClick={cancelRecipeImage}
-              >Cancel</button>
-            </div>
-          )}
+                <h4>Caption:</h4>
+                <input
+                  className="caption"
+                  max={150}
+                  min={2}
+                  name="caption"
+                  onChange={changeRecipeImageCaption}
+                  type="text"
+                  value={recipe_image!.caption}
+                />
+                <button
+                  className="image-cancel-button"
+                  disabled={loading}
+                  onClick={cancelRecipeImage}
+                >Cancel</button>
+              </>
+            )
+          }
         </div>
 
         <div className="equipment-image">
           <h2>Image of All Equipment</h2>
-  
-          {!equipmentImage && (
-            <div>
-              {
-                !recipe_id
-                ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousEquipmentImageFilename && <img src={`${url}-equipment/${previousEquipmentImageFilename}`} />
-              }
-
-              <h4>Change</h4>
-              <input
-                accept="image/*"
-                name="equipment-image-input"
-                onChange={(e) => onSelectFile(e, "equipment")}
-                type="file"
-              />
-            </div>
-          )}
-  
-          {equipmentImage && (
-            <div>
-              <ReactCrop
-                crop={equipmentCrop}
-                onChange={onEquipmentCropChange}
-                onComplete={onEquipmentCropComplete}
-                {...commonReactCropProps}
-              >
-                <img onLoad={onEquipmentImageLoaded} src={equipmentImage as string} />
-              </ReactCrop>
-              
-              <ToolTip />
-  
-              <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={equipmentMediumImagePreview} />
+          {
+            !equipmentImageState.image
+            ? (
+              <>
+                {
+                  !recipe_id
+                  ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
+                  : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />
+                }
+                <h4>Change</h4>
+                <input
+                  accept="image/*"
+                  name="equipment-image-input"
+                  onChange={(e) => onSelectFile(e, "equipment")}
+                  type="file"
+                />
+              </>
+            )
+            : (
+              <>
+                <ReactCrop
+                  crop={equipmentImageState.crop}
+                  onChange={onEquipmentCropChange}
+                  onComplete={onEquipmentCropComplete}
+                  {...commonReactCropProps}
+                >
+                  <img onLoad={onEquipmentImageLoaded} src={equipmentImageState.image as string} />
+                </ReactCrop>
+                <ToolTip />
+                <div className="crops">
+                  <div className="crop-full-outer">
+                    <span>Full Size: </span>
+                    <img className="crop-full" src={equipmentImageState.mediumPreview} />
+                  </div>
                 </div>
-              </div>
-
-              <h4>Caption:</h4>
-              <input
-                className="caption"
-                max={150}
-                min={2}
-                name="caption"
-                onChange={changeEquipmentImageCaption}
-                type="text"
-                value={equipmentImageCaption}
-              />
-  
-              <button
-                className="image-cancel-button"
-                disabled={loading}
-                onClick={cancelEquipmentImage}
-              >Cancel</button>
-            </div>
-          )}
+                <h4>Caption:</h4>
+                <input
+                  className="caption"
+                  max={150}
+                  min={2}
+                  name="caption"
+                  onChange={changeEquipmentImageCaption}
+                  type="text"
+                  value={equipment_image!.caption}
+                />
+                <button
+                  className="image-cancel-button"
+                  disabled={loading}
+                  onClick={cancelEquipmentImage}
+                >Cancel</button>
+              </>
+            )
+          }
         </div>
 
         <div className="ingredients-image">
           <h2>Image of All Ingredients</h2>
-  
-          {!ingredientsImage && (
-            <div>
-              {
-                !recipe_id
-                ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousIngredientsImageFilename && <img src={`${url}-ingredients/${previousIngredientsImageFilename}`} />
-              }
-
-              <h4>Change</h4>
-              <input
-                accept="image/*"
-                name="ingredients-image-input"
-                onChange={(e) => onSelectFile(e, "ingredients")}
-                type="file"
-              />
-            </div>
-          )}
-  
-          {ingredientsImage && (
-            <div>
-              <ReactCrop
-                crop={ingredientsCrop}
-                onChange={onIngredientsCropChange}
-                onComplete={onIngredientsCropComplete}
-                {...commonReactCropProps}
-              >
-                <img onLoad={onIngredientsImageLoaded} src={ingredientsImage as string} />
-              </ReactCrop>
-              
-              <ToolTip />
-  
-              <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={ingredientsMediumImagePreview} />
+          {
+            !ingredientsImageState.image
+            ? (
+              <>
+                {
+                  !recipe_id
+                  ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
+                  : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
+                }
+                <h4>Change</h4>
+                <input
+                  accept="image/*"
+                  name="ingredients-image-input"
+                  onChange={(e) => onSelectFile(e, "ingredients")}
+                  type="file"
+                />
+              </>
+            )
+            : (
+              <>
+                <ReactCrop
+                  crop={ingredientsImageState.crop}
+                  onChange={onIngredientsCropChange}
+                  onComplete={onIngredientsCropComplete}
+                  {...commonReactCropProps}
+                >
+                  <img onLoad={onIngredientsImageLoaded} src={ingredientsImageState.image as string} />
+                </ReactCrop>
+                <ToolTip />
+                <div className="crops">
+                  <div className="crop-full-outer">
+                    <span>Full Size: </span>
+                    <img className="crop-full" src={ingredientsImageState.mediumPreview} />
+                  </div>
                 </div>
-              </div>
-
-              <h4>Caption:</h4>
-              <input
-                className="caption"
-                max={150}
-                min={2}
-                name="caption"
-                onChange={changeIngredientsImageCaption}
-                type="text"
-                value={ingredientsImageCaption}
-              />
-  
-              <button
-                className="image-cancel-button"
-                disabled={loading}
-                onClick={cancelIngredientsImage}
-              >Cancel</button>
-            </div>
-          )}
+                <h4>Caption:</h4>
+                <input
+                  className="caption"
+                  max={150}
+                  min={2}
+                  name="caption"
+                  onChange={changeIngredientsImageCaption}
+                  type="text"
+                  value={ingredients_image!.caption}
+                />
+                <button
+                  className="image-cancel-button"
+                  disabled={loading}
+                  onClick={cancelIngredientsImage}
+                >Cancel</button>
+              </>
+            )
+          }
         </div>
 
         <div className="cooking-image">
           <h2>Image of Cooking In Action</h2>
-  
-          {!cookingImage && (
-            <div>
-              {
-                !recipe_id
-                ? <img src={`${url}/nobsc-recipe-default`} />
-                : previousCookingImageFilename && <img src={`${url}-cooking/${previousCookingImageFilename}`} />
-              }
-  
-              <h4>Change</h4>
-              <input
-                accept="image/*"
-                name="cooking-image-input"
-                onChange={(e) => onSelectFile(e, "cooking")}
-                type="file"
-              />
-            </div>
-          )}
-  
-          {cookingImage && (
-            <div>
-              <ReactCrop
-                crop={cookingCrop}
-                onChange={onCookingCropChange}
-                onComplete={onCookingCropComplete}
-                {...commonReactCropProps}
-              >
-                <img onLoad={onCookingImageLoaded} src={cookingImage as string} />
-              </ReactCrop>
-              
-              <ToolTip />
-  
-              <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={cookingMediumImagePreview} />
+          {
+            !cookingImageState.image
+            ? (
+              <>
+                {
+                  !recipe_id
+                  ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
+                  : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />
+                }
+                <h4>Change</h4>
+                <input
+                  accept="image/*"
+                  name="cooking-image-input"
+                  onChange={(e) => onSelectFile(e, "cooking")}
+                  type="file"
+                />
+              </>
+            )
+            : (
+              <>
+                <ReactCrop
+                  crop={cookingImageState.crop}
+                  onChange={onCookingCropChange}
+                  onComplete={onCookingCropComplete}
+                  {...commonReactCropProps}
+                >
+                  <img onLoad={onCookingImageLoaded} src={cookingImageState.image as string} />
+                </ReactCrop>
+                <ToolTip />
+                <div className="crops">
+                  <div className="crop-full-outer">
+                    <span>Full Size: </span>
+                    <img className="crop-full" src={cookingImageState.mediumPreview} />
+                  </div>
                 </div>
-              </div>
-
-              <h4>Caption:</h4>
-              <input
-                className="caption"
-                max={150}
-                min={2}
-                name="caption"
-                onChange={changeCookingImageCaption}
-                type="text"
-                value={cookingImageCaption}
-              />
-  
-              <button
-                className="image-cancel-button"
-                disabled={loading}
-                onClick={cancelCookingImage}
-              >Cancel</button>
-            </div>
-          )}
+                <h4>Caption:</h4>
+                <input
+                  className="caption"
+                  max={150}
+                  min={2}
+                  name="caption"
+                  onChange={changeCookingImageCaption}
+                  type="text"
+                  value={cooking_image!.caption}
+                />
+                <button
+                  className="image-cancel-button"
+                  disabled={loading}
+                  onClick={cancelCookingImage}
+                >Cancel</button>
+              </>
+            )
+          }
         </div>
       </div>
 
@@ -1151,16 +1152,6 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
     my_favorite_recipes,
     my_saved_recipes
   }= useUserData();
-
-  // EXTREMELY IMPORTANT:
-  // Note that:
-  // my_private_equipment, my_private_ingredients, and my_private_recipes are
-  // only allowed in a recipe of "private" ownership
-  //
-  // my_public_recipes, my_favorite_recipes, and my_saved_recipes are
-  // only allowed in a recipe of "private" or "public" ownership
-  //
-  // This MUST also be checked on the backend server!!!
 
   const allowedEquipment = [
     ...equipment,
@@ -1204,12 +1195,17 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
   };
 }
 
-const url = "https://s3.amazonaws.com/nobsc-user-recipe";
+type ImageState = {
+  image:         string | ArrayBuffer | null;
+  crop:          Crop;
+  mediumPreview: string;
+  thumbPreview?: string;
+  tinyPreview?:  string;
+};
 
-type SyntheticEvent =      React.SyntheticEvent<EventTarget>;
+type SyntheticEvent = React.SyntheticEvent<EventTarget>;
+
 type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
-
-type Image = string | ArrayBuffer | null;
 
 export function ToolTip() {
   return (
@@ -1408,6 +1404,7 @@ export type RequiredSubrecipe = {
 };
 
 type ExistingImage = {
+  image_id:       string;
   image_filename: string;
   caption:        string;
 };
@@ -1465,17 +1462,6 @@ export type SubrecipeRow = ExistingRequiredSubrecipe & {
   key: string;
 };
 
-type ImageInfo = {
-  image_filename: string;
-  caption:        string;
-  type:           number;
-  order:          number;
-};
-
-type ImageUpload = ImageInfo & {
-  medium: File | null;
-};
-
 export type RecipeUpload = {
   recipe_type_id:       number;
   cuisine_id:           number;
@@ -1488,18 +1474,25 @@ export type RecipeUpload = {
   required_equipment:   RequiredEquipment[];
   required_ingredients: RequiredIngredient[];
   required_subrecipes:  RequiredSubrecipe[];
-  recipe_image:         ImageUpload & {
-    thumb: File | null;
-    tiny:  File | null;
-  },
-  equipment_image:      ImageUpload,
-  ingredients_image:    ImageUpload,
-  cooking_image:        ImageUpload
+  recipe_image:         ImageInfo | ImageUpdateInfo,
+  equipment_image:      ImageInfo | ImageUpdateInfo,
+  ingredients_image:    ImageInfo | ImageUpdateInfo,
+  cooking_image:        ImageInfo | ImageUpdateInfo
 };
 
 export type RecipeUpdateUpload = RecipeUpload & {
   recipe_id: string;
 };
+
+type ImageInfo = {
+  image_filename: string;
+  caption:        string;
+  type:           number;
+};
+
+type ImageUpdateInfo = ImageInfo & {
+  image_id: string;
+}
 
 async function uploadImageToAWSS3(signature: any, image: any) {
   await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
