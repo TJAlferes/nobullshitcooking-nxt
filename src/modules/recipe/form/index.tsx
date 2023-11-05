@@ -59,7 +59,7 @@ export default function RecipeForm({ ownership }: Props) {
   const [recipeTinyImage, setRecipeTinyImage] = useState<File | null>(null);
   const [recipe_image, setRecipeImage] = useState({
     image_id: "",
-    image_filename: "",
+    image_filename: "default",
     caption: "",
     type: 1
   });
@@ -73,7 +73,7 @@ export default function RecipeForm({ ownership }: Props) {
   const [equipmentMediumImage, setEquipmentMediumImage] = useState<File | null>(null);
   const [equipment_image, setEquipmentImage] = useState({
     image_id: "",
-    image_filename: "",
+    image_filename: "default",
     caption: "",
     type: 2
   });
@@ -87,7 +87,7 @@ export default function RecipeForm({ ownership }: Props) {
   const [ingredientsMediumImage, setIngredientsMediumImage] = useState<File | null>(null);
   const [ingredients_image, setIngredientsImage] = useState({
     image_id: "",
-    image_filename: "",
+    image_filename: "default",
     caption: "",
     type: 3
   });
@@ -101,7 +101,7 @@ export default function RecipeForm({ ownership }: Props) {
   const [cookingMediumImage, setCookingMediumImage] = useState<File | null>(null);
   const [cooking_image, setCookingImage] = useState({
     image_id: "",
-    image_filename: "",
+    image_filename: "default",
     caption: "",
     type: 4
   });
@@ -389,6 +389,19 @@ export default function RecipeForm({ ownership }: Props) {
     setCookingMediumImage(null);
   };
 
+  // TO DO: confirmation modal
+  const deleteRecipeImageFromAWSS3 = () =>
+    setRecipeImage({...recipe_image, image_filename: "default"});
+
+  const deleteEquipmentImageFromAWSS3 = () =>
+    setEquipmentImage({...equipment_image, image_filename: "default"});
+
+  const deleteIngredientsImageFromAWSS3 = () =>
+    setIngredientsImage({...ingredients_image, image_filename: "default"});
+
+  const deleteCookingImageFromAWSS3 = () =>
+    setCookingImage({...cooking_image, image_filename: "default"});
+
   const getCheckedMethods = () => Object.keys(usedMethods)
     .filter(key => usedMethods[parseInt(key)] === true)
     .map(key => ({method_id: parseInt(key)}));
@@ -443,14 +456,15 @@ export default function RecipeForm({ ownership }: Props) {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
-      // TO DO: how can they reset image_filename to "default"? Do they even need this ability?
+      // TO DO: how can they reset image_filename to "default"? Do they need this ability?
+      // AKA how can they delete an image?
       recipe_image,
       equipment_image,
       ingredients_image,
       cooking_image
     };
 
-    // upload any images to AWS S3, then insert info into MySQL
+    // upload any newly made images to AWS S3, then insert info into MySQL
     try {
       if (recipeMediumImage && recipeThumbImage && recipeTinyImage) {
         const res = await axios.post(
@@ -900,6 +914,15 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "recipe")}
                   type="file"
                 />
+                {
+                  recipe_id
+                  ? (
+                    <button onClick={deleteRecipeImageFromAWSS3}>
+                      Delete / Reset To Default
+                    </button>
+                  )
+                  : false
+                }
               </>
             )
             : (
@@ -965,6 +988,15 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "equipment")}
                   type="file"
                 />
+                {
+                  recipe_id
+                  ? (
+                    <button onClick={deleteEquipmentImageFromAWSS3}>
+                      Delete / Reset To Default
+                    </button>
+                  )
+                  : false
+                }
               </>
             )
             : (
@@ -1022,6 +1054,15 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "ingredients")}
                   type="file"
                 />
+                {
+                  recipe_id
+                  ? (
+                    <button onClick={deleteIngredientsImageFromAWSS3}>
+                      Delete / Reset To Default
+                    </button>
+                  )
+                  : false
+                }
               </>
             )
             : (
@@ -1079,6 +1120,15 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "cooking")}
                   type="file"
                 />
+                {
+                  recipe_id
+                  ? (
+                    <button onClick={deleteCookingImageFromAWSS3}>
+                      Delete / Reset To Default
+                    </button>
+                  )
+                  : false
+                }
               </>
             )
             : (
@@ -1494,6 +1544,6 @@ type ImageUpdateInfo = ImageInfo & {
   image_id: string;
 }
 
-async function uploadImageToAWSS3(signature: any, image: any) {
+async function uploadImageToAWSS3(signature: string, image: File) {
   await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
 }
