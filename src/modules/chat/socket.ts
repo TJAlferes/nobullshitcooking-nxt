@@ -7,7 +7,13 @@ let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
 
 export function getSocket() {
   if (!socket) {
-    socket = io(`${endpoint}`, {autoConnect: false, withCredentials: true});
+    socket = io(
+      `${endpoint}`,
+      {
+        autoConnect: false,
+        withCredentials: true
+      }
+    );
   }
   return socket;
 }

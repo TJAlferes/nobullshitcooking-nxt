@@ -74,15 +74,15 @@ export default function Chat() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.io.on('reconnect', onReconnect);
-    socket.on('OnlineFriends',        (friends) => onlineFriends(friends));
-    socket.on('FriendCameOnline',     (friend) =>  friendCameOnline(friend));
-    socket.on('FriendWentOffline',    (friend) =>  friendWentOffline(friend));
-    socket.on('UsersInRoom',          (users, room) => joinedRoom(users, room));
+    socket.on('OnlineFriends', (friends) => onlineFriends(friends));
+    socket.on('FriendCameOnline', (friend) => friendCameOnline(friend));
+    socket.on('FriendWentOffline', (friend) => friendWentOffline(friend));
+    socket.on('UsersInRoom', (users, room) => joinedRoom(users, room));
     socket.on('UsersInRoomRefetched', (users, room) => rejoinedRoom(users, room));
-    socket.on('UserJoinedRoom',       (user) => userJoinedRoom(user));
-    socket.on('UserLeftRoom',         (user) => userLeftRoom(user));
-    socket.on('Message',              (message) =>  receivedMessage(message));
-    socket.on('PrivateMessage',       (message) =>  receivedPrivateMessage(message));
+    socket.on('UserJoinedRoom', (user) => userJoinedRoom(user));
+    socket.on('UserLeftRoom', (user) => userLeftRoom(user));
+    socket.on('Message', (message) => receivedMessage(message));
+    socket.on('PrivateMessage', (message) => receivedPrivateMessage(message));
     socket.on('FailedPrivateMessage', (feedback) => failedPrivateMessage(feedback));
 
     return () => {
