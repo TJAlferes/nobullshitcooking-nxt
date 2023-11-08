@@ -1,30 +1,44 @@
-import axios         from 'axios';
-import Link          from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState }  from 'react';
+import { useState } from 'react';
 
-import { endpoint }     from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Register() {
   const router = useRouter();
 
-  const [ email,         setEmail ]         = useState("");
-  const [ password,      setPassword ]      = useState("");
-  const [ passwordAgain, setPasswordAgain ] = useState("");
-  const [ username,      setUsername ]      = useState("");
+  const [feedback, setFeedback] = useState('');
+  const [loading, setLoading] = useState(false);
+  //const [status, setStatus] = useState('typing'); // 'typing', 'submitting', or 'success'
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
-
-  const emailChange         = (e: ChangeEvent) => setEmail(e.target.value);
-  const usernameChange      = (e: ChangeEvent) => setUsername(e.target.value);
-  const passwordChange      = (e: ChangeEvent) => setPassword(e.target.value);
-  const passwordAgainChange = (e: ChangeEvent) => setPasswordAgain(e.target.value);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
+  const [username, setUsername] = useState('');
 
   const register = async () => {
+    if (!username) {
+      return setFeedback('Username required.');
+    }
+    if (!email) {
+      return setFeedback('Email required.');
+    }
+    if (!password) {
+      return setFeedback('Password required.');
+    }
+    if (!passwordAgain) {
+      return setFeedback('Password Again required.');
+    }
+    if (password !== passwordAgain) {
+      return setFeedback('Same password required.');
+    }
+
     setLoading(true);
+    setFeedback('');
     window.scrollTo(0, 0);
+
     try {
       const res = await axios.post(`${endpoint}/users`, {email, password, username});
       if (res.status === 201) {
@@ -36,23 +50,20 @@ export default function Register() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
+
     setLoading(false);
-    setTimeout(() => setFeedback(""), 4000);
   };
 
   const registerClick = async () => {
-    if (loading) return;
-    await register();
+    if (!loading) await register();
   };
 
-  const registerKeyUp = async (e: React.KeyboardEvent) => {
-    if (loading) return;
-    if (e.key && (e.key !== "Enter")) return;
-    await register();
+  const registerKeyUp = async (key: string) => {
+    if (!loading && key === "Enter") await register();
   };
   
   return (
-    <div className="register" onKeyUp={e => registerKeyUp(e)}>
+    <div className="register" onKeyUp={e => registerKeyUp(e.key)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile" src={`${url}logo-small-white.png`} />
@@ -72,7 +83,7 @@ export default function Register() {
           minLength={6}
           maxLength={20}
           name="username"
-          onChange={usernameChange}
+          onChange={e => setUsername(e.target.value)}
           size={20}
           type="text"
           value={username}
@@ -86,7 +97,7 @@ export default function Register() {
           minLength={5}
           maxLength={60}
           name="email"
-          onChange={emailChange}
+          onChange={e => setEmail(e.target.value)}
           size={60}
           type="email"
           value={email}
@@ -100,7 +111,7 @@ export default function Register() {
           minLength={6}
           maxLength={60}
           name="password"
-          onChange={passwordChange}
+          onChange={e => setPassword(e.target.value)}
           size={60}
           type="password"
           value={password}
@@ -114,7 +125,7 @@ export default function Register() {
           minLength={6}
           maxLength={60}
           name="passwordAgain"
-          onChange={passwordAgainChange}
+          onChange={e => setPasswordAgain(e.target.value)}
           size={60}
           type="password"
           value={passwordAgain}
@@ -128,7 +139,7 @@ export default function Register() {
           loadingText="Creating Account..."
           name="submit"
           onClick={registerClick}
-          onKeyUp={registerKeyUp}
+          type="button"
           text="Create Account"
         />
       </form>
@@ -147,5 +158,3 @@ export default function Register() {
 }
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

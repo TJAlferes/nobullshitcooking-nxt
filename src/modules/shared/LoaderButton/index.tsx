@@ -7,6 +7,7 @@ export function LoaderButton({
   name,
   onClick,
   onKeyUp = (e: React.KeyboardEvent) => {},
+  type = "button",
   text
 }: Props) {
   return (
@@ -17,7 +18,7 @@ export function LoaderButton({
       name={name}
       onClick={e => onClick(e)}
       onKeyUp={e => onKeyUp(e)}
-      type="button"
+      type={type}
     >
       {!isLoading ? text : loadingText}
     </button>
@@ -33,5 +34,6 @@ type Props = {
   name:                             string;
   onClick(e?: React.MouseEvent):    void;
   onKeyUp?(e: React.KeyboardEvent): void;
+  type:                             "button" | "submit" | "reset";
   text:                             string;
 };
