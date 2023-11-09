@@ -1,29 +1,37 @@
-import axios         from 'axios';
-import Link          from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState }  from 'react';
+import { useState } from 'react';
 
-import { endpoint }     from '../../../config/api';
-import { useAuth }      from '../../../store';
+import { endpoint } from '../../../config/api';
+import { useAuth } from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
+
+// TO DO: user forgot password
 
 export default function Login() {
   const router = useRouter();
 
   const { login } = useAuth();
 
-  const [ email,    setEmail ]    = useState("");
-  const [ password, setPassword ] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
-
-  const emailChange    = (e: ChangeEvent) => setEmail(e.target.value);
-  const passwordChange = (e: ChangeEvent) => setPassword(e.target.value);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const loginHandler = async () => {
+    if (!email) {
+      return setFeedback('Email required.');
+    }
+    if (!password) {
+      return setFeedback('Password required.');
+    }
+
     setLoading(true);
+    setFeedback('');
     window.scrollTo(0, 0);
+
     try {
       const res = await axios.post(
         `${endpoint}/login`,
@@ -32,36 +40,27 @@ export default function Login() {
       );
       if (res.status === 201) {
         login(res.data);
-        setFeedback('Logged in.');
-        setTimeout(() => router.push('/dashboard'));
+        router.push('/dashboard');
       } else {
         setFeedback(res.data.error);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
+
     setLoading(false);
-    setTimeout(() => setFeedback(""), 4000);
   };
 
-  const loginClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (loading) return;
-    if (!validateLoginInfo()) return;
-    loginHandler();
+  const loginClick = async (e: React.MouseEvent) => {
+    if (!loading) await loginHandler();
   }
 
-  const loginKeyUp = (e: React.KeyboardEvent) => {
-    if (loading) return;
-    if (!validateLoginInfo()) return;
-    if (e.key && (e.key !== "Enter")) return;
-    loginHandler();
+  const loginKeyUp = async (key: string) => {
+    if (!loading && key !== "Enter") await loginHandler();
   }
-
-  const validateLoginInfo = () => (email.length > 4 && password.length > 5);
 
   return (
-    <div className="login" onKeyUp={e => loginKeyUp(e)}>
+    <div className="login" onKeyUp={e => loginKeyUp(e.key)}>
       <Link href="/">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile"  src={`${url}logo-small-white.png`} />
@@ -80,7 +79,7 @@ export default function Login() {
           id="email"
           maxLength={50}
           name="email"
-          onChange={emailChange}
+          onChange={e => setEmail(e.target.value)}
           size={20}
           type="text"
           value={email}
@@ -93,7 +92,7 @@ export default function Login() {
           id="password"
           maxLength={20}
           name="password"
-          onChange={passwordChange}
+          onChange={e => setPassword(e.target.value)}
           size={20}
           type="password"
           value={password}
@@ -101,14 +100,18 @@ export default function Login() {
 
         <LoaderButton
           className="login__button"
-          disabled={!validateLoginInfo()}
+          disabled={email.length < 5
+            || email.length > 60
+            || password.length < 6
+            || password.length > 60
+          }
           id="login-button"
           isLoading={loading}
           loadingText="Logging In..."
           name="submit"
           onClick={loginClick}
-          onKeyUp={loginKeyUp}
           text="Login"
+          type='button'
         />
       </form>
     </div>
@@ -116,5 +119,3 @@ export default function Login() {
 }
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;

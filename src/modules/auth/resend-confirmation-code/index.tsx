@@ -6,33 +6,22 @@ import { useState } from 'react';
 import { endpoint } from '../../../config/api';
 import { LoaderButton } from '../../shared/LoaderButton';
 
-export default function Register() {
+// TO DO: user forgot password
+export default function ResendConfirmationCode() {
   const router = useRouter();
 
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
-  //const [status, setStatus] = useState('typing'); // 'typing', 'submitting', or 'success'
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordAgain, setPasswordAgain] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const register = async () => {
-    if (!username) {
-      return setFeedback('Username required.');
-    }
+  const requestResend = async () => {
     if (!email) {
       return setFeedback('Email required.');
     }
     if (!password) {
       return setFeedback('Password required.');
-    }
-    if (!passwordAgain) {
-      return setFeedback('Password Again required.');
-    }
-    if (password !== passwordAgain) {
-      return setFeedback('Same password required.');
     }
 
     setLoading(true);
@@ -40,9 +29,9 @@ export default function Register() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(`${endpoint}/users`, {email, password, username});
-      if (res.status === 201) {
-        setFeedback('User account created.');
+      const res = await axios.patch(`${endpoint}/resend-confirmation-code`, {email, password});
+      if (res.status === 204) {
+        setFeedback("Confirmation code re-sent.");
         setTimeout(() => router.push('/confirm'), 4000);
       } else {
         setFeedback(res.data.error);
@@ -54,52 +43,40 @@ export default function Register() {
     setLoading(false);
   };
 
-  const registerClick = async () => {
-    if (!loading) await register();
+  const requestResendClick = async () => {
+    if (!loading) await requestResend();
   };
 
-  const registerKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await register();
+  const requestResendKeyUp = async (key: string) => {
+    if (!loading && key === "Enter") await requestResend();
   };
   
   return (
-    <div className="register" onKeyUp={e => registerKeyUp(e.key)}>
+    <div className="register" onKeyUp={e => requestResendKeyUp(e.key)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile" src={`${url}logo-small-white.png`} />
       </Link>
 
       <form>
-        <h1>Create Account</h1>
+        <h1>Resend Confirmation Code</h1>
 
         <p className="feedback">{feedback}</p>
 
-        <label>Username</label>
-        <input
-          autoComplete="username"
-          autoFocus
-          disabled={loading}
-          id="username"
-          minLength={6}
-          maxLength={20}
-          name="username"
-          onChange={e => setUsername(e.target.value)}
-          size={20}
-          type="text"
-          value={username}
-        />
+        <p>Can't find your confirmation code? We can email you a new one:</p>
 
         <label>Email</label>
         <input
           autoComplete="email"
+          autoFocus
           disabled={loading}
           id="email"
-          minLength={5}
           maxLength={60}
+          minLength={5}
           name="email"
           onChange={e => setEmail(e.target.value)}
           size={60}
-          type="email"
+          type="text"
           value={email}
         />
 
@@ -108,8 +85,8 @@ export default function Register() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
-          minLength={6}
           maxLength={60}
+          minLength={6}
           name="password"
           onChange={e => setPassword(e.target.value)}
           size={60}
@@ -117,35 +94,20 @@ export default function Register() {
           value={password}
         />
 
-        <label>Password Again</label>
-        <input
-          autoComplete="current-password"
-          disabled={loading}
-          id="passwordAgain"
-          minLength={6}
-          maxLength={60}
-          name="passwordAgain"
-          onChange={e => setPasswordAgain(e.target.value)}
-          size={60}
-          type="password"
-          value={passwordAgain}
-        />
-        
         <LoaderButton
-          className="create-account"
+          className="request-resend-confirmation-code"
           disabled={email.length < 5
             || email.length > 60
             || password.length < 6
             || password.length > 60
-            || password !== passwordAgain
           }
-          id="create_account"
+          id="request-resend-confirmation-code"
           isLoading={loading}
-          loadingText="Creating Account..."
+          loadingText="Resending..."
           name="submit"
-          onClick={registerClick}
-          type="button"
-          text="Create Account"
+          onClick={requestResendClick}
+          text="Request Resend"
+          type='button'
         />
       </form>
 

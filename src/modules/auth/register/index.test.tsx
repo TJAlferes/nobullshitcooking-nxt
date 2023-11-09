@@ -1,26 +1,36 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { http } from 'msw';
-import { setupServer } from 'msw/node';
+import '@testing-library/jest-dom'
+import { http, HttpResponse } from 'msw';
+import { setupWorker } from 'msw/browser';
 import Register from '.';
 
-const server = setupServer(
-  // Define MSW request handlers here
-);
+export const handlers = [
+  http.post('/users', async ({ request }) => {
+    const data = await request.formData();
+    const email = data.get('email');
+ 
+    // don't do this here, do happy path (success) here, and do errors below w/ .use
+    if (!email) {
+      return new HttpResponse('Missing email', {status: 400});
+    }
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+    //...
+  }),
+];
 
-test('it renders', () => {
-  render(<Register />);
-  expect(screen.getByText('Create Account')).toBeInTheDocument();
+export const worker = setupWorker(...handlers);
+
+beforeAll(async () => {
+  await worker.start({onUnhandledRequest: 'error'});  // or 'warn'
 });
+afterEach(() => worker.resetHandlers());
+afterAll(() => worker.stop());
 
 test('on submit, handles success', async () => {
   const user = userEvent.setup();
   render(<Register />);
-  
+
   await user.type(screen.getByLabelText('Username'), 'testuser');
   await user.type(screen.getByLabelText('Email'), 'test@example.com');
   await user.type(screen.getByLabelText('Password'), 'password');
@@ -31,9 +41,9 @@ test('on submit, handles success', async () => {
 });
 
 test('on submit, handles error', async () => {
-  server.use(
-    http.post('https://your-api-endpoint.com/users', ({ request }) => {
-      return new Response(ctx.status(400), ctx.json({ error: 'Registration failed' }));
+  worker.use(
+    http.post('https://your-api-endpoint.com/users', (info) => {
+      return HttpResponse.json({error: 'Registration failed'}, {status: 400});
     })
   );
 

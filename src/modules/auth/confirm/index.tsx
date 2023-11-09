@@ -1,29 +1,28 @@
-import axios         from 'axios';
-import Link          from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState }  from 'react';
+import { useState } from 'react';
 
-import { endpoint }     from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Confirm() {
   const router = useRouter();
 
-  const [ confirmation_code, setConfirmationCode ] = useState("");
-  
-  const [ email,    setEmail ]                     = useState("");
-  const [ password, setPassword ]                  = useState("");
-
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
 
-  const confirmationCodeChange = (e: ChangeEvent) => setConfirmationCode(e.target.value);
-  const emailChange            = (e: ChangeEvent) => setEmail(e.target.value);
-  const passwordChange         = (e: ChangeEvent) => setPassword(e.target.value);
+  const [ confirmation_code, setConfirmationCode ] = useState("");
   
   const confirm = async () => {
+    if (!confirmation_code) {
+      return setFeedback('Confirmation Code required.')
+    }
+
     setLoading(true);
+    setFeedback('');
     window.scrollTo(0, 0);
+
     try {
       const res = await axios.patch(`${endpoint}/confirm`, {confirmation_code});
       if (res.status === 204) {
@@ -33,51 +32,20 @@ export default function Confirm() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-    setLoading(false);
-    setTimeout(() => setFeedback(""), 4000);
-  };
 
-  const requestResend = async () => {
-    setLoading(true);
-    window.scrollTo(0, 0);
-    try {
-      const res = await axios.patch(`${endpoint}/resend-confirmation-code`, {email, password});
-      if (res.status === 204) {
-        setFeedback("Confirmation code re-sent.");
-      } else {
-        setFeedback(res.data.error);
-      }
-    } catch(err) {
-      setFeedback('An error occurred. Please try again.');
-    }
     setLoading(false);
-    setTimeout(() => setFeedback(""), 4000);
   };
 
   const confirmClick = async () => {
-    if (loading) return;
-    await confirm();
+    if (!loading) await confirm();
   };
 
-  const confirmKeyUp = async (e: React.KeyboardEvent) => {
-    if (loading) return;
-    if (e.key && (e.key !== "Enter")) return;
-    await confirm();
-  };
-
-  const requestResendClick = async () => {
-    if (loading) return;
-    await requestResend();
-  };
-
-  const requestResendKeyUp = async (e: React.KeyboardEvent) => {
-    if (loading) return;
-    if (e.key && (e.key !== "Enter")) return;
-    await requestResend();
+  const confirmKeyUp = async (key: string) => {
+    if (!loading && key === "Enter") await confirm();
   };
   
   return (
-    <div className="register" onKeyUp={e => confirmKeyUp(e)}>
+    <div className="register" onKeyUp={e => confirmKeyUp(e.key)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile" src={`${url}logo-small-white.png`} />
@@ -97,7 +65,7 @@ export default function Confirm() {
           maxLength={36}
           minLength={36}
           name="confirmationCode"
-          onChange={confirmationCodeChange}
+          onChange={e => setConfirmationCode(e.target.value)}
           size={36}
           type="text"
           value={confirmation_code}
@@ -113,57 +81,13 @@ export default function Confirm() {
           loadingText="Confirming..."
           name="submit"
           onClick={confirmClick}
-          onKeyUp={confirmKeyUp}
           text="Confirm"
-        />
-
-        <p>Can't find your confirmation code? We can email you a new one:</p>
-
-        <label>Email</label>
-        <input
-          autoComplete="email"
-          autoFocus
-          disabled={loading}
-          id="email"
-          maxLength={60}
-          minLength={5}
-          name="email"
-          onChange={emailChange}
-          size={60}
-          type="text"
-          value={email}
-        />
-
-        <label>Password</label>
-        <input
-          autoComplete="current-password"
-          disabled={loading}
-          id="password"
-          maxLength={60}
-          minLength={6}
-          name="password"
-          onChange={passwordChange}
-          size={60}
-          type="password"
-          value={password}
-        />
-
-        <LoaderButton
-          className="request-resend-confirmation-code"
-          disabled={email.length < 5
-            || email.length > 60
-            || password.length < 6
-            || password.length > 60
-          }
-          id="request-resend-confirmation-code"
-          isLoading={loading}
-          loadingText="Resending..."
-          name="submit"
-          onClick={requestResendClick}
-          onKeyUp={requestResendKeyUp}
-          text="Request Resend"
+          type='button'
         />
       </form>
+
+      <p>Can't find your confirmation code? We can email you a new one:</p>
+      <Link href='/resend-confirmation-code'>Resend Confirmation Code</Link>
 
       <div className="links">
         <Link href="/terms">Terms of Use</Link>
@@ -179,5 +103,3 @@ export default function Confirm() {
 }
 
 const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
