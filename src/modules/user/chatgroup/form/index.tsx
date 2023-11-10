@@ -1,14 +1,15 @@
-import axios                           from 'axios';
-import Link                            from 'next/link';
-import { useSearchParams, useRouter }  from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ReactCrop, { Crop }             from 'react-image-crop';
+import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint }        from '../../../../config/api';
-import { useAuthname }     from '../../../auth';
-import { LoaderButton }    from '../../../shared/LoaderButton';
+import { endpoint } from '../../../../config/api';
+import { useAuth } from '../../../../store';
+import { LoaderButton } from '../../../shared/LoaderButton';
 import { getCroppedImage } from '../../../shared/getCroppedImage';
+import { uploadImageToAwsS3 } from '../../../shared/uploadImageToAwsS3';
 
 export default function ChatgroupForm() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function ChatgroupForm() {
   const params = useSearchParams();
   const chatgroup_id = params.get('chatgroup_id');
 
-  const authname = useAuthname();
+  const { authname } = useAuth();
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);
@@ -138,8 +139,8 @@ export default function ChatgroupForm() {
             {subfolder: `chatgroup/`},
             {withCredentials: true}
           );
-          await uploadImageToAWSS3(fullSignature, image.small);
-          await uploadImageToAWSS3(tinySignature, image.tiny);
+          await uploadImageToAwsS3(fullSignature, image.small);
+          await uploadImageToAwsS3(tinySignature, image.tiny);
           // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
           image.image_filename = filename;
           image.small = null;
@@ -333,7 +334,3 @@ export type ChatgroupUpload = {
 export type ChatgroupUpdateUpload = ChatgroupUpload & {
   chatgroup_id: string;
 };
-
-async function uploadImageToAWSS3(signature: any, image: any) {
-  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
-}

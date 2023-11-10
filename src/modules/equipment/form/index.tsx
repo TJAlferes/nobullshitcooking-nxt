@@ -10,6 +10,7 @@ import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
+import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
 
 export default function EquipmentForm({ ownership }: Props) {
@@ -159,8 +160,8 @@ export default function EquipmentForm({ ownership }: Props) {
           {subfolder: 'equipment'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(res.data.smallSignature, smallImage);
-        await uploadImageToAWSS3(res.data.tinySignature, tinyImage);
+        await uploadImageToAwsS3(res.data.smallSignature, smallImage);
+        await uploadImageToAwsS3(res.data.tinySignature, tinyImage);
         equipment_upload.image_filename = res.data.filename;
       }
 
@@ -412,7 +413,3 @@ export type EquipmentUpdateUpload = EquipmentUpload & {
 };
 
 export type ExistingEquipmentToEdit = EquipmentUpdateUpload;
-
-async function uploadImageToAWSS3(signature: any, image: any) {
-  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
-}

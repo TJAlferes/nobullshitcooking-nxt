@@ -10,6 +10,7 @@ import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
+import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
 
 export default function IngredientForm({ ownership }: Props) {
@@ -171,8 +172,8 @@ export default function IngredientForm({ ownership }: Props) {
           {subfolder: 'ingredient'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(data.smallSignature, smallImage);
-        await uploadImageToAWSS3(data.tinySignature, tinyImage);
+        await uploadImageToAwsS3(data.smallSignature, smallImage);
+        await uploadImageToAwsS3(data.tinySignature, tinyImage);
         ingredient_upload.image_filename = data.filename;
       }
 
@@ -438,7 +439,3 @@ export type IngredientUpdateUpload = IngredientUpload & {
 };
 
 export type ExistingIngredientToEdit = IngredientUpdateUpload;
-
-async function uploadImageToAWSS3(signature: any, image: any) {
-  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
-}

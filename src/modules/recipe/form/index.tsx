@@ -12,6 +12,7 @@ import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
+import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
 
 export default function RecipeForm({ ownership }: Props) {
@@ -472,9 +473,9 @@ export default function RecipeForm({ ownership }: Props) {
           {subfolder: 'recipe'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(res.data.mediumSignature, recipeMediumImage);
-        await uploadImageToAWSS3(res.data.thumbSignature, recipeThumbImage);
-        await uploadImageToAWSS3(res.data.tinySignature, recipeTinyImage);
+        await uploadImageToAwsS3(res.data.mediumSignature, recipeMediumImage);
+        await uploadImageToAwsS3(res.data.thumbSignature, recipeThumbImage);
+        await uploadImageToAwsS3(res.data.tinySignature, recipeTinyImage);
         recipe_upload.recipe_image.image_filename = res.data.filename;
       }
     
@@ -484,7 +485,7 @@ export default function RecipeForm({ ownership }: Props) {
           {subfolder: 'recipe-equipment'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(res.data.mediumSignature, equipmentMediumImage);
+        await uploadImageToAwsS3(res.data.mediumSignature, equipmentMediumImage);
         recipe_upload.equipment_image.image_filename = res.data.filename;
       }
     
@@ -494,7 +495,7 @@ export default function RecipeForm({ ownership }: Props) {
           {subfolder: 'recipe-ingredients'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(res.data.mediumSignature, ingredientsMediumImage);
+        await uploadImageToAwsS3(res.data.mediumSignature, ingredientsMediumImage);
         recipe_upload.ingredients_image.image_filename = res.data.filename;
       }
     
@@ -504,7 +505,7 @@ export default function RecipeForm({ ownership }: Props) {
           {subfolder: 'recipe-cooking'},
           {withCredentials: true}
         );
-        await uploadImageToAWSS3(res.data.mediumSignature, cookingMediumImage);
+        await uploadImageToAwsS3(res.data.mediumSignature, cookingMediumImage);
         recipe_upload.cooking_image.image_filename = res.data.filename;
       }
 
@@ -1542,8 +1543,4 @@ type ImageInfo = {
 
 type ImageUpdateInfo = ImageInfo & {
   image_id: string;
-}
-
-async function uploadImageToAWSS3(signature: string, image: File) {
-  await axios.put(signature, image, {headers: {'Content-Type': 'image/jpeg'}});
-}
+};
