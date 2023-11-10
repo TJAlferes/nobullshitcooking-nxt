@@ -24,7 +24,7 @@ export default function ForgotPassword() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.get(`${endpoint}/forgot-password/${email}`);
+      const res = await axios.post(`${endpoint}/forgot-password`, {email});
       if (res.status === 201) {
         router.push('/reset-password');
       } else {

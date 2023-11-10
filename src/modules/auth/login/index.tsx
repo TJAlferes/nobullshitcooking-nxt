@@ -32,11 +32,7 @@ export default function Login() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(
-        `${endpoint}/login`,
-        {email, password},
-        {withCredentials: true}
-      );
+      const res = await axios.post(`${endpoint}/login`, {email, password});
       if (res.status === 201) {
         login(res.data);
         router.push('/dashboard');

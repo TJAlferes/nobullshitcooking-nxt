@@ -4,13 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { useAuth } from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function ResetPassword() {
   const router = useRouter();
-
-  const { login } = useAuth();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,14 +32,12 @@ export default function ResetPassword() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(
+      const res = await axios.patch(
         `${endpoint}/reset-password`,
-        {email, temporary_password, new_password},
-        {withCredentials: true}
+        {email, temporary_password, new_password}
       );
-      if (res.status === 201) {
-        login(res.data);
-        router.push('/dashboard');
+      if (res.status === 204) {
+        router.push('/login');
       } else {
         setFeedback(res.data.error);
       }
