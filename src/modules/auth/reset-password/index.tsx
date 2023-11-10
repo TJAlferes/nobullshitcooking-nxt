@@ -7,24 +7,27 @@ import { endpoint } from '../../../config/api';
 import { useAuth } from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
 
-// TO DO: user forgot password
-export default function Login() {
+export default function ResetPassword() {
   const router = useRouter();
 
   const { login } = useAuth();
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [temporary_password, setTemporaryPassword] = useState('');
+  const [new_password, setNewPassword] = useState('');
 
   const loginHandler = async () => {
     if (!email) {
       return setFeedback('Email required.');
     }
-    if (!password) {
-      return setFeedback('Password required.');
+    if (!temporary_password) {
+      return setFeedback('Temporary Password required.');
+    }
+    if (!new_password) {
+      return setFeedback('New Password required.');
     }
 
     setLoading(true);
@@ -33,8 +36,8 @@ export default function Login() {
 
     try {
       const res = await axios.post(
-        `${endpoint}/login`,
-        {email, password},
+        `${endpoint}/reset-password`,
+        {email, temporary_password, new_password},
         {withCredentials: true}
       );
       if (res.status === 201) {
@@ -66,7 +69,7 @@ export default function Login() {
       </Link>
 
       <form>
-        <h1>Sign In</h1>
+        <h1>Reset Password</h1>
 
         <p className="feedback">{feedback}</p>
 
@@ -84,25 +87,40 @@ export default function Login() {
           value={email}
         />
 
-        <label>Password</label>
+        <label>Temporary Password</label>
         <input
-          autoComplete="current-password"
+          autoComplete="temporary-password"
           disabled={loading}
-          id="password"
+          id="temporary-password"
           maxLength={20}
-          name="password"
-          onChange={e => setPassword(e.target.value)}
+          name="temporary-password"
+          onChange={e => setTemporaryPassword(e.target.value)}
           size={20}
           type="password"
-          value={password}
+          value={temporary_password}
+        />
+
+        <label>Set New Password</label>
+        <input
+          autoComplete="new-password"
+          disabled={loading}
+          id="new-password"
+          maxLength={20}
+          name="new-password"
+          onChange={e => setNewPassword(e.target.value)}
+          size={20}
+          type="password"
+          value={new_password}
         />
 
         <LoaderButton
           className="login__button"
           disabled={email.length < 5
             || email.length > 60
-            || password.length < 6
-            || password.length > 60
+            || temporary_password.length < 6
+            || temporary_password.length > 60
+            || new_password.length < 6
+            || new_password.length > 60
           }
           id="login-button"
           isLoading={loading}
@@ -112,8 +130,6 @@ export default function Login() {
           text="Login"
           type='button'
         />
-
-        <Link href='/forgot-password'>Forgot password?</Link>
       </form>
     </div>
   );

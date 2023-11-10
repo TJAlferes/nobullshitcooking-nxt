@@ -4,27 +4,19 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { useAuth } from '../../../store';
 import { LoaderButton } from '../../shared/LoaderButton';
 
-// TO DO: user forgot password
-export default function Login() {
+export default function ForgotPassword() {
   const router = useRouter();
-
-  const { login } = useAuth();
 
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const loginHandler = async () => {
+  const requestTemporaryPassword = async () => {
     if (!email) {
       return setFeedback('Email required.');
-    }
-    if (!password) {
-      return setFeedback('Password required.');
     }
 
     setLoading(true);
@@ -32,14 +24,9 @@ export default function Login() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(
-        `${endpoint}/login`,
-        {email, password},
-        {withCredentials: true}
-      );
+      const res = await axios.get(`${endpoint}/forgot-password/${email}`);
       if (res.status === 201) {
-        login(res.data);
-        router.push('/dashboard');
+        router.push('/reset-password');
       } else {
         setFeedback(res.data.error);
       }
@@ -50,25 +37,27 @@ export default function Login() {
     setLoading(false);
   };
 
-  const loginClick = async () => {
-    if (!loading) await loginHandler();
+  const handleClick = async () => {
+    if (!loading) await requestTemporaryPassword();
   };
 
-  const loginKeyUp = async (key: string) => {
-    if (!loading && key !== "Enter") await loginHandler();
+  const handleKeyUp = async (key: string) => {
+    if (!loading && key !== "Enter") await requestTemporaryPassword();
   };
 
   return (
-    <div className="login" onKeyUp={e => loginKeyUp(e.key)}>
+    <div className="login" onKeyUp={e => handleKeyUp(e.key)}>
       <Link href="/">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile"  src={`${url}logo-small-white.png`} />
       </Link>
 
       <form>
-        <h1>Sign In</h1>
+        <h1>Forgotten Password</h1>
 
         <p className="feedback">{feedback}</p>
+
+        <p>Forgot password? We can email you a temporary password, and you can set a new password.</p>
 
         <label>Email</label>
         <input
@@ -84,36 +73,17 @@ export default function Login() {
           value={email}
         />
 
-        <label>Password</label>
-        <input
-          autoComplete="current-password"
-          disabled={loading}
-          id="password"
-          maxLength={20}
-          name="password"
-          onChange={e => setPassword(e.target.value)}
-          size={20}
-          type="password"
-          value={password}
-        />
-
         <LoaderButton
-          className="login__button"
-          disabled={email.length < 5
-            || email.length > 60
-            || password.length < 6
-            || password.length > 60
-          }
-          id="login-button"
+          className="request-temporary-password__button"
+          disabled={email.length < 5 || email.length > 60}
+          id="request-temporary-password-button"
           isLoading={loading}
-          loadingText="Logging In..."
+          loadingText="Processing..."
           name="submit"
-          onClick={loginClick}
-          text="Login"
+          onClick={handleClick}
+          text="Request Temporary Password"
           type='button'
         />
-
-        <Link href='/forgot-password'>Forgot password?</Link>
       </form>
     </div>
   );
