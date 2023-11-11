@@ -8,7 +8,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
-import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
@@ -25,66 +24,55 @@ export default function IngredientForm({ ownership }: Props) {
 
   const allowedIngredients = useAllowedIngredients(ownership);
 
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const [ ingredient_type_id, setIngredientTypeId ]  = useState(0);
-  const [ ingredient_brand,   setIngredientBrand ]   = useState<string|null>("");
-  const [ ingredient_variety, setIngredientVariety ] = useState<string|null>("");
-  const [ ingredient_name,    setIngredientName ]    = useState("");
-  const [ notes,              setNotes ]             = useState("");
-
-  const [ previousImageFilename, setPreviousImageFilename ] = useState("");
-  const [ smallImage,            setSmallImage ]   = useState<File | null>(null);
-  const [ tinyImage,             setTinyImage ]    = useState<File | null>(null);
-  const [ imageCaption,          setImageCaption ] = useState("");
+  const [ingredient_type_id, setIngredientTypeId] = useState(0);
+  const [ingredient_brand, setIngredientBrand] = useState('');
+  const [ingredient_variety, setIngredientVariety] = useState('');
+  const [ingredient_name, setIngredientName] = useState('');
+  const [notes, setNotes] = useState('');
 
   const imageRef = useRef<HTMLImageElement>();
-  const [ image,             setImage ]             = useState<Image>(null);
-  const [ crop,              setCrop ]              = useState<Crop>(initialCrop);
-  const [ smallImagePreview, setSmallImagePreview ] = useState("");
-  const [ tinyImagePreview,  setTinyImagePreview ]  = useState("");
+  const [imageState, setImageState] = useState<ImageState>({
+    image: null,
+    crop: initialCrop,
+    smallPreview: '',
+    tinyPreview: ''
+  });
+  const [smallImage, setSmallImage] = useState<File | null>(null);
+  const [tinyImage, setTinyImage] = useState<File | null>(null);
+  const [image, setImage] = useState({
+    image_id: '',
+    image_filename: 'default',
+    caption: '',
+  });
 
   useEffect(() => {
     let mounted = true;
 
     function getExistingIngredientToEdit() {
-      if (!ingredient_id) {
-        router.push('/dashboard');
-        return;
-      }
-
-      setLoading(true);
-
       window.scrollTo(0, 0);
-
+      setLoading(true);
       const ingredient = allowedIngredients.find(i => i.ingredient_id === ingredient_id);
-      if (!ingredient) {
-        router.push('/dashboard');
-        setLoading(false);
-        return;
-      }
-
+      if (!ingredient) return router.push('/dashboard');
       setIngredientTypeId(ingredient.ingredient_type_id);
-      setIngredientBrand(ingredient.ingredient_brand);
-      setIngredientVariety(ingredient.ingredient_variety)
+      setIngredientBrand(ingredient.ingredient_brand ?? '');
+      setIngredientVariety(ingredient.ingredient_variety ?? '')
       setIngredientName(ingredient.ingredient_name);
       setNotes(ingredient.notes);
-      setPreviousImageFilename(ingredient.image.image_filename);
-      setImageCaption(ingredient.image.caption);
-      
+      setImage({
+        ...image,
+        image_id: ingredient.image_id,
+        image_filename: ingredient.image_filename,
+        caption: ingredient.caption
+      });
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) {
-        router.push(`/404`);
-        return;
-      }
-
-      if (ingredient_id) {
-        getExistingIngredientToEdit();
-      }
+      if (!authname) return router.push(`/404`);
+      if (ingredient_id) getExistingIngredientToEdit();
     }
 
     return () => {
@@ -97,18 +85,11 @@ export default function IngredientForm({ ownership }: Props) {
     setMyPrivateIngredients(res.data);
   };
 
-  const changeIngredientType     = (e: SyntheticEvent) => setIngredientTypeId(Number((e.target as HTMLInputElement).value));
-  const changeIngredientBrand    = (e: SyntheticEvent) => setIngredientBrand((e.target as HTMLInputElement).value);
-  const changeIngredientVariety  = (e: SyntheticEvent) => setIngredientVariety((e.target as HTMLInputElement).value);
-  const changeIngredientName     = (e: SyntheticEvent) => setIngredientName((e.target as HTMLInputElement).value);
-  const changeNotes              = (e: SyntheticEvent) => setNotes((e.target as HTMLInputElement).value);
-  const changeImageCaption       = (e: SyntheticEvent) => setImageCaption((e.target as HTMLInputElement).value);
-
-  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (!(target.files && target.files.length > 0)) return;
+  const onSelectFile = (target: HTMLInputElement) => {
+    if (!target.files) return;
+    if (target.files.length < 1) return;
     const reader = new FileReader();
-    reader.addEventListener("load", () => setImage(reader.result));
+    reader.addEventListener("load", () => setImageState({...imageState, image: reader.result}));
     reader.readAsDataURL(target.files[0] as Blob);
   };
 
@@ -117,39 +98,34 @@ export default function IngredientForm({ ownership }: Props) {
     const small = await getCroppedImage(280, 280, imageRef.current, crop);
     const tiny = await getCroppedImage(28, 28, imageRef.current, crop);
     if (!small || !tiny) return;
-    setSmallImagePreview(small.preview);
-    setTinyImagePreview(tiny.preview);
+    setImageState({
+      ...imageState,
+      smallPreview: small.preview,
+      tinyPreview: tiny.preview
+    });
     setSmallImage(small.final);
     setTinyImage(tiny.final);
   };
 
-  const onCropChange   = (crop: Crop) => setCrop(crop);
-  const onCropComplete = (crop: Crop) => makeCrops(crop);
-  const onImageLoaded  = (e: React.SyntheticEvent<HTMLImageElement>) =>
-    imageRef.current = e.currentTarget;
-
   const cancelImage = () => {
-    setSmallImagePreview("");
-    setTinyImagePreview("");
-    setImage(null);
+    setImageState({
+      ...imageState,
+      image: null,
+      //crop
+      smallPreview: '',
+      tinyPreview: ''
+    });
     setSmallImage(null);
     setTinyImage(null);
   };
 
   const submit = async () => {
-    setLoading(true);
     window.scrollTo(0, 0);
-
-    if (!isValidIngredientUpload({
-      ingredient_type_id,
-      ingredient_brand,
-      ingredient_variety,
-      ingredient_name,
-      alt_names,
-      notes,
-      setFeedback
-    })) return;
-
+    if (ingredient_type_id === 0) return setFeedback('Ingredient Type required.');
+    if (ingredient_name.trim() === "") return setFeedback('Ingredient Name required.');
+    //if (alt_names
+    setLoading(true);
+    setFeedback('');
     const ingredient_upload = {
       ingredient_type_id,
       ingredient_brand,
@@ -157,13 +133,9 @@ export default function IngredientForm({ ownership }: Props) {
       ingredient_name,
       //alt_names,
       notes,
-      image_filename: ingredient_id ? previousImageFilename : "default",
-      caption: imageCaption
+      image_filename: image.image_filename,
+      caption: image.caption
     };
-
-    // TO DO: AUTHORIZE ON BACK END, MAKE SURE THEY ACTUALLY OWN THE INGREDIENT
-    // BEFORE ENTERING ANYTHING INTO MySQL / AWS S3!!!
-
     // upload any images to AWS S3, then insert info into MySQL
     try {
       if (smallImage && tinyImage) {
@@ -176,12 +148,11 @@ export default function IngredientForm({ ownership }: Props) {
         await uploadImageToAwsS3(data.tinySignature, tinyImage);
         ingredient_upload.image_filename = data.filename;
       }
-
       const editing = ingredient_id !== null;
       if (editing) {
         const res = await axios.patch(
           `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
-          {ingredient_id, ...ingredient_upload},
+          {ingredient_id, image_id: image.image_id, ...ingredient_upload},
           {withCredentials: true}
         );
         if (res.status === 204) {
@@ -208,14 +179,13 @@ export default function IngredientForm({ ownership }: Props) {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-  
     setTimeout(() => {
-      setFeedback("");
+      setFeedback('');
       setLoading(false);
     }, 4000);
   };
 
-  const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads/ingredient`;
+  const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads`;
 
   return (
     <div className="one-col new-ingredient">
@@ -237,7 +207,7 @@ export default function IngredientForm({ ownership }: Props) {
       <h2>Ingredient Type</h2>
       <select
         name="ingredientType"
-        onChange={changeIngredientType}
+        onChange={e => setIngredientTypeId(Number(e.target.value))}
         required
         value={ingredient_type_id}
       >
@@ -252,54 +222,64 @@ export default function IngredientForm({ ownership }: Props) {
       <h2>Name</h2>
       <input
         className="name"
-        onChange={changeIngredientName}
+        onChange={e => setIngredientName(e.target.value)}
         type="text"
         value={ingredient_name}
       />
 
       <h2>Notes</h2>
-      <textarea className="notes" onChange={changeNotes} value={notes} />
+      <textarea className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='ingredient-image'>
         <h2>Image of Ingredient</h2>
 
-        {!image && (
+        {!imageState.image && (
           <div>
             {
               !ingredient_id
-              ? <img src={`${url}/${NOBSC_USER_ID}/default`} />
-              : <img src={`${url}/${auth_id}/${previousImageFilename}`} />
+              ? <img src={`${url}/ingredient/${NOBSC_USER_ID}/default`} />
+              : <img src={`${url}/ingredient/${auth_id}/${image.image_filename}`} />
             }
             
             <h4>Change</h4>
-            <input accept="image/*" name="image-input" onChange={onSelectFile} type="file" />
+            <input
+              accept="image/*"
+              name="image-input"
+              onChange={e => onSelectFile(e.target)}
+              type="file"
+            />
           </div>
         )}
 
-        {image && (
+        {imageState.image && (
           <div>
             <ReactCrop
               aspect={1}
               className="crop-tool"
-              crop={crop}
-              onChange={onCropChange}
-              onComplete={onCropComplete}
+              crop={imageState.crop}
+              onChange={crop => setImageState({...imageState, crop})}
+              onComplete={crop => makeCrops(crop)}
               style={{minHeight: "300px"}}
             >
-              <img onLoad={onImageLoaded} src={image as string} />
+              <img
+                onLoad={e => imageRef.current = e.currentTarget}
+                src={imageState.image as string}
+              />
             </ReactCrop>
 
-            <ToolTip />
+            <span className="crop-tool-tip">
+              Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
+            </span>
   
             <div className="crops">
               <div className="crop-full-outer">
                 <span>Small Size: </span>
-                <img className="crop-full" src={smallImagePreview} />
+                <img className="crop-full" src={imageState.smallPreview} />
               </div>
 
               <div className="crop-tiny-outer">
                 <span>Tiny Size: </span>
-                <img className="crop-tiny" src={tinyImagePreview} />
+                <img className="crop-tiny" src={imageState.tinyPreview} />
               </div>
             </div>
 
@@ -308,10 +288,9 @@ export default function IngredientForm({ ownership }: Props) {
               className="caption"
               max={150}
               min={2}
-              name="caption"
-              onChange={changeImageCaption}
+              onChange={e => setImage({...image, caption: e.target.value})}
               type="text"
-              value={imageCaption}
+              value={image.caption}
             />
 
             <button
@@ -324,17 +303,13 @@ export default function IngredientForm({ ownership }: Props) {
       </div>
 
       <div className="finish">
-        <Link href="/dashboard" className="cancel-button">Cancel</Link>
+        <Link className="cancel-button" href="/dashboard">Cancel</Link>
 
-        <LoaderButton
-          className="submit-button"
-          id="create_ingredient_button"
-          isLoading={loading}
-          loadingText="Creating..."
-          name="submit"
+        <button
+          className='submit-button'
+          disabled={loading}
           onClick={submit}
-          text="Create"
-        />
+        >{loading ? 'Creating...' : 'Create'}</button>
       </div>
     </div>
   );
@@ -347,30 +322,20 @@ type Props = {
 function useAllowedIngredients(ownership: Ownership) {
   const { ingredients } = useData();
   const { my_private_ingredients } = useUserData();
-
   // must be checked server-side!!! never let random users edit official content
-  if (ownership === "private") {
-    return my_private_ingredients;
-  }
-  if (ownership === "official") {
-    return ingredients;
-  }
+  if (ownership === "private") return my_private_ingredients;
+  if (ownership === "official") return ingredients;
   return [];
 }
 
-const url = 'https://s3.amazonaws.com/nobsc/';
-
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
-type Image = string | ArrayBuffer | null;
-
-export function ToolTip() {
-  return (
-    <span className="crop-tool-tip">
-      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
-    </span>
-  );
-}
+type ImageState = {
+  image:        string | ArrayBuffer | null;
+  crop:         Crop;
+  smallPreview: string;
+  tinyPreview:  string;
+};
 
 const initialCrop: Crop = {
   unit:   'px',
@@ -380,49 +345,6 @@ const initialCrop: Crop = {
   height: 50
 };
 
-export function isValidIngredientUpload({
-  ingredient_type_id,
-  ingredient_brand,
-  ingredient_variety,
-  ingredient_name,
-  alt_names,
-  notes,
-  setFeedback
-}: IsValidIngredientUploadParams) {
-  function feedback(message: string) {
-    window.scrollTo(0, 0);
-    setFeedback(message);
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
-
-  const validIngredientTypeId = ingredient_type_id !== 0;
-  if (!validIngredientTypeId) return feedback("Select ingredient type.");
-
-  //const validIngredientBrand = ingredient_brand.trim() !== "";
-  //const validIngredientVariety = ingredient_variety.trim() !== "";
-
-  const validIngredientName = ingredient_name.trim() !== "";
-  if (!validIngredientName) return feedback("Enter ingredient name.");
-
-  //const validAltNames = alt_names
-
-  const validNotes = notes.trim() !== "";
-  if (!validNotes) return feedback("Enter notes.");
-
-  return true;
-}
-
-type IsValidIngredientUploadParams = {
-  ingredient_type_id: number;
-  ingredient_brand:   string;  // | null
-  ingredient_variety: string;  // | null
-  ingredient_name:    string;
-  alt_names:          string[];
-  notes:              string;
-  setFeedback:        (feedback: string) => void;
-};
-
 export type IngredientUpload = {
   ingredient_type_id: number;
   ingredient_brand:   string;  // | null
@@ -430,12 +352,14 @@ export type IngredientUpload = {
   ingredient_name:    string;
   //alt_names:          string[];
   notes:              string;
+  //image_id:           string;
   image_filename:     string;
   caption:            string;
 };
 
 export type IngredientUpdateUpload = IngredientUpload & {
   ingredient_id: string;
+  image_id:      string;
 };
 
 export type ExistingIngredientToEdit = IngredientUpdateUpload;

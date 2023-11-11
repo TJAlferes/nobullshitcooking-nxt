@@ -15,7 +15,8 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
   const {
     owner_id,
     equipment_name,
-    image,
+    image_filename,
+    caption,
     equipment_type_name,
     notes
   } = equipment;
@@ -35,8 +36,8 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
         <h1>{equipment_name}</h1>
 
         <div className="image">
-          <img src={`${url}/equipment/${image.image_filename}.jpg`} />
-          <span>{image.caption}</span>
+          <img src={`${url}/equipment/${image_filename}.jpg`} />
+          <span>{caption}</span>
         </div>
 
         <div className="type">

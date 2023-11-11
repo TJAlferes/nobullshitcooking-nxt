@@ -25,18 +25,22 @@ export default function RecipeForm({ ownership }: Props) {
   const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
   const { setMyPublicRecipes, setMyPrivateRecipes } = useUserData();
 
-  const { allowedEquipment, allowedIngredients, allowedRecipes } = useAllowedContent(ownership, recipe_id);
+  const {
+    allowedEquipment,
+    allowedIngredients,
+    allowedRecipes
+  } = useAllowedContent(ownership, recipe_id);
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [recipe_type_id, setRecipeTypeId] = useState(0);
   const [cuisine_id, setCuisineId] = useState(0);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [active_time, setActiveTime] = useState("");
-  const [total_time, setTotalTime] = useState("");
-  const [directions, setDirections] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [active_time, setActiveTime] = useState('');
+  const [total_time, setTotalTime] = useState('');
+  const [directions, setDirections] = useState('');
   const [usedMethods, setUsedMethods] = useState<Methods>(
     methods.reduce((acc: { [key: number]: boolean }, curr) => {
       acc[curr.method_id] = false;
@@ -1171,19 +1175,13 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="finish">
-        <Link className="cancel-button" href={`/dashboard`}>
-          Cancel
-        </Link>
+        <Link className="cancel-button" href='/dashboard'>Cancel</Link>
 
-        <LoaderButton
-          className="submit-button"
-          id="user_submit_recipe_button"
-          isLoading={loading}
-          loadingText="Submitting Recipe..."
-          name="submit"
+        <button
+          className='submit-button'
+          disabled={loading}
           onClick={submit}
-          text="Submit Recipe"
-        />
+        >{loading ? 'Creating...' : 'Create'}</button>
       </div>
     </div>
   );

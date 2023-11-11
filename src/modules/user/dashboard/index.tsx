@@ -291,8 +291,8 @@ export default function Dashboard() {
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
-    const small = await getCroppedImage(250, 250, imageRef.current, crop);
-    const tiny = await getCroppedImage(25,  25,  imageRef.current, crop);
+    const small = await getCroppedImage(280, 280, imageRef.current, crop);
+    const tiny = await getCroppedImage(28, 28, imageRef.current, crop);
     if (!small || !tiny) return;
     setSmallCrop(small.preview);
     setTinyCrop(tiny.preview);

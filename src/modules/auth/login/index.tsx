@@ -5,32 +5,24 @@ import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
 import { useAuth } from '../../../store';
-import { LoaderButton } from '../../shared/LoaderButton';
 
-// TO DO: user forgot password
 export default function Login() {
   const router = useRouter();
 
   const { login } = useAuth();
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const loginHandler = async () => {
-    if (!email) {
-      return setFeedback('Email required.');
-    }
-    if (!password) {
-      return setFeedback('Password required.');
-    }
-
+    window.scrollTo(0, 0);
+    if (!email) return setFeedback('Email required.');
+    if (!password) return setFeedback('Password required.');
     setLoading(true);
     setFeedback('');
-    window.scrollTo(0, 0);
-
     try {
       const res = await axios.post(`${endpoint}/login`, {email, password});
       if (res.status === 201) {
@@ -42,7 +34,6 @@ export default function Login() {
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }
-
     setLoading(false);
   };
 
@@ -93,21 +84,16 @@ export default function Login() {
           value={password}
         />
 
-        <LoaderButton
-          className="login__button"
-          disabled={email.length < 5
+        <button
+          className='login__button'
+          disabled={loading
+            || email.length < 5
             || email.length > 60
             || password.length < 6
             || password.length > 60
           }
-          id="login-button"
-          isLoading={loading}
-          loadingText="Logging In..."
-          name="submit"
           onClick={loginClick}
-          text="Login"
-          type='button'
-        />
+        >{loading ? 'Logging In...' : 'Login'}</button>
 
         <Link href='/forgot-password'>Forgot password?</Link>
       </form>

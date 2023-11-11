@@ -31,9 +31,9 @@ type Props = {
   id:                               string;
   isLoading:                        boolean;
   loadingText:                      string;
-  name:                             string;
+  name?:                             string;
   onClick(e?: React.MouseEvent):    void;
   onKeyUp?(e: React.KeyboardEvent): void;
-  type:                             "button" | "submit" | "reset";
+  type?:                             "button" | "submit" | "reset";
   text:                             string;
 };
