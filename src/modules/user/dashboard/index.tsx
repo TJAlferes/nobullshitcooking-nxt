@@ -20,8 +20,8 @@ export default function Dashboard() {
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState("avatar");
-  const [subTab, setSubTab] = useState("private");
+  const [tab, setTab] = useState('avatar');
+  const [subTab, setSubTab] = useState('private');
   const [deleteId, setDeleteId] = useState('');
   const [deleteName, setDeleteName] = useState('');
   const [modalActive, setModalActive] = useState(false);
@@ -154,24 +154,6 @@ export default function Dashboard() {
     setSmallAvatar(null);
     setTinyAvatar(null);
   };
-
-  /*const deleteChatGroup = async (chatgroup_id: string) => {
-    setLoading(true);
-    window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${authname}/chatgroups`;
-    try {
-      const res1 = await axios.delete(`${url}/${chatgroup_id}`, {withCredentials: true});
-      setFeedback(res1.data.message);
-      const res2 = await axios.get(url, {withCredentials: true});
-      userData.setMyChatgroups(res2.data);
-    } catch (err) {
-      setFeedback(error);
-    }
-    setTimeout(() => {
-      setLoading(false);
-      setFeedback("");
-    }, 3000);
-  };*/
 
   const unattributePublicPlan = async (plan_id: string) => {
     setLoading(true);
@@ -416,9 +398,37 @@ export default function Dashboard() {
 
       {
         tab === "settings" && (
-        <>
-          <input />
-        </>
+        <div className='dashboard-settings'>
+          <label htmlFor='new-username'>New Username:</label>
+          <input
+            name='new-username'
+            onChange={e => setNewUsername(e.target.value)}
+            value={new_username}
+            minLength={6}
+            maxLength={20}
+          />
+          <button onClick={updateUsername}>Update Username</button>
+
+          <label htmlFor='new-email'>New Email:</label>
+          <input
+            name='new-email'
+            onChange={e => setNewEmail(e.target.value)}
+            value={new_email}
+            minLength={5}
+            maxLength={60}
+          />
+          <button onClick={updateEmail}>Update Email</button>
+
+          <label htmlFor='new-password'>New Password:</label>
+          <input
+            name='new-password'
+            onChange={e => setNewPassword(e.target.value)}
+            value={new_password}
+            minLength={6}
+            maxLength={60}
+          />
+          <button onClick={updatePassword}>Update Password</button>
+        </div>
         )
       }
 
@@ -809,69 +819,35 @@ export default function Dashboard() {
 }
 
 function Tabs({ tab, setTab }: TabsProps) {
+  const names = ['settings', 'avatar', 'plans', 'recipes', 'ingredients', 'equipment'];
   return (
-    <div className="dashboard-tabs">
-      <button
-        className={tab === "avatar" ? "--active" : ""}
-        name='avatar'
-        onClick={e => setTab(e.currentTarget.name)}
-      >{"Avatar"}</button>
-
-      <button
-        className={tab === "plans" ? "--active" : ""}
-        name={"plans"}
-        onClick={e => setTab(e.currentTarget.name)}
-      >{"Plans"}</button>
-
-      <button
-        className={tab === "recipes" ? "--active" : ""}
-        name={"recipes"}
-        onClick={e => setTab(e.currentTarget.name)}
-      >{"Recipes"}</button>
-
-      <button
-        className={tab === "ingredients" ? "--active" : ""}
-        name={"ingredients"}
-        onClick={e => setTab(e.currentTarget.name)}
-      >{"Ingredients"}</button>
-
-      <button
-        className={tab === "equipment" ? "--active" : ""}
-        name={"equipment"}
-        onClick={e => setTab(e.currentTarget.name)}
-      >{"Equipment"}</button>
+    <div className='dashboard-tabs'>
+      {names.map(name => (
+        <button
+          className={tab === name ? '--active' : ''}
+          onClick={() => setTab(name)}
+        >{capitalizeFirstLetter(name)}</button>
+      ))}
     </div>
   );
 }
 
 function Subtabs({ subTab, setSubTab }: SubtabsProps) {
+  const names = ['private', 'public', 'favorite', 'saved'];
   return (
-    <div className="dashboard-subtabs">
-      <button
-        className={subTab === "private" ? "--active" : ""}
-        name={"private"}
-        onClick={e => setSubTab(e.currentTarget.name)}
-      >{"Private"}</button>
-
-      <button
-        className={subTab === "public" ? "--active" : ""}
-        name={"public"}
-        onClick={e => setSubTab(e.currentTarget.name)}
-      >{"Public"}</button>
-
-      <button
-        className={subTab === "favorite" ? "--active" : ""}
-        name={"favorite"}
-        onClick={e => setSubTab(e.currentTarget.name)}
-      >{"Favorite"}</button>
-
-      <button
-        className={subTab === "saved" ? "--active" : ""}
-        name={"saved"}
-        onClick={e => setSubTab(e.currentTarget.name)}
-      >{"Saved"}</button>
+    <div className='dashboard-subtabs'>
+      {names.map(name => (
+        <button
+          className={subTab === name ? '--active' : ''}
+          onClick={() => setSubTab(name)}
+        >{capitalizeFirstLetter(name)}</button>
+      ))}
     </div>
   );
+}
+
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 const error = 'An error occurred. Please try again.';

@@ -1,18 +1,18 @@
-import axios        from 'axios';
-import Link         from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useState } from 'react';
 
-import { endpoint }             from '../../../../config/api';
+import { endpoint } from '../../../../config/api';
 import { useAuth, useUserData } from '../../../../store';
 
 export default function Friends() {
-  const { authname }       = useAuth();
+  const { authname } = useAuth();
   const { my_friendships, setMyFriendships } = useUserData();
 
-  const [ userToFind, setUsertoFind ] = useState("");
-  const [ feedback,   setFeedback ]   = useState("");
-  const [ loading,    setLoading ]    = useState(false);
-  const [ tab,        setTab ]        = useState("accepted");
+  const [feedback, setFeedback] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState('current');
+  const [userToFind, setUsertoFind] = useState('');
 
   const url = `${endpoint}/users/${authname}/friendships`;
 
@@ -28,59 +28,61 @@ export default function Friends() {
     setLoading(true);
     try {
       const res = await axios.post(`${url}/${friendname}/create`, {}, {withCredentials: true});
-      if (res.status === 201) setFeedback("Friendship request sent.");
-      if (res.status === 403) setFeedback(res.data.message);
-      if (res.status === 404) setFeedback("Not found.");
+      if (res.status === 201) setFeedback('Friendship request sent.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
     setTimeout(() => {
-      setFeedback("");
-      setUsertoFind("");
+      setFeedback('');
+      setUsertoFind('');
     }, 4000);
   };
 
   const acceptFriendship = async (friendname: string) => {
     setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     try {
-      const res = await axios.put(`${url}/${friendname}/accept`, {}, {withCredentials: true});
-      if (res.status === 204) setFeedback("Friendship request accepted.");
-      if (res.status === 403) setFeedback("Could not process.");
-      if (res.status === 404) setFeedback("Not found.");
+      const res = await axios.patch(`${url}/${friendname}/accept`, {}, {withCredentials: true});
+      if (res.status === 204) setFeedback('Friendship request accepted.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-    setTimeout(() => setFeedback(""), 4000);
+    setTimeout(() => setFeedback(''), 4000);
   };
 
   const rejectFriendship = async (friendname: string) => {
     setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     try {
-      const res = await axios.put(`${url}/${friendname}/reject`, {}, {withCredentials: true});
-      if (res.status === 204) setFeedback("Friendship request rejected.");
-      if (res.status === 403) setFeedback("Could not process.");
-      if (res.status === 404) setFeedback("Not found.");
+      const res = await axios.delete(`${url}/${friendname}/reject`, {withCredentials: true});
+      if (res.status === 204) setFeedback('Friendship request rejected.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-    setTimeout(() => setFeedback(""), 4000);
+    setTimeout(() => setFeedback(''), 4000);
   };
 
   const deleteFriendship = async (friendname: string) => {
     setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     try {
       const res = await axios.delete(`${url}/${friendname}/delete`, {withCredentials: true});
-      if (res.status === 204) setFeedback("Friendship deleted.");
-      if (res.status === 403) setFeedback("Forbidden.");
-      if (res.status === 404) setFeedback("Not found.");
+      if (res.status === 204) setFeedback('Friendship deleted.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-    setTimeout(() => setFeedback(""), 4000);
+    setTimeout(() => setFeedback(''), 4000);
   };
 
   const blockUser = async () => {
@@ -88,37 +90,36 @@ export default function Friends() {
     const friendname = userToFind.trim();
     if (friendname === authname) return;
     setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     try {
       const res = await axios.post(`${url}/${friendname}/block`, {}, {withCredentials: true});
-      if (res.status === 204) setFeedback("User blocked.");
-      if (res.status === 404) setFeedback("Not found.");
+      if (res.status === 204) setFeedback('User blocked.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
     setTimeout(() => {
-      setFeedback("");
-      setUsertoFind("");
+      setFeedback('');
+      setUsertoFind('');
     }, 4000);
   };
 
   const unblockUser = async (friendname: string) => {
     setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     try {
       const res = await axios.delete(`${url}/${friendname}/unblock`, {withCredentials: true});
-      if (res.status === 204) setFeedback("User unblocked.");
-      if (res.status === 403) setFeedback("Forbidden.");
-      if (res.status === 404) setFeedback("Not found.");
+      if (res.status === 204) setFeedback('User unblocked.');
+      else setFeedback(res.data.message);
       await getMyFriendships();
     } catch(err) {
       setFeedback(error);
     }
-    setTimeout(() => setFeedback(""), 4000);
+    setTimeout(() => setFeedback(''), 4000);
   };
-
-  const inputChange = (e: ChangeEvent) => setUsertoFind(e.target.value);
-
-  const tabChange = (value: string) => setTab(value);
 
   return (
     <div className="two-col friends">
@@ -127,10 +128,10 @@ export default function Friends() {
       <p className="feedback">{feedback}</p>
 
       <div className="friends-find">
-        <label htmlFor="friends-find-input">Username:</label>
+        <label htmlFor="user-to-find">Username:</label>
         <input
-          name="friends-find-input"
-          onChange={inputChange}
+          name='user-to-find'
+          onChange={e => setUsertoFind(e.target.value)}
           value={userToFind}
           minLength={6}
           maxLength={20}
@@ -139,35 +140,35 @@ export default function Friends() {
         <button
           className="--request"
           disabled={loading}
-          name="friends-find-request"
           onClick={requestFriendship}
         >Send Friend Request</button>
         
         <button
           className="--block"
           disabled={loading}
-          name="friends-find-block"
           onClick={blockUser}
         >Block User</button>
       </div>
 
       <div className="friends-tabs">
         <button
-          className={tab === "accepted" ? "--active" : ""}
-          name="current"
-          onClick={() => tabChange("accepted")}
+          className={tab === 'pending-received' ? '--active' : ''}
+          onClick={() => setTab('pending-received')}
+        >Pending Received</button>
+
+        <button
+          className={tab === 'pending-sent' ? '--active' : ''}
+          onClick={() => setTab("pending-sent")}
+        >Pending Sent</button>
+
+        <button
+          className={tab === 'accepted' ? '--active' : ''}
+          onClick={() => setTab('accepted')}
         >Current</button>
         
         <button
-          className={tab === "pending-received" ? "--active" : ""}
-          name="pending"
-          onClick={() => tabChange("pending-received")}
-        >Pending</button>
-        
-        <button
-          className={tab === "blocked" ? "--active" : ""}
-          name="blocked"
-          onClick={() => tabChange("blocked")}
+          className={tab === 'blocked' ? '--active' : ''}
+          onClick={() => setTab('blocked')}
         >Blocked</button>
       </div>
 
@@ -182,38 +183,34 @@ export default function Friends() {
               <Link href={`/profile/${f.username}`}>{f.username}</Link>
             </span>
 
-            {f.status === "pending-received" && (
+            {f.status === 'pending-received' && (
               <button
                 className="action"
                 disabled={loading}
-                name="accept"
                 onClick={() => acceptFriendship(f.username)}
               >Accept</button>
             )}
             
-            {f.status === "pending-received" && (
+            {f.status === 'pending-received' && (
               <button
                 className="delete"
                 disabled={loading}
-                name="reject"
                 onClick={() => rejectFriendship(f.username)}
               >Reject</button>
             )}
             
-            {f.status === "accepted" && (
+            {f.status === 'accepted' && (
               <button
                 className="delete"
                 disabled={loading}
-                name="unfriend"
                 onClick={() => deleteFriendship(f.username)}
               >Unfriend</button>
             )}
             
-            {f.status === "blocked" && (
+            {f.status === 'blocked' && (
               <button
                 className="delete"
                 disabled={loading}
-                name="unblock"
                 onClick={() => unblockUser(f.username)}
               >Unblock</button>
             )}
@@ -222,10 +219,8 @@ export default function Friends() {
       </div>
     </div>
   );
-};
+}
 
 const error = 'An error occurred. Please try again.';
 
 const s3Url = '';  // TO DO: finish
-
-type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
