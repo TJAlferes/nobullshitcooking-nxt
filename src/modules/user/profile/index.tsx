@@ -1,9 +1,9 @@
-import axios                          from 'axios';
-import Link                           from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState }        from 'react';
+import { useEffect, useState } from 'react';
 
-import { endpoint }      from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { RecipeOverview } from '../../../store';

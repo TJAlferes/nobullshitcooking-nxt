@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { endpoint }              from '../../../../config/api';
+import { endpoint } from '../../../../config/api';
 import type { RecipeDetailView } from '../../../../modules/recipe/detail';
-import UserPrivateRecipeDetail   from '../../../../modules/user/private-recipe/detail';
+import UserPrivateRecipeDetail from '../../../../modules/user/private-recipe/detail';
 
 export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
   return <UserPrivateRecipeDetail recipe={recipe} />

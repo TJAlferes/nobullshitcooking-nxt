@@ -1,14 +1,14 @@
-import axios                          from 'axios';
-import Link                           from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState }        from 'react';
+import { useEffect, useState } from 'react';
 
-import { endpoint }             from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import type { RecipeOverview }  from '../../../store';
-import { NOBSC_USER_ID }        from '../../shared/constants';
-import { LoaderSpinner }        from '../../shared/LoaderSpinner';
-import { Ownership }            from '../../shared/types';
+import type { RecipeOverview } from '../../../store';
+import { NOBSC_USER_ID } from '../../shared/constants';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
+import { Ownership } from '../../shared/types';
 
 export default function PlanDetail({ ownership }: Props) {
   const router  = useRouter();
@@ -28,14 +28,8 @@ export default function PlanDetail({ ownership }: Props) {
   useEffect(() => {
     let mounted = true;
     async function getExistingPlanToView() {
-      if (!username || !plan_id) {
-        router.push('/');
-        return;
-      }
-
       setLoading(true);
       window.scrollTo(0, 0);
-
       let plan = null;
       if (ownership === "public") {
         if (authname) {
@@ -45,33 +39,18 @@ export default function PlanDetail({ ownership }: Props) {
           plan = res.data;
         }
       } else if (ownership === "private") {
-        if (!authname) {
-          router.push(`/404`);
-          return;
-        }
+        if (!authname) return router.push(`/404`);
         plan = my_private_plans.find(p => p.plan_id === plan_id);
       }
-
-      if (!plan) {
-        router.push('/');
-        return;
-      }
-
+      if (!plan) return router.push('/');
       setPlanName(plan.plan_name);
       setIncludedRecipes(plan.included_recipes);
-
       setLoading(false);
     }
 
     if (mounted) {
-      if (!username || !plan_id) {
-        router.push('/404');
-        return;
-      }
-
-      if (plan_id) {
-        getExistingPlanToView();
-      }
+      if (!username || !plan_id) return router.push('/404');
+      if (plan_id) getExistingPlanToView();
     }
 
     return () => {
@@ -82,7 +61,7 @@ export default function PlanDetail({ ownership }: Props) {
   if (loading) return <LoaderSpinner></LoaderSpinner>;
 
   return (
-    <div className="one-col plan">
+    <div className="one-col plan-detail">
       <div className="heading">
         <h1>Plan</h1>
 

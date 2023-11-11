@@ -25,9 +25,7 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
       } catch (err) {}
     }
 
-    if (!data) {
-      getInitialData();
-    }
+    if (!data) getInitialData();
   }, []);
 
   return (

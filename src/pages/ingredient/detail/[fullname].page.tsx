@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import { endpoint }            from '../../../config/api';
-import IngredientDetail        from "../../../modules/ingredient/detail";
-import type { IngredientView } from '../../../modules/shared/data/state';
+import { endpoint } from '../../../config/api';
+import IngredientDetail from '../../../modules/ingredient/detail';
+import type { IngredientView } from '../../../store';
 
 export default function IngredientDetailPage({ ingredient }: Props) {
-  return <IngredientDetail ingredient={ingredient} />;
+  return <IngredientDetail ownership="official" ingredient={ingredient} />;
 }
 
 type Props = {

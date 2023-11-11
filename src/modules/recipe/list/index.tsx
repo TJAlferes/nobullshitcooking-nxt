@@ -1,21 +1,18 @@
-import Link                           from 'next/link';
+import Link from 'next/link';
 import { Fragment, useState, useRef } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../redux';
-import { getItem }                         from '../../general/localStorage';
-import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
-import { Pagination, ResultsPerPage }      from '../../shared/search';
-import { useSearch }                       from '../../shared/search/hook';
+import { useData } from '../../../store';
+import { getItem } from '../../general/localStorage';
+import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { Pagination, ResultsPerPage } from '../../shared/search';
+import { useSearch } from '../../shared/search/hook';
 
 // list of search results  TO DO: make a filter to toggle include/exclude Public User Recipes)
 export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
   const searchDriver = useSearch();
-
-  const recipe_types = useSelector(state => state.data.recipe_types);
-  const methods      = useSelector(state => state.data.methods);
-  const cuisines     = useSelector(state => state.data.cuisines);
+  const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = [
     {continent: "Africa",   cuisines: cuisines.filter(c => c.continent_code === "AF")},
     {continent: "Americas", cuisines: cuisines.filter(c => c.continent_code === "AM")},
@@ -25,27 +22,23 @@ export default function RecipeList() {
   ];  // TO DO: improve this (Array.reduce?)
   const { results, total_results, total_pages } = getItem("found");
 
-  const [ expandedFilter,     setExpandedFilter ]     = useState<string|null>(null);
-  const [ checkedRecipeTypes, setCheckedRecipeTypes ] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);
-  const [ checkedMethods,     setCheckedMethods ]     = useState<string[]>(searchDriver.params.filters?.methods ?? []);
-  const [ checkedCuisines,    setCheckedCuisines ]    = useState<string[]>(searchDriver.params.filters?.cuisines ?? []);
-  //const sorts =           params.filters?.sorts;
+  const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
+  const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);
+  const [checkedMethods, setCheckedMethods] = useState<string[]>(searchDriver.params.filters?.methods ?? []);
+  const [checkedCuisines, setCheckedCuisines] = useState<string[]>(searchDriver.params.filters?.cuisines ?? []);
+  //const sorts = params.filters?.sorts;
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
-      
       // if needed, re-search with updated filters
       const { filters } = searchDriver.params;
-
       if (name === "recipeTypes" && checkedRecipeTypes !== filters?.recipe_types) {
         searchDriver.setFilters(name, checkedRecipeTypes);
       }
-
       if (name === "methods" && checkedMethods !== filters?.methods) {
         searchDriver.setFilters(name, checkedMethods);
       }
-
       if (name === "cuisines" && checkedCuisines !== filters?.cuisines) {
         searchDriver.setFilters(name, checkedCuisines);
       }
@@ -55,7 +48,7 @@ export default function RecipeList() {
   };
 
   return (
-    <div className="two-col">
+    <div className="two-col recipe-list">
       <div className="two-col-left search-results">
         <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
         <h1>Recipes</h1>
@@ -186,23 +179,21 @@ export default function RecipeList() {
         <ResultsPerPage />
 
         <div className="search-results-list">
-          {
-            results
-              ? results.map(r => (
-                <Link
-                  className="search-results-list-item"
-                  href={`/recipe?title=${r.title}`}
-                  key={r.id}
-                >
-                  <img src="/images/dev/sushi-280-172.jpg" />
-                  <h3>{r.title}</h3>
-                  <div className="author">{r.author}</div>
-                  <div className="cuisine">{r.cuisine_name}</div>
-                  <div className="type">{r.recipe_type_name}</div>
-                </Link>
-              ))
-              : <div>Loading...</div>
-          }
+          {results
+            ? results.map(r => (
+              <Link
+                className="search-results-list-item"
+                href={`/recipe?title=${r.title}`}
+                key={r.id}
+              >
+                <img src="/images/dev/sushi-280-172.jpg" />
+                <h3>{r.title}</h3>
+                <div className="author">{r.author}</div>
+                <div className="cuisine">{r.cuisine_name}</div>
+                <div className="type">{r.recipe_type_name}</div>
+              </Link>
+            ))
+            : <div>Loading...</div>}
         </div>
 
         <Pagination />

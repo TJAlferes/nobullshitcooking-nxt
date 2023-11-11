@@ -1,40 +1,37 @@
-import Link         from 'next/link';
+import Link from 'next/link';
 import { useState } from 'react';
 
-import { useTypedSelector as useSelector } from '../../../redux';
-import { getItem }                         from '../../general/localStorage';
-import { ExpandCollapse }                  from '../../shared/ExpandCollapse';
-import { useSearch }                       from '../../shared/search/hook';
-import { Pagination, ResultsPerPage }      from '../../shared/search';
+import { useData } from '../../../store';
+import { getItem } from '../../general/localStorage';
+import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { useSearch } from '../../shared/search/hook';
+import { Pagination, ResultsPerPage } from '../../shared/search';
 
 export default function EquipmentList() {
   const searchDriver = useSearch();
 
-  const equipment_types = useSelector(state => state.data.equipment_types);
+  const { equipment_types } = useData();
   const { results, total_results, total_pages } = getItem("found");
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
-
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =
     useState<string[]>(searchDriver.params.filters?.equipment_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
-
       // if needed, re-search with updated filters
       const { filters } = searchDriver.params;
-
       if (name === "equipmentTypes" && checkedEquipmentTypes !== filters?.equipment_types) {
         searchDriver.setFilters(name, checkedEquipmentTypes);
       }
     } else {
-      setExpandedFilter(name);
+      setExpandedFilter(name);  // open the dropdown
     }
   };
 
   return (
-    <div className="two-col">
+    <div className="two-col equipment-list">
       <div className="two-col-left search-results">
         <h1>Equipment</h1>
         <p>{total_results} total results and {total_pages} total pages</p>
@@ -83,21 +80,19 @@ export default function EquipmentList() {
         <ResultsPerPage />
         
         <div className="search-results-list">
-          {
-            results
-              ? results.map(e => (
-                <Link
-                  className="search-results-list-item"
-                  href={`/equipment?name=${e.equipment_name}`}
-                  key={e.id}
-                >
-                  <img src="/images/dev/knife-280-172.jpg" />
-                  <h3>{e.equipment_name}</h3>
-                  <div className="type">{e.equipment_type_name}</div>
-                </Link>
-              ))
-              : <div>Loading...</div>
-          }
+          {results
+            ? results.map(e => (
+              <Link
+                className="search-results-list-item"
+                href={`/equipment?name=${e.equipment_name}`}
+                key={e.id}
+              >
+                <img src="/images/dev/knife-280-172.jpg" />
+                <h3>{e.equipment_name}</h3>
+                <div className="type">{e.equipment_type_name}</div>
+              </Link>
+            ))
+            : <div>Loading...</div>}
         </div>
 
         <Pagination />

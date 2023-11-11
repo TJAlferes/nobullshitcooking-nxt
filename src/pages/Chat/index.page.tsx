@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-import { LoaderSpinner } from '../../modules/shared/components';
+import { LoaderSpinner } from '../../modules/shared/LoaderSpinner';
 
 const Chat = dynamic(
   () => import('../../modules/chat'),

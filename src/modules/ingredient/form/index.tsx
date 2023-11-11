@@ -346,8 +346,6 @@ function useAllowedIngredients(ownership: Ownership) {
   return [];
 }
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 type ImageState = {
   image:        string | ArrayBuffer | null;
   crop:         Crop;

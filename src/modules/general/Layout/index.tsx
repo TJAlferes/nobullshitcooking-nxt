@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { useRouter }      from 'next/router.js';
+import { useRouter } from 'next/router.js';
 
 import { useTheme } from '../../../store';
-import { Header }   from './Header';
-import { Main }     from './Main';
-import { Footer }   from './Footer';
+import { Header } from './Header';
+import { Main } from './Main';
+import { Footer } from './Footer';
 
 export function Layout({ children }: Props) {
   const { pathname } = useRouter();
@@ -14,11 +14,8 @@ export function Layout({ children }: Props) {
   const authPage = pathname.match(/\/login/)
     || pathname.match(/\/register/)
     || pathname.match(/\/verify/);
-
   // This layout does not apply to auth pages.
-  if (authPage) {
-    return <>{children}</>;
-  }
+  if (authPage) return <>{children}</>;
   
   return (
     <div id="layout" className={`${theme}`}>

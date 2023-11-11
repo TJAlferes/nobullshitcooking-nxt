@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// set up abs paths
-import { endpoint }               from '../../../../../config/api';
-import UserPrivateEquipmentDetail from "../../../../../modules/user/private/equipment/detail";
-import type { Equipment }         from '../../../../../modules/user/private/data/state';
+import { endpoint } from '../../../../config/api';
+import UserPrivateEquipmentDetail from "../../../../modules/user/private-equipment/detail";
+import type { Equipment } from '../../../../../modules/user/private/data/state';
 
 export default function UserPrivateEquipmentDetailPage({ equipment }: {equipment: Equipment}) {
   return <UserPrivateEquipmentDetail equipment={equipment} />
@@ -16,8 +15,7 @@ function slugify(name: string) {
     .join('-');
 }
 
-
-// JUST USE GETSERVERSIDEPROPS FOR PRIVATE USER ENTITIES???
+// TO DO: JUST USE GETSERVERSIDEPROPS FOR PRIVATE USER ENTITIES???
 
 export async function getStaticPaths() {
   const response = await axios.get(`${endpoint}/equipment/names`);

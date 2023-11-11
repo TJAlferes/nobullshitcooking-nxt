@@ -1,12 +1,12 @@
-import axios         from 'axios';
-import Link          from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/router.js';
-import { useState }  from 'react';
+import { useState } from 'react';
 
-import { endpoint }          from '../../../../config/api';
+import { endpoint } from '../../../../config/api';
 import { useAuth, useTheme } from '../../../../store';
-import { LeftNav }           from '../../../shared/menu';
-import { Search }            from '../../../shared/search';
+import { LeftNav } from '../../../shared/menu';
+import { Search } from '../../../shared/search';
 
 export function Header() {
   const router = useRouter();
@@ -61,7 +61,6 @@ export function Header() {
           )
         }
         <Link href="/help">Help</Link>
-
         {!authname
           ? (
             <>
@@ -76,7 +75,6 @@ export function Header() {
             </>
           )
         }
-
         <Link href="/cart">Cart</Link>
       </div>
       

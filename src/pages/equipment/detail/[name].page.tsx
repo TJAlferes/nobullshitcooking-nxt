@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { endpoint }           from '../../../config/api';
-import EquipmentDetail        from "../../../modules/equipment/detail";
-import type { EquipmentView } from '../../../modules/shared/data/state';
+import { endpoint } from '../../../config/api';
+import EquipmentDetail from "../../../modules/equipment/detail";
+import type { EquipmentView } from '../../../store';
 
 export default function EquipmentDetailPage({ equipment }: Props) {
   return <EquipmentDetail ownership="official" equipment={equipment} />;

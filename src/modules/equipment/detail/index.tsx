@@ -1,9 +1,9 @@
 import { useRouter } from 'next/navigation';
 
-import { useAuth }            from '../../../store';
+import { useAuth } from '../../../store';
 import type { EquipmentView } from '../../../store';
-import { LoaderSpinner }      from '../../shared/LoaderSpinner';
-import type { Ownership }     from '../../shared/types';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
+import type { Ownership } from '../../shared/types';
 
 export default function EquipmentDetail({ ownership, equipment }: Props) {
   const router = useRouter();
@@ -25,13 +25,13 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
   if (ownership === "private") {
     if (auth_id !== owner_id) {
       router.push('/404');
-      return;
+      return false;
     }
     url += "user/private/";
   }
 
   return (
-    <div className="two-col equipment">
+    <div className="two-col equipment-detail">
       <div className="two-col-left">
         <h1>{equipment_name}</h1>
 

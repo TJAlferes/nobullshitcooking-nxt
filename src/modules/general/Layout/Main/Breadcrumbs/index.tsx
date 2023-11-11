@@ -1,4 +1,4 @@
-import Link            from 'next/link';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export function Breadcrumbs() {
@@ -11,13 +11,6 @@ export function Breadcrumbs() {
     name: convert(path),
     href: '/' + linkPath.slice(0, i + 1).join('/')
   }));
-  //const breadcrumbs = pathname
-  //  .split('/')
-  //  .filter(Boolean)
-  //  .map((segment, index, segments) => {
-  //    const path = `/${segments.slice(0, index + 1).join('/')}`;
-  //    return {path, label: segment};
-  //  });
 
   if ( !breadcrumbs || pathname === "/home" || pathname?.match(/^\/$/) ) return null;
 
@@ -36,19 +29,6 @@ export function Breadcrumbs() {
       ))}
     </nav>
   );
-  //return (
-  //  <nav>
-  //    <ul>
-  //      {breadcrumbs.map((breadcrumb, index) => (
-  //        <li key={index}>
-  //          <Link href={breadcrumb.path}>
-  //            {convert(breadcrumb.label)}
-  //          </Link>
-  //        </li>
-  //      ))}
-  //    </ul>
-  //  </nav>
-  //);
 }
 
 function convert(string: string) {
@@ -64,9 +44,4 @@ function convert(string: string) {
     .join();
 
   return capitalized;
-};
-
-type Breadcrumb = {
-  name: string;
-  href: string;
-};
+}

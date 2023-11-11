@@ -1,12 +1,12 @@
-import axios         from 'axios';
-import Link          from 'next/link';
+import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState }  from 'react';
+import { useState } from 'react';
 
-import { endpoint }             from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import { LoaderSpinner }        from '../../shared/LoaderSpinner';
-import type { Ownership }       from '../../shared/types';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
+import type { Ownership } from '../../shared/types';
 
 export default function RecipeDetail({ ownership, recipe }: Props) {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
   if (ownership === "private") {
     if (auth_id !== owner_id) {
       router.push('/404');
-      return;
+      return false;
     }
     url += "user/private/";
   } else if (ownership === "public") {
@@ -48,7 +48,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
 
   // TO DO: move logic out of return
   return (
-    <div className="two-col">
+    <div className="two-col recipe-detail">
       <div className="two-col-left recipe">
         <h1>{title}</h1>
 

@@ -1,19 +1,17 @@
-import axios                                   from 'axios';
-import type { XYCoord }                        from 'dnd-core';
-import update                                  from 'immutability-helper';
-import { useSearchParams, useRouter }          from 'next/navigation';
-import { useEffect, useRef, useState }         from 'react';
-import type { ChangeEvent }                    from 'react';
-import AriaModal                               from 'react-aria-modal';
+import axios from 'axios';
+import type { XYCoord } from 'dnd-core';
+import update from 'immutability-helper';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import AriaModal from 'react-aria-modal';
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
-import { endpoint }             from '../../../config/api';
+import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import type { RecipeOverview }  from '../../../store';
-import { NOBSC_USER_ID }        from '../../shared/constants';
-import { ExpandCollapse }       from '../../shared/ExpandCollapse';
-import { LoaderButton }         from '../../shared/LoaderButton';
-import type { Ownership }       from '../../shared/types';
+import type { RecipeOverview } from '../../../store';
+import { NOBSC_USER_ID } from '../../shared/constants';
+import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import type { Ownership } from '../../shared/types';
 
 export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
@@ -32,50 +30,32 @@ export default function PlanForm({ ownership }: Props) {
   const [ plan_name, setPlanName ] = useState("");
   const [ included_recipes, setIncludedRecipes ] = useState<RecipeOverview[][]>([[], [], [], [], [], [], []]);
 
-  const [ feedback,    setFeedback ]    = useState("");
-  const [ loading,     setLoading ]     = useState(false);
-  const [ modalActive, setModalActive ] = useState(false);
-  const [ tab,         setTab ]         = useState("official");
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [modalActive, setModalActive] = useState(false);
+  const [tab, setTab] = useState("official");
 
   useEffect(() => {
     let mounted = true;
 
     function getExistingPlanToEdit() {
-      if (!plan_id) {
-        router.push(`/dashboard`);
-        return;
-      }
-
       setLoading(true);
       window.scrollTo(0, 0);
-
       let plan = null;
       if (ownership === "public") {
         plan = my_public_plans.find(p => p.plan_id === plan_id);
       } else if (ownership === "private") {
         plan = my_private_plans.find(p => p.plan_id === plan_id);
       }
-
-      if (!plan) {
-        router.push(`/dashboard`);
-        return;
-      }
-
+      if (!plan) return router.push(`/dashboard`);
       setPlanName(plan.plan_name);
       setIncludedRecipes(plan.included_recipes);
-
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) {
-        router.push(`/404`);
-        return;
-      }
-
-      if (plan_id) {
-        getExistingPlanToEdit();
-      }
+      if (!authname) return router.push(`/404`);
+      if (plan_id) getExistingPlanToEdit();
     }
 
     return () => {
@@ -93,21 +73,10 @@ export default function PlanForm({ ownership }: Props) {
     }
   };
 
-  const activateModal = () => setModalActive(true);
-
-  const deactivateModal = () => setModalActive(false);
-
   const discardChanges = () => {
     setModalActive(false);
     router.push('/dashboard');
   };
-
-  const getApplicationNode = (): Element | Node =>
-    document.getElementById('root') as Element | Node;
-
-  const changePlanName = (e: ChangeEvent<HTMLInputElement>) => setPlanName(e.target.value);
-
-  const clickTab = (e: SyntheticEvent) => setTab((e.target as HTMLButtonElement).name);
 
   const addRecipeToDay = (day: number, recipe: RecipeOverview) => {
     const new_included_recipes = update(included_recipes, {
@@ -129,24 +98,25 @@ export default function PlanForm({ ownership }: Props) {
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
     if (!day) return;
-
     const draggedRecipe = included_recipes[day - 1]![dragIndex]!;
-
     const new_included_recipes = update(included_recipes, {
       [day - 1]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
-
     setIncludedRecipes(new_included_recipes);
   };
 
+  const invalid = (message: string) => {
+    setFeedback(message);
+    setLoading(false);
+  };
+
   const submit = async () => {
-    setLoading(true);
     window.scrollTo(0, 0);
-
-    if (!isValidPlan({plan_name, setFeedback})) return;
-
+    setFeedback('');
+    setLoading(true);
+    if (plan_name.trim() === '') return invalid('Plan Name required.');
     const plan_upload = {
       plan_name,
       included_recipes: included_recipes.map((recipes, i) => 
@@ -157,7 +127,6 @@ export default function PlanForm({ ownership }: Props) {
         }))
       )
     };
-    
     try {
       if (plan_id) {
         const res = await axios.patch(
@@ -208,34 +177,28 @@ export default function PlanForm({ ownership }: Props) {
   return (
     <div className="one-col plan-form">
       <div className="heading">
-        {
-          ownership === "private"
-          && plan_id
+        {ownership === "private" && plan_id
           ? <h1>Update Private Plan</h1>
-          : <h1>Create Private Plan</h1>
-        }
-        {
-          ownership === "public"
-          && plan_id
+          : <h1>Create Private Plan</h1>}
+        {ownership === "public" && plan_id
           ? <h1>Update Public Plan</h1>
-          : <h1>Create Public Plan</h1>
-        }
+          : <h1>Create Public Plan</h1>}
 
         <p className="feedback">{feedback}</p>
 
         <div className="name">
           <label>Plan Name:</label>
-          <input onChange={changePlanName} type="text" value={plan_name} />
+          <input onChange={e => setPlanName(e.target.value)} type="text" value={plan_name} />
         </div>
       </div>
 
       <div className="calendar">
         <div className="recipes-tabs">
-          <button className={tab === "official" ? "--active" : ""} name="official" onClick={e => clickTab(e)}>Official</button>
-          <button className={tab === "private" ? "--active" : ""}  name="private"  onClick={e => clickTab(e)}>My Private</button>
-          <button className={tab === "public" ? "--active" : ""}   name="public"   onClick={e => clickTab(e)}>My Public</button>
-          <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={e => clickTab(e)}>My Favorite</button>
-          <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={e => clickTab(e)}>My Saved</button>
+          <button className={tab === "official" ? "--active" : ""} name="official" onClick={() => setTab('official')}>Official</button>
+          <button className={tab === "private" ? "--active" : ""}  name="private"  onClick={() => setTab('private')}>My Private</button>
+          <button className={tab === "public" ? "--active" : ""}   name="public"   onClick={() => setTab('public')}>My Public</button>
+          <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={() => setTab('favorite')}>My Favorite</button>
+          <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={() => setTab('saved')}>My Saved</button>
         </div>
 
         <Recipes
@@ -278,7 +241,7 @@ export default function PlanForm({ ownership }: Props) {
       <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
 
       <div className="finish">
-        <button className="cancel-button" onClick={activateModal}>Cancel</button>
+        <button className="cancel-button" onClick={() => setModalActive(true)}>Cancel</button>
         
         {
           modalActive
@@ -287,28 +250,24 @@ export default function PlanForm({ ownership }: Props) {
               dialogClass="cancel"
               focusDialog={true}
               focusTrapOptions={{returnFocusOnDeactivate: false}}
-              getApplicationNode={getApplicationNode}
-              onExit={deactivateModal}
+              getApplicationNode={() => document.getElementById('root') as Element | Node}
+              onExit={() => setModalActive(false)}
               titleText="Cancel?"
               underlayClickExits={false}
             >
               <p>Cancel? Changes will not be saved.</p>
-              <button className="cancel-cancel" onClick={deactivateModal}>No, Keep Working</button>
+              <button className="cancel-cancel" onClick={() => setModalActive(false)}>No, Keep Working</button>
               <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
             </AriaModal>
           )
           : false
         }
 
-        <LoaderButton
-          className="submit-button"
-          id="planner-submit-button"
-          isLoading={loading}
-          loadingText="Submit Plan..."
-          name="submit"
+        <button
+          className='submit-button'
+          disabled={loading}
           onClick={submit}
-          text="Submit Plan"
-        />
+        >{loading ? 'Creating...' : 'Create'}</button>
       </div>
     </div>
   );
@@ -338,26 +297,6 @@ function useAllowedContent(ownership: Ownership) {
   };
 }
 
-function isValidPlan({
-  plan_name,
-  setFeedback
-}: {
-  plan_name:   string;
-  setFeedback: (feedback: string) => void;
-}) {
-  function feedback(message: string) {
-    window.scrollTo(0, 0);
-    setFeedback(message);
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
-
-  const validPlanName = plan_name.trim() !== "";
-  if (!validPlanName) return feedback("Enter plan name.");
-
-  return true;
-}
-
 interface TabToList {
   [index: string]: any;
   //"official": RecipeOverview[];
@@ -366,8 +305,6 @@ interface TabToList {
   "favorite": RecipeOverview[];
   "saved":    RecipeOverview[];
 }
-
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
 function ToolTip() {
   return (

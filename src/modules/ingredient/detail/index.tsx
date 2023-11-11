@@ -1,9 +1,9 @@
 import { useRouter } from 'next/navigation';
 
-import { useAuth }             from '../../../store';
+import { useAuth } from '../../../store';
 import type { IngredientView } from '../../../store';
-import { LoaderSpinner }       from '../../shared/LoaderSpinner';
-import type { Ownership }      from '../../shared/types';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
+import type { Ownership } from '../../shared/types';
 
 export default function IngredientDetail({ ownership, ingredient }: Props) {
   const router = useRouter();
@@ -15,7 +15,8 @@ export default function IngredientDetail({ ownership, ingredient }: Props) {
   const {
     owner_id,
     fullname,
-    image,
+    image_filename,
+    caption,
     ingredient_type_name,
     notes
   } = ingredient;
@@ -24,19 +25,19 @@ export default function IngredientDetail({ ownership, ingredient }: Props) {
   if (ownership === "private") {
     if (auth_id !== owner_id) {
       router.push('/404');
-      return;
+      return false;
     }
     url += "user/private/";
   }
 
   return (
-    <div className="two-col ingredient">
+    <div className="two-col ingredient-detail">
       <div className="two-col-left">
         <h1>{fullname}</h1>
 
         <div className="image">
-          <img src={`${url}ingredient/${image.image_filename}.jpg`} />
-          <span>{image.caption}</span>
+          <img src={`${url}ingredient/${image_filename}.jpg`} />
+          <span>{caption}</span>
         </div>
 
         <div className="type">

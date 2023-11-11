@@ -1,5 +1,5 @@
 import { usePathname, useRouter } from 'next/navigation';
-import type { ReactElement }      from 'react';
+import type { ReactElement } from 'react';
 
 import { useAuth } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';

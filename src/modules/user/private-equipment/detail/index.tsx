@@ -1,5 +1,5 @@
-import EquipmentDetail        from "../../../equipment/detail";
-import type { EquipmentView } from "../../../shared/data/state";
+import EquipmentDetail from "../../../equipment/detail";
+import type { EquipmentView } from "../../../../store";
 
 export default function UserPrivateEquipmentDetail({ equipment }: Props) {
   return <EquipmentDetail ownership="private" equipment={equipment} />;
