@@ -118,12 +118,17 @@ export default function EquipmentForm({ ownership }: Props) {
     setTinyImage(null);
   };
 
+  const invalid = (message: string) => {
+    setFeedback(message);
+    setLoading(false);
+  };
+
   const submit = async () => {
     window.scrollTo(0, 0);
-    if (equipment_type_id === 0) return setFeedback('Equipment Type required.');
-    if (equipment_name.trim() === "") return setFeedback('Equipment Name required.');
-    setLoading(true);
     setFeedback('');
+    setLoading(true);
+    if (equipment_type_id === 0) return invalid('Equipment Type required.');
+    if (equipment_name.trim() === "") return invalid('Equipment Name required.');
     const equipment_upload = {
       equipment_type_id,
       equipment_name,
@@ -184,18 +189,12 @@ export default function EquipmentForm({ ownership }: Props) {
   
   return (
     <div className="one-col equipment-form">
-      {
-        ownership === "private"
-        && equipment_id
+      {ownership === "private" && equipment_id
         ? <h1>Update Private Equipment</h1>
-        : <h1>Create Private Equipment</h1>
-      }
-      {
-        ownership === "official"
-        && equipment_id
+        : <h1>Create Private Equipment</h1>}
+      {ownership === "official" && equipment_id
         ? <h1>Update Official Equipment</h1>
-        : <h1>Create Official Equipment</h1>
-      }
+        : <h1>Create Official Equipment</h1>}
 
       <p className="feedback">{feedback}</p>
 

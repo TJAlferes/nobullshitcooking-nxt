@@ -1,8 +1,8 @@
-import axios                           from 'axios';
-import Link                            from 'next/link';
-import { useSearchParams, useRouter }  from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import ReactCrop, { Crop }             from "react-image-crop";
+import ReactCrop, { Crop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint } from '../../../config/api';
@@ -81,7 +81,10 @@ export default function IngredientForm({ ownership }: Props) {
   }, []);  // do this in getServerSideProps???
 
   const getMyPrivateIngredients = async () => {
-    const res = await axios.get(`${endpoint}/users/${authname}/private-ingredients`, {withCredentials: true});
+    const res = await axios.get(
+      `${endpoint}/users/${authname}/private-ingredients`,
+      {withCredentials: true}
+    );
     setMyPrivateIngredients(res.data);
   };
 
@@ -119,13 +122,18 @@ export default function IngredientForm({ ownership }: Props) {
     setTinyImage(null);
   };
 
+  const invalid = (message: string) => {
+    setFeedback(message);
+    setLoading(false);
+  };
+
   const submit = async () => {
     window.scrollTo(0, 0);
-    if (ingredient_type_id === 0) return setFeedback('Ingredient Type required.');
-    if (ingredient_name.trim() === "") return setFeedback('Ingredient Name required.');
-    //if (alt_names
-    setLoading(true);
     setFeedback('');
+    setLoading(true);
+    if (ingredient_type_id === 0) return invalid('Ingredient Type required.');
+    if (ingredient_name.trim() === "") return invalid('Ingredient Name required.');
+    //if (alt_names
     const ingredient_upload = {
       ingredient_type_id,
       ingredient_brand,
@@ -188,19 +196,13 @@ export default function IngredientForm({ ownership }: Props) {
   const url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads`;
 
   return (
-    <div className="one-col new-ingredient">
-      {
-        ownership === "private"
-        && ingredient_id
+    <div className="one-col ingredient-form">
+      {ownership === "private" && ingredient_id
         ? <h1>Update Private Ingredient</h1>
-        : <h1>Create Private Ingredient</h1>
-      }
-      {
-        ownership === "official"
-        && ingredient_id
+        : <h1>Create Private Ingredient</h1>}
+      {ownership === "official" && ingredient_id
         ? <h1>Update Official Ingredient</h1>
-        : <h1>Create Official Ingredient</h1>
-      }
+        : <h1>Create Official Ingredient</h1>}
 
       <p className="feedback">{feedback}</p>
 
@@ -211,7 +213,7 @@ export default function IngredientForm({ ownership }: Props) {
         required
         value={ingredient_type_id}
       >
-        <option value=""></option>
+        <option value={0}>Select type</option>
         {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
           <option key={ingredient_type_id} value={ingredient_type_id}>
             {ingredient_type_name}
@@ -219,7 +221,23 @@ export default function IngredientForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h2>Name</h2>
+      <h2>Ingredient Brand</h2>
+      <input
+        className="name"
+        onChange={e => setIngredientBrand(e.target.value)}
+        type="text"
+        value={ingredient_brand}
+      />
+
+      <h2>Ingredient Variety</h2>
+      <input
+        className="name"
+        onChange={e => setIngredientVariety(e.target.value)}
+        type="text"
+        value={ingredient_variety}
+      />
+
+      <h2>Ingredient Name</h2>
       <input
         className="name"
         onChange={e => setIngredientName(e.target.value)}

@@ -10,7 +10,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
-import { LoaderButton } from '../../shared/LoaderButton';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
@@ -115,25 +114,14 @@ export default function RecipeForm({ ownership }: Props) {
     let mounted = true;
 
     async function getExistingRecipeToEdit() {
-      if (!recipe_id) {
-        router.push(`/dashboard`);
-        return;
-      }
-
-      setLoading(true);
       window.scrollTo(0, 0);
-
+      setLoading(true);
       const res = await axios.get(
         `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}/edit`,
         {withCredentials: true}
       );
-      
       const recipe: ExistingRecipeToEdit = res.data;
-      if (!recipe) {
-        router.push(`/dashboard`);
-        return;
-      }
-
+      if (!recipe) return router.push(`/dashboard`);
       setRecipeTypeId(recipe.recipe_type_id);
       setCuisineId(recipe.cuisine_id);
       setTitle(recipe.title);
@@ -155,19 +143,12 @@ export default function RecipeForm({ ownership }: Props) {
       setEquipmentImage({...equipment_image, ...recipe.equipment_image});
       setIngredientsImage({...ingredients_image, ...recipe.ingredients_image});
       setCookingImage({...cooking_image, ...recipe.cooking_image});
-
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) {
-        router.push(`/404`);
-        return;
-      }
-
-      if (recipe_id) {
-        getExistingRecipeToEdit();
-      }
+      if (!authname) return router.push(`/404`);
+      if (recipe_id) getExistingRecipeToEdit();
     }
 
     return () => {
@@ -186,38 +167,13 @@ export default function RecipeForm({ ownership }: Props) {
       );
       setMyPrivateRecipes(res.data);
     }
-  };
-
-  const changeRecipeType  = (e: ChangeEvent<HTMLSelectElement>) => setRecipeTypeId(Number(e.target.value));
-  const changeCuisine     = (e: ChangeEvent<HTMLSelectElement>) => setCuisineId(Number(e.target.value));
-  const changeTitle       = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
-  const changeDescription = (e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value);
-  const changeActiveTime  = (e: ChangeEvent<HTMLInputElement>) => setActiveTime(e.target.value);
-  const changeTotalTime   = (e: ChangeEvent<HTMLInputElement>) => setTotalTime(e.target.value);
-  const changeDirections  = (e: ChangeEvent<HTMLTextAreaElement>) => setDirections(e.target.value);
-
-  const changeRecipeImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
-    setRecipeImage({...recipe_image, caption: e.target.value});
-
-  const changeEquipmentImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
-    setEquipmentImage({...equipment_image, caption: e.target.value});
-
-  const changeIngredientsImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
-    setIngredientsImage({...ingredients_image, caption: e.target.value});
-
-  const changeCookingImageCaption = (e: ChangeEvent<HTMLInputElement>) =>
-    setCookingImage({...cooking_image, caption: e.target.value});
-
-  const changeMethods = (e: SyntheticEvent) => {
-    const id = (e.target as HTMLInputElement).id;
-    setUsedMethods(prevState => ({...prevState, [id]: !prevState[parseInt(id)]}));
-  };
+  };  // do this in getServerSideProps???
 
   const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
     const newRows =    Array.from(equipmentRows);
     const elToUpdate = newRows.findIndex(el => el.key === rowKey);
     const name =       (e.target as HTMLInputElement).name;
-    const value =      (e.target as HTMLInputElement).value as string;
+    const value =      (e.target as HTMLInputElement).value;
     const obj =        newRows[elToUpdate];
     if (!obj) return;
     obj[name] = value;
@@ -245,24 +201,6 @@ export default function RecipeForm({ ownership }: Props) {
     obj[name] = value;
     setSubrecipeRows(newRows);
   };
-
-  const addEquipmentRow  = () =>
-    setEquipmentRows([...equipmentRows, pristineEquipmentRow]);
-
-  const addIngredientRow = () =>
-    setIngredientRows([...ingredientRows, pristineIngredientRow]);
-
-  const addSubrecipeRow  = () =>
-    setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow]);
-
-  const removeEquipmentRow = (rowKey: string) =>
-    setEquipmentRows(equipmentRows.filter(row => row.key !== rowKey));
-
-  const removeIngredientRow = (rowKey: string) =>
-    setIngredientRows(ingredientRows.filter(row => row.key !== rowKey));
-
-  const removeSubrecipeRow = (rowKey: string) =>
-    setSubrecipeRows(subrecipeRows.filter(row => row.key !== rowKey));
   
   const onSelectFile = (e: ChangeEvent, type: string) => {
     const target = e.target as HTMLInputElement;
@@ -284,30 +222,6 @@ export default function RecipeForm({ ownership }: Props) {
     });
     reader.readAsDataURL(target.files[0] as Blob);
   };
-
-  const onRecipeImageLoaded = (e: SyntheticImageEvent) =>
-    recipeImageRef.current = e.currentTarget;
-  
-  const onEquipmentImageLoaded = (e: SyntheticImageEvent) =>
-    equipmentImageRef.current = e.currentTarget;
-
-  const onIngredientsImageLoaded = (e: SyntheticImageEvent) =>
-    ingredientsImageRef.current = e.currentTarget;
-  
-  const onCookingImageLoaded = (e: SyntheticImageEvent) =>
-    cookingImageRef.current = e.currentTarget;
-  
-  const onRecipeCropChange = (crop: PixelCrop) =>
-    setRecipeImageState({...recipeImageState, crop});
-
-  const onEquipmentCropChange = (crop: PixelCrop) =>
-    setEquipmentImageState({...equipmentImageState, crop});
-
-  const onIngredientsCropChange = (crop: PixelCrop) =>
-    setIngredientsImageState({...ingredientsImageState, crop});
-
-  const onCookingCropChange = (crop: PixelCrop) =>
-    setCookingImageState({...cookingImageState, crop});
   
   const onRecipeCropComplete = async (crop: Crop) => {
     if (!recipeImageRef.current) return;
@@ -430,25 +344,37 @@ export default function RecipeForm({ ownership }: Props) {
     subrecipe_id: s.subrecipe_id
   }));
 
+  const invalid = (message: string) => {
+    setFeedback(message);
+    setLoading(false);
+  };
+
   const submit = async () => {
-    setLoading(true);
     window.scrollTo(0, 0);
-
-    if (!isValidRecipeUpload({
-      recipe_type_id,
-      cuisine_id,
-      title,
-      description,
-      active_time,
-      total_time,
-      directions,
-      required_methods:     getCheckedMethods(),
-      required_equipment:   getRequiredEquipment(),
-      required_ingredients: getRequiredIngredients(),
-      required_subrecipes:  getRequiredSubrecipes(),
-      setFeedback
-    })) return;
-
+    setFeedback('');
+    setLoading(true);
+    if (recipe_type_id === 0) return invalid('Recipe Type required.');
+    if (cuisine_id === 0) return invalid('Cuisine required.');
+    if (title.trim() === '') return invalid('Title required.');
+    if (description.trim() === '') return invalid('Description required.');
+    if (!validateAndFormatTime(active_time)) return invalid('Invalid time.');
+    if (!validateAndFormatTime(total_time)) return invalid('Invalid time.');
+    if (directions.trim() === '') return invalid('Directions required.');
+    if (getCheckedMethods().length < 1) return invalid('Select required method(s).');
+    for (const { equipment_id } of getRequiredEquipment()) {
+      //amount
+      if (!equipment_id) return invalid('Review required equipment.');
+    }
+    for (const { ingredient_id } of getRequiredIngredients()) {
+      //amount
+      //unit_id
+      if (!ingredient_id) return invalid('Review required ingredients.');
+    }
+    for (const { subrecipe_id } of getRequiredSubrecipes()) {
+      //amount
+      //unit_id
+      if (!subrecipe_id) return invalid('Review required subrecipes.');
+    }
     const recipe_upload = {
       recipe_type_id,
       cuisine_id,
@@ -461,8 +387,6 @@ export default function RecipeForm({ ownership }: Props) {
       required_equipment:   getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
       required_subrecipes:  getRequiredSubrecipes(),
-      // TO DO: how can they reset image_filename to "default"? Do they need this ability?
-      // AKA how can they delete an image?
       recipe_image,
       equipment_image,
       ingredients_image,
@@ -555,18 +479,12 @@ export default function RecipeForm({ ownership }: Props) {
 
   return (
     <div className="one-col recipe-form">
-      {
-        ownership === "private"
-        && recipe_id
+      {ownership === "private" && recipe_id
         ? <h1>Update Private Recipe</h1>
-        : <h1>Create Private Recipe</h1>
-      }
-      {
-        ownership === "public"
-        && recipe_id
+        : <h1>Create Private Recipe</h1>}
+      {ownership === "public" && recipe_id
         ? <h1>Update Public Recipe</h1>
-        : <h1>Create Public Recipe</h1>
-      }
+        : <h1>Create Public Recipe</h1>}
 
       <p className="feedback">{feedback}</p>
 
@@ -574,7 +492,7 @@ export default function RecipeForm({ ownership }: Props) {
       <select
         id="recipe_type_id"
         name="recipeType"
-        onChange={changeRecipeType}
+        onChange={e => setRecipeTypeId(Number(e.target.value))}
         required
         value={recipe_type_id}
       >
@@ -590,7 +508,7 @@ export default function RecipeForm({ ownership }: Props) {
       <select
         id="cuisine_id"
         name="cuisine"
-        onChange={changeCuisine}
+        onChange={e => setCuisineId(Number(e.target.value))}
         required
         value={cuisine_id}
       >
@@ -607,7 +525,7 @@ export default function RecipeForm({ ownership }: Props) {
         max={100}
         min={2}
         name="title"
-        onChange={changeTitle}
+        onChange={e => setTitle(e.target.value)}
         type="text"
         value={title}
       />
@@ -619,7 +537,7 @@ export default function RecipeForm({ ownership }: Props) {
         max={150}
         min={2}
         name="description"
-        onChange={changeDescription}
+        onChange={e => setDescription(e.target.value)}
         type="time"
         value={description}
       />
@@ -628,7 +546,7 @@ export default function RecipeForm({ ownership }: Props) {
       <input
         className="time"
         name="active_time"
-        onChange={changeActiveTime}
+        onChange={e => setActiveTime(e.target.value)}
         type="time"
         value={active_time}
       />
@@ -637,7 +555,7 @@ export default function RecipeForm({ ownership }: Props) {
       <input
         className="time"
         name="total_time"
-        onChange={changeTotalTime}
+        onChange={e => setTotalTime(e.target.value)}
         type=""
         value={total_time}
       />
@@ -649,7 +567,12 @@ export default function RecipeForm({ ownership }: Props) {
             <input
               checked={usedMethods[method_id] === true ? true : false}
               id={`${method_id}`}
-              onChange={e => changeMethods(e)}
+              onChange={e =>
+                setUsedMethods(prevState => ({
+                  ...prevState,
+                  [e.target.id]: !prevState[parseInt(e.target.id)]
+                }))
+              }
               type="checkbox"
             />
             <label>{method_name}</label>
@@ -666,7 +589,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Amount:</label>
               <select
                 name="amount"
-                onChange={(e) => changeEquipmentRow(e, key)}
+                onChange={e => changeEquipmentRow(e, key)}
                 required
                 value={amount ?? ""}
               >
@@ -681,7 +604,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Type:</label>
               <select
                 name="type"
-                onChange={(e) => changeEquipmentRow(e, key)}
+                onChange={e => changeEquipmentRow(e, key)}
                 required
                 value={equipment_type_id}
               >
@@ -693,7 +616,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Equipment:</label>
               <select
                 name="equipment"
-                onChange={(e) => changeEquipmentRow(e, key)}
+                onChange={e => changeEquipmentRow(e, key)}
                 required
                 value={equipment_id}
               >
@@ -711,15 +634,16 @@ export default function RecipeForm({ ownership }: Props) {
 
               <button
                 className="--remove"
-                onClick={() => removeEquipmentRow(key)}
+                onClick={() => setEquipmentRows(equipmentRows.filter(row => row.key !== key))}
               >Remove</button>
             </div>
           ))}
         </div>
 
-        <button className="--add-row" onClick={addEquipmentRow}>
-          Add Equipment
-        </button>
+        <button
+          className="--add-row"
+          onClick={() => setEquipmentRows([...equipmentRows, pristineEquipmentRow])}
+        >Add Equipment</button>
       </div>
 
       <div className="required-ingredients">
@@ -733,7 +657,7 @@ export default function RecipeForm({ ownership }: Props) {
                 max="9999"
                 min="0.125"
                 name="amount"
-                onChange={(e) => changeIngredientRow(e, key)}
+                onChange={e => changeIngredientRow(e, key)}
                 step="any"
                 type="number"
                 value={amount ?? ""}
@@ -743,7 +667,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Unit:</label>
               <select
                 name="unit"
-                onChange={(e) => changeIngredientRow(e, key)}
+                onChange={e => changeIngredientRow(e, key)}
                 value={unit_id ?? ""}
               >
                 <option value={0}>Select unit (optional)</option>
@@ -755,7 +679,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Type:</label>
               <select
                 name="type"
-                onChange={(e) => changeIngredientRow(e, key)}
+                onChange={e => changeIngredientRow(e, key)}
                 required
                 value={ingredient_type_id}
               >
@@ -770,7 +694,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Ingredient:</label>
               <select
                 name="ingredient"
-                onChange={(e) => changeIngredientRow(e, key)}
+                onChange={e => changeIngredientRow(e, key)}
                 required
                 value={ingredient_id}
               >
@@ -788,15 +712,16 @@ export default function RecipeForm({ ownership }: Props) {
 
               <button
                 className="--remove"
-                onClick={() => removeIngredientRow(key)}
+                onClick={() => setIngredientRows(ingredientRows.filter(row => row.key !== key))}
               >Remove</button>
             </div>
           ))}
         </div>
 
-        <button className="--add-row" onClick={addIngredientRow}>
-          Add Ingredient
-        </button>
+        <button
+          className="--add-row"
+          onClick={() => setIngredientRows([...ingredientRows, pristineIngredientRow])}
+        >Add Ingredient</button>
       </div>
 
       <div className="required-subrecipes">
@@ -810,7 +735,7 @@ export default function RecipeForm({ ownership }: Props) {
                 max="9999"
                 min="0.125"
                 name="amount"
-                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                onChange={e => changeSubrecipeRow(e, s.key)}
                 step="any"
                 type="number"
                 value={s.amount ?? ""}
@@ -820,7 +745,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Unit:</label>
               <select
                 name="unit"
-                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                onChange={e => changeSubrecipeRow(e, s.key)}
                 value={s.unit_id ?? ""}
               >
                 <option value={0}>Select unit (optional)</option>
@@ -832,7 +757,7 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Type:</label>
               <select
                 name="type"
-                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                onChange={e => changeSubrecipeRow(e, s.key)}
                 required
                 value={s.recipe_type_id}
               >
@@ -863,7 +788,7 @@ export default function RecipeForm({ ownership }: Props) {
               <select
                 className="--subrecipe"
                 name="subrecipe"
-                onChange={(e) => changeSubrecipeRow(e, s.key)}
+                onChange={e => changeSubrecipeRow(e, s.key)}
                 required
                 value={s.subrecipe_id}
               >
@@ -880,15 +805,16 @@ export default function RecipeForm({ ownership }: Props) {
               
               <button
                 className="--remove"
-                onClick={() => removeSubrecipeRow(s.key)}
+                onClick={() => setSubrecipeRows(subrecipeRows.filter(row => row.key !== s.key))}
               >Remove</button>
             </div>
           ))}
         </div>
 
-        <button className="--add-row" onClick={addSubrecipeRow}>
-          Add Subrecipe
-        </button>
+        <button
+          className="--add-row"
+          onClick={() => setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow])}
+        >Add Subrecipe</button>
       </div>
 
       <h2>Directions</h2>
@@ -896,7 +822,7 @@ export default function RecipeForm({ ownership }: Props) {
         className="directions"
         id="recipe_directions"
         name="directions"
-        onChange={changeDirections}
+        onChange={e => setDirections(e.target.value)}
         value={directions}
       />
 
@@ -907,11 +833,9 @@ export default function RecipeForm({ ownership }: Props) {
             !recipeImageState.image
             ? (
               <>
-                {
-                  !recipe_id
+                {!recipe_id
                   ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />
-                }
+                  : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
                 <h4>Change</h4>
                 <input
                   accept="image/*"
@@ -919,26 +843,23 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "recipe")}
                   type="file"
                 />
-                {
-                  recipe_id
-                  ? (
-                    <button onClick={deleteRecipeImageFromAWSS3}>
-                      Delete / Reset To Default
-                    </button>
-                  )
-                  : false
-                }
+                {recipe_id
+                  ? <button onClick={deleteRecipeImageFromAWSS3}>Delete / Reset To Default</button>
+                  : false}
               </>
             )
             : (
               <>
                 <ReactCrop
                   crop={recipeImageState.crop}
-                  onChange={onRecipeCropChange}
+                  onChange={(crop) => setRecipeImageState({...recipeImageState, crop})}
                   onComplete={onRecipeCropComplete}
                   {...commonReactCropProps}
                 >
-                  <img onLoad={onRecipeImageLoaded} src={recipeImageState.image as string} />
+                  <img
+                    onLoad={e => recipeImageRef.current = e.currentTarget}
+                    src={recipeImageState.image as string}
+                  />
                 </ReactCrop>
                 <ToolTip />
                 <div className="crops">
@@ -961,7 +882,7 @@ export default function RecipeForm({ ownership }: Props) {
                   max={150}
                   min={2}
                   name="caption"
-                  onChange={changeRecipeImageCaption}
+                  onChange={e => setRecipeImage({...recipe_image, caption: e.target.value})}
                   type="text"
                   value={recipe_image!.caption}
                 />
@@ -981,11 +902,9 @@ export default function RecipeForm({ ownership }: Props) {
             !equipmentImageState.image
             ? (
               <>
-                {
-                  !recipe_id
+                {!recipe_id
                   ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />
-                }
+                  : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
                 <h4>Change</h4>
                 <input
                   accept="image/*"
@@ -993,26 +912,23 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "equipment")}
                   type="file"
                 />
-                {
-                  recipe_id
-                  ? (
-                    <button onClick={deleteEquipmentImageFromAWSS3}>
-                      Delete / Reset To Default
-                    </button>
-                  )
-                  : false
-                }
+                {recipe_id
+                  ? <button onClick={deleteEquipmentImageFromAWSS3}>Delete / Reset To Default</button>
+                  : false}
               </>
             )
             : (
               <>
                 <ReactCrop
                   crop={equipmentImageState.crop}
-                  onChange={onEquipmentCropChange}
+                  onChange={(crop) => setEquipmentImageState({...equipmentImageState, crop})}
                   onComplete={onEquipmentCropComplete}
                   {...commonReactCropProps}
                 >
-                  <img onLoad={onEquipmentImageLoaded} src={equipmentImageState.image as string} />
+                  <img
+                    onLoad={e => equipmentImageRef.current = e.currentTarget}
+                    src={equipmentImageState.image as string}
+                  />
                 </ReactCrop>
                 <ToolTip />
                 <div className="crops">
@@ -1027,7 +943,7 @@ export default function RecipeForm({ ownership }: Props) {
                   max={150}
                   min={2}
                   name="caption"
-                  onChange={changeEquipmentImageCaption}
+                  onChange={e => setEquipmentImage({...equipment_image, caption: e.target.value})}
                   type="text"
                   value={equipment_image!.caption}
                 />
@@ -1047,8 +963,7 @@ export default function RecipeForm({ ownership }: Props) {
             !ingredientsImageState.image
             ? (
               <>
-                {
-                  !recipe_id
+                {!recipe_id
                   ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
                   : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
                 }
@@ -1059,26 +974,23 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "ingredients")}
                   type="file"
                 />
-                {
-                  recipe_id
-                  ? (
-                    <button onClick={deleteIngredientsImageFromAWSS3}>
-                      Delete / Reset To Default
-                    </button>
-                  )
-                  : false
-                }
+                {recipe_id
+                  ? <button onClick={deleteIngredientsImageFromAWSS3}>Delete / Reset To Default</button>
+                  : false}
               </>
             )
             : (
               <>
                 <ReactCrop
                   crop={ingredientsImageState.crop}
-                  onChange={onIngredientsCropChange}
+                  onChange={(crop) => setIngredientsImageState({...ingredientsImageState, crop})}
                   onComplete={onIngredientsCropComplete}
                   {...commonReactCropProps}
                 >
-                  <img onLoad={onIngredientsImageLoaded} src={ingredientsImageState.image as string} />
+                  <img
+                    onLoad={e => ingredientsImageRef.current = e.currentTarget}
+                    src={ingredientsImageState.image as string}
+                  />
                 </ReactCrop>
                 <ToolTip />
                 <div className="crops">
@@ -1093,7 +1005,7 @@ export default function RecipeForm({ ownership }: Props) {
                   max={150}
                   min={2}
                   name="caption"
-                  onChange={changeIngredientsImageCaption}
+                  onChange={e => setIngredientsImage({...ingredients_image, caption: e.target.value})}
                   type="text"
                   value={ingredients_image!.caption}
                 />
@@ -1113,11 +1025,9 @@ export default function RecipeForm({ ownership }: Props) {
             !cookingImageState.image
             ? (
               <>
-                {
-                  !recipe_id
+                {!recipe_id
                   ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />
-                }
+                  : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
                 <h4>Change</h4>
                 <input
                   accept="image/*"
@@ -1125,26 +1035,23 @@ export default function RecipeForm({ ownership }: Props) {
                   onChange={(e) => onSelectFile(e, "cooking")}
                   type="file"
                 />
-                {
-                  recipe_id
-                  ? (
-                    <button onClick={deleteCookingImageFromAWSS3}>
-                      Delete / Reset To Default
-                    </button>
-                  )
-                  : false
-                }
+                {recipe_id
+                  ? <button onClick={deleteCookingImageFromAWSS3}>Delete / Reset To Default</button>
+                  : false}
               </>
             )
             : (
               <>
                 <ReactCrop
                   crop={cookingImageState.crop}
-                  onChange={onCookingCropChange}
+                  onChange={(crop) => setCookingImageState({...cookingImageState, crop})}
                   onComplete={onCookingCropComplete}
                   {...commonReactCropProps}
                 >
-                  <img onLoad={onCookingImageLoaded} src={cookingImageState.image as string} />
+                  <img
+                    onLoad={e => cookingImageRef.current = e.currentTarget}
+                    src={cookingImageState.image as string}
+                  />
                 </ReactCrop>
                 <ToolTip />
                 <div className="crops">
@@ -1159,7 +1066,7 @@ export default function RecipeForm({ ownership }: Props) {
                   max={150}
                   min={2}
                   name="caption"
-                  onChange={changeCookingImageCaption}
+                  onChange={e => setCookingImage({...cooking_image, caption: e.target.value})}
                   type="text"
                   value={cooking_image!.caption}
                 />
@@ -1254,8 +1161,6 @@ type ImageState = {
 
 type SyntheticEvent = React.SyntheticEvent<EventTarget>;
 
-type SyntheticImageEvent = React.SyntheticEvent<HTMLImageElement>;
-
 export function ToolTip() {
   return (
     <span className="crop-tool-tip">
@@ -1310,126 +1215,22 @@ export const commonReactCropProps = {
   }
 };
 
-export function isValidRecipeUpload({
-  recipe_type_id,
-  cuisine_id,
-  title,
-  description,
-  active_time,
-  total_time,
-  directions,
-  required_methods,
-  required_equipment,
-  required_ingredients,
-  required_subrecipes,
-  setFeedback
-}: IsValidRecipeUploadParams): boolean {
-  function validateAndFormatTime(time: string) {
-    // validate
-    const [ hours, minutes ] = time.split(':');
-  
-    const parsedHours = hours ? parseInt(hours): 0;
-    const parsedMinutes = minutes ? parseInt(minutes) : 0;
-  
-    if (isNaN(parsedHours) || isNaN(parsedMinutes)) {
-      return false;
-    }
-  
-    if (parsedHours < 0 || parsedHours > 23 || parsedMinutes < 0 || parsedMinutes > 59) {
-      return false;
-    }
-  
-    // format
-    // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)
-    const formattedHours   = parsedHours.toString().padStart(2, '0');
-    const formattedMinutes = parsedMinutes.toString().padStart(2, '0');
+function validateAndFormatTime(time: string) {
+  // validate
+  const [ hours, minutes ] = time.split(':');
+  const parsedHours = hours ? parseInt(hours): 0;
+  const parsedMinutes = minutes ? parseInt(minutes) : 0;
+  if (isNaN(parsedHours) || isNaN(parsedMinutes)) return false;
+  if (parsedHours < 0 || parsedHours > 23 || parsedMinutes < 0 || parsedMinutes > 59) return false;
 
-    time = `${formattedHours}:${formattedMinutes}`;
-  
-    return true;
-  }
-
-  function feedback(message: string) {
-    window.scrollTo(0, 0);
-    setFeedback(message);
-    setTimeout(() => setFeedback(""), 3000);
-    return false;
-  }
-
-  const validRecipeTypeId = recipe_type_id !== 0;
-  if (!validRecipeTypeId) return feedback("Select recipe type.");
-
-  const validCuisineId = cuisine_id !== 0;
-  if (!validCuisineId) return feedback("Select cuisine.");
-
-  const validTitle = title.trim() !== "";
-  if (!validTitle) return feedback("Enter title.");
-
-  const validDescription = description.trim() !== "";
-  if (!validDescription) return feedback("Enter description.");
-
-  const validActiveTime = validateAndFormatTime(active_time);
-  if (!validActiveTime) return feedback('Invalid time.');
-
-  const validTotalTime = validateAndFormatTime(total_time);
-  if (!validTotalTime) return feedback('Invalid time.');
-
-  const validDirections = directions.trim() !== "";
-  if (!validDirections) return feedback("Enter directions.");
-
-  const validMethods = required_methods.length < 1;
-  if (!validMethods) return feedback("Select required method(s).");
-
-  let validEquipment = true;
-  if (required_equipment.length) {
-    required_equipment.map(r => {
-      if (!r.equipment_id) {
-        validEquipment = false;
-      }
-    });
-    
-    if (!validEquipment) return feedback("Review required equipment.");
-  }
-
-  let validIngredients = true;
-  if (required_ingredients.length) {
-    required_ingredients.map(r => {
-      if (!r.ingredient_id) {
-        validIngredients = false;
-      }
-    });
-
-    if (!validIngredients) return feedback("Review required ingredients.");
-  }
-
-  let validSubrecipes = true;
-  if (required_subrecipes.length) {
-    required_subrecipes.map(r => {
-      if (!r.subrecipe_id) {
-        validSubrecipes = false;
-      }
-    });
-
-    if (!validSubrecipes) return feedback("Review required subrecipes.");
-  }
+  // format
+  // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)
+  const formattedHours   = parsedHours.toString().padStart(2, '0');
+  const formattedMinutes = parsedMinutes.toString().padStart(2, '0');
+  time = `${formattedHours}:${formattedMinutes}`;
 
   return true;
 }
-
-type IsValidRecipeUploadParams = {
-  recipe_type_id:       number;
-  cuisine_id:           number;
-  title:                string;
-  description:          string;
-  active_time:          string;
-  total_time:           string;
-  directions:           string;
-  required_methods:     RequiredMethod[];
-  required_equipment:   RequiredEquipment[];
-  required_ingredients: RequiredIngredient[];
-  required_subrecipes:  RequiredSubrecipe[];
-  setFeedback:          (feedback: string) => void;
-};
 
 export type RequiredMethod = {
   method_id: number;
