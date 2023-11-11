@@ -213,11 +213,11 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
   const { authname } = useAuth();
   const { my_favorite_recipes, my_saved_recipes } = useUserData();
 
-  const [ feedback,  setFeedback ]  = useState("");
-  const [ loading,   setLoading ]   = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [ favorited, setFavorited ] = useState(false);
-  const [ saved,     setSaved ]     = useState(false);
+  const [favorited, setFavorited] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   if (!authname) return false;  // null? fragment?
   if (authname === author_id) return false;  // cannot favorite/save your own recipe

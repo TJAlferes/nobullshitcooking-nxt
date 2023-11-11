@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../config/api';
-import type { RecipeDetailView } from '../../../../modules/recipe/detail';
 import UserPrivateRecipeDetail from '../../../../modules/user/private-recipe/detail';
+import type { RecipeDetailView } from '../../../../modules/recipe/detail';
 
 export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
   return <UserPrivateRecipeDetail recipe={recipe} />
@@ -35,9 +35,11 @@ type Props = {
   recipe: RecipeDetailView;
 };
 
+// TO DO: change your routing then???
+
 type ServerSideProps = {
   params: {
     username:  string;
-    recipe_id: string;
+    recipe_id: string;  // title???
   };
 };

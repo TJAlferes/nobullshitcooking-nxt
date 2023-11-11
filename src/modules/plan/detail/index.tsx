@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import type { RecipeOverview } from '../../../store';
+import type { PlanView, RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { Ownership } from '../../shared/types';
 
-export default function PlanDetail({ ownership }: Props) {
+export default function PlanDetail({ ownership, plan }: Props) {
   const router  = useRouter();
 
   const params  = useSearchParams();
@@ -20,12 +20,16 @@ export default function PlanDetail({ ownership }: Props) {
   const { authname } = useAuth();
   const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
-  const [ plan_name, setPlanName ] = useState("");
-  const [ included_recipes, setIncludedRecipes ] = useState<RecipeOverview[][]>([[], [], [], [], [], [], []]);
 
   const [ loading, setLoading ] = useState(false);
 
-  useEffect(() => {
+  const {
+    plan_id,
+    plan_name,
+    included_recipes
+  } = plan;
+
+  /*useEffect(() => {
     let mounted = true;
     async function getExistingPlanToView() {
       setLoading(true);
@@ -47,16 +51,14 @@ export default function PlanDetail({ ownership }: Props) {
       setIncludedRecipes(plan.included_recipes);
       setLoading(false);
     }
-
     if (mounted) {
       if (!username || !plan_id) return router.push('/404');
       if (plan_id) getExistingPlanToView();
     }
-
     return () => {
       mounted = false;
     };
-  }, []);
+  }, []);*/
 
   if (loading) return <LoaderSpinner></LoaderSpinner>;
 
@@ -103,6 +105,7 @@ export default function PlanDetail({ ownership }: Props) {
 
 type Props = {
   ownership: Ownership;
+  plan:      PlanView;
 };
 
 function Recipe({

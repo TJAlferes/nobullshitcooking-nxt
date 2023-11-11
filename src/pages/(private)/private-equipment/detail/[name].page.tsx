@@ -2,36 +2,26 @@ import axios from 'axios';
 
 import { endpoint } from '../../../../config/api';
 import UserPrivateEquipmentDetail from "../../../../modules/user/private-equipment/detail";
-import type { Equipment } from '../../../../../modules/user/private/data/state';
+import type { EquipmentView } from '../../../../store';
 
-export default function UserPrivateEquipmentDetailPage({ equipment }: {equipment: Equipment}) {
+export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
   return <UserPrivateEquipmentDetail equipment={equipment} />
 }
 
-function slugify(name: string) {
-  return name
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
-// TO DO: JUST USE GETSERVERSIDEPROPS FOR PRIVATE USER ENTITIES???
-
-export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/equipment/names`);
-
-  const paths = response.data.map((equipment: {name: string}) => ({
-    params: {
-      name: slugify(equipment.name)
-    }
-  }));
-
-  return {paths, fallback: false};
-}
-
-export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/equipment/${params.equipment_name}`);
-
+export async function getServerSideProps({ params }: ServerSideProps) {
+  const response = await axios.get(
+    `${endpoint}/users/${params.username}/private-equipment/${params.equipment_id}`,
+    {withCredentials: true}
+  );
+  if (response.status === 401) {
+    return {
+      props: {},
+      redirect: {
+        permanent:   false,
+        destination: "/login"
+      }
+    };
+  }
   return {
     props: {
       equipment: response.data
@@ -39,8 +29,15 @@ export async function getStaticProps({ params }: StaticProps) {
   };
 }
 
-type StaticProps = {
+type Props = {
+  equipment: EquipmentView;
+};
+
+// TO DO: change your routing then
+
+type ServerSideProps = {
   params: {
-    equipment_name: string;
+    username:     string;
+    equipment_id: string;  // name AKA equipment_name
   };
 };
