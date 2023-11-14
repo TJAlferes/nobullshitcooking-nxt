@@ -1,10 +1,7 @@
-import axios from 'axios';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { endpoint } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useAuth } from '../../../store';
 import type { PlanView, RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
@@ -13,54 +10,17 @@ import { Ownership } from '../../shared/types';
 export default function PlanDetail({ ownership, plan }: Props) {
   const router  = useRouter();
 
-  const params  = useSearchParams();
-  const username = params.get('username');
-  const plan_id = params.get('plan_id');
+  const { auth_id } = useAuth();
+  //const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
-  const { authname } = useAuth();
-  const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
-
-
-  const [ loading, setLoading ] = useState(false);
+  if (!plan) return <LoaderSpinner />;  // or return router.push('/404'); ???
 
   const {
     plan_id,
+    owner_id,
     plan_name,
     included_recipes
   } = plan;
-
-  /*useEffect(() => {
-    let mounted = true;
-    async function getExistingPlanToView() {
-      setLoading(true);
-      window.scrollTo(0, 0);
-      let plan = null;
-      if (ownership === "public") {
-        if (authname) {
-          plan = my_public_plans.find(p => p.plan_id === plan_id);
-        } else {
-          const res = await axios.get(`${endpoint}/users/${username}/public-plans/${plan_id}`);
-          plan = res.data;
-        }
-      } else if (ownership === "private") {
-        if (!authname) return router.push(`/404`);
-        plan = my_private_plans.find(p => p.plan_id === plan_id);
-      }
-      if (!plan) return router.push('/');
-      setPlanName(plan.plan_name);
-      setIncludedRecipes(plan.included_recipes);
-      setLoading(false);
-    }
-    if (mounted) {
-      if (!username || !plan_id) return router.push('/404');
-      if (plan_id) getExistingPlanToView();
-    }
-    return () => {
-      mounted = false;
-    };
-  }, []);*/
-
-  if (loading) return <LoaderSpinner></LoaderSpinner>;
 
   return (
     <div className="one-col plan-detail">
@@ -120,6 +80,17 @@ function Recipe({
 }: {
   recipe: RecipeOverview;
 }) {
+  //let url = "https://s3.amazonaws.com";
+  //if (ownership === "private") {
+  //  if (auth_id !== owner_id) {
+  //    router.push('/404');
+  //    return false;
+  //  }
+  //  url += "/nobsc-private-uploads";
+  //} else if (ownership === "public") {
+  //  url += "/nobsc-public-uploads";
+  //}
+
   let url = "https://s3.amazonaws.com/nobsc/image/";
   let path = "";
 
@@ -150,3 +121,4 @@ function Recipe({
 }
 
 // slugify title and use that instead of recipe_id ???
+// (don't slugify, encodeURIComponent)

@@ -1,12 +1,12 @@
-import Link                               from 'next/link';
-import { usePathname }                    from 'next/navigation';
-import { useState }                       from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
-import { useAuth }          from '../../../store';
-import { useTheme }         from '../../../store';
-import { ExpandCollapse }   from '../ExpandCollapse';
-import { useSearch }        from '../search/hook';
+import { useAuth } from '../../../store';
+import { useTheme } from '../../../store';
+import { ExpandCollapse } from '../ExpandCollapse';
+import { useSearch } from '../search/hook';
 import type { SearchIndex } from '../search/state';
 
 export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {

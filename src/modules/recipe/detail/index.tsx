@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useAuth, useUserData, getMyFavoriteRecipes, getMySavedRecipes } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { Ownership } from '../../shared/types';
 
@@ -41,9 +41,9 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       router.push('/404');
       return false;
     }
-    url += "user/private/";
+    url += "/nobsc-private-uploads";
   } else if (ownership === "public") {
-    url += "user/public/";
+    url += "/nobsc-public-uploads";
   }
 
   // TO DO: move logic out of return
@@ -259,7 +259,7 @@ function SaveArea({ recipe_id, author_id, ownership }: SaveAreaProps) {
       setSaved(true);
       window.scrollTo(0, 0);
       setFeedback(data.message);
-      //await getMySavedRecipes();
+      await getMySavedRecipes();
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     }

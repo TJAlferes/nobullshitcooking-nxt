@@ -1,9 +1,9 @@
-import axios                          from 'axios';
+import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
-import qs                             from 'qs';
+import qs from 'qs';
 
-import { endpoint }                        from '../../../config/api';
-import { setItem }                         from '../../general/localStorage';
+import { endpoint } from '../../../config/api';
+import { setItem } from '../../general/localStorage';
 import type { SearchIndex, SearchRequest } from './state';
 
 // general/Layout/Header/Search
@@ -13,15 +13,15 @@ import type { SearchIndex, SearchRequest } from './state';
 // recipe/list
 
 export function useSearch() {
-  const router       = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const search = async (searchIndexChanged?: boolean, term?: string) => {
-    if (searchIndexChanged)       delete params.filters;
-    if (term)                     params.term             = term;
-    if (!params.current_page)     params.current_page     = "1";
+    if (searchIndexChanged) delete params.filters;
+    if (term) params.term = term;
+    if (!params.current_page) params.current_page = "1";
     if (!params.results_per_page) params.results_per_page = "20";
     //await delay(250);  // debounce
     const search_params = qs.stringify(params);
@@ -80,9 +80,9 @@ export function useSearch() {
 }
 
 export type UseSearch = {
-  params:               SearchRequest;
-  search:               (searchIndexChanged?: boolean, term?: string) =>                          void;
-  setFilters:           (filterName: string, filterValues: string[]) =>                           void;
-  setPreFilters:        (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
-  clearFilters:         (filterName: string) =>                                                   void;
+  params:        SearchRequest;
+  search:        (searchIndexChanged?: boolean, term?: string) =>                          void;
+  setFilters:    (filterName: string, filterValues: string[]) =>                           void;
+  setPreFilters: (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
+  clearFilters:  (filterName: string) =>                                                   void;
 };  // interface???

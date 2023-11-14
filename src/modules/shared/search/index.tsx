@@ -1,27 +1,27 @@
-import axios                from 'axios';
+import axios from 'axios';
 import type { ChangeEvent } from 'react';
 import { useState, useRef } from 'react';
 
-import { endpoint }       from '../../../config/api';
-import { useSearch }      from './hook';
-export { Pagination }     from './Pagination';
+import { endpoint } from '../../../config/api';
+import { useSearch } from './hook';
+export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
 import type { SearchIndex, SuggestionView } from './state';
 
 export function Search() {
   const searchDriver = useSearch();
 
-  const [ searchIndexChanged, setSearchIndexChanged ] = useState(false);  // useRef?
+  const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef?
 
-  const inputRef           = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
-  const mouseIsOverRef     = useRef<boolean>(false);
+  const mouseIsOverRef = useRef<boolean>(false);
 
-  const [ index,       setIndex ]       = useState("recipes");  // index AKA prefilter AKA database table
-  const [ term,        setTerm ]        = useState("");
-  const [ suggestions, setSuggestions ] = useState<SuggestionView[]>([]);
+  const [index, setIndex] = useState('recipes');  // index AKA prefilter AKA database table
+  const [term, setTerm] = useState('');
+  const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
-  const capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // "recipes" --> "Recipes"
+  const capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // 'recipes' --> 'Recipes'
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
@@ -35,7 +35,7 @@ export function Search() {
     setTerm(value);
     if (value.length < 3) return;
     if (autosuggestionsRef.current) {
-      autosuggestionsRef.current.style.display = "block";
+      autosuggestionsRef.current.style.display = 'block';
     }
     //await delay(1250);  // debounce
     try {
@@ -73,7 +73,7 @@ export function Search() {
 
     inputRef.current.onblur = function() {
       if (mouseIsOverRef.current === false && autosuggestionsRef.current) {
-        autosuggestionsRef.current.style.display = "none";
+        autosuggestionsRef.current.style.display = 'none';
       }
     };
   };
@@ -81,35 +81,35 @@ export function Search() {
   initSearchInputBlurHandler();  // put into a useEffect? and is a manual teardown needed?
 
   return (
-    <div className="search">
-      <div className="category">
-        <div className="facade">
+    <div className='search'>
+      <div className='category'>
+        <div className='facade'>
           <span>{capitalized}</span>
-          <img src="/images/header/down-arrow.png" width="8" height="6" />
+          <img src='/images/header/down-arrow.png' width='8' height='6' />
         </div>
         
         <select onChange={onSearchIndexChange}>
-          <option value="recipes">Recipes</option>
-          <option value="ingredients">Ingredients</option>
-          <option value="equipment">Equipment</option>
-          <option value="products">Products</option>
+          <option value='recipes'>Recipes</option>
+          <option value='ingredients'>Ingredients</option>
+          <option value='equipment'>Equipment</option>
+          <option value='products'>Products</option>
         </select>
       </div>
 
-      <div className="insert">
+      <div className='insert'>
         <input
           ref={inputRef}
-          id="search-input"
+          id='search-input'
           onFocus={onInputChange}
           onChange={onInputChange}
           value={term}
         />
 
-        <div className="magnifying-glass" onClick={submitSearch}>
+        <div className='magnifying-glass' onClick={submitSearch}>
           <span></span>
         </div>
 
-        <div ref={autosuggestionsRef} className="autosuggestions">
+        <div ref={autosuggestionsRef} className='autosuggestions'>
           <ul>
             {suggestions.map(suggestion => (
               <li

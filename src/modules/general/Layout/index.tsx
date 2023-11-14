@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useRouter } from 'next/router.js';
+import { useRouter } from 'next/router';
 
 import { useTheme } from '../../../store';
 import { Header } from './Header';

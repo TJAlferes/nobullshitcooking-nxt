@@ -1,14 +1,14 @@
-import axios                          from 'axios';
-import { memo }                       from 'react';
+import axios from 'axios';
+import { memo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import qs                             from 'qs';
+import qs from 'qs';
 
-import { endpoint }           from '../../../../config/api';
-import { setItem }            from '../../../general/localStorage';
+import { endpoint } from '../../../../config/api';
+import { setItem } from '../../../general/localStorage';
 import type { SearchRequest } from '../state';
 
 export const ResultsPerPage = memo(function ResultsPerPage() {
-  const router       = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const params = qs.parse(searchParams.toString()) as SearchRequest;

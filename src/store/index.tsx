@@ -1,152 +1,152 @@
 import axios from 'axios';
-import { useState, useCallback } from "react";
-import type { ReactNode } from "react";
-import { createContext, useContextSelector } from "use-context-selector";
+import { useState, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContextSelector } from 'use-context-selector';
 
 import { endpoint } from '../config/api';
-import { getItem, setItem } from "../modules/general/localStorage";
-import type { Ownership } from "../modules/shared/types";
+import { getItem, setItem } from '../modules/general/localStorage';
+import type { Ownership } from '../modules/shared/types';
 
 function store() {
-  const [cuisines, setCuisines] = useState<CuisineView[]>(getItem("cuisines") || []);
-  const [equipment, setEquipment] = useState<EquipmentView[]>(getItem("equipment") || []);
-  const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem("equipment_types") || []);
-  const [ingredients, setIngredients] = useState<IngredientView[]>(getItem("ingredients") || []);
-  const [ingredient_types, setIngredientTypes] = useState<IngredientTypeView[]>(getItem("ingredient_types") || []);
-  const [units, setUnits] = useState<UnitView[]>(getItem("units") || []);
-  const [methods, setMethods] = useState<MethodView[]>(getItem("methods") || []);
-  const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem("recipe_types") || []);
+  const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
+  const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
+  const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
+  const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') || []);
+  const [ingredient_types, setIngredientTypes] = useState<IngredientTypeView[]>(getItem('ingredient_types') || []);
+  const [units, setUnits] = useState<UnitView[]>(getItem('units') || []);
+  const [methods, setMethods] = useState<MethodView[]>(getItem('methods') || []);
+  const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') || []);
 
-  const [theme, setTheme] = useState<Theme>(getItem("theme") || "");
+  const [theme, setTheme] = useState<Theme>(getItem('theme') || '');
 
-  const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem("my_friendships") || []);
-  const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem("my_public_plans") || []);
-  const [my_public_recipes, setMyPublicRecipes] = useState<RecipeOverview[]>(getItem("my_public_recipes") || []);
-  const [my_favorite_recipes, setMyFavoriteRecipes] = useState<RecipeOverview[]>(getItem("my_favorite_recipes") || []);
-  const [my_private_equipment, setMyPrivateEquipment] = useState<EquipmentView[]>(getItem("my_private_equipment") || []);
-  const [my_private_ingredients, setMyPrivateIngredients] = useState<IngredientView[]>(getItem("my_private_ingredients") || []);
-  const [my_private_plans, setMyPrivatePlans] = useState<PlanView[]>(getItem("my_private_plans") || []);
-  const [my_private_recipes, setMyPrivateRecipes] = useState<RecipeOverview[]>(getItem("my_private_recipes") || []);
-  const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem("my_saved_recipes") || []);
-  const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem("my_chatgroups") || []);
+  const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
+  const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem('my_public_plans') || []);
+  const [my_public_recipes, setMyPublicRecipes] = useState<RecipeOverview[]>(getItem('my_public_recipes') || []);
+  const [my_favorite_recipes, setMyFavoriteRecipes] = useState<RecipeOverview[]>(getItem('my_favorite_recipes') || []);
+  const [my_private_equipment, setMyPrivateEquipment] = useState<EquipmentView[]>(getItem('my_private_equipment') || []);
+  const [my_private_ingredients, setMyPrivateIngredients] = useState<IngredientView[]>(getItem('my_private_ingredients') || []);
+  const [my_private_plans, setMyPrivatePlans] = useState<PlanView[]>(getItem('my_private_plans') || []);
+  const [my_private_recipes, setMyPrivateRecipes] = useState<RecipeOverview[]>(getItem('my_private_recipes') || []);
+  const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem('my_saved_recipes') || []);
+  const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem('my_chatgroups') || []);
 
-  const [auth_id, setAuthId] = useState<string>(getItem("auth_id") || "");
-  const [auth_email, setAuthEmail] = useState<string>(getItem("auth_email") || "");
-  const [authname, setAuthname] = useState<string>(getItem("authname") || "");
-  const [auth_avatar, setAuthAvatar] = useState<string>(getItem("auth_avatar") || "");
+  const [auth_id, setAuthId] = useState<string>(getItem('auth_id') || '');
+  const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') || '');
+  const [authname, setAuthname] = useState<string>(getItem('authname') || '');
+  const [auth_avatar, setAuthAvatar] = useState<string>(getItem('auth_avatar') || '');
 
   const [connected, setConnected] = useState(false);
 
-  const [current_private_conversation, setCurrentPrivateConversation] = useState(getItem("current_private_conversation") || "");  //other auth_id;
-  const [private_conversations, setPrivateConversations] = useState(getItem("private_conversations") || []);
-  const [private_chatmessages, setPrivateChatmessages] = useState(getItem("private_chatmessages") || []);
+  const [current_private_conversation, setCurrentPrivateConversation] = useState(getItem('current_private_conversation') || '');  //other auth_id;
+  const [private_conversations, setPrivateConversations] = useState(getItem('private_conversations') || []);
+  const [private_chatmessages, setPrivateChatmessages] = useState(getItem('private_chatmessages') || []);
 
-  const [current_chatgroup, setCurrentChatgroup] = useState(getItem("current_chatgroup") || "");
-  const [chatgroups, setChatgroups] = useState(getItem("chatgroups") || []);
-  const [chatgroup_users, setChatgroupUsers] = useState(getItem("chatgroup_users") || []);
+  const [current_chatgroup, setCurrentChatgroup] = useState(getItem('current_chatgroup') || '');
+  const [chatgroups, setChatgroups] = useState(getItem('chatgroups') || []);
+  const [chatgroup_users, setChatgroupUsers] = useState(getItem('chatgroup_users') || []);
 
-  const [current_chatroom, setCurrentChatroom] = useState(getItem("current_chatroom") || "");
-  const [chatrooms, setChatrooms] = useState(getItem("chatrooms") || []);
-  const [chatroom_users, setChatroomUsers] = useState(getItem("chatroom_users") || []);
-  const [chatmessages, setChatmessages] = useState(getItem("chatmessages") || []);
+  const [current_chatroom, setCurrentChatroom] = useState(getItem('current_chatroom') || '');
+  const [chatrooms, setChatrooms] = useState(getItem('chatrooms') || []);
+  const [chatroom_users, setChatroomUsers] = useState(getItem('chatroom_users') || []);
+  const [chatmessages, setChatmessages] = useState(getItem('chatmessages') || []);
 
   return {
     cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
-      setItem("cuisines", cuisines);
+      setItem('cuisines', cuisines);
     }, []),
     equipment,
     setEquipment: useCallback((equipment: EquipmentView[]) => {
       setEquipment(equipment);
-      setItem("equipment", equipment);
+      setItem('equipment', equipment);
     }, []),
     equipment_types,
     setEquipmentTypes: useCallback((equipment_types: EquipmentTypeView[]) => {
       setEquipmentTypes(equipment_types);
-      setItem("equipment_types", equipment_types);
+      setItem('equipment_types', equipment_types);
     }, []),
     ingredients,
     setIngredients: useCallback((ingredients: IngredientView[]) => {
       setIngredients(ingredients);
-      setItem("ingredients", ingredients);
+      setItem('ingredients', ingredients);
     }, []),
     ingredient_types,
     setIngredientTypes: useCallback((ingredient_types: IngredientTypeView[]) => {
       setIngredientTypes(ingredient_types);
-      setItem("ingredient_types", ingredient_types);
+      setItem('ingredient_types', ingredient_types);
     }, []),
     units,
     setUnits: useCallback((units: UnitView[]) => {
       setUnits(units);
-      setItem("units", units);
+      setItem('units', units);
     }, []),
     methods,
     setMethods: useCallback((methods: MethodView[]) => {
       setMethods(methods);
-      setItem("methods", methods);
+      setItem('methods', methods);
     }, []),
     recipe_types,
     setRecipeTypes: useCallback((recipe_types: RecipeTypeView[]) => {
       setRecipeTypes(recipe_types);
-      setItem("recipe_types", recipe_types);
+      setItem('recipe_types', recipe_types);
     }, []),
 
     theme,
     setTheme: useCallback((theme: Theme) => {
       setTheme(theme);
-      setItem("theme", theme);
+      setItem('theme', theme);
     }, []),
 
     my_friendships,
     setMyFriendships: useCallback((my_friendships: FriendshipView[]) => {
       setMyFriendships(my_friendships);
-      setItem("my_friendships", my_friendships);
+      setItem('my_friendships', my_friendships);
     }, []),
     my_public_plans,
     setMyPublicPlans: useCallback((my_public_plans: PlanView[]) => {
       setMyPublicPlans(my_public_plans);
-      setItem("my_public_plans", my_public_plans);
+      setItem('my_public_plans', my_public_plans);
     }, []),
     my_public_recipes,
     setMyPublicRecipes: useCallback((my_public_recipes: RecipeOverview[]) => {
       setMyPublicRecipes(my_public_recipes);
-      setItem("my_public_recipes", my_public_recipes);
+      setItem('my_public_recipes', my_public_recipes);
     }, []),
     my_favorite_recipes,
     setMyFavoriteRecipes: useCallback((my_favorite_recipes: RecipeOverview[]) => {
       setMyFavoriteRecipes(my_favorite_recipes);
-      setItem("my_favorite_recipes", my_favorite_recipes);
+      setItem('my_favorite_recipes', my_favorite_recipes);
     }, []),
     my_private_equipment,
     setMyPrivateEquipment: useCallback((my_private_equipment: EquipmentView[]) => {
       setMyPrivateEquipment(my_private_equipment);
-      setItem("my_private_equipment", my_private_equipment);
+      setItem('my_private_equipment', my_private_equipment);
     }, []),
     my_private_ingredients,
     setMyPrivateIngredients: useCallback((my_private_ingredients: IngredientView[]) => {
       setMyPrivateIngredients(my_private_ingredients);
-      setItem("my_private_ingredients", my_private_ingredients);
+      setItem('my_private_ingredients', my_private_ingredients);
     }, []),
     my_private_plans,
     setMyPrivatePlans: useCallback((my_private_plans: PlanView[]) => {
       setMyPrivatePlans(my_private_plans);
-      setItem("my_private_plans", my_private_plans);
+      setItem('my_private_plans', my_private_plans);
     }, []),
     my_private_recipes,
     setMyPrivateRecipes: useCallback((my_private_recipes: RecipeOverview[]) => {
       setMyPrivateRecipes(my_private_recipes);
-      setItem("my_private_recipes", my_private_recipes);
+      setItem('my_private_recipes', my_private_recipes);
     }, []),
     my_saved_recipes,
     setMySavedRecipes: useCallback((my_saved_recipes: RecipeOverview[]) => {
       setMySavedRecipes(my_saved_recipes);
-      setItem("my_saved_recipes", my_saved_recipes);
+      setItem('my_saved_recipes', my_saved_recipes);
     }, []),
     my_chatgroups,
     setMyChatgroups: useCallback((my_chatgroups: []) => {
       setMyChatgroups(my_chatgroups);
-      setItem("my_chatgroups", my_chatgroups);
+      setItem('my_chatgroups', my_chatgroups);
     }, []),
 
     auth_id,
@@ -156,106 +156,106 @@ function store() {
     auth_email,
     setAuthEmail: useCallback((auth_email: string) => {
       setAuthEmail(auth_email);
-      setItem("auth_email", auth_email);
+      setItem('auth_email', auth_email);
     }, []),
     authname,
     setAuthname: useCallback((authname: string) => {
       setAuthname(authname);
-      setItem("authname", authname);
+      setItem('authname', authname);
     }, []),
     auth_avatar,
     setAuthAvatar: useCallback((auth_avatar: string) => {
       setAuthAvatar(auth_avatar);
-      setItem("auth_avatar", auth_avatar);
+      setItem('auth_avatar', auth_avatar);
     }, []),
 
     connected,
     setConnected: useCallback((connected: boolean) => {
       setConnected(connected);
-      setItem("connected", connected);
+      setItem('connected', connected);
     }, []),
 
     current_private_conversation,
     setCurrentPrivateConversation: useCallback((current_private_conversation: string) => {
       setCurrentPrivateConversation(current_private_conversation);
-      setItem("current_private_conversation", current_private_conversation);
+      setItem('current_private_conversation', current_private_conversation);
     }, []),
     private_conversations,
     setPrivateConversations: useCallback((private_conversations: PrivateConversation[]) => {
       setPrivateConversations(private_conversations);
-      setItem("private_conversations", private_conversations);
+      setItem('private_conversations', private_conversations);
     }, []),
     private_chatmessages,
     setPrivateChatmessages: useCallback((private_chatmessages: PrivateChatmessageView[]) => {
       setPrivateChatmessages(private_chatmessages);
-      setItem("private_chatmessages", private_chatmessages);
+      setItem('private_chatmessages', private_chatmessages);
     }, []),
 
     current_chatgroup,
     setCurrentChatgroup: useCallback((current_chatgroup: string) => {
       setCurrentChatgroup(current_chatgroup);
-      setItem("current_chatgroup", current_chatgroup);
+      setItem('current_chatgroup', current_chatgroup);
     }, []),
     chatgroups,
     setChatgroups: useCallback((chatgroups: ChatgroupView[]) => {
       setChatgroups(chatgroups);
-      setItem("chatgroups", chatgroups);
+      setItem('chatgroups', chatgroups);
     }, []),
     chatgroup_users,
     setChatgroupUsers: useCallback((chatgroup_users: ChatgroupUserView[]) => {
       setChatgroupUsers(chatgroup_users);
-      setItem("chatgroup_users", chatgroup_users);
+      setItem('chatgroup_users', chatgroup_users);
     }, []),
 
     current_chatroom,
     setCurrentChatroom: useCallback((current_chatroom: string) => {
       setCurrentChatroom(current_chatroom);
-      setItem("current_chatroom", current_chatroom);
+      setItem('current_chatroom', current_chatroom);
     }, []),
     chatrooms,
     setChatrooms: useCallback((chatrooms: ChatroomView[]) => {
       setChatrooms(chatrooms);
-      setItem("chatrooms", chatrooms);
+      setItem('chatrooms', chatrooms);
     }, []),
     chatroom_users,
     setChatroomUsers: useCallback((chatroom_users: ChatroomUserView[]) => {
       setChatroomUsers(chatroom_users);
-      setItem("chatroom_users", chatroom_users);
+      setItem('chatroom_users', chatroom_users);
     }, []),
     chatmessages,
     setChatmessages: useCallback((chatmessages: ChatMessageView[]) => {
       setChatmessages(chatmessages);
-      setItem("chatmessages", chatmessages);
+      setItem('chatmessages', chatmessages);
     }, []),
 
     login: useCallback((params: LoginParams) => {
       setAuthId(params.auth_id);
-      setItem("auth_id", params.auth_id);
+      setItem('auth_id', params.auth_id);
       setAuthEmail(params.auth_email);
-      setItem("auth_email", params.auth_email);
+      setItem('auth_email', params.auth_email);
       setAuthname(params.authname);
-      setItem("authname", params.authname);
+      setItem('authname', params.authname);
 
       setMyFriendships(params.my_friendships);
-      setItem("my_friendships", params.my_friendships);
+      setItem('my_friendships', params.my_friendships);
       setMyPublicPlans(params.my_public_plans);
-      setItem("my_public_plans", params.my_public_plans);
+      setItem('my_public_plans', params.my_public_plans);
       setMyPublicRecipes(params.my_public_recipes);
-      setItem("my_public_recipes", params.my_public_recipes);
+      setItem('my_public_recipes', params.my_public_recipes);
       setMyFavoriteRecipes(params.my_favorite_recipes);
-      setItem("my_favorite_recipes", params.my_favorite_recipes);
+      setItem('my_favorite_recipes', params.my_favorite_recipes);
       setMyPrivateEquipment(params.my_private_equipment);
-      setItem("my_private_equipment", params.my_private_equipment);
+      setItem('my_private_equipment', params.my_private_equipment);
       setMyPrivateIngredients(params.my_private_ingredients);
-      setItem("my_private_ingredients", params.my_private_ingredients);
+      setItem('my_private_ingredients', params.my_private_ingredients);
       setMyPrivatePlans(params.my_private_plans);
-      setItem("my_private_plans", params.my_private_plans);
+      setItem('my_private_plans', params.my_private_plans);
       setMyPrivateRecipes(params.my_private_recipes);
-      setItem("my_private_recipes", params.my_private_recipes);
+      setItem('my_private_recipes', params.my_private_recipes);
       setMySavedRecipes(params.my_saved_recipes);
-      setItem("my_saved_recipes", params.my_saved_recipes);
+      setItem('my_saved_recipes', params.my_saved_recipes);
       setMyChatgroups(params.my_chatgroups);
-      setItem("my_chatgroups", params.my_chatgroups);
+      setItem('my_chatgroups', params.my_chatgroups);
     }, []),
     logout: useCallback(() => {
       sessionStorage.clear();
@@ -270,7 +270,7 @@ function store() {
       setMethods([]);
       setRecipeTypes([]);
 
-      //setTheme("light");
+      //setTheme('light');
 
       setMyFriendships([]);
       setMyPublicPlans([]);
@@ -283,19 +283,19 @@ function store() {
       setMySavedRecipes([]);
       setMyChatgroups([]);
 
-      setAuthId("");
-      setAuthEmail("");
-      setAuthname("");
-      setAuthAvatar("");
+      setAuthId('');
+      setAuthEmail('');
+      setAuthname('');
+      setAuthAvatar('');
 
       setConnected(false);
-      setCurrentPrivateConversation("");
+      setCurrentPrivateConversation('');
       setPrivateConversations([]);
       setPrivateChatmessages([]);
-      setCurrentChatgroup("");
+      setCurrentChatgroup('');
       setChatgroups([]);
       setChatgroupUsers([]);
-      setCurrentChatroom("");
+      setCurrentChatroom('');
       setChatrooms([]);
       setChatroomUsers([]);
       setChatmessages([]);
@@ -404,12 +404,38 @@ export function useChat() {
 }
 
 // refetches
+function createDataFetcher(path: string, key: keyof Data) {
+  return async function () {
+    try {
+      const res = await axios.get(`${endpoint}${path}`);
+      setItem(key, res.data);
+    } catch (err) {}
+  }
+}
+
+export const getCuisines = createDataFetcher("/cuisines", "cuisines");
+export const getEquipments = createDataFetcher("/equipment", "equipment");
+export const getEquipmentTypes = createDataFetcher("/equipment-types", "equipment_types");
+export const getIngredients = createDataFetcher("/ingredients", "ingredients");
+export const getIngredientTypes = createDataFetcher("/ingredient-types", "ingredient_types");
+export const getUnits = createDataFetcher("/units", "units");
+export const getMethods = createDataFetcher("/methods", "methods");
+export const getRecipeTypes = createDataFetcher("/recipe-types", "recipe_types");
+
+function createUserDataFetcher(path: string, key: keyof UserData) {
+  return async function () {
+    try {
+      const res = await axios.get(`${endpoint}${path}`, {withCredentials: true});
+      setItem(key, res.data);
+    } catch (err) {}
+  }
+}
 
 export const getMyFriendships = useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/friendships`,
-    "my_friendships"
+    'my_friendships'
   )
 );
 
@@ -417,7 +443,7 @@ export const getMyPrivateEquipment = useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/private-equipment`,
-    "my_private_equipment"
+    'my_private_equipment'
   )
 );
 
@@ -425,7 +451,7 @@ export const getMyPrivateIngredients = useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/private-ingredients`,
-    "my_private_ingredients"
+    'my_private_ingredients'
   )
 );
 
@@ -433,7 +459,7 @@ export const getMyFavoriteRecipes = useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/favorite-recipes`,
-    "my_favorite_recipes"
+    'my_favorite_recipes'
   )
 );
 
@@ -441,7 +467,7 @@ export const getMySavedRecipes = useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/saved-recipes`,
-    "my_saved_recipes"
+    'my_saved_recipes'
   )
 );
 
@@ -466,15 +492,6 @@ export const getMyRecipes = (ownership: Ownership) => {
     )
   );
 };
-
-function createUserDataFetcher(path: string, key: keyof UserData) {
-  return async function () {
-    try {
-      const res = await axios.get(`${endpoint}${path}`, {withCredentials: true});
-      setItem(key, res.data);
-    } catch (err) {}
-  }
-}
 
 type StoreContextProviderProps = {
   children: ReactNode;
@@ -540,7 +557,7 @@ export type RecipeTypeView = {
   recipe_type_name: string;
 };
 
-type Theme = "light" | "dark";
+type Theme = 'light' | 'dark';
 
 export type FriendshipView = {
   user_id:  number;
@@ -565,6 +582,17 @@ export type PlanView = {
   owner_id:  string;
   plan_name: string;
   included_recipes: RecipeOverview[][];
+};
+
+type Data = {
+  cuisines: CuisineView[];
+  equipment: EquipmentView[];
+  equipment_types: EquipmentTypeView[];
+  ingredients: IngredientView[];
+  ingredient_types: IngredientTypeView[];
+  units: UnitView[];
+  methods: MethodView[];
+  recipe_types: RecipeTypeView[];
 };
 
 type UserData = {
