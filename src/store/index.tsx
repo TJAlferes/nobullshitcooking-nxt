@@ -1,5 +1,7 @@
+'use client';
+
 import axios from 'axios';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
@@ -7,8 +9,13 @@ import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { Ownership } from '../modules/shared/types';
 
-function store() {
-  const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
+const StoreContext = createContext<any>(undefined);
+
+const initialCuisines = () => getItem('cuisines') || [];
+
+//function Store() {
+export function StoreProvider({ children }: StoreContextProviderProps) {
+  const [cuisines, setCuisines] = useState<CuisineView[]>(initialCuisines);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
   const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') || []);
@@ -17,7 +24,7 @@ function store() {
   const [methods, setMethods] = useState<MethodView[]>(getItem('methods') || []);
   const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') || []);
 
-  const [theme, setTheme] = useState<Theme>(getItem('theme') || '');
+  const [theme, setTheme] = useState<Theme>(getItem('theme') || 'light');
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
   const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem('my_public_plans') || []);
@@ -50,7 +57,7 @@ function store() {
   const [chatroom_users, setChatroomUsers] = useState(getItem('chatroom_users') || []);
   const [chatmessages, setChatmessages] = useState(getItem('chatmessages') || []);
 
-  return {
+  const storeValue = {
     cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
@@ -301,13 +308,9 @@ function store() {
       setChatmessages([]);
     }, [])
   };
-}
 
-const StoreContext = createContext(store());
-
-export function StoreProvider({ children }: StoreContextProviderProps) {
   return (
-    <StoreContext.Provider value={store()}>
+    <StoreContext.Provider value={storeValue}>
       {children}
     </StoreContext.Provider>
   );
@@ -431,7 +434,7 @@ function createUserDataFetcher(path: string, key: keyof UserData) {
   }
 }
 
-export const getMyFriendships = useContextSelector(
+export const getMyFriendships = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/friendships`,
@@ -439,7 +442,7 @@ export const getMyFriendships = useContextSelector(
   )
 );
 
-export const getMyPrivateEquipment = useContextSelector(
+export const getMyPrivateEquipment = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/private-equipment`,
@@ -447,7 +450,7 @@ export const getMyPrivateEquipment = useContextSelector(
   )
 );
 
-export const getMyPrivateIngredients = useContextSelector(
+export const getMyPrivateIngredients = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/private-ingredients`,
@@ -455,7 +458,7 @@ export const getMyPrivateIngredients = useContextSelector(
   )
 );
 
-export const getMyFavoriteRecipes = useContextSelector(
+export const getMyFavoriteRecipes = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/favorite-recipes`,
@@ -463,7 +466,7 @@ export const getMyFavoriteRecipes = useContextSelector(
   )
 );
 
-export const getMySavedRecipes = useContextSelector(
+export const getMySavedRecipes = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
     `/users/${s.authname}/saved-recipes`,
