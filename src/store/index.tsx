@@ -1,7 +1,5 @@
-'use client';
-
 import axios from 'axios';
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
@@ -9,7 +7,9 @@ import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { Ownership } from '../modules/shared/types';
 
-function useStore() {
+const StoreContext = createContext<StoreValue | null>(null);
+
+export function StoreProvider({ children }: StoreContextProviderProps) {
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
@@ -40,19 +40,19 @@ function useStore() {
   const [connected, setConnected] = useState(false);
 
   const [current_private_conversation, setCurrentPrivateConversation] = useState(getItem('current_private_conversation') || '');  //other auth_id;
-  const [private_conversations, setPrivateConversations] = useState(getItem('private_conversations') || []);
-  const [private_chatmessages, setPrivateChatmessages] = useState(getItem('private_chatmessages') || []);
+  const [private_conversations, setPrivateConversations] = useState<PrivateConversationView[]>(getItem('private_conversations') || []);
+  const [private_chatmessages, setPrivateChatmessages] = useState<PrivateChatmessageView[]>(getItem('private_chatmessages') || []);
 
   const [current_chatgroup, setCurrentChatgroup] = useState(getItem('current_chatgroup') || '');
-  const [chatgroups, setChatgroups] = useState(getItem('chatgroups') || []);
-  const [chatgroup_users, setChatgroupUsers] = useState(getItem('chatgroup_users') || []);
+  const [chatgroups, setChatgroups] = useState<ChatgroupView[]>(getItem('chatgroups') || []);
+  const [chatgroup_users, setChatgroupUsers] = useState<ChatgroupUserView[]>(getItem('chatgroup_users') || []);
 
   const [current_chatroom, setCurrentChatroom] = useState(getItem('current_chatroom') || '');
-  const [chatrooms, setChatrooms] = useState(getItem('chatrooms') || []);
-  const [chatroom_users, setChatroomUsers] = useState(getItem('chatroom_users') || []);
-  const [chatmessages, setChatmessages] = useState(getItem('chatmessages') || []);
+  const [chatrooms, setChatrooms] = useState<ChatroomView[]>(getItem('chatrooms') || []);
+  const [chatroom_users, setChatroomUsers] = useState<ChatroomUserView[]>(getItem('chatroom_users') || []);
+  const [chatmessages, setChatmessages] = useState<ChatMessageView[]>(getItem('chatmessages') || []);
 
-  return {
+  const storeValue = {
     cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
@@ -146,7 +146,7 @@ function useStore() {
       setItem('my_saved_recipes', my_saved_recipes);
     }, []),
     my_chatgroups,
-    setMyChatgroups: useCallback((my_chatgroups: []) => {
+    setMyChatgroups: useCallback((my_chatgroups: ChatgroupView[]) => {
       setMyChatgroups(my_chatgroups);
       setItem('my_chatgroups', my_chatgroups);
     }, []),
@@ -183,7 +183,7 @@ function useStore() {
       setItem('current_private_conversation', current_private_conversation);
     }, []),
     private_conversations,
-    setPrivateConversations: useCallback((private_conversations: PrivateConversation[]) => {
+    setPrivateConversations: useCallback((private_conversations: PrivateConversationView[]) => {
       setPrivateConversations(private_conversations);
       setItem('private_conversations', private_conversations);
     }, []),
@@ -303,14 +303,6 @@ function useStore() {
       setChatmessages([]);
     }, [])
   };
-}
-
-type Exp = ReturnType<typeof useStore>;
-
-const StoreContext = createContext<Exp>(useStore());
-
-export function StoreProvider({ children }: StoreContextProviderProps) {
-  const storeValue = useStore();
 
   return (
     <StoreContext.Provider value={storeValue}>
@@ -320,7 +312,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
 }
 
 export function useData() {
-  return useContextSelector(StoreContext, (s) => ({
+  return useContextSelector(StoreContext, (s) => !s ? null : ({
     cuisines:         s.cuisines,
     equipment:        s.equipment,
     equipment_types:  s.equipment_types,
@@ -333,14 +325,14 @@ export function useData() {
 }
 
 export function useTheme() {
-  return useContextSelector(StoreContext, (s) => ({
+  return useContextSelector(StoreContext, (s) => !s ? null : ({
     theme:    s.theme,
     setTheme: s.setTheme
   }));
 }
 
 export function useUserData() {
-  return useContextSelector(StoreContext, (s) => ({
+  return useContextSelector(StoreContext, (s) => !s ? null : ({
     my_friendships:          s.my_friendships,
     setMyFriendships:        s.setMyFriendships,
     my_public_plans:         s.my_public_plans,
@@ -365,7 +357,7 @@ export function useUserData() {
 }
 
 export function useAuth() {
-  return useContextSelector(StoreContext, (s) => ({
+  return useContextSelector(StoreContext, (s) => !s ? null : ({
     auth_id:       s.auth_id,
     auth_email:    s.auth_email,
     setAuthEmail:  s.setAuthEmail,
@@ -380,7 +372,7 @@ export function useAuth() {
 }
 
 export function useChat() {
-  return useContextSelector(StoreContext, (s) => ({
+  return useContextSelector(StoreContext, (s) => !s ? null : ({
     connected:                     s.connected,
     setConnected:                  s.setConnected,
 
@@ -440,7 +432,7 @@ function createUserDataFetcher(path: string, key: keyof UserData) {
 export const getMyFriendships = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
-    `/users/${s.authname}/friendships`,
+    `/users/${s!.authname}/friendships`,
     'my_friendships'
   )
 );
@@ -448,7 +440,7 @@ export const getMyFriendships = () => useContextSelector(
 export const getMyPrivateEquipment = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
-    `/users/${s.authname}/private-equipment`,
+    `/users/${s!.authname}/private-equipment`,
     'my_private_equipment'
   )
 );
@@ -456,7 +448,7 @@ export const getMyPrivateEquipment = () => useContextSelector(
 export const getMyPrivateIngredients = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
-    `/users/${s.authname}/private-ingredients`,
+    `/users/${s!.authname}/private-ingredients`,
     'my_private_ingredients'
   )
 );
@@ -464,7 +456,7 @@ export const getMyPrivateIngredients = () => useContextSelector(
 export const getMyFavoriteRecipes = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
-    `/users/${s.authname}/favorite-recipes`,
+    `/users/${s!.authname}/favorite-recipes`,
     'my_favorite_recipes'
   )
 );
@@ -472,7 +464,7 @@ export const getMyFavoriteRecipes = () => useContextSelector(
 export const getMySavedRecipes = () => useContextSelector(
   StoreContext,
   (s) => createUserDataFetcher(
-    `/users/${s.authname}/saved-recipes`,
+    `/users/${s!.authname}/saved-recipes`,
     'my_saved_recipes'
   )
 );
@@ -482,7 +474,7 @@ export const getMyPlans = (ownership: Ownership) => {
   return useContextSelector(
     StoreContext,
     (s) => createUserDataFetcher(
-      `/users/${s.authname}/${ownership}-plans`,
+      `/users/${s!.authname}/${ownership}-plans`,
       `my_${ownership}_plans`
     )
   );
@@ -493,7 +485,7 @@ export const getMyRecipes = (ownership: Ownership) => {
   return useContextSelector(
     StoreContext,
     (s) => createUserDataFetcher(
-      `/users/${s.authname}/${ownership}-recipes`,
+      `/users/${s!.authname}/${ownership}-recipes`,
       `my_${ownership}_recipes`
     )
   );
@@ -623,7 +615,7 @@ type LoginParams = UserData & {
 
 //
 
-type PrivateConversation = {
+type PrivateConversationView = {
   user_id:  string;
   username: string;
 };
@@ -669,4 +661,84 @@ type ChatMessageView = {
   sender_id:      string;
   sendername:     string;
   content:        string;
+};
+
+type StoreValue = {
+  cuisines: CuisineView[];
+  setCuisines: (cuisines: CuisineView[]) => void;
+  equipment: EquipmentView[];
+  setEquipment: (equipment: EquipmentView[]) => void;
+  equipment_types: EquipmentTypeView[];
+  setEquipmentTypes: (equipment_types: EquipmentTypeView[]) => void;
+  ingredients: IngredientView[];
+  setIngredients: (ingredients: IngredientView[]) => void;
+  ingredient_types: IngredientTypeView[];
+  setIngredientTypes: (ingredient_types: IngredientTypeView[]) => void;
+  units: UnitView[];
+  setUnits: (units: UnitView[]) => void;
+  methods: MethodView[];
+  setMethods: (methods: MethodView[]) => void;
+  recipe_types: RecipeTypeView[];
+  setRecipeTypes: (recipe_types: RecipeTypeView[]) => void;
+
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+
+  my_friendships: FriendshipView[];
+  setMyFriendships: (my_friendships: FriendshipView[]) => void;
+  my_public_plans: PlanView[];
+  setMyPublicPlans: (my_public_plans: PlanView[]) => void;
+  my_public_recipes: RecipeOverview[];
+  setMyPublicRecipes: (my_public_recipes: RecipeOverview[]) => void;
+  my_favorite_recipes: RecipeOverview[];
+  setMyFavoriteRecipes: (my_favorite_recipes: RecipeOverview[]) => void;
+  my_private_equipment: EquipmentView[];
+  setMyPrivateEquipment: (my_private_equipment: EquipmentView[]) => void;
+  my_private_ingredients: IngredientView[];
+  setMyPrivateIngredients: (my_private_ingredients: IngredientView[]) => void;
+  my_private_plans: PlanView[];
+  setMyPrivatePlans: (my_private_plans: PlanView[]) => void;
+  my_private_recipes: RecipeOverview[];
+  setMyPrivateRecipes: (my_private_recipes: RecipeOverview[]) => void;
+  my_saved_recipes: RecipeOverview[];
+  setMySavedRecipes: (my_saved_recipes: RecipeOverview[]) => void;
+  my_chatgroups: ChatgroupView[];
+  setMyChatgroups: (my_chatgroups: ChatgroupView[]) => void;
+
+  auth_id: string;
+  auth_email: string;
+  setAuthEmail: (auth_email: string) => void;
+  authname: string;
+  setAuthname: (authname: string) => void;
+  auth_avatar: string;
+  setAuthAvatar: (auth_avatar: string) => void;
+
+  login: (params: LoginParams) => void;
+  logout: () => void;
+
+  connected: boolean;
+  setConnected: (connected: boolean) => void;
+
+  current_private_conversation: string;
+  setCurrentPrivateConversation: (current_private_conversation: string) => void;
+  private_conversations: PrivateConversationView[];
+  setPrivateConversations: (private_conversations: PrivateConversationView[]) => void;
+  private_chatmessages: PrivateChatmessageView[];
+  setPrivateChatmessages:  (private_chatmessages: PrivateChatmessageView[]) => void;
+
+  current_chatgroup: string;
+  setCurrentChatgroup: (current_chatgroup: string) => void;
+  chatgroups: ChatgroupView[];
+  setChatgroups: (chatgroups: ChatgroupView[]) => void;
+  chatgroup_users: ChatgroupUserView[];
+  setChatgroupUsers: (chatgroup_users: ChatgroupUserView[]) => void;
+  
+  current_chatroom: string;
+  setCurrentChatroom: (current_chatroom: string) => void;
+  chatrooms: ChatroomView[];
+  setChatrooms: (chatrooms: ChatroomView[]) => void;
+  chatroom_users: ChatroomUserView[];
+  setChatroomUsers: (chatroom_users: ChatroomUserView[]) => void;
+  chatmessages: ChatMessageView[];
+  setChatmessages: (chatmessages: ChatMessageView[]) => void;
 };
