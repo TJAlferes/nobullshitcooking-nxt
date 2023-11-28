@@ -322,8 +322,6 @@ function useAllowedEquipment(ownership: Ownership) {
   return [];
 }
 
-type Image = string | ArrayBuffer | null;
-
 type ImageState = {
   image:        string | ArrayBuffer | null;
   crop:         Crop;

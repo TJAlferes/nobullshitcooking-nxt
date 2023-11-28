@@ -12,19 +12,12 @@ type Props = {
   ingredient: IngredientView;
 };
 
-function slugify(fullname: string) {
-  return fullname
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
 export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/ingredient/fullnames`);
+  const response = await axios.get(`${endpoint}/ingredients/fullnames`);
 
   const paths = response.data.map((ingredient: {fullname: string}) => ({
     params: {
-      fullname: slugify(ingredient.fullname)
+      fullname: encodeURIComponent(ingredient.fullname)
     }
   }));
 
@@ -35,7 +28,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/ingredient/${params.fullname}`);
+  const response = await axios.get(`${endpoint}/ingredients/${params.fullname}`);
 
   return {
     props: {

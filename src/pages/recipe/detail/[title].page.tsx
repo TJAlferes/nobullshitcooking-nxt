@@ -8,26 +8,12 @@ export default function RecipeDetailPage({ recipe }: Props) {
   return <RecipeDetail ownership="official" recipe={recipe} />;
 }
 
-function slugify(title: string) {
-  return title
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
-}
-
-/*function unslugify(title: string) {
-  return title
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}*/
-
 export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/recipe/titles`);
+  const response = await axios.get(`${endpoint}/recipes/titles`);
 
   const paths = response.data.map((recipe: {title: string}) => ({
     params: {
-      title: slugify(recipe.title)
+      title: encodeURIComponent(recipe.title)
     }
   }));
 

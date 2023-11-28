@@ -1,4 +1,4 @@
-import axios                           from 'axios';
+/*import axios                           from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 import { endpoint }         from '../../config/api';
@@ -237,7 +237,7 @@ export default function Chat() {
       dispatch(sendPrivateMessage(whisper, trimmedTo));
     }
     else dispatch(sendMessage(trim));
-    /*else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trim, trimmedFriend);}*/
+    //else if (currentFriend !== "") {const trimmedFriend = currentFriend.trim();messengerSendWhisper(trim, trimmedFriend);}
     setMessageToSend("");
     preventSpam();
     setLoading(false);
@@ -430,3 +430,4 @@ function getTime(time: Date) {
 const url = "https://s3.amazonaws.com/nobsc-user-avatars";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
+*/

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-import { Breadcrumbs } from './Breadcrumbs';
+//import { Breadcrumbs } from './Breadcrumbs';
 
 export function Main({ children }: Props) {
   return (
     <main className="main">
-      <Breadcrumbs />
+      {/*<Breadcrumbs />*/}
       {children}
     </main>
   );

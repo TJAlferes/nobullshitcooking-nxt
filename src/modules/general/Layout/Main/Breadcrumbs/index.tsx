@@ -3,10 +3,13 @@ import { usePathname } from 'next/navigation';
 
 export function Breadcrumbs() {
   const pathname = usePathname();
-  if (pathname === undefined) return null;
+  console.log(pathname);
+  if (!pathname) return null;
 
   const linkPath = pathname?.split('/');
+  console.log(linkPath);
   linkPath?.shift();
+  console.log(linkPath);
   const breadcrumbs = linkPath.map((path, i) => ({
     name: convert(path),
     href: '/' + linkPath.slice(0, i + 1).join('/')
@@ -31,6 +34,7 @@ export function Breadcrumbs() {
   );
 }
 
+// ???
 function convert(string: string) {
   const converted = string
     .replace(/-/g, ' ')

@@ -9,13 +9,8 @@ import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { Ownership } from '../modules/shared/types';
 
-const StoreContext = createContext<any>(undefined);
-
-const initialCuisines = () => getItem('cuisines') || [];
-
-//function Store() {
-export function StoreProvider({ children }: StoreContextProviderProps) {
-  const [cuisines, setCuisines] = useState<CuisineView[]>(initialCuisines);
+function useStore() {
+  const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
   const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') || []);
@@ -57,7 +52,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [chatroom_users, setChatroomUsers] = useState(getItem('chatroom_users') || []);
   const [chatmessages, setChatmessages] = useState(getItem('chatmessages') || []);
 
-  const storeValue = {
+  return {
     cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
@@ -308,6 +303,14 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setChatmessages([]);
     }, [])
   };
+}
+
+type Exp = ReturnType<typeof useStore>;
+
+const StoreContext = createContext<Exp>(useStore());
+
+export function StoreProvider({ children }: StoreContextProviderProps) {
+  const storeValue = useStore();
 
   return (
     <StoreContext.Provider value={storeValue}>

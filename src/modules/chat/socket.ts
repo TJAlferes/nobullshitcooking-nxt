@@ -1,4 +1,4 @@
-import { io }          from 'socket.io-client';
+/*import { io }          from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
 
 import { endpoint } from '../../config/api';
@@ -40,3 +40,4 @@ interface ServerToClientEvents {
   PrivateMessageSent:   (message: Message) =>              void;
   PrivateMessageFailed: (feedback: string) =>              void;
 }
+*/

@@ -1,4 +1,4 @@
-import dynamic from 'next/dynamic';
+/*import dynamic from 'next/dynamic';
 
 import { LoaderSpinner } from '../../modules/shared/LoaderSpinner';
 
@@ -8,8 +8,8 @@ const Chat = dynamic(
     loading: () => <LoaderSpinner />,
     ssr:     true
   }
-);
+);*/
 
 export default function ChatPage() {
-  return <Chat />;
+  return <div>chat page</div>;
 }
