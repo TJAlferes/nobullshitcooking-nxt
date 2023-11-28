@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Confirm() {
   const router = useRouter();
@@ -73,17 +72,11 @@ export default function Confirm() {
 
         <p>Please check your email for the confirmation code.</p>
 
-        <LoaderButton
+        <button
           className="verify-confirmation-code"
           disabled={confirmation_code.length !== 36}
-          id="verify_confirmation_code"
-          isLoading={loading}
-          loadingText="Confirming..."
-          name="submit"
           onClick={confirmClick}
-          text="Confirm"
-          type='button'
-        />
+        >{loading ? 'Confirming...' : 'Confirm'}</button>
       </form>
 
       <p>Can't find your confirmation code? We can email you a new one:</p>

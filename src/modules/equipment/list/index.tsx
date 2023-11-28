@@ -6,12 +6,13 @@ import { getItem } from '../../general/localStorage';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
+import type { SearchResponse } from '../../shared/search/types';
 
 export default function EquipmentList() {
   const searchDriver = useSearch();
 
   const { equipment_types } = useData();
-  const { results, total_results, total_pages } = getItem("found");
+  const { results, total_results, total_pages } = getItem("found") as SearchResponse;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =

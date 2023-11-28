@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { LoaderButton } from '../../shared/LoaderButton';
 
 // TO DO: user forgot password
 export default function ResendConfirmationCode() {
@@ -94,21 +93,15 @@ export default function ResendConfirmationCode() {
           value={password}
         />
 
-        <LoaderButton
+        <button
           className="request-resend-confirmation-code"
           disabled={email.length < 5
             || email.length > 60
             || password.length < 6
             || password.length > 60
           }
-          id="request-resend-confirmation-code"
-          isLoading={loading}
-          loadingText="Resending..."
-          name="submit"
           onClick={requestResendClick}
-          text="Request Resend"
-          type='button'
-        />
+        >{loading ? 'Resending...' : 'Resend'}</button>
       </form>
 
       <div className="links">

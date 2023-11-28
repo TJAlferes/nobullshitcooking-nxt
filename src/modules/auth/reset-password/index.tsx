@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -108,7 +107,7 @@ export default function ResetPassword() {
           value={new_password}
         />
 
-        <LoaderButton
+        <button
           className="login__button"
           disabled={email.length < 5
             || email.length > 60
@@ -117,14 +116,8 @@ export default function ResetPassword() {
             || new_password.length < 6
             || new_password.length > 60
           }
-          id="login-button"
-          isLoading={loading}
-          loadingText="Logging In..."
-          name="submit"
           onClick={loginClick}
-          text="Login"
-          type='button'
-        />
+        >{loading ? 'Logging In...' : 'Login'}</button>
       </form>
     </div>
   );

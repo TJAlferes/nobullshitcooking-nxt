@@ -114,7 +114,7 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  const deleteAccount = async () => {
+  /*const deleteAccount = async () => {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
@@ -131,7 +131,7 @@ export default function Dashboard() {
       setFeedback(error);
     }
     setLoading(false);
-  };
+  };*/
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
 
@@ -155,7 +155,7 @@ export default function Dashboard() {
     setTinyAvatar(null);
   };
 
-  const unattributePublicPlan = async (plan_id: string) => {
+  /*const unattributePublicPlan = async (plan_id: string) => {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
@@ -174,7 +174,7 @@ export default function Dashboard() {
       setFeedback(error);
     }
     setLoading(false);
-  };
+  };*/
 
   const unattributePublicRecipe = async (recipe_id: string) => {
     setLoading(true);

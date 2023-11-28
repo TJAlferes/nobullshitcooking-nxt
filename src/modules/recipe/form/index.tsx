@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
+import ReactCrop, { Crop } from 'react-image-crop';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 

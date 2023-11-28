@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function Register() {
   const router = useRouter();
@@ -131,7 +130,7 @@ export default function Register() {
           value={passwordAgain}
         />
         
-        <LoaderButton
+        <button
           className="create-account"
           disabled={email.length < 5
             || email.length > 60
@@ -139,14 +138,8 @@ export default function Register() {
             || password.length > 60
             || password !== passwordAgain
           }
-          id="create_account"
-          isLoading={loading}
-          loadingText="Creating Account..."
-          name="submit"
           onClick={registerClick}
-          type="button"
-          text="Create Account"
-        />
+        >{loading ? 'Creating Account...' : 'Create Account'}</button>
       </form>
 
       <div className="links">

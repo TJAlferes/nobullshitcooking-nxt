@@ -5,7 +5,7 @@ import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
 import { setItem } from '../../../general/localStorage';
-import type { SearchRequest } from '../state';
+import type { SearchRequest } from '../types';
 
 export const ResultsPerPage = memo(function ResultsPerPage() {
   const router = useRouter();

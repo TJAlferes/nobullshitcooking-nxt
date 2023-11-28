@@ -6,6 +6,7 @@ import { getItem } from '../../general/localStorage';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import { useSearch } from '../../shared/search/hook';
+import type { SearchResponse } from '../../shared/search/types';
 
 // list of search results  TO DO: make a filter to toggle include/exclude Public User Recipes)
 export default function RecipeList() {
@@ -20,7 +21,7 @@ export default function RecipeList() {
     {continent: "Europe",   cuisines: cuisines.filter(c => c.continent_code === "EU")},
     {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
   ];  // TO DO: improve this (Array.reduce?)
-  const { results, total_results, total_pages } = getItem("found");
+  const { results, total_results, total_pages } = getItem("found") as SearchResponse;
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);

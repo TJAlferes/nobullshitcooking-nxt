@@ -110,8 +110,8 @@ export default function Profile() {
           ? (userFavoriteRecipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
-                {r.recipe_image !== "nobsc-recipe-default"
-                  ? <img src={`${url}/nobsc-user-recipe/${r.recipe_image}-tiny`} />
+                {r.image_filename !== "default"
+                  ? <img src={`${url}/nobsc-user-recipe/${r.image_filename}-tiny`} />
                   : <div className="image-default-28-18"></div>
                 }
               </span>
@@ -129,8 +129,8 @@ export default function Profile() {
           ? (userPublicRecipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
-                {r.recipe_image !== "nobsc-recipe-default"
-                  ? <img src={`${url}/nobsc-user-recipe/${r.recipe_image}-tiny`} />
+                {r.image_filename !== "default"
+                  ? <img src={`${url}/nobsc-user-recipe/${r.image_filename}-tiny`} />
                   : <div className="image-default-28-18"></div>
                 }
               </span>

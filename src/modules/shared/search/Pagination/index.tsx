@@ -5,7 +5,7 @@ import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
 import { getItem, setItem } from '../../../general/localStorage';
-import type { SearchRequest } from '../state';
+import type { SearchRequest } from '../types';
 
 export const Pagination = memo(function Pagination() {
   const router = useRouter();

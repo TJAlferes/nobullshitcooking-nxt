@@ -4,7 +4,7 @@ import qs from 'qs';
 
 import { endpoint } from '../../../config/api';
 import { setItem } from '../../general/localStorage';
-import type { SearchIndex, SearchRequest } from './state';
+import type { SearchIndex, SearchRequest } from './types';
 
 // general/Layout/Header/Search
 // shared/menu                   move into general/Layout/Header/LeftNav???

@@ -7,7 +7,6 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint } from '../../../../config/api';
 import { useAuth } from '../../../../store';
-import { LoaderButton } from '../../../shared/LoaderButton';
 import { getCroppedImage } from '../../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../../shared/uploadImageToAwsS3';
 
@@ -46,10 +45,10 @@ export default function ChatgroupForm() {
       setLoading(true);
       window.scrollTo(0, 0);
 
-      const chatgroups = await axios.get(
+      const chatgroup: any = await axios.get(
         `${endpoint}/users/${authname}/chatgroups/${chatgroup_id}`
       );
-      if (!chatgroups) {
+      if (!chatgroup) {
         router.push(`/dashboard`);
         return;
       }
@@ -167,8 +166,8 @@ export default function ChatgroupForm() {
             {subfolder: `chatgroup/`},
             {withCredentials: true}
           );
-          await uploadImageToAWSS3(fullSignature, image.small);
-          await uploadImageToAWSS3(tinySignature, image.tiny);
+          await uploadImageToAwsS3(fullSignature, image.small);
+          await uploadImageToAwsS3(tinySignature, image.tiny);
           // TO DO: CHECK IF ABOVE OPERATIONS WERE SUCCESSFUL!!!
           image.image_filename = filename;
           image.small = null;
@@ -258,15 +257,10 @@ export default function ChatgroupForm() {
       <div className="finish">
         <Link href="/dashboard" className="cancel-button">Cancel</Link>
 
-        <LoaderButton
+        <button
           className="submit-button"
-          id="create_equipment_button"
-          isLoading={loading}
-          loadingText="Creating..."
-          name="submit"
           onClick={submit}
-          text="Submit"
-        />
+        >{loading ? 'Submitting' : 'Submit'}</button>
       </div>
     </div>
   );

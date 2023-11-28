@@ -6,7 +6,7 @@ import { endpoint } from '../../../config/api';
 import { useSearch } from './hook';
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
-import type { SearchIndex, SuggestionView } from './state';
+import type { SearchIndex, SuggestionView } from './types';
 
 export function Search() {
   const searchDriver = useSearch();

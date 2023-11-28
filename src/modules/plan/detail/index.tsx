@@ -1,23 +1,23 @@
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+//import { useRouter } from 'next/navigation';
 
-import { useAuth } from '../../../store';
+//import { useAuth } from '../../../store';
 import type { PlanView, RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { Ownership } from '../../shared/types';
 
-export default function PlanDetail({ ownership, plan }: Props) {
-  const router  = useRouter();
+export default function PlanDetail({ /*ownership,*/ plan }: Props) {
+  //const router = useRouter();
 
-  const { auth_id } = useAuth();
+  //const { auth_id } = useAuth();
   //const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
 
   if (!plan) return <LoaderSpinner />;  // or return router.push('/404'); ???
 
   const {
-    plan_id,
-    owner_id,
+    //plan_id,
+    //owner_id,
     plan_name,
     included_recipes
   } = plan;

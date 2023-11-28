@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { LoaderButton } from '../../shared/LoaderButton';
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -73,17 +72,11 @@ export default function ForgotPassword() {
           value={email}
         />
 
-        <LoaderButton
+        <button
           className="request-temporary-password__button"
           disabled={email.length < 5 || email.length > 60}
-          id="request-temporary-password-button"
-          isLoading={loading}
-          loadingText="Processing..."
-          name="submit"
           onClick={handleClick}
-          text="Request Temporary Password"
-          type='button'
-        />
+        >{loading ? 'Requesting...' : 'Request Temporary Password'}</button>
       </form>
     </div>
   );
