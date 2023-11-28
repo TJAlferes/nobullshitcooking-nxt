@@ -15,7 +15,7 @@ export default function ResetPassword() {
   const [temporary_password, setTemporaryPassword] = useState('');
   const [new_password, setNewPassword] = useState('');
 
-  const loginHandler = async () => {
+  const resetPasswordHandler = async () => {
     if (!email) {
       return setFeedback('Email required.');
     }
@@ -47,16 +47,16 @@ export default function ResetPassword() {
     setLoading(false);
   };
 
-  const loginClick = async () => {
-    if (!loading) await loginHandler();
+  const resetPasswordClick = async () => {
+    if (!loading) await resetPasswordHandler();
   };
 
-  const loginKeyUp = async (key: string) => {
-    if (!loading && key !== "Enter") await loginHandler();
+  const resetPasswordKeyUp = async (key: string) => {
+    if (!loading && key === "Enter") await resetPasswordHandler();
   };
 
   return (
-    <div className="login" onKeyUp={e => loginKeyUp(e.key)}>
+    <div className="login" onKeyUp={e => resetPasswordKeyUp(e.key)}>
       <Link href="/">
         <img className="--desktop" src={`${url}logo-large-white.png`} />
         <img className="--mobile"  src={`${url}logo-small-white.png`} />
@@ -116,8 +116,8 @@ export default function ResetPassword() {
             || new_password.length < 6
             || new_password.length > 60
           }
-          onClick={loginClick}
-        >{loading ? 'Logging In...' : 'Login'}</button>
+          onClick={resetPasswordClick}
+        >{loading ? 'Resetting...' : 'Reset'}</button>
       </form>
     </div>
   );

@@ -41,7 +41,7 @@ export default function ForgotPassword() {
   };
 
   const handleKeyUp = async (key: string) => {
-    if (!loading && key !== "Enter") await requestTemporaryPassword();
+    if (!loading && key === "Enter") await requestTemporaryPassword();
   };
 
   return (

@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   const loginKeyUp = async (key: string) => {
-    if (!loading && key !== "Enter") await loginHandler();
+    if (!loading && key === "Enter") await loginHandler();
   };
 
   return (

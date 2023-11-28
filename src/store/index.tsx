@@ -312,92 +312,92 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
 }
 
 export function useData() {
-  return useContextSelector(StoreContext, (s) => !s ? null : ({
-    cuisines:         s.cuisines,
-    equipment:        s.equipment,
-    equipment_types:  s.equipment_types,
-    ingredients:      s.ingredients,
-    ingredient_types: s.ingredient_types,
-    units:            s.units,
-    methods:          s.methods,
-    recipe_types:     s.recipe_types
+  return useContextSelector(StoreContext, (s) => ({
+    cuisines:         s!.cuisines,
+    equipment:        s!.equipment,
+    equipment_types:  s!.equipment_types,
+    ingredients:      s!.ingredients,
+    ingredient_types: s!.ingredient_types,
+    units:            s!.units,
+    methods:          s!.methods,
+    recipe_types:     s!.recipe_types
   }));
 }
 
 export function useTheme() {
-  return useContextSelector(StoreContext, (s) => !s ? null : ({
-    theme:    s.theme,
-    setTheme: s.setTheme
+  return useContextSelector(StoreContext, (s) => ({
+    theme:    s!.theme,
+    setTheme: s!.setTheme
   }));
 }
 
 export function useUserData() {
-  return useContextSelector(StoreContext, (s) => !s ? null : ({
-    my_friendships:          s.my_friendships,
-    setMyFriendships:        s.setMyFriendships,
-    my_public_plans:         s.my_public_plans,
-    setMyPublicPlans:        s.setMyPublicPlans,
-    my_public_recipes:       s.my_public_recipes,
-    setMyPublicRecipes:      s.setMyPublicRecipes,
-    my_favorite_recipes:     s.my_favorite_recipes,
-    setMyFavoriteRecipes:    s.setMyFavoriteRecipes,
-    my_private_equipment:    s.my_private_equipment,
-    setMyPrivateEquipment:   s.setMyPrivateEquipment,
-    my_private_ingredients:  s.my_private_ingredients,
-    setMyPrivateIngredients: s.setMyPrivateIngredients,
-    my_private_plans:        s.my_private_plans,
-    setMyPrivatePlans:       s.setMyPrivatePlans,
-    my_private_recipes:      s.my_private_recipes,
-    setMyPrivateRecipes:     s.setMyPrivateRecipes,
-    my_saved_recipes:        s.my_saved_recipes,
-    setMySavedRecipes:       s.setMySavedRecipes,
-    my_chatgroups:           s.my_chatgroups,
-    setMyChatgroups:         s.setMyChatgroups
+  return useContextSelector(StoreContext, (s) => ({
+    my_friendships:          s!.my_friendships,
+    setMyFriendships:        s!.setMyFriendships,
+    my_public_plans:         s!.my_public_plans,
+    setMyPublicPlans:        s!.setMyPublicPlans,
+    my_public_recipes:       s!.my_public_recipes,
+    setMyPublicRecipes:      s!.setMyPublicRecipes,
+    my_favorite_recipes:     s!.my_favorite_recipes,
+    setMyFavoriteRecipes:    s!.setMyFavoriteRecipes,
+    my_private_equipment:    s!.my_private_equipment,
+    setMyPrivateEquipment:   s!.setMyPrivateEquipment,
+    my_private_ingredients:  s!.my_private_ingredients,
+    setMyPrivateIngredients: s!.setMyPrivateIngredients,
+    my_private_plans:        s!.my_private_plans,
+    setMyPrivatePlans:       s!.setMyPrivatePlans,
+    my_private_recipes:      s!.my_private_recipes,
+    setMyPrivateRecipes:     s!.setMyPrivateRecipes,
+    my_saved_recipes:        s!.my_saved_recipes,
+    setMySavedRecipes:       s!.setMySavedRecipes,
+    my_chatgroups:           s!.my_chatgroups,
+    setMyChatgroups:         s!.setMyChatgroups
   }));
 }
 
 export function useAuth() {
-  return useContextSelector(StoreContext, (s) => !s ? null : ({
-    auth_id:       s.auth_id,
-    auth_email:    s.auth_email,
-    setAuthEmail:  s.setAuthEmail,
-    authname:      s.authname,
-    setAuthname:   s.setAuthname,
-    auth_avatar:   s.auth_avatar,
-    setAuthAvatar: s.setAuthAvatar,
+  return useContextSelector(StoreContext, (s) => ({
+    auth_id:       s!.auth_id,
+    auth_email:    s!.auth_email,
+    setAuthEmail:  s!.setAuthEmail,
+    authname:      s!.authname,
+    setAuthname:   s!.setAuthname,
+    auth_avatar:   s!.auth_avatar,
+    setAuthAvatar: s!.setAuthAvatar,
     
-    login:         s.login,
-    logout:        s.logout
+    login:         s!.login,
+    logout:        s!.logout
   }));
 }
 
 export function useChat() {
-  return useContextSelector(StoreContext, (s) => !s ? null : ({
-    connected:                     s.connected,
-    setConnected:                  s.setConnected,
+  return useContextSelector(StoreContext, (s) => ({
+    connected:                     s!.connected,
+    setConnected:                  s!.setConnected,
 
-    current_private_conversation:  s.current_private_conversation,
-    setCurrentPrivateConversation: s.setCurrentPrivateConversation,
-    private_conversations:         s.private_conversations,
-    setPrivateConversations:       s.setPrivateConversations,
-    private_chatmessages:          s.private_chatmessages,
-    setPrivateChatMessages:        s.setPrivateChatmessages,
+    current_private_conversation:  s!.current_private_conversation,
+    setCurrentPrivateConversation: s!.setCurrentPrivateConversation,
+    private_conversations:         s!.private_conversations,
+    setPrivateConversations:       s!.setPrivateConversations,
+    private_chatmessages:          s!.private_chatmessages,
+    setPrivateChatMessages:        s!.setPrivateChatmessages,
 
-    current_chatgroup:   s.current_chatgroup,
-    setCurrentChatgroup: s.setCurrentChatgroup,
-    chatgroups:          s.chatgroups,
-    setChatgroups:       s.setChatgroups,
-    chatgroup_users:     s.chatgroup_users,
-    setChatgroupUsers:   s.setChatgroupUsers,
+    current_chatgroup:   s!.current_chatgroup,
+    setCurrentChatgroup: s!.setCurrentChatgroup,
+    chatgroups:          s!.chatgroups,
+    setChatgroups:       s!.setChatgroups,
+    chatgroup_users:     s!.chatgroup_users,
+    setChatgroupUsers:   s!.setChatgroupUsers,
 
-    current_chatroom:   s.current_chatroom,
-    setCurrentChatroom: s.setCurrentChatroom,
-    chatrooms:          s.chatrooms,
-    setChatrooms:       s.setChatrooms,
-    chatroom_users:     s.chatroom_users,
-    setChatroomUsers:   s.setChatroomUsers,
-    chatmessages:       s.chatmessages,
-    setChatmessages:    s.setChatmessages
+    current_chatroom:   s!.current_chatroom,
+    setCurrentChatroom: s!.setCurrentChatroom,
+    chatrooms:          s!.chatrooms,
+    setChatrooms:       s!.setChatrooms,
+    chatroom_users:     s!.chatroom_users,
+    setChatroomUsers:   s!.setChatroomUsers,
+    chatmessages:       s!.chatmessages,
+    setChatmessages:    s!.setChatmessages
   }));
 }
 
