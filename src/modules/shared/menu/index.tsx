@@ -7,7 +7,7 @@ import { useAuth } from '../../../store';
 import { useTheme } from '../../../store';
 import { ExpandCollapse } from '../ExpandCollapse';
 import { useSearch } from '../search/hook';
-import type { SearchIndex } from '../search/state';
+import type { SearchIndex } from '../search/types';
 
 export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
   const { setPreFilters } = useSearch();

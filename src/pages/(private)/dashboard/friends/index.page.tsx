@@ -1,4 +1,4 @@
-import Friends from "../../modules/user/friends";
+import Friends from '../../../../modules/user/dashboard/friends';
 
 export default function FriendsPage() {
   return <Friends />;

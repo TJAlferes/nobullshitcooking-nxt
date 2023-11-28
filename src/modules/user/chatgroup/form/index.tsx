@@ -268,8 +268,6 @@ export default function ChatgroupForm() {
 
 const url = 'https://s3.amazonaws.com/nobsc/';
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 type Image = string | ArrayBuffer | null;
 
 export function ToolTip() {
