@@ -1,4 +1,4 @@
-import axios from 'axios';
+//import axios from 'axios';
 
 import UserPrivateIngredientForm from '../../../../modules/user/private-ingredient/form';
 

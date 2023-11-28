@@ -1,78 +1,74 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { RecipeOverview } from '../../../store';
 
-export default function Profile() {
-  const router   = useRouter();
+export default function Profile({ profile }: Props) {
+  const router = useRouter();
 
-  const params   = useSearchParams();
+  const params = useSearchParams();
   const username = params.get('username');
-  if (!username || (username.length < 6) || (username.length > 20)) {
+  if (!profile || !username || (username.length < 6) || (username.length > 20)) {
     router.push('/');
     return <LoaderSpinner />;
   }
 
+  const { avatar, favorite_recipes, public_recipes } = profile;
+
   const { authname } = useAuth();
   const { my_friendships } = useUserData();
 
-  const [ userAvatar, setUserAvatar ] = useState("nobsc-user-default");
-  const [ userFavoriteRecipes, setUserFavoriteRecipes ] = useState<RecipeOverview[]>([]);
-  const [ userPublicRecipes,   setUserPublicRecipes ]   = useState<RecipeOverview[]>([]);
+  const [clicked, setClicked] = useState(false);
+  const [tab, setTab] = useState("public");
 
-  const [ clicked, setClicked ] = useState(false);
-  const [ tab,     setTab ]     = useState("public");
-
-  const [ feedback, setFeedback ] = useState("");
-  const [ loading,  setLoading ]  = useState(false);
-
-  useEffect(() => {
-    async function getProfile(username: string) {
-      const res = await axios.get(`${endpoint}/users/${username}/profile`);
-      setUserAvatar(res.data.avatar_url);
-      setUserFavoriteRecipes(res.data.favorite_recipes);
-      setUserPublicRecipes(res.data.public_recipes);
-    }  // TO DO: WHAT HAPPENS IF THE USER IS NOT FOUND?
-    getProfile(username);
-  }, []);
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const requestFriendship = async () => {
     if (loading) return;
-    if (!username) return;
-    const friendname = username.trim();
-    if (friendname === authname) return;
+    if (username === authname) {
+      return setFeedback('Invalid');
+    }
     setClicked(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
     setLoading(true);
     try {
-      const { data } = await axios.post(
+      const res = await axios.post(
         `${endpoint}/users/${authname}/friendships`,
-        {friendname},
+        {friendname: username},
         {withCredentials: true}
       );
-      setFeedback(data.message);
-    } catch(err) {
+      setFeedback(res.data.message);
+    } catch (err) {
+      setClicked(false);
       setFeedback('An error occurred. Please try again.');
     }
-    //delay(4000);
-    setFeedback("");
+    setTimeout(() => {
+      setFeedback('');
+      setLoading(false);
+    }, 4000);
   };
 
-  const changeTab = (value: string) => setTab(value);
+  let url = 'https://s3.amazonaws.com';
+  if (avatar === 'default') {
+    url += '/nobsc-default-images/avatar'
+  } else {
+    url += `/nobsc-public-uploads/avatar/user_id/${avatar}`;
+  }
 
-  return !username ? <LoaderSpinner /> : (
+  return (
     <div className="one-col profile">
       <h1>{username}</h1>
 
       <p className="feedback">{feedback}</p>
 
-      {userAvatar !== "nobsc-user-default" && (
-        <img src={`${url}/nobsc-user-avatars/${userAvatar}`} />
-      )}
+      <img src={`${url}`} />
       
       <div className="friend-request-outer">
         {authname && username !== authname
@@ -96,18 +92,18 @@ export default function Profile() {
       <div className="tabs">
         <button
           className={tab === "public" ? "--active" : ""}
-          onClick={() => changeTab("public")}
+          onClick={() => setTab("public")}
         >Public</button>
 
         <button
           className={tab === "favorite" ? "--active" : ""}
-          onClick={() => changeTab("favorite")}
+          onClick={() => setTab("favorite")}
         >Favorite</button>
       </div>
 
       {tab === "favorite" && (
-        userFavoriteRecipes.length
-          ? (userFavoriteRecipes.map(r => (
+        favorite_recipes.length
+          ? (favorite_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
@@ -125,8 +121,8 @@ export default function Profile() {
       }
 
       {tab === "public" && (
-        userPublicRecipes.length
-          ? (userPublicRecipes.map(r => (
+        public_recipes.length
+          ? (public_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
@@ -147,4 +143,12 @@ export default function Profile() {
   );
 }
 
-const url = "https://s3.amazonaws.com";
+type Props = {
+  profile: ProfileView;
+};
+
+export type ProfileView = {
+  avatar:           string;
+  favorite_recipes: RecipeOverview[];
+  public_recipes:   RecipeOverview[];
+};
