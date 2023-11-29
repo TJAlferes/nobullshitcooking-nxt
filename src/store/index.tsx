@@ -5,7 +5,7 @@ import { createContext, useContextSelector } from 'use-context-selector';
 
 import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
-import type { SearchIndex } from '../modules/shared/search/types';
+import type { SearchIndex, SearchResponse } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -23,7 +23,8 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [theme, setTheme] = useState<Theme>(getItem('theme') || 'light');
 
   const [search_index, setSearchIndex] = useState<SearchIndex>(getItem('search_index') || 'recipe');
-  const [search_term, setSearchTerm] = useState(getItem('search_term') || '');
+  const [search_term, setSearchTerm] = useState<string>(getItem('search_term') || '');
+  const [found, setFound] = useState<SearchResponse>(getItem('found') || {});
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
   const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem('my_public_plans') || []);
@@ -113,6 +114,11 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     setSearchTerm: useCallback((search_term: string) => {
       setSearchTerm(search_term);
       setItem('search_term', search_term);
+    }, []),
+    found,
+    setFound: useCallback((found: SearchResponse) => {
+      setFound(found);
+      setItem('found', found);
     }, []),
 
     my_friendships,
@@ -351,7 +357,9 @@ export function useSearchState() {
     search_index:   s!.search_index,
     setSearchIndex: s!.setSearchIndex,
     search_term:    s!.search_term,
-    setSearchTerm:  s!.setSearchTerm
+    setSearchTerm:  s!.setSearchTerm,
+    found:          s!.found,
+    setFound:       s!.setFound
   }));
 }
 
@@ -712,6 +720,8 @@ type StoreValue = {
   setSearchIndex: (search_index: SearchIndex) => void;
   search_term: string;
   setSearchTerm: (search_term: string) => void;
+  found: SearchResponse;
+  setFound: (found: SearchResponse) => void;
 
   my_friendships: FriendshipView[];
   setMyFriendships: (my_friendships: FriendshipView[]) => void;

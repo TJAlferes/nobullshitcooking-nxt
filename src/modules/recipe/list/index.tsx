@@ -2,17 +2,15 @@ import Link from 'next/link';
 import { Fragment, useState, useRef } from 'react';
 
 import { useData } from '../../../store';
-import { getItem } from '../../general/localStorage';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import { useSearch } from '../../shared/search/hook';
-import type { SearchResponse } from '../../shared/search/types';
 
 // list of search results  TO DO: make a filter to toggle include/exclude Public User Recipes)
 export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
-  const { params, setFilters } = useSearch();
+  const { found, params, setFilters } = useSearch();
   const { filters } = params;
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = [
@@ -22,7 +20,7 @@ export default function RecipeList() {
     {continent: "Europe",   cuisines: cuisines.filter(c => c.continent_code === "EU")},
     {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
   ];  // TO DO: improve this (Array.reduce?)
-  const { results, total_results, total_pages } = getItem("found") as SearchResponse;
+  const { results, total_results, total_pages } = found;
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(filters?.recipe_types ?? []);

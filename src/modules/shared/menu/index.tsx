@@ -9,7 +9,10 @@ import { ExpandCollapse } from '../ExpandCollapse';
 import { useSearch } from '../search/hook';
 import type { SearchIndex } from '../search/types';
 
-export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
+export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
+  isLeftNavOpen: boolean;
+  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { setPreFilters } = useSearch();
 
   const [ active, setActive ] = useState<string | null>(null);
@@ -31,9 +34,9 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
           <hr />
           <NavLinks />
 
-          {active && (
+          {active ? (
             <div className="submenu">
-              {submenuItems.map(item => active === item.parent && (
+              {submenuItems.map(item => active === item.parent ? (
                 <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
                   <Link
                     href="#"
@@ -49,9 +52,9 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
                     {item.name}
                   </Link>
                 </div>
-              ))}
+              ) : false)}
             </div>
-          )}
+          ) : false}
         </ReactAimMenu>
       </nav>
 
@@ -105,11 +108,6 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: Props) {
   );
 }
 
-type Props = {
-  isLeftNavOpen:    boolean;
-  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
 function NavLinks() {
   const { authname } = useAuth();
 
@@ -118,14 +116,14 @@ function NavLinks() {
       <NavLink text="Home" to="/" />
       <hr />
 
-      {authname !== '' && (
+      {authname !== '' ? (
         <>
           <NavLink text={authname} to="/dashboard" />
           <NavLink text="Chat"     to="/chat" />
           <NavLink text="Friends"  to="/friends" />
           <hr />
         </>
-      )}
+      ) : false}
 
       <NavLink text="Water"  to="/water" />
       <NavLink text="Tea"    to="/tea" />
@@ -138,7 +136,10 @@ function NavLinks() {
   );
 }
 
-function NavLink({ text, to }: NavLinkProps) {
+function NavLink({ text, to }: {
+  text: string;
+  to: string;
+}) {
   const pathname = usePathname();
   const { theme } = useTheme();
 
@@ -152,11 +153,6 @@ function NavLink({ text, to }: NavLinkProps) {
     </div>
   );
 }
-
-type NavLinkProps = {
-  text: string;
-  to:   string;
-};
 
 const menuItems = [
   {name: 'Recipes',     link: '/recipes',     image: 'recipes'},

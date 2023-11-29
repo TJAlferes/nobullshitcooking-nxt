@@ -22,30 +22,24 @@ export function Search() {
   const mouseIsOverRef = useRef<boolean>(false);
 
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
-
-  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);  // 'recipe' --> 'Recipe'
+  
+  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
     setSearchIndex(e.target.value as SearchIndex);
-    
     setSearchIndexChanged(true);
   };
 
   let cancelToken: CancelTokenSource | undefined;
-  // Note: Cancel Token is now deprecated,
-  // TO DO: upgrade to Signal
+  // TO DO: Cancel Token is deprecated, upgrade to Signal
   // See: https://axios-http.com/docs/cancellation
 
   const getSuggestions = async (value: string, cancelToken: CancelTokenSource | undefined) => {
-    //Check if there are any previous pending requests
-    if (cancelToken !== undefined) {
+    if (cancelToken !== undefined) {  // Check for any prev pending reqs
       cancelToken.cancel("Operation canceled due to new request.");
     }
-
-    //Save the cancel token for the current request
-    cancelToken = axios.CancelToken.source();
-
+    cancelToken = axios.CancelToken.source();  // Save the cancel token for the curr req
     try {
       const res = await axios.get(
         `${endpoint}/search/auto/${search_index}?term=${value}`,
@@ -61,6 +55,7 @@ export function Search() {
       autosuggestionsRef.current.style.display = 'block';
     }
     getSuggestions(debounced_search_term, cancelToken);
+    // clean up function needed here???
   }, [debounced_search_term]);
 
   const submitSearch = () => search(searchIndexChanged);
