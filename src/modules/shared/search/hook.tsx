@@ -6,8 +6,11 @@ import { endpoint } from '../../../config/api';
 import { setItem } from '../../general/localStorage';
 import type { SearchIndex, SearchRequest } from './types';
 
-// general/Layout/Header/Search
-// shared/menu                   move into general/Layout/Header/LeftNav???
+// This hook is used by:
+// shared/menu                  TO DO: move into general/Layout/Header/LeftNav???
+// shared/search/Pagination     (used in */list)
+// shared/search/ResultsPerPage (used in */list)
+// shared/search/index          (used in general/Layout/Header and recipe/form)
 // equipment/list
 // ingredient/list
 // recipe/list

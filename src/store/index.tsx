@@ -5,6 +5,7 @@ import { createContext, useContextSelector } from 'use-context-selector';
 
 import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
+import type { SearchIndex } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -20,6 +21,9 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') || []);
 
   const [theme, setTheme] = useState<Theme>(getItem('theme') || 'light');
+
+  const [search_index, setSearchIndex] = useState<SearchIndex>(getItem('search_index') || 'recipe');
+  const [search_term, setSearchTerm] = useState(getItem('search_term') || '');
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
   const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem('my_public_plans') || []);
@@ -98,6 +102,17 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     setTheme: useCallback((theme: Theme) => {
       setTheme(theme);
       setItem('theme', theme);
+    }, []),
+
+    search_index,
+    setSearchIndex: useCallback((search_index: SearchIndex) => {
+      setSearchIndex(search_index);
+      setItem('search_index', search_index);
+    }, []),
+    search_term,
+    setSearchTerm: useCallback((search_term: string) => {
+      setSearchTerm(search_term);
+      setItem('search_term', search_term);
     }, []),
 
     my_friendships,
@@ -328,6 +343,15 @@ export function useTheme() {
   return useContextSelector(StoreContext, (s) => ({
     theme:    s!.theme,
     setTheme: s!.setTheme
+  }));
+}
+
+export function useSearchState() {
+  return useContextSelector(StoreContext, (s) => ({
+    search_index:   s!.search_index,
+    setSearchIndex: s!.setSearchIndex,
+    search_term:    s!.search_term,
+    setSearchTerm:  s!.setSearchTerm
   }));
 }
 
@@ -683,6 +707,11 @@ type StoreValue = {
 
   theme: Theme;
   setTheme: (theme: Theme) => void;
+
+  search_index: SearchIndex;
+  setSearchIndex: (search_index: SearchIndex) => void;
+  search_term: string;
+  setSearchTerm: (search_term: string) => void;
 
   my_friendships: FriendshipView[];
   setMyFriendships: (my_friendships: FriendshipView[]) => void;

@@ -8,6 +8,7 @@ import { endpoint } from '../../../config/api';
 import { debounce } from '../../general/debounce';
 import { useSearch } from './hook';
 import type { SearchIndex, SuggestionView } from './types';
+import { useSearchState } from '../../../store';
 
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
@@ -15,6 +16,7 @@ export { ResultsPerPage } from './ResultsPerPage';
 export function Search() {
   const router = useRouter();
 
+  const { search_index, setSearchIndex, search_term, setSearchTerm } = useSearchState();
   const { params, search } = useSearch();
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
@@ -23,46 +25,41 @@ export function Search() {
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef = useRef<boolean>(false);
 
-  const [index, setIndex] = useState<SearchIndex>('recipe');  // AKA prefilter AKA database table
-  const [term, setTerm] = useState('');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
-  const capitalized = index.charAt(0).toUpperCase() + index.slice(1) + 's';  // 'recipe' --> 'Recipe'
+  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1) + 's';  // 'recipe' --> 'Recipe'
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
-    setIndex(e.target.value as SearchIndex);
+    setSearchIndex(e.target.value as SearchIndex);
     
     setSearchIndexChanged(true);
   };
 
-  // TO DO: RequestSequencer
+  const getSuggestions = debounce(async () => {
+    try {
+      const res = await axios.get(
+        `${endpoint}/search/auto/${search_index}?term=${search_term}`
+      );
+      setSuggestions(res.data);
+    } catch (err) {}
+  }, 1250);
 
+  // TO DO: RequestSequencer
   const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    //setTerm(value);
-    params.index = index;
-    params.term = value;
-    const search_params = qs.stringify(params);
-    router.push(`/${index}/list/?${search_params}`);
+    setSearchTerm(value);
     if (value.length < 3) return;
     if (autosuggestionsRef.current) {
       autosuggestionsRef.current.style.display = 'block';
     }
-    debounce(async () => {
-      try {
-        const res = await axios.get(
-          `${endpoint}/search/auto/${params.index}?term=${params.term}`
-        );
-        setSuggestions(res.data);
-      } catch (err) {}
-    }, 1250);
+    getSuggestions();
   };
 
-  const submitSearch = () => search(searchIndexChanged, term);
+  const submitSearch = () => search(searchIndexChanged, search_term);
 
   const selectSuggestion = (suggestion: string) => {
-    setTerm(suggestion);  // just search right away?
+    setSearchTerm(suggestion);  // just search right away?
     setSuggestions([]);
   };
 
@@ -113,7 +110,7 @@ export function Search() {
           id='search-input'
           onFocus={onInputChange}
           onChange={onInputChange}
-          value={term}
+          value={search_term}
         />
 
         <div className='magnifying-glass' onClick={submitSearch}>
