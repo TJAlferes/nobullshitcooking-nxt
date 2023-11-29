@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { useSearchState } from '../../../store';
 import { useDebouncedValue } from '../../general/useDebouncedValue';
 import { useSearch } from './hook';
 import type { SearchIndex, SuggestionView } from './types';
@@ -13,8 +12,7 @@ export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
 
 export function Search() {
-  const { search_index, setSearchIndex, search_term, setSearchTerm } = useSearchState();
-  const { search } = useSearch();
+  const { search_index, setSearchIndex, search_term, setSearchTerm, search } = useSearch();
   const debounced_search_term = useDebouncedValue(search_term);
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
@@ -25,7 +23,7 @@ export function Search() {
 
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
-  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1) + 's';  // 'recipe' --> 'Recipe'
+  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);  // 'recipe' --> 'Recipe'
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
@@ -65,7 +63,7 @@ export function Search() {
     getSuggestions(debounced_search_term, cancelToken);
   }, [debounced_search_term]);
 
-  const submitSearch = () => search(searchIndexChanged, search_term);
+  const submitSearch = () => search(searchIndexChanged);
 
   const selectSuggestion = (suggestion: string) => {
     setSearchTerm(suggestion);  // just search right away?
@@ -109,7 +107,7 @@ export function Search() {
           <option value='recipes'>Recipes</option>
           <option value='ingredients'>Ingredients</option>
           <option value='equipment'>Equipment</option>
-          <option value='products'>Products</option>
+          {/*<option value='products'>Products</option>*/}
         </select>
       </div>
 

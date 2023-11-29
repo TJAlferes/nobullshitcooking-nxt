@@ -1,10 +1,10 @@
 export type SearchIndex =
-  | "recipe"
-  | "ingredient"
+  | "recipes"
+  | "ingredients"
   | "equipment"
-  | "product";
-  //| "page"
-  //| "post";
+  | "products";
+  //| "pages"
+  //| "posts";
 
 export type SearchRequest = {
   index: SearchIndex;

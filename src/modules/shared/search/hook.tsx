@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
 import { endpoint } from '../../../config/api';
+import { useSearchState } from '../../../store';
 import { setItem } from '../../general/localStorage';
 import type { SearchIndex, SearchRequest } from './types';
 
@@ -21,18 +22,23 @@ export function useSearch() {
 
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-  const search = async (searchIndexChanged?: boolean, term?: string) => {
+  const { search_index, setSearchIndex, search_term, setSearchTerm } = useSearchState();
+
+  const search = async (searchIndexChanged?: boolean) => {
     if (searchIndexChanged) delete params.filters;
-    if (term) params.term = term;
+    //if (search_index) params.index = search_index;
+    if (search_term) params.term = search_term;  // TO DO: reset serch_term?  // minLength?
     if (!params.current_page) params.current_page = "1";
     if (!params.results_per_page) params.results_per_page = "20";
-    //await delay(250);  // debounce
     const search_params = qs.stringify(params);
-    const { index } = params;
     try {
-      const res = await axios.get(`${endpoint}/search/find/${index}?${search_params}`);
+      const res = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
       setItem('found', res.data);
-      router.push(`/${index}/list/?${search_params}`);
+      const page = search_index === 'equipment'
+        ? search_index
+        : search_index.slice(0, search_index.length - 1);
+      console.log(page);
+      router.push(`/${page}/list/?${search_params}`);
     } catch (err) {}
   };
 
@@ -63,7 +69,7 @@ export function useSearch() {
     params.index = searchIndex;  // move???
     delete params.filters;
     setFilters(filterName, filterValues);
-  };  // used in leftnav links
+  };  // used in leftnav menu links
 
   const clearFilters = (filterName: string) => {
     delete params['filters']?.[filterName];
@@ -72,6 +78,10 @@ export function useSearch() {
   };
 
   return {
+    search_index,
+    setSearchIndex,
+    search_term,
+    setSearchTerm,
     params,
     search,
     setFilters,
@@ -81,9 +91,13 @@ export function useSearch() {
 }
 
 export type UseSearch = {
-  params:        SearchRequest;
-  search:        (searchIndexChanged?: boolean, term?: string) =>                          void;
-  setFilters:    (filterName: string, filterValues: string[]) =>                           void;
+  search_index: SearchIndex;
+  setSearchIndex: (search_index: SearchIndex) => void;
+  search_term: string;
+  setSearchTerm: (search_term: string) => void;
+  params: SearchRequest;
+  search: (searchIndexChanged?: boolean, term?: string) => void;
+  setFilters: (filterName: string, filterValues: string[]) => void;
   setPreFilters: (searchIndex: SearchIndex, filterName: string, filterValues: string[]) => void;
-  clearFilters:  (filterName: string) =>                                                   void;
+  clearFilters: (filterName: string) => void;
 };  // interface???
