@@ -1,28 +1,10 @@
-/*{
-  // search request state
-  index: "recipes",
-  term: "",
-  filters: {
-    equipment_types: [],
-    ingredient_types: [],
-    recipe_types: [],
-    methods: [],
-    cuisines: [],
-  },
-  sorts: {},
-  current_page: "1",
-  results_per_page: "20"
-}*/
-
-// TO DO: move stuff
-
 export type SearchIndex =
-  | "recipes"
-  | "ingredients"
+  | "recipe"
+  | "ingredient"
   | "equipment"
-  | "products";
-  //| "pages"
-  //| "posts";
+  | "product";
+  //| "page"
+  //| "post";
 
 export type SearchRequest = {
   index: SearchIndex;

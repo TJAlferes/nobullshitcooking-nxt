@@ -27,10 +27,8 @@ export function useSearch() {
     const search_params = qs.stringify(params);
     const { index } = params;
     try {
-      const response = await axios.get(
-        `${endpoint}/search/find/${index}?${search_params}`
-      );
-      setItem('found', response.data);
+      const res = await axios.get(`${endpoint}/search/find/${index}?${search_params}`);
+      setItem('found', res.data);
       router.push(`/${index}/list/?${search_params}`);
     } catch (err) {}
   };

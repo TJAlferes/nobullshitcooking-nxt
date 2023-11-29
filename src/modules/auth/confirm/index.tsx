@@ -28,7 +28,7 @@ export default function Confirm() {
         setFeedback("User account confirmed.");
         setTimeout(() => router.push('/login'), 4000);
       }
-    } catch(err) {
+    } catch (err) {
       setFeedback('An error occurred. Please try again.');
     }
 

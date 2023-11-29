@@ -12,7 +12,8 @@ import type { SearchResponse } from '../../shared/search/types';
 export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
-  const searchDriver = useSearch();
+  const { params, setFilters } = useSearch();
+  const { filters } = params;
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = [
     {continent: "Africa",   cuisines: cuisines.filter(c => c.continent_code === "AF")},
@@ -24,24 +25,23 @@ export default function RecipeList() {
   const { results, total_results, total_pages } = getItem("found") as SearchResponse;
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
-  const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(searchDriver.params.filters?.recipe_types ?? []);
-  const [checkedMethods, setCheckedMethods] = useState<string[]>(searchDriver.params.filters?.methods ?? []);
-  const [checkedCuisines, setCheckedCuisines] = useState<string[]>(searchDriver.params.filters?.cuisines ?? []);
-  //const sorts = params.filters?.sorts;
+  const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(filters?.recipe_types ?? []);
+  const [checkedMethods, setCheckedMethods] = useState<string[]>(filters?.methods ?? []);
+  const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
+  //const sorts = filters?.sorts;
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      const { filters } = searchDriver.params;
       if (name === "recipeTypes" && checkedRecipeTypes !== filters?.recipe_types) {
-        searchDriver.setFilters(name, checkedRecipeTypes);
+        setFilters(name, checkedRecipeTypes);
       }
       if (name === "methods" && checkedMethods !== filters?.methods) {
-        searchDriver.setFilters(name, checkedMethods);
+        setFilters(name, checkedMethods);
       }
       if (name === "cuisines" && checkedCuisines !== filters?.cuisines) {
-        searchDriver.setFilters(name, checkedCuisines);
+        setFilters(name, checkedCuisines);
       }
     } else {
       setExpandedFilter(name);  // open the dropdown

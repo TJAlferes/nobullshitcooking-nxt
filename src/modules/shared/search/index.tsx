@@ -1,27 +1,33 @@
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import qs from 'qs';
 import type { ChangeEvent } from 'react';
 import { useState, useRef } from 'react';
 
 import { endpoint } from '../../../config/api';
+import { debounce } from '../../general/debounce';
 import { useSearch } from './hook';
-export { Pagination } from './Pagination';
-export { ResultsPerPage } from './ResultsPerPage';
 import type { SearchIndex, SuggestionView } from './types';
 
-export function Search() {
-  const searchDriver = useSearch();
+export { Pagination } from './Pagination';
+export { ResultsPerPage } from './ResultsPerPage';
 
-  const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef?
+export function Search() {
+  const router = useRouter();
+
+  const { params, search } = useSearch();
+
+  const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
 
   const inputRef = useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef = useRef<boolean>(false);
 
-  const [index, setIndex] = useState('recipes');  // index AKA prefilter AKA database table
+  const [index, setIndex] = useState<SearchIndex>('recipe');  // AKA prefilter AKA database table
   const [term, setTerm] = useState('');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
-  const capitalized = index.charAt(0).toUpperCase() + index.slice(1);  // 'recipes' --> 'Recipes'
+  const capitalized = index.charAt(0).toUpperCase() + index.slice(1) + 's';  // 'recipe' --> 'Recipe'
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
@@ -30,25 +36,30 @@ export function Search() {
     setSearchIndexChanged(true);
   };
 
+  // TO DO: RequestSequencer
+
   const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setTerm(value);
+    //setTerm(value);
+    params.index = index;
+    params.term = value;
+    const search_params = qs.stringify(params);
+    router.push(`/${index}/list/?${search_params}`);
     if (value.length < 3) return;
     if (autosuggestionsRef.current) {
       autosuggestionsRef.current.style.display = 'block';
     }
-    //await delay(1250);  // debounce
-    try {
-      const { data } = await axios.get(
-        `${endpoint}/search/autosuggest/${index}?term=${term}`
-      );
-      setSuggestions(data.found);
-    } catch (err) {}
+    debounce(async () => {
+      try {
+        const res = await axios.get(
+          `${endpoint}/search/auto/${params.index}?term=${params.term}`
+        );
+        setSuggestions(res.data);
+      } catch (err) {}
+    }, 1250);
   };
 
-  const submitSearch = () => {
-    searchDriver.search(searchIndexChanged && searchIndexChanged, term && term);
-  };
+  const submitSearch = () => search(searchIndexChanged, term);
 
   const selectSuggestion = (suggestion: string) => {
     setTerm(suggestion);  // just search right away?
@@ -56,7 +67,7 @@ export function Search() {
   };
 
   const initSearchInputBlurHandler = () => {
-    if (typeof window === 'undefined')   return;
+    if (typeof window === 'undefined') return;
     if (typeof document === 'undefined') return;
 
     mouseIsOverRef.current = false;
