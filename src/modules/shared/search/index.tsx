@@ -1,23 +1,21 @@
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import qs from 'qs';
+import type { CancelTokenSource } from 'axios';
+import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { useState, useRef } from 'react';
 
 import { endpoint } from '../../../config/api';
-import { debounce } from '../../general/debounce';
+import { useSearchState } from '../../../store';
+import { useDebouncedValue } from '../../general/useDebouncedValue';
 import { useSearch } from './hook';
 import type { SearchIndex, SuggestionView } from './types';
-import { useSearchState } from '../../../store';
 
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
 
 export function Search() {
-  const router = useRouter();
-
   const { search_index, setSearchIndex, search_term, setSearchTerm } = useSearchState();
-  const { params, search } = useSearch();
+  const { search } = useSearch();
+  const debounced_search_term = useDebouncedValue(search_term);
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
 
@@ -36,25 +34,36 @@ export function Search() {
     setSearchIndexChanged(true);
   };
 
-  const getSuggestions = debounce(async () => {
+  let cancelToken: CancelTokenSource | undefined;
+  // Note: Cancel Token is now deprecated,
+  // TO DO: upgrade to Signal
+  // See: https://axios-http.com/docs/cancellation
+
+  const getSuggestions = async (value: string, cancelToken: CancelTokenSource | undefined) => {
+    //Check if there are any previous pending requests
+    if (cancelToken !== undefined) {
+      cancelToken.cancel("Operation canceled due to new request.");
+    }
+
+    //Save the cancel token for the current request
+    cancelToken = axios.CancelToken.source();
+
     try {
       const res = await axios.get(
-        `${endpoint}/search/auto/${search_index}?term=${search_term}`
+        `${endpoint}/search/auto/${search_index}?term=${value}`,
+        {cancelToken: cancelToken.token}
       );
-      setSuggestions(res.data);
+      if (res.status === 200) setSuggestions(res.data);
     } catch (err) {}
-  }, 1250);
+  };
 
-  // TO DO: RequestSequencer
-  const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    if (value.length < 3) return;
+  useEffect(() => {
+    if (debounced_search_term.length < 3) return;
     if (autosuggestionsRef.current) {
       autosuggestionsRef.current.style.display = 'block';
     }
-    getSuggestions();
-  };
+    getSuggestions(debounced_search_term, cancelToken);
+  }, [debounced_search_term]);
 
   const submitSearch = () => search(searchIndexChanged, search_term);
 
@@ -108,8 +117,8 @@ export function Search() {
         <input
           ref={inputRef}
           id='search-input'
-          onFocus={onInputChange}
-          onChange={onInputChange}
+          onFocus={e => setSearchTerm(e.target.value)}
+          onChange={e => setSearchTerm(e.target.value)}
           value={search_term}
         />
 
