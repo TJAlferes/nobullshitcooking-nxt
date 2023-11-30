@@ -2,29 +2,27 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { useData } from '../../../store';
-import { getItem } from '../../general/localStorage';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
-import type { SearchResponse } from '../../shared/search/types';
 
 export default function IngredientList() {
-  const searchDriver = useSearch();
+  const { found, params, setFilters } = useSearch();
 
   const { ingredient_types } = useData();
-  const { results, total_results, total_pages } = getItem("found") as SearchResponse;
+  const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedIngredientTypes, setCheckedIngredientTypes ] =
-    useState<string[]>(searchDriver.params.filters?.ingredient_types ?? []);
+    useState<string[]>(params.filters?.ingredient_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      const { filters } = searchDriver.params;
+      const { filters } = params;
       if (name === "ingredientTypes" && checkedIngredientTypes !== filters?.ingredient_types) {
-        searchDriver.setFilters(name, checkedIngredientTypes);
+        setFilters(name, checkedIngredientTypes);
       }
     } else {
       setExpandedFilter(name);  // open the dropdown

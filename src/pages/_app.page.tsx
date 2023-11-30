@@ -17,11 +17,13 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     async function getInitialData() {
       try {
-        const response = await axios.get(`${endpoint}/initial-data`);
-        for (const [ key, value ] of Object.entries(response.data)) {
-          setItem(key, value);
+        const res = await axios.get(`${endpoint}/initial-data`);
+        if (res.status === 200) {
+          for (const [ key, value ] of Object.entries(res.data)) {
+            setItem(key, value);
+          }
+          setData(true);
         }
-        setData(true);
       } catch (err) {}
     }
 

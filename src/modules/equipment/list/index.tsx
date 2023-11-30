@@ -1,30 +1,41 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useData } from '../../../store';
-import { getItem } from '../../general/localStorage';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
-import type { SearchResponse } from '../../shared/search/types';
+import { getItem } from '../../general/localStorage';
+import type { EquipmentTypeView } from '../../../store';
 
 export default function EquipmentList() {
-  const searchDriver = useSearch();
+  const { found, params, setFilters } = useSearch();
 
   const { equipment_types } = useData();
-  const { results, total_results, total_pages } = getItem("found") as SearchResponse;
+  //const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>([]);
+
+  // Effect to run on component mount to retrieve data from localStorage
+  useEffect(() => {
+    //const { equipment_types } = useData();
+    const equipment_types_ls = getItem('equipment_types') as EquipmentTypeView[];
+    //console.log(equipment_types[0]);
+    console.log(equipment_types_ls[0]);
+    //setEquipmentTypes(equipment_types_ls);
+  }, []); // Empty dependency array ensures the effect runs only once on mount
+
+  const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =
-    useState<string[]>(searchDriver.params.filters?.equipment_types ?? []);
+    useState<string[]>(params.filters?.equipment_types ?? []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      const { filters } = searchDriver.params;
+      const { filters } = params;
       if (name === "equipmentTypes" && checkedEquipmentTypes !== filters?.equipment_types) {
-        searchDriver.setFilters(name, checkedEquipmentTypes);
+        setFilters(name, checkedEquipmentTypes);
       }
     } else {
       setExpandedFilter(name);  // open the dropdown
@@ -77,8 +88,8 @@ export default function EquipmentList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={1} />
+        <ResultsPerPage key={2} />
         
         <div className="search-results-list">
           {results
@@ -96,8 +107,8 @@ export default function EquipmentList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={3} />
+        <ResultsPerPage key={4} />
       </div>
 
       <div className="two-col-right"></div>

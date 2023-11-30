@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Fragment, useState, useRef } from 'react';
 
-import { useData } from '../../../store';
+import { CuisineView, useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import { useSearch } from '../../shared/search/hook';
@@ -13,13 +13,7 @@ export default function RecipeList() {
   const { found, params, setFilters } = useSearch();
   const { filters } = params;
   const { recipe_types, methods, cuisines } = useData();
-  const cuisineGroups = [
-    {continent: "Africa",   cuisines: cuisines.filter(c => c.continent_code === "AF")},
-    {continent: "Americas", cuisines: cuisines.filter(c => c.continent_code === "AM")},
-    {continent: "Asia",     cuisines: cuisines.filter(c => c.continent_code === "AS")},
-    {continent: "Europe",   cuisines: cuisines.filter(c => c.continent_code === "EU")},
-    {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
-  ];  // TO DO: improve this (Array.reduce?)
+  const cuisineGroups = groupCuisines(cuisines);
   const { results, total_results, total_pages } = found;
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
@@ -202,6 +196,16 @@ export default function RecipeList() {
       <div className="two-col-right"></div>
     </div>
   );
+}
+
+function groupCuisines(cuisines: CuisineView[]) {
+  return [
+    {continent: "Africa",   cuisines: cuisines.filter(c => c.continent_code === "AF")},
+    {continent: "Americas", cuisines: cuisines.filter(c => c.continent_code === "AM")},
+    {continent: "Asia",     cuisines: cuisines.filter(c => c.continent_code === "AS")},
+    {continent: "Europe",   cuisines: cuisines.filter(c => c.continent_code === "EU")},
+    {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
+  ];  // TO DO: improve this (Array.reduce?)
 }
 
 /*

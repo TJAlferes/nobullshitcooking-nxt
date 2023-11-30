@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
@@ -10,10 +10,17 @@ import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
 
+// Maybe use this...
+// https://github.com/astoilkov/use-local-storage-state/blob/main/src/useLocalStorageState.ts
+
 export function StoreProvider({ children }: StoreContextProviderProps) {
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
+  useEffect(() => {
+    const t = getItem('equipment_types');
+    setEquipmentTypes(t || []);
+  }, []);
   const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') || []);
   const [ingredient_types, setIngredientTypes] = useState<IngredientTypeView[]>(getItem('ingredient_types') || []);
   const [units, setUnits] = useState<UnitView[]>(getItem('units') || []);
