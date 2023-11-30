@@ -10,6 +10,7 @@ import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 import type { RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
+import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import type { Ownership } from '../../shared/types';
 
@@ -177,12 +178,7 @@ export default function PlanForm({ ownership }: Props) {
   return (
     <div className="one-col plan-form">
       <div className="heading">
-        {ownership === "private" && plan_id
-          ? <h1>Update Private Plan</h1>
-          : <h1>Create Private Plan</h1>}
-        {ownership === "public" && plan_id
-          ? <h1>Update Public Plan</h1>
-          : <h1>Create Public Plan</h1>}
+        <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
 
         <p className="feedback">{feedback}</p>
 

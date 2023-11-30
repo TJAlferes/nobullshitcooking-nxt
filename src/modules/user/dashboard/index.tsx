@@ -9,6 +9,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
+import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 
@@ -45,6 +46,11 @@ export default function Dashboard() {
   const [tinyCrop, setTinyCrop] = useState('');
 
   const imageRef = useRef<HTMLImageElement | null>();
+
+  const error = 'An error occurred. Please try again.';
+
+  const privateUrl = 'https://s3.amazonaws.com/nobsc-private-uploads/recipe';
+  const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads/recipe';
 
   const updateEmail = async () => {
     setLoading(true);
@@ -436,19 +442,19 @@ export default function Dashboard() {
         <>
           {!avatar && (
             <div className="dashboard-avatar">
-              <Link href={`/profile/${auth.authname}`}>View Profile</Link>
+              <Link href={`/${auth.authname}/profile`}>View Profile</Link>
       
               <h2>Profile Picture</h2>
       
               <div className="avatar-crops">
                 <div className="--full">
                   <span>Full Size: </span>
-                  <img src={`${avatarUrl}/${auth.auth_avatar}`} />
+                  <img src={`${publicUrl}/avatar/${auth.auth_id}${auth.auth_avatar}`} />
                 </div>
 
                 <div className="--tiny">
                   <span>Tiny Size: </span>
-                  <img src={`${avatarUrl}/${auth.auth_avatar}-tiny`} />
+                  <img src={`${publicUrl}/avatar/${auth.auth_id}/${auth.auth_avatar}-tiny`} />
                 </div>
               </div>
       
@@ -510,10 +516,10 @@ export default function Dashboard() {
 
       {tab === "plans" && (
         <div className="dashboard-content">
-          <h2>Plans</h2>
+          <h2>Private Plans</h2>
   
-          <Link href="/plan/form`" className="new-entity">
-            Create New Plan
+          <Link href="/private-plan/form" className="new-entity">
+            Create Private Plan
           </Link>
   
           {modalActive
@@ -537,11 +543,11 @@ export default function Dashboard() {
             ? userData.my_private_plans.map(p => (
               <div className="dashboard-item" key={p.plan_id}>
                 <span className="name">
-                  <Link href={`/user-plan/${p.plan_id}`}>{p.plan_name}</Link>
+                  <Link href={`/private-plan/detail${p.plan_id}`}>{p.plan_name}</Link>
                 </span>
 
                 <span className="action">
-                  <Link href={`/new-plan/${p.plan_id}`}>Edit</Link>
+                  <Link href={`/private-plan/form/${p.plan_id}`}>Edit</Link>
                 </span>
 
                 <span
@@ -559,8 +565,8 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Private Recipes</h2>
 
-          <Link href="/new-recipe" className="new-entity">
-            Create New Private Recipe
+          <Link href="/private-recipe/form" className="new-entity">
+            Create Private Recipe
           </Link>
 
           {modalActive
@@ -586,18 +592,18 @@ export default function Dashboard() {
             ? userData.my_private_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.image_filename}-tiny`} />
+                  {r.image_filename !== "default"
+                    ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/user-recipe/${r.recipe_id}`}>{r.title}</Link>
+                  <Link href={`/private-recipe/detail/${r.recipe_id}`}>{r.title}</Link>
                 </span>
 
                 <span className="action">
-                  <Link href={`/new-recipe/${r.recipe_id}`}>Edit</Link>
+                  <Link href={`/private-recipe/form/${r.recipe_id}`}>Edit</Link>
                 </span>
 
                 <span
@@ -615,8 +621,8 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Public Recipes</h2>
 
-          <Link href="/new-recipe" className="new-entity">
-            Create New Public Recipe
+          <Link href="/public-recipe/form" className="new-entity">
+            Create Public Recipe
           </Link>
 
           {modalActive
@@ -643,18 +649,18 @@ export default function Dashboard() {
             ? userData.my_public_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.image_filename}-tiny`} />
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
+                  <Link href={`/${auth.authname}/recipe/detail/${r.title}`}>{r.title}</Link>
                 </span>
 
                 <span className="action">
-                  <Link href={`/new-recipe/${r.recipe_id}`}>Edit</Link>
+                  <Link href={`/public-recipe/form/${r.recipe_id}`}>Edit</Link>
                 </span>
 
                 <span
@@ -678,14 +684,14 @@ export default function Dashboard() {
             ? userData.my_favorite_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.image_filename}-tiny`} />
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
                     : <div className="img--28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
+                  <Link href={`/${r.author}/recipe/detail${r.title}`}>{r.title}</Link>
                 </span>
 
                 <span
@@ -709,14 +715,14 @@ export default function Dashboard() {
             ? userData.my_saved_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "nobsc-recipe-default"
-                    ? <img src={`${recipeUrl}/${r.image_filename}-tiny`} />
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
+                  <Link href={`${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
                 </span>
 
                 <span
@@ -734,28 +740,28 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Private Ingredients</h2>
 
-          <Link href="/new-ingredient" className="new-entity">
-            Create New Ingredient
+          <Link href="/private-ingredient/form" className="new-entity">
+            Create Private Ingredient
           </Link>
 
           {userData.my_private_ingredients.length
             ? userData.my_private_ingredients.map(i => (
               <div className="dashboard-item" key={i.ingredient_id}>
                 <span className="tiny">
-                  {i.image_filename !== "nobsc-ingredient-default"
-                    ? <img src={`${recipeUrl}/${i.image_filename}-tiny`} />
+                  {i.image_filename !== "default"
+                    ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/user-ingredient/${i.ingredient_id}`}>
+                  <Link href={`/private-ingredient/detail/${i.ingredient_id}`}>
                     {i.ingredient_name}
                   </Link>
                 </span>
 
                 <span className="action">
-                  <Link href={`/user-ingredient/edit/${i.ingredient_id}`}>
+                  <Link href={`/private-ingredient/form/${i.ingredient_id}`}>
                     Edit
                   </Link>
                 </span>
@@ -775,22 +781,22 @@ export default function Dashboard() {
         <div className="dashboard-content">
           <h2>Private Equipment</h2>
 
-          <Link href="/new-equipment" className="new-entity">
-            Create New Equipment
+          <Link href="/private-equipment/form" className="new-entity">
+            Create Private Equipment
           </Link>
 
           {userData.my_private_equipment.length
             ? userData.my_private_equipment.map(e => (
               <div className="dashboard-item" key={e.equipment_id}>
                 <span className="tiny">
-                  {e.image_filename !== "nobsc-equipment-default"
-                    ? <img src={`${recipeUrl}/${e.image_filename}-tiny`} />
+                  {e.image_filename !== "default"
+                    ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny`} />
                     : <div className="img-28-18"></div>
                   }
                 </span>
 
                 <span className="name">
-                  <Link href={`/user-equipment/${e.equipment_id}`}>
+                  <Link href={`/private-equipment/detail/${e.equipment_id}`}>
                     {e.equipment_name}
                   </Link>
                 </span>
@@ -798,7 +804,7 @@ export default function Dashboard() {
                 <span className="action">
                   <Link
                     href={{
-                      pathname: '/new-equipment',
+                      pathname: '/private-equipment/form',
                       query: {equipment_id: e.equipment_id}
                     }}
                   >Edit</Link>
@@ -818,7 +824,10 @@ export default function Dashboard() {
   );
 }
 
-function Tabs({ tab, setTab }: TabsProps) {
+function Tabs({ tab, setTab }: {
+  tab: string;
+  setTab: Dispatch<SetStateAction<string>>;
+}) {
   const names = ['settings', 'avatar', 'plans', 'recipes', 'ingredients', 'equipment'];
   return (
     <div className='dashboard-tabs'>
@@ -832,7 +841,10 @@ function Tabs({ tab, setTab }: TabsProps) {
   );
 }
 
-function Subtabs({ subTab, setSubTab }: SubtabsProps) {
+function Subtabs({ subTab, setSubTab }: {
+  subTab: string;
+  setSubTab: Dispatch<SetStateAction<string>>;
+}) {
   const names = ['private', 'public', 'favorite', 'saved'];
   return (
     <div className='dashboard-subtabs'>
@@ -845,23 +857,3 @@ function Subtabs({ subTab, setSubTab }: SubtabsProps) {
     </div>
   );
 }
-
-function capitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-const error = 'An error occurred. Please try again.';
-
-const avatarUrl = "https://s3.amazonaws.com/nobsc-user-avatars";
-
-const recipeUrl = "https://s3.amazonaws.com/nobsc-user-recipe";
-
-type TabsProps = {
-  tab:    string;
-  setTab: Dispatch<SetStateAction<string>>;
-};
-
-type SubtabsProps = {
-  subTab:    string;
-  setSubTab: Dispatch<SetStateAction<string>>;
-};

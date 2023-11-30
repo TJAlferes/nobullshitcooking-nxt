@@ -8,6 +8,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { endpoint } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
+import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 import type { Ownership } from '../../shared/types';
@@ -197,12 +198,7 @@ export default function IngredientForm({ ownership }: Props) {
 
   return (
     <div className="one-col ingredient-form">
-      {ownership === "private" && ingredient_id
-        ? <h1>Update Private Ingredient</h1>
-        : <h1>Create Private Ingredient</h1>}
-      {ownership === "official" && ingredient_id
-        ? <h1>Update Official Ingredient</h1>
-        : <h1>Create Official Ingredient</h1>}
+      <h1>{ingredient_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Ingredient</h1>
 
       <p className="feedback">{feedback}</p>
 
