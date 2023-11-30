@@ -15,6 +15,8 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
   const [ data, setData ] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
     async function getInitialData() {
       try {
         const res = await axios.get(`${endpoint}/initial-data`);
@@ -27,7 +29,11 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
       } catch (err) {}
     }
 
-    if (!data) getInitialData();
+    if (mounted && data) getInitialData();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

@@ -1,27 +1,15 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
-import { getItem } from '../../general/localStorage';
-import type { EquipmentTypeView } from '../../../store';
 
 export default function EquipmentList() {
   const { found, params, setFilters } = useSearch();
 
   const { equipment_types } = useData();
-  //const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>([]);
-
-  // Effect to run on component mount to retrieve data from localStorage
-  useEffect(() => {
-    //const { equipment_types } = useData();
-    const equipment_types_ls = getItem('equipment_types') as EquipmentTypeView[];
-    //console.log(equipment_types[0]);
-    console.log(equipment_types_ls[0]);
-    //setEquipmentTypes(equipment_types_ls);
-  }, []); // Empty dependency array ensures the effect runs only once on mount
 
   const { results, total_results, total_pages } = found;
 

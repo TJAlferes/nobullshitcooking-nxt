@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
@@ -10,17 +10,10 @@ import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
 
-// Maybe use this...
-// https://github.com/astoilkov/use-local-storage-state/blob/main/src/useLocalStorageState.ts
-
 export function StoreProvider({ children }: StoreContextProviderProps) {
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') || []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') || []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') || []);
-  useEffect(() => {
-    const t = getItem('equipment_types');
-    setEquipmentTypes(t || []);
-  }, []);
   const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') || []);
   const [ingredient_types, setIngredientTypes] = useState<IngredientTypeView[]>(getItem('ingredient_types') || []);
   const [units, setUnits] = useState<UnitView[]>(getItem('units') || []);
@@ -29,7 +22,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
 
   const [theme, setTheme] = useState<Theme>(getItem('theme') || 'light');
 
-  const [search_index, setSearchIndex] = useState<SearchIndex>(getItem('search_index') || 'recipe');
+  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');
   const [search_term, setSearchTerm] = useState<string>(getItem('search_term') || '');
   const [found, setFound] = useState<SearchResponse>(getItem('found') || {});
 
@@ -115,7 +108,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     search_index,
     setSearchIndex: useCallback((search_index: SearchIndex) => {
       setSearchIndex(search_index);
-      setItem('search_index', search_index);
+      //setItem('search_index', search_index);
     }, []),
     search_term,
     setSearchTerm: useCallback((search_term: string) => {
@@ -344,6 +337,7 @@ export function useData() {
     cuisines:         s!.cuisines,
     equipment:        s!.equipment,
     equipment_types:  s!.equipment_types,
+    setEquipmentTypes: s!.setEquipmentTypes,
     ingredients:      s!.ingredients,
     ingredient_types: s!.ingredient_types,
     units:            s!.units,

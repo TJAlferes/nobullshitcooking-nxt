@@ -1,7 +1,7 @@
 export function getItem(key: string) {
-  if (typeof window === 'undefined') return false;  // return;
-  const item = window.localStorage.getItem(key);
-  if (!item) return false;  // undefined;
+  if (typeof window === 'undefined') return false;
+  const item = window.localStorage.getItem(JSON.stringify(key));
+  if (!item) return false;
   return JSON.parse(item);
 }
 

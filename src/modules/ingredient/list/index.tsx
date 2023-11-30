@@ -10,6 +10,7 @@ export default function IngredientList() {
   const { found, params, setFilters } = useSearch();
 
   const { ingredient_types } = useData();
+  
   const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
