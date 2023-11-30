@@ -12,7 +12,7 @@ import { RouteGuard } from '../modules/general/RouteGuard';  // TO DO: hand this
 import { StoreProvider } from '../store';
 
 export default function NOBSCApp({ Component, pageProps }: AppProps) {
-  const [ data, setData ] = useState(false);
+  //const [ data, setData ] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -24,12 +24,13 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
           for (const [ key, value ] of Object.entries(res.data)) {
             setItem(key, value);
           }
-          setData(true);
+          //setData(true);
         }
+        console.log('GET INITIAL DATA RAN');
       } catch (err) {}
     }
 
-    if (mounted && data) getInitialData();
+    if (mounted) getInitialData();
 
     return () => {
       mounted = false;

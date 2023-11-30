@@ -22,7 +22,7 @@ export default function EquipmentList() {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
       const { filters } = params;
-      if (name === "equipmentTypes" && checkedEquipmentTypes !== filters?.equipment_types) {
+      if (name === "equipment_types" && checkedEquipmentTypes !== filters?.equipment_types) {
         setFilters(name, checkedEquipmentTypes);
       }
     } else {
@@ -41,19 +41,19 @@ export default function EquipmentList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "equipmentTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "equipment_types" ? " active" : ""}`}>
                 <span>Equipment Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "equipmentTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "equipment_types" ? " active" : ""}`}>
                 <span>Equipment Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
-            isDisabled={expandedFilter !== "equipmentTypes" && expandedFilter !== null}
-            handler={() => toggleFilterDropdown("equipmentTypes")}
+            isDisabled={expandedFilter !== "equipment_types" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("equipment_types")}
           >
             <div className="filter-group">
               {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (

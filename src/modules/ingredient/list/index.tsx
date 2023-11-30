@@ -10,7 +10,7 @@ export default function IngredientList() {
   const { found, params, setFilters } = useSearch();
 
   const { ingredient_types } = useData();
-  
+
   const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
@@ -22,7 +22,7 @@ export default function IngredientList() {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
       const { filters } = params;
-      if (name === "ingredientTypes" && checkedIngredientTypes !== filters?.ingredient_types) {
+      if (name === "ingredient_types" && checkedIngredientTypes !== filters?.ingredient_types) {
         setFilters(name, checkedIngredientTypes);
       }
     } else {
@@ -41,19 +41,19 @@ export default function IngredientList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "ingredientTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "ingredient_types" ? " active" : ""}`}>
                 <span>Ingredient Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "ingredientTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "ingredient_types" ? " active" : ""}`}>
                 <span>Ingredient Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
-            isDisabled={expandedFilter !== "ingredientTypes" && expandedFilter !== null}
-            handler={() => toggleFilterDropdown("ingredientTypes")}
+            isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("ingredient_types")}
           >
             <div className="filter-group">
               {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (

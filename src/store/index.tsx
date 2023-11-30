@@ -20,11 +20,15 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [methods, setMethods] = useState<MethodView[]>(getItem('methods') || []);
   const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') || []);
 
-  const [theme, setTheme] = useState<Theme>(getItem('theme') || 'light');
+  // These 4 we do not put into localStorage,
+  // because if the user opens the site again in a new tab,
+  // then Next.js hydration throws a runtime error saying text does not match between server and client.
+  // TO DO: If needed, find out of there is a workaround.
+  const [theme, setTheme] = useState<Theme>('light');
 
   const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');
-  const [search_term, setSearchTerm] = useState<string>(getItem('search_term') || '');
-  const [found, setFound] = useState<SearchResponse>(getItem('found') || {});
+  const [search_term, setSearchTerm] = useState<string>('');
+  const [found, setFound] = useState<SearchResponse>({results: [], total_results: 0, total_pages: 0});
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
   const [my_public_plans, setMyPublicPlans] = useState<PlanView[]>(getItem('my_public_plans') || []);
@@ -102,23 +106,19 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     theme,
     setTheme: useCallback((theme: Theme) => {
       setTheme(theme);
-      setItem('theme', theme);
     }, []),
 
     search_index,
     setSearchIndex: useCallback((search_index: SearchIndex) => {
       setSearchIndex(search_index);
-      //setItem('search_index', search_index);
     }, []),
     search_term,
     setSearchTerm: useCallback((search_term: string) => {
       setSearchTerm(search_term);
-      setItem('search_term', search_term);
     }, []),
     found,
     setFound: useCallback((found: SearchResponse) => {
       setFound(found);
-      setItem('found', found);
     }, []),
 
     my_friendships,
@@ -258,6 +258,8 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setItem('auth_email', params.auth_email);
       setAuthname(params.authname);
       setItem('authname', params.authname);
+      setAuthAvatar(params.auth_avatar);
+      setItem('auth_avatar', params.auth_avatar);
 
       setMyFriendships(params.my_friendships);
       setItem('my_friendships', params.my_friendships);

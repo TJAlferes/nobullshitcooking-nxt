@@ -1,4 +1,5 @@
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 
 import { useAuth } from '../../../store';
@@ -27,7 +28,13 @@ export function RouteGuard({ children }: Props) {
     return <LoaderSpinner />;
   }
 
-  const unauthenticatedRoutes = ['/register', '/confirm', '/login'];
+  const unauthenticatedRoutes = [
+    '/register',
+    '/confirm',
+    '/resend-confirmation-code',
+    '/login',
+    '/forgot-password'
+  ];
   const unauthenticatedRoute = unauthenticatedRoutes.includes(pathname);
   const authenticated = authname !== "";
   if (unauthenticatedRoute && authenticated) {

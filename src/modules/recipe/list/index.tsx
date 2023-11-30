@@ -26,7 +26,7 @@ export default function RecipeList() {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "recipeTypes" && checkedRecipeTypes !== filters?.recipe_types) {
+      if (name === "recipe_types" && checkedRecipeTypes !== filters?.recipe_types) {
         setFilters(name, checkedRecipeTypes);
       }
       if (name === "methods" && checkedMethods !== filters?.methods) {
@@ -53,19 +53,19 @@ export default function RecipeList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "recipeTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "recipe_types" ? " active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "recipeTypes" ? " active" : ""}`}>
+              <div className={`filter-name${expandedFilter === "recipe_types" ? " active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
-            isDisabled={expandedFilter !== "recipeTypes" && expandedFilter !== null}
-            handler={() => toggleFilterDropdown("recipeTypes")}
+            isDisabled={expandedFilter !== "recipe_types" && expandedFilter !== null}
+            handler={() => toggleFilterDropdown("recipe_types")}
           >
             <div className="filter-group">
               {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
