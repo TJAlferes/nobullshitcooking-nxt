@@ -534,7 +534,6 @@ export default function RecipeForm({ ownership }: Props) {
         min={2}
         name="description"
         onChange={e => setDescription(e.target.value)}
-        type="time"
         value={description}
       />
 
@@ -552,7 +551,7 @@ export default function RecipeForm({ ownership }: Props) {
         className="time"
         name="total_time"
         onChange={e => setTotalTime(e.target.value)}
-        type=""
+        type="time"
         value={total_time}
       />
 

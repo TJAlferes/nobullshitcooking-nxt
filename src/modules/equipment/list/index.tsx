@@ -30,6 +30,8 @@ export default function EquipmentList() {
     }
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
+
   return (
     <div className="two-col equipment-list">
       <div className="two-col-left search-results">
@@ -87,7 +89,7 @@ export default function EquipmentList() {
                 href={`/equipment/detail/${e.equipment_name}`}
                 key={e.id}
               >
-                <img src="/images/dev/knife-280-172.jpg" />
+                <img src={`${url}/${e.image_filename}.jpg`} />
                 <h3>{e.equipment_name}</h3>
                 <div className="type">{e.equipment_type_name}</div>
               </Link>
@@ -103,5 +105,3 @@ export default function EquipmentList() {
     </div>
   );
 }
-
-//const url = "https://s3.amazonaws.com/nobsc-images-01/equipment/";

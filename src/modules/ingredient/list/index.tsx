@@ -30,6 +30,8 @@ export default function IngredientList() {
     }
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/ingredient';
+
   return (
     <div className="two-col ingredient-list">
       <div className="two-col-left search-results">
@@ -87,7 +89,7 @@ export default function IngredientList() {
                 href={`/ingredient/detail/${i.fullname}`}
                 key={i.id}
               >
-                <img src="/images/dev/peas-280-172.jpg" />
+                <img src={`${url}/${i.image_filename}.jpg`} />
                 <h3>{i.fullname}</h3>
                 <div className="type">{i.ingredient_type_name}</div>
               </Link>
@@ -105,4 +107,9 @@ export default function IngredientList() {
   );
 }
 
-//const url = "https://s3.amazonaws.com/nobsc-images-01/ingredients/";
+function slugify(title: string) {
+  return title
+    .split(' ')
+    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+    .join('-');
+}

@@ -13,9 +13,9 @@ type Props = {
 };
 
 export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/ingredients/fullnames`);
+  const res = await axios.get(`${endpoint}/ingredients/fullnames`);
 
-  const paths = response.data.map((ingredient: {fullname: string}) => ({
+  const paths = res.data.map((ingredient: {fullname: string}) => ({
     params: {
       fullname: ingredient.fullname
     }
@@ -28,13 +28,13 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(
+  const res = await axios.get(
     `${endpoint}/ingredients/${encodeURIComponent(params.fullname)}`
   );
 
   return {
     props: {
-      ingredient: response.data
+      ingredient: res.data
     }
   };
 }

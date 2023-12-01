@@ -1,15 +1,15 @@
-.recipe {
+.recipe-detail {
   font-size: 1.3rem;
 }
 
-.recipe .save-area {
+.recipe-detail .save-area {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 5px;
 }
 
-.recipe .save-area button.--save {
+.recipe-detail .save-area button.--save {
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
   border: 1px solid #aaa;
   border-radius: 2px;
@@ -18,31 +18,31 @@
   padding: 1px 2px;
 }
 
-.recipe .save-area span {
+.recipe-detail .save-area span {
   font-family: Helvetica, sans-serif;
   font-size: 1.2rem;
   margin-right: 10px;
   padding: 2px 3px;
 }
 
-.recipe h2 {
+.recipe-detail h2 {
   font-size: 1.7rem;
   padding-top: 18px;
 }
 
-.recipe .author a {
+.recipe-detail .author a {
   color: #68abe6;
   font-weight: 900;
   text-decoration: none;
 }
 
-.recipe .methods {
+.recipe-detail .methods {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.recipe .method {
+.recipe-detail .method {
   margin: 0 4px 4px 0;
   max-width: fit-content;
   padding: 1px 3px;

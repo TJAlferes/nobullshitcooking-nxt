@@ -21,13 +21,13 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
     notes
   } = equipment;
 
-  let url = "https://s3.amazonaws.com/nobsc/image/";
-  if (ownership === "private") {
+  let url = `https://s3.amazonaws.com/nobsc-${ownership}-uploads/equipment`;
+  if (ownership === 'private') {
     if (auth_id !== owner_id) {
       router.push('/404');
       return false;
     }
-    url += "user/private/";
+    url += `/${auth_id}`;
   }
 
   return (
@@ -36,7 +36,7 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
         <h1>{equipment_name}</h1>
 
         <div className="image">
-          <img src={`${url}/equipment/${image_filename}.jpg`} />
+          <img src={`${url}/${image_filename}.jpg`} />
           <span>{caption}</span>
         </div>
 

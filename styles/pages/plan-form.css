@@ -1,6 +1,6 @@
-/*.new-plan {}*/
+/*.plan-form {}*/
 
-.new-plan .name label {
+.plan-form .name label {
   display: block;
   font-size: 1.3rem;
   font-weight: 900;
@@ -9,7 +9,7 @@
   order: 1;
 }
 
-.new-plan .name input {
+.plan-form .name input {
   border-style: solid;
   border-width: 1px;
   border-radius: 1px;
@@ -20,13 +20,13 @@
   width: 685px;
 }
 
-.new-plan .calendar {
+.plan-form .calendar {
   height: 480px;
   margin: 0 auto;
   width: 100%;
 }
 
-.new-plan-recipes {
+.plan-form-recipes {
   border-style: solid;
   border-width: 1px;
   display: flex;
@@ -39,7 +39,7 @@
   width: 756px;
 }
 
-.new-plan-recipe {
+.plan-form-recipe {
   border-style: solid;
   border-width: 1px;
   display: inline-block;
@@ -47,7 +47,7 @@
 }
 
 /*
-.new-plan-recipe {
+.plan-form-recipe {
   align-content: center;
   background-color: #FFF3CC;
   border: 1px solid #FFDEC3;
@@ -66,24 +66,24 @@
   width: 90%;
 }
 
-.new-plan-recipe .image {
+.plan-form-recipe .image {
   margin: 1px 0 0 1px;
 }
 
-.new-plan-recipe .text {
+.plan-form-recipe .text {
   font-size: 1.1rem;
   text-align: center;
   width: 100%;
 }
 */
 
-.new-plan .recipes-tabs {
+.plan-form .recipes-tabs {
   border-bottom: 2px solid #6cabe4;
   margin-top: 10px;
   width: 755px;
 }
 
-.new-plan .recipes-tabs button {
+.plan-form .recipes-tabs button {
   background-image: linear-gradient(to bottom, #eee, #bbb);
   border-color: #ddd #666 #666 #ddd;
   border-radius: 1px;
@@ -98,17 +98,17 @@
   width: 151px;
 }
 
-.new-plan .recipes-tabs button.--active {
+.plan-form .recipes-tabs button.--active {
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
 }
 
-.new-plan .finish {
+.plan-form .finish {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.new-plan .cancel {
+.plan-form .cancel {
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -118,72 +118,72 @@
   width: 280px;
 }
 
-.new-plan .cancel .cancel-cancel,
-.new-plan .cancel .cancel-button {
+.plan-form .cancel .cancel-cancel,
+.plan-form .cancel .cancel-button {
   margin: 0 auto;
 }
 
-.new-plan .cancel p {
+.plan-form .cancel p {
   margin-bottom: 10px;
   text-align: center;
 }
 
-.light .new-plan .name label {
+.light .plan-form .name label {
   color: #777;
 }
 
-.light .new-plan .name input {
+.light .plan-form .name input {
   background-color: #fff;
   border-color: #bbb;
   color: #000;
 }
 
-.light .new-plan .day--white,
-.light .new-plan .expanded-day--white {
+.light .plan-form .day--white,
+.light .plan-form .expanded-day--white {
   background-color: #fff;
 }
 
-.light .new-plan .day--green,
-.light .new-plan .expanded-day--green {
+.light .plan-form .day--green,
+.light .plan-form .expanded-day--green {
   background-color: #d6ffd6;
 }
 
-.light .new-plan-recipes {
+.light .plan-form-recipes {
   border-color: #bfbfbf;
 }
 
-.light .new-plan-recipe {
+.light .plan-form-recipe {
   background-color: #fff3cc;
   border-color: #ffdec3;
   box-shadow: 1px 1px 1px #999;
   color: #000;
 }
 
-.dark .new-plan .name label {
+.dark .plan-form .name label {
   color: #999;
 }
 
-.dark .new-plan .name input {
+.dark .plan-form .name input {
   background-color: #1e1e1e;
   border-color: #666;
   color: #bbb;
 }
 
-.dark .new-plan .day--white,
-.dark .new-plan .expanded-day--white {
+.dark .plan-form .day--white,
+.dark .plan-form .expanded-day--white {
   background-color: #222;
 }
 
-.dark .new-plan .day--green,
-.dark .new-plan .expanded-day--green {
+.dark .plan-form .day--green,
+.dark .plan-form .expanded-day--green {
   background-color: #3d6d3d;
 }
 
-.dark .new-plan-recipes {
+.dark .plan-form-recipes {
   border-color: #5a5a5a;
 }
 
-.dark .new-plan-recipe {
+.dark .plan-form-recipe {
   background-color: #afae8f;
   border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
@@ -191,7 +191,7 @@
 }
 
 @media (max-width: 1209px) {
-  .new-plan .finish {
+  .plan-form .finish {
     padding: 10px 0;
   }
 }

@@ -42,7 +42,7 @@ export function Search() {
     cancelToken = axios.CancelToken.source();  // Save the cancel token for the curr req
     try {
       const res = await axios.get(
-        `${endpoint}/search/auto/${search_index}?term=${value}`,
+        `${endpoint}/search/auto/${search_index}?term=${encodeURIComponent(value)}`,
         {cancelToken: cancelToken.token}
       );
       if (res.status === 200) setSuggestions(res.data);

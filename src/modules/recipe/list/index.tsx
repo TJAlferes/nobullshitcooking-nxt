@@ -40,6 +40,8 @@ export default function RecipeList() {
     }
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
+
   return (
     <div className="two-col recipe-list">
       <div className="two-col-left search-results">
@@ -179,7 +181,7 @@ export default function RecipeList() {
                 href={`/recipe/detail/${encodeURIComponent(r.title)}`}
                 key={r.id}
               >
-                <img src="/images/dev/sushi-280-172.jpg" />
+                <img src={`${url}/${r.image_filename}.jpg`} />
                 <h3>{r.title}</h3>
                 <div className="author">{r.author}</div>
                 <div className="cuisine">{r.cuisine_name}</div>
