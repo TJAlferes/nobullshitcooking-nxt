@@ -68,7 +68,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
           {
             author === "Unknown"
             ? "Unknown"
-            : <Link href={`/profile/${author}`}>{author}</Link>
+            : <Link href={`/${author}/profile`}>{author}</Link>
           }
         </div>
 
@@ -183,7 +183,8 @@ type ImageView = {
 };
 
 type ImageWithCaptionView = ImageView & {
-  caption: string;
+  image_id: string;
+  caption:  string;
 };
 
 type RequiredMethodView = {

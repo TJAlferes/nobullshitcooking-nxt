@@ -84,7 +84,7 @@ export default function IngredientList() {
             ? results.map(i => (
               <Link
                 className="search-results-list-item"
-                href={`/ingredient?fullname=${i.fullname}`}
+                href={`/ingredient/detail/${i.fullname}`}
                 key={i.id}
               >
                 <img src="/images/dev/peas-280-172.jpg" />

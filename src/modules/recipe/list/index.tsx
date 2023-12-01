@@ -176,7 +176,7 @@ export default function RecipeList() {
             ? results.map(r => (
               <Link
                 className="search-results-list-item"
-                href={`/recipe?title=${r.title}`}
+                href={`/recipe/detail/${encodeURIComponent(r.title)}`}
                 key={r.id}
               >
                 <img src="/images/dev/sushi-280-172.jpg" />

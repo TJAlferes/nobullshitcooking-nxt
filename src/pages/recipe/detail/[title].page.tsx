@@ -8,12 +8,16 @@ export default function RecipeDetailPage({ recipe }: Props) {
   return <RecipeDetail ownership="official" recipe={recipe} />;
 }
 
-export async function getStaticPaths() {
-  const response = await axios.get(`${endpoint}/recipes/titles`);
+type Props = {
+  recipe: RecipeDetailView;
+};
 
-  const paths = response.data.map((recipe: {title: string}) => ({
+export async function getStaticPaths() {
+  const res = await axios.get(`${endpoint}/recipes/titles`);
+
+  const paths = res.data.map((recipe: {title: string}) => ({
     params: {
-      title: encodeURIComponent(recipe.title)
+      title: recipe.title
     }
   }));
 
@@ -24,18 +28,16 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: StaticProps) {
-  const response = await axios.get(`${endpoint}/recipe/${params.title}`);
+  const res = await axios.get(
+    `${endpoint}/recipes/${encodeURIComponent(params.title)}`
+  );
 
   return {
     props: {
-      recipe: response.data
+      recipe: res.data
     }
   };
 }
-
-type Props = {
-  recipe: RecipeDetailView;
-};
 
 type StaticProps = {
   params: {
