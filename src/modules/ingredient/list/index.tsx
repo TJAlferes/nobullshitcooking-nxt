@@ -8,6 +8,17 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 
 export default function IngredientList() {
   const { found, params, setFilters } = useSearch();
+  /*
+    TO DO: If they are at:
+      /ingredient/list?current_page=1&results_per_page=20
+
+    and they change that to:
+      /ingredient/list?current_page=2&results_per_page=20
+      
+    then run the search for page 2.
+
+    (Same for other search query params.)
+  */
 
   const { ingredient_types } = useData();
 

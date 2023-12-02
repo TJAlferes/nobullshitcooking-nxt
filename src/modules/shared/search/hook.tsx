@@ -20,9 +20,10 @@ export function useSearch() {
 
   const search = async (searchIndexChanged?: boolean) => {
     if (searchIndexChanged) delete params.filters;
-    // *** you may need the opposite: setSearchTerm(params.term);
-    if (search_term) params.term = search_term;  // TO DO: reset serch_term?  // minLength?
+    params.term = search_term;
+    if (params.term === '') delete params.term;
     if (!params.current_page) params.current_page = "1";
+    if (searchIndexChanged) params.current_page = "1";
     if (!params.results_per_page) params.results_per_page = "20";
     const search_params = qs.stringify(params);
     try {

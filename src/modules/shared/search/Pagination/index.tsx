@@ -4,18 +4,21 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
-import { getItem, setItem } from '../../../general/localStorage';
+import { useSearchState } from '../../../../store';
+import { setItem } from '../../../general/localStorage';
 import type { SearchRequest } from '../types';
 
 export const Pagination = memo(function Pagination() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const { search_index, found, setFound } = useSearchState();
+
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const current_page = params.current_page ? params.current_page : "1";
 
-  const { total_pages } = getItem("found");
+  const { total_pages } = found;
 
   if (!total_pages || Number(total_pages) < 2) return null;
 
@@ -25,17 +28,19 @@ export const Pagination = memo(function Pagination() {
   const next  = curr + 1;
   const last  = Number(total_pages);
 
-  const goToPage = async (page: number) => {
-    params.current_page = `${page}`;
+  const goToPage = async (pageNumber: number) => {
+    params.current_page = `${pageNumber}`;
 
     const search_params = qs.stringify(params);
     
     try {
-      const response = await axios.get(
-        `${endpoint}/search/find/${params.index}?${search_params}`
-      );
-      setItem('found', response.data);
-      router.push(`/${params.index}/list/?${search_params}`);
+      const res
+        = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
+      if (res.status === 200) setFound(res.data);
+      const nextjsPage = search_index === 'equipment'
+        ? search_index
+        : search_index.slice(0, search_index.length - 1);
+      router.push(`/${nextjsPage}/list/?${search_params}`);
     } catch (err) {}
   };
 
