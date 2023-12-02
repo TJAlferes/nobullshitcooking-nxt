@@ -26,8 +26,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   // TO DO: If needed, find out of there is a workaround.
   const [theme, setTheme] = useState<Theme>('light');
 
-  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');
-  const [search_term, setSearchTerm] = useState<string>('');
+  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');  // hmm
   const [found, setFound] = useState<SearchResponse>({results: [], total_results: 0, total_pages: 0});
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') || []);
@@ -111,10 +110,6 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     search_index,
     setSearchIndex: useCallback((search_index: SearchIndex) => {
       setSearchIndex(search_index);
-    }, []),
-    search_term,
-    setSearchTerm: useCallback((search_term: string) => {
-      setSearchTerm(search_term);
     }, []),
     found,
     setFound: useCallback((found: SearchResponse) => {
@@ -359,8 +354,6 @@ export function useSearchState() {
   return useContextSelector(StoreContext, (s) => ({
     search_index:   s!.search_index,
     setSearchIndex: s!.setSearchIndex,
-    search_term:    s!.search_term,
-    setSearchTerm:  s!.setSearchTerm,
     found:          s!.found,
     setFound:       s!.setFound
   }));
@@ -721,8 +714,6 @@ type StoreValue = {
 
   search_index: SearchIndex;
   setSearchIndex: (search_index: SearchIndex) => void;
-  search_term: string;
-  setSearchTerm: (search_term: string) => void;
   found: SearchResponse;
   setFound: (found: SearchResponse) => void;
 

@@ -5,7 +5,6 @@ import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
 import { useSearchState } from '../../../../store';
-import { setItem } from '../../../general/localStorage';
 import type { SearchRequest } from '../types';
 
 export const Pagination = memo(function Pagination() {
@@ -14,13 +13,12 @@ export const Pagination = memo(function Pagination() {
 
   const { search_index, found, setFound } = useSearchState();
 
+  const { total_pages } = found;
+  if (!total_pages || Number(total_pages) < 2) return null;
+
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const current_page = params.current_page ? params.current_page : "1";
-
-  const { total_pages } = found;
-
-  if (!total_pages || Number(total_pages) < 2) return null;
 
   const curr  = current_page ? Number(current_page) : 1;
   const first = 1;

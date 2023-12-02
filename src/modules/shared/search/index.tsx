@@ -1,27 +1,34 @@
 import axios from 'axios';
 import type { CancelTokenSource } from 'axios';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import { endpoint } from '../../../config/api';
 import { useDebouncedValue } from '../../general/useDebouncedValue';
 import { useSearch } from './hook';
-import type { SearchIndex, SuggestionView } from './types';
+import type { SearchRequest, SearchIndex, SuggestionView } from './types';
 
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
 
 export function Search() {
-  const { search_index, setSearchIndex, search_term, setSearchTerm, search } = useSearch();
-  const debounced_search_term = useDebouncedValue(search_term);
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const { search_index, setSearchIndex, /*search_term, setSearchTerm,*/ search } = useSearch();
+  const debounced_search_term = useDebouncedValue(params.term || '');  // move???
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
+  const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef = useRef<boolean>(false);
-
-  const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
   
   const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);
 
@@ -55,13 +62,29 @@ export function Search() {
       autosuggestionsRef.current.style.display = 'block';
     }
     getSuggestions(debounced_search_term, cancelToken);
+
+    const params = new URLSearchParams(searchParams);
+    if (debounced_search_term) params.set('term', debounced_search_term);
+    else params.delete('term');
+    router.replace(`${pathname}?${params.toString()}`);
+
     // clean up function needed here???
   }, [debounced_search_term]);
+
+  const inputChangeHandler = (term: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) params.set('term', term);
+    else params.delete('term');
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   const submitSearch = () => search(searchIndexChanged);
 
   const selectSuggestion = (suggestion: string) => {
-    setSearchTerm(suggestion);  // just search right away?
+    //setSearchTerm(suggestion);  // just search right away?
+    const params = new URLSearchParams(searchParams);
+    params.set('term', suggestion);
+    router.replace(`${pathname}?${params.toString()}`);
     setSuggestions([]);
   };
 
@@ -102,7 +125,6 @@ export function Search() {
           <option value='recipes'>Recipes</option>
           <option value='ingredients'>Ingredients</option>
           <option value='equipment'>Equipment</option>
-          {/*<option value='products'>Products</option>*/}
         </select>
       </div>
 
@@ -110,9 +132,10 @@ export function Search() {
         <input
           ref={inputRef}
           id='search-input'
-          onFocus={e => setSearchTerm(e.target.value)}
-          onChange={e => setSearchTerm(e.target.value)}
-          value={search_term}
+          /*onFocus={e => setSearchTerm(e.target.value)}*/
+          onChange={e => inputChangeHandler(e.target.value)}
+          value={params.term}
+          /*defaultValue={}*/
         />
 
         <div className='magnifying-glass' onClick={submitSearch}>

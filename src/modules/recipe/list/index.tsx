@@ -22,6 +22,9 @@ export default function RecipeList() {
   const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
   //const sorts = filters?.sorts;
 
+  // TO DO:
+  // search and setFound in HERE??? and setFilters simply does router.push???
+
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
