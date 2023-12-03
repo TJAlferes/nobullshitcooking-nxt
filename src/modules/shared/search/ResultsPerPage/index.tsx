@@ -1,21 +1,21 @@
-import axios from 'axios';
+//import axios from 'axios';
 import { memo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
-import { endpoint } from '../../../../config/api';
-import { useSearchState } from '../../../../store';
+//import { endpoint } from '../../../../config/api';
+//import { useSearchState } from '../../../../store';
 import type { SearchRequest } from '../types';
 
-export const ResultsPerPage = memo(function ResultsPerPage() {
+export const ResultsPerPage = memo(function ResultsPerPage({
+  search_index
+}: {
+  search_index: string;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { search_index, setFound } = useSearchState();
-
   const params = qs.parse(searchParams.toString()) as SearchRequest;
-
-  const value = params.results_per_page ? Number(params.results_per_page) : 20;
 
   const changeResultsPerPage = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     params.current_page     = "1";
@@ -24,15 +24,23 @@ export const ResultsPerPage = memo(function ResultsPerPage() {
     const search_params = qs.stringify(params);
     
     try {
-      const res
-        = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
-      if (res.status === 200) setFound(res.data);
+      // only do these in the list pages...
+      //const res
+      //  = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
+      //if (res.status === 200) setFound(res.data);
+
+      // these still do here?
       const page = search_index === 'equipment'
         ? search_index
         : search_index.slice(0, search_index.length - 1);
+
       router.push(`/${page}/list/?${search_params}`);
-    } catch (err) {}
+    } catch (err) {
+      //
+    }
   };
+
+  const value = params.results_per_page ? Number(params.results_per_page) : 20;
 
   return (
     <div className="results-per-page">

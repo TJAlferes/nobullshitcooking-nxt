@@ -7,7 +7,7 @@ import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 
 export default function EquipmentList() {
-  const { found, params, setFilters } = useSearch();
+  const { found, params, setFilters, search_index } = useSearch();
 
   const { equipment_types } = useData();
 
@@ -78,8 +78,8 @@ export default function EquipmentList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination key={1} />
-        <ResultsPerPage key={2} />
+        <Pagination key={1} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={2} search_index={search_index} />
         
         <div className="search-results-list">
           {results
@@ -87,7 +87,7 @@ export default function EquipmentList() {
               <Link
                 className="search-results-list-item"
                 href={`/equipment/detail/${e.equipment_name}`}
-                key={e.id}
+                key={e.equipment_id}
               >
                 <img src={`${url}/${e.image_filename}.jpg`} />
                 <h3>{e.equipment_name}</h3>
@@ -97,8 +97,8 @@ export default function EquipmentList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} />
-        <ResultsPerPage key={4} />
+        <Pagination key={3} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={4} search_index={search_index} />
       </div>
 
       <div className="two-col-right"></div>

@@ -62,12 +62,6 @@ export function Search() {
       autosuggestionsRef.current.style.display = 'block';
     }
     getSuggestions(debounced_search_term, cancelToken);
-
-    const params = new URLSearchParams(searchParams);
-    if (debounced_search_term) params.set('term', debounced_search_term);
-    else params.delete('term');
-    router.replace(`${pathname}?${params.toString()}`);
-
     // clean up function needed here???
   }, [debounced_search_term]);
 
@@ -129,13 +123,20 @@ export function Search() {
       </div>
 
       <div className='insert'>
+        {/*
+          Warning: A component is changing an uncontrolled input to be controlled.
+          This is likely caused by the value changing from undefined to a defined value,
+          which should not happen.
+          Decide between using a controlled or uncontrolled input element
+          for the lifetime of the component.
+        */}
         <input
           ref={inputRef}
           id='search-input'
           /*onFocus={e => setSearchTerm(e.target.value)}*/
           onChange={e => inputChangeHandler(e.target.value)}
-          value={params.term}
-          /*defaultValue={}*/
+          /*value={params.term}*/
+          defaultValue={params.term}
         />
 
         <div className='magnifying-glass' onClick={submitSearch}>

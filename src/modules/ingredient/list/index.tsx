@@ -18,7 +18,7 @@ export default function IngredientList() {
   const term = params.term || '';
   const current_page = Number(params.current_page) || 1;
 
-  const { found, /*params,*/ setFilters } = useSearch();
+  const { found, /*params,*/ setFilters, search_index } = useSearch();
   /*
     TO DO:
 
@@ -33,8 +33,6 @@ export default function IngredientList() {
 
     (Same for other search query params.)
   */
-
-
 
   const { ingredient_types } = useData();
 
@@ -105,8 +103,8 @@ export default function IngredientList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={1} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={2} search_index={search_index} />
 
         <div className="search-results-list">
           {results
@@ -114,7 +112,7 @@ export default function IngredientList() {
               <Link
                 className="search-results-list-item"
                 href={`/ingredient/detail/${i.fullname}`}
-                key={i.id}
+                key={i.ingredient_id}
               >
                 <img src={`${url}/${i.image_filename}.jpg`} />
                 <h3>{i.fullname}</h3>
@@ -124,19 +122,11 @@ export default function IngredientList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={3} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={4} search_index={search_index} />
       </div>
 
-      <div className="two-col-right">
-      </div>
+      <div className="two-col-right"></div>
     </div>
   );
-}
-
-function slugify(title: string) {
-  return title
-    .split(' ')
-    .map(word => word.charAt(0).toLowerCase() + word.slice(1))
-    .join('-');
 }

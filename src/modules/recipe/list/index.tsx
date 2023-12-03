@@ -1,29 +1,58 @@
+import axios from 'axios';
 import Link from 'next/link';
-import { Fragment, useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import qs from 'qs';
+import { Fragment, useEffect, useState, useRef } from 'react';
 
+import { endpoint } from '../../../config/api';
 import { CuisineView, useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage } from '../../shared/search';
+import type { SearchRequest, SearchResponse } from '../../shared/search/types';
 import { useSearch } from '../../shared/search/hook';
 
-// list of search results  TO DO: make a filter to toggle include/exclude Public User Recipes)
+// TO DO: make a filter to include/exclude Public User Recipes
 export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
-  const { found, params, setFilters } = useSearch();
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const { /*found, setFound,*/ params, setFilters, search_index } = useSearch();
   const { filters } = params;
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
-  const { results, total_results, total_pages } = found;
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(filters?.recipe_types ?? []);
   const [checkedMethods, setCheckedMethods] = useState<string[]>(filters?.methods ?? []);
   const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
   //const sorts = filters?.sorts;
+  const [found, setFound] = useState<SearchResponse>({
+    results: [],
+    total_results: 0,
+    total_pages: 0
+  });
 
-  // TO DO:
-  // search and setFound in HERE??? and setFilters simply does router.push???
+  useEffect(() => {
+    async function getResults() {
+      const params = qs.parse(searchParams.toString()) as SearchRequest;
+      const search_params = qs.stringify(params);
+      console.log('search_params: ', search_params);
+
+      try {
+        const res = await axios
+          .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+          
+        if (res.status === 200) setFound(res.data);
+      } catch (err) {
+        //
+      }
+    }
+
+    getResults();
+  }, [router]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
@@ -43,12 +72,14 @@ export default function RecipeList() {
     }
   };
 
+  const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
 
   return (
     <div className="two-col recipe-list">
       <div className="two-col-left search-results">
         <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+
         <h1>Recipes</h1>
 
         <p>{total_results} total results and {total_pages} total pages</p>
@@ -173,8 +204,8 @@ export default function RecipeList() {
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={1} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={2} search_index={search_index} />
 
         <div className="search-results-list">
           {results
@@ -182,7 +213,7 @@ export default function RecipeList() {
               <Link
                 className="search-results-list-item"
                 href={`/recipe/detail/${encodeURIComponent(r.title)}`}
-                key={r.id}
+                key={r.recipe_id}
               >
                 <img src={`${url}/${r.image_filename}.jpg`} />
                 <h3>{r.title}</h3>
@@ -194,8 +225,8 @@ export default function RecipeList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination />
-        <ResultsPerPage />
+        <Pagination key={3} search_index={search_index} total_pages={total_pages} />
+        <ResultsPerPage key={4} search_index={search_index} />
       </div>
 
       <div className="two-col-right"></div>
@@ -212,11 +243,3 @@ function groupCuisines(cuisines: CuisineView[]) {
     {continent: "Oceania",  cuisines: cuisines.filter(c => c.continent_code === "OC")}
   ];  // TO DO: improve this (Array.reduce?)
 }
-
-/*
-r.recipe_image !== "nobsc-recipe-default"
-  ? <img className="recipes-image" src={`${url}${r.recipe_image}-thumb`} />
-  : <div className="image-default-100-62"></div>
-*/
-
-//const url = "https://s3.amazonaws.com/nobsc-user-recipe/";

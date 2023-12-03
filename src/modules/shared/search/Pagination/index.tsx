@@ -1,22 +1,47 @@
-import axios from 'axios';
+//import axios from 'axios';
 import { memo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
-import { endpoint } from '../../../../config/api';
-import { useSearchState } from '../../../../store';
-import type { SearchRequest } from '../types';
+//import { endpoint } from '../../../../config/api';
+//import { useSearchState } from '../../../../store';
+import type { SearchIndex, SearchRequest } from '../types';
 
-export const Pagination = memo(function Pagination() {
+export const Pagination = memo(function Pagination({
+  search_index,
+  total_pages
+}: {
+  search_index: SearchIndex;
+  total_pages: number | string;
+}) {
+  if (!total_pages || Number(total_pages) < 2) return null;
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { search_index, found, setFound } = useSearchState();
-
-  const { total_pages } = found;
-  if (!total_pages || Number(total_pages) < 2) return null;
-
   const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const goToPage = async (pageNumber: number) => {
+    params.current_page = `${pageNumber}`;
+
+    const search_params = qs.stringify(params);
+    
+    try {
+      // only do these in the list pages...
+      //const res
+      //  = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
+      //if (res.status === 200) setFound(res.data);
+
+      // these still do here?
+      const nextjsPage = search_index === 'equipment'
+        ? search_index
+        : search_index.slice(0, search_index.length - 1);
+
+      router.push(`/${nextjsPage}/list/?${search_params}`);
+    } catch (err) {
+      //
+    }
+  };
 
   const current_page = params.current_page ? params.current_page : "1";
 
@@ -25,22 +50,6 @@ export const Pagination = memo(function Pagination() {
   const prev  = curr - 1;
   const next  = curr + 1;
   const last  = Number(total_pages);
-
-  const goToPage = async (pageNumber: number) => {
-    params.current_page = `${pageNumber}`;
-
-    const search_params = qs.stringify(params);
-    
-    try {
-      const res
-        = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
-      if (res.status === 200) setFound(res.data);
-      const nextjsPage = search_index === 'equipment'
-        ? search_index
-        : search_index.slice(0, search_index.length - 1);
-      router.push(`/${nextjsPage}/list/?${search_params}`);
-    } catch (err) {}
-  };
 
   return (
     <div className="pagination">
