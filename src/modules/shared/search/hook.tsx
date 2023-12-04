@@ -1,4 +1,5 @@
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 
 import { useSearchState } from '../../../store';
@@ -13,8 +14,6 @@ export function useSearch() {
   const { search_index, setSearchIndex, found, setFound } = useSearchState();
 
   const search = async (searchIndexChanged?: boolean) => {
-    //const params = qs.parse(searchParams.toString()) as SearchRequest;
-    console.log('HELLO');
     if (params.term === '') delete params.term;
     if (searchIndexChanged) {
       params.current_page = '1';
@@ -22,13 +21,16 @@ export function useSearch() {
     }
     if (!params.current_page) params.current_page = '1';
     if (!params.results_per_page) params.results_per_page = '20';
-
-    const search_params = qs.stringify(params);
+    
     const page = search_index === 'equipment'
       ? search_index
       : search_index.slice(0, search_index.length - 1);
 
-    router.push(`/${page}/list/?${search_params}`);
+    //router.push(`/${page}/list/?${qs.stringify(params)}`);
+    router.push({
+      pathname: `/${page}/list`,
+      query: qs.stringify(params),
+    });
   };
 
   const setFilters = (filterName: string, filterValues: string[]) => {
@@ -70,11 +72,12 @@ export function useSearch() {
   };
 
   return {
+    //router,  // do they need the same router instance?
     search_index,
     setSearchIndex,
     found,
     setFound,
-    params,
+    params,  // do they need the same params object?
     search,
     setFilters,
     //clearFilters,
@@ -83,6 +86,7 @@ export function useSearch() {
 }
 
 export type UseSearch = {
+  //router: AppRouterInstance;
   search_index: SearchIndex;
   setSearchIndex: (search_index: SearchIndex) => void;
   found: SearchResponse;

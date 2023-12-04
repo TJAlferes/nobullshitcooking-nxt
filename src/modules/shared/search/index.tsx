@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { CancelTokenSource } from 'axios';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
@@ -18,19 +19,18 @@ export function Search() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  //const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-  const { search_index, setSearchIndex, /*search_term, setSearchTerm,*/ search } = useSearch();
+  const { search_index, setSearchIndex, params, search } = useSearch();
   const debounced_search_term = useDebouncedValue(params.term || '');  // move???
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
+  const [term, setTerm] = useState(params.term || '');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const autosuggestionsRef = useRef<HTMLDivElement>(null);
   const mouseIsOverRef = useRef<boolean>(false);
-  
-  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const autosuggestionsRef = useRef<HTMLDivElement | null>(null);
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
@@ -53,7 +53,9 @@ export function Search() {
         {cancelToken: cancelToken.token}
       );
       if (res.status === 200) setSuggestions(res.data);
-    } catch (err) {}
+    } catch (err) {
+      //
+    }
   };
 
   useEffect(() => {
@@ -62,50 +64,52 @@ export function Search() {
       autosuggestionsRef.current.style.display = 'block';
     }
     getSuggestions(debounced_search_term, cancelToken);
-    // clean up function needed here???
   }, [debounced_search_term]);
 
-  const inputChangeHandler = (term: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) params.set('term', term);
-    else params.delete('term');
-    router.replace(`${pathname}?${params.toString()}`);
+  const inputChangeHandler = (value: string) => {
+    setTerm(value);
+    if (value) params.term = value;
+    else delete params.term;
+    router.replace(`${pathname}?${qs.stringify(params)}`);
   };
-
-  const submitSearch = () => search(searchIndexChanged);
 
   const selectSuggestion = (suggestion: string) => {
-    //setSearchTerm(suggestion);  // just search right away?
-    const params = new URLSearchParams(searchParams);
-    params.set('term', suggestion);
-    router.replace(`${pathname}?${params.toString()}`);
-    setSuggestions([]);
+    inputChangeHandler(suggestion);
+    search(searchIndexChanged);
   };
 
-  const initSearchInputBlurHandler = () => {
-    if (typeof window === 'undefined') return;
-    if (typeof document === 'undefined') return;
-
+  useEffect(() => {
     mouseIsOverRef.current = false;
-    if (!autosuggestionsRef.current) return;
-    if (!inputRef.current) return;
 
-    autosuggestionsRef.current.onmouseover = function() {
+    if (!autosuggestionsRef.current || !inputRef.current) return;
+
+    autosuggestionsRef.current.onmouseover = () => {
       mouseIsOverRef.current = true;
     };
 
-    autosuggestionsRef.current.onmouseout = function() {
+    autosuggestionsRef.current.onmouseout = () => {
       mouseIsOverRef.current = false;
     };
 
-    inputRef.current.onblur = function() {
+    inputRef.current.onblur = () => {
       if (mouseIsOverRef.current === false && autosuggestionsRef.current) {
         autosuggestionsRef.current.style.display = 'none';
       }
     };
-  };
-  
-  initSearchInputBlurHandler();  // put into a useEffect? and is a manual teardown needed?
+
+    return () => {
+      if (autosuggestionsRef.current) {
+        autosuggestionsRef.current.onmouseover = null;
+        autosuggestionsRef.current.onmouseout = null;
+      }
+
+      if (inputRef.current) {
+        inputRef.current.onblur = null;
+      }
+    };
+  }, []);
+
+  const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);
 
   return (
     <div className='search'>
@@ -123,23 +127,16 @@ export function Search() {
       </div>
 
       <div className='insert'>
-        {/*
-          Warning: A component is changing an uncontrolled input to be controlled.
-          This is likely caused by the value changing from undefined to a defined value,
-          which should not happen.
-          Decide between using a controlled or uncontrolled input element
-          for the lifetime of the component.
-        */}
         <input
           ref={inputRef}
           id='search-input'
-          /*onFocus={e => setSearchTerm(e.target.value)}*/
           onChange={e => inputChangeHandler(e.target.value)}
-          /*value={params.term}*/
-          defaultValue={params.term}
+          value={params.term || term}
+          spellCheck={false}
+          autoComplete='off'
         />
 
-        <div className='magnifying-glass' onClick={submitSearch}>
+        <div className='magnifying-glass' onClick={() => search(searchIndexChanged)}>
           <span></span>
         </div>
 

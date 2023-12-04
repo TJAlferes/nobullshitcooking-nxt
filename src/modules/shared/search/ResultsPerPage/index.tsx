@@ -1,12 +1,14 @@
 //import axios from 'axios';
 import { memo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 
 //import { endpoint } from '../../../../config/api';
 //import { useSearchState } from '../../../../store';
 import type { SearchRequest } from '../types';
 
+// TO DO: change button to Link, have goToPage return the ``
 export const ResultsPerPage = memo(function ResultsPerPage({
   search_index
 }: {
@@ -20,8 +22,6 @@ export const ResultsPerPage = memo(function ResultsPerPage({
   const changeResultsPerPage = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     params.current_page     = "1";
     params.results_per_page = `${e.target.value}`;
-
-    const search_params = qs.stringify(params);
     
     try {
       // only do these in the list pages...
@@ -34,7 +34,11 @@ export const ResultsPerPage = memo(function ResultsPerPage({
         ? search_index
         : search_index.slice(0, search_index.length - 1);
 
-      router.push(`/${page}/list/?${search_params}`);
+      //router.push(`/${page}/list/?${qs.stringify(params)}`);
+      router.push({
+        pathname: `/${page}/list`,
+        query: qs.stringify(params),
+      });
     } catch (err) {
       //
     }

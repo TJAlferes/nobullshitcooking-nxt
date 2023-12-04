@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
@@ -19,8 +20,10 @@ export default function RecipeList() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { /*found, setFound,*/ params, setFilters, search_index } = useSearch();
-  const { filters } = params;
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+
+  const { search_index, setFilters } = useSearch();
+  const { term, current_page, results_per_page, filters } = params;
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
 
@@ -35,24 +38,37 @@ export default function RecipeList() {
     total_pages: 0
   });
 
+  //const { term, current_page, results_per_page } = router.query;
+
   useEffect(() => {
-    async function getResults() {
-      const params = qs.parse(searchParams.toString()) as SearchRequest;
-      const search_params = qs.stringify(params);
-      console.log('search_params: ', search_params);
+    if (term && current_page && results_per_page) getResults();
+  }, []);
 
-      try {
-        const res = await axios
-          .get(`${endpoint}/search/find/${search_index}?${search_params}`);
-          
-        if (res.status === 200) setFound(res.data);
-      } catch (err) {
-        //
-      }
+  const getResults = async () => {
+    const search_params = qs.stringify(router.query);
+    console.log('search_params: ', search_params);
+
+    try {
+      const res = await axios
+        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+        
+      if (res.status === 200) setFound(res.data);
+    } catch (err) {
+      //
     }
+  };
 
-    getResults();
-  }, [router]);
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [term, current_page, results_per_page]);
+
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') getResults();
+  };
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
