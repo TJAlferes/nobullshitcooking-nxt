@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import qs from 'qs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -14,24 +13,22 @@ export default function IngredientList() {
 
   const params: SearchRequest = router.query;
 
-  const term = params.term || '';
-  const current_page = Number(params.current_page) || 1;
-
-  const { found, /*params,*/ setFilters, search_index } = useSearch();
-
+  const { search_index, setFilters, found, search } = useSearch();
+  const { filters } = params;
   const { ingredient_types } = useData();
-
-  const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedIngredientTypes, setCheckedIngredientTypes ] =
-    useState<string[]>(params.filters?.ingredient_types ?? []);
+    useState<string[]>(filters?.ingredient_types ?? []);
+
+  useEffect(() => {
+    search();
+  }, []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      const { filters } = params;
       if (name === "ingredient_types" && checkedIngredientTypes !== filters?.ingredient_types) {
         setFilters(name, checkedIngredientTypes);
       }
@@ -40,6 +37,7 @@ export default function IngredientList() {
     }
   };
 
+  const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/ingredient';
 
   return (

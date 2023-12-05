@@ -9,7 +9,7 @@ import type { ChangeEvent } from 'react';
 import { endpoint } from '../../../config/api';
 import { useDebouncedValue } from '../../general/useDebouncedValue';
 import { useSearch } from './hook';
-import type { SearchRequest, SearchIndex, SuggestionView } from './types';
+import type { SearchIndex, SuggestionView } from './types';
 
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';

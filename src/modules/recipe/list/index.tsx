@@ -23,12 +23,11 @@ export default function RecipeList() {
   const cuisineGroups = groupCuisines(cuisines);
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
-  const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>(filters?.recipe_types ?? []);
+  const [checkedRecipeTypes, setCheckedRecipeTypes]
+    = useState<string[]>(filters?.recipe_types ?? []);
   const [checkedMethods, setCheckedMethods] = useState<string[]>(filters?.methods ?? []);
   const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
   //const sorts = filters?.sorts;
-
-  //const { term, current_page, results_per_page } = router.query;
 
   useEffect(() => {
     search();

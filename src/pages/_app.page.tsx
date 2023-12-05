@@ -18,12 +18,15 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
     async function getInitialData() {
       try {
         const res = await axios.get(`${endpoint}/initial-data`);
+        
         if (res.status === 200) {
           for (const [ key, value ] of Object.entries(res.data)) {
             setItem(key, value);
           }
         }
-      } catch (err) {}
+      } catch (err) {
+        //
+      }
     }
 
     if (mounted) getInitialData();

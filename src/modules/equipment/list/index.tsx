@@ -1,27 +1,34 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
+import type { SearchRequest } from '../../shared/search/types';
 
 export default function EquipmentList() {
-  const { found, params, setFilters, search_index } = useSearch();
+  const router = useRouter();
 
+  const params: SearchRequest = router.query;
+
+  const { search_index, setFilters, found, search } = useSearch();
+  const { filters } = params;
   const { equipment_types } = useData();
-
-  const { results, total_results, total_pages } = found;
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =
-    useState<string[]>(params.filters?.equipment_types ?? []);
+    useState<string[]>(filters?.equipment_types ?? []);
+
+  useEffect(() => {
+    search();
+  }, []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      const { filters } = params;
       if (name === "equipment_types" && checkedEquipmentTypes !== filters?.equipment_types) {
         setFilters(name, checkedEquipmentTypes);
       }
@@ -30,6 +37,7 @@ export default function EquipmentList() {
     }
   };
 
+  const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
 
   return (

@@ -1,13 +1,12 @@
-//import axios from 'axios';
+import axios from 'axios';
 import { memo } from 'react';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 
-//import { endpoint } from '../../../../config/api';
-//import { useSearchState } from '../../../../store';
+import { endpoint } from '../../../../config/api';
+import { useSearchState } from '../../../../store';
 import type { SearchIndex, SearchRequest } from '../types';
 
-// TO DO: change button to Link, have goToPage return the ``
 export const Pagination = memo(function Pagination({
   search_index,
   total_pages
@@ -21,28 +20,30 @@ export const Pagination = memo(function Pagination({
 
   const params: SearchRequest = router.query;
 
+  const { setFound } = useSearchState();
+
   const goToPage = async (pageNumber: number) => {
     params.current_page = `${pageNumber}`;
-    
+
+    const search_params = qs.stringify(params);
+  
     try {
-      // only do these in the list pages...
-      //const res
-      //  = await axios.get(`${endpoint}/search/find/${search_index}?${search_params}`);
-      //if (res.status === 200) setFound(res.data);
-
-      // these still do here?
-      const nextjsPage = search_index === 'equipment'
-        ? search_index
-        : search_index.slice(0, search_index.length - 1);
-
-      //router.push(`/${nextjsPage}/list/?${qs.stringify(params)}`);
-      router.push({
-        pathname: `/${nextjsPage}/list`,
-        query: qs.stringify(params),
-      });
+      const res = await axios
+        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+        
+      if (res.status === 200) setFound(res.data);
     } catch (err) {
       //
     }
+
+    const nextjsPage = search_index === 'equipment'
+      ? search_index
+      : search_index.slice(0, search_index.length - 1);
+
+    router.push({
+      pathname: `/${nextjsPage}/list`,
+      query: search_params
+    });
   };
 
   const current_page = params.current_page ? params.current_page : "1";
