@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useState } from 'react';
 
@@ -10,29 +10,14 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function IngredientList() {
-  const searchParams = useSearchParams();
-  const sParams = new URLSearchParams(searchParams);
+  const router = useRouter();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const params: SearchRequest = router.query;
 
   const term = params.term || '';
   const current_page = Number(params.current_page) || 1;
 
   const { found, /*params,*/ setFilters, search_index } = useSearch();
-  /*
-    TO DO:
-
-    If they are at:
-      /ingredient/list?current_page=1&results_per_page=20
-
-    and they change that to:
-      /ingredient/list?current_page=2&results_per_page=20
-    and press Enter
-      
-    then run the search for page 2.
-
-    (Same for other search query params.)
-  */
 
   const { ingredient_types } = useData();
 

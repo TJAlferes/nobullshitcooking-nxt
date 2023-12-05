@@ -1,19 +1,21 @@
-import { useSearchParams } from 'next/navigation';
+import axios from 'axios';
 import { useRouter } from 'next/router';
+//import type { NextRouter } from 'next/router';
 import qs from 'qs';
 
+import { endpoint } from '../../../config/api';
 import { useSearchState } from '../../../store';
 import type { SearchIndex, SearchRequest, SearchResponse } from './types';
 
 export function useSearch() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const params: SearchRequest = router.query;
 
   const { search_index, setSearchIndex, found, setFound } = useSearchState();
 
   const search = async (searchIndexChanged?: boolean) => {
+    const params: SearchRequest = router.query;  //
     if (params.term === '') delete params.term;
     if (searchIndexChanged) {
       params.current_page = '1';
@@ -25,11 +27,23 @@ export function useSearch() {
     const page = search_index === 'equipment'
       ? search_index
       : search_index.slice(0, search_index.length - 1);
+    
+    const search_params = qs.stringify(params);
+    console.log('search_params: ', search_params);
+  
+    try {
+      const res = await axios
+        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+        
+      if (res.status === 200) setFound(res.data);
+    } catch (err) {
+      //
+    }
 
-    //router.push(`/${page}/list/?${qs.stringify(params)}`);
+    //router.push(`/${page}/list/?${search_params}`);
     router.push({
       pathname: `/${page}/list`,
-      query: qs.stringify(params),
+      query: search_params,
     });
   };
 
@@ -66,7 +80,7 @@ export function useSearch() {
   ) => {
     //const params = qs.parse(searchParams.toString()) as SearchRequest;  // remove???
     delete params.term;
-    params.index = searchIndex;  // TO DO: figure this out
+    //params.index = searchIndex;  // TO DO: figure this out
     delete params.filters;
     setFilters(filterName, filterValues);
   };
@@ -86,7 +100,7 @@ export function useSearch() {
 }
 
 export type UseSearch = {
-  //router: AppRouterInstance;
+  //router: NextRouter;
   search_index: SearchIndex;
   setSearchIndex: (search_index: SearchIndex) => void;
   found: SearchResponse;

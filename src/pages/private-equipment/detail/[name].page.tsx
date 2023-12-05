@@ -9,11 +9,11 @@ export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.get(
+  const res = await axios.get(
     `${endpoint}/users/${params.username}/private-equipment/${params.equipment_id}`,
     {withCredentials: true}
   );
-  if (response.status === 401) {
+  if (res.status === 401) {
     return {
       props: {},
       redirect: {
@@ -24,7 +24,7 @@ export async function getServerSideProps({ params }: ServerSideProps) {
   }
   return {
     props: {
-      equipment: response.data
+      equipment: res.data
     }
   };
 }

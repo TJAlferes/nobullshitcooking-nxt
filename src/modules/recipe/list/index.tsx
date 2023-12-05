@@ -1,15 +1,11 @@
-import axios from 'axios';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import qs from 'qs';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
-import { endpoint } from '../../../config/api';
 import { CuisineView, useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { Pagination, ResultsPerPage } from '../../shared/search';
-import type { SearchRequest, SearchResponse } from '../../shared/search/types';
+import type { SearchRequest } from '../../shared/search/types';
 import { useSearch } from '../../shared/search/hook';
 
 // TO DO: make a filter to include/exclude Public User Recipes
@@ -18,12 +14,11 @@ export default function RecipeList() {
   renders.current++;
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const params: SearchRequest = router.query;
 
-  const { search_index, setFilters } = useSearch();
-  const { term, current_page, results_per_page, filters } = params;
+  const { search_index, setFilters, found, search } = useSearch();
+  const { filters } = params;
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
 
@@ -32,43 +27,12 @@ export default function RecipeList() {
   const [checkedMethods, setCheckedMethods] = useState<string[]>(filters?.methods ?? []);
   const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
   //const sorts = filters?.sorts;
-  const [found, setFound] = useState<SearchResponse>({
-    results: [],
-    total_results: 0,
-    total_pages: 0
-  });
 
   //const { term, current_page, results_per_page } = router.query;
 
   useEffect(() => {
-    if (term && current_page && results_per_page) getResults();
+    search();
   }, []);
-
-  const getResults = async () => {
-    const search_params = qs.stringify(router.query);
-    console.log('search_params: ', search_params);
-
-    try {
-      const res = await axios
-        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
-        
-      if (res.status === 200) setFound(res.data);
-    } catch (err) {
-      //
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [term, current_page, results_per_page]);
-
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') getResults();
-  };
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {

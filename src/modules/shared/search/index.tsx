@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { CancelTokenSource } from 'axios';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useEffect, useRef, useState } from 'react';
@@ -17,9 +17,8 @@ export { ResultsPerPage } from './ResultsPerPage';
 export function Search() {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  //const params = qs.parse(searchParams.toString()) as SearchRequest;
+  //const params: SearchRequest = router.query;
 
   const { search_index, setSearchIndex, params, search } = useSearch();
   const debounced_search_term = useDebouncedValue(params.term || '');  // move???
@@ -109,6 +108,10 @@ export function Search() {
     };
   }, []);
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') search();
+  };
+
   const capitalized = search_index.charAt(0).toUpperCase() + search_index.slice(1);
 
   return (
@@ -131,6 +134,7 @@ export function Search() {
           ref={inputRef}
           id='search-input'
           onChange={e => inputChangeHandler(e.target.value)}
+          onKeyUp={e => handleKeyUp(e)}
           value={params.term || term}
           spellCheck={false}
           autoComplete='off'

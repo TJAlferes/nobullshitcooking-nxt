@@ -1,6 +1,5 @@
 //import axios from 'axios';
 import { memo } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 
@@ -15,9 +14,8 @@ export const ResultsPerPage = memo(function ResultsPerPage({
   search_index: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const params: SearchRequest = router.query;
 
   const changeResultsPerPage = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     params.current_page     = "1";

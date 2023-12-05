@@ -1,6 +1,5 @@
 //import axios from 'axios';
 import { memo } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 
@@ -19,9 +18,8 @@ export const Pagination = memo(function Pagination({
   if (!total_pages || Number(total_pages) < 2) return null;
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const params: SearchRequest = router.query;
 
   const goToPage = async (pageNumber: number) => {
     params.current_page = `${pageNumber}`;

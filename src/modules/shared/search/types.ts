@@ -7,7 +7,7 @@ export type SearchIndex =
   //| "posts";
 
 export type SearchRequest = {
-  index: SearchIndex;
+  //index: SearchIndex;
   term?: string;
   filters?:          {
     [index: string]:   string[];
