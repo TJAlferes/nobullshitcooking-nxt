@@ -1,51 +1,51 @@
-.register {
+.auth {
   display: block;
-  font-size: 13px;  /* move */
+  font-size: 13px;  /* TO DO: move??? */
   max-width: 100%;
   min-width: 300px;
 }
 
-.register .home-links {
+.auth .home-links {
   display: block;
   margin: 0 auto;
   max-width: content;
 }
 
-.register .home-links .--desktop {
+.auth .home-links .--desktop {
   display: block;
   margin: 0 auto;
 }
 
-.register .home-links .--mobile {
+.auth .home-links .--mobile {
   display: none;
   margin: 0 auto;
 }
 
-.register form {
-  display: block;
-  border: 1px solid #444;
+.auth form {
+  border: 1px solid #ddd;
   border-radius: 4px;
-  margin: 20px auto;
+  display: block;
+  margin: 20px auto 20px auto;
   padding: 14px 18px;
   width: 320px;
 }
 
-.register h1 {
+.auth h1 {
   display: block;
   font-size: 28px;
   font-weight: 400;
   line-height: 1.2;
   margin-bottom: 14px;
 }
-
-.register label {
+  
+.auth label {
   display: block;
   margin: 14px auto 4px auto;
   font-size: 13px;
   font-weight: 700;
 }
 
-.register input {
+.auth input {
   border: 1px solid #aaa;
   border-radius: 2px;
   display: block;
@@ -55,8 +55,7 @@
   width: 100%;
 }
 
-.create-account,
-.verify-confirmation-code {
+.auth button {
   background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
   border: 1px solid;
   border-color: #999 #777 #555 #777;
@@ -64,21 +63,20 @@
   color: black;
   cursor: pointer;
   cursor: hand;
+  /*font-family: 'Play', sans-serif;*/
   font-size: 14px;
   height: 31px;
   margin: 18px auto 24px auto;
   padding-top: 1px;
   width: 100%;
 }
-
-.create-account:hover,
-.create-account:active,
-.verify-confirmation-code:hover,
-.verify-confirmation-code:active {
+  
+.auth button:hover,
+.auth button:active {
   background-image: linear-gradient(to bottom, #8cbeec, #4493d8);
 }
 
-.register .links {
+.auth .links {
   display: table;
   list-style-type: none;
   margin: 18px auto 0 auto;
@@ -86,7 +84,7 @@
   text-align: center;
 }
 
-.register .links a {
+.auth .links a {
   display: inline-block;
   font-family: Arial, sans-serif;
   font-size: 12px;
@@ -94,18 +92,18 @@
   text-decoration: none;
 }
 
-.register .links a:link,
-.register .links a:visited {
+.auth .links a:link,
+.auth .links a:visited {
   color: #68abe6;
 }
 
-.register .links a:hover,
-.register .links a:active {
+.auth .links a:hover,
+.auth .links a:active {
   color: #c10006;
   text-decoration: underline;
 }
 
-.register .copyright {
+.auth .copyright {
   font-family: Arial, sans-serif;
   font-size: 11px;
   margin: 12px 0 18px 0;
@@ -113,17 +111,17 @@
 }
 
 @media (max-width: 899px) {
-  .register .home-links .--desktop {
+  .auth .home-links .--desktop {
     display: none;
     margin: 0 auto;
   }
 
-  .register .home-links .--mobile {
+  .auth .home-links .--mobile {
     display: block;
     margin: 0 auto;
   }
 
-  .register form {
+  .auth form {
     width: 280px;
   }
 }

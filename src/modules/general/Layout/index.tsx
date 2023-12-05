@@ -12,8 +12,11 @@ export function Layout({ children }: Props) {
   const { theme } = useTheme();
 
   const authPage = pathname.match(/\/login/)
+    || pathname.match(/\/forgot-password/)
+    || pathname.match(/\/reset-password/)
     || pathname.match(/\/register/)
-    || pathname.match(/\/verify/);
+    || pathname.match(/\/resend-confirmation-code/)
+    || pathname.match(/\/confirm/);
   // This layout does not apply to auth pages.
   if (authPage) return <>{children}</>;
   

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -60,12 +60,14 @@ export default function Register() {
   const registerKeyUp = async (key: string) => {
     if (!loading && key === "Enter") await register();
   };
+
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="register" onKeyUp={e => registerKeyUp(e.key)}>
+    <div className="auth register" onKeyUp={e => registerKeyUp(e.key)}>
       <Link href="/" className="home-links">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile" src={`${url}logo-small-white.png`} />
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
@@ -131,7 +133,6 @@ export default function Register() {
         />
         
         <button
-          className="create-account"
           disabled={email.length < 5
             || email.length > 60
             || password.length < 6
@@ -154,5 +155,3 @@ export default function Register() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -49,12 +49,14 @@ export default function ResendConfirmationCode() {
   const requestResendKeyUp = async (key: string) => {
     if (!loading && key === "Enter") await requestResend();
   };
+
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="register" onKeyUp={e => requestResendKeyUp(e.key)}>
+    <div className="auth resend-confirmation-code" onKeyUp={e => requestResendKeyUp(e.key)}>
       <Link href="/" className="home-links">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile" src={`${url}logo-small-white.png`} />
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
@@ -94,7 +96,6 @@ export default function ResendConfirmationCode() {
         />
 
         <button
-          className="request-resend-confirmation-code"
           disabled={email.length < 5
             || email.length > 60
             || password.length < 6
@@ -116,5 +117,3 @@ export default function ResendConfirmationCode() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

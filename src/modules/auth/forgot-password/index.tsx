@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -8,10 +8,10 @@ import { endpoint } from '../../../config/api';
 export default function ForgotPassword() {
   const router = useRouter();
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const requestTemporaryPassword = async () => {
     if (!email) {
@@ -44,15 +44,17 @@ export default function ForgotPassword() {
     if (!loading && key === "Enter") await requestTemporaryPassword();
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
+
   return (
-    <div className="login" onKeyUp={e => handleKeyUp(e.key)}>
-      <Link href="/">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile"  src={`${url}logo-small-white.png`} />
+    <div className="auth forgot-password" onKeyUp={e => handleKeyUp(e.key)}>
+      <Link href="/" className="home-links">
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
-        <h1>Forgotten Password</h1>
+        <h1>Forgot Password</h1>
 
         <p className="feedback">{feedback}</p>
 
@@ -73,7 +75,6 @@ export default function ForgotPassword() {
         />
 
         <button
-          className="request-temporary-password__button"
           disabled={email.length < 5 || email.length > 60}
           onClick={handleClick}
         >{loading ? 'Requesting...' : 'Request Temporary Password'}</button>
@@ -81,5 +82,3 @@ export default function ForgotPassword() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

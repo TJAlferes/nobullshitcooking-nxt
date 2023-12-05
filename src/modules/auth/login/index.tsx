@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -45,11 +45,13 @@ export default function Login() {
     if (!loading && key === "Enter") await loginHandler();
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
+
   return (
-    <div className="login" onKeyUp={e => loginKeyUp(e.key)}>
-      <Link href="/">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile"  src={`${url}logo-small-white.png`} />
+    <div className="auth login" onKeyUp={e => loginKeyUp(e.key)}>
+      <Link href="/" className="home-links">
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
@@ -85,7 +87,6 @@ export default function Login() {
         />
 
         <button
-          className='login__button'
           disabled={loading
             || email.length < 5
             || email.length > 60
@@ -100,5 +101,3 @@ export default function Login() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

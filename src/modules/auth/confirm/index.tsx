@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -42,18 +42,22 @@ export default function Confirm() {
   const confirmKeyUp = async (key: string) => {
     if (!loading && key === "Enter") await confirm();
   };
+
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="register" onKeyUp={e => confirmKeyUp(e.key)}>
+    <div className="auth confirm" onKeyUp={e => confirmKeyUp(e.key)}>
       <Link href="/" className="home-links">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile" src={`${url}logo-small-white.png`} />
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
         <h1>Confirm</h1>
 
         <p className="feedback">{feedback}</p>
+
+        <p>Please check your email for the confirmation code.</p>
 
         <label>Code</label>
         <input
@@ -70,17 +74,14 @@ export default function Confirm() {
           value={confirmation_code}
         />
 
-        <p>Please check your email for the confirmation code.</p>
-
         <button
-          className="verify-confirmation-code"
           disabled={confirmation_code.length !== 36}
           onClick={confirmClick}
         >{loading ? 'Confirming...' : 'Confirm'}</button>
-      </form>
 
-      <p>Can't find your confirmation code? We can email you a new one:</p>
-      <Link href='/resend-confirmation-code'>Resend Confirmation Code</Link>
+        <p>Can't find your confirmation code? We can email you a new one:</p>
+        <Link href='/resend-confirmation-code'>Resend Confirmation Code</Link>
+      </form>
 
       <div className="links">
         <Link href="/terms">Terms of Use</Link>
@@ -94,5 +95,3 @@ export default function Confirm() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -55,11 +55,13 @@ export default function ResetPassword() {
     if (!loading && key === "Enter") await resetPasswordHandler();
   };
 
+  const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
+
   return (
-    <div className="login" onKeyUp={e => resetPasswordKeyUp(e.key)}>
-      <Link href="/">
-        <img className="--desktop" src={`${url}logo-large-white.png`} />
-        <img className="--mobile"  src={`${url}logo-small-white.png`} />
+    <div className="auth reset-password" onKeyUp={e => resetPasswordKeyUp(e.key)}>
+      <Link href="/" className="home-links">
+        <img className="--desktop" src={`${url}/logo-large-white.png`} />
+        <img className="--mobile" src={`${url}/logo-small-white.png`} />
       </Link>
 
       <form>
@@ -108,7 +110,6 @@ export default function ResetPassword() {
         />
 
         <button
-          className="login__button"
           disabled={email.length < 5
             || email.length > 60
             || temporary_password.length < 6
@@ -122,5 +123,3 @@ export default function ResetPassword() {
     </div>
   );
 }
-
-const url = "https://s3.amazonaws.com/nobsc-images-01/auth/";
