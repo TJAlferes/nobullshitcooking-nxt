@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+import qs from 'qs';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
 import { CuisineView, useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 import { useSearch } from '../../shared/search/hook';
@@ -13,12 +15,11 @@ export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
 
-  const router = useRouter();
-
-  const params: SearchRequest = router.query;
-
-  const { search_index, setFilters, found, search } = useSearch();
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
+
+  const { search_index, setSearchIndex, setFilters, found, search } = useSearch();
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
 
@@ -29,8 +30,11 @@ export default function RecipeList() {
   const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
   //const sorts = filters?.sorts;
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setSearchIndex('recipes');
     search();
+    setLoading(false);
   }, []);
 
   const toggleFilterDropdown = (name: string) => {
@@ -53,6 +57,8 @@ export default function RecipeList() {
 
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
+
+  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col recipe-list">

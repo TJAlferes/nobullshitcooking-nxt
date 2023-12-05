@@ -1,28 +1,32 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+import qs from 'qs';
 import { useEffect, useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function EquipmentList() {
-  const router = useRouter();
-
-  const params: SearchRequest = router.query;
-
-  const { search_index, setFilters, found, search } = useSearch();
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
+
+  const { search_index, setSearchIndex, setFilters, found, search } = useSearch();
   const { equipment_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] =
     useState<string[]>(filters?.equipment_types ?? []);
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setSearchIndex('equipment');
     search();
+    setLoading(false);
   }, []);
 
   const toggleFilterDropdown = (name: string) => {
@@ -39,6 +43,8 @@ export default function EquipmentList() {
 
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
+  
+  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col equipment-list">

@@ -40,63 +40,63 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem('my_saved_recipes') ?? []);
   const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem('my_chatgroups') ?? []);
 
-  const [auth_id, setAuthId] = useState<string>(getItem('auth_id') || '');
-  const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') || '');
-  const [authname, setAuthname] = useState<string>(getItem('authname') || '');
-  const [auth_avatar, setAuthAvatar] = useState<string>(getItem('auth_avatar') || '');
+  const [auth_id, setAuthId] = useState<string>(getItem('auth_id') ?? '');
+  const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') ?? '');
+  const [authname, setAuthname] = useState<string>(getItem('authname') ?? '');
+  const [auth_avatar, setAuthAvatar] = useState<string>(getItem('auth_avatar') ?? '');
 
   const [connected, setConnected] = useState(false);
 
-  const [current_private_conversation, setCurrentPrivateConversation] = useState(getItem('current_private_conversation') || '');  //other auth_id;
+  const [current_private_conversation, setCurrentPrivateConversation] = useState(getItem('current_private_conversation') ?? '');  //other auth_id;
   const [private_conversations, setPrivateConversations] = useState<PrivateConversationView[]>(getItem('private_conversations') ?? []);
   const [private_chatmessages, setPrivateChatmessages] = useState<PrivateChatmessageView[]>(getItem('private_chatmessages') ?? []);
 
-  const [current_chatgroup, setCurrentChatgroup] = useState(getItem('current_chatgroup') || '');
+  const [current_chatgroup, setCurrentChatgroup] = useState(getItem('current_chatgroup') ?? '');
   const [chatgroups, setChatgroups] = useState<ChatgroupView[]>(getItem('chatgroups') ?? []);
   const [chatgroup_users, setChatgroupUsers] = useState<ChatgroupUserView[]>(getItem('chatgroup_users') ?? []);
 
-  const [current_chatroom, setCurrentChatroom] = useState(getItem('current_chatroom') || '');
+  const [current_chatroom, setCurrentChatroom] = useState(getItem('current_chatroom') ?? '');
   const [chatrooms, setChatrooms] = useState<ChatroomView[]>(getItem('chatrooms') ?? []);
   const [chatroom_users, setChatroomUsers] = useState<ChatroomUserView[]>(getItem('chatroom_users') ?? []);
   const [chatmessages, setChatmessages] = useState<ChatMessageView[]>(getItem('chatmessages') ?? []);
 
   const storeValue = {
-    cuisines,
+    cuisines: getItem('cuisines') ?? cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
-      setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState on line 9.
+      setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState.
       setItem('cuisines', cuisines);
     }, []),
-    equipment,
+    equipment: getItem('equipment') ?? equipment,
     setEquipment: useCallback((equipment: EquipmentView[]) => {
       setEquipment(equipment);
       setItem('equipment', equipment);
     }, []),
-    equipment_types,
+    equipment_types: getItem('equipment_types') ?? equipment_types,
     setEquipmentTypes: useCallback((equipment_types: EquipmentTypeView[]) => {
       setEquipmentTypes(equipment_types);
       setItem('equipment_types', equipment_types);
     }, []),
-    ingredients,
+    ingredients: getItem('ingredients') ?? ingredients,
     setIngredients: useCallback((ingredients: IngredientView[]) => {
       setIngredients(ingredients);
       setItem('ingredients', ingredients);
     }, []),
-    ingredient_types,
+    ingredient_types: getItem('ingredient_types') ?? ingredient_types,
     setIngredientTypes: useCallback((ingredient_types: IngredientTypeView[]) => {
       setIngredientTypes(ingredient_types);
       setItem('ingredient_types', ingredient_types);
     }, []),
-    units,
+    units: getItem('units') ?? units,
     setUnits: useCallback((units: UnitView[]) => {
       setUnits(units);
       setItem('units', units);
     }, []),
-    methods,
+    methods: getItem('methods') ?? methods,
     setMethods: useCallback((methods: MethodView[]) => {
       setMethods(methods);
       setItem('methods', methods);
     }, []),
-    recipe_types,
+    recipe_types: getItem('recipe_types') ?? recipe_types,
     setRecipeTypes: useCallback((recipe_types: RecipeTypeView[]) => {
       setRecipeTypes(recipe_types);
       setItem('recipe_types', recipe_types);
@@ -116,72 +116,72 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setFound(found);
     }, []),
 
-    my_friendships,
+    my_friendships: getItem('my_friendships') ?? my_friendships,
     setMyFriendships: useCallback((my_friendships: FriendshipView[]) => {
       setMyFriendships(my_friendships);
       setItem('my_friendships', my_friendships);
     }, []),
-    my_public_plans,
+    my_public_plans: getItem('my_public_plans') ?? my_public_plans,
     setMyPublicPlans: useCallback((my_public_plans: PlanView[]) => {
       setMyPublicPlans(my_public_plans);
       setItem('my_public_plans', my_public_plans);
     }, []),
-    my_public_recipes,
+    my_public_recipes: getItem('my_public_recipes') ?? my_public_recipes,
     setMyPublicRecipes: useCallback((my_public_recipes: RecipeOverview[]) => {
       setMyPublicRecipes(my_public_recipes);
       setItem('my_public_recipes', my_public_recipes);
     }, []),
-    my_favorite_recipes,
+    my_favorite_recipes: getItem('my_favorite_recipes') ?? my_favorite_recipes,
     setMyFavoriteRecipes: useCallback((my_favorite_recipes: RecipeOverview[]) => {
       setMyFavoriteRecipes(my_favorite_recipes);
       setItem('my_favorite_recipes', my_favorite_recipes);
     }, []),
-    my_private_equipment,
+    my_private_equipment: getItem('my_private_equipment') ?? my_private_equipment,
     setMyPrivateEquipment: useCallback((my_private_equipment: EquipmentView[]) => {
       setMyPrivateEquipment(my_private_equipment);
       setItem('my_private_equipment', my_private_equipment);
     }, []),
-    my_private_ingredients,
+    my_private_ingredients: getItem('my_private_ingredients') ?? my_private_ingredients,
     setMyPrivateIngredients: useCallback((my_private_ingredients: IngredientView[]) => {
       setMyPrivateIngredients(my_private_ingredients);
       setItem('my_private_ingredients', my_private_ingredients);
     }, []),
-    my_private_plans,
+    my_private_plans: getItem('my_private_plans') ?? my_private_plans,
     setMyPrivatePlans: useCallback((my_private_plans: PlanView[]) => {
       setMyPrivatePlans(my_private_plans);
       setItem('my_private_plans', my_private_plans);
     }, []),
-    my_private_recipes,
+    my_private_recipes: getItem('my_private_recipes') ?? my_private_recipes,
     setMyPrivateRecipes: useCallback((my_private_recipes: RecipeOverview[]) => {
       setMyPrivateRecipes(my_private_recipes);
       setItem('my_private_recipes', my_private_recipes);
     }, []),
-    my_saved_recipes,
+    my_saved_recipes: getItem('my_saved_recipes') ?? my_saved_recipes,
     setMySavedRecipes: useCallback((my_saved_recipes: RecipeOverview[]) => {
       setMySavedRecipes(my_saved_recipes);
       setItem('my_saved_recipes', my_saved_recipes);
     }, []),
-    my_chatgroups,
+    my_chatgroups: getItem('my_chatgroups') ?? my_chatgroups,
     setMyChatgroups: useCallback((my_chatgroups: ChatgroupView[]) => {
       setMyChatgroups(my_chatgroups);
       setItem('my_chatgroups', my_chatgroups);
     }, []),
 
-    auth_id,
+    auth_id: getItem('auth_id') ?? auth_id,
     // They cannot change their auth_id (user_id). It is set once when they login.
     // They can, however, change their email, username (authname), password, and avatar from their dashboard user account settings.
     // (Their password, of course, is never sent from the server, so no need to store it here.)
-    auth_email,
+    auth_email: getItem('auth_email') ?? auth_email,
     setAuthEmail: useCallback((auth_email: string) => {
       setAuthEmail(auth_email);
       setItem('auth_email', auth_email);
     }, []),
-    authname,
+    authname: getItem('authname') ?? authname,
     setAuthname: useCallback((authname: string) => {
       setAuthname(authname);
       setItem('authname', authname);
     }, []),
-    auth_avatar,
+    auth_avatar: getItem('auth_avatar') ?? auth_avatar,
     setAuthAvatar: useCallback((auth_avatar: string) => {
       setAuthAvatar(auth_avatar);
       setItem('auth_avatar', auth_avatar);
@@ -193,54 +193,54 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setItem('connected', connected);
     }, []),
 
-    current_private_conversation,
+    current_private_conversation: getItem('current_private_conversation') ?? current_private_conversation,
     setCurrentPrivateConversation: useCallback((current_private_conversation: string) => {
       setCurrentPrivateConversation(current_private_conversation);
       setItem('current_private_conversation', current_private_conversation);
     }, []),
-    private_conversations,
+    private_conversations: getItem('private_conversations') ?? private_conversations,
     setPrivateConversations: useCallback((private_conversations: PrivateConversationView[]) => {
       setPrivateConversations(private_conversations);
       setItem('private_conversations', private_conversations);
     }, []),
-    private_chatmessages,
+    private_chatmessages: getItem('private_chatmessages') ?? private_chatmessages,
     setPrivateChatmessages: useCallback((private_chatmessages: PrivateChatmessageView[]) => {
       setPrivateChatmessages(private_chatmessages);
       setItem('private_chatmessages', private_chatmessages);
     }, []),
 
-    current_chatgroup,
+    current_chatgroup: getItem('current_chatgroup') ?? current_chatgroup,
     setCurrentChatgroup: useCallback((current_chatgroup: string) => {
       setCurrentChatgroup(current_chatgroup);
       setItem('current_chatgroup', current_chatgroup);
     }, []),
-    chatgroups,
+    chatgroups: getItem('chatgroups') ?? chatgroups,
     setChatgroups: useCallback((chatgroups: ChatgroupView[]) => {
       setChatgroups(chatgroups);
       setItem('chatgroups', chatgroups);
     }, []),
-    chatgroup_users,
+    chatgroup_users: getItem('chatgroup_users') ?? chatgroup_users,
     setChatgroupUsers: useCallback((chatgroup_users: ChatgroupUserView[]) => {
       setChatgroupUsers(chatgroup_users);
       setItem('chatgroup_users', chatgroup_users);
     }, []),
 
-    current_chatroom,
+    current_chatroom: getItem('current_chatroom') ?? current_chatroom,
     setCurrentChatroom: useCallback((current_chatroom: string) => {
       setCurrentChatroom(current_chatroom);
       setItem('current_chatroom', current_chatroom);
     }, []),
-    chatrooms,
+    chatrooms: getItem('chatrooms') ?? chatrooms,
     setChatrooms: useCallback((chatrooms: ChatroomView[]) => {
       setChatrooms(chatrooms);
       setItem('chatrooms', chatrooms);
     }, []),
-    chatroom_users,
+    chatroom_users: getItem('chatroom_users') ?? chatroom_users,
     setChatroomUsers: useCallback((chatroom_users: ChatroomUserView[]) => {
       setChatroomUsers(chatroom_users);
       setItem('chatroom_users', chatroom_users);
     }, []),
-    chatmessages,
+    chatmessages: getItem('chatmessages') ?? chatmessages,
     setChatmessages: useCallback((chatmessages: ChatMessageView[]) => {
       setChatmessages(chatmessages);
       setItem('chatmessages', chatmessages);

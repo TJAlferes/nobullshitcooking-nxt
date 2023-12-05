@@ -1,34 +1,39 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
+import qs from 'qs';
 import { useEffect, useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
+import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { useSearch } from '../../shared/search/hook';
 import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function IngredientList() {
-  const router = useRouter();
-
-  const params: SearchRequest = router.query;
-
-  const { search_index, setFilters, found, search } = useSearch();
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
+
+  const { search_index, setSearchIndex, setFilters, found, search } = useSearch();
   const { ingredient_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedIngredientTypes, setCheckedIngredientTypes ] =
     useState<string[]>(filters?.ingredient_types ?? []);
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setSearchIndex('ingredients');
     search();
+    setLoading(false);
   }, []);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
+      // TO DO: fix
       if (name === "ingredient_types" && checkedIngredientTypes !== filters?.ingredient_types) {
         setFilters(name, checkedIngredientTypes);
       }
@@ -39,6 +44,8 @@ export default function IngredientList() {
 
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/ingredient';
+
+  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col ingredient-list">

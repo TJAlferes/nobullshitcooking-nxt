@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
 import { endpoint } from '../../../config/api';
@@ -8,13 +9,12 @@ import type { SearchIndex, SearchRequest, SearchResponse } from './types';
 
 export function useSearch() {
   const router = useRouter();
-
-  const params: SearchRequest = router.query;
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
 
   const { search_index, setSearchIndex, found, setFound } = useSearchState();
 
   const search = async (searchIndexChanged?: boolean) => {
-    //const params: SearchRequest = router.query;  //
     if (params.term === '') delete params.term;
     if (searchIndexChanged) {
       params.current_page = '1';
@@ -43,10 +43,9 @@ export function useSearch() {
       query: search_params
     });
   };
-
+  
   const setFilters = (filterName: string, filterValues: string[]) => {
-    const params: SearchRequest = router.query;  //
-    if (params.filters) {
+    if (params.filters?.[filterName]) {
       if (filterValues.length > 0) {
         params.filters[filterName] = filterValues;
       } else {
