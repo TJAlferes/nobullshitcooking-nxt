@@ -24,7 +24,7 @@ export default function IngredientList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    search();
+    search('ingredients');
     setLoading(false);
   }, []);
 

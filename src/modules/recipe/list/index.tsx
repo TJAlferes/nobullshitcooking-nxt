@@ -32,7 +32,7 @@ export default function RecipeList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    search();
+    search('recipes');
     setLoading(false);
   }, []);
 

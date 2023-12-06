@@ -14,13 +14,18 @@ export function useSearch() {
 
   const { found, setFound } = useSearchState();
 
-  const search = async (searchIndexChanged?: boolean) => {
-    if (!params.index) params.index = 'recipes';
+  const search = async (index?: SearchIndex) => {
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
+    if (!index) params.index = 'recipes';  //
+    else params.index = index;
     if (params.term === '') delete params.term;
-    if (searchIndexChanged) {
+    // rather than this, if they do a new search, just do this anyway???
+    /*if (searchIndexChanged) {
       params.current_page = '1';
       delete params.filters;
-    }
+    }*/
+    //params.current_page = '1';
+    delete params.filters;
     if (!params.current_page) params.current_page = '1';
     if (!params.results_per_page) params.results_per_page = '20';
     

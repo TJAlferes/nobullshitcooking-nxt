@@ -10,6 +10,7 @@ import { endpoint } from '../../../config/api';
 import { useDebouncedValue } from '../../general/useDebouncedValue';
 import { useSearch } from './hook';
 import type { SearchIndex, SuggestionView } from './types';
+import { LoaderSpinner } from '../LoaderSpinner';
 
 export { Pagination } from './Pagination';
 export { ResultsPerPage } from './ResultsPerPage';
@@ -22,7 +23,7 @@ export function Search() {
   const debounced_search_term = useDebouncedValue(params.term || '');  // move???
 
   const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
-  const [index, setIndex] = useState(params.index ?? 'recipes');
+  const [index, setIndex] = useState<SearchIndex>();
   const [term, setTerm] = useState(params.term ?? '');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
@@ -30,10 +31,15 @@ export function Search() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const autosuggestionsRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    setIndex(params.index ?? 'recipes');
+  }, [params.index]);
+
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
-    setIndex(e.target.value as SearchIndex);
+    //setIndex(e.target.value as SearchIndex);
     params.index = e.target.value as SearchIndex;
+    router.replace(`${pathname}?${qs.stringify(params)}`);
     setSearchIndexChanged(true);
   };
 
@@ -74,7 +80,7 @@ export function Search() {
 
   const selectSuggestion = (suggestion: string) => {
     inputChangeHandler(suggestion);
-    search(searchIndexChanged);
+    search(index);
   };
 
   useEffect(() => {
@@ -109,8 +115,10 @@ export function Search() {
   }, []);
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') search();
+    if (event.key === 'Enter') search(index);
   };
+
+  if (!index) return <LoaderSpinner />;
 
   const capitalized = index.charAt(0).toUpperCase() + index.slice(1);
 
@@ -122,7 +130,7 @@ export function Search() {
           <img src='/images/header/down-arrow.png' width='8' height='6' />
         </div>
         
-        <select onChange={onSearchIndexChange}>
+        <select onChange={onSearchIndexChange} value={index}>
           <option value='recipes'>Recipes</option>
           <option value='ingredients'>Ingredients</option>
           <option value='equipment'>Equipment</option>
@@ -140,7 +148,7 @@ export function Search() {
           autoComplete='off'
         />
 
-        <div className='magnifying-glass' onClick={() => search(searchIndexChanged)}>
+        <div className='magnifying-glass' onClick={() => search(index)}>
           <span></span>
         </div>
 

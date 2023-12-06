@@ -24,7 +24,7 @@ export default function EquipmentList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    search();
+    search('equipment');
     setLoading(false);
   }, []);
 
