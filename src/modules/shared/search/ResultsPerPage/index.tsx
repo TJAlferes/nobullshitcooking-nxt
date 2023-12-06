@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { memo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import qs from 'qs';
 
@@ -7,14 +8,12 @@ import { endpoint } from '../../../../config/api';
 import { useSearchState } from '../../../../store';
 import type { SearchRequest } from '../types';
 
-export const ResultsPerPage = memo(function ResultsPerPage({
-  search_index
-}: {
-  search_index: string;
-}) {
+export const ResultsPerPage = memo(function ResultsPerPage() {
   const router = useRouter();
 
-  const params: SearchRequest = router.query;
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString()) as SearchRequest;
+  const { index } = params;
 
   const { setFound } = useSearchState();
 
@@ -26,16 +25,16 @@ export const ResultsPerPage = memo(function ResultsPerPage({
   
     try {
       const res = await axios
-        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+        .get(`${endpoint}/search/find/${index}?${search_params}`);
         
       if (res.status === 200) setFound(res.data);
     } catch (err) {
       //
     }
 
-    const page = search_index === 'equipment'
-      ? search_index
-      : search_index.slice(0, search_index.length - 1);
+    const page = index === 'equipment'
+      ? index
+      : index.slice(0, index.length - 1);
 
     router.push({
       pathname: `/${page}/list`,

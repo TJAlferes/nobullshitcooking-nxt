@@ -5,7 +5,7 @@ import { createContext, useContextSelector } from 'use-context-selector';
 
 import { endpoint } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
-import type { SearchIndex, SearchResponse } from '../modules/shared/search/types';
+import type { SearchResponse } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -20,13 +20,8 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [methods, setMethods] = useState<MethodView[]>(getItem('methods') ?? []);
   const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') ?? []);
 
-  // These 4 we do not put into localStorage,
-  // because if the user opens the site again in a new tab,
-  // then Next.js hydration throws a runtime error saying text does not match between server and client.
-  // TO DO: If needed, find out of there is a workaround.
   const [theme, setTheme] = useState<Theme>('light');
 
-  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');  // TO DO: put this in search params also
   const [found, setFound] = useState<SearchResponse>({results: [], total_results: 0, total_pages: 0});
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') ?? []);
@@ -107,10 +102,6 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setTheme(theme);
     }, []),
 
-    search_index,
-    setSearchIndex: useCallback((search_index: SearchIndex) => {
-      setSearchIndex(search_index);
-    }, []),
     found,
     setFound: useCallback((found: SearchResponse) => {
       setFound(found);
@@ -352,8 +343,6 @@ export function useTheme() {
 
 export function useSearchState() {
   return useContextSelector(StoreContext, (s) => ({
-    search_index:   s!.search_index,
-    setSearchIndex: s!.setSearchIndex,
     found:          s!.found,
     setFound:       s!.setFound
   }));
@@ -712,8 +701,6 @@ type StoreValue = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 
-  search_index: SearchIndex;
-  setSearchIndex: (search_index: SearchIndex) => void;
   found: SearchResponse;
   setFound: (found: SearchResponse) => void;
 

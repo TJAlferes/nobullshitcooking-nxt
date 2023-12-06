@@ -15,7 +15,7 @@ export default function EquipmentList() {
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
 
-  const { search_index, setSearchIndex, setFilters, found, search } = useSearch();
+  const { setFilters, found, search } = useSearch();
   const { equipment_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
@@ -24,7 +24,6 @@ export default function EquipmentList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setSearchIndex('equipment');
     search();
     setLoading(false);
   }, []);
@@ -92,8 +91,8 @@ export default function EquipmentList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination key={1} search_index={search_index} total_pages={total_pages} />
-        <ResultsPerPage key={2} search_index={search_index} />
+        <Pagination key={1} total_pages={total_pages} />
+        <ResultsPerPage key={2} />
         
         <div className="search-results-list">
           {results
@@ -111,8 +110,8 @@ export default function EquipmentList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} search_index={search_index} total_pages={total_pages} />
-        <ResultsPerPage key={4} search_index={search_index} />
+        <Pagination key={3} total_pages={total_pages} />
+        <ResultsPerPage key={4} />
       </div>
 
       <div className="two-col-right"></div>

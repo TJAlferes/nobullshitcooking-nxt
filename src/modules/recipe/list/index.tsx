@@ -19,7 +19,7 @@ export default function RecipeList() {
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
 
-  const { search_index, setSearchIndex, setFilters, found, search } = useSearch();
+  const { setFilters, found, search } = useSearch();
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
 
@@ -32,7 +32,6 @@ export default function RecipeList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setSearchIndex('recipes');
     search();
     setLoading(false);
   }, []);
@@ -189,15 +188,15 @@ export default function RecipeList() {
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
 
-        <Pagination key={1} search_index={search_index} total_pages={total_pages} />
-        <ResultsPerPage key={2} search_index={search_index} />
+        <Pagination key={1} total_pages={total_pages} />
+        <ResultsPerPage key={2} />
 
         <div className="search-results-list">
           {results
             ? results.map(r => (
               <Link
                 className="search-results-list-item"
-                href={`/recipe/detail/${encodeURIComponent(r.title)}`}
+                href={`/recipe/detail/${encodeURIComponent(r.title!)}`}
                 key={r.recipe_id}
               >
                 <img src={`${url}/${r.image_filename}.jpg`} />
@@ -210,8 +209,8 @@ export default function RecipeList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} search_index={search_index} total_pages={total_pages} />
-        <ResultsPerPage key={4} search_index={search_index} />
+        <Pagination key={3} total_pages={total_pages} />
+        <ResultsPerPage key={4} />
       </div>
 
       <div className="two-col-right"></div>

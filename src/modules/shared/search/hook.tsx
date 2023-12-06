@@ -12,9 +12,10 @@ export function useSearch() {
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
-  const { search_index, setSearchIndex, found, setFound } = useSearchState();
+  const { found, setFound } = useSearchState();
 
   const search = async (searchIndexChanged?: boolean) => {
+    if (!params.index) params.index = 'recipes';
     if (params.term === '') delete params.term;
     if (searchIndexChanged) {
       params.current_page = '1';
@@ -26,17 +27,16 @@ export function useSearch() {
     const search_params = qs.stringify(params);
   
     try {
-      const res = await axios
-        .get(`${endpoint}/search/find/${search_index}?${search_params}`);
+      const res = await axios.get(`${endpoint}/search/find/?${search_params}`);
         
       if (res.status === 200) setFound(res.data);
     } catch (err) {
       //
     }
 
-    const page = search_index === 'equipment'
-      ? search_index
-      : search_index.slice(0, search_index.length - 1);
+    const page = params.index === 'equipment'
+      ? params.index
+      : params.index.slice(0, params.index.length - 1);
 
     router.push({
       pathname: `/${page}/list`,
@@ -75,7 +75,7 @@ export function useSearch() {
     filterName: string,
     filterValues: string[]
   ) => {
-    setSearchIndex(searchIndex);
+    params.index = searchIndex;
 
     if (params.term) delete params.term;
     if (params.term === '') delete params.term;
@@ -101,11 +101,9 @@ export function useSearch() {
   };
 
   return {
-    search_index,
-    setSearchIndex,
     found,
     setFound,
-    params,  // do they need the same params object?
+    params,
     search,
     setFilters,
     //clearFilters,
@@ -114,8 +112,6 @@ export function useSearch() {
 }
 
 export type UseSearch = {
-  search_index: SearchIndex;
-  setSearchIndex: (search_index: SearchIndex) => void;
   found: SearchResponse;
   setFound: (found: SearchResponse) => void;
   params: SearchRequest;
