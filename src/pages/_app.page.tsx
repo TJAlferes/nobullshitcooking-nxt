@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd-multi-backend';  // TO DO: move DOWN, to plan
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import type { AppProps } from 'next/app';
@@ -10,8 +10,11 @@ import { setItem } from '../modules/general/localStorage';
 import { Layout } from '../modules/general/Layout';
 import { RouteGuard } from '../modules/general/RouteGuard';  // TO DO: hand this differently (in Next.js pages???)
 import { StoreProvider } from '../store';
+import { LoaderSpinner } from '../modules/shared/LoaderSpinner';
 
 export default function NOBSCApp({ Component, pageProps }: AppProps) {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     let mounted = true;
 
@@ -27,6 +30,8 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
       } catch (err) {
         //
       }
+
+      setLoading(false);
     }
 
     if (mounted) getInitialData();
@@ -35,6 +40,8 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
       mounted = false;
     };
   }, []);
+
+  if (loading) return <LoaderSpinner />;
 
   return (
     <StoreProvider>

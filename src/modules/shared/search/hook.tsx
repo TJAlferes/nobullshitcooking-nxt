@@ -75,10 +75,29 @@ export function useSearch() {
     filterName: string,
     filterValues: string[]
   ) => {
-    delete params.term;
-    //params.index = searchIndex;  // TO DO: figure this out
-    delete params.filters;
-    setFilters(filterName, filterValues);
+    setSearchIndex(searchIndex);
+
+    if (params.term) delete params.term;
+    if (params.term === '') delete params.term;
+    if (params.filters) delete params.filters;
+    params.filters = {
+      [filterName]: filterValues
+    };
+    //if (params.sorts) delete params.sorts;
+    
+    params.current_page = '1';
+    params.results_per_page = '20';
+
+    const search_params = qs.stringify(params);
+
+    const page = searchIndex === 'equipment'
+      ? searchIndex
+      : searchIndex.slice(0, searchIndex.length - 1);
+
+    router.push({
+      pathname: `/${page}/list`,
+      query: search_params
+    });
   };
 
   return {

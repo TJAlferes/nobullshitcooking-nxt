@@ -39,14 +39,15 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
               {submenuItems.map(item => active === item.parent ? (
                 <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
                   <Link
-                    href="#"
-                    onClick={() => {
+                    href={{hash: null}}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsLeftNavOpen(false);
                       setPreFilters(
                         item.searchIndex as SearchIndex,
                         item.filterName,
                         item.filterValues
                       );
-                      setIsLeftNavOpen(false);
                     }}
                   >
                     {item.name}
@@ -82,14 +83,15 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
                   .map(subitem => (
                     <div className="submenu-item">
                       <Link
-                        href="#"
-                        onClick={() => {
+                        href={{hash: null}}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsLeftNavOpen(false);
                           setPreFilters(
                             subitem.searchIndex as SearchIndex,
                             subitem.filterName,
                             subitem.filterValues
                           );
-                          setIsLeftNavOpen(false);
                         }}
                       >
                         {item.name}
@@ -155,25 +157,25 @@ function NavLink({ text, to }: {
 }
 
 const menuItems = [
-  {name: 'Recipes',     link: '/recipes',     image: 'recipes'},
-  {name: 'Methods',     link: '/recipes',     image: 'methods'},
-  {name: 'Ingredients', link: '/ingredients', image: 'ingredients'},
-  {name: 'Equipment',   link: '/equipment',   image: 'equipment'}
+  {name: 'Recipes',     link: '/recipe/list',     image: 'recipes'},
+  {name: 'Methods',     link: '/recipe/list',     image: 'methods'},
+  {name: 'Ingredients', link: '/ingredient/list', image: 'ingredients'},
+  {name: 'Equipment',   link: '/equipment/list',  image: 'equipment'}
 ];
 
 const submenuItems = [
-  {parent: 'Recipes', name: 'Drinks',     searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Drink'],     image: null},
-  {parent: 'Recipes', name: 'Appetizers', searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Appetizer'], image: null},
-  {parent: 'Recipes', name: 'Mains',      searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Main'],      image: null},
-  {parent: 'Recipes', name: 'Sides',      searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Side'],      image: null},
-  {parent: 'Recipes', name: 'Desserts',   searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Dessert'],   image: null},
-  {parent: 'Recipes', name: 'Soups',      searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Soup'],      image: null},
-  {parent: 'Recipes', name: 'Salads',     searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Salad'],     image: null},
-  {parent: 'Recipes', name: 'Stews',      searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Stew'],      image: null},
-  {parent: 'Recipes', name: 'Casseroles', searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Casserole'], image: null},
-  {parent: 'Recipes', name: 'Sauces',     searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Sauce'],     image: null},
-  {parent: 'Recipes', name: 'Dressings',  searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Dressing'],  image: null},
-  {parent: 'Recipes', name: 'Condiments', searchIndex: "recipes", filterName: "recipeTypes", filterValues: ['Condiment'], image: null},
+  {parent: 'Recipes', name: 'Drinks',     searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Drink'],     image: null},
+  {parent: 'Recipes', name: 'Appetizers', searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Appetizer'], image: null},
+  {parent: 'Recipes', name: 'Mains',      searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Main'],      image: null},
+  {parent: 'Recipes', name: 'Sides',      searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Side'],      image: null},
+  {parent: 'Recipes', name: 'Desserts',   searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Dessert'],   image: null},
+  {parent: 'Recipes', name: 'Soups',      searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Soup'],      image: null},
+  {parent: 'Recipes', name: 'Salads',     searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Salad'],     image: null},
+  {parent: 'Recipes', name: 'Stews',      searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Stew'],      image: null},
+  {parent: 'Recipes', name: 'Casseroles', searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Casserole'], image: null},
+  {parent: 'Recipes', name: 'Sauces',     searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Sauce'],     image: null},
+  {parent: 'Recipes', name: 'Dressings',  searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Dressing'],  image: null},
+  {parent: 'Recipes', name: 'Condiments', searchIndex: "recipes", filterName: "recipe_types", filterValues: ['Condiment'], image: null},
 
   {parent: 'Methods', name: 'Chill and Freeze',                       searchIndex: "recipes", filterName: "methods", filterValues: ['Chill', 'Freeze'],                            image: null},
   {parent: 'Methods', name: 'Steam, Poach, Simmer, Boil, and Blanch', searchIndex: "recipes", filterName: "methods", filterValues: ['Steam', 'Poach', 'Simmer', 'Boil', 'Blanch'], image: null},
@@ -182,20 +184,20 @@ const submenuItems = [
   {parent: 'Methods', name: 'Saute, Fry, and Glaze',                  searchIndex: "recipes", filterName: "methods", filterValues: ['Saute', 'Fry', 'Glaze'],                      image: null},
   {parent: 'Methods', name: 'BBQ, Grill, and Smoke',                  searchIndex: "recipes", filterName: "methods", filterValues: ['BBQ', 'Grill', 'Smoke'],                      image: null},
 
-  {parent: 'Ingredients', name: 'Fish and Shellfish',       searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Fish', 'Shellfish'],       image: null},
-  {parent: 'Ingredients', name: 'Beef, Pork, and Poultry',  searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Beef', 'Pork', 'Poultry'], image: null},
-  {parent: 'Ingredients', name: 'Eggs and Dairy',           searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Egg', 'Dairy'],            image: null},
-  {parent: 'Ingredients', name: 'Beans and Vegetables',     searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Bean', 'Vegetable'],       image: null},
-  {parent: 'Ingredients', name: 'Fruit',                    searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Fruit'],                   image: null},
-  {parent: 'Ingredients', name: 'Seeds and Grains',         searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Seed', 'Grain'],           image: null},
-  {parent: 'Ingredients', name: 'Oils',                     searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Oil'],                     image: null},
-  {parent: 'Ingredients', name: 'Acids, Herbs, and Spices', searchIndex: "ingredients", filterName: "ingredientTypes", filterValues: ['Acid', 'Herb', 'Spice'],   image: null},
+  {parent: 'Ingredients', name: 'Fish and Shellfish',       searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Fish', 'Shellfish'],       image: null},
+  {parent: 'Ingredients', name: 'Beef, Pork, and Poultry',  searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Beef', 'Pork', 'Poultry'], image: null},
+  {parent: 'Ingredients', name: 'Eggs and Dairy',           searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Egg', 'Dairy'],            image: null},
+  {parent: 'Ingredients', name: 'Beans and Vegetables',     searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Bean', 'Vegetable'],       image: null},
+  {parent: 'Ingredients', name: 'Fruit',                    searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Fruit'],                   image: null},
+  {parent: 'Ingredients', name: 'Seeds and Grains',         searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Seed', 'Grain'],           image: null},
+  {parent: 'Ingredients', name: 'Oils',                     searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Oil'],                     image: null},
+  {parent: 'Ingredients', name: 'Acids, Herbs, and Spices', searchIndex: "ingredients", filterName: "ingredient_types", filterValues: ['Acid', 'Herb', 'Spice'],   image: null},
 
-  {parent: 'Equipment', name: 'Cleaning',  searchIndex: "equipment", filterName: "equipmentTypes", filterValues: ['Cleaning'],  image: null},
-  {parent: 'Equipment', name: 'Preparing', searchIndex: "equipment", filterName: "equipmentTypes", filterValues: ['Preparing'], image: null},
-  {parent: 'Equipment', name: 'Cooking',   searchIndex: "equipment", filterName: "equipmentTypes", filterValues: ['Cooking'],   image: null},
-  {parent: 'Equipment', name: 'Dining',    searchIndex: "equipment", filterName: "equipmentTypes", filterValues: ['Dining'],    image: null},
-  {parent: 'Equipment', name: 'Storage',   searchIndex: "equipment", filterName: "equipmentTypes", filterValues: ['Storage'],   image: null}
+  {parent: 'Equipment', name: 'Cleaning',  searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Cleaning'],  image: null},
+  {parent: 'Equipment', name: 'Preparing', searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Preparing'], image: null},
+  {parent: 'Equipment', name: 'Cooking',   searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Cooking'],   image: null},
+  {parent: 'Equipment', name: 'Dining',    searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Dining'],    image: null},
+  {parent: 'Equipment', name: 'Storage',   searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Storage'],   image: null}
 ];
 
         /*<NavLink text="Equipment" to="/products" /> (Products) (Maybe also Supply?)

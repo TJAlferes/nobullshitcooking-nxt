@@ -26,7 +26,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   // TO DO: If needed, find out of there is a workaround.
   const [theme, setTheme] = useState<Theme>('light');
 
-  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');  // hmm
+  const [search_index, setSearchIndex] = useState<SearchIndex>('recipes');  // TO DO: put this in search params also
   const [found, setFound] = useState<SearchResponse>({results: [], total_results: 0, total_pages: 0});
 
   const [my_friendships, setMyFriendships] = useState<FriendshipView[]>(getItem('my_friendships') ?? []);

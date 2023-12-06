@@ -1,8 +1,8 @@
 export type SearchIndex =
   | "recipes"
   | "ingredients"
-  | "equipment"
-  | "products";
+  | "equipment";
+  //| "products"
   //| "pages"
   //| "posts";
 
