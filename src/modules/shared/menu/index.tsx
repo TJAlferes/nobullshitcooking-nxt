@@ -28,7 +28,9 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
               className={`menu-item${active === item.name ? ' active' : ''}`}
               onHover={() => setActive(item.name)}
             >
-              <Link href={item.link}>{item.name}</Link>
+              <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
+                {item.name}
+              </Link>
             </MenuItem>
           ))}
           <hr />
@@ -67,13 +69,17 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
               <ExpandCollapse
                 headingWhileCollapsed={(
                   <div className="menu-item">
-                    <Link href={item.link}>{item.name}</Link>
+                    <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
+                      {item.name}
+                    </Link>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />
                   </div>
                 )}
                 headingWhileExpanded={(
                   <div className="menu-item">
-                    <Link href={item.link}>{item.name}</Link>
+                    <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
+                      {item.name}
+                    </Link>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />
                   </div>
                 )}
@@ -94,7 +100,7 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
                           );
                         }}
                       >
-                        {item.name}
+                        {subitem.name}
                       </Link>
                     </div>
                   ))
