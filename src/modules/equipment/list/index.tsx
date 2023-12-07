@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -11,11 +12,15 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function EquipmentList() {
+  const renders = useRef(0);
+  renders.current++;
+
+  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
 
-  const { setFilters, found, search } = useSearch();
+  const { setFilters, search, found } = useSearch();
   const { equipment_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
@@ -23,10 +28,14 @@ export default function EquipmentList() {
     useState<string[]>(filters?.equipment_types ?? []);
 
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    search('equipment');
-    setLoading(false);
-  }, []);
+    const trySearch = async () => {
+      await search('equipment');
+      setLoading(false);
+    }
+    if (router.isReady) trySearch();
+  }, [router.isReady]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
@@ -40,15 +49,18 @@ export default function EquipmentList() {
     }
   };
 
+  if (loading) return <LoaderSpinner />;
+
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
-  
-  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col equipment-list">
       <div className="two-col-left search-results">
+        <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+
         <h1>Equipment</h1>
+
         <p>{total_results} total results and {total_pages} total pages</p>
 
         <div className="filters">
@@ -91,7 +103,7 @@ export default function EquipmentList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination key={1} total_pages={total_pages} />
+        <Pagination key={1} />
         <ResultsPerPage key={2} />
         
         <div className="search-results-list">
@@ -110,7 +122,7 @@ export default function EquipmentList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} total_pages={total_pages} />
+        <Pagination key={3} />
         <ResultsPerPage key={4} />
       </div>
 

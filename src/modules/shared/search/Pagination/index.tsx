@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { memo } from 'react';
+//import { memo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import qs from 'qs';
@@ -8,20 +8,14 @@ import { endpoint } from '../../../../config/api';
 import { useSearchState } from '../../../../store';
 import type { SearchRequest } from '../types';
 
-export const Pagination = memo(function Pagination({
-  total_pages
-}: {
-  total_pages: number | string;
-}) {
-  if (!total_pages || Number(total_pages) < 2) return null;
+export function Pagination() {
+  const { found, setFound } = useSearchState();
 
   const router = useRouter();
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { index } = params;
-
-  const { setFound } = useSearchState();
 
   const goToPage = async (pageNumber: number) => {
     params.current_page = `${pageNumber}`;
@@ -30,7 +24,7 @@ export const Pagination = memo(function Pagination({
   
     try {
       const res = await axios
-        .get(`${endpoint}/search/find/${index}?${search_params}`);
+        .get(`${endpoint}/search/find?${search_params}`);
         
       if (res.status === 200) setFound(res.data);
     } catch (err) {
@@ -48,6 +42,8 @@ export const Pagination = memo(function Pagination({
   };
 
   const current_page = params.current_page ? params.current_page : "1";
+  const { total_pages } = found;
+  if (!total_pages || Number(total_pages) < 2) return null;
 
   const curr  = current_page ? Number(current_page) : 1;
   const first = 1;
@@ -84,4 +80,4 @@ export const Pagination = memo(function Pagination({
       </span>
     </div>
   );
-});
+}

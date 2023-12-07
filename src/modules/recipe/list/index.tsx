@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
@@ -15,6 +16,7 @@ export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
 
+  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
@@ -32,9 +34,12 @@ export default function RecipeList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    search('recipes');
-    setLoading(false);
-  }, []);
+    const trySearch = async () => {
+      await search('recipes');
+      setLoading(false);
+    }
+    if (router.isReady) trySearch();
+  }, [router.isReady]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
@@ -54,10 +59,10 @@ export default function RecipeList() {
     }
   };
 
+  if (loading) return <LoaderSpinner />;
+
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
-
-  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col recipe-list">
@@ -188,7 +193,7 @@ export default function RecipeList() {
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
         {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
 
-        <Pagination key={1} total_pages={total_pages} />
+        <Pagination key={1} />
         <ResultsPerPage key={2} />
 
         <div className="search-results-list">
@@ -209,7 +214,7 @@ export default function RecipeList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} total_pages={total_pages} />
+        <Pagination key={3} />
         <ResultsPerPage key={4} />
       </div>
 

@@ -20,9 +20,8 @@ export function Search() {
   const router = useRouter();
 
   const { params, search } = useSearch();
-  const debounced_search_term = useDebouncedValue(params.term || '');  // move???
+  const debounced_search_term = useDebouncedValue(params.term ?? '');  // move???
 
-  const [searchIndexChanged, setSearchIndexChanged] = useState(false);  // useRef???
   const [index, setIndex] = useState<SearchIndex>();
   const [term, setTerm] = useState(params.term ?? '');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
@@ -37,10 +36,10 @@ export function Search() {
 
   const onSearchIndexChange = (e: ChangeEvent<HTMLSelectElement>) => {
     inputRef.current?.focus();
-    //setIndex(e.target.value as SearchIndex);
+    setIndex(e.target.value as SearchIndex);
     params.index = e.target.value as SearchIndex;
+    delete params.filters;
     router.replace(`${pathname}?${qs.stringify(params)}`);
-    setSearchIndexChanged(true);
   };
 
   let cancelToken: CancelTokenSource | undefined;
@@ -130,7 +129,7 @@ export function Search() {
           <img src='/images/header/down-arrow.png' width='8' height='6' />
         </div>
         
-        <select onChange={onSearchIndexChange} value={index}>
+        <select onChange={onSearchIndexChange}>
           <option value='recipes'>Recipes</option>
           <option value='ingredients'>Ingredients</option>
           <option value='equipment'>Equipment</option>
@@ -143,7 +142,7 @@ export function Search() {
           id='search-input'
           onChange={e => inputChangeHandler(e.target.value)}
           onKeyUp={e => handleKeyUp(e)}
-          value={params.term || term}
+          value={params.term ?? term}
           spellCheck={false}
           autoComplete='off'
         />

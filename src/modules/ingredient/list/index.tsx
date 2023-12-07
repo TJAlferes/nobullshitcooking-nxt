@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useEffect, useState } from 'react';
 
@@ -11,6 +12,7 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function IngredientList() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
@@ -24,9 +26,12 @@ export default function IngredientList() {
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    search('ingredients');
-    setLoading(false);
-  }, []);
+    const trySearch = async () => {
+      await search('ingredients');
+      setLoading(false);
+    }
+    if (router.isReady) trySearch();
+  }, [router.isReady]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
@@ -41,10 +46,10 @@ export default function IngredientList() {
     }
   };
 
+  if (loading) return <LoaderSpinner />;
+
   const { results, total_results, total_pages } = found;
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/ingredient';
-
-  if (loading) return <LoaderSpinner />;
 
   return (
     <div className="two-col ingredient-list">
@@ -92,7 +97,7 @@ export default function IngredientList() {
           </ExpandCollapse>
         </div>
 
-        <Pagination key={1} total_pages={total_pages} />
+        <Pagination key={1} />
         <ResultsPerPage key={2} />
 
         <div className="search-results-list">
@@ -111,7 +116,7 @@ export default function IngredientList() {
             : <div>Loading...</div>}
         </div>
 
-        <Pagination key={3} total_pages={total_pages} />
+        <Pagination key={3} />
         <ResultsPerPage key={4} />
       </div>
 

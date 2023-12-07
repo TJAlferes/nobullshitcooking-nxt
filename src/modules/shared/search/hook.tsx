@@ -16,16 +16,9 @@ export function useSearch() {
 
   const search = async (index?: SearchIndex) => {
     const params = qs.parse(searchParams.toString()) as SearchRequest;
-    if (!index) params.index = 'recipes';  //
+    if (!index) params.index = 'recipes';
     else params.index = index;
     if (params.term === '') delete params.term;
-    // rather than this, if they do a new search, just do this anyway???
-    /*if (searchIndexChanged) {
-      params.current_page = '1';
-      delete params.filters;
-    }*/
-    //params.current_page = '1';
-    delete params.filters;
     if (!params.current_page) params.current_page = '1';
     if (!params.results_per_page) params.results_per_page = '20';
     
@@ -47,9 +40,11 @@ export function useSearch() {
       pathname: `/${page}/list`,
       query: search_params
     });
+    //router.push(`/${page}/list?${search_params}`, undefined, {shallow: false});
   };
   
-  const setFilters = (filterName: string, filterValues: string[]) => {
+  const setFilters = async (filterName: string, filterValues: string[]) => {
+    //const params = qs.parse(searchParams.toString()) as SearchRequest;
     if (params.filters?.[filterName]) {
       if (filterValues.length > 0) {
         params.filters[filterName] = filterValues;
@@ -66,7 +61,7 @@ export function useSearch() {
 
     params.current_page = '1';
 
-    search();
+    search(params.index);
   };
 
   /*const clearFilters = (filterName: string) => {
@@ -80,6 +75,7 @@ export function useSearch() {
     filterName: string,
     filterValues: string[]
   ) => {
+    const params = qs.parse(searchParams.toString()) as SearchRequest;
     params.index = searchIndex;
 
     if (params.term) delete params.term;
