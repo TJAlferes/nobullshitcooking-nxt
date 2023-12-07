@@ -81,13 +81,13 @@ export default function RecipeList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "recipe_types" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "recipe_types" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
                 <span>Recipe Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
@@ -117,13 +117,13 @@ export default function RecipeList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "methods" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
                 <span>Methods</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "methods" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
                 <span>Methods</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
@@ -153,13 +153,13 @@ export default function RecipeList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "cuisines" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
                 <span>Cuisines</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "cuisines" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
                 <span>Cuisines</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>

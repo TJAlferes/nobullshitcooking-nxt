@@ -22,8 +22,8 @@ export function Search() {
   const { params, search } = useSearch();
   const debounced_search_term = useDebouncedValue(params.term ?? '');  // move???
 
-  const [index, setIndex] = useState<SearchIndex>();
-  const [term, setTerm] = useState(params.term ?? '');
+  const [index, setIndex] = useState<SearchIndex>('recipes');
+  const [term, setTerm] = useState('');
   const [suggestions, setSuggestions] = useState<SuggestionView[]>([]);
 
   const mouseIsOverRef = useRef<boolean>(false);
@@ -64,7 +64,7 @@ export function Search() {
 
   useEffect(() => {
     if (debounced_search_term.length < 3) return;
-    if (autosuggestionsRef.current) {
+    if (mouseIsOverRef.current && autosuggestionsRef.current) {
       autosuggestionsRef.current.style.display = 'block';
     }
     getSuggestions(debounced_search_term, cancelToken);
@@ -80,12 +80,21 @@ export function Search() {
   const selectSuggestion = (suggestion: string) => {
     inputChangeHandler(suggestion);
     search(index);
+    mouseIsOverRef.current = false;
+    if (autosuggestionsRef.current) autosuggestionsRef.current.style.display = 'none';
+  };
+
+  const submitSearch = () => {
+    params.term = term;
+    search(index);
   };
 
   useEffect(() => {
     mouseIsOverRef.current = false;
 
     if (!autosuggestionsRef.current || !inputRef.current) return;
+
+    autosuggestionsRef.current.style.display = 'none';  //
 
     autosuggestionsRef.current.onmouseover = () => {
       mouseIsOverRef.current = true;
@@ -94,6 +103,26 @@ export function Search() {
     autosuggestionsRef.current.onmouseout = () => {
       mouseIsOverRef.current = false;
     };
+
+    autosuggestionsRef.current.onblur = () => {
+      if (mouseIsOverRef.current === false && autosuggestionsRef.current) {
+        autosuggestionsRef.current.style.display = 'none';
+      }
+    };
+
+    inputRef.current.onmouseover = () => {
+      mouseIsOverRef.current = true;
+    };
+
+    inputRef.current.onmouseout = () => {
+      mouseIsOverRef.current = false;
+    };
+
+    inputRef.current.onfocus = () => {
+      if (mouseIsOverRef.current === true && autosuggestionsRef.current) {
+        autosuggestionsRef.current.style.display = 'block';
+      }
+    };  //
 
     inputRef.current.onblur = () => {
       if (mouseIsOverRef.current === false && autosuggestionsRef.current) {
@@ -105,16 +134,20 @@ export function Search() {
       if (autosuggestionsRef.current) {
         autosuggestionsRef.current.onmouseover = null;
         autosuggestionsRef.current.onmouseout = null;
+        autosuggestionsRef.current.onblur = null;
       }
 
       if (inputRef.current) {
+        inputRef.current.onmouseover = null;
+        inputRef.current.onmouseout = null;
+        inputRef.current.onfocus = null;
         inputRef.current.onblur = null;
       }
     };
   }, []);
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') search(index);
+    if (event.key === 'Enter') submitSearch();
   };
 
   if (!index) return <LoaderSpinner />;
@@ -147,7 +180,7 @@ export function Search() {
           autoComplete='off'
         />
 
-        <div className='magnifying-glass' onClick={() => search(index)}>
+        <div className='magnifying-glass' onClick={() => submitSearch()}>
           <span></span>
         </div>
 

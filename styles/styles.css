@@ -131,30 +131,30 @@ h4 {
   padding: 0 6px;
 }
 
-.img-280-172 {
-  min-height: 172px;
+.img-280-280 {
+  min-height: 280px;
   min-width: 280px;
 }
 
-.img-100-62 {
-  min-height: 62px;
+.img-100-100 {
+  min-height: 100px;
   min-width: 100px;
 }
 
-.img-28-18 {
-  min-height: 18px;
+.img-28-28 {
+  min-height: 28px;
   min-width: 28px;
 }
 
-.light .img-280-172,
-.light .img-100-62,
-.light .img-28-18 {
+.light .img-280-280,
+.light .img-100-100,
+.light .img-28-28 {
   background-color: #c10006;
 }
 
-.dark .img-280-172,
-.dark .img-100-62,
-.dark .img-28-18 {
+.dark .img-280-280,
+.dark .img-100-100,
+.dark .img-28-28 {
   background-color: #690004;
 }
 

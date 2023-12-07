@@ -61,6 +61,8 @@
   background-color: #fff;
 
   white-space: wrap;
+
+  z-index: 1;
 }
 
 .search-results .filter-group span {
@@ -92,14 +94,19 @@
   color: #000;
 }
 
-.search-results-list-item img {
-  display: block;
-  width: 280px;
+.search-results-list-item:hover,
+.search-results-list-item:active {
+  outline: 2px solid #ddd;
+  background-color: #ddd;
 }
-
-/*.search-results-list-item h3 {}*/
 
 .search-results-list-item:hover h3,
 .search-results-list-item:active h3 {
   color: #c10006;
+}
+
+.search-results-list-item img {
+  display: block;
+  width: 280px;
+  height: 280px;
 }

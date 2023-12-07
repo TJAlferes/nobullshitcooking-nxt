@@ -63,13 +63,13 @@ export default function IngredientList() {
 
           <ExpandCollapse
             headingWhileCollapsed={(
-              <div className={`filter-name${expandedFilter === "ingredient_types" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
                 <span>Ingredient Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
             )}
             headingWhileExpanded={(
-              <div className={`filter-name${expandedFilter === "ingredient_types" ? " active" : ""}`}>
+              <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
                 <span>Ingredient Types</span>
                 <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
