@@ -36,6 +36,7 @@ export default function RecipeList() {
   useEffect(() => {
     const trySearch = async () => {
       await search('recipes');
+      // TO DO: set filters here???
       setLoading(false);
     }
     if (router.isReady) trySearch();

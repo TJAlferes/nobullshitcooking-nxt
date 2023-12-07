@@ -15,7 +15,6 @@ export function useSearch() {
   const { found, setFound } = useSearchState();
 
   const search = async (index?: SearchIndex) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
     if (!index) params.index = 'recipes';
     else params.index = index;
     if (params.term === '') delete params.term;
@@ -44,8 +43,7 @@ export function useSearch() {
   };
   
   const setFilters = async (filterName: string, filterValues: string[]) => {
-    //const params = qs.parse(searchParams.toString()) as SearchRequest;
-    if (params.filters?.[filterName]) {
+    if (params.filters) {
       if (filterValues.length > 0) {
         params.filters[filterName] = filterValues;
       } else {
