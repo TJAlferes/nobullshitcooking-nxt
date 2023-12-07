@@ -56,56 +56,60 @@ export default function IngredientList() {
     <div className="two-col ingredient-list">
       <div className="two-col-left search-results">
         <h1>Ingredients</h1>
-        <p>{total_results} total results and {total_pages} total pages</p>
 
-        <div className="filters">
-          <span className="filter-by">Filter by:</span>
+        <div className="settings">
+          <p className="info">{total_results} total results and {total_pages} total pages</p>
 
-          <ExpandCollapse
-            headingWhileCollapsed={(
-              <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                <span>Ingredient Types</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
+          <ResultsPerPage key={1} />
+
+          <div className="filters">
+            <span className="filter-by">Filter by:</span>
+
+            <ExpandCollapse
+              headingWhileCollapsed={(
+                <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                  <span>Ingredient Types</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+              headingWhileExpanded={(
+                <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                  <span>Ingredient Types</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+              isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
+              handler={() => toggleFilterDropdown("ingredient_types")}
+            >
+              <div className="filter-group">
+                {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
+                  <span key={ingredient_type_id}>
+                    <input
+                      type="checkbox"
+                      checked={checkedIngredientTypes?.includes(ingredient_type_name)}
+                      onChange={() => {
+                        setCheckedIngredientTypes(
+                          checkedIngredientTypes?.includes(ingredient_type_name)
+                          ? checkedIngredientTypes.filter(v => v !== ingredient_type_name)
+                          : [...checkedIngredientTypes, ingredient_type_name]
+                        );
+                      }}
+                    />
+                    <label>{ingredient_type_name}</label>
+                  </span>
+                ))}
               </div>
-            )}
-            headingWhileExpanded={(
-              <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                <span>Ingredient Types</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
-              </div>
-            )}
-            isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
-            handler={() => toggleFilterDropdown("ingredient_types")}
-          >
-            <div className="filter-group">
-              {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
-                <span key={ingredient_type_id}>
-                  <input
-                    type="checkbox"
-                    checked={checkedIngredientTypes?.includes(ingredient_type_name)}
-                    onChange={() => {
-                      setCheckedIngredientTypes(
-                        checkedIngredientTypes?.includes(ingredient_type_name)
-                        ? checkedIngredientTypes.filter(v => v !== ingredient_type_name)
-                        : [...checkedIngredientTypes, ingredient_type_name]
-                      );
-                    }}
-                  />
-                  <label>{ingredient_type_name}</label>
-                </span>
-              ))}
-            </div>
-          </ExpandCollapse>
+            </ExpandCollapse>
+          </div>
         </div>
 
-        <Pagination key={1} />
-        <ResultsPerPage key={2} />
+        <Pagination key={2} />
 
         <div className="search-results-list">
           {!results
             ? <div>Loading...</div>
             : results.length < 1
-              ? <div className="no-results">No results found.</div>
+              ? <p className="no-results">No results found.</p>
               : results.map(i => (
                 <Link
                   className="search-results-list-item"
@@ -121,7 +125,6 @@ export default function IngredientList() {
         </div>
 
         <Pagination key={3} />
-        <ResultsPerPage key={4} />
       </div>
 
       <div className="two-col-right"></div>

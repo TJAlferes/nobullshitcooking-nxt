@@ -15,7 +15,7 @@ export function ResultsPerPage() {
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { index } = params;
 
-  const { setFound } = useSearchState();
+  const { found, setFound } = useSearchState();
 
   const changeResultsPerPage = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     params.current_page     = "1";
@@ -28,6 +28,7 @@ export function ResultsPerPage() {
         .get(`${endpoint}/search/find?${search_params}`);
         
       if (res.status === 200) setFound(res.data);
+      else setFound({results: [], total_results: 0, total_pages: 0});
     } catch (err) {
       //
     }
@@ -41,6 +42,9 @@ export function ResultsPerPage() {
       query: search_params
     });
   };
+
+  const { total_results } = found;
+  if (!total_results || Number(total_results) < 21) return null;
 
   const value = params.results_per_page ? Number(params.results_per_page) : 20;
 

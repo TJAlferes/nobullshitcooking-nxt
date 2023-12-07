@@ -27,6 +27,7 @@ export function useSearch() {
       const res = await axios.get(`${endpoint}/search/find/?${search_params}`);
         
       if (res.status === 200) setFound(res.data);
+      else setFound({results: [], total_results: 0, total_pages: 0});
     } catch (err) {
       //
     }

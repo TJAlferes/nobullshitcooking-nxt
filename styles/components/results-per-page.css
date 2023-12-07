@@ -3,11 +3,35 @@
 }
 
 .results-per-page label {
-
+  padding-right: 10px;
+  
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
-.results-per-page select {
 
+.results-per-page select,
+.results-per-page select:active {
+  width: max-content;
+  height: 30px;
+
+  padding: 0 8px;
+
+  border: 1px solid;
+  border-color: #fff #888 #888 #fff;
+  border-radius: 1px;
+
+  font-size: 1.4rem;
+
+  color: #444;
+
+  background-image: linear-gradient(to bottom, #eee, #bbb);
+
+  cursor: pointer;
+}
+
+.results-per-page select:focus {
+  outline: none;
 }
 
 .results-per-page option {
