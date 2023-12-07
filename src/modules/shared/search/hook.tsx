@@ -39,7 +39,6 @@ export function useSearch() {
       pathname: `/${page}/list`,
       query: search_params
     });
-    //router.push(`/${page}/list?${search_params}`, undefined, {shallow: false});
   };
   
   const setFilters = async (filterName: string, filterValues: string[]) => {

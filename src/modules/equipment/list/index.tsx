@@ -32,6 +32,7 @@ export default function EquipmentList() {
   useEffect(() => {
     const trySearch = async () => {
       await search('equipment');
+      if (filters?.equipment_types) setCheckedEquipmentTypes(filters.equipment_types);
       setLoading(false);
     }
     if (router.isReady) trySearch();
@@ -107,19 +108,22 @@ export default function EquipmentList() {
         <ResultsPerPage key={2} />
         
         <div className="search-results-list">
-          {results
-            ? results.map(e => (
-              <Link
-                className="search-results-list-item"
-                href={`/equipment/detail/${e.equipment_name}`}
-                key={e.equipment_id}
-              >
-                <img src={`${url}/${e.image_filename}.jpg`} />
-                <h3>{e.equipment_name}</h3>
-                <div className="type">{e.equipment_type_name}</div>
-              </Link>
-            ))
-            : <div>Loading...</div>}
+          {!results
+            ? <div>Loading...</div>
+            : results.length < 1
+              ? <div className="no-results">No results found.</div>
+              : results.map(e => (
+                <Link
+                  className="search-results-list-item"
+                  href={`/equipment/detail/${e.equipment_name}`}
+                  key={e.equipment_id}
+                >
+                  <img src={`${url}/${e.image_filename}.jpg`} />
+                  <h3>{e.equipment_name}</h3>
+                  <div className="type">{e.equipment_type_name}</div>
+                </Link>
+              ))
+          }
         </div>
 
         <Pagination key={3} />

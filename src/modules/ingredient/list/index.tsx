@@ -28,6 +28,7 @@ export default function IngredientList() {
   useEffect(() => {
     const trySearch = async () => {
       await search('ingredients');
+      if (filters?.ingredient_types) setCheckedIngredientTypes(filters.ingredient_types);
       setLoading(false);
     }
     if (router.isReady) trySearch();
@@ -101,19 +102,22 @@ export default function IngredientList() {
         <ResultsPerPage key={2} />
 
         <div className="search-results-list">
-          {results
-            ? results.map(i => (
-              <Link
-                className="search-results-list-item"
-                href={`/ingredient/detail/${i.fullname}`}
-                key={i.ingredient_id}
-              >
-                <img src={`${url}/${i.image_filename}.jpg`} />
-                <h3>{i.fullname}</h3>
-                <div className="type">{i.ingredient_type_name}</div>
-              </Link>
-            ))
-            : <div>Loading...</div>}
+          {!results
+            ? <div>Loading...</div>
+            : results.length < 1
+              ? <div className="no-results">No results found.</div>
+              : results.map(i => (
+                <Link
+                  className="search-results-list-item"
+                  href={`/ingredient/detail/${i.fullname}`}
+                  key={i.ingredient_id}
+                >
+                  <img src={`${url}/${i.image_filename}.jpg`} />
+                  <h3>{i.fullname}</h3>
+                  <div className="type">{i.ingredient_type_name}</div>
+                </Link>
+              ))
+          }
         </div>
 
         <Pagination key={3} />

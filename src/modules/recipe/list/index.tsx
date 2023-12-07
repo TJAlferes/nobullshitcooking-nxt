@@ -36,7 +36,9 @@ export default function RecipeList() {
   useEffect(() => {
     const trySearch = async () => {
       await search('recipes');
-      // TO DO: set filters here???
+      if (filters?.recipe_types) setCheckedRecipeTypes(filters.recipe_types);
+      if (filters?.methods) setCheckedMethods(filters.methods);
+      if (filters?.cuisines) setCheckedCuisines(filters.cuisines);
       setLoading(false);
     }
     if (router.isReady) trySearch();
@@ -198,21 +200,24 @@ export default function RecipeList() {
         <ResultsPerPage key={2} />
 
         <div className="search-results-list">
-          {results
-            ? results.map(r => (
-              <Link
-                className="search-results-list-item"
-                href={`/recipe/detail/${encodeURIComponent(r.title!)}`}
-                key={r.recipe_id}
-              >
-                <img src={`${url}/${r.image_filename}.jpg`} />
-                <h3>{r.title}</h3>
-                <div className="author">{r.author}</div>
-                <div className="cuisine">{r.cuisine_name}</div>
-                <div className="type">{r.recipe_type_name}</div>
-              </Link>
-            ))
-            : <div>Loading...</div>}
+          {!results
+            ? <div>Loading...</div>
+            : results.length < 1
+              ? <div className="no-results">No results found.</div>
+              : results.map(r => (
+                <Link
+                  className="search-results-list-item"
+                  href={`/recipe/detail/${encodeURIComponent(r.title!)}`}
+                  key={r.recipe_id}
+                >
+                  <img src={`${url}/${r.image_filename}.jpg`} />
+                  <h3>{r.title}</h3>
+                  <div className="author">{r.author}</div>
+                  <div className="cuisine">{r.cuisine_name}</div>
+                  <div className="type">{r.recipe_type_name}</div>
+                </Link>
+              ))
+          }
         </div>
 
         <Pagination key={3} />
