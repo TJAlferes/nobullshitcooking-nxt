@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  height: 100vh;
+  min-height: 100vh;
 }
 
 .dashboard .left-col {
@@ -89,6 +91,27 @@
 }
 
 /*-------------------------------------------------*/
+
+.dashboard .account-settings h4 {
+  margin-bottom: 10px;
+}
+
+.dashboard .account-settings label {
+  display: block;
+  margin: 14px 0 4px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.dashboard .account-settings input {
+  display: block;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  padding: 3px 7px;
+  height: 31px;
+  width: 235px;
+  outline: none;
+}
 
 .dashboard-avatar a,
 .dashboard-avatar a:visited {
@@ -211,6 +234,7 @@
 }
 
 .dashboard-content {
+  padding: 10px;
   width: 100%;
 }
 
@@ -223,18 +247,20 @@
 }
 
 .new-entity {
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+  display: block;
+  margin: 0 30px 10px 0;
   border: 1px solid #aaa;
   border-radius: 2px;
-  color: #000;
-  display: block;
-  height: 30px;
-  line-height: 26px;
-  margin: 0 30px 10px 0;
   padding: 1px 5px;
+  color: #000;
+  height: 30px;
+  width: 235px;
+  line-height: 26px;
+  font-size: 1.3rem;
   text-align: center;
   text-decoration: none;
-  width: 235px;
+  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+  cursor: pointer;
 }
 
 .dashboard-content .no-content {

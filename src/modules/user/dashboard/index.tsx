@@ -28,9 +28,11 @@ export default function Dashboard() {
   const [deleteName, setDeleteName] = useState('');
   const [modalActive, setModalActive] = useState(false);
 
-  const [new_email, setNewEmail] = useState('');
-  const [new_password, setNewPassword] = useState('');
   const [new_username, setNewUsername] = useState('');
+  const [new_email, setNewEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [new_password, setNewPassword] = useState('');
+  const [new_password_again, setNewPasswordAgain] = useState('');
 
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(null);
   const [small_avatar, setSmallAvatar] = useState<File | null>(null);
@@ -409,7 +411,7 @@ export default function Dashboard() {
         <div className="left-col">
           <nav className="dashboard-nav">
             <div className={`menu-item ${tab === 'avatar' ? '--active' : ''}`} onClick={() => setTab('avatar')}>
-              Avatar
+              Profile Settings
             </div>
   
             <ExpandCollapse
@@ -508,10 +510,12 @@ export default function Dashboard() {
         <div className="right-col">
           {
             tab === "settings" && (
-            <div className='dashboard-content dashboard-settings'>
+            <div className='dashboard-content account-settings'>
               <h2>Account Settings</h2>
 
-              <label htmlFor='new-username'>New Username:</label>
+              <h3>Username</h3>
+              <p>{auth.authname}</p>
+              <label htmlFor='new-username'>New Username</label>
               <input
                 name='new-username'
                 onChange={e => setNewUsername(e.target.value)}
@@ -519,9 +523,14 @@ export default function Dashboard() {
                 minLength={6}
                 maxLength={20}
               />
-              <button onClick={updateUsername}>Update Username</button>
+              <button
+                className='new-entity'
+                onClick={updateUsername}
+              >Update Username</button>
     
-              <label htmlFor='new-email'>New Email:</label>
+              <h3>Email</h3>
+              <p>{auth.auth_email}</p>
+              <label htmlFor='new-email'>New Email</label>
               <input
                 name='new-email'
                 onChange={e => setNewEmail(e.target.value)}
@@ -529,17 +538,43 @@ export default function Dashboard() {
                 minLength={5}
                 maxLength={60}
               />
-              <button onClick={updateEmail}>Update Email</button>
+              <button
+                className='new-entity'
+                onClick={updateEmail}
+              >Update Email</button>
     
-              <label htmlFor='new-password'>New Password:</label>
+              <h3>Password</h3>
+              <label htmlFor='password'>Current Password</label>
+              <input
+                name='password'
+                onChange={e => setPassword(e.target.value)}
+                value={password}
+                minLength={6}
+                maxLength={60}
+                type='password'
+              />
+              <label htmlFor='new-password'>New Password</label>
               <input
                 name='new-password'
                 onChange={e => setNewPassword(e.target.value)}
                 value={new_password}
                 minLength={6}
                 maxLength={60}
+                type='password'
               />
-              <button onClick={updatePassword}>Update Password</button>
+              <label htmlFor='new-password-again'>New Password Again</label>
+              <input
+                name='new-password-again'
+                onChange={e => setNewPasswordAgain(e.target.value)}
+                value={new_password_again}
+                minLength={6}
+                maxLength={60}
+                type='password'
+              />
+              <button
+                className='new-entity'
+                onClick={updatePassword}
+              >Update Password</button>
             </div>
             )
           }
@@ -548,9 +583,11 @@ export default function Dashboard() {
             <>
               {!avatar && (
                 <div className="dashboard-content dashboard-avatar">
+                  <h2>Profile Settings</h2>
+
                   <Link href={`/${auth.authname}/profile`}>View Profile</Link>
           
-                  <h2>Profile Picture</h2>
+                  <h3>Avatar</h3>
           
                   <div className="avatar-crops">
                     <div className="--full">
