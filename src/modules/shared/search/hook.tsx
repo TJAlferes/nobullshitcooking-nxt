@@ -68,12 +68,11 @@ export function useSearch() {
     search();
   };*/
 
-  const setPreFilters = (
+  const setPreFilters = async (
     searchIndex: SearchIndex,
     filterName: string,
     filterValues: string[]
   ) => {
-    const params = qs.parse(searchParams.toString()) as SearchRequest;
     params.index = searchIndex;
 
     if (params.term) delete params.term;
@@ -88,6 +87,15 @@ export function useSearch() {
     params.results_per_page = '20';
 
     const search_params = qs.stringify(params);
+
+    try {
+      const res = await axios.get(`${endpoint}/search/find/?${search_params}`);
+        
+      if (res.status === 200) setFound(res.data);
+      else setFound({results: [], total_results: 0, total_pages: 0});
+    } catch (err) {
+      //
+    }
 
     const page = searchIndex === 'equipment'
       ? searchIndex

@@ -26,10 +26,9 @@ export default function RecipeList() {
   const cuisineGroups = groupCuisines(cuisines);
 
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
-  const [checkedRecipeTypes, setCheckedRecipeTypes]
-    = useState<string[]>(filters?.recipe_types ?? []);
-  const [checkedMethods, setCheckedMethods] = useState<string[]>(filters?.methods ?? []);
-  const [checkedCuisines, setCheckedCuisines] = useState<string[]>(filters?.cuisines ?? []);
+  const [checkedRecipeTypes, setCheckedRecipeTypes] = useState<string[]>([]);
+  const [checkedMethods, setCheckedMethods] = useState<string[]>([]);
+  const [checkedCuisines, setCheckedCuisines] = useState<string[]>([]);
   //const sorts = filters?.sorts;
 
   const [loading, setLoading] = useState(true);
@@ -74,131 +73,139 @@ export default function RecipeList() {
 
         <h1>Recipes</h1>
 
-        <div className="settings">
-          <p className="info">{total_results} total results and {total_pages} total pages</p>
+        {results.length > 0
+          ? (
+            <div className="settings">
+              <p className="info">
+                {total_results} total results and {total_pages} total pages
+              </p>
 
-          <ResultsPerPage key={1} />
+              <ResultsPerPage key={1} />
 
-          <div className="filters">
-            <span className="filter-by">Filter by:</span>
+              <div className="filters">
+                <span className="filter-by">Filter by:</span>
 
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
-                  <span>Recipe Types</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                <ExpandCollapse
+                  headingWhileCollapsed={(
+                    <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
+                      <span>Recipe Types</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  headingWhileExpanded={(
+                    <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
+                      <span>Recipe Types</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  isDisabled={expandedFilter !== "recipe_types" && expandedFilter !== null}
+                  handler={() => toggleFilterDropdown("recipe_types")}
+                >{null}</ExpandCollapse>
+
+                <ExpandCollapse
+                  headingWhileCollapsed={(
+                    <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
+                      <span>Methods</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  headingWhileExpanded={(
+                    <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
+                      <span>Methods</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  isDisabled={expandedFilter !== "methods" && expandedFilter !== null}
+                  handler={() => toggleFilterDropdown("methods")}
+                >{null}</ExpandCollapse>
+
+                <ExpandCollapse
+                  headingWhileCollapsed={(
+                    <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
+                      <span>Cuisines</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  headingWhileExpanded={(
+                    <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
+                      <span>Cuisines</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  isDisabled={expandedFilter !== "cuisines" && expandedFilter !== null}
+                  handler={() => toggleFilterDropdown("cuisines")}
+                >{null}</ExpandCollapse>
+
+                <div className={`filter-group ${expandedFilter === "recipe_types" ? "active" : ""}`}>
+                  {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
+                    <span key={recipe_type_id}>
+                      <input
+                        type="checkbox"
+                        checked={checkedRecipeTypes?.includes(recipe_type_name)}
+                        onChange={() => {
+                          setCheckedRecipeTypes(
+                            checkedRecipeTypes?.includes(recipe_type_name)
+                            ? checkedRecipeTypes.filter(v => v !== recipe_type_name)
+                            : [...checkedRecipeTypes, recipe_type_name]
+                          );
+                        }}
+                      />
+                      <label>{recipe_type_name}</label>
+                    </span>
+                  ))}
                 </div>
-              )}
-              headingWhileExpanded={(
-                <div className={`filter-name ${expandedFilter === "recipe_types" ? "active" : ""}`}>
-                  <span>Recipe Types</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+
+                <div className={`filter-group ${expandedFilter === "methods" ? "active" : ""}`}>
+                  {methods.map(({ method_id, method_name }) => (
+                    <span key={method_id}>
+                      <input
+                        type="checkbox"
+                        checked={checkedMethods?.includes(method_name)}
+                        onChange={() => {
+                          setCheckedMethods(
+                            checkedMethods?.includes(method_name)
+                            ? checkedMethods.filter(v => v !== method_name)
+                            : [...checkedMethods, method_name]
+                          );
+                        }}
+                      />
+                      <label>{method_name}</label>
+                    </span>
+                  ))}
                 </div>
-              )}
-              isDisabled={expandedFilter !== "recipe_types" && expandedFilter !== null}
-              handler={() => toggleFilterDropdown("recipe_types")}
-            >
-              <div className="filter-group">
-                {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
-                  <span key={recipe_type_id}>
-                    <input
-                      type="checkbox"
-                      checked={checkedRecipeTypes?.includes(recipe_type_name)}
-                      onChange={() => {
-                        setCheckedRecipeTypes(
-                          checkedRecipeTypes?.includes(recipe_type_name)
-                          ? checkedRecipeTypes.filter(v => v !== recipe_type_name)
-                          : [...checkedRecipeTypes, recipe_type_name]
-                        );
-                      }}
-                    />
-                    <label>{recipe_type_name}</label>
-                  </span>
-                ))}
+
+                <div className={`filter-group ${expandedFilter === "cuisines" ? "active" : ""}`}>
+                  {cuisineGroups.map(group => (
+                    <Fragment key={group.continent}>
+                      <h4>{group.continent}</h4>
+                      {group.cuisines.map(({ cuisine_id, country_code, cuisine_name }) => (
+                        <span key={cuisine_id}>
+                          <input
+                            type="checkbox"
+                            checked={checkedCuisines?.includes(country_code)}
+                            onChange={() => {
+                              setCheckedCuisines(
+                                checkedCuisines?.includes(country_code)
+                                ? checkedCuisines.filter(v => v !== country_code)
+                                : [...checkedCuisines, country_code]
+                              );
+                            }}
+                          />
+                          <label>{cuisine_name}</label>
+                        </span>
+                      ))}
+                    </Fragment >
+                  ))}
+                </div>
               </div>
-            </ExpandCollapse>
 
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
-                  <span>Methods</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              headingWhileExpanded={(
-                <div className={`filter-name ${expandedFilter === "methods" ? "active" : ""}`}>
-                  <span>Methods</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              isDisabled={expandedFilter !== "methods" && expandedFilter !== null}
-              handler={() => toggleFilterDropdown("methods")}
-            >
-              <div className="filter-group">
-                {methods.map(({ method_id, method_name }) => (
-                  <span key={method_id}>
-                    <input
-                      type="checkbox"
-                      checked={checkedMethods?.includes(method_name)}
-                      onChange={() => {
-                        setCheckedMethods(
-                          checkedMethods?.includes(method_name)
-                          ? checkedMethods.filter(v => v !== method_name)
-                          : [...checkedMethods, method_name]
-                        );
-                      }}
-                    />
-                    <label>{method_name}</label>
-                  </span>
-                ))}
-              </div>
-            </ExpandCollapse>
-
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
-                  <span>Cuisines</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              headingWhileExpanded={(
-                <div className={`filter-name ${expandedFilter === "cuisines" ? "active" : ""}`}>
-                  <span>Cuisines</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              isDisabled={expandedFilter !== "cuisines" && expandedFilter !== null}
-              handler={() => toggleFilterDropdown("cuisines")}
-            >
-              <div className="filter-group">
-                {cuisineGroups.map(group => (
-                  <Fragment key={group.continent}>
-                    <h4>{group.continent}</h4>
-                    {group.cuisines.map(({ cuisine_id, country_code, cuisine_name }) => (
-                      <span key={cuisine_id}>
-                        <input
-                          type="checkbox"
-                          checked={checkedCuisines?.includes(country_code)}
-                          onChange={() => {
-                            setCheckedCuisines(
-                              checkedCuisines?.includes(country_code)
-                              ? checkedCuisines.filter(v => v !== country_code)
-                              : [...checkedCuisines, country_code]
-                            );
-                          }}
-                        />
-                        <label>{cuisine_name}</label>
-                      </span>
-                    ))}
-                  </Fragment >
-                ))}
-              </div>
-            </ExpandCollapse>
-          </div>
-        </div>
-
-        {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
-        {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
+              {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'asc'))}>ASC</button>*/}
+              {/*<button onClick={() => router.push(pathname + '?' + createQueryString('sort', 'desc'))}>DESC</button>*/}
+            </div>
+          )
+          : false
+        }
+        
         <Pagination key={2} />
 
         <div className="search-results-list">

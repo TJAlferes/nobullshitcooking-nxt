@@ -21,8 +21,7 @@ export default function IngredientList() {
   const { ingredient_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
-  const [ checkedIngredientTypes, setCheckedIngredientTypes ] =
-    useState<string[]>(filters?.ingredient_types ?? []);
+  const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -57,31 +56,37 @@ export default function IngredientList() {
       <div className="two-col-left search-results">
         <h1>Ingredients</h1>
 
-        <div className="settings">
-          <p className="info">{total_results} total results and {total_pages} total pages</p>
+        {results.length > 0
+          ? (
+            <div className="settings">
+              <p className="info">
+                {total_results} total results and {total_pages} total pages
+              </p>
 
-          <ResultsPerPage key={1} />
+              <ResultsPerPage key={1} />
 
-          <div className="filters">
-            <span className="filter-by">Filter by:</span>
+              <div className="filters">
+                <span className="filter-by">Filter by:</span>
 
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                  <span>Ingredient Types</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              headingWhileExpanded={(
-                <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                  <span>Ingredient Types</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
-              handler={() => toggleFilterDropdown("ingredient_types")}
-            >
-              <div className="filter-group">
+                <ExpandCollapse
+                  headingWhileCollapsed={(
+                    <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                      <span>Ingredient Types</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  headingWhileExpanded={(
+                    <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                      <span>Ingredient Types</span>
+                      <img src="/images/header/down-arrow.png" width="8" height="6" />
+                    </div>
+                  )}
+                  isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
+                  handler={() => toggleFilterDropdown("ingredient_types")}
+                >{null}</ExpandCollapse>
+              </div>
+
+              <div className={`filter-group ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
                 {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
                   <span key={ingredient_type_id}>
                     <input
@@ -99,10 +104,11 @@ export default function IngredientList() {
                   </span>
                 ))}
               </div>
-            </ExpandCollapse>
-          </div>
-        </div>
-
+            </div>
+          )
+          : false
+        }
+        
         <Pagination key={2} />
 
         <div className="search-results-list">

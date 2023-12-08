@@ -2,6 +2,10 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: 10px;
+
+  position: relative;
+
+  width: 100%;
 }
 
 .search-results .info {
@@ -12,8 +16,6 @@
 .search-results .filters {
   display: flex;
   align-items: center;
-
-  position: relative;
 }
 
 .search-results .filter-by {
@@ -60,9 +62,14 @@
 }
 
 .search-results .filter-group {
+  display: none;
+
   position: absolute;
-  left: 0;
   top: 30px;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
 
   max-width: 1180px;
   width: max-content;
@@ -78,6 +85,10 @@
   white-space: wrap;
 
   z-index: 1;
+}
+
+.search-results .filter-group.active {
+  display: block;
 }
 
 .search-results .filter-group span {
