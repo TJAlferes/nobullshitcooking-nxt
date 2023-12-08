@@ -49,8 +49,12 @@ export default function Dashboard() {
 
   const error = 'An error occurred. Please try again.';
 
-  const privateUrl = 'https://s3.amazonaws.com/nobsc-private-uploads/recipe';
-  const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads/recipe';
+  const officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads';
+  const privateUrl = 'https://s3.amazonaws.com/nobsc-private-uploads';
+  const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads';
+  const avatarUrl = auth.auth_avatar === 'default'
+    ? `${officialUrl}/avatar/default`
+    : `${publicUrl}/avatar/user_id/${avatar}`;
 
   const updateEmail = async () => {
     setLoading(true);
@@ -449,12 +453,12 @@ export default function Dashboard() {
               <div className="avatar-crops">
                 <div className="--full">
                   <span>Full Size: </span>
-                  <img src={`${publicUrl}/avatar/${auth.auth_id}${auth.auth_avatar}`} />
+                  <img src={`${avatarUrl}.jpg`} />
                 </div>
 
                 <div className="--tiny">
                   <span>Tiny Size: </span>
-                  <img src={`${publicUrl}/avatar/${auth.auth_id}/${auth.auth_avatar}-tiny`} />
+                  <img src={`${avatarUrl}-tiny.jpg`} />
                 </div>
               </div>
       

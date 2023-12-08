@@ -11,6 +11,11 @@
   width: 100%;
 }
 
+.profile .avatar {
+  height: 280px;
+  width: 280px;
+}
+
 .profile .tabs {
   border-bottom: 2px solid #6cabe4;
   margin-bottom: 10px;

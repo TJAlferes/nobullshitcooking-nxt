@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
@@ -11,14 +11,11 @@ import type { RecipeOverview } from '../../../store';
 export default function Profile({ profile }: Props) {
   const router = useRouter();
 
-  const params = useSearchParams();
-  const username = params.get('username');
+  const username = router.asPath.split('/').at(1);
   if (!profile || !username || (username.length < 6) || (username.length > 20)) {
     router.push('/');
     return <LoaderSpinner />;
   }
-
-  const { avatar, favorite_recipes, public_recipes } = profile;
 
   const { authname } = useAuth();
   const { my_friendships } = useUserData();
@@ -55,12 +52,13 @@ export default function Profile({ profile }: Props) {
     }, 4000);
   };
 
-  let url = 'https://s3.amazonaws.com';
-  if (avatar === 'default') {
-    url += '/nobsc-default-images/avatar'
-  } else {
-    url += `/nobsc-public-uploads/avatar/user_id/${avatar}`;
-  }
+  const { avatar, favorite_recipes, public_recipes } = profile;
+
+  const officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads';
+  const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads';
+  const avatarUrl = avatar === 'default'
+    ? `${officialUrl}/avatar/default`
+    : `${publicUrl}/avatar/user_id/${avatar}`;
 
   return (
     <div className="one-col profile">
@@ -68,7 +66,7 @@ export default function Profile({ profile }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <img src={`${url}`} />
+      <img className="avatar" src={`${avatarUrl}.jpg`} />
       
       <div className="friend-request-outer">
         {authname && username !== authname
@@ -102,12 +100,12 @@ export default function Profile({ profile }: Props) {
       </div>
 
       {tab === "favorite" && (
-        favorite_recipes.length
+        favorite_recipes && favorite_recipes.length > 0
           ? (favorite_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
-                  ? <img src={`${url}/nobsc-user-recipe/${r.image_filename}-tiny`} />
+                  ? <img src={`${publicUrl}/recipe/${r.image_filename}-tiny.jpg`} />
                   : <div className="image-default-28-18"></div>
                 }
               </span>
@@ -121,12 +119,12 @@ export default function Profile({ profile }: Props) {
       }
 
       {tab === "public" && (
-        public_recipes.length
+        public_recipes && public_recipes.length > 0
           ? (public_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
-                  ? <img src={`${url}/nobsc-user-recipe/${r.image_filename}-tiny`} />
+                  ? <img src={`${publicUrl}/recipe/${r.image_filename}-tiny.jpg`} />
                   : <div className="image-default-28-18"></div>
                 }
               </span>

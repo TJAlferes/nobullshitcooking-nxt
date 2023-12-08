@@ -9,11 +9,11 @@ export default function ProfilePage({ profile }: Props) {
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.get(`${endpoint}/users/${params.username}`);
+  const res = await axios.get(`${endpoint}/users/${params.username}`);
 
   return {
     props: {
-      profile: response.data
+      profile: res.data
     }
   };
 }
