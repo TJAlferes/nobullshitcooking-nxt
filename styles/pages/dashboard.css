@@ -184,41 +184,6 @@
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
 }
 
-.dashboard-tabs,
-.dashboard-subtabs {
-  /*border-bottom: 2px solid #6cabe4;*/
-  /*margin-bottom: 10px;*/
-  width: 100%;
-  background-color: #eee;
-}
-
-.dashboard-tabs button,
-.dashboard-subtabs button {
-  background-image: linear-gradient(to bottom, #eee, #bbb);
-  border: 1px solid;
-  border-color: #ddd #666 #666 #ddd;
-  border-radius: 1px;
-  color: #222;
-  cursor: pointer;
-  font-size: 1.3rem;
-  height: 30px;
-  line-height: 26px;
-  padding: 0 8px;
-}
-
-.dashboard-tabs button {
-  width: 188px;
-}
-
-.dashboard-subtabs button {
-  width: 235px;
-}
-
-.dashboard-tabs button.--active,
-.dashboard-subtabs button.--active {
-  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
-}
-
 .dashboard-content {
   padding: 10px;
   width: 100%;

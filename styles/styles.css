@@ -82,6 +82,7 @@ h4 {
 
 input {
   display: block;
+  margin-bottom: 10px;
   border: 1px solid #aaa;
   border-radius: 2px;
   padding: 3px 7px;

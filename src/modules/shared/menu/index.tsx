@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Menu as ReactAimMenu, MenuItem } from 'react-aim-menu';
 
 import { useAuth } from '../../../store';
 import { useTheme } from '../../../store';
@@ -15,53 +13,11 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
 }) {
   const { setPreFilters } = useSearch();
 
-  const [ active, setActive ] = useState<string | null>(null);
-
   return !isLeftNavOpen ? null : (
     <>
       <div className="shadow"></div>
 
       <nav className="left-nav">
-        <ReactAimMenu className="menu" onMouseLeave={() => setActive(null)}>
-          {menuItems.map(item => (
-            <MenuItem
-              className={`menu-item${active === item.name ? ' active' : ''}`}
-              onHover={() => setActive(item.name)}
-            >
-              <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
-                {item.name}
-              </Link>
-            </MenuItem>
-          ))}
-          <hr />
-          <NavLinks />
-
-          {active ? (
-            <div className="submenu">
-              {submenuItems.map(item => active === item.parent ? (
-                <div className={`submenu-item${active === item.parent ? ' active' : ''}`}>
-                  <Link
-                    href={{hash: null}}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsLeftNavOpen(false);
-                      setPreFilters(
-                        item.searchIndex as SearchIndex,
-                        item.filterName,
-                        item.filterValues
-                      );
-                    }}
-                  >
-                    {item.name}
-                  </Link>
-                </div>
-              ) : false)}
-            </div>
-          ) : false}
-        </ReactAimMenu>
-      </nav>
-
-      <nav className="left-nav--mobile">
         <div className="menu">
           {menuItems.map(item => (
             <>
@@ -110,53 +66,64 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
           ))}
         </div>
 
-        <NavLinks />
+        <NavLinks setIsLeftNavOpen={setIsLeftNavOpen} />
       </nav>
     </>
   );
 }
 
-function NavLinks() {
+function NavLinks({ setIsLeftNavOpen }: {
+  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { authname } = useAuth();
 
   return (
     <>
-      <NavLink text="Home" to="/" />
+      <NavLink text="Home" to="/" setIsLeftNavOpen={setIsLeftNavOpen} />
       <hr />
 
       {authname !== '' ? (
         <>
-          <NavLink text={authname} to="/dashboard" />
-          <NavLink text="Chat"     to="/chat" />
-          <NavLink text="Friends"  to="/friends" />
+          <NavLink text={authname} to="/dashboard" setIsLeftNavOpen={setIsLeftNavOpen} />
+          <NavLink text="Chat"     to="/chat" setIsLeftNavOpen={setIsLeftNavOpen} />
+          <NavLink text="Friends"  to="/friends" setIsLeftNavOpen={setIsLeftNavOpen} />
           <hr />
         </>
       ) : false}
 
-      <NavLink text="Water"  to="/water" />
-      <NavLink text="Tea"    to="/tea" />
-      <NavLink text="Coffee" to="/coffee" />
+      <NavLink text="Water"  to="/water" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Tea"    to="/tea" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Coffee" to="/coffee" setIsLeftNavOpen={setIsLeftNavOpen} />
       <hr />
-      <NavLink text="Outdoors" to="/outdoors" />
-      <NavLink text="Garden"   to="/garden" />
-      <NavLink text="Tools"    to="/tools" />
+      <NavLink text="Outdoors" to="/outdoors" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Garden"   to="/garden" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Tools"    to="/tools" setIsLeftNavOpen={setIsLeftNavOpen} />
     </>
   );
 }
 
-function NavLink({ text, to }: {
+function NavLink({ text, to, setIsLeftNavOpen }: {
   text: string;
   to: string;
+  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
   const { theme } = useTheme();
 
-  const backgroundColor = theme === "light" ? "#ddd" : "#444";
+  const color = theme === 'light' ? '#000' : '#ccc';
+  const backgroundColor = theme === 'light' ? '#bfddfa' : '#507ea7';
 
-  const style = to === pathname ? {backgroundColor} : {};
+  const style = to === pathname ? {color, backgroundColor} : {};
 
   return (
-    <div className="left-nav-item">
+    <div
+      className="left-nav-item"
+      style={style}
+      onClick={(e) => {
+        e.preventDefault();
+        setIsLeftNavOpen(false);
+      }}
+    >
       <Link href={to} style={style}>{`${text}`}</Link>
     </div>
   );
@@ -205,6 +172,3 @@ const submenuItems = [
   {parent: 'Equipment', name: 'Dining',    searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Dining'],    image: null},
   {parent: 'Equipment', name: 'Storage',   searchIndex: "equipment", filterName: "equipment_types", filterValues: ['Storage'],   image: null}
 ];
-
-        /*<NavLink text="Equipment" to="/products" /> (Products) (Maybe also Supply?)
-          <hr />*/

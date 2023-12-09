@@ -15,6 +15,7 @@ export default function Friends() {
   const [userToFind, setUsertoFind] = useState('');
 
   const url = `${endpoint}/users/${authname}/friendships`;
+  const error = 'An error occurred. Please try again.';
 
   const getMyFriendships = async () => {
     const res = await axios.get(url, {withCredentials: true});
@@ -176,11 +177,16 @@ export default function Friends() {
         {my_friendships.filter(f => f.status === tab).map(f => (
           <div className="friends-item" key={f.username}>
             <span className="avatar">
-              <img src={`${s3Url}/${f.avatar}-tiny`} />
+              <img
+                src={f.avatar === 'default'
+                  ? 'https://s3.amazonaws.com/nobsc-official-uploads/avatar/default-tiny.jpg'
+                  : `https://s3.amazonaws.com/nobsc-public-uploads/avatar/${f.user_id}/${f.avatar}-tiny.jpg`
+                }
+              />
             </span>
 
             <span className="username">
-              <Link href={`/profile/${f.username}`}>{f.username}</Link>
+              <Link href={`/${f.username}/profile`}>{f.username}</Link>
             </span>
 
             {f.status === 'pending-received' && (
@@ -220,7 +226,3 @@ export default function Friends() {
     </div>
   );
 }
-
-const error = 'An error occurred. Please try again.';
-
-const s3Url = '';  // TO DO: finish
