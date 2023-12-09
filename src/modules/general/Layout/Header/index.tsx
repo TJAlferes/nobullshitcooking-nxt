@@ -75,7 +75,6 @@ export function Header() {
             </>
           )
         }
-        <Link href="/cart">Cart</Link>
       </div>
       
       <LeftNav isLeftNavOpen={isLeftNavOpen} setIsLeftNavOpen={setIsLeftNavOpen} />

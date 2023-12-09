@@ -202,7 +202,7 @@ export default function IngredientForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Ingredient Type</h2>
+      <h3>Ingredient Type</h3>
       <select
         name="ingredientType"
         onChange={e => setIngredientTypeId(Number(e.target.value))}
@@ -217,7 +217,7 @@ export default function IngredientForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h2>Ingredient Brand</h2>
+      <h3>Ingredient Brand</h3>
       <input
         className="name"
         onChange={e => setIngredientBrand(e.target.value)}
@@ -225,7 +225,7 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_brand}
       />
 
-      <h2>Ingredient Variety</h2>
+      <h3>Ingredient Variety</h3>
       <input
         className="name"
         onChange={e => setIngredientVariety(e.target.value)}
@@ -233,7 +233,7 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_variety}
       />
 
-      <h2>Ingredient Name</h2>
+      <h3>Ingredient Name</h3>
       <input
         className="name"
         onChange={e => setIngredientName(e.target.value)}
@@ -241,11 +241,11 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_name}
       />
 
-      <h2>Notes</h2>
+      <h3>Notes</h3>
       <textarea className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='ingredient-image'>
-        <h2>Image of Ingredient</h2>
+        <h3>Image of Ingredient</h3>
 
         {!imageState.image && (
           <div>

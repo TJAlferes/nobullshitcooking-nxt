@@ -484,7 +484,7 @@ export default function RecipeForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Recipe Type</h2>
+      <h3>Recipe Type</h3>
       <select
         id="recipe_type_id"
         name="recipeType"
@@ -500,7 +500,7 @@ export default function RecipeForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h2>Cuisine</h2>
+      <h3>Cuisine</h3>
       <select
         id="cuisine_id"
         name="cuisine"
@@ -514,7 +514,7 @@ export default function RecipeForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h2>Title</h2>
+      <h3>Title</h3>
       <input
         className="title"
         id="recipe_title"
@@ -526,7 +526,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={title}
       />
 
-      <h2>Description / Author Note</h2>
+      <h3>Description / Author Note</h3>
       <input
         className="description"
         id="recipe_description"
@@ -537,7 +537,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={description}
       />
 
-      <h2>Active Time</h2>
+      <h3>Active Time</h3>
       <input
         className="time"
         name="active_time"
@@ -546,7 +546,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={active_time}
       />
 
-      <h2>Total Time</h2>
+      <h3>Total Time</h3>
       <input
         className="time"
         name="total_time"
@@ -555,7 +555,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={total_time}
       />
 
-      <h2>Methods</h2>
+      <h3>Methods</h3>
       <div className="methods">
         {methods.map(({ method_id, method_name }) => (
           <span className="method" key={method_id}>
@@ -576,7 +576,7 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="required-equipment">
-        <h2>Equipment</h2>
+        <h3>Equipment</h3>
 
         <div className="equipment-rows">
           {equipmentRows.map(({ key, amount, equipment_type_id, equipment_id }) => (
@@ -642,7 +642,7 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="required-ingredients">
-        <h2>Ingredients</h2>
+        <h3>Ingredients</h3>
         
         <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, unit_id, ingredient_type_id, ingredient_id }) => (
@@ -720,7 +720,7 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="required-subrecipes">
-        <h2>Subrecipes</h2>
+        <h3>Subrecipes</h3>
         
         <div className="subrecipe-rows">
           {subrecipeRows.map(s => (
@@ -812,7 +812,7 @@ export default function RecipeForm({ ownership }: Props) {
         >Add Subrecipe</button>
       </div>
 
-      <h2>Directions</h2>
+      <h3>Directions</h3>
       <textarea
         className="directions"
         id="recipe_directions"
@@ -822,8 +822,15 @@ export default function RecipeForm({ ownership }: Props) {
       />
 
       <div className="recipe-form-images">
+        <h2>Images</h2>
+
+        <div>
+          <span>If possible, upload all four images. See an example </span>
+          <Link href='/recipe/detail/Dark%20Chocolate%Banana'>here</Link>.
+        </div>
+
         <div className="recipe-image">
-          <h2>Image of Finished Recipe</h2>
+          <h3>Finished Recipe</h3>
           {
             !recipeImageState.image
             ? (
@@ -831,7 +838,7 @@ export default function RecipeForm({ ownership }: Props) {
                 {!recipe_id
                   ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
                   : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
-                <h4>Change</h4>
+                <label>Change</label>
                 <input
                   accept="image/*"
                   name="image-input"
@@ -892,7 +899,7 @@ export default function RecipeForm({ ownership }: Props) {
         </div>
 
         <div className="equipment-image">
-          <h2>Image of All Equipment</h2>
+          <h3>Equipment</h3>
           {
             !equipmentImageState.image
             ? (
@@ -900,7 +907,7 @@ export default function RecipeForm({ ownership }: Props) {
                 {!recipe_id
                   ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
                   : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
-                <h4>Change</h4>
+                <label>Change</label>
                 <input
                   accept="image/*"
                   name="equipment-image-input"
@@ -953,7 +960,7 @@ export default function RecipeForm({ ownership }: Props) {
         </div>
 
         <div className="ingredients-image">
-          <h2>Image of All Ingredients</h2>
+          <h3>Ingredients</h3>
           {
             !ingredientsImageState.image
             ? (
@@ -962,7 +969,7 @@ export default function RecipeForm({ ownership }: Props) {
                   ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
                   : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
                 }
-                <h4>Change</h4>
+                <label>Change</label>
                 <input
                   accept="image/*"
                   name="ingredients-image-input"
@@ -1015,7 +1022,7 @@ export default function RecipeForm({ ownership }: Props) {
         </div>
 
         <div className="cooking-image">
-          <h2>Image of Cooking In Action</h2>
+          <h3>Cooking In Action</h3>
           {
             !cookingImageState.image
             ? (
@@ -1023,7 +1030,7 @@ export default function RecipeForm({ ownership }: Props) {
                 {!recipe_id
                   ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
                   : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
-                <h4>Change</h4>
+                <label>Change</label>
                 <input
                   accept="image/*"
                   name="cooking-image-input"

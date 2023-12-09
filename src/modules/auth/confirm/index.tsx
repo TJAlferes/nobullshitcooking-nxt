@@ -57,7 +57,7 @@ export default function Confirm() {
 
         <p className="feedback">{feedback}</p>
 
-        <p>Please check your email for the confirmation code.</p>
+        <p>Check your email for the confirmation code.</p>
 
         <label>Code</label>
         <input
@@ -78,9 +78,10 @@ export default function Confirm() {
           disabled={confirmation_code.length !== 36}
           onClick={confirmClick}
         >{loading ? 'Confirming...' : 'Confirm'}</button>
-
-        <p>Can't find your confirmation code? We can email you a new one:</p>
-        <Link href='/resend-confirmation-code'>Resend Confirmation Code</Link>
+        
+        <Link className='troubleshoot' href='/resend-confirmation-code'>
+          Can't find your confirmation code?
+        </Link>
       </form>
 
       <div className="links">

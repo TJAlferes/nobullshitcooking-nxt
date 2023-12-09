@@ -92,13 +92,21 @@
   text-decoration: none;
 }
 
+.auth .troubleshoot {
+  
+}
+
 .auth .links a:link,
-.auth .links a:visited {
+.auth .links a:visited,
+.auth .troubleshoot:link,
+.auth .troubleshoot:visited {
   color: #68abe6;
 }
 
 .auth .links a:hover,
-.auth .links a:active {
+.auth .links a:active,
+.auth .troubleshoot:hover,
+.auth .troubleshoot:active {
   color: #c10006;
   text-decoration: underline;
 }

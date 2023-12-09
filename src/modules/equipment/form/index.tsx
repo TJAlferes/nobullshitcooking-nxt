@@ -129,7 +129,7 @@ export default function EquipmentForm({ ownership }: Props) {
     setFeedback('');
     setLoading(true);
     if (equipment_type_id === 0) return invalid('Equipment Type required.');
-    if (equipment_name.trim() === "") return invalid('Equipment Name required.');
+    if (equipment_name.trim() === '') return invalid('Equipment Name required.');
     const equipment_upload = {
       equipment_type_id,
       equipment_name,
@@ -194,7 +194,7 @@ export default function EquipmentForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h2>Equipment Type</h2>
+      <h3>Equipment Type</h3>
       <select
         name="equipmentType"
         onChange={e => setEquipmentTypeId(Number(e.target.value))}
@@ -209,7 +209,7 @@ export default function EquipmentForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h2>Equipment Name</h2>
+      <h3>Equipment Name</h3>
       <input
         className="name"
         onChange={e => setEquipmentName(e.target.value)}
@@ -217,11 +217,11 @@ export default function EquipmentForm({ ownership }: Props) {
         value={equipment_name}
       />
 
-      <h2>Notes</h2>
+      <h3>Notes</h3>
       <textarea className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='equipment-image'>
-        <h2>Image of Equipment</h2>
+        <h3>Image of Equipment</h3>
 
         {!imageState.image && (
           <div>

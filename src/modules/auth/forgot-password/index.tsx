@@ -58,7 +58,10 @@ export default function ForgotPassword() {
 
         <p className="feedback">{feedback}</p>
 
-        <p>Forgot password? We can email you a temporary password, and you can set a new password.</p>
+        <p>
+          Enter the email associated with your account to receive a temporary password.
+          Then you can set your new password.
+        </p>
 
         <label>Email</label>
         <input
