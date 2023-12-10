@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   column-gap: 10px;
   position: relative;
+  margin-bottom: 10px;
   width: 100%;
 }
 
@@ -60,30 +61,36 @@
   right: 0; 
   margin-left: auto; 
   margin-right: auto;
-  /*border: 1px solid #aaa;*/
   border: 2px solid #bfddfa;
   padding: 8px;
+  max-height: 367px;
   max-width: 1180px;
-  width: max-content;
   min-width: 300px;
+  overflow-y: scroll;
   background-color: #fff;
   white-space: wrap;
   z-index: 1;
 }
 
 .search-results .filter-group.active {
-  display: block;
+  display: grid;
+  gap: 3px;
 }
 
 .search-results .filter-group span {
-  display: inline-block;
-  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   margin-right: 20px;
+  width: fit-content;
   white-space: normal;
 }
 
 .search-results .filter-group input {
   margin-right: 2px;
+  margin-bottom: 0;
+  height: initial;
+  width: initial;
 }
 
 .search-results .filter-group label {
@@ -92,10 +99,10 @@
 
 .search-results-list {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  row-gap: 18px;
   width: inherit;
-  outline: 1px solid red;
 }
 
 .search-results-list-item {

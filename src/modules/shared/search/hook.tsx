@@ -62,10 +62,8 @@ export function useSearch() {
     search(params.index);
   };
 
-  /*const clearFilters = (filterName: string) => {
-    delete params['filters']?.[filterName];
-    params.current_page = '1';
-    search();
+  /*const clearFilters = () => {
+    delete params.filters;
   };*/
 
   const setPreFilters = async (
@@ -77,7 +75,7 @@ export function useSearch() {
 
     if (params.term) delete params.term;
     if (params.term === '') delete params.term;
-    if (params.filters) delete params.filters;
+    //if (params.filters) delete params.filters;
     params.filters = {
       [filterName]: filterValues
     };

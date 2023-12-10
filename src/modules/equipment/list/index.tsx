@@ -31,6 +31,9 @@ export default function EquipmentList() {
   useEffect(() => {
     const trySearch = async () => {
       await search('equipment');
+      // TO DO: bug:
+      // if they're already at /equipment/list then this setter does not work
+      console.log(filters?.equipment_types);
       if (filters?.equipment_types) setCheckedEquipmentTypes(filters.equipment_types);
       setLoading(false);
     }
