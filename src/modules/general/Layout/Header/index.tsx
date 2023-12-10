@@ -65,13 +65,13 @@ export function Header() {
           ? (
             <>
               <Link href="/register">Create Account</Link>
-              <Link href="/login">Sign In</Link>
+              <Link href="/login">Login</Link>
             </>
           )
           : (
             <>
               <Link href="/dashboard">{`Hello, ${authname}`}</Link>
-              <span className="logout" onClick={logoutHandler}>Sign Out</span>
+              <span className="logout" onClick={logoutHandler}>Log Out</span>
             </>
           )
         }

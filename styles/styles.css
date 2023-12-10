@@ -72,12 +72,12 @@ h4 {
 }
 
 .feedback {
-  color: #c10006;
   display: block;
-  font-size: 1.4rem;
   height: 31px;
-  text-align: center;
   width: 100%;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #c10006;
 }
 
 input {

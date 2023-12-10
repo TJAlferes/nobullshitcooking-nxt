@@ -410,9 +410,10 @@ export default function Dashboard() {
       <div className="cols">
         <div className="left-col">
           <nav className="dashboard-nav">
-            <div className={`menu-item ${tab === 'avatar' ? '--active' : ''}`} onClick={() => setTab('avatar')}>
-              Profile Settings
-            </div>
+            <div
+              className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
+              onClick={() => setTab('avatar')}
+            >Profile Settings</div>
   
             <ExpandCollapse
               headingWhileCollapsed={(

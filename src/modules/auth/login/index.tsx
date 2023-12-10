@@ -55,7 +55,7 @@ export default function Login() {
       </Link>
 
       <form>
-        <h1>Sign In</h1>
+        <h1>Login</h1>
 
         <p className="feedback">{feedback}</p>
 
@@ -94,7 +94,7 @@ export default function Login() {
             || password.length > 60
           }
           onClick={loginClick}
-        >{loading ? 'Signing In...' : 'Sign In'}</button>
+        >{loading ? 'Logging In...' : 'Login'}</button>
 
         <Link className='troubleshoot' href='/forgot-password'>Forgot password?</Link>
       </form>

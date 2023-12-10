@@ -6,16 +6,16 @@
 }
 
 .two-col-left {
+  padding: 10px;
   width: 100%;
   max-width: 1200px;
   min-width: 300px;
-  padding: 10px;
 }
 
 .two-col-right {
+  padding: 10px;
   max-width: 300px;
   min-width: 300px;
-  padding: 10px;
 }
 
 @media (max-width: 899px) {
@@ -46,90 +46,4 @@ Dark Theme
 .dark .two-col-right {
   background-color: #222;
   color: #aaa;
-}
-
-
-
-/* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
-
-.light .search-result-recipe-link:hover,
-.light .search-result-recipe-link:active,
-.light .search-result-ingredient-link:hover,
-.light .search-result-ingredient-link:active,
-.light .search-result-equipment-link:hover,
-.light .search-result-equipment-link:active {
-  background-color: #eee;
-}
-
-.light .search-result-recipe-text__title,
-.light .search-result-recipe-text__author,
-.light .search-result-recipe-text__types-cuisine,
-.light .search-result-recipe-text__types-recipe-type,
-.light .search-result-recipe-text__tags-methods,
-.light .search-result-recipe-text__tags-ingredients,
-.light .search-result-ingredient-text__name,
-.light .search-result-ingredient-text__type,
-.light .search-result-equipment-text__name,
-.light .search-result-equipment-text__type {
-  color: #000;
-}
-
-.light .search-result-recipe-text__tags-method {
-  background-color: #cfcfcf;
-}
-
-.light .search-result-recipe-text__tags-ingredient {
-  background-color: #dedede;
-}
-
-
-
-/* EQUIPMENTS, INGREDIENTS, RECIPES (search results) */
-
-.dark .search-result-recipe-link:hover,
-.dark .search-result-recipe-link:active,
-.dark .search-result-ingredient-link:hover,
-.dark .search-result-ingredient-link:active,
-.dark .search-result-equipment-link:hover,
-.dark .search-result-equipment-link:active {
-  background-color: #333;
-}
-
-.dark .search-result-recipe-text__title,
-.dark .search-result-recipe-text__author,
-.dark .search-result-recipe-text__types-cuisine,
-.dark .search-result-recipe-text__types-recipe-type,
-.dark .search-result-recipe-text__tags-methods,
-.dark .search-result-recipe-text__tags-ingredients,
-.dark .search-result-ingredient-text__name,
-.dark .search-result-ingredient-text__type,
-.dark .search-result-equipment-text__name,
-.dark .search-result-equipment-text__type {
-  color: #aaa;
-}
-
-.dark .search-result-recipe-text__tags-method {
-  background-color: #555;
-}
-
-.dark .search-result-recipe-text__tags-ingredient {
-  background-color: #444;
-}
-
-/* NOT USED (Recipes? Recipe?) */
-
-.light .recipe-details__required-method {
-  background-color: #cfcfcf;
-}
-
-.light .recipe-details__author-name:hover {
-  color: #c10006;
-}
-
-.dark .recipe-details__required-method {
-  background-color: #555;
-}
-
-.dark .recipe-details__author-name:hover {
-  color: #690004;
 }

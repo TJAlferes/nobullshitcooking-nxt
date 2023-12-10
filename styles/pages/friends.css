@@ -40,36 +40,62 @@
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
 }
 
-.friends-tabs {
-  border-bottom: 2px solid #6cabe4;
+.friends .cols {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  margin-bottom: 10px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.friends .left-col {
+  width: 240px;
+}
+
+.friends .right-col {
   width: 100%;
+  height: 100%;
+  border-left: 2px solid #bfddfa;
 }
 
-.friends-tabs button,
-.friends-tabs button.--active {
-  border: 1px solid;
-  border-color: #ddd #666 #666 #ddd;
-  border-radius: 1px;
-  color: #222;
-  cursor: pointer;
-  flex-grow: 1;
+.friends-nav {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 240px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.friends-nav .menu-item,
+.friends-nav .submenu-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+  height: 32px;
+  padding-right: 18px;
   font-size: 1.4rem;
-  height: 30px;
-  line-height: 26px;
-  padding: 0 8px;
-  text-align: center;
+  cursor: pointer;
 }
 
-.friends-tabs button {
-  background-image: linear-gradient(to bottom, #eee, #bbb);
+.friends-nav .menu-item.--active,
+.friends-nav .submenu-item.--active {
+  background-color: #bfddfa;
 }
 
-.friends-tabs button.--active {
-  background-image: linear-gradient(to bottom, #b8dbfb, #68abe6);
+.friends-nav .menu-item,
+.friends-nav .expand-collapse .menu-item span,
+.friends-nav--mobile .expand-collapse .menu-item span {
+  font-size: 1.4rem;
+  text-indent: 18px;
+}
+
+.friends-content {
+  padding: 10px;
+  width: 100%;
 }
 
 .friends-list {

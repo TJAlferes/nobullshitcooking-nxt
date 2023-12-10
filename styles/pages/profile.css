@@ -2,15 +2,6 @@
   width: 1000px;
 }
 
-.profile .feedback {
-  color: #c10006;
-  font-family: Arial;
-  font-size: 14px;
-  height: 31px;
-  text-align: center;
-  width: 100%;
-}
-
 .profile .avatar {
   height: 280px;
   width: 280px;
@@ -42,20 +33,20 @@
 }
 
 .profile .none {
-  font-size: 13px;
+  font-size: 1.3rem;
 }
 
 .profile .item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   border-bottom: 1px solid;
   border-left: 1px solid;
   border-right: 1px solid;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   height: 28px;
-  line-height: 24px;
   width: 100%;
+  line-height: 24px;
 }
 
 .profile .item:first-of-type {
