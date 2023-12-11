@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 import qs from 'qs';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
@@ -16,12 +15,11 @@ export default function RecipeList() {
   const renders = useRef(0);
   renders.current++;
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
-  const { filters } = params;
+  const { filters, current_page, results_per_page } = params;
 
-  const { setFilters, found, search } = useSearch();
+  const { router, found, search, setFilters } = useSearch();
   const { recipe_types, methods, cuisines } = useData();
   const cuisineGroups = groupCuisines(cuisines);
 
@@ -32,28 +30,69 @@ export default function RecipeList() {
   //const sorts = filters?.sorts;
 
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const trySearch = async () => {
+      if (!filters?.recipe_types) {
+        setCheckedRecipeTypes([]);
+      } else if (
+        JSON.stringify(checkedRecipeTypes) !== JSON.stringify(filters?.recipe_types)
+      ) {
+        setCheckedRecipeTypes(filters.recipe_types);
+      }
+
+      if (!filters?.methods) {
+        setCheckedMethods([]);
+      } else if (
+        JSON.stringify(checkedMethods) !== JSON.stringify(filters?.methods)
+      ) {
+        setCheckedMethods(filters.methods);
+      }
+
+      if (!filters?.cuisines) {
+        setCheckedCuisines([]);
+      } else if (
+        JSON.stringify(checkedCuisines) !== JSON.stringify(filters?.cuisines)
+      ) {
+        setCheckedCuisines(filters.cuisines);
+      }
+
       await search('recipes');
-      if (filters?.recipe_types) setCheckedRecipeTypes(filters.recipe_types);
-      if (filters?.methods) setCheckedMethods(filters.methods);
-      if (filters?.cuisines) setCheckedCuisines(filters.cuisines);
+
       setLoading(false);
     }
+
     if (router.isReady) trySearch();
-  }, [router.isReady]);
+  }, [
+    router.isReady,
+    JSON.stringify(filters),
+    JSON.stringify(filters?.equipment_types),
+    JSON.stringify(filters?.methods),
+    JSON.stringify(filters?.cuisines),
+    current_page,
+    results_per_page
+  ]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "recipe_types" && checkedRecipeTypes !== filters?.recipe_types) {
+      if (
+        name === "recipe_types" &&
+        JSON.stringify(checkedRecipeTypes) !== JSON.stringify(filters?.recipe_types)
+      ) {
         setFilters(name, checkedRecipeTypes);
       }
-      if (name === "methods" && checkedMethods !== filters?.methods) {
+      if (
+        name === "methods" &&
+        JSON.stringify(checkedMethods) !== JSON.stringify(filters?.methods)
+      ) {
         setFilters(name, checkedMethods);
       }
-      if (name === "cuisines" && checkedCuisines !== filters?.cuisines) {
+      if (
+        name === "cuisines" &&
+        JSON.stringify(checkedCuisines) !== JSON.stringify(filters?.cuisines)
+      ) {
         setFilters(name, checkedCuisines);
       }
     } else {

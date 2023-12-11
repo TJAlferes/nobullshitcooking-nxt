@@ -16,7 +16,7 @@ export default function EquipmentList() {
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
-  const { filters } = params;
+  const { filters, current_page, results_per_page } = params;
 
   const { router, found, search, setFilters } = useSearch();
   const { equipment_types } = useData();
@@ -38,12 +38,12 @@ export default function EquipmentList() {
       await search('equipment');
       setLoading(false);
     }
-    if (router.isReady === true) {
-      trySearch();
-    }
+    if (router.isReady) trySearch();
   }, [
     router.isReady,
-    JSON.stringify(filters?.equipment_types)
+    JSON.stringify(filters?.equipment_types),
+    current_page,
+    results_per_page
   ]);
 
   const toggleFilterDropdown = (name: string) => {

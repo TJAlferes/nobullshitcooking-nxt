@@ -1,7 +1,6 @@
 import axios from 'axios';
 //import { memo } from 'react';
 import { useSearchParams } from 'next/navigation';
-//import { useRouter } from 'next/router';
 import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
@@ -10,7 +9,6 @@ import { useSearch } from '../hook';
 import type { SearchRequest } from '../types';
 
 export function Pagination() {
-  //const router = useRouter();
   const { router } = useSearch();
   const { found, setFound } = useSearchState();
 

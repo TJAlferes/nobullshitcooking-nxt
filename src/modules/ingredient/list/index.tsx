@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useEffect, useState } from 'react';
 
@@ -12,33 +11,47 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function IngredientList() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
-  const { filters } = params;
+  const { filters, current_page, results_per_page } = params;
 
-  const { setFilters, found, search } = useSearch();
+  const { router, found, search, setFilters } = useSearch();
   const { ingredient_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedIngredientTypes, setCheckedIngredientTypes ] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const trySearch = async () => {
+      if (!filters?.ingredient_types) {
+        setCheckedIngredientTypes([]);
+      } else if (
+        JSON.stringify(checkedIngredientTypes) !== JSON.stringify(filters?.ingredient_types)
+      ) {
+        setCheckedIngredientTypes(filters.ingredient_types);
+      }
       await search('ingredients');
-      if (filters?.ingredient_types) setCheckedIngredientTypes(filters.ingredient_types);
       setLoading(false);
     }
     if (router.isReady) trySearch();
-  }, [router.isReady]);
+  }, [
+    router.isReady,
+    JSON.stringify(filters?.ingredient_types),
+    current_page,
+    results_per_page
+  ]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
       // TO DO: fix
-      if (name === "ingredient_types" && checkedIngredientTypes !== filters?.ingredient_types) {
+      if (
+        name === "ingredient_types" &&
+        JSON.stringify(checkedIngredientTypes) !== JSON.stringify(filters?.ingredient_types)
+      ) {
         setFilters(name, checkedIngredientTypes);
       }
     } else {
