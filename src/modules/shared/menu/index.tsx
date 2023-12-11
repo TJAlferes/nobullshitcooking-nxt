@@ -102,6 +102,7 @@ function NavLinks({ setIsLeftNavOpen }: {
   );
 }
 
+// shallow={true} ???
 function NavLink({ text, to, setIsLeftNavOpen }: {
   text: string;
   to: string;

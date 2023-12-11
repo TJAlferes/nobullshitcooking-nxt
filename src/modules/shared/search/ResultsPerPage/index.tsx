@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { memo } from 'react';
+//import { memo } from 'react';
 import { useSearchParams } from 'next/navigation';
 //import { useRouter } from 'next/router';
 import qs from 'qs';

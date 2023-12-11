@@ -23,38 +23,27 @@ export default function EquipmentList() {
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
   const [ checkedEquipmentTypes, setCheckedEquipmentTypes ] = useState<string[]>([]);
-  console.log('TOP LVL ', checkedEquipmentTypes);
-  console.log(renders.current);
 
   const [loading, setLoading] = useState(true);
 
-  const ran = useRef(false);
-  ran.current = false;
-
   useEffect(() => {
     const trySearch = async () => {
+      if (!filters?.equipment_types) {
+        setCheckedEquipmentTypes([]);
+      } else if (
+        JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
+      ) {
+        setCheckedEquipmentTypes(filters.equipment_types);
+      }
       await search('equipment');
-      if (filters?.equipment_types) setCheckedEquipmentTypes(filters.equipment_types);
       setLoading(false);
-      ran.current = true;
-      console.log('AFTER ', JSON.stringify(filters?.equipment_types));
-      console.log('AFTER ', checkedEquipmentTypes);
     }
-    if (
-      ran.current === false &&
-      router.isReady === true &&
-      JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
-    ) {
-      console.log('BEFORE ', JSON.stringify(filters?.equipment_types));
-      console.log('BEFORE ', checkedEquipmentTypes);
+    if (router.isReady === true) {
       trySearch();
     }
   }, [
     router.isReady,
-    filters?.equipment_types,
-    ran.current,
-    checkedEquipmentTypes,
-    //JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
+    JSON.stringify(filters?.equipment_types)
   ]);
 
   const toggleFilterDropdown = (name: string) => {
@@ -65,7 +54,6 @@ export default function EquipmentList() {
         name === "equipment_types" &&
         JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
       ) {
-        console.log(checkedEquipmentTypes.toString());
         setFilters(name, checkedEquipmentTypes);
       }
     } else {
