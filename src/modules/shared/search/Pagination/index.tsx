@@ -1,17 +1,18 @@
 import axios from 'axios';
 //import { memo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
 import { useSearchState } from '../../../../store';
+import { useSearch } from '../hook';
 import type { SearchRequest } from '../types';
 
 export function Pagination() {
+  //const router = useRouter();
+  const { router } = useSearch();
   const { found, setFound } = useSearchState();
-
-  const router = useRouter();
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
@@ -39,7 +40,7 @@ export function Pagination() {
     router.push({
       pathname: `/${nextjsPage}/list`,
       query: search_params
-    });
+    }, undefined, {shallow: true});
   };
 
   const current_page = params.current_page ? params.current_page : "1";

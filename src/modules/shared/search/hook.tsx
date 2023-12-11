@@ -40,11 +40,7 @@ export function useSearch() {
     router.push({
       pathname: `/${page}/list`,
       query: search_params
-    },
-    undefined,
-    {
-      shallow: true
-    });
+    }, undefined, {shallow: true});
   };
   
   const setFilters = async (filterName: string, filterValues: string[]) => {
@@ -109,11 +105,7 @@ export function useSearch() {
     router.push({
       pathname: `/${page}/list`,
       query: search_params
-    },
-    undefined,
-    {
-      shallow: true
-    });
+    }, undefined, {shallow: true});
   };
 
   return {

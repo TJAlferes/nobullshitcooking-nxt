@@ -1,21 +1,22 @@
 import axios from 'axios';
-//import { memo } from 'react';
+import { memo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 import qs from 'qs';
 
 import { endpoint } from '../../../../config/api';
 import { useSearchState } from '../../../../store';
+import { useSearch } from '../hook';
 import type { SearchRequest } from '../types';
 
 export function ResultsPerPage() {
-  const router = useRouter();
+  //const router = useRouter();
+  const { router } = useSearch();
+  const { found, setFound } = useSearchState();
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { index } = params;
-
-  const { found, setFound } = useSearchState();
 
   const changeResultsPerPage = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     params.current_page     = "1";
@@ -40,7 +41,7 @@ export function ResultsPerPage() {
     router.push({
       pathname: `/${page}/list`,
       query: search_params
-    });
+    }, undefined, {shallow: true});
   };
 
   const { total_results } = found;
