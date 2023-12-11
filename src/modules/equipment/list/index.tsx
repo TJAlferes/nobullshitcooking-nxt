@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 import qs from 'qs';
 import { useEffect, useRef, useState } from 'react';
 
@@ -15,12 +14,11 @@ export default function EquipmentList() {
   const renders = useRef(0);
   renders.current++;
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
   const { filters } = params;
 
-  const { setFilters, search, found } = useSearch();
+  const { router, setFilters, search, found } = useSearch();
   const { equipment_types } = useData();
 
   const [ expandedFilter, setExpandedFilter ] = useState<string|null>(null);
@@ -28,23 +26,37 @@ export default function EquipmentList() {
 
   const [loading, setLoading] = useState(true);
 
+  const ran = useRef(false);
+  ran.current = false;
+
   useEffect(() => {
     const trySearch = async () => {
       await search('equipment');
-      // TO DO: bug:
-      // if they're already at /equipment/list then this setter does not work
-      console.log(filters?.equipment_types);
       if (filters?.equipment_types) setCheckedEquipmentTypes(filters.equipment_types);
       setLoading(false);
+      ran.current = true;
     }
-    if (router.isReady) trySearch();
-  }, [router.isReady]);
+    if (
+      ran.current === false &&
+      router.isReady === true &&
+      JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
+    ) {
+      trySearch();
+    }
+  }, [
+    router.isReady,
+    JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
+  ]);
 
   const toggleFilterDropdown = (name: string) => {
     if (expandedFilter === name) {
       setExpandedFilter(null);  // close the dropdown
       // if needed, re-search with updated filters
-      if (name === "equipment_types" && checkedEquipmentTypes !== filters?.equipment_types) {
+      if (
+        name === "equipment_types" &&
+        JSON.stringify(checkedEquipmentTypes) !== JSON.stringify(filters?.equipment_types)
+      ) {
+        console.log(checkedEquipmentTypes.toString());
         setFilters(name, checkedEquipmentTypes);
       }
     } else {
@@ -98,7 +110,7 @@ export default function EquipmentList() {
                     <span key={equipment_type_id}>
                       <input
                         type="checkbox"
-                        checked={checkedEquipmentTypes?.includes(equipment_type_name)}
+                        checked={checkedEquipmentTypes.includes(equipment_type_name)}
                         onChange={() => {
                           setCheckedEquipmentTypes(
                             checkedEquipmentTypes?.includes(equipment_type_name)

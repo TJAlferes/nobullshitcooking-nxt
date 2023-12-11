@@ -25,7 +25,7 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
               <ExpandCollapse
                 headingWhileCollapsed={(
                   <div className="menu-item">
-                    <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
+                    <Link shallow={true} href={item.link} onClick={() => setIsLeftNavOpen(false)}>
                       {item.name}
                     </Link>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />
@@ -33,7 +33,7 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
                 )}
                 headingWhileExpanded={(
                   <div className="menu-item">
-                    <Link href={item.link} onClick={() => setIsLeftNavOpen(false)}>
+                    <Link shallow={true} href={item.link} onClick={() => setIsLeftNavOpen(false)}>
                       {item.name}
                     </Link>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />

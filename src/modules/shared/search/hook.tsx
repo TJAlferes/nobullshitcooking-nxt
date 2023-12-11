@@ -1,17 +1,18 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import qs from 'qs';
 
 import { endpoint } from '../../../config/api';
-import { useSearchState } from '../../../store';
+import { useRouter, useSearchState } from '../../../store';
 import type { SearchIndex, SearchRequest, SearchResponse } from './types';
 
 export function useSearch() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
 
+  const router = useRouter();
   const { found, setFound } = useSearchState();
 
   const search = async (index?: SearchIndex) => {
@@ -35,10 +36,14 @@ export function useSearch() {
     const page = params.index === 'equipment'
       ? params.index
       : params.index.slice(0, params.index.length - 1);
-
+    
     router.push({
       pathname: `/${page}/list`,
       query: search_params
+    },
+    undefined,
+    {
+      shallow: true
     });
   };
   
@@ -75,7 +80,9 @@ export function useSearch() {
 
     if (params.term) delete params.term;
     if (params.term === '') delete params.term;
-    //if (params.filters) delete params.filters;
+    if (params.filters) delete params.filters;
+    //setFilters(filterName, filterValues);
+
     params.filters = {
       [filterName]: filterValues
     };
@@ -102,10 +109,15 @@ export function useSearch() {
     router.push({
       pathname: `/${page}/list`,
       query: search_params
+    },
+    undefined,
+    {
+      shallow: true
     });
   };
 
   return {
+    router,
     found,
     setFound,
     params,
@@ -117,6 +129,7 @@ export function useSearch() {
 }
 
 export type UseSearch = {
+  router: NextRouter;
   found: SearchResponse;
   setFound: (found: SearchResponse) => void;
   params: SearchRequest;

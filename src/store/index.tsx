@@ -1,4 +1,8 @@
 import axios from 'axios';
+import { useSearchParams as useNextjsSearchParams } from 'next/navigation';
+//import { ReadonlyURLSearchParams } from 'next/navigation';
+import { useRouter as useNextjsRouter } from 'next/router';
+import type { NextRouter } from 'next/router';
 import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
@@ -11,6 +15,9 @@ import type { Ownership } from '../modules/shared/types';
 const StoreContext = createContext<StoreValue | null>(null);
 
 export function StoreProvider({ children }: StoreContextProviderProps) {
+  const router = useNextjsRouter();
+  const searchParams = useNextjsSearchParams();
+
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') ?? []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') ?? []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') ?? []);
@@ -56,6 +63,9 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [chatmessages, setChatmessages] = useState<ChatMessageView[]>(getItem('chatmessages') ?? []);
 
   const storeValue = {
+    router,
+    searchParams,
+
     cuisines: getItem('cuisines') ?? cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState.
@@ -319,6 +329,14 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     </StoreContext.Provider>
   );
 }
+
+export function useRouter() {
+  return useContextSelector(StoreContext, (s) => s!.router);
+}
+
+/*export function useSearchParams() {
+  return useContextSelector(StoreContext, (s) => s!.searchParams);
+}*/
 
 export function useData() {
   return useContextSelector(StoreContext, (s) => ({
@@ -681,6 +699,9 @@ type ChatMessageView = {
 };
 
 type StoreValue = {
+  router: NextRouter;
+  //searchParams: ReadonlyURLSearchParams;
+
   cuisines: CuisineView[];
   setCuisines: (cuisines: CuisineView[]) => void;
   equipment: EquipmentView[];
