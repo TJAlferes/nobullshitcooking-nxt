@@ -22,7 +22,6 @@ export function Header() {
     if (!authname) return;
     try {
       await axios.post(`${endpoint}/logout`, {}, {withCredentials: true});
-      logout();
     } catch(err) {
       console.log(err);
     } finally {
@@ -43,6 +42,8 @@ export function Header() {
         <Link className="logo" href={{pathname: "/"}}>
           <img src={`/images/header/logo-${theme}.png`} />
         </Link>
+
+        <LeftNav isLeftNavOpen={isLeftNavOpen} setIsLeftNavOpen={setIsLeftNavOpen} />
       </div>
 
       <Search />
@@ -76,8 +77,6 @@ export function Header() {
           )
         }
       </div>
-      
-      <LeftNav isLeftNavOpen={isLeftNavOpen} setIsLeftNavOpen={setIsLeftNavOpen} />
     </header>
   );
 }

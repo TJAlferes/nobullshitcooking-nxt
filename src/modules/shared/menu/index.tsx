@@ -25,17 +25,13 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
               <ExpandCollapse
                 headingWhileCollapsed={(
                   <div className="menu-item">
-                    <Link shallow={true} href={item.link} onClick={() => setIsLeftNavOpen(false)}>
-                      {item.name}
-                    </Link>
+                    <span>{item.name}</span>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />
                   </div>
                 )}
                 headingWhileExpanded={(
                   <div className="menu-item">
-                    <Link shallow={true} href={item.link} onClick={() => setIsLeftNavOpen(false)}>
-                      {item.name}
-                    </Link>
+                    <span>{item.name}</span>
                     <img src="/images/header/down-arrow.png" width="8" height="6" />
                   </div>
                 )}

@@ -65,88 +65,84 @@ export default function IngredientList() {
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/ingredient';
 
   return (
-    <div className="two-col ingredient-list">
-      <div className="two-col-left search-results">
-        <h1>Ingredients</h1>
+    <div className="one-col search-results ingredient-list">
+      <h1>Ingredients</h1>
 
-        {results.length > 0
-          ? (
-            <div className="settings">
-              <p className="info">
-                {total_results} total results and {total_pages} total pages
-              </p>
+      {results.length > 0
+        ? (
+          <div className="settings">
+            <p className="info">
+              {total_results} total results and {total_pages} total pages
+            </p>
 
-              <ResultsPerPage key={1} />
+            <ResultsPerPage key={1} />
 
-              <div className="filters">
-                <span className="filter-by">Filter by:</span>
+            <div className="filters">
+              <span className="filter-by">Filter by:</span>
 
-                <ExpandCollapse
-                  headingWhileCollapsed={(
-                    <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                      <span>Ingredient Types</span>
-                      <img src="/images/header/down-arrow.png" width="8" height="6" />
-                    </div>
-                  )}
-                  headingWhileExpanded={(
-                    <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                      <span>Ingredient Types</span>
-                      <img src="/images/header/down-arrow.png" width="8" height="6" />
-                    </div>
-                  )}
-                  isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
-                  handler={() => toggleFilterDropdown("ingredient_types")}
-                >{null}</ExpandCollapse>
-              </div>
-
-              <div className={`filter-group ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
-                {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
-                  <span key={ingredient_type_id}>
-                    <input
-                      type="checkbox"
-                      checked={checkedIngredientTypes?.includes(ingredient_type_name)}
-                      onChange={() => {
-                        setCheckedIngredientTypes(
-                          checkedIngredientTypes?.includes(ingredient_type_name)
-                          ? checkedIngredientTypes.filter(v => v !== ingredient_type_name)
-                          : [...checkedIngredientTypes, ingredient_type_name]
-                        );
-                      }}
-                    />
-                    <label>{ingredient_type_name}</label>
-                  </span>
-                ))}
-              </div>
+              <ExpandCollapse
+                headingWhileCollapsed={(
+                  <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                    <span>Ingredient Types</span>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+                headingWhileExpanded={(
+                  <div className={`filter-name ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+                    <span>Ingredient Types</span>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+                isDisabled={expandedFilter !== "ingredient_types" && expandedFilter !== null}
+                handler={() => toggleFilterDropdown("ingredient_types")}
+              >{null}</ExpandCollapse>
             </div>
-          )
-          : false
-        }
+
+            <div className={`filter-group ${expandedFilter === "ingredient_types" ? "active" : ""}`}>
+              {ingredient_types.map(({ ingredient_type_id, ingredient_type_name }) => (
+                <span key={ingredient_type_id}>
+                  <input
+                    type="checkbox"
+                    checked={checkedIngredientTypes?.includes(ingredient_type_name)}
+                    onChange={() => {
+                      setCheckedIngredientTypes(
+                        checkedIngredientTypes?.includes(ingredient_type_name)
+                        ? checkedIngredientTypes.filter(v => v !== ingredient_type_name)
+                        : [...checkedIngredientTypes, ingredient_type_name]
+                      );
+                    }}
+                  />
+                  <label>{ingredient_type_name}</label>
+                </span>
+              ))}
+            </div>
+          </div>
+        )
+        : false
+      }
         
-        <Pagination key={2} />
+      <Pagination key={2} />
 
-        <div className="search-results-list">
-          {!results
-            ? <div>Loading...</div>
-            : results.length < 1
-              ? <p className="no-results">No results found.</p>
-              : results.map(i => (
-                <Link
-                  className="search-results-list-item"
-                  href={`/ingredient/detail/${i.fullname}`}
-                  key={i.ingredient_id}
-                >
-                  <img src={`${url}/${i.image_filename}.jpg`} />
-                  <h3>{i.fullname}</h3>
-                  <div className="type">{i.ingredient_type_name}</div>
-                </Link>
-              ))
-          }
-        </div>
-
-        <Pagination key={3} />
+      <div className="search-results-list">
+        {!results
+          ? <div>Loading...</div>
+          : results.length < 1
+            ? <p className="no-results">No results found.</p>
+            : results.map(i => (
+              <Link
+                className="search-results-list-item"
+                href={`/ingredient/detail/${i.fullname}`}
+                key={i.ingredient_id}
+              >
+                <img src={`${url}/${i.image_filename}.jpg`} />
+                <h3>{i.fullname}</h3>
+                <div className="type">{i.ingredient_type_name}</div>
+              </Link>
+            ))
+        }
       </div>
 
-      <div className="two-col-right"></div>
+      <Pagination key={3} />
     </div>
   );
 }
