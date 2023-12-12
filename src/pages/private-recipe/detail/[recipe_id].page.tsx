@@ -9,12 +9,12 @@ export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.get(
+  const res = await axios.get(
     `${endpoint}/users/${params.username}/private-recipes/${params.recipe_id}`,
     {withCredentials: true}
   );
 
-  if (response.status === 401) {
+  if (res.status === 401) {
     return {
       props: {},
       redirect: {
@@ -26,7 +26,7 @@ export async function getServerSideProps({ params }: ServerSideProps) {
 
   return {
     props: {
-      recipe: response.data
+      recipe: res.data
     }
   };
 }

@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { endpoint } from '../../../config/api';
-import { useAuth, useData, useUserData } from '../../../store';
+import { EquipmentView, IngredientView, useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { getCroppedImage } from '../../shared/getCroppedImage';
@@ -47,8 +47,8 @@ export default function RecipeForm({ ownership }: Props) {
       return acc;
     }, {})
   );
-  const [equipmentRows, setEquipmentRows] = useState<EquipmentRow[]>([pristineEquipmentRow]);
-  const [ingredientRows, setIngredientRows] = useState<IngredientRow[]>([pristineIngredientRow]);
+  const [equipmentRows, setEquipmentRows] = useState<EquipmentRow[]>([pristineEquipmentRow()]);
+  const [ingredientRows, setIngredientRows] = useState<IngredientRow[]>([pristineIngredientRow()]);
   const [subrecipeRows, setSubrecipeRows] = useState<SubrecipeRow[]>([]);
 
   const recipeImageRef = useRef<HTMLImageElement>();
@@ -170,37 +170,37 @@ export default function RecipeForm({ ownership }: Props) {
     }
   };  // do this in getServerSideProps???
 
-  const changeEquipmentRow = (e: SyntheticEvent, rowKey: string) => {
-    const newRows =    Array.from(equipmentRows);
-    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
-    const name =       (e.target as HTMLInputElement).name;
-    const value =      (e.target as HTMLInputElement).value;
-    const obj =        newRows[elToUpdate];
+  const changeEquipmentRow = (e: React.ChangeEvent<HTMLSelectElement>, rowKey: string) => {
+    const rows = [...equipmentRows];
+    const elToUpdate = rows.findIndex(el => el.key === rowKey);
+    const obj = rows[elToUpdate];
     if (!obj) return;
-    obj[name] = value;
-    setEquipmentRows(newRows);
+    obj[e.target.name] = e.target.value;
+    setEquipmentRows(rows);
   };
 
-  const changeIngredientRow = (e: SyntheticEvent, rowKey: string) => {
-    const newRows =    Array.from(ingredientRows);
-    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
-    const name =       (e.target as HTMLInputElement).name;
-    const value =      (e.target as HTMLInputElement).value;
-    const obj =        newRows[elToUpdate];
+  const changeIngredientRow = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    rowKey: string
+  ) => {
+    const rows = [...ingredientRows];
+    const elToUpdate = rows.findIndex(el => el.key === rowKey);
+    const obj = rows[elToUpdate];
     if (!obj) return;
-    obj[name] = value;
-    setIngredientRows(newRows);
+    obj[e.target.name] = e.target.value;
+    setIngredientRows(rows);
   };
 
-  const changeSubrecipeRow = (e: SyntheticEvent, rowKey: string) => {
-    const newRows =    Array.from(subrecipeRows);
-    const elToUpdate = newRows.findIndex(el => el.key === rowKey);
-    const name =       (e.target as HTMLInputElement).name;
-    const value =      (e.target as HTMLInputElement).value;
-    const obj =        newRows[elToUpdate];
+  const changeSubrecipeRow = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    rowKey: string
+  ) => {
+    const rows = [...subrecipeRows];
+    const elToUpdate = rows.findIndex(el => el.key === rowKey);
+    const obj = rows[elToUpdate];
     if (!obj) return;
-    obj[name] = value;
-    setSubrecipeRows(newRows);
+    obj[e.target.name] = e.target.value;
+    setSubrecipeRows(rows);
   };
   
   const onSelectFile = (e: ChangeEvent, type: string) => {
@@ -484,36 +484,6 @@ export default function RecipeForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h3>Recipe Type</h3>
-      <select
-        id="recipe_type_id"
-        name="recipeType"
-        onChange={e => setRecipeTypeId(Number(e.target.value))}
-        required
-        value={recipe_type_id}
-      >
-        <option value={0}>Select type</option>
-        {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
-          <option key={recipe_type_id} value={recipe_type_id}>
-            {recipe_type_name}
-          </option>
-        ))}
-      </select>
-
-      <h3>Cuisine</h3>
-      <select
-        id="cuisine_id"
-        name="cuisine"
-        onChange={e => setCuisineId(Number(e.target.value))}
-        required
-        value={cuisine_id}
-      >
-        <option value={0}>Select cuisine</option>
-        {cuisines.map(({ cuisine_id, cuisine_name }) => (
-          <option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>
-        ))}
-      </select>
-
       <h3>Title</h3>
       <input
         className="title"
@@ -555,6 +525,45 @@ export default function RecipeForm({ ownership }: Props) {
         value={total_time}
       />
 
+      <h3>Directions</h3>
+      <textarea
+        className="directions"
+        id="recipe_directions"
+        name="directions"
+        onChange={e => setDirections(e.target.value)}
+        value={directions}
+      />
+
+      <h3>Recipe Type</h3>
+      <select
+        id="recipe_type_id"
+        name="recipeType"
+        onChange={e => setRecipeTypeId(Number(e.target.value))}
+        required
+        value={recipe_type_id}
+      >
+        <option value={0}>Select type</option>
+        {recipe_types.map(({ recipe_type_id, recipe_type_name }) => (
+          <option key={recipe_type_id} value={recipe_type_id}>
+            {recipe_type_name}
+          </option>
+        ))}
+      </select>
+
+      <h3>Cuisine</h3>
+      <select
+        id="cuisine_id"
+        name="cuisine"
+        onChange={e => setCuisineId(Number(e.target.value))}
+        required
+        value={cuisine_id}
+      >
+        <option value={0}>Select cuisine</option>
+        {cuisines.map(({ cuisine_id, cuisine_name }) => (
+          <option key={cuisine_id} value={cuisine_id}>{cuisine_name}</option>
+        ))}
+      </select>
+
       <h3>Methods</h3>
       <div className="methods">
         {methods.map(({ method_id, method_name }) => (
@@ -570,7 +579,7 @@ export default function RecipeForm({ ownership }: Props) {
               }
               type="checkbox"
             />
-            <label>{method_name}</label>
+            <label htmlFor={`${method_id}`}>{method_name}</label>
           </span>
         ))}
       </div>
@@ -598,7 +607,7 @@ export default function RecipeForm({ ownership }: Props) {
 
               <label>Type:</label>
               <select
-                name="type"
+                name="equipment_type_id"
                 onChange={e => changeEquipmentRow(e, key)}
                 required
                 value={equipment_type_id}
@@ -610,10 +619,11 @@ export default function RecipeForm({ ownership }: Props) {
 
               <label>Equipment:</label>
               <select
-                name="equipment"
+                name="equipment_id"
                 onChange={e => changeEquipmentRow(e, key)}
                 required
-                value={equipment_id}
+                disabled={equipment_type_id === 0}
+                value={equipment_type_id === 0 ? "" : equipment_id}
               >
                 <option value="">Select equipment</option>
                 {
@@ -637,7 +647,7 @@ export default function RecipeForm({ ownership }: Props) {
 
         <button
           className="--add-row"
-          onClick={() => setEquipmentRows([...equipmentRows, pristineEquipmentRow])}
+          onClick={() => setEquipmentRows([...equipmentRows, pristineEquipmentRow()])}
         >Add Equipment</button>
       </div>
 
@@ -661,7 +671,7 @@ export default function RecipeForm({ ownership }: Props) {
 
               <label>Unit:</label>
               <select
-                name="unit"
+                name="unit_id"
                 onChange={e => changeIngredientRow(e, key)}
                 value={unit_id ?? ""}
               >
@@ -673,7 +683,7 @@ export default function RecipeForm({ ownership }: Props) {
 
               <label>Type:</label>
               <select
-                name="type"
+                name="ingredient_type_id"
                 onChange={e => changeIngredientRow(e, key)}
                 required
                 value={ingredient_type_id}
@@ -688,10 +698,11 @@ export default function RecipeForm({ ownership }: Props) {
 
               <label>Ingredient:</label>
               <select
-                name="ingredient"
+                name="ingredient_id"
                 onChange={e => changeIngredientRow(e, key)}
                 required
-                value={ingredient_id}
+                disabled={ingredient_type_id === 0}
+                value={ingredient_type_id === 0 ? "" : ingredient_id}
               >
                 <option value="">Select ingredient</option>
                 {
@@ -715,7 +726,7 @@ export default function RecipeForm({ ownership }: Props) {
 
         <button
           className="--add-row"
-          onClick={() => setIngredientRows([...ingredientRows, pristineIngredientRow])}
+          onClick={() => setIngredientRows([...ingredientRows, pristineIngredientRow()])}
         >Add Ingredient</button>
       </div>
 
@@ -739,7 +750,7 @@ export default function RecipeForm({ ownership }: Props) {
               
               <label>Unit:</label>
               <select
-                name="unit"
+                name="unit_id"
                 onChange={e => changeSubrecipeRow(e, s.key)}
                 value={s.unit_id ?? ""}
               >
@@ -751,7 +762,7 @@ export default function RecipeForm({ ownership }: Props) {
               
               <label>Type:</label>
               <select
-                name="type"
+                name="recipe_type_id"
                 onChange={e => changeSubrecipeRow(e, s.key)}
                 required
                 value={s.recipe_type_id}
@@ -766,7 +777,7 @@ export default function RecipeForm({ ownership }: Props) {
               
               <label>Cuisine:</label>
               <select
-                name="cuisine"
+                name="cuisine_id"
                 onChange={(e) => changeSubrecipeRow(e, s.key)}
                 required
                 value={s.cuisine_id}
@@ -782,10 +793,11 @@ export default function RecipeForm({ ownership }: Props) {
               <label>Subrecipe:</label>
               <select
                 className="--subrecipe"
-                name="subrecipe"
+                name="subrecipe_id"
                 onChange={e => changeSubrecipeRow(e, s.key)}
                 required
-                value={s.subrecipe_id}
+                disabled={s.recipe_type_id === 0 || s.cuisine_id === 0}
+                value={(s.recipe_type_id === 0 || s.cuisine_id === 0) ? "" : s.subrecipe_id}
               >
                 <option value="">Select subrecipe</option>
                 {
@@ -808,18 +820,9 @@ export default function RecipeForm({ ownership }: Props) {
 
         <button
           className="--add-row"
-          onClick={() => setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow])}
+          onClick={() => setSubrecipeRows([...subrecipeRows, pristineSubrecipeRow()])}
         >Add Subrecipe</button>
       </div>
-
-      <h3>Directions</h3>
-      <textarea
-        className="directions"
-        id="recipe_directions"
-        name="directions"
-        onChange={e => setDirections(e.target.value)}
-        value={directions}
-      />
 
       <div className="recipe-form-images">
         <h2>Images</h2>
@@ -1101,7 +1104,8 @@ type Props = {
 };
 
 function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
-  const { equipment, ingredients } = useData();
+  const { equipment, setEquipment, ingredients, setIngredients } = useData();
+
   const {
     my_private_equipment,
     my_private_ingredients,
@@ -1109,7 +1113,19 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
     my_public_recipes,
     my_favorite_recipes,
     my_saved_recipes
-  }= useUserData();
+  } = useUserData();
+
+  useEffect(() => {
+    async function getData() {
+      const res1 = await axios.get(`${endpoint}/equipment`);
+      const res2 = await axios.get(`${endpoint}/ingredients`);
+      const equipment: EquipmentView[] = res1.data;
+      const ingredients: IngredientView[] = res2.data;
+      if (equipment) setEquipment(equipment);
+      if (ingredients) setIngredients(ingredients);
+    }
+    getData();
+  }, []);
 
   const allowedEquipment = [
     ...equipment,
@@ -1161,8 +1177,6 @@ type ImageState = {
   tinyPreview?:  string;
 };
 
-type SyntheticEvent = React.SyntheticEvent<EventTarget>;
-
 export function ToolTip() {
   return (
     <span className="crop-tool-tip">
@@ -1171,29 +1185,29 @@ export function ToolTip() {
   );
 }
 
-export const pristineEquipmentRow = {
+export const pristineEquipmentRow = () => ({
   key:               uuidv4(),
   amount:            0,
   equipment_type_id: 0,
   equipment_id:      ""
-};
+});
 
-export const pristineIngredientRow = {
+export const pristineIngredientRow = () => ({
   key:                uuidv4(),
   amount:             0,
   unit_id:            0,
   ingredient_type_id: 0,
   ingredient_id:      ""
-};
+});
 
-export const pristineSubrecipeRow = {
+export const pristineSubrecipeRow = () => ({
   key:            uuidv4(),
   amount:         0,
   unit_id:        0,
   recipe_type_id: 0,
   cuisine_id:     0,
   subrecipe_id:   ""
-};
+});
 
 export const initialCrop: Crop = {
   unit:   'px',

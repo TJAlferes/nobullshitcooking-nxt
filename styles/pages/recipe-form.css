@@ -15,48 +15,6 @@
   box-shadow: none;
 }
 
-.recipe-form .ownership {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
-.recipe-form .ownership span {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  height: 32px;
-  max-height: 32px;
-  max-width: 90px;
-  min-height: 32px;
-  min-width: 90px;
-  width: 90px;
-}
-
-.recipe-form .ownership input {
-  display: block;
-  height: 13px;
-  margin: 9px 0 10px 0;
-  max-height: 13px;
-  min-height: 13px;
-  max-width: 13px;
-  min-width: 13px;
-  order: 1;
-  width: 13px;
-}
-
-.recipe-form .ownership label {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 700;
-  height: 13px;
-  margin: 9px 0 19px 4px;
-  max-height: 13px;
-  min-height: 13px;
-  order: 2;
-  width: fit-content;
-}
-
 .recipe-form .methods {
   display: flex;
   flex-direction: row;

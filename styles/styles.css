@@ -86,11 +86,18 @@ input {
   border: 1px solid #aaa;
   border-radius: 2px;
   padding: 3px 7px;
-  height: 31px;
   width: 235px;
 }
 
+input,
+textarea,
+select {
+  height: 31px;
+  font-size: 1.4rem;
+}
+
 input:focus,
+textarea:focus,
 select:focus {
   outline: solid 2px #b4d8fa;
 }

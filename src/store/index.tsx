@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useSearchParams as useNextjsSearchParams } from 'next/navigation';
-//import { ReadonlyURLSearchParams } from 'next/navigation';
 import { useRouter as useNextjsRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
 import { useState, useCallback } from 'react';
@@ -16,7 +14,6 @@ const StoreContext = createContext<StoreValue | null>(null);
 
 export function StoreProvider({ children }: StoreContextProviderProps) {
   const router = useNextjsRouter();
-  const searchParams = useNextjsSearchParams();
 
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') ?? []);
   const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') ?? []);
@@ -64,7 +61,6 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
 
   const storeValue = {
     router,
-    searchParams,
 
     cuisines: getItem('cuisines') ?? cuisines,
     setCuisines: useCallback((cuisines: CuisineView[]) => {
@@ -334,21 +330,19 @@ export function useRouter() {
   return useContextSelector(StoreContext, (s) => s!.router);
 }
 
-/*export function useSearchParams() {
-  return useContextSelector(StoreContext, (s) => s!.searchParams);
-}*/
-
 export function useData() {
   return useContextSelector(StoreContext, (s) => ({
-    cuisines:         s!.cuisines,
-    equipment:        s!.equipment,
-    equipment_types:  s!.equipment_types,
+    cuisines:          s!.cuisines,
+    equipment:         s!.equipment,
+    setEquipment:      s!.setEquipment,
+    equipment_types:   s!.equipment_types,
     setEquipmentTypes: s!.setEquipmentTypes,
-    ingredients:      s!.ingredients,
-    ingredient_types: s!.ingredient_types,
-    units:            s!.units,
-    methods:          s!.methods,
-    recipe_types:     s!.recipe_types
+    ingredients:       s!.ingredients,
+    setIngredients:    s!.setIngredients,
+    ingredient_types:  s!.ingredient_types,
+    units:             s!.units,
+    methods:           s!.methods,
+    recipe_types:      s!.recipe_types
   }));
 }
 
@@ -700,7 +694,6 @@ type ChatMessageView = {
 
 type StoreValue = {
   router: NextRouter;
-  //searchParams: ReadonlyURLSearchParams;
 
   cuisines: CuisineView[];
   setCuisines: (cuisines: CuisineView[]) => void;
