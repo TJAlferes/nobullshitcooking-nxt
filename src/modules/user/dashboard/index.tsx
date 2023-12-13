@@ -127,7 +127,7 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  /*const deleteAccount = async () => {
+  const deleteAccount = async () => {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
@@ -144,7 +144,7 @@ export default function Dashboard() {
       setFeedback(error);
     }
     setLoading(false);
-  };*/
+  };
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
 
@@ -414,8 +414,16 @@ export default function Dashboard() {
               className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
               onClick={() => setTab('avatar')}
             >Profile Settings</div>
+
+            <div
+              className={`menu-item ${tab === 'plans' ? '--active' : ''}`}
+              onClick={() => {
+                setTab('plans');
+                //setSubTab('private');
+              }}
+            >Plans</div>
   
-            <ExpandCollapse
+            {/*<ExpandCollapse
               headingWhileCollapsed={(
                 <div className="menu-item">
                   <span>Plans</span>
@@ -445,7 +453,7 @@ export default function Dashboard() {
                   }}
                 >Private</div>
               </div>
-            </ExpandCollapse>
+            </ExpandCollapse>*/}
   
             <ExpandCollapse
               headingWhileCollapsed={(

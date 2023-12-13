@@ -7,7 +7,7 @@ import AriaModal from 'react-aria-modal';
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
 import { endpoint } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useAuth, useUserData, useData } from '../../../store';
 import type { RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
@@ -167,34 +167,29 @@ export default function PlanForm({ ownership }: Props) {
   };
 
   const tabToList: TabToList = {
-    //"official": officialRecipes,
-    "private":  allowedRecipes.my_private_recipes,
-    "public":   allowedRecipes.my_public_recipes,
-    "favorite": allowedRecipes.my_favorite_recipes,
-    "saved":    allowedRecipes.my_saved_recipes
+    "official":    allowedRecipes.official_recipes,
+    "public":      allowedRecipes.my_public_recipes,
+    "my-public":   allowedRecipes.my_public_recipes,
+    "my-private":  allowedRecipes.my_private_recipes,
+    "my-favorite": allowedRecipes.my_favorite_recipes,
+    "my-saved":    allowedRecipes.my_saved_recipes
   };
   const recipes: RecipeOverview[] = tabToList[tab];
 
   return (
     <div className="one-col plan-form">
-      <div className="heading">
-        <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
+      <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
 
-        <p className="feedback">{feedback}</p>
+      <p className="feedback">{feedback}</p>
 
-        <div className="name">
-          <label>Plan Name:</label>
-          <input onChange={e => setPlanName(e.target.value)} type="text" value={plan_name} />
-        </div>
-      </div>
-
-      <div className="calendar">
-        <div className="recipes-tabs">
-          <button className={tab === "official" ? "--active" : ""} name="official" onClick={() => setTab('official')}>Official</button>
-          <button className={tab === "private" ? "--active" : ""}  name="private"  onClick={() => setTab('private')}>My Private</button>
-          <button className={tab === "public" ? "--active" : ""}   name="public"   onClick={() => setTab('public')}>My Public</button>
-          <button className={tab === "favorite" ? "--active" : ""} name="favorite" onClick={() => setTab('favorite')}>My Favorite</button>
-          <button className={tab === "saved" ? "--active" : ""}    name="saved"    onClick={() => setTab('saved')}>My Saved</button>
+      <div className="cols">
+        <div className="tabs">
+          <div className={`tab ${tab === "official" ? "--active" : ""}`} onClick={() => setTab('official')}>Official</div>
+          <div className={`tab ${tab === "public" ? "--active" : ""}`} onClick={() => setTab('public')}>Public</div>
+          <div className={`tab ${tab === "my-public" ? "--active" : ""}`} onClick={() => setTab('my-public')}>My Public</div>
+          <div className={`tab ${tab === "my-private" ? "--active" : ""}`} onClick={() => setTab('my-private')}>My Private</div>
+          <div className={`tab ${tab === "my-favorite" ? "--active" : ""}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
+          <div className={`tab ${tab === "my-saved" ? "--active" : ""}`} onClick={() => setTab('my-saved')}>My Saved</div>
         </div>
 
         <Recipes
@@ -232,6 +227,11 @@ export default function PlanForm({ ownership }: Props) {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="name">
+        <h3>Plan Name</h3>
+        <input onChange={e => setPlanName(e.target.value)} name="plan_name" type="text" value={plan_name} />
       </div>
 
       <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
@@ -274,6 +274,8 @@ type Props = {
 };
 
 function useAllowedContent(ownership: Ownership) {
+  const { official_recipes, setOfficialRecipes } = useData();
+
   const {
     my_private_recipes,
     my_public_recipes,
@@ -281,11 +283,22 @@ function useAllowedContent(ownership: Ownership) {
     my_saved_recipes
   } = useUserData();
 
+  useEffect(() => {
+    async function getData() {
+      const res = await axios.get(`${endpoint}/recipes`);
+      if (res.status === 200) {
+        const official_recipes: RecipeOverview[] = res.data;
+        setOfficialRecipes(official_recipes);
+      }
+    }
+    getData();
+  }, []);
+
   // EXTREMELY IMPORTANT:
   // my_private_recipes and my_saved_recipes are only allowed in private plans
   // This MUST also be checked on the backend server!!!
   return {
-    //...recipes,
+    official_recipes,
     my_public_recipes: (ownership === "private" || ownership === "public") ? my_public_recipes : [],
     my_favorite_recipes: (ownership === "private" || ownership === "public") ? my_favorite_recipes : [],
     my_private_recipes: ownership === "private" ? my_private_recipes : [],
@@ -295,11 +308,12 @@ function useAllowedContent(ownership: Ownership) {
 
 interface TabToList {
   [index: string]: any;
-  //"official": RecipeOverview[];
-  "private":  RecipeOverview[];
-  "public":   RecipeOverview[];
-  "favorite": RecipeOverview[];
-  "saved":    RecipeOverview[];
+  "official":    RecipeOverview[];
+  "public":      RecipeOverview[];
+  "my-public":   RecipeOverview[];
+  "my-private":  RecipeOverview[];
+  "my-favorite": RecipeOverview[];
+  "my-saved":    RecipeOverview[];
 }
 
 function ToolTip() {
@@ -340,7 +354,7 @@ function Recipes({
   }));
 
   return (
-    <div className="new-plan-recipes" ref={drop}>
+    <div className="recipes" ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           day={0}

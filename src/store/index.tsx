@@ -16,13 +16,15 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const router = useNextjsRouter();
 
   const [cuisines, setCuisines] = useState<CuisineView[]>(getItem('cuisines') ?? []);
-  const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') ?? []);
   const [equipment_types, setEquipmentTypes] = useState<EquipmentTypeView[]>(getItem('equipment_types') ?? []);
-  const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') ?? []);
   const [ingredient_types, setIngredientTypes] = useState<IngredientTypeView[]>(getItem('ingredient_types') ?? []);
   const [units, setUnits] = useState<UnitView[]>(getItem('units') ?? []);
   const [methods, setMethods] = useState<MethodView[]>(getItem('methods') ?? []);
   const [recipe_types, setRecipeTypes] = useState<RecipeTypeView[]>(getItem('recipe_types') ?? []);
+
+  const [equipment, setEquipment] = useState<EquipmentView[]>(getItem('equipment') ?? []);
+  const [ingredients, setIngredients] = useState<IngredientView[]>(getItem('ingredients') ?? []);
+  const [official_recipes, setOfficialRecipes] = useState<RecipeOverview[]>(getItem('official_recipes') ?? []);
 
   const [theme, setTheme] = useState<Theme>('light');
 
@@ -67,20 +69,10 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setCuisines(cuisines);  // Despite appearances, not recursive. Calls the setter from React usetState.
       setItem('cuisines', cuisines);
     }, []),
-    equipment: getItem('equipment') ?? equipment,
-    setEquipment: useCallback((equipment: EquipmentView[]) => {
-      setEquipment(equipment);
-      setItem('equipment', equipment);
-    }, []),
     equipment_types: getItem('equipment_types') ?? equipment_types,
     setEquipmentTypes: useCallback((equipment_types: EquipmentTypeView[]) => {
       setEquipmentTypes(equipment_types);
       setItem('equipment_types', equipment_types);
-    }, []),
-    ingredients: getItem('ingredients') ?? ingredients,
-    setIngredients: useCallback((ingredients: IngredientView[]) => {
-      setIngredients(ingredients);
-      setItem('ingredients', ingredients);
     }, []),
     ingredient_types: getItem('ingredient_types') ?? ingredient_types,
     setIngredientTypes: useCallback((ingredient_types: IngredientTypeView[]) => {
@@ -101,6 +93,22 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     setRecipeTypes: useCallback((recipe_types: RecipeTypeView[]) => {
       setRecipeTypes(recipe_types);
       setItem('recipe_types', recipe_types);
+    }, []),
+
+    equipment: getItem('equipment') ?? equipment,
+    setEquipment: useCallback((equipment: EquipmentView[]) => {
+      setEquipment(equipment);
+      setItem('equipment', equipment);
+    }, []),
+    ingredients: getItem('ingredients') ?? ingredients,
+    setIngredients: useCallback((ingredients: IngredientView[]) => {
+      setIngredients(ingredients);
+      setItem('ingredients', ingredients);
+    }, []),
+    official_recipes: getItem('official_recipes') ?? official_recipes,
+    setOfficialRecipes: useCallback((official_recipes: RecipeOverview[]) => {
+      setOfficialRecipes(official_recipes)
+      setItem('official_recipes', official_recipes)
     }, []),
 
     theme,
@@ -279,13 +287,15 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       localStorage.clear();
       
       setCuisines([]);
-      setEquipment([]);
       setEquipmentTypes([]);
-      setIngredients([]);
       setIngredientTypes([]);
       setUnits([]);
       setMethods([]);
       setRecipeTypes([]);
+
+      setEquipment([]);
+      setIngredients([]);
+      setOfficialRecipes([]);
 
       //setTheme('light');
 
@@ -332,17 +342,20 @@ export function useRouter() {
 
 export function useData() {
   return useContextSelector(StoreContext, (s) => ({
-    cuisines:          s!.cuisines,
-    equipment:         s!.equipment,
-    setEquipment:      s!.setEquipment,
-    equipment_types:   s!.equipment_types,
-    setEquipmentTypes: s!.setEquipmentTypes,
-    ingredients:       s!.ingredients,
-    setIngredients:    s!.setIngredients,
-    ingredient_types:  s!.ingredient_types,
-    units:             s!.units,
-    methods:           s!.methods,
-    recipe_types:      s!.recipe_types
+    cuisines:           s!.cuisines,
+    equipment_types:    s!.equipment_types,
+    setEquipmentTypes:  s!.setEquipmentTypes,
+    ingredient_types:   s!.ingredient_types,
+    units:              s!.units,
+    methods:            s!.methods,
+    recipe_types:       s!.recipe_types,
+
+    equipment:          s!.equipment,
+    setEquipment:       s!.setEquipment,
+    ingredients:        s!.ingredients,
+    setIngredients:     s!.setIngredients,
+    official_recipes:   s!.official_recipes,
+    setOfficialRecipes: s!.setOfficialRecipes
   }));
 }
 
@@ -697,12 +710,8 @@ type StoreValue = {
 
   cuisines: CuisineView[];
   setCuisines: (cuisines: CuisineView[]) => void;
-  equipment: EquipmentView[];
-  setEquipment: (equipment: EquipmentView[]) => void;
   equipment_types: EquipmentTypeView[];
   setEquipmentTypes: (equipment_types: EquipmentTypeView[]) => void;
-  ingredients: IngredientView[];
-  setIngredients: (ingredients: IngredientView[]) => void;
   ingredient_types: IngredientTypeView[];
   setIngredientTypes: (ingredient_types: IngredientTypeView[]) => void;
   units: UnitView[];
@@ -711,6 +720,13 @@ type StoreValue = {
   setMethods: (methods: MethodView[]) => void;
   recipe_types: RecipeTypeView[];
   setRecipeTypes: (recipe_types: RecipeTypeView[]) => void;
+
+  equipment: EquipmentView[];
+  setEquipment: (equipment: EquipmentView[]) => void;
+  ingredients: IngredientView[];
+  setIngredients: (ingredients: IngredientView[]) => void;
+  official_recipes: RecipeOverview[];
+  setOfficialRecipes: (official_recipes: RecipeOverview[]) => void;
 
   theme: Theme;
   setTheme: (theme: Theme) => void;
