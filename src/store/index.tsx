@@ -612,8 +612,8 @@ export type RecipeOverview = {
   owner_id:       string;
   recipe_type_id: number;
   cuisine_id:     number;
-  title:          string;
   author:         string;
+  title:          string;
   image_filename: string;
 };
 

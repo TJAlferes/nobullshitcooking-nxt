@@ -198,33 +198,29 @@ export default function PlanForm({ ownership }: Props) {
           reorderRecipeInDay={reorderRecipeInDay}
         />
 
-        <div className="plan__monthly-plan">
-          <div className="monthly-plan">
-            <div className="header">
-              <span>Sunday</span>
-              <span>Monday</span>
-              <span>Tuesday</span>
-              <span>Wednesday</span>
-              <span>Thursday</span>
-              <span>Friday</span>
-              <span>Saturday</span>
-            </div>
-
-            <div className="body">
-              {Object.keys(included_recipes).map((recipeList, i) => (
-                <div className="monthly-plan__body-day" key={i} >
-                  <div className="body-day__content">
-                    <Day
-                      day={i + 1}
-                      recipes={included_recipes[Number(recipeList)]}
-                      addRecipeToDay={addRecipeToDay}
-                      removeRecipeFromDay={removeRecipeFromDay}
-                      reorderRecipeInDay={reorderRecipeInDay}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="calendar">
+          <div className="header">
+            <span>Sunday</span>
+            <span>Monday</span>
+            <span>Tuesday</span>
+            <span>Wednesday</span>
+            <span>Thursday</span>
+            <span>Friday</span>
+            <span>Saturday</span>
+          </div>
+          {/*<div className="monthly-plan"></div>*/}
+          <div className="weekly-plan">
+            {Object.keys(included_recipes).map((recipeList, i) => (
+              <div className="plan-day" key={i} >
+                <Day
+                  day={i + 1}
+                  recipes={included_recipes[Number(recipeList)]}
+                  addRecipeToDay={addRecipeToDay}
+                  removeRecipeFromDay={removeRecipeFromDay}
+                  reorderRecipeInDay={reorderRecipeInDay}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -291,7 +287,7 @@ function useAllowedContent(ownership: Ownership) {
         setOfficialRecipes(official_recipes);
       }
     }
-    getData();
+    if (official_recipes.length === 0) getData();
   }, []);
 
   // EXTREMELY IMPORTANT:
@@ -299,6 +295,7 @@ function useAllowedContent(ownership: Ownership) {
   // This MUST also be checked on the backend server!!!
   return {
     official_recipes,
+    //public_recipes,
     my_public_recipes: (ownership === "private" || ownership === "public") ? my_public_recipes : [],
     my_favorite_recipes: (ownership === "private" || ownership === "public") ? my_favorite_recipes : [],
     my_private_recipes: ownership === "private" ? my_private_recipes : [],
@@ -456,7 +453,7 @@ function Recipe({
   }
 
   return (
-    <div className="new-plan-recipe" key={recipe_id} ref={ref}>
+    <div className="recipe" key={recipe_id} ref={ref}>
       <div className="image">
         <img src={`${url}recipe/${author_id}/${image_filename}-tiny`} />
       </div>

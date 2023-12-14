@@ -7,56 +7,6 @@
   width: 100%;
 }
 
-.plan-form-recipes {
-  border-style: solid;
-  border-width: 1px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 125px;
-  justify-content: space-around;
-  overflow-y: scroll;
-  padding: 6px;
-}
-
-.plan-form-recipe {
-  border-style: solid;
-  border-width: 1px;
-  display: inline-block;
-  margin: 6px 1px;
-}
-
-/*
-.plan-form-recipe {
-  align-content: center;
-  background-color: #FFF3CC;
-  border: 1px solid #FFDEC3;
-  box-shadow: 1px 1px 1px #999;
-  cursor: move;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  font-size: 1.1rem;
-  height: 27px;
-  margin: 6px 1px;
-  max-width: 200px;
-  min-width: 100px;
-  overflow: hidden;
-  text-align: center;
-  width: 90%;
-}
-
-.plan-form-recipe .image {
-  margin: 1px 0 0 1px;
-}
-
-.plan-form-recipe .text {
-  font-size: 1.1rem;
-  text-align: center;
-  width: 100%;
-}
-*/
-
 .plan-form .tabs {
   display: flex;
   flex-direction: column;
@@ -90,11 +40,69 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  border-left: 2px solid #bfddfa;
+  /*justify-content: space-around;*/
+  row-gap: 2px;
+  border-left: 2px solid;
+  padding: 2px;
   width: 370px;
   height: 100vh;
   min-height: 100vh;
+  overflow-y: scroll;
 }
+
+.plan-form .recipe {
+  border-style: solid;
+  border-width: 1px;
+}
+
+/*.plan-form-recipe {
+  align-content: center;
+  background-color: #FFF3CC;
+  border: 1px solid #FFDEC3;
+  box-shadow: 1px 1px 1px #999;
+  cursor: move;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font-size: 1.1rem;
+  height: 27px;
+  margin: 6px 1px;
+  max-width: 200px;
+  min-width: 100px;
+  overflow: hidden;
+  text-align: center;
+  width: 90%;
+}
+
+.plan-form-recipe .image {
+  margin: 1px 0 0 1px;
+}
+
+.plan-form-recipe .text {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+}*/
+
+/*.plan-form .name {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.plan-form .name label,
+.plan-form .name span {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 30px;
+}
+
+.plan-form .name label {
+  margin-right: 5px;
+}*/
 
 .plan-form .finish {
   display: flex;
@@ -154,11 +162,11 @@ Light/Day/Sun Theme
   background-color: #d6ffd6;
 }
 
-.light .plan-form-recipes {
-  border-color: #bfbfbf;
+.light .plan-form .recipes {
+  border-color: #bfddfa;
 }
 
-.light .plan-form-recipe {
+.light .plan-form .recipe {
   background-color: #fff3cc;
   border-color: #ffdec3;
   box-shadow: 1px 1px 1px #999;
@@ -191,11 +199,11 @@ Dark/Night/Moon Theme
   background-color: #3d6d3d;
 }
 
-.dark .plan-form-recipes {
+.dark .plan-form .recipes {
   border-color: #5a5a5a;
 }
 
-.dark .plan-form-recipe {
+.dark .plan-form .recipe {
   background-color: #afae8f;
   border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
