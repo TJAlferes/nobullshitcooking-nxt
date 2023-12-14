@@ -199,7 +199,7 @@ export default function PlanForm({ ownership }: Props) {
         />
 
         <div className="calendar">
-          <div className="header">
+          <div className="weekdays">
             <span>Sunday</span>
             <span>Monday</span>
             <span>Tuesday</span>
@@ -211,15 +211,14 @@ export default function PlanForm({ ownership }: Props) {
           {/*<div className="monthly-plan"></div>*/}
           <div className="weekly-plan">
             {Object.keys(included_recipes).map((recipeList, i) => (
-              <div className="plan-day" key={i} >
-                <Day
-                  day={i + 1}
-                  recipes={included_recipes[Number(recipeList)]}
-                  addRecipeToDay={addRecipeToDay}
-                  removeRecipeFromDay={removeRecipeFromDay}
-                  reorderRecipeInDay={reorderRecipeInDay}
-                />
-              </div>
+              <Day
+                key={i}
+                day={i + 1}
+                recipes={included_recipes[Number(recipeList)]}
+                addRecipeToDay={addRecipeToDay}
+                removeRecipeFromDay={removeRecipeFromDay}
+                reorderRecipeInDay={reorderRecipeInDay}
+              />
             ))}
           </div>
         </div>
@@ -494,8 +493,7 @@ function Day({
   const color = (isOver && canDrop) ? "--green" : "--white";
 
   return (
-    <div className={`day${color}`} ref={drop}>
-      <span className="date">{day}</span>
+    <div className={`day ${color}`} ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           day={day}
