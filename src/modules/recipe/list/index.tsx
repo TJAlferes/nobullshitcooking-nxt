@@ -103,7 +103,7 @@ export default function RecipeList() {
   if (loading) return <LoaderSpinner />;
 
   const { results, total_results, total_pages } = found;
-  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
+  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/recipe';
 
   return (
     <div className="two-col recipe-list">

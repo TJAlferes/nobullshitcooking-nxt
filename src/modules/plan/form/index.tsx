@@ -1,14 +1,15 @@
 import axios from 'axios';
 import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
+import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData, useData } from '../../../store';
-import type { RecipeOverview } from '../../../store';
+import type { RecipeOverview, IncludedRecipes } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -29,7 +30,15 @@ export default function PlanForm({ ownership }: Props) {
   const allowedRecipes = useAllowedContent(ownership);
 
   const [ plan_name, setPlanName ] = useState("");
-  const [ included_recipes, setIncludedRecipes ] = useState<RecipeOverview[][]>([[], [], [], [], [], [], []]);
+  const [ included_recipes, setIncludedRecipes ] = useState<IncludedRecipes>({
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: []
+  });
 
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,14 +57,20 @@ export default function PlanForm({ ownership }: Props) {
       } else if (ownership === "private") {
         plan = my_private_plans.find(p => p.plan_id === plan_id);
       }
-      if (!plan) return router.push(`/dashboard`);
+      if (!plan) {
+        router.push(`/dashboard`);
+        return;
+      }
       setPlanName(plan.plan_name);
       setIncludedRecipes(plan.included_recipes);
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) return router.push(`/404`);
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
       if (plan_id) getExistingPlanToEdit();
     }
 
@@ -80,31 +95,34 @@ export default function PlanForm({ ownership }: Props) {
   };
 
   const addRecipeToDay = (day: number, recipe: RecipeOverview) => {
-    const new_included_recipes = update(included_recipes, {
-      [day - 1]: {
+    setIncludedRecipes(prev => update(prev, {
+      [day]: {
         $push: [recipe]
-      },
-    });
-    setIncludedRecipes(new_included_recipes);
+      }
+    }));
   };
   
   const removeRecipeFromDay = (day: number, index: number) => {
-    const new_included_recipes = update(included_recipes, {
-      [day - 1]: {
+    console.log('DAY: ', day);
+    console.log('INDEX: ', index);
+    setIncludedRecipes(prev => update(prev, {
+      [day]: {
         $splice: [[index, 1]]
-      },
-    });
-    setIncludedRecipes(new_included_recipes);
+      }
+    }));
   };
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
     if (!day) return;
-    const draggedRecipe = included_recipes[day - 1]![dragIndex]!;
+
+    const draggedRecipe = included_recipes[day]![dragIndex]!;
+
     const new_included_recipes = update(included_recipes, {
-      [day - 1]: {
+      [day]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, draggedRecipe]]
       }
     });
+    
     setIncludedRecipes(new_included_recipes);
   };
 
@@ -118,16 +136,18 @@ export default function PlanForm({ ownership }: Props) {
     setFeedback('');
     setLoading(true);
     if (plan_name.trim() === '') return invalid('Plan Name required.');
+
     const plan_upload = {
       plan_name,
-      included_recipes: included_recipes.map((recipes, i) => 
-        recipes.map((recipe, j) => ({
+      included_recipes: () => Object.entries(included_recipes).map(([key, value]) => 
+        value.map((recipe, index) => ({
           recipe_id:     recipe.recipe_id,
-          day_number:    i + 1,
-          recipe_number: j + 1
+          day_number:    key,
+          recipe_number: index + 1
         }))
       )
     };
+
     try {
       if (plan_id) {
         const res = await axios.patch(
@@ -210,11 +230,11 @@ export default function PlanForm({ ownership }: Props) {
           </div>
           {/*<div className="monthly-plan"></div>*/}
           <div className="weekly-plan">
-            {Object.keys(included_recipes).map((recipeList, i) => (
+            {Object.entries(included_recipes).map(([key, value]) => (
               <Day
-                key={i}
-                day={i + 1}
-                recipes={included_recipes[Number(recipeList)]}
+                key={parseInt(key)}
+                day={parseInt(key)}
+                recipes={value}
                 addRecipeToDay={addRecipeToDay}
                 removeRecipeFromDay={removeRecipeFromDay}
                 reorderRecipeInDay={reorderRecipeInDay}
@@ -336,7 +356,7 @@ function Recipes({
   removeRecipeFromDay,
   reorderRecipeInDay
 }: {
-  recipes: RecipeOverview[] | undefined;
+  recipes: RecipeOverview[];
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
@@ -345,7 +365,7 @@ function Recipes({
 
     collect: (monitor: DropTargetMonitor) => ({
       canDrop: monitor.canDrop(),
-      isOver:  monitor.isOver()
+      isOver:  monitor.isOver(),
     })
   }));
 
@@ -353,6 +373,7 @@ function Recipes({
     <div className="recipes" ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
+          key={i}
           day={0}
           index={i}
           recipe={recipe}
@@ -379,14 +400,18 @@ function Recipe({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [ , drag ] = useDrag(() => ({
-    collect: (monitor: any) => ({isDragging: monitor.isDragging()}),
+  const [ _, drag ] = useDrag(() => ({
+    collect: (monitor: DragSourceMonitor) => ({
+      isDragging: monitor.isDragging(),
+      dropResult: monitor.getDropResult()
+    }),
 
-    end(item: any) {
-      //const item: RecipeProps = monitor.getItem();
+    end(item, monitor: DragSourceMonitor<DragItem, {day: number}>) {
       if (item.day === 0) return;
-      //if (dropResult && (dropResult.day !== item.day)) removeRecipeFromDay(item.day, item.index);
-      removeRecipeFromDay(item.day, item.index);
+      const dropResult = monitor.getDropResult();
+      if (dropResult && item.day !== dropResult.day) {
+        removeRecipeFromDay(item.day, item.index);
+      }
     },
 
     item: {
@@ -402,7 +427,7 @@ function Recipe({
   const [ , drop ] = useDrop({
     accept: 'RECIPE',
 
-    hover(item: {index: number}, monitor: DropTargetMonitor<any, any>) {  // TO DO: improve "any, any"
+    hover(item: DragItem, monitor: DropTargetMonitor<DragItem>) {  // TO DO: improve "any, any"
       if (!item) return;  // ?
       if (!ref.current) return;
 
@@ -439,22 +464,25 @@ function Recipe({
     image_filename
   } = recipe;
 
-  let url = "https://s3.amazonaws.com/nobsc/image/";
+  let officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads/recipe';
+  let publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads/recipe';
+  let privateUrl = 'https://s3.amazonaws.com/nobsc-private-uploads/recipe';
+  let url = '';
 
-  if (author_id !== NOBSC_USER_ID) {
-    url += "user/";
-
+  if (author_id === NOBSC_USER_ID) {
+    url = officialUrl;
+  } else {
     if (author_id === owner_id) {
-      url += "private/";
+      url = `${privateUrl}/${author_id}`;
     } else {
-      url += "public/";
+      url = `${publicUrl}/${author_id}`;
     }
   }
 
   return (
     <div className="recipe" key={recipe_id} ref={ref}>
       <div className="image">
-        <img src={`${url}recipe/${author_id}/${image_filename}-tiny`} />
+        <img src={`${url}/${image_filename}-tiny.jpg`} />
       </div>
 
       <div className="text">{title}</div>
@@ -470,7 +498,7 @@ function Day({
   reorderRecipeInDay
 }: {
   day: number;
-  recipes: RecipeOverview[] | undefined;
+  recipes: RecipeOverview[];
   addRecipeToDay: (day: number, recipe: RecipeOverview) => void;
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
@@ -483,10 +511,10 @@ function Day({
       isOver:  monitor.isOver()
     }),
 
-    drop(item: any, monitor: DropTargetMonitor<any, any>) {
+    drop(item: DragItem, monitor: DropTargetMonitor<any, any>) {
       const draggedRecipe = monitor.getItem();
-      if (item.day !== draggedRecipe.day) addRecipeToDay(item.day, draggedRecipe.recipe);
-      return {day: item.day};
+      if (day !== draggedRecipe.day) addRecipeToDay(day, draggedRecipe.recipe);
+      return {day};
     }
   }));
 
@@ -496,6 +524,7 @@ function Day({
     <div className={`day ${color}`} ref={drop}>
       {recipes && recipes.map((recipe, i) => (
         <Recipe
+          key={i}
           day={day}
           index={i}
           recipe={recipe}
@@ -506,3 +535,10 @@ function Day({
     </div>
   );
 }
+
+type DragItem = {
+  type: string;
+  index: number;
+  day: number;
+  recipe: RecipeOverview;
+};

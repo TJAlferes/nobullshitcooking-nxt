@@ -617,11 +617,22 @@ export type RecipeOverview = {
   image_filename: string;
 };
 
+export type IncludedRecipes = {
+  [index: number]: RecipeOverview[];
+  1: RecipeOverview[];
+  2: RecipeOverview[];
+  3: RecipeOverview[];
+  4: RecipeOverview[];
+  5: RecipeOverview[];
+  6: RecipeOverview[];
+  7: RecipeOverview[];
+};
+
 export type PlanView = {
-  plan_id:   string;
-  owner_id:  string;
-  plan_name: string;
-  included_recipes: RecipeOverview[][];
+  plan_id:          string;
+  owner_id:         string;
+  plan_name:        string;
+  included_recipes: IncludedRecipes;
 };
 
 type Data = {
