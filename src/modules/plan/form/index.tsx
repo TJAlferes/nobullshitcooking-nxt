@@ -3,9 +3,11 @@ import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
+import { DndProvider } from 'react-dnd-multi-backend';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { v4 as uuidv4 } from 'uuid';
 
 import { endpoint } from '../../../config/api';
@@ -17,6 +19,9 @@ import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import type { Ownership } from '../../shared/types';
 
 export default function PlanForm({ ownership }: Props) {
+  const renders = useRef(0);
+  renders.current++;
+
   const router = useRouter();
 
   const params  = useSearchParams();
@@ -207,90 +212,95 @@ export default function PlanForm({ ownership }: Props) {
   const recipes: RecipeOverview[] = tabToList[tab];
 
   return (
-    <div className="one-col plan-form">
-      <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
+    <DndProvider options={HTML5toTouch}>
+      <div className="one-col plan-form">
+        <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+        <div>{JSON.stringify(current_recipes[1], undefined, 2)}</div>
 
-      <p className="feedback">{feedback}</p>
+        <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
 
-      <div className="cols">
-        <div className="tabs">
-          <div className={`tab ${tab === "official" ? "--active" : ""}`} onClick={() => setTab('official')}>Official</div>
-          <div className={`tab ${tab === "public" ? "--active" : ""}`} onClick={() => setTab('public')}>Public</div>
-          <div className={`tab ${tab === "my-public" ? "--active" : ""}`} onClick={() => setTab('my-public')}>My Public</div>
-          <div className={`tab ${tab === "my-private" ? "--active" : ""}`} onClick={() => setTab('my-private')}>My Private</div>
-          <div className={`tab ${tab === "my-favorite" ? "--active" : ""}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
-          <div className={`tab ${tab === "my-saved" ? "--active" : ""}`} onClick={() => setTab('my-saved')}>My Saved</div>
+        <p className="feedback">{feedback}</p>
+
+        <div className="cols">
+          <div className="tabs">
+            <div className={`tab ${tab === "official" ? "--active" : ""}`} onClick={() => setTab('official')}>Official</div>
+            <div className={`tab ${tab === "public" ? "--active" : ""}`} onClick={() => setTab('public')}>Public</div>
+            <div className={`tab ${tab === "my-public" ? "--active" : ""}`} onClick={() => setTab('my-public')}>My Public</div>
+            <div className={`tab ${tab === "my-private" ? "--active" : ""}`} onClick={() => setTab('my-private')}>My Private</div>
+            <div className={`tab ${tab === "my-favorite" ? "--active" : ""}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
+            <div className={`tab ${tab === "my-saved" ? "--active" : ""}`} onClick={() => setTab('my-saved')}>My Saved</div>
+          </div>
+
+          <Recipes
+            recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
+            removeRecipeFromDay={removeRecipeFromDay}
+            reorderRecipeInDay={reorderRecipeInDay}
+          />
+
+          <div className="calendar">
+            <div className="weekdays">
+              <span>Sunday</span>
+              <span>Monday</span>
+              <span>Tuesday</span>
+              <span>Wednesday</span>
+              <span>Thursday</span>
+              <span>Friday</span>
+              <span>Saturday</span>
+            </div>
+            {/*<div className="monthly-plan"></div>*/}
+            <div className="weekly-plan">
+              {Object.entries(current_recipes).map(([key, value]) => (
+                <Day
+                  key={parseInt(key)}
+                  day={parseInt(key)}
+                  recipes={value}
+                  addRecipeToDay={addRecipeToDay}
+                  removeRecipeFromDay={removeRecipeFromDay}
+                  reorderRecipeInDay={reorderRecipeInDay}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
-        <Recipes
-          recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
-          removeRecipeFromDay={removeRecipeFromDay}
-          reorderRecipeInDay={reorderRecipeInDay}
-        />
-
-        <div className="calendar">
-          <div className="weekdays">
-            <span>Sunday</span>
-            <span>Monday</span>
-            <span>Tuesday</span>
-            <span>Wednesday</span>
-            <span>Thursday</span>
-            <span>Friday</span>
-            <span>Saturday</span>
-          </div>
-          {/*<div className="monthly-plan"></div>*/}
-          <div className="weekly-plan">
-            {Object.entries(current_recipes).map(([key, value]) => (
-              <Day
-                key={parseInt(key)}
-                day={parseInt(key)}
-                recipes={value}
-                addRecipeToDay={addRecipeToDay}
-                removeRecipeFromDay={removeRecipeFromDay}
-                reorderRecipeInDay={reorderRecipeInDay}
-              />
-            ))}
-          </div>
+        <div className="name">
+          <h3>Plan Name</h3>
+          <input onChange={e => setPlanName(e.target.value)} name="plan_name" type="text" value={plan_name} />
         </div>
-      </div>
 
-      <div className="name">
-        <h3>Plan Name</h3>
-        <input onChange={e => setPlanName(e.target.value)} name="plan_name" type="text" value={plan_name} />
-      </div>
+        <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
 
-      <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
-
-      <div className="finish">
-        <button className="cancel-button" onClick={() => setModalActive(true)}>Cancel</button>
+        <div className="finish">
+          <button className="cancel-button" onClick={() => setModalActive(true)}>Cancel</button>
         
-        {
-          modalActive
-          ? (
-            <AriaModal
-              dialogClass="cancel"
-              focusDialog={true}
-              focusTrapOptions={{returnFocusOnDeactivate: false}}
-              getApplicationNode={() => document.getElementById('root') as Element | Node}
-              onExit={() => setModalActive(false)}
-              titleText="Cancel?"
-              underlayClickExits={false}
-            >
-              <p>Cancel? Changes will not be saved.</p>
-              <button className="cancel-cancel" onClick={() => setModalActive(false)}>No, Keep Working</button>
-              <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
-            </AriaModal>
-          )
-          : false
-        }
+          {
+            modalActive
+            ? (
+              <AriaModal
+                dialogClass="cancel"
+                focusDialog={true}
+                focusTrapOptions={{returnFocusOnDeactivate: false}}
+                getApplicationNode={() => document.getElementById('root') as Element | Node}
+                onExit={() => setModalActive(false)}
+                titleText="Cancel?"
+                underlayClickExits={false}
+              >
+                <p>Cancel? Changes will not be saved.</p>
+                <button className="cancel-cancel" onClick={() => setModalActive(false)}>No, Keep Working</button>
+                <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
+              </AriaModal>
+            )
+            : false
+          }
 
-        <button
-          className='submit-button'
-          disabled={loading}
-          onClick={submit}
-        >{loading ? 'Creating...' : 'Create'}</button>
+          <button
+            className='submit-button'
+            disabled={loading}
+            onClick={submit}
+          >{loading ? 'Creating...' : 'Create'}</button>
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }
 
@@ -370,6 +380,9 @@ function Recipes({
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
+  const renders = useRef(0);
+  renders.current++;
+
   const [ , drop ] = useDrop(() => ({
     accept: 'RECIPE',
 
@@ -381,10 +394,11 @@ function Recipes({
 
   return (
     <div className="recipes" ref={drop}>
+      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           key={recipe.key}
-          //id={id}
           day={0}
           index={i}
           recipe={recipe}
@@ -411,7 +425,7 @@ function Recipe({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [ _, drag ] = useDrag(() => ({
+  const [ , drag ] = useDrag(() => ({
     collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
       dropResult: monitor.getDropResult()
@@ -419,6 +433,7 @@ function Recipe({
 
     end(item, monitor: DragSourceMonitor<DragItem, {day: number}>) {
       if (item.day === 0) return;
+      if (!monitor.didDrop()) return;
       const dropResult = monitor.getDropResult();
       if (dropResult && item.day !== dropResult.day) {
         removeRecipeFromDay(item.day, item.index);
@@ -460,7 +475,9 @@ function Recipe({
       if (draggingDown && aboveCenter) return;
       if (draggingUp && belowCenter) return;
 
-      reorderRecipeInDay(day, dragIndex, hoverIndex);  // reorder/swap/move recipes
+      if (!monitor.isOver()) return;
+
+      reorderRecipeInDay(day, dragIndex, hoverIndex);
       item.index = hoverIndex;  // We mutate the monitor item here. Generally we avoid mutations, but here we mutate to avoid expensive index searches.
     }
   });
@@ -497,12 +514,12 @@ function Recipe({
         <img src={`${url}/${image_filename}-tiny.jpg`} />
       </div>
 
-      <div className="text">{title}</div>
+      <div className="text">{key}</div>
     </div>
   );
 }
 
-function Day({
+const Day = memo(function DayComponent({
   day,
   recipes,
   addRecipeToDay,
@@ -515,6 +532,9 @@ function Day({
   removeRecipeFromDay: (day: number, index: number) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {  // TO DO: limit the max number of recipes per day to 7
+  const renders = useRef(0);
+  renders.current++;
+
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: 'RECIPE',
 
@@ -533,6 +553,8 @@ function Day({
 
   return (
     <div className={`day ${color}`} ref={drop}>
+      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           key={recipe.key}
@@ -545,7 +567,7 @@ function Day({
       ))}
     </div>
   );
-}
+});
 
 type CurrentRecipes = {
   [index: number]: DraggableRecipe[];

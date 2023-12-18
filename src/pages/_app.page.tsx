@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { DndProvider } from 'react-dnd-multi-backend';  // TO DO: move DOWN, to plan
-import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import type { AppProps } from 'next/app';
 
 import '../../styles/styles.css';
@@ -45,13 +43,11 @@ export default function NOBSCApp({ Component, pageProps }: AppProps) {
 
   return (
     <StoreProvider>
-      <DndProvider options={HTML5toTouch}>
-        <RouteGuard>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </RouteGuard>
-      </DndProvider>
+      <RouteGuard>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </RouteGuard>
     </StoreProvider>
   );
 }
