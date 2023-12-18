@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData, useData } from '../../../store';
-import type { RecipeOverview, DraggableRecipe, IncludedRecipes } from '../../../store';
+import type { PlanView, RecipeOverview, IncludedRecipes } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -31,7 +31,7 @@ export default function PlanForm({ ownership }: Props) {
   const allowedRecipes = useAllowedContent(ownership);
 
   const [ plan_name, setPlanName ] = useState("");
-  const [ included_recipes, setIncludedRecipes ] = useState<IncludedRecipes>({
+  const [ current_recipes, setCurrentRecipes ] = useState<CurrentRecipes>({
     1: [],
     2: [],
     3: [],
@@ -53,6 +53,7 @@ export default function PlanForm({ ownership }: Props) {
       setLoading(true);
       window.scrollTo(0, 0);
       let plan = null;
+      // (fetched from the backend when they logged in)
       if (ownership === "public") {
         plan = my_public_plans.find(p => p.plan_id === plan_id);
       } else if (ownership === "private") {
@@ -63,7 +64,20 @@ export default function PlanForm({ ownership }: Props) {
         return;
       }
       setPlanName(plan.plan_name);
-      setIncludedRecipes(plan.included_recipes);
+
+      const curr_recipes: CurrentRecipes = {
+        1: [],
+        2: [],
+        3: [],
+        4: [],
+        5: [],
+        6: [],
+        7: []
+      };
+      for (const [ key, value ] of Object.entries(plan.included_recipes)) {
+        curr_recipes[parseInt(key)] = value.map(recipe => ({...recipe, key: uuidv4()}));
+      }
+      setCurrentRecipes(curr_recipes);
       setLoading(false);
     }
 
@@ -97,7 +111,7 @@ export default function PlanForm({ ownership }: Props) {
 
   const addRecipeToDay = (day: number, recipe: DraggableRecipe) => {
     if (!day) return;
-    setIncludedRecipes(prev => update(prev, {
+    setCurrentRecipes(prev => update(prev, {
       [day]: {
         $push: [recipe]
       }
@@ -106,7 +120,7 @@ export default function PlanForm({ ownership }: Props) {
   
   const removeRecipeFromDay = (day: number, index: number) => {
     if (!day) return;
-    setIncludedRecipes(prev => update(prev, {
+    setCurrentRecipes(prev => update(prev, {
       [day]: {
         $splice: [[index, 1]]
       }
@@ -115,7 +129,7 @@ export default function PlanForm({ ownership }: Props) {
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
     if (!day) return;
-    setIncludedRecipes(prev => update(prev, {
+    setCurrentRecipes(prev => update(prev, {
       [day]: {
         $splice: [[dragIndex, 1], [hoverIndex, 0, prev[day]![dragIndex]!]]
       }
@@ -135,7 +149,7 @@ export default function PlanForm({ ownership }: Props) {
 
     const plan_upload = {
       plan_name,
-      included_recipes: () => Object.entries(included_recipes).map(([key, value]) => 
+      included_recipes: () => Object.entries(current_recipes).map(([key, value]) => 
         value.map((recipe, index) => ({
           recipe_id:     recipe.recipe_id,
           day_number:    key,
@@ -226,7 +240,7 @@ export default function PlanForm({ ownership }: Props) {
           </div>
           {/*<div className="monthly-plan"></div>*/}
           <div className="weekly-plan">
-            {Object.entries(included_recipes).map(([key, value]) => (
+            {Object.entries(current_recipes).map(([key, value]) => (
               <Day
                 key={parseInt(key)}
                 day={parseInt(key)}
@@ -532,6 +546,21 @@ function Day({
     </div>
   );
 }
+
+type CurrentRecipes = {
+  [index: number]: DraggableRecipe[];
+  1: DraggableRecipe[];
+  2: DraggableRecipe[];
+  3: DraggableRecipe[];
+  4: DraggableRecipe[];
+  5: DraggableRecipe[];
+  6: DraggableRecipe[];
+  7: DraggableRecipe[];
+};
+
+type DraggableRecipe = RecipeOverview & {
+  key: string;
+};
 
 type DragItem = {
   type: string;

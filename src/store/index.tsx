@@ -617,20 +617,15 @@ export type RecipeOverview = {
   image_filename: string;
 };
 
-export type DraggableRecipe = RecipeOverview & {
-  key: string;
-  //id: string;
-};
-
 export type IncludedRecipes = {
-  [index: number]: DraggableRecipe[];
-  1: DraggableRecipe[];
-  2: DraggableRecipe[];
-  3: DraggableRecipe[];
-  4: DraggableRecipe[];
-  5: DraggableRecipe[];
-  6: DraggableRecipe[];
-  7: DraggableRecipe[];
+  [index: number]: RecipeOverview[];
+  1: RecipeOverview[];
+  2: RecipeOverview[];
+  3: RecipeOverview[];
+  4: RecipeOverview[];
+  5: RecipeOverview[];
+  6: RecipeOverview[];
+  7: RecipeOverview[];
 };
 
 export type PlanView = {
