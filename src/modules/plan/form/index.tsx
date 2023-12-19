@@ -80,7 +80,10 @@ export default function PlanForm({ ownership }: Props) {
         7: []
       };
       for (const [ key, value ] of Object.entries(plan.included_recipes)) {
-        curr_recipes[parseInt(key)] = value.map(recipe => ({...recipe, key: uuidv4()}));
+        curr_recipes[parseInt(key)] = value.map(recipe => {
+          const k = uuidv4();
+          return {...recipe, key: k, stableKey: k};
+        });
       }
       setCurrentRecipes(curr_recipes);
       setLoading(false);
@@ -115,33 +118,24 @@ export default function PlanForm({ ownership }: Props) {
   };
 
   const addRecipeToDay = (day: number, recipe: DraggableRecipe) => {
-    if (!day) return;
-    setCurrentRecipes(prev => update(prev, {
-      [day]: {
-        $push: [recipe]
-      }
+    setCurrentRecipes(prev => ({
+      ...prev,
+      [day]: [...prev[day]!, recipe]
     }));
   };
-  
-  /*
-  TO DO:
-  (day, key) {
-    the index you need is
-    the index of the recipe in day where recipe.key === key
-  }
-  */
-  const removeRecipeFromDay = (day: number, index: number) => {
-    if (!day) return;
-    //console.log('DAY: ', day, ' INDEX: ', index);
-    setCurrentRecipes(prev => update(prev, {
-      [day]: {
-        $splice: [[index, 1]]
-      }
-    }));
+
+  const removeRecipeFromDay = (day: number, stableKey: string) => {
+    setCurrentRecipes(prev => {
+      const updated = prev[day]!.filter(r => r.stableKey !== stableKey);
+
+      return {
+        ...prev,
+        [day]: updated
+      };
+    });
   };
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
-    if (!day) return;
     const recipe = current_recipes[day]![dragIndex]!;
     setCurrentRecipes(prev => update(prev, {
       [day]: {
@@ -243,7 +237,10 @@ export default function PlanForm({ ownership }: Props) {
           </div>
 
           <Recipes
-            recipes={recipes.map(recipe => ({...recipe, key: uuidv4()}))}
+            recipes={recipes.map(recipe => {
+              const k = uuidv4();
+              return {...recipe, key: k, stableKey: k};
+            })}
             removeRecipeFromDay={removeRecipeFromDay}
             reorderRecipeInDay={reorderRecipeInDay}
           />
@@ -388,7 +385,7 @@ function Recipes({
   reorderRecipeInDay
 }: {
   recipes: DraggableRecipe[];
-  removeRecipeFromDay: (day: number, index: number) => void;
+  removeRecipeFromDay: (day: number, stableKey: string) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
   const renders = useRef(0);
@@ -410,6 +407,7 @@ function Recipes({
       {recipes && recipes.map((recipe, i) => (
         <Recipe
           key={recipe.key}
+          stableKey={recipe.key}
           day={0}
           index={i}
           recipe={recipe}
@@ -422,16 +420,18 @@ function Recipes({
 }
 
 function Recipe({
+  stableKey,
   day,
   index,
   recipe,
   removeRecipeFromDay,
   reorderRecipeInDay
 }: {
+  stableKey: string;
   day: number;
   index: number;
   recipe: DraggableRecipe;
-  removeRecipeFromDay: (day: number, index: number) => void;
+  removeRecipeFromDay: (day: number, stableKey: string) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -448,9 +448,7 @@ function Recipe({
       if (!monitor.didDrop()) return;
       const dropResult = monitor.getDropResult();
       if (dropResult && item.day !== dropResult.day) {
-        //console.log('day: ', day, ' item.day: ', item.day);
-        console.log('index: ', index, ' item.index: ', item.index);
-        removeRecipeFromDay(item.day, item.index);  //, index);
+        removeRecipeFromDay(item.day, stableKey);
       }
     },
 
@@ -542,7 +540,7 @@ function Day({
   day: number;
   recipes: DraggableRecipe[];
   addRecipeToDay: (day: number, recipe: DraggableRecipe) => void;
-  removeRecipeFromDay: (day: number, index: number) => void;
+  removeRecipeFromDay: (day: number, stableKey: string) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {  // TO DO: limit the max number of recipes per day to 7
   const renders = useRef(0);
@@ -557,17 +555,7 @@ function Day({
     }),
 
     drop(item: DragItem, monitor: DropTargetMonitor<DragItem>) {
-      if (day !== item.day) {
-        //removeRecipeFromDay();
-        addRecipeToDay(day, item.recipe);
-      }
-
-      /*const didDrop = monitor.didDrop();
-      if (didDrop && item.day !== 0) {
-        const dropResult = monitor.getDropResult();
-        if (dropResult && )
-      }*/
-
+      if (day !== item.day) addRecipeToDay(day, item.recipe);
       return {day, index: item.index};
     }
   }));
@@ -578,11 +566,12 @@ function Day({
     <div className={`day ${color}`} ref={drop}>
       <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
 
-      {recipes && recipes.map((recipe, i) => (
+      {recipes && recipes.map(recipe => (
         <Recipe
           key={recipe.key}
+          stableKey={recipe.key}
           day={day}
-          index={i}
+          index={recipes.findIndex((r) => r.stableKey === recipe.stableKey)}
           recipe={recipe}
           removeRecipeFromDay={removeRecipeFromDay}
           reorderRecipeInDay={reorderRecipeInDay}
@@ -605,6 +594,7 @@ type CurrentRecipes = {
 
 type DraggableRecipe = RecipeOverview & {
   key: string;
+  stableKey: string;
 };
 
 type DragItem = {
