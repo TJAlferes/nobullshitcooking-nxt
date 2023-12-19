@@ -123,8 +123,16 @@ export default function PlanForm({ ownership }: Props) {
     }));
   };
   
+  /*
+  TO DO:
+  (day, key) {
+    the index you need is
+    the index of the recipe in day where recipe.key === key
+  }
+  */
   const removeRecipeFromDay = (day: number, index: number) => {
     if (!day) return;
+    //console.log('DAY: ', day, ' INDEX: ', index);
     setCurrentRecipes(prev => update(prev, {
       [day]: {
         $splice: [[index, 1]]
@@ -134,9 +142,13 @@ export default function PlanForm({ ownership }: Props) {
   
   const reorderRecipeInDay = (day: number, dragIndex: number, hoverIndex: number) => {
     if (!day) return;
+    const recipe = current_recipes[day]![dragIndex]!;
     setCurrentRecipes(prev => update(prev, {
       [day]: {
-        $splice: [[dragIndex, 1], [hoverIndex, 0, prev[day]![dragIndex]!]]
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, recipe]
+        ]
       }
     }));
   };
@@ -215,7 +227,6 @@ export default function PlanForm({ ownership }: Props) {
     <DndProvider options={HTML5toTouch}>
       <div className="one-col plan-form">
         <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
-        <div>{JSON.stringify(current_recipes[1], undefined, 2)}</div>
 
         <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
 
@@ -386,7 +397,7 @@ function Recipes({
   const [ , drop ] = useDrop(() => ({
     accept: 'RECIPE',
 
-    collect: (monitor: DropTargetMonitor) => ({
+    collect: (monitor: DropTargetMonitor<DragItem>) => ({
       canDrop: monitor.canDrop(),
       isOver:  monitor.isOver(),
     })
@@ -426,26 +437,28 @@ function Recipe({
   const ref = useRef<HTMLDivElement>(null);
 
   const [ , drag ] = useDrag(() => ({
-    collect: (monitor: DragSourceMonitor) => ({
+    collect: (monitor: DragSourceMonitor<DragItem>) => ({
       isDragging: monitor.isDragging(),
-      dropResult: monitor.getDropResult()
+      dropResult: monitor.getDropResult(),
+      //index: monitor.getItem().index
     }),
 
-    end(item, monitor: DragSourceMonitor<DragItem, {day: number}>) {
+    end(item, monitor: DragSourceMonitor<DragItem, {day: number; index: number}>) {
       if (item.day === 0) return;
       if (!monitor.didDrop()) return;
       const dropResult = monitor.getDropResult();
       if (dropResult && item.day !== dropResult.day) {
-        removeRecipeFromDay(item.day, item.index);
+        //console.log('day: ', day, ' item.day: ', item.day);
+        console.log('index: ', index, ' item.index: ', item.index);
+        removeRecipeFromDay(item.day, item.index);  //, index);
       }
     },
 
-    item: {
+    item: () => ({
       day,
       index,
-      recipe,
-      type: 'RECIPE'
-    },
+      recipe
+    }),
 
     type: 'RECIPE'
   }));
@@ -453,8 +466,8 @@ function Recipe({
   const [ , drop ] = useDrop({
     accept: 'RECIPE',
 
-    hover(item: DragItem, monitor: DropTargetMonitor<DragItem>) {  // TO DO: improve "any, any"
-      if (!item) return;  // ?
+    hover(item: DragItem, monitor: DropTargetMonitor<DragItem>) {
+      //if (!item) return;  // ?
       if (!ref.current) return;
 
       const dragIndex  = item.index;
@@ -462,7 +475,7 @@ function Recipe({
       if (dragIndex === hoverIndex) return;  // Don't replace items with themselves
 
       // The rectangular dimensions of the Recipe item being hovered over
-      const rectangle       = ref.current?.getBoundingClientRect();
+      const rectangle       = ref.current.getBoundingClientRect();
       const mouseLocation   = monitor.getClientOffset();
       const verticalCenter  = (rectangle.bottom - rectangle.top) / 2;
       const distanceFromTop = (mouseLocation as XYCoord).y - rectangle.top;
@@ -491,7 +504,7 @@ function Recipe({
     owner_id,
     title,
     image_filename
-  } = recipe;
+  } = recipe;  // TO DO: BUG: sometimes recipe is undefined
 
   let officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads/recipe';
   let publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads/recipe';
@@ -519,7 +532,7 @@ function Recipe({
   );
 }
 
-const Day = memo(function DayComponent({
+function Day({
   day,
   recipes,
   addRecipeToDay,
@@ -538,14 +551,24 @@ const Day = memo(function DayComponent({
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: 'RECIPE',
 
-    collect: (monitor: DropTargetMonitor) => ({
+    collect: (monitor: DropTargetMonitor<DragItem>) => ({
       canDrop: monitor.canDrop(),
       isOver:  monitor.isOver()
     }),
 
-    drop(item: DragItem) {
-      if (day !== item.day) addRecipeToDay(day, item.recipe);
-      return {day};
+    drop(item: DragItem, monitor: DropTargetMonitor<DragItem>) {
+      if (day !== item.day) {
+        //removeRecipeFromDay();
+        addRecipeToDay(day, item.recipe);
+      }
+
+      /*const didDrop = monitor.didDrop();
+      if (didDrop && item.day !== 0) {
+        const dropResult = monitor.getDropResult();
+        if (dropResult && )
+      }*/
+
+      return {day, index: item.index};
     }
   }));
 
@@ -567,7 +590,7 @@ const Day = memo(function DayComponent({
       ))}
     </div>
   );
-});
+}
 
 type CurrentRecipes = {
   [index: number]: DraggableRecipe[];
@@ -585,8 +608,7 @@ type DraggableRecipe = RecipeOverview & {
 };
 
 type DragItem = {
-  type: string;
-  index: number;
   day: number;
+  index: number;
   recipe: DraggableRecipe;
 };
