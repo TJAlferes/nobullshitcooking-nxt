@@ -168,7 +168,7 @@ export default function Dashboard() {
     setTinyAvatar(null);
   };
 
-  /*const unattributePublicPlan = async (plan_id: string) => {
+  const unattributePublicPlan = async (plan_id: string) => {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
@@ -187,7 +187,7 @@ export default function Dashboard() {
       setFeedback(error);
     }
     setLoading(false);
-  };*/
+  };
 
   const unattributePublicRecipe = async (recipe_id: string) => {
     setLoading(true);
@@ -414,16 +414,8 @@ export default function Dashboard() {
               className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
               onClick={() => setTab('avatar')}
             >Profile Settings</div>
-
-            <div
-              className={`menu-item ${tab === 'plans' ? '--active' : ''}`}
-              onClick={() => {
-                setTab('plans');
-                //setSubTab('private');
-              }}
-            >Plans</div>
   
-            {/*<ExpandCollapse
+            <ExpandCollapse
               headingWhileCollapsed={(
                 <div className="menu-item">
                   <span>Plans</span>
@@ -453,7 +445,7 @@ export default function Dashboard() {
                   }}
                 >Private</div>
               </div>
-            </ExpandCollapse>*/}
+            </ExpandCollapse>
   
             <ExpandCollapse
               headingWhileCollapsed={(
@@ -666,7 +658,54 @@ export default function Dashboard() {
             </>
           )}
 
-          {tab === "plans" && (
+          {tab === "plans" && subTab === "public" ? (
+            <div className="dashboard-content">
+              <h2>Public Plans</h2>
+      
+              <Link href="/public-plan/form" className="new-entity">
+                Create Public Plan
+              </Link>
+      
+              {modalActive
+                ? (
+                  <AriaModal {...commonAriaModalProps}>
+                    <p>{'Unattribute Public Plan: '}{deleteName}{' ?'}</p>
+    
+                    <button className="--cancel" onClick={deactivateModal}>
+                      Cancel
+                    </button>
+    
+                    <button className="--action" onClick={() => unattributePublicPlan(deleteId)}>
+                      Yes, Unattribute Plan
+                    </button>
+                  </AriaModal>
+                )
+                : false
+              }
+      
+              {userData.my_private_plans.length
+                ? userData.my_private_plans.map(p => (
+                  <div className="dashboard-item" key={p.plan_id}>
+                    <span className="name">
+                      <Link href={`/public-plan/detail${p.plan_id}`}>{p.plan_name}</Link>
+                    </span>
+    
+                    <span className="action">
+                      <Link href={`/public-plan/form/${p.plan_id}`}>Edit</Link>
+                    </span>
+    
+                    <span
+                      className="delete"
+                      onClick={() => activateModal(p.plan_id, p.plan_name)}
+                    >Delete</span>
+                  </div>
+                ))
+                : <div className="no-content">You haven't created any public plans yet.</div>
+              }
+            </div>
+          ): false}
+
+          {tab === "plans" && subTab === "private" ? (
             <div className="dashboard-content">
               <h2>Private Plans</h2>
       
@@ -708,66 +747,12 @@ export default function Dashboard() {
                     >Delete</span>
                   </div>
                 ))
-                : <div className="no-content">You haven't created any plans yet.</div>
+                : <div className="no-content">You haven't created any private plans yet.</div>
               }
             </div>
-          )}
+          ) : false}
 
-          {tab === "recipes" && subTab === "private" && (
-            <div className="dashboard-content">
-              <h2>Private Recipes</h2>
-    
-              <Link href="/private-recipe/form" className="new-entity">
-                Create Private Recipe
-              </Link>
-    
-              {modalActive
-                ? (
-                  <AriaModal {...commonAriaModalProps}>
-                    <p>{'Delete Private Recipe: '}{deleteName}{' ?'}</p>
-    
-                    <button className="--cancel" onClick={deactivateModal}>
-                      Cancel
-                    </button>
-    
-                    <button className="--action" onClick={() => deletePrivateRecipe(deleteId)}>
-                      Yes, Delete Recipe
-                    </button>
-                  </AriaModal>
-                )
-                : false
-              }
-    
-              {userData.my_private_recipes.length
-                ? userData.my_private_recipes.map(r => (
-                  <div className="dashboard-item" key={r.recipe_id}>
-                    <span className="tiny">
-                      {r.image_filename !== "default"
-                        ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/private-recipe/detail/${r.recipe_id}`}>{r.title}</Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/private-recipe/form/${r.recipe_id}`}>Edit</Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => activateModal(r.recipe_id, r.title)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any private recipes yet.</div>
-              }
-            </div>
-          )}
-
-          {tab === "recipes" && subTab === "public" && (
+          {tab === "recipes" && subTab === "public" ? (
             <div className="dashboard-content">
               <h2>Public Recipes</h2>
     
@@ -820,9 +805,63 @@ export default function Dashboard() {
                 : <div className="no-content">You haven't created any public recipes yet.</div>
               }
             </div>
-          )}
+          ) : false}
 
-          {tab === "recipes" && subTab === "favorite" && (
+          {tab === "recipes" && subTab === "private" ? (
+            <div className="dashboard-content">
+              <h2>Private Recipes</h2>
+    
+              <Link href="/private-recipe/form" className="new-entity">
+                Create Private Recipe
+              </Link>
+    
+              {modalActive
+                ? (
+                  <AriaModal {...commonAriaModalProps}>
+                    <p>{'Delete Private Recipe: '}{deleteName}{' ?'}</p>
+    
+                    <button className="--cancel" onClick={deactivateModal}>
+                      Cancel
+                    </button>
+    
+                    <button className="--action" onClick={() => deletePrivateRecipe(deleteId)}>
+                      Yes, Delete Recipe
+                    </button>
+                  </AriaModal>
+                )
+                : false
+              }
+    
+              {userData.my_private_recipes.length
+                ? userData.my_private_recipes.map(r => (
+                  <div className="dashboard-item" key={r.recipe_id}>
+                    <span className="tiny">
+                      {r.image_filename !== "default"
+                        ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
+                        : <div className="img-28-18"></div>
+                      }
+                    </span>
+    
+                    <span className="name">
+                      <Link href={`/private-recipe/detail/${r.recipe_id}`}>{r.title}</Link>
+                    </span>
+    
+                    <span className="action">
+                      <Link href={`/private-recipe/form/${r.recipe_id}`}>Edit</Link>
+                    </span>
+    
+                    <span
+                      className="delete"
+                      onClick={() => activateModal(r.recipe_id, r.title)}
+                    >Delete</span>
+                  </div>
+                ))
+                : <div className="no-content">You haven't created any private recipes yet.</div>
+              }
+            </div>
+          ) : false}
+
+          {tab === "recipes" && subTab === "favorite" ? (
             <div className="dashboard-content">
               <h2 className="--tall">Favorite Recipes</h2>
     
@@ -849,9 +888,9 @@ export default function Dashboard() {
                 : <div className="no-content">You haven't favorited any recipes yet.</div>
               }
             </div>
-          )}
+          ): false}
 
-          {tab === "recipes" && subTab === "saved" && (
+          {tab === "recipes" && subTab === "saved" ? (
             <div className="dashboard-content">
               <h2 className="--tall">Saved Recipes</h2>
     
@@ -878,9 +917,9 @@ export default function Dashboard() {
                 : <div className="no-content">You haven't saved any recipes yet.</div>
               }
             </div>
-          )}
+          ) : false}
 
-          {tab === "ingredients" && (
+          {tab === "ingredients" ? (
             <div className="dashboard-content">
               <h2>Private Ingredients</h2>
     
@@ -919,9 +958,9 @@ export default function Dashboard() {
                 : <div className="no-content">You haven't created any private ingredients yet.</div>
               }
             </div>
-          )}
+          ) : false}
 
-          {tab === "equipment" && (
+          {tab === "equipment" ? (
             <div className="dashboard-content">
               <h2>Private Equipment</h2>
     
@@ -963,7 +1002,7 @@ export default function Dashboard() {
                 : <div className="no-content">You haven't created any private equipment yet.</div>
               }
             </div>
-          )}
+          ) : false}
         </div>
       </div>
     </div>

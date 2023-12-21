@@ -24,7 +24,11 @@ export default function Login() {
     setLoading(true);
     setFeedback('');
     try {
-      const res = await axios.post(`${endpoint}/login`, {email, password});
+      const res = await axios.post(
+        `${endpoint}/login`,
+        {email, password},
+        {withCredentials: true}
+      );
       if (res.status === 201) {
         login(res.data);
         router.push('/dashboard');

@@ -127,7 +127,6 @@ export default function PlanForm({ ownership }: Props) {
   const removeRecipeFromDay = (day: number, stableKey: string) => {
     setCurrentRecipes(prev => {
       const updated = prev[day]!.filter(r => r.stableKey !== stableKey);
-
       return {
         ...prev,
         [day]: updated
@@ -160,14 +159,16 @@ export default function PlanForm({ ownership }: Props) {
 
     const plan_upload = {
       plan_name,
-      included_recipes: () => Object.entries(current_recipes).map(([key, value]) => 
+      included_recipes: Object.entries(current_recipes).flatMap(([key, value]) => 
         value.map((recipe, index) => ({
           recipe_id:     recipe.recipe_id,
-          day_number:    key,
+          day_number:    Number(key),
           recipe_number: index + 1
         }))
-      )
+      ) as IncludedRecipe[]
     };
+
+    console.log(plan_upload.included_recipes);
 
     try {
       if (plan_id) {
@@ -194,6 +195,8 @@ export default function PlanForm({ ownership }: Props) {
           await getMyPlans();
           setTimeout(() => router.push('/dashboard'), 3000);
         } else {
+          console.log('HERE');
+          console.log('HERE');
           setFeedback(res.data.message);
         }
       }
@@ -601,4 +604,10 @@ type DragItem = {
   day: number;
   index: number;
   recipe: DraggableRecipe;
+};
+
+type IncludedRecipe = {
+  recipe_id:     string;
+  day_number:    number;
+  recipe_number: number;
 };
