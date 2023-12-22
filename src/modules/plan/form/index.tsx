@@ -3,7 +3,7 @@ import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { DndProvider } from 'react-dnd-multi-backend';
@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData, useData } from '../../../store';
-import type { PlanView, RecipeOverview, IncludedRecipes } from '../../../store';
+import type { RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -35,21 +35,14 @@ export default function PlanForm({ ownership }: Props) {
 
   const allowedRecipes = useAllowedContent(ownership);
 
-  const [ plan_name, setPlanName ] = useState("");
-  const [ current_recipes, setCurrentRecipes ] = useState<CurrentRecipes>({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-    7: []
-  });
+  const [ plan_name, setPlanName ] = useState('');
+  const [ current_recipes, setCurrentRecipes ] =
+    useState<CurrentRecipes>({1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []});
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
   const [modalActive, setModalActive] = useState(false);
-  const [tab, setTab] = useState("official");
+  const [tab, setTab] = useState('official');
 
   useEffect(() => {
     let mounted = true;
@@ -57,28 +50,22 @@ export default function PlanForm({ ownership }: Props) {
     function getExistingPlanToEdit() {
       setLoading(true);
       window.scrollTo(0, 0);
+
       let plan = null;
-      // (fetched from the backend when they logged in)
-      if (ownership === "public") {
+      if (ownership === 'public') {
         plan = my_public_plans.find(p => p.plan_id === plan_id);
-      } else if (ownership === "private") {
+      } else if (ownership === 'private') {
         plan = my_private_plans.find(p => p.plan_id === plan_id);
       }
+
       if (!plan) {
         router.push(`/dashboard`);
         return;
       }
+
       setPlanName(plan.plan_name);
 
-      const curr_recipes: CurrentRecipes = {
-        1: [],
-        2: [],
-        3: [],
-        4: [],
-        5: [],
-        6: [],
-        7: []
-      };
+      const curr_recipes: CurrentRecipes = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []};
       for (const [ key, value ] of Object.entries(plan.included_recipes)) {
         curr_recipes[parseInt(key)] = value.map(recipe => {
           const k = uuidv4();
@@ -86,6 +73,7 @@ export default function PlanForm({ ownership }: Props) {
         });
       }
       setCurrentRecipes(curr_recipes);
+
       setLoading(false);
     }
 
@@ -103,11 +91,14 @@ export default function PlanForm({ ownership }: Props) {
   }, []);
 
   const getMyPlans = async () => {
-    if (ownership === "public") {
+    if (ownership === 'public') {
       const res = await axios.get(`${endpoint}/users/${authname}/public-plans`);
       setMyPublicPlans(res.data);
-    } else if (ownership === "private") {
-      const res = await axios.get(`${endpoint}/users/${authname}/private-plans`, {withCredentials: true});
+    } else if (ownership === 'private') {
+      const res = await axios.get(
+        `${endpoint}/users/${authname}/private-plans`,
+        {withCredentials: true}
+      );
       setMyPrivatePlans(res.data);
     }
   };
@@ -155,6 +146,7 @@ export default function PlanForm({ ownership }: Props) {
     window.scrollTo(0, 0);
     setFeedback('');
     setLoading(true);
+
     if (plan_name.trim() === '') return invalid('Plan Name required.');
 
     const plan_upload = {
@@ -168,8 +160,6 @@ export default function PlanForm({ ownership }: Props) {
       ) as IncludedRecipe[]
     };
 
-    console.log(plan_upload.included_recipes);
-
     try {
       if (plan_id) {
         const res = await axios.patch(
@@ -177,6 +167,7 @@ export default function PlanForm({ ownership }: Props) {
           {plan_id, ...plan_upload},
           {withCredentials: true}
         );
+
         if (res.status === 204) {
           setFeedback("Plan updated.");
           await getMyPlans();
@@ -190,13 +181,12 @@ export default function PlanForm({ ownership }: Props) {
           plan_upload,
           {withCredentials: true}
         );
+
         if (res.status === 201) {
           setFeedback("Plan created.");
           await getMyPlans();
           setTimeout(() => router.push('/dashboard'), 3000);
         } else {
-          console.log('HERE');
-          console.log('HERE');
           setFeedback(res.data.message);
         }
       }
@@ -231,12 +221,12 @@ export default function PlanForm({ ownership }: Props) {
 
         <div className="cols">
           <div className="tabs">
-            <div className={`tab ${tab === "official" ? "--active" : ""}`} onClick={() => setTab('official')}>Official</div>
-            <div className={`tab ${tab === "public" ? "--active" : ""}`} onClick={() => setTab('public')}>Public</div>
-            <div className={`tab ${tab === "my-public" ? "--active" : ""}`} onClick={() => setTab('my-public')}>My Public</div>
-            <div className={`tab ${tab === "my-private" ? "--active" : ""}`} onClick={() => setTab('my-private')}>My Private</div>
-            <div className={`tab ${tab === "my-favorite" ? "--active" : ""}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
-            <div className={`tab ${tab === "my-saved" ? "--active" : ""}`} onClick={() => setTab('my-saved')}>My Saved</div>
+            <div className={`tab ${tab === 'official' ? '--active' : ''}`} onClick={() => setTab('official')}>Official</div>
+            <div className={`tab ${tab === 'public' ? '--active' : ''}`} onClick={() => setTab('public')}>Public</div>
+            <div className={`tab ${tab === 'my-public' ? '--active' : ''}`} onClick={() => setTab('my-public')}>My Public</div>
+            <div className={`tab ${tab === 'my-private' ? '--active' : ''}`} onClick={() => setTab('my-private')}>My Private</div>
+            <div className={`tab ${tab === 'my-favorite' ? '--active' : ''}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
+            <div className={`tab ${tab === 'my-saved' ? '--active' : ''}`} onClick={() => setTab('my-saved')}>My Saved</div>
           </div>
 
           <Recipes
@@ -258,7 +248,6 @@ export default function PlanForm({ ownership }: Props) {
               <span>Friday</span>
               <span>Saturday</span>
             </div>
-            {/*<div className="monthly-plan"></div>*/}
             <div className="weekly-plan">
               {Object.entries(current_recipes).map(([key, value]) => (
                 <Day
@@ -276,13 +265,20 @@ export default function PlanForm({ ownership }: Props) {
 
         <div className="name">
           <h3>Plan Name</h3>
-          <input onChange={e => setPlanName(e.target.value)} name="plan_name" type="text" value={plan_name} />
+          <input
+            onChange={e => setPlanName(e.target.value)}
+            name="plan_name"
+            type="text"
+            value={plan_name}
+          />
         </div>
 
         <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
 
         <div className="finish">
-          <button className="cancel-button" onClick={() => setModalActive(true)}>Cancel</button>
+          <button className="cancel-button" onClick={() => setModalActive(true)}>
+            Cancel
+          </button>
         
           {
             modalActive
@@ -297,8 +293,12 @@ export default function PlanForm({ ownership }: Props) {
                 underlayClickExits={false}
               >
                 <p>Cancel? Changes will not be saved.</p>
-                <button className="cancel-cancel" onClick={() => setModalActive(false)}>No, Keep Working</button>
-                <button className="cancel-button" onClick={discardChanges}>Yes, Discard Changes</button>
+                <button className="cancel-cancel" onClick={() => setModalActive(false)}>
+                  No, Keep Working
+                </button>
+                <button className="cancel-button" onClick={discardChanges}>
+                  Yes, Discard Changes
+                </button>
               </AriaModal>
             )
             : false

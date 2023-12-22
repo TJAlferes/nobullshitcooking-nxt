@@ -1,5 +1,5 @@
 import Link from 'next/link';
-//import { useRouter } from 'next/navigation';
+//import { useRouter } from 'next/router';
 
 //import { useAuth } from '../../../store';
 import type { PlanView, RecipeOverview } from '../../../store';
@@ -7,12 +7,7 @@ import { NOBSC_USER_ID } from '../../shared/constants';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { Ownership } from '../../shared/types';
 
-export default function PlanDetail({ /*ownership,*/ plan }: Props) {
-  //const router = useRouter();
-
-  //const { auth_id } = useAuth();
-  //const { my_public_plans, my_private_plans } = useUserData();  // TO DO: put this into useAllowedContent
-
+export default function PlanDetail({ ownership, plan }: Props) {
   if (!plan) return <LoaderSpinner />;  // or return router.push('/404'); ???
 
   const {
@@ -119,6 +114,3 @@ function Recipe({
     </div>
   );
 }
-
-// slugify title and use that instead of recipe_id ???
-// (don't slugify, encodeURIComponent)

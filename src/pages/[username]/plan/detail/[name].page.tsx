@@ -1,21 +1,21 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../config/api';
-import UserPublicPlanDetail from "../../../../modules/user/public-plan/detail";
-import type { PlanView } from "../../../../store";
+import PlanDetail from '../../../../modules/plan/detail';
+import type { PlanView } from '../../../../store';
 
 export default function UserPublicPlanDetailPage({ plan }: Props) {
-  return <UserPublicPlanDetail plan={plan} />;
+  return <PlanDetail ownership='public' plan={plan} />;
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const response = await axios.get(
+  const res = await axios.get(
     `${endpoint}/users/${params.username}/public-plans/${params.name}`
   );
 
   return {
     props: {
-      plan: response.data
+      plan: res.data
     }
   };
 }

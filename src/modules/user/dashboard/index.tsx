@@ -687,7 +687,7 @@ export default function Dashboard() {
                 ? userData.my_private_plans.map(p => (
                   <div className="dashboard-item" key={p.plan_id}>
                     <span className="name">
-                      <Link href={`/public-plan/detail${p.plan_id}`}>{p.plan_name}</Link>
+                      <Link href={`/${auth.authname}/plan/detail/${p.plan_name}`}>{p.plan_name}</Link>
                     </span>
     
                     <span className="action">
@@ -734,7 +734,7 @@ export default function Dashboard() {
                 ? userData.my_private_plans.map(p => (
                   <div className="dashboard-item" key={p.plan_id}>
                     <span className="name">
-                      <Link href={`/private-plan/detail${p.plan_id}`}>{p.plan_name}</Link>
+                      <Link href={`/private-plan/detail/${p.plan_id}`}>{p.plan_name}</Link>
                     </span>
     
                     <span className="action">
