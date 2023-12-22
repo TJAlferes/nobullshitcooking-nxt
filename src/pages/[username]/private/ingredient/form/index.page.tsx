@@ -1,7 +1,5 @@
-//import axios from 'axios';
-
-import UserPrivateIngredientForm from '../../../modules/user/private-ingredient/form';
+import IngredientForm from '../../../../../modules/ingredient/form';
 
 export default function UserPrivateIngredientFormPage() {
-  return <UserPrivateIngredientForm />;
+  return <IngredientForm ownership='private' />;
 }

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../../config/api';
-import UserPrivateRecipeDetail from '../../../../../modules/user/private-recipe/detail';
+import RecipeDetail from '../../../../../modules/recipe/detail';
 import type { RecipeDetailView } from '../../../../../modules/recipe/detail';
 
 export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
-  return <UserPrivateRecipeDetail recipe={recipe} />
+  return <RecipeDetail ownership='private' recipe={recipe} />
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {

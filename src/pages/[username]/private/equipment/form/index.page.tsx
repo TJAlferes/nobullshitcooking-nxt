@@ -1,5 +1,5 @@
-import UserPrivateEquipmentForm from '../../../modules/user/private-equipment/form';
+import EquipmentForm from '../../../../../modules/equipment/form';
 
 export default function UserPrivateEquipmentFormPage() {
-  return <UserPrivateEquipmentForm />
+  return <EquipmentForm ownership='private' />
 }

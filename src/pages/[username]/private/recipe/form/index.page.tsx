@@ -1,5 +1,5 @@
-import UserPrivateRecipeForm from '../../../../../modules/user/private-recipe/form';
+import RecipeForm from '../../../../../modules/recipe/form';
 
 export default function UserPrivateRecipeFormPage() {
-  return <UserPrivateRecipeForm />;
+  return <RecipeForm ownership='private' />;
 }
