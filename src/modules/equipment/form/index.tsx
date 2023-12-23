@@ -85,7 +85,7 @@ export default function EquipmentForm({ ownership }: Props) {
     return () => {
       mounted = false;
     };
-  }, []);  // do this in getServerSideProps???
+  }, []);
 
   const getMyPrivateEquipment = async () => {
     const res = await axios.get(
@@ -167,7 +167,7 @@ export default function EquipmentForm({ ownership }: Props) {
           {withCredentials: true}
         );
         if (res.status === 204) {
-          setFeedback("Equipment updated.");
+          setFeedback('Equipment updated.');
           await getMyPrivateEquipment();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {
@@ -180,7 +180,7 @@ export default function EquipmentForm({ ownership }: Props) {
           {withCredentials: true}
         );
         if (res.status === 201) {
-          setFeedback("Equipment created.");
+          setFeedback('Equipment created.');
           await getMyPrivateEquipment();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {

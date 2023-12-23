@@ -89,7 +89,7 @@ export default function IngredientForm({ ownership }: Props) {
     return () => {
       mounted = false;
     };
-  }, []);  // do this in getServerSideProps???
+  }, []);
 
   const getMyPrivateIngredients = async () => {
     const res = await axios.get(

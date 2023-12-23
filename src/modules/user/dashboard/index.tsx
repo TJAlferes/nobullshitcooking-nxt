@@ -317,25 +317,29 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
+
     try {
       let new_avatar = "";
+
       if (small_avatar && tiny_avatar) {
         const { data } = await axios.post(
-          `${endpoint}/signed-url`,
-          {subfolder: 'public/avatar/'},
+          `${endpoint}/aws-s3-public-uploads`,
+          {subfolder: 'avatar'},
           {withCredentials: true}
         );
         await uploadImageToAwsS3(data.smallSignature, small_avatar);
         await uploadImageToAwsS3(data.tinySignature, tiny_avatar);
         new_avatar = data.filename;
       }
+
       const res = await axios.patch(
         `${endpoint}/users/${auth.authname}/avatar`,
         {new_avatar},
         {withCredentials: true}
       );
+
       if (res.status === 204) {
-        setFeedback("Avatar updated.");
+        setFeedback('Avatar updated.');
         auth.setAuthAvatar(new_avatar);
         setTimeout(() => router.push(`/dashboard`), 3000);
       } else {
@@ -344,6 +348,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+
     setLoading(false);
   };
 
@@ -493,17 +498,20 @@ export default function Dashboard() {
               </div>
             </ExpandCollapse>
   
-            <div className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`} onClick={() => setTab('ingredients')}>
-              Ingredients
-            </div>
+            <div
+              className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
+              onClick={() => setTab('ingredients')}
+            >Ingredients</div>
   
-            <div className={`menu-item ${tab === 'equipment' ? '--active' : ''}`} onClick={() => setTab('equipment')}>
-              Equipment
-            </div>
+            <div
+              className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
+              onClick={() => setTab('equipment')}
+            >Equipment</div>
   
-            <div className={`menu-item ${tab === 'settings' ? '--active' : ''}`} onClick={() => setTab('settings')}>
-              Account Settings
-            </div>
+            <div
+              className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
+              onClick={() => setTab('settings')}
+            >Account Settings</div>
           </nav>
           <nav className="dashboard-nav--mobile"></nav>
         </div>
@@ -623,7 +631,10 @@ export default function Dashboard() {
                     onComplete={crop => makeCrops(crop)}
                     style={{minHeight: "300px"}}
                   >
-                    <img onLoad={e => imageRef.current = e.currentTarget} src={avatar as string} />
+                    <img
+                      onLoad={e => imageRef.current = e.currentTarget}
+                      src={avatar as string}
+                    />
                   </ReactCrop>
           
                   <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
@@ -662,7 +673,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Public Plans</h2>
       
-              <Link href="/public-plan/form" className="new-entity">
+              <Link href={`/${auth.authname}/plan/form`} className="new-entity">
                 Create Public Plan
               </Link>
       
@@ -683,15 +694,17 @@ export default function Dashboard() {
                 : false
               }
       
-              {userData.my_private_plans.length
-                ? userData.my_private_plans.map(p => (
+              {userData.my_public_plans.length
+                ? userData.my_public_plans.map(p => (
                   <div className="dashboard-item" key={p.plan_id}>
                     <span className="name">
-                      <Link href={`/${auth.authname}/plan/detail/${p.plan_name}`}>{p.plan_name}</Link>
+                      <Link href={`/${auth.authname}/plan/detail/${p.plan_name}`}>
+                        {p.plan_name}
+                      </Link>
                     </span>
     
                     <span className="action">
-                      <Link href={`/public-plan/form/${p.plan_id}`}>Edit</Link>
+                      <Link href={`/${auth.authname}/plan/form/edit/${p.plan_id}`}>Edit</Link>
                     </span>
     
                     <span
@@ -709,7 +722,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Private Plans</h2>
       
-              <Link href="/private-plan/form" className="new-entity">
+              <Link href={`/${auth.authname}/private/plan/form`} className="new-entity">
                 Create Private Plan
               </Link>
       
@@ -734,11 +747,11 @@ export default function Dashboard() {
                 ? userData.my_private_plans.map(p => (
                   <div className="dashboard-item" key={p.plan_id}>
                     <span className="name">
-                      <Link href={`/private-plan/detail/${p.plan_id}`}>{p.plan_name}</Link>
+                      <Link href={`/${auth.authname}/private/plan/detail/${p.plan_id}`}>{p.plan_name}</Link>
                     </span>
     
                     <span className="action">
-                      <Link href={`/private-plan/form/${p.plan_id}`}>Edit</Link>
+                      <Link href={`/${auth.authname}/private/plan/form/edit/${p.plan_id}`}>Edit</Link>
                     </span>
     
                     <span
@@ -756,7 +769,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Public Recipes</h2>
     
-              <Link href="/public-recipe/form" className="new-entity">
+              <Link href={`/${auth.authname}/recipe/form`} className="new-entity">
                 Create Public Recipe
               </Link>
     
@@ -784,7 +797,7 @@ export default function Dashboard() {
                     <span className="tiny">
                       {r.image_filename !== "default"
                         ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
+                        : <div className="img-28-28"></div>
                       }
                     </span>
     
@@ -793,7 +806,7 @@ export default function Dashboard() {
                     </span>
     
                     <span className="action">
-                      <Link href={`/public-recipe/form/${r.recipe_id}`}>Edit</Link>
+                      <Link href={`/${auth.authname}/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
                     </span>
     
                     <span
@@ -811,7 +824,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Private Recipes</h2>
     
-              <Link href="/private-recipe/form" className="new-entity">
+              <Link href={`/${auth.authname}/private/recipe/form`} className="new-entity">
                 Create Private Recipe
               </Link>
     
@@ -838,16 +851,16 @@ export default function Dashboard() {
                     <span className="tiny">
                       {r.image_filename !== "default"
                         ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
+                        : <div className="img-28-28"></div>
                       }
                     </span>
     
                     <span className="name">
-                      <Link href={`/private-recipe/detail/${r.recipe_id}`}>{r.title}</Link>
+                      <Link href={`/${auth.authname}/private/recipe/detail/${r.recipe_id}`}>{r.title}</Link>
                     </span>
     
                     <span className="action">
-                      <Link href={`/private-recipe/form/${r.recipe_id}`}>Edit</Link>
+                      <Link href={`/${auth.authname}/private/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
                     </span>
     
                     <span
@@ -876,7 +889,7 @@ export default function Dashboard() {
                     </span>
     
                     <span className="name">
-                      <Link href={`/${r.author}/recipe/detail${r.title}`}>{r.title}</Link>
+                      <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
                     </span>
     
                     <span
@@ -900,12 +913,12 @@ export default function Dashboard() {
                     <span className="tiny">
                       {r.image_filename !== "default"
                         ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
+                        : <div className="img-28-28"></div>
                       }
                     </span>
     
                     <span className="name">
-                      <Link href={`${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
+                      <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
                     </span>
     
                     <span
@@ -923,7 +936,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Private Ingredients</h2>
     
-              <Link href="/private-ingredient/form" className="new-entity">
+              <Link href={`/${auth.authname}/private/ingredient/form`} className="new-entity">
                 Create Private Ingredient
               </Link>
     
@@ -933,18 +946,18 @@ export default function Dashboard() {
                     <span className="tiny">
                       {i.image_filename !== "default"
                         ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
+                        : <div className="img-28-28"></div>
                       }
                     </span>
     
                     <span className="name">
-                      <Link href={`/private-ingredient/detail/${i.ingredient_id}`}>
+                      <Link href={`/${auth.authname}/private/ingredient/detail/${i.ingredient_id}`}>
                         {i.ingredient_name}
                       </Link>
                     </span>
     
                     <span className="action">
-                      <Link href={`/private-ingredient/form/${i.ingredient_id}`}>
+                      <Link href={`/${auth.authname}/private/ingredient/form/edit/${i.ingredient_id}`}>
                         Edit
                       </Link>
                     </span>
@@ -964,7 +977,7 @@ export default function Dashboard() {
             <div className="dashboard-content">
               <h2>Private Equipment</h2>
     
-              <Link href="/private-equipment/form" className="new-entity">
+              <Link href={`/${auth.authname}/private/equipment/form`} className="new-entity">
                 Create Private Equipment
               </Link>
     
@@ -974,23 +987,20 @@ export default function Dashboard() {
                     <span className="tiny">
                       {e.image_filename !== "default"
                         ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny`} />
-                        : <div className="img-28-18"></div>
+                        : <div className="img-28-28"></div>
                       }
                     </span>
     
                     <span className="name">
-                      <Link href={`/private-equipment/detail/${e.equipment_id}`}>
+                      <Link href={`/${auth.authname}/private/equipment/detail/${e.equipment_id}`}>
                         {e.equipment_name}
                       </Link>
                     </span>
     
                     <span className="action">
-                      <Link
-                        href={{
-                          pathname: '/private-equipment/form',
-                          query: {equipment_id: e.equipment_id}
-                        }}
-                      >Edit</Link>
+                      <Link href={`/${auth.authname}/private/equipment/form/edit/${e.equipment_id}`}>
+                        Edit
+                      </Link>
                     </span>
     
                     <span
