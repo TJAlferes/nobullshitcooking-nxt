@@ -25,7 +25,7 @@ export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
 
   const params  = useSearchParams();
-  const plan_id = params.get('plan_id');
+  const plan_id = params.get('plan_id');  // but public uses plan_name ???
 
   const { authname } = useAuth();
   const {
@@ -66,12 +66,19 @@ export default function PlanForm({ ownership }: Props) {
       setPlanName(plan.plan_name);
 
       const curr_recipes: CurrentRecipes = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []};
+
       for (const [ key, value ] of Object.entries(plan.included_recipes)) {
         curr_recipes[parseInt(key)] = value.map(recipe => {
           const k = uuidv4();
-          return {...recipe, key: k, stableKey: k};
+
+          return {
+            key: k,
+            stableKey: k,
+            ...recipe
+          };
         });
       }
+
       setCurrentRecipes(curr_recipes);
 
       setLoading(false);
@@ -528,7 +535,7 @@ function Recipe({
         <img src={`${url}/${image_filename}-tiny.jpg`} />
       </div>
 
-      <div className="text">{key}</div>
+      <div className="text">{title}</div>
     </div>
   );
 }

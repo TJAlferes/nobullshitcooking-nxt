@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../../config/api';
-import PlanDetail from '../../../../../modules/plan/detail';
-import type { PlanView } from '../../../../../store';
+import EquipmentDetail from '../../../../../modules/equipment/detail';
+import type { EquipmentView } from '../../../../../store';
 
-export default function UserPrivatePlanDetailPage({ plan }: Props) {
-  return <PlanDetail ownership='private' plan={plan} />;
+export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
+  return <EquipmentDetail ownership='private' equipment={equipment} />
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-plans/${params.name}`,
+    `${endpoint}/users/${params.username}/private-equipment/${params.equipment_id}`,
     {withCredentials: true}
   );
 
@@ -23,21 +23,21 @@ export async function getServerSideProps({ params }: ServerSideProps) {
       }
     };
   }
-  
+
   return {
     props: {
-      plan: res.data
+      equipment: res.data
     }
   };
 }
 
 type Props = {
-  plan: PlanView;
+  equipment: EquipmentView;
 };
 
 type ServerSideProps = {
   params: {
-    username: string;
-    name:     string;
+    username:     string;
+    equipment_id: string;
   };
 };

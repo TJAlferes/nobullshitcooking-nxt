@@ -51,10 +51,16 @@ export default function EquipmentForm({ ownership }: Props) {
     let mounted = true;
 
     function getExistingEquipmentToEdit() {
-      window.scrollTo(0, 0);
       setLoading(true);
+      window.scrollTo(0, 0);
+
       const equipment = allowedEquipment.find(e => e.equipment_id === equipment_id);
-      if (!equipment) return router.push('/dashboard');
+
+      if (!equipment) {
+        router.push('/dashboard');
+        return;
+      }
+
       setEquipmentTypeId(equipment.equipment_type_id);
       setEquipmentName(equipment.equipment_name);
       setNotes(equipment.notes);
@@ -64,11 +70,15 @@ export default function EquipmentForm({ ownership }: Props) {
         image_filename: equipment.image_filename,
         caption: equipment.caption
       });
+
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) return router.push(`/404`);
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
       if (equipment_id) getExistingEquipmentToEdit();
     }
 

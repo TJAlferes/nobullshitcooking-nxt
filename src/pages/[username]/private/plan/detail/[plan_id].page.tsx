@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../../config/api';
-import RecipeDetail from '../../../../../modules/recipe/detail';
-import type { RecipeDetailView } from '../../../../../modules/recipe/detail';
+import PlanDetail from '../../../../../modules/plan/detail';
+import type { PlanView } from '../../../../../store';
 
-export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
-  return <RecipeDetail ownership='private' recipe={recipe} />
+export default function UserPrivatePlanDetailPage({ plan }: Props) {
+  return <PlanDetail ownership='private' plan={plan} />;
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-recipes/${params.title}`,
+    `${endpoint}/users/${params.username}/private-plans/${params.plan_id}`,
     {withCredentials: true}
   );
 
@@ -23,21 +23,21 @@ export async function getServerSideProps({ params }: ServerSideProps) {
       }
     };
   }
-
+  
   return {
     props: {
-      recipe: res.data
+      plan: res.data
     }
   };
 }
 
 type Props = {
-  recipe: RecipeDetailView;
+  plan: PlanView;
 };
 
 type ServerSideProps = {
   params: {
     username: string;
-    title: string;
+    plan_id:  string;
   };
 };

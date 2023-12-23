@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 import { endpoint } from '../../../../../config/api';
-import EquipmentDetail from '../../../../../modules/equipment/detail';
-import type { EquipmentView } from '../../../../../store';
+import RecipeDetail from '../../../../../modules/recipe/detail';
+import type { RecipeDetailView } from '../../../../../modules/recipe/detail';
 
-export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
-  return <EquipmentDetail ownership='private' equipment={equipment} />
+export default function UserPrivateRecipeDetailPage({ recipe }: Props) {
+  return <RecipeDetail ownership='private' recipe={recipe} />
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-equipment/${params.name}`,
+    `${endpoint}/users/${params.username}/private-recipes/${params.recipe_id}`,
     {withCredentials: true}
   );
 
@@ -26,18 +26,18 @@ export async function getServerSideProps({ params }: ServerSideProps) {
 
   return {
     props: {
-      equipment: res.data
+      recipe: res.data
     }
   };
 }
 
 type Props = {
-  equipment: EquipmentView;
+  recipe: RecipeDetailView;
 };
 
 type ServerSideProps = {
   params: {
-    username: string;
-    name: string;
+    username:  string;
+    recipe_id: string;
   };
 };

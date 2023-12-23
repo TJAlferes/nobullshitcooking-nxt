@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
@@ -18,8 +19,8 @@ import type { Ownership } from '../../shared/types';
 export default function RecipeForm({ ownership }: Props) {
   const router = useRouter();
 
-  const params = useSearchParams();
-  const recipe_id = params.get('recipe_id');
+  const params = useParams();
+  const recipe_id = params['recipe_id'] as string | null;
 
   const { auth_id, authname } = useAuth();
   const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
@@ -115,14 +116,20 @@ export default function RecipeForm({ ownership }: Props) {
     let mounted = true;
 
     async function getExistingRecipeToEdit() {
-      window.scrollTo(0, 0);
       setLoading(true);
+      window.scrollTo(0, 0);
+      
       const res = await axios.get(
         `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}/edit`,
         {withCredentials: true}
       );
       const recipe: ExistingRecipeToEdit = res.data;
-      if (!recipe) return router.push(`/dashboard`);
+
+      if (!recipe) {
+        router.push(`/dashboard`);
+        return;
+      }
+
       setRecipeTypeId(recipe.recipe_type_id);
       setCuisineId(recipe.cuisine_id);
       setTitle(recipe.title);
@@ -130,25 +137,30 @@ export default function RecipeForm({ ownership }: Props) {
       setActiveTime(recipe.active_time);
       setTotalTime(recipe.total_time);
       setDirections(recipe.directions);
-      setUsedMethods(prevState => {
-        const nextState = {...prevState};
+      setUsedMethods(prev => {
+        const next = {...prev};
         recipe.required_methods?.map(({ method_id }) => {
-          nextState[method_id] = true;
+          next[method_id] = true;
         });
-        return nextState;
+        return next;
       });
       setEquipmentRows(recipe.required_equipment.map(r => ({...r, key: uuidv4()})));
       setIngredientRows(recipe.required_ingredients.map(r => ({...r, key: uuidv4()})));
       setSubrecipeRows(recipe.required_subrecipes.map(r => ({...r, key: uuidv4()})));
+      //setRecipeImage(prev => ({...prev, ...recipe.recipe_image}));
       setRecipeImage({...recipe_image, ...recipe.recipe_image});
       setEquipmentImage({...equipment_image, ...recipe.equipment_image});
       setIngredientsImage({...ingredients_image, ...recipe.ingredients_image});
       setCookingImage({...cooking_image, ...recipe.cooking_image});
+
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) return router.push(`/404`);
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
       if (recipe_id) getExistingRecipeToEdit();
     }
 
@@ -168,7 +180,7 @@ export default function RecipeForm({ ownership }: Props) {
       );
       setMyPrivateRecipes(res.data);
     }
-  };  // do this in getServerSideProps???
+  };
 
   const changeEquipmentRow = (e: React.ChangeEvent<HTMLSelectElement>, rowKey: string) => {
     const rows = [...equipmentRows];
@@ -351,9 +363,10 @@ export default function RecipeForm({ ownership }: Props) {
   };
 
   const submit = async () => {
+    setLoading(true);
     window.scrollTo(0, 0);
     setFeedback('');
-    setLoading(true);
+
     if (recipe_type_id === 0) return invalid('Recipe Type required.');
     if (cuisine_id === 0) return invalid('Cuisine required.');
     if (title.trim() === '') return invalid('Title required.');
@@ -376,6 +389,7 @@ export default function RecipeForm({ ownership }: Props) {
       //unit_id
       if (!subrecipe_id) return invalid('Review required subrecipes.');
     }
+
     const recipe_upload = {
       recipe_type_id,
       cuisine_id,
@@ -384,10 +398,10 @@ export default function RecipeForm({ ownership }: Props) {
       active_time,
       total_time,
       directions,
-      required_methods:     getCheckedMethods(),
-      required_equipment:   getRequiredEquipment(),
+      required_methods: getCheckedMethods(),
+      required_equipment: getRequiredEquipment(),
       required_ingredients: getRequiredIngredients(),
-      required_subrecipes:  getRequiredSubrecipes(),
+      required_subrecipes: getRequiredSubrecipes(),
       recipe_image,
       equipment_image,
       ingredients_image,
@@ -438,8 +452,7 @@ export default function RecipeForm({ ownership }: Props) {
         recipe_upload.cooking_image.image_filename = res.data.filename;
       }
 
-      const editing = recipe_id !== null;
-      if (editing) {
+      if (recipe_id) {
         const res = await axios.patch(
           `${endpoint}/users/${authname}/${ownership}-recipes`,
           {recipe_id, ...recipe_upload},

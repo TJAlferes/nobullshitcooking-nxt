@@ -53,10 +53,16 @@ export default function IngredientForm({ ownership }: Props) {
     let mounted = true;
 
     function getExistingIngredientToEdit() {
-      window.scrollTo(0, 0);
       setLoading(true);
+      window.scrollTo(0, 0);
+
       const ingredient = allowedIngredients.find(i => i.ingredient_id === ingredient_id);
-      if (!ingredient) return router.push('/dashboard');
+
+      if (!ingredient) {
+        router.push('/dashboard');
+        return;
+      }
+
       setIngredientTypeId(ingredient.ingredient_type_id);
       setIngredientBrand(ingredient.ingredient_brand ?? '');
       setIngredientVariety(ingredient.ingredient_variety ?? '')
@@ -68,11 +74,15 @@ export default function IngredientForm({ ownership }: Props) {
         image_filename: ingredient.image_filename,
         caption: ingredient.caption
       });
+
       setLoading(false);
     }
 
     if (mounted) {
-      if (!authname) return router.push(`/404`);
+      if (!authname) {
+        router.push(`/404`);
+        return;
+      }
       if (ingredient_id) getExistingIngredientToEdit();
     }
 

@@ -10,7 +10,7 @@ export default function UserPrivateIngredientDetailPage({ ingredient }: Props) {
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-ingredients/${params.fullname}`,
+    `${endpoint}/users/${params.username}/private-ingredients/${params.ingredient_id}`,
     {withCredentials: true}
   );
 
@@ -37,7 +37,7 @@ type Props = {
 
 type ServerSideProps = {
   params: {
-    username: string;
-    fullname: string;  // TO DO: how to handle this? how to handle alt_names?
+    username:      string;
+    ingredient_id: string;
   };
 };
