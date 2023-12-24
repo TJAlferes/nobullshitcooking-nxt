@@ -630,6 +630,9 @@ export type IncludedRecipes = {
 
 export type PlanView = {
   plan_id:          string;
+  author_id:        string;
+  author:           string;
+  //avatar ???
   owner_id:         string;
   plan_name:        string;
   included_recipes: IncludedRecipes;

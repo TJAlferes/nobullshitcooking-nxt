@@ -11,8 +11,11 @@ export default function PlanDetail({ ownership, plan }: Props) {
   if (!plan) return <LoaderSpinner />;  // or return router.push('/404'); ???
 
   const {
-    //plan_id,
-    //owner_id,
+    plan_id,
+    author_id,
+    author,
+    //avatar ???
+    owner_id,
     plan_name,
     included_recipes
   } = plan;
