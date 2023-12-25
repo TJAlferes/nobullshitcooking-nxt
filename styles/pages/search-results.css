@@ -106,7 +106,6 @@
 
 .search-results-list-item {
   display: block;
-  /*height: px;*/
   width: 280px;
   text-decoration: none;
   color: #000;
@@ -134,4 +133,12 @@
   width: inherit;
   font-size: 1.4rem;
   text-align: center;
+}
+
+.search-results .page-settings {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-top: 10px;
+  height: 32px;
 }

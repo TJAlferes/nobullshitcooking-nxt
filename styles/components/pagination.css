@@ -1,13 +1,8 @@
 .pagination {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
+  justify-content: center;
+  /*margin: 2px 0;*/
   height: 32px;
-
-  margin: 2px 0;
-
-  background-color: #eee;
 }
 
 .pagination span {
@@ -19,30 +14,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   font-size: 1.4rem;
   font-weight: bold;
-
   user-select: none;
 }
 
 .pagination button {
   height: 30px;
   width: 48px;
-  
   padding: 0 8px;
-
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
   border-radius: 1px;
-
   font-size: 1.4rem;
   line-height: 28px;
-
   color: #555;
-
   background-image: linear-gradient(to bottom, #eee, #bbb);
-
   cursor: pointer;
 }
 

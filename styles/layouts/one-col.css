@@ -1,5 +1,6 @@
 .one-col {
   padding: 18px;
+  height: 100%;
   min-width: 300px;
 }
 
@@ -21,7 +22,7 @@ Light Theme
 }
 
 .light .one-col label {
-  color: #777;
+  /*color: #777;*/
 }
 
 .light .one-col :is(input, select, textarea) {

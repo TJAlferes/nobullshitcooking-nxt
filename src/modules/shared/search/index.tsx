@@ -162,7 +162,7 @@ export function Search() {
           <img src='/images/header/down-arrow.png' width='8' height='6' />
         </div>
         
-        <select onChange={onSearchIndexChange}>
+        <select onChange={onSearchIndexChange} value={index}>
           <option value='recipes'>Recipes</option>
           <option value='ingredients'>Ingredients</option>
           <option value='equipment'>Equipment</option>

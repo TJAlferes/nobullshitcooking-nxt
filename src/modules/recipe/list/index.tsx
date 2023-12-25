@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import qs from 'qs';
-import { Fragment, useEffect, useState, useRef } from 'react';
+import { Fragment, useEffect, /*useRef,*/ useState } from 'react';
 
 import { CuisineView, useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -12,8 +12,8 @@ import { useSearch } from '../../shared/search/hook';
 
 // TO DO: make a filter to include/exclude Public User Recipes
 export default function RecipeList() {
-  const renders = useRef(0);
-  renders.current++;
+  //const renders = useRef(0);
+  //renders.current++;
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
@@ -107,7 +107,7 @@ export default function RecipeList() {
 
   return (
     <div className="one-col search-results recipe-list">
-      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+      {/*<div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>*/}
 
       <h1>Recipes</h1>
 

@@ -172,11 +172,23 @@ select:focus {
   min-width: 28px;
 }
 
+/*
+
+Light Theme
+
+*/
+
 .light .img-280-280,
 .light .img-100-100,
 .light .img-28-28 {
   background-color: #c10006;
 }
+
+/*
+
+Dark Theme
+
+*/
 
 .dark .img-280-280,
 .dark .img-100-100,
@@ -220,7 +232,6 @@ select:focus {
 @import './components/results-per-page.css';
 
 @import './layouts/one-col.css';
-@import './layouts/two-col.css';
 
 @import './pages/auth.css';
 @import './pages/chat.css';

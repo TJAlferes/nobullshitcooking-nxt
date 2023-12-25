@@ -31,25 +31,21 @@ export default function EquipmentDetail({ ownership, equipment }: Props) {
   }
 
   return (
-    <div className="two-col equipment-detail">
-      <div className="two-col-left">
-        <h1>{equipment_name}</h1>
+    <div className="one-col equipment-detail">
+      <h1>{equipment_name}</h1>
 
-        <div className="image">
-          <img src={`${url}/${image_filename}.jpg`} />
-          <span>{caption}</span>
-        </div>
-
-        <div className="type">
-          <b>Equipment Type:</b>{' '}<span>{equipment_type_name}</span>
-        </div>
-
-        <div className="notes">
-          <b>Equipment Notes:</b>{' '}<div>{notes}</div>
-        </div>
+      <div className="image">
+        <img src={`${url}/${image_filename}.jpg`} />
+        <span>{caption}</span>
       </div>
 
-      <div className="two-col-right"></div>
+      <div className="type">
+        <b>Equipment Type:</b>{' '}<span>{equipment_type_name}</span>
+      </div>
+      
+      <div className="notes">
+        <b>Equipment Notes:</b>{' '}<div>{notes}</div>
+      </div>
     </div>
   );
 }

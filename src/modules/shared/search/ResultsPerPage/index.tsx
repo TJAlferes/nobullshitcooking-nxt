@@ -50,11 +50,19 @@ export function ResultsPerPage() {
   return (
     <div className="results-per-page">
       <label>Results per page:</label>
-      <select onChange={changeResultsPerPage} value={value}>
+
+      <div className='category'>
+        <div className='facade'>
+          <span>{value}</span>
+          <img src='/images/header/down-arrow.png' width='8' height='6' />
+        </div>
+        
+        <select onChange={changeResultsPerPage} value={value}>
         <option value={20}>20</option>
         <option value={50}>50</option>
         <option value={100}>100</option>
       </select>
+      </div>
     </div>
   );
 }

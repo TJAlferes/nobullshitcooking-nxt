@@ -1,32 +1,55 @@
 .results-per-page {
-
+  display: flex;
+  align-items: center;
+  height: 32px;
+  max-width: fit-content;
 }
 
 .results-per-page label {
   padding-right: 10px;
-  
   font-size: 1.4rem;
   font-weight: 700;
 }
 
-.results-per-page select,
-.results-per-page select:active {
+.results-per-page .category {
+  position: relative;
+}
+
+.results-per-page .facade {
+  float: left;
+  height: 30px;
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
   border-radius: 1px;
-  padding: 0 8px;
-  height: 30px;
-  width: max-content;
-  font-size: 1.4rem;
-  color: #444;
   background-image: linear-gradient(to bottom, #eee, #bbb);
-  cursor: pointer;
 }
 
-.results-per-page select:focus {
-  outline: none;
+.results-per-page .facade span {
+  margin: 0 21px 0 8px;
+  background: none;
+  color: #555;
+  font-size: 1.4rem;
+  line-height: 28px;
+}
+
+.results-per-page .facade img {
+  position: absolute;
+  right: 7px;
+  top: 12px;
+}
+
+.results-per-page select {
+  border: 0;
+  cursor: pointer;
+  height: 30px;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
 }
 
 .results-per-page option {
-
+  font-size: 1.4rem;
 }

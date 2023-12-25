@@ -31,25 +31,21 @@ export default function IngredientDetail({ ownership, ingredient }: Props) {
   }
 
   return (
-    <div className="two-col ingredient-detail">
-      <div className="two-col-left">
-        <h1>{fullname}</h1>
+    <div className="one-col ingredient-detail">
+      <h1>{fullname}</h1>
 
-        <div className="image">
-          <img src={`${url}/${image_filename}.jpg`} />
-          <span>{caption}</span>
-        </div>
-
-        <div className="type">
-          <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>
-        </div>
-
-        <div className="notes">
-          <b>Ingredient Notes:</b>{' '}<div>{notes}</div>
-        </div>
+      <div className="image">
+        <img src={`${url}/${image_filename}.jpg`} />
+        <span>{caption}</span>
       </div>
 
-      <div className="two-col-right"></div>
+      <div className="type">
+        <b>Ingredient Type:</b>{' '}<span>{ingredient_type_name}</span>
+      </div>
+      
+      <div className="notes">
+        <b>Ingredient Notes:</b>{' '}<div>{notes}</div>
+      </div>
     </div>
   );
 }

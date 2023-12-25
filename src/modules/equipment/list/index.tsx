@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import qs from 'qs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, /*useRef,*/ useState } from 'react';
 
 import { useData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
@@ -11,8 +11,8 @@ import { Pagination, ResultsPerPage } from '../../shared/search';
 import type { SearchRequest } from '../../shared/search/types';
 
 export default function EquipmentList() {
-  const renders = useRef(0);
-  renders.current++;
+  //const renders = useRef(0);
+  //renders.current++;
 
   const searchParams = useSearchParams();
   const params = qs.parse(searchParams.toString()) as SearchRequest;
@@ -67,8 +67,8 @@ export default function EquipmentList() {
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
 
   return (
-    <div className="two-col search-results equipment-list">
-      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+    <div className="one-col search-results equipment-list">
+      {/*<div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>*/}
 
       <h1>Equipment</h1>
 
@@ -78,8 +78,6 @@ export default function EquipmentList() {
             <p className="info">
               {total_results} total results and {total_pages} total pages
             </p>
-
-            <ResultsPerPage />
 
             <div className="filters">
               <span className="filter-by">Filter by:</span>
@@ -124,8 +122,6 @@ export default function EquipmentList() {
         )
         : false
       }
-
-      <Pagination key={1} />
         
       <div className="search-results-list">
         {!results
@@ -146,7 +142,15 @@ export default function EquipmentList() {
         }
       </div>
 
-      <Pagination key={2} />
+      {results.length > 0
+        ? (
+          <div className="page-settings">
+            <ResultsPerPage />
+            <Pagination />
+          </div>
+        )
+        : false
+      }
     </div>
   );
 }
