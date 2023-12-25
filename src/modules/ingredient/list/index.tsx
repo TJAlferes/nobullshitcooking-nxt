@@ -75,7 +75,7 @@ export default function IngredientList() {
               {total_results} total results and {total_pages} total pages
             </p>
 
-            <ResultsPerPage key={1} />
+            <ResultsPerPage />
 
             <div className="filters">
               <span className="filter-by">Filter by:</span>
@@ -121,7 +121,7 @@ export default function IngredientList() {
         : false
       }
         
-      <Pagination key={2} />
+      <Pagination key={1} />
 
       <div className="search-results-list">
         {!results
@@ -142,7 +142,7 @@ export default function IngredientList() {
         }
       </div>
 
-      <Pagination key={3} />
+      <Pagination key={2} />
     </div>
   );
 }

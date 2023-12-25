@@ -98,15 +98,15 @@
 }
 
 .search-results-list {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
   row-gap: 18px;
   width: inherit;
 }
 
 .search-results-list-item {
   display: block;
+  /*height: px;*/
   width: 280px;
   text-decoration: none;
   color: #000;

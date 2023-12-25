@@ -67,90 +67,86 @@ export default function EquipmentList() {
   const url = 'https://s3.amazonaws.com/nobsc-official-uploads/equipment';
 
   return (
-    <div className="two-col equipment-list">
-      <div className="two-col-left search-results">
-        <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+    <div className="two-col search-results equipment-list">
+      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
 
-        <h1>Equipment</h1>
+      <h1>Equipment</h1>
 
-        {results.length > 0
-          ? (
-            <div className="settings">
-              <p className="info">
-                {total_results} total results and {total_pages} total pages
-              </p>
+      {results.length > 0
+        ? (
+          <div className="settings">
+            <p className="info">
+              {total_results} total results and {total_pages} total pages
+            </p>
 
-              <ResultsPerPage key={1} />
+            <ResultsPerPage />
 
-              <div className="filters">
-                <span className="filter-by">Filter by:</span>
+            <div className="filters">
+              <span className="filter-by">Filter by:</span>
 
-                <ExpandCollapse
-                  headingWhileCollapsed={(
-                    <div className={`filter-name ${expandedFilter === "equipment_types" ? "active" : ""}`}>
-                      <span>Equipment Types</span>
-                      <img src="/images/header/down-arrow.png" width="8" height="6" />
-                    </div>
-                  )}
-                  headingWhileExpanded={(
-                    <div className={`filter-name ${expandedFilter === "equipment_types" ? "active" : ""}`}>
-                      <span>Equipment Types</span>
-                      <img src="/images/header/down-arrow.png" width="8" height="6" />
-                    </div>
-                  )}
-                  isDisabled={expandedFilter !== "equipment_types" && expandedFilter !== null}
-                  handler={() => toggleFilterDropdown("equipment_types")}
-                >{null}</ExpandCollapse>
+              <ExpandCollapse
+                headingWhileCollapsed={(
+                  <div className={`filter-name ${expandedFilter === "equipment_types" ? "active" : ""}`}>
+                    <span>Equipment Types</span>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+                headingWhileExpanded={(
+                  <div className={`filter-name ${expandedFilter === "equipment_types" ? "active" : ""}`}>
+                    <span>Equipment Types</span>
+                    <img src="/images/header/down-arrow.png" width="8" height="6" />
+                  </div>
+                )}
+                isDisabled={expandedFilter !== "equipment_types" && expandedFilter !== null}
+                handler={() => toggleFilterDropdown("equipment_types")}
+              >{null}</ExpandCollapse>
 
-                <div className={`filter-group ${expandedFilter === "equipment_types" ? "active" : ""}`}>
-                  {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
-                    <span key={equipment_type_id}>
-                      <input
-                        type="checkbox"
-                        checked={checkedEquipmentTypes.includes(equipment_type_name)}
-                        onChange={() => {
-                          setCheckedEquipmentTypes(
-                            checkedEquipmentTypes?.includes(equipment_type_name)
-                            ? checkedEquipmentTypes.filter(v => v !== equipment_type_name)
-                            : [...checkedEquipmentTypes, equipment_type_name]
-                          );
-                        }}
-                      />
-                        <label>{equipment_type_name}</label>
-                    </span>
-                  ))}
-                </div>
+              <div className={`filter-group ${expandedFilter === "equipment_types" ? "active" : ""}`}>
+                {equipment_types.map(({ equipment_type_id, equipment_type_name }) => (
+                  <span key={equipment_type_id}>
+                    <input
+                      type="checkbox"
+                      checked={checkedEquipmentTypes.includes(equipment_type_name)}
+                      onChange={() => {
+                        setCheckedEquipmentTypes(
+                          checkedEquipmentTypes?.includes(equipment_type_name)
+                          ? checkedEquipmentTypes.filter(v => v !== equipment_type_name)
+                          : [...checkedEquipmentTypes, equipment_type_name]
+                        );
+                      }}
+                    />
+                      <label>{equipment_type_name}</label>
+                  </span>
+                ))}
               </div>
             </div>
-          )
-          : false
-        }
+          </div>
+        )
+        : false
+      }
 
-        <Pagination key={2} />
+      <Pagination key={1} />
         
-        <div className="search-results-list">
-          {!results
-            ? <div>Loading...</div>
-            : results.length < 1
-              ? <p className="no-results">No results found.</p>
-              : results.map(e => (
-                <Link
-                  className="search-results-list-item"
-                  href={`/equipment/detail/${e.equipment_name}`}
-                  key={e.equipment_id}
-                >
-                  <img src={`${url}/${e.image_filename}.jpg`} />
-                  <h3>{e.equipment_name}</h3>
-                  <div className="type">{e.equipment_type_name}</div>
-                </Link>
-              ))
-          }
-        </div>
-
-        <Pagination key={3} />
+      <div className="search-results-list">
+        {!results
+          ? <div>Loading...</div>
+          : results.length < 1
+            ? <p className="no-results">No results found.</p>
+            : results.map(e => (
+              <Link
+                className="search-results-list-item"
+                href={`/equipment/detail/${e.equipment_name}`}
+                key={e.equipment_id}
+              >
+                <img src={`${url}/${e.image_filename}.jpg`} />
+                <h3>{e.equipment_name}</h3>
+                <div className="type">{e.equipment_type_name}</div>
+              </Link>
+            ))
+        }
       </div>
 
-      <div className="two-col-right"></div>
+      <Pagination key={2} />
     </div>
   );
 }
