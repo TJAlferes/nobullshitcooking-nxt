@@ -19,8 +19,8 @@ import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import type { Ownership } from '../../shared/types';
 
 export default function PlanForm({ ownership }: Props) {
-  const renders = useRef(0);
-  renders.current++;
+  //const renders = useRef(0);
+  //renders.current++;
 
   const router = useRouter();
 
@@ -220,7 +220,7 @@ export default function PlanForm({ ownership }: Props) {
   return (
     <DndProvider options={HTML5toTouch}>
       <div className="one-col plan-form">
-        <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+        {/*<div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>*/}
 
         <h1>{plan_id ? 'Update' : 'Create'} {capitalizeFirstLetter(ownership)} Plan</h1>
 
@@ -398,8 +398,8 @@ function Recipes({
   removeRecipeFromDay: (day: number, stableKey: string) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {
-  const renders = useRef(0);
-  renders.current++;
+  //const renders = useRef(0);
+  //renders.current++;
 
   const [ , drop ] = useDrop(() => ({
     accept: 'RECIPE',
@@ -412,7 +412,7 @@ function Recipes({
 
   return (
     <div className="recipes" ref={drop}>
-      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+      {/*<div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>*/}
 
       {recipes && recipes.map((recipe, i) => (
         <Recipe
@@ -553,8 +553,8 @@ function Day({
   removeRecipeFromDay: (day: number, stableKey: string) => void;
   reorderRecipeInDay: (day: number, dragIndex: number, hoverIndex: number) => void;
 }) {  // TO DO: limit the max number of recipes per day to 7
-  const renders = useRef(0);
-  renders.current++;
+  //const renders = useRef(0);
+  //renders.current++;
 
   const [ { canDrop, isOver }, drop ] = useDrop(() => ({
     accept: 'RECIPE',
@@ -574,7 +574,7 @@ function Day({
 
   return (
     <div className={`day ${color}`} ref={drop}>
-      <div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>
+      {/*<div style={{fontSize: "2rem", color: "red"}}>{renders.current}</div>*/}
 
       {recipes && recipes.map(recipe => (
         <Recipe
