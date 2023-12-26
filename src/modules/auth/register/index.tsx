@@ -1,9 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { axiosInstance, endpoint } from '../../../config/api';
 
 export default function Register() {
   const router = useRouter();
@@ -39,7 +38,12 @@ export default function Register() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(`${endpoint}/users`, {email, password, username});
+      const { data: { csrfToken } } = await axiosInstance.get('/csrf-token');
+      const res = await axiosInstance.post(
+        `${endpoint}/users`,
+        {email, password, username},
+        {headers: {'X-CSRF-TOKEN': csrfToken}}
+      );
       if (res.status === 201) {
         setFeedback('User account created.');
         setTimeout(() => router.push('/confirm'), 4000);
