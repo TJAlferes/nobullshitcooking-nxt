@@ -1,11 +1,10 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
@@ -92,10 +91,7 @@ export default function IngredientForm({ ownership }: Props) {
   }, []);
 
   const getMyPrivateIngredients = async () => {
-    const res = await axios.get(
-      `${endpoint}/users/${authname}/private-ingredients`,
-      {withCredentials: true}
-    );
+    const res = await api.get(`/users/${authname}/private-ingredients`);
     setMyPrivateIngredients(res.data);
   };
 
@@ -158,21 +154,19 @@ export default function IngredientForm({ ownership }: Props) {
     // upload any images to AWS S3, then insert info into MySQL
     try {
       if (smallImage && tinyImage) {
-        const { data } = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'ingredient'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'ingredient'}
         );
-        await uploadImageToAwsS3(data.smallSignature, smallImage);
-        await uploadImageToAwsS3(data.tinySignature, tinyImage);
-        ingredient_upload.image_filename = data.filename;
+        await uploadImageToAwsS3(res.data.smallSignature, smallImage);
+        await uploadImageToAwsS3(res.data.tinySignature, tinyImage);
+        ingredient_upload.image_filename = res.data.filename;
       }
       const editing = ingredient_id !== null;
       if (editing) {
-        const res = await axios.patch(
-          `${endpoint}/users/${authname}/private-ingredients/${ingredient_id}`,
-          {ingredient_id, image_id: image.image_id, ...ingredient_upload},
-          {withCredentials: true}
+        const res = await api.patch(
+          `/users/${authname}/private-ingredients/${ingredient_id}`,
+          {ingredient_id, image_id: image.image_id, ...ingredient_upload}
         );
         if (res.status === 204) {
           setFeedback("Ingredient updated.");
@@ -182,10 +176,9 @@ export default function IngredientForm({ ownership }: Props) {
           setFeedback(res.data.error);
         }
       } else {
-        const res = await axios.post(
-          `${endpoint}/users/${authname}/private-ingredients`,
-          ingredient_upload,
-          {withCredentials: true}
+        const res = await api.post(
+          `/users/${authname}/private-ingredients`,
+          ingredient_upload
         );
         if (res.status === 201) {
           setFeedback("Ingredient created.");

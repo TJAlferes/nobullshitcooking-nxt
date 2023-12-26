@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
@@ -8,7 +7,7 @@ import ReactCrop, { Crop } from 'react-image-crop';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { EquipmentView, IngredientView, useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
@@ -119,9 +118,8 @@ export default function RecipeForm({ ownership }: Props) {
       setLoading(true);
       window.scrollTo(0, 0);
       
-      const res = await axios.get(
-        `${endpoint}/users/${authname}/${ownership}-recipes/${recipe_id}/edit`,
-        {withCredentials: true}
+      const res = await api.get(
+        `/users/${authname}/${ownership}-recipes/${recipe_id}/edit`
       );
       const recipe: ExistingRecipeToEdit = res.data;
 
@@ -171,13 +169,10 @@ export default function RecipeForm({ ownership }: Props) {
 
   const getMyRecipes = async () => {
     if (ownership === "public") {
-      const res = await axios.get(`${endpoint}/users/${authname}/public-recipes`);
+      const res = await api.get(`/users/${authname}/public-recipes`, false);
       setMyPublicRecipes(res.data);
     } else if (ownership === "private") {
-      const res = await axios.get(
-        `${endpoint}/users/${authname}/private-recipes`,
-        {withCredentials: true}
-      );
+      const res = await api.get(`/users/${authname}/private-recipes`);
       setMyPrivateRecipes(res.data);
     }
   };
@@ -411,10 +406,9 @@ export default function RecipeForm({ ownership }: Props) {
     // upload any newly made images to AWS S3, then insert info into MySQL
     try {
       if (recipeMediumImage && recipeThumbImage && recipeTinyImage) {
-        const res = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'recipe'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe'}
         );
         await uploadImageToAwsS3(res.data.mediumSignature, recipeMediumImage);
         await uploadImageToAwsS3(res.data.thumbSignature, recipeThumbImage);
@@ -423,40 +417,36 @@ export default function RecipeForm({ ownership }: Props) {
       }
     
       if (equipmentMediumImage) {
-        const res = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'recipe-equipment'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-equipment'}
         );
         await uploadImageToAwsS3(res.data.mediumSignature, equipmentMediumImage);
         recipe_upload.equipment_image.image_filename = res.data.filename;
       }
     
       if (ingredientsMediumImage) {
-        const res = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'recipe-ingredients'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-ingredients'}
         );
         await uploadImageToAwsS3(res.data.mediumSignature, ingredientsMediumImage);
         recipe_upload.ingredients_image.image_filename = res.data.filename;
       }
     
       if (cookingMediumImage) {
-        const res = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'recipe-cooking'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'recipe-cooking'}
         );
         await uploadImageToAwsS3(res.data.mediumSignature, cookingMediumImage);
         recipe_upload.cooking_image.image_filename = res.data.filename;
       }
 
       if (recipe_id) {
-        const res = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-recipes`,
-          {recipe_id, ...recipe_upload},
-          {withCredentials: true}
+        const res = await api.patch(
+          `/users/${authname}/${ownership}-recipes`,
+          {recipe_id, ...recipe_upload}
         );
         if (res.status === 204) {
           setFeedback("Recipe updated.");
@@ -466,10 +456,9 @@ export default function RecipeForm({ ownership }: Props) {
           setFeedback(res.data.error);
         }
       } else {
-        const res = await axios.post(
-          `${endpoint}/users/${authname}/${ownership}-recipes`,
-          recipe_upload,
-          {withCredentials: true}
+        const res = await api.post(
+          `/users/${authname}/${ownership}-recipes`,
+          recipe_upload
         );
         if (res.status === 201) {
           setFeedback("Recipe created.");
@@ -1130,8 +1119,8 @@ function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
 
   useEffect(() => {
     async function getData() {
-      const res1 = await axios.get(`${endpoint}/equipment`);
-      const res2 = await axios.get(`${endpoint}/ingredients`);
+      const res1 = await api.get('/equipment', false);
+      const res2 = await api.get('/ingredients', false);
       const equipment: EquipmentView[] = res1.data;
       const ingredients: IngredientView[] = res2.data;
       if (equipment) setEquipment(equipment);

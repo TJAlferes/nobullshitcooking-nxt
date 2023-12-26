@@ -1,8 +1,7 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 
 export default function Friends() {
@@ -14,11 +13,11 @@ export default function Friends() {
   const [tab, setTab] = useState('current');
   const [userToFind, setUsertoFind] = useState('');
 
-  const url = `${endpoint}/users/${authname}/friendships`;
+  const url = `/users/${authname}/friendships`;
   const error = 'An error occurred. Please try again.';
 
   const getMyFriendships = async () => {
-    const res = await axios.get(url, {withCredentials: true});
+    const res = await api.get(url);
     setMyFriendships(res.data);
   };
 
@@ -28,7 +27,7 @@ export default function Friends() {
     if (friendname === authname) return;
     setLoading(true);
     try {
-      const res = await axios.post(`${url}/${friendname}/create`, {}, {withCredentials: true});
+      const res = await api.post(`/${url}/${friendname}/create`);
       if (res.status === 201) setFeedback('Friendship request sent.');
       else setFeedback(res.data.message);
       await getMyFriendships();
@@ -46,7 +45,7 @@ export default function Friends() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(`${url}/${friendname}/accept`, {}, {withCredentials: true});
+      const res = await api.patch(`${url}/${friendname}/accept`);
       if (res.status === 204) setFeedback('Friendship request accepted.');
       else setFeedback(res.data.message);
       await getMyFriendships();
@@ -61,7 +60,7 @@ export default function Friends() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.delete(`${url}/${friendname}/reject`, {withCredentials: true});
+      const res = await api.delete(`${url}/${friendname}/reject`);
       if (res.status === 204) setFeedback('Friendship request rejected.');
       else setFeedback(res.data.message);
       await getMyFriendships();
@@ -76,7 +75,7 @@ export default function Friends() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.delete(`${url}/${friendname}/delete`, {withCredentials: true});
+      const res = await api.delete(`${url}/${friendname}/delete`);
       if (res.status === 204) setFeedback('Friendship deleted.');
       else setFeedback(res.data.message);
       await getMyFriendships();
@@ -94,7 +93,7 @@ export default function Friends() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.post(`${url}/${friendname}/block`, {}, {withCredentials: true});
+      const res = await api.post(`${url}/${friendname}/block`);
       if (res.status === 204) setFeedback('User blocked.');
       else setFeedback(res.data.message);
       await getMyFriendships();
@@ -112,7 +111,7 @@ export default function Friends() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.delete(`${url}/${friendname}/unblock`, {withCredentials: true});
+      const res = await api.delete(`${url}/${friendname}/unblock`);
       if (res.status === 204) setFeedback('User unblocked.');
       else setFeedback(res.data.message);
       await getMyFriendships();

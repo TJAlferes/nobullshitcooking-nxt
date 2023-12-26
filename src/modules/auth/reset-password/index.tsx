@@ -1,9 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -31,8 +30,8 @@ export default function ResetPassword() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.patch(
-        `${endpoint}/reset-password`,
+      const res = await api.patch(
+        '/reset-password',
         {email, temporary_password, new_password}
       );
       if (res.status === 204) {

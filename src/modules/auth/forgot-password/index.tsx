@@ -1,9 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -23,7 +22,7 @@ export default function ForgotPassword() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.post(`${endpoint}/forgot-password`, {email});
+      const res = await api.post('/forgot-password', {email});
       if (res.status === 201) {
         router.push('/reset-password');
       } else {

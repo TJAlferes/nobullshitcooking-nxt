@@ -1,9 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { RecipeOverview } from '../../../store';
@@ -36,10 +35,9 @@ export default function Profile({ profile }: Props) {
     window.scrollTo(0, 0);
     setLoading(true);
     try {
-      const res = await axios.post(
-        `${endpoint}/users/${authname}/friendships`,
-        {friendname: username},
-        {withCredentials: true}
+      const res = await api.post(
+        `/users/${authname}/friendships`,
+        {friendname: username}
       );
       setFeedback(res.data.message);
     } catch (err) {

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { axiosInstance, endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 
 export default function Confirm() {
   const router = useRouter();
@@ -22,12 +22,7 @@ export default function Confirm() {
     window.scrollTo(0, 0);
 
     try {
-      const { data: { csrfToken } } = await axiosInstance.get('/csrf-token');
-      const res = await axiosInstance.patch(
-        `${endpoint}/confirm`,
-        {confirmation_code},
-        {headers: {'X-CSRF-TOKEN': csrfToken}}
-        );
+      const res = await api.patch('/confirm', {confirmation_code});
       if (res.status === 204) {
         setFeedback("User account confirmed.");
         setTimeout(() => router.push('/login'), 4000);

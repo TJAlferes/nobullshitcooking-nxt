@@ -1,11 +1,10 @@
-import axios from 'axios';
 import { useRouter as useNextjsRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
 import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
-import { endpoint } from '../config/api';
+import { api } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { SearchResponse } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
@@ -447,7 +446,7 @@ export function useChat() {
 function createDataFetcher(path: string, key: keyof Data) {
   return async function () {
     try {
-      const res = await axios.get(`${endpoint}${path}`);
+      const res = await api.get(path, false);
       setItem(key, res.data);
     } catch (err) {}
   }
@@ -465,7 +464,7 @@ export const getRecipeTypes = createDataFetcher("/recipe-types", "recipe_types")
 function createUserDataFetcher(path: string, key: keyof UserData) {
   return async function () {
     try {
-      const res = await axios.get(`${endpoint}${path}`, {withCredentials: true});
+      const res = await api.get(path);
       setItem(key, res.data);
     } catch (err) {}
   }

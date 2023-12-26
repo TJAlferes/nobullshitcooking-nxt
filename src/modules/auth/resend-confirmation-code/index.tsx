@@ -1,11 +1,9 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 
-// TO DO: user forgot password
 export default function ResendConfirmationCode() {
   const router = useRouter();
 
@@ -28,7 +26,7 @@ export default function ResendConfirmationCode() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await axios.patch(`${endpoint}/resend-confirmation-code`, {email, password});
+      const res = await api.patch('/resend-confirmation-code', {email, password});
       if (res.status === 204) {
         setFeedback("Confirmation code re-sent.");
         setTimeout(() => router.push('/confirm'), 4000);

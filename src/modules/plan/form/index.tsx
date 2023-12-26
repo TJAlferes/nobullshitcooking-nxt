@@ -1,4 +1,3 @@
-import axios from 'axios';
 import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
 import { useSearchParams } from 'next/navigation';
@@ -10,7 +9,7 @@ import { DndProvider } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { v4 as uuidv4 } from 'uuid';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useUserData, useData } from '../../../store';
 import type { RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
@@ -99,13 +98,10 @@ export default function PlanForm({ ownership }: Props) {
 
   const getMyPlans = async () => {
     if (ownership === 'public') {
-      const res = await axios.get(`${endpoint}/users/${authname}/public-plans`);
+      const res = await api.get(`/users/${authname}/public-plans`);
       setMyPublicPlans(res.data);
     } else if (ownership === 'private') {
-      const res = await axios.get(
-        `${endpoint}/users/${authname}/private-plans`,
-        {withCredentials: true}
-      );
+      const res = await api.get(`/users/${authname}/private-plans`);
       setMyPrivatePlans(res.data);
     }
   };
@@ -169,10 +165,9 @@ export default function PlanForm({ ownership }: Props) {
 
     try {
       if (plan_id) {
-        const res = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-plans`,
-          {plan_id, ...plan_upload},
-          {withCredentials: true}
+        const res = await api.patch(
+          `/users/${authname}/${ownership}-plans`,
+          {plan_id, ...plan_upload}
         );
 
         if (res.status === 204) {
@@ -183,10 +178,9 @@ export default function PlanForm({ ownership }: Props) {
           setFeedback(res.data.message);
         }
       } else {
-        const res = await axios.post(
-          `${endpoint}/users/${authname}/${ownership}-plans`,
-          plan_upload,
-          {withCredentials: true}
+        const res = await api.post(
+          `/users/${authname}/${ownership}-plans`,
+          plan_upload
         );
 
         if (res.status === 201) {
@@ -338,7 +332,7 @@ function useAllowedContent(ownership: Ownership) {
 
   useEffect(() => {
     async function getData() {
-      const res = await axios.get(`${endpoint}/recipes`);
+      const res = await api.get(`/recipes`, false);
       if (res.status === 200) {
         const official_recipes: RecipeOverview[] = res.data;
         setOfficialRecipes(official_recipes);

@@ -1,15 +1,12 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import AriaModal from 'react-aria-modal';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useUserData } from '../../../store';
-import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
@@ -64,10 +61,9 @@ export default function Dashboard() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(
-        `${endpoint}/users/${auth.authname}/update-email`,
-        {new_email},
-        {withCredentials: true}
+      const res = await api.patch(
+        `/users/${auth.authname}/update-email`,
+        {new_email}
       );
       if (res.status === 204) {
         setFeedback("Email updated.")
@@ -87,10 +83,9 @@ export default function Dashboard() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(
-        `${endpoint}/users/${auth.authname}/update-password`,
-        {new_password},
-        {withCredentials: true}
+      const res = await api.patch(
+        `/users/${auth.authname}/update-password`,
+        {new_password}
       );
       if (res.status === 204) {
         setFeedback("Password updated.")
@@ -109,10 +104,9 @@ export default function Dashboard() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.patch(
-        `${endpoint}/users/${auth.authname}/update-username`,
-        {new_username},
-        {withCredentials: true}
+      const res = await api.patch(
+        `/users/${auth.authname}/update-username`,
+        {new_username}
       );
       if (res.status === 204) {
         setFeedback("Username updated.")
@@ -132,7 +126,7 @@ export default function Dashboard() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await axios.delete(`${endpoint}/users/${auth.authname}`, {withCredentials: true});
+      const res = await api.delete(`/users/${auth.authname}`);
       if (res.status === 204) {
         setFeedback('User account deleted.');
         auth.logout();
@@ -172,12 +166,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/public-plans`
+    const url = `/users/${auth.authname}/public-plans`
     try {
-      const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${plan_id}`);
       if (res1.status === 204) {
         setFeedback("Public plan unattributed.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPublicPlans(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);
       } else {
@@ -193,12 +187,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/public-recipes`;
+    const url = `/users/${auth.authname}/public-recipes`;
     try {
-      const res1 = await axios.patch(`${url}/${recipe_id}`, {withCredentials: true});
+      const res1 = await api.patch(`${url}/${recipe_id}`);
       if (res1.status === 204) {
         setFeedback("Public recipe unattributed.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPublicRecipes(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);
       } else {
@@ -214,12 +208,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/private-equipment`;
+    const url = `/users/${auth.authname}/private-equipment`;
     try {
-      const res1 = await axios.delete(`${url}/${equipment_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${equipment_id}`);
       if (res1.status === 204) {
         setFeedback("Private equipment deleted.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPrivateEquipment(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {
@@ -235,12 +229,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/private-ingredients`
+    const url = `/users/${auth.authname}/private-ingredients`
     try {
-      const res1 = await axios.delete(`${url}/${ingredient_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${ingredient_id}`);
       if (res1.status === 204) {
         setFeedback("Private ingredient deleted.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPrivateIngredients(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {
@@ -256,12 +250,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/private-plans`
+    const url = `/users/${auth.authname}/private-plans`
     try {
-      const res1 = await axios.delete(`${url}/${plan_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${plan_id}`);
       if (res1.status === 204) {
         setFeedback("Private plan deleted.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPrivatePlans(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {
@@ -277,12 +271,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/private-recipes`;
+    const url = `/users/${auth.authname}/private-recipes`;
     try {
-      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${recipe_id}`);
       if (res1.status === 204) {
         setFeedback("Private recipe deleted.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyPrivateRecipes(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {
@@ -322,20 +316,18 @@ export default function Dashboard() {
       let new_avatar = "";
 
       if (small_avatar && tiny_avatar) {
-        const { data } = await axios.post(
-          `${endpoint}/aws-s3-public-uploads`,
-          {subfolder: 'avatar'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-public-uploads`,
+          {subfolder: 'avatar'}
         );
-        await uploadImageToAwsS3(data.smallSignature, small_avatar);
-        await uploadImageToAwsS3(data.tinySignature, tiny_avatar);
-        new_avatar = data.filename;
+        await uploadImageToAwsS3(res.data.smallSignature, small_avatar);
+        await uploadImageToAwsS3(res.data.tinySignature, tiny_avatar);
+        new_avatar = res.data.filename;
       }
 
-      const res = await axios.patch(
-        `${endpoint}/users/${auth.authname}/avatar`,
-        {new_avatar},
-        {withCredentials: true}
+      const res = await api.patch(
+        `/users/${auth.authname}/avatar`,
+        {new_avatar}
       );
 
       if (res.status === 204) {
@@ -356,12 +348,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/favorite-recipes`;
+    const url = `/users/${auth.authname}/favorite-recipes`;
     try {
-      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${recipe_id}`);
       if (res1.status === 204) {
         setFeedback("Recipe unfavorited.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMyFavoriteRecipes(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {
@@ -377,12 +369,12 @@ export default function Dashboard() {
     setLoading(true);
     setFeedback('');
     window.scrollTo(0, 0);
-    const url = `${endpoint}/users/${auth.authname}/saved-recipes`
+    const url = `/users/${auth.authname}/saved-recipes`
     try {
-      const res1 = await axios.delete(`${url}/${recipe_id}`, {withCredentials: true});
+      const res1 = await api.delete(`${url}/${recipe_id}`);
       if (res1.status === 204) {
         setFeedback("Recipe unsaved.");
-        const res2 = await axios.get(url, {withCredentials: true});
+        const res2 = await api.get(url);
         userData.setMySavedRecipes(res2.data);
         setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
       } else {

@@ -1,11 +1,10 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
@@ -88,10 +87,7 @@ export default function EquipmentForm({ ownership }: Props) {
   }, []);
 
   const getMyPrivateEquipment = async () => {
-    const res = await axios.get(
-      `${endpoint}/users/${authname}/private-equipment`,
-      {withCredentials: true}
-    );
+    const res = await api.get(`/users/${authname}/private-equipment`);
     setMyPrivateEquipment(res.data);
   };
 
@@ -150,10 +146,9 @@ export default function EquipmentForm({ ownership }: Props) {
     // upload any images to AWS S3, then insert info into MySQL
     try {
       if (smallImage && tinyImage) {
-        const res = await axios.post(
-          `${endpoint}/aws-s3-${ownership}-uploads`,
-          {subfolder: 'equipment'},
-          {withCredentials: true}
+        const res = await api.post(
+          `/aws-s3-${ownership}-uploads`,
+          {subfolder: 'equipment'}
         );
         await uploadImageToAwsS3(res.data.smallSignature, smallImage);
         await uploadImageToAwsS3(res.data.tinySignature, tinyImage);
@@ -161,10 +156,9 @@ export default function EquipmentForm({ ownership }: Props) {
       }
       const editing = equipment_id !== null;
       if (editing) {
-        const res = await axios.patch(
-          `${endpoint}/users/${authname}/${ownership}-equipment/${equipment_id}`,
-          {equipment_id, image_id: image.image_id, ...equipment_upload},
-          {withCredentials: true}
+        const res = await api.patch(
+          `/users/${authname}/${ownership}-equipment/${equipment_id}`,
+          {equipment_id, image_id: image.image_id, ...equipment_upload}
         );
         if (res.status === 204) {
           setFeedback('Equipment updated.');
@@ -174,10 +168,9 @@ export default function EquipmentForm({ ownership }: Props) {
           setFeedback(res.data.error);
         }
       } else {
-        const res = await axios.post(
-          `${endpoint}/users/${authname}/${ownership}-equipment`,
-          equipment_upload,
-          {withCredentials: true}
+        const res = await api.post(
+          `/users/${authname}/${ownership}-equipment`,
+          equipment_upload
         );
         if (res.status === 201) {
           setFeedback('Equipment created.');
