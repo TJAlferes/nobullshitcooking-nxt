@@ -22,7 +22,7 @@ export const api = {
   },
 
   async post(path: string, body: any = {}) {
-    const { data: { csrfToken } } = await axiosInstance.get('/csrf-token');
+    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
 
     const res = await axiosInstance.post(
       `${endpoint}${path}`,
@@ -39,7 +39,7 @@ export const api = {
   },
 
   async patch(path: string, body: any = {}) {
-    const { data: { csrfToken } } = await axiosInstance.get('/csrf-token');
+    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
 
     const res = await axiosInstance.patch(
       `${endpoint}${path}`,
@@ -56,7 +56,7 @@ export const api = {
   },
 
   async delete(path: string) {
-    const { data: { csrfToken } } = await axiosInstance.get('/csrf-token');
+    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
 
     const res = await axiosInstance.delete(
       `${endpoint}${path}`,

@@ -1,9 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../config/api';
+import { api } from '../../../config/api';
 import { useAuth } from '../../../store';
 
 export default function Login() {
@@ -24,11 +23,8 @@ export default function Login() {
     setLoading(true);
     setFeedback('');
     try {
-      const res = await axios.post(
-        `${endpoint}/login`,
-        {email, password},
-        {withCredentials: true}
-      );
+
+      const res = await api.post(`/login`, {email, password});
       if (res.status === 201) {
         login(res.data);
         router.push('/dashboard');
