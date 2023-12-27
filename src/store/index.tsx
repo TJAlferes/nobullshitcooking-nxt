@@ -40,6 +40,8 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem('my_saved_recipes') ?? []);
   const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem('my_chatgroups') ?? []);
 
+  const [csrfToken, setCsrfToken] = useState<string>('');  // IMPORTANT: do NOT put into localStorage
+
   const [auth_id, setAuthId] = useState<string>(getItem('auth_id') ?? '');
   const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') ?? '');
   const [authname, setAuthname] = useState<string>(getItem('authname') ?? '');
@@ -169,6 +171,11 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
     setMyChatgroups: useCallback((my_chatgroups: ChatgroupView[]) => {
       setMyChatgroups(my_chatgroups);
       setItem('my_chatgroups', my_chatgroups);
+    }, []),
+
+    csrfToken,
+    setCsrfToken: useCallback((csrfToken: string) => {
+      setCsrfToken(csrfToken);
     }, []),
 
     auth_id: getItem('auth_id') ?? auth_id,
@@ -369,6 +376,13 @@ export function useSearchState() {
   return useContextSelector(StoreContext, (s) => ({
     found:          s!.found,
     setFound:       s!.setFound
+  }));
+}
+
+export function useCsrf() {
+  return useContextSelector(StoreContext, (s) => ({
+    csrfToken:    s!.csrfToken,
+    setCsrfToken: s!.setCsrfToken
   }));
 }
 
@@ -767,6 +781,9 @@ type StoreValue = {
   setMySavedRecipes: (my_saved_recipes: RecipeOverview[]) => void;
   my_chatgroups: ChatgroupView[];
   setMyChatgroups: (my_chatgroups: ChatgroupView[]) => void;
+
+  csrfToken: string;
+  setCsrfToken: (csrfToken: string) => void;
 
   auth_id: string;
   auth_email: string;

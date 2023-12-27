@@ -5,7 +5,9 @@ export const endpoint = process.env.NODE_ENV === 'production'
   : 'http://localhost:3003/v1';
 
 export const axiosInstance = axios.create({
-  xsrfCookieName: '__Host-psifi.x-csrf-token',
+  xsrfCookieName: process.env.NODE_ENV === 'production'
+    ? '__Host-psifi.x-csrf-token'
+    : 'x-csrf-token',
   xsrfHeaderName: 'X-CSRF-TOKEN'
 });
 
@@ -21,9 +23,7 @@ export const api = {
     return res;
   },
 
-  async post(path: string, body: any = {}) {
-    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
-
+  async post(path: string, body: any = {}, csrfToken: string) {
     const res = await axiosInstance.post(
       `${endpoint}${path}`,
       body,
@@ -38,9 +38,7 @@ export const api = {
     return res;
   },
 
-  async patch(path: string, body: any = {}) {
-    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
-
+  async patch(path: string, body: any = {}, csrfToken: string) {
     const res = await axiosInstance.patch(
       `${endpoint}${path}`,
       body,
@@ -55,9 +53,7 @@ export const api = {
     return res;
   },
 
-  async delete(path: string) {
-    const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
-
+  async delete(path: string, csrfToken: string) {
     const res = await axiosInstance.delete(
       `${endpoint}${path}`,
       {
