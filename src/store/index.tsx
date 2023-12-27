@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
-import { api } from '../config/api';
+import { protectedApi } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { SearchResponse } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
@@ -40,7 +40,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem('my_saved_recipes') ?? []);
   const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem('my_chatgroups') ?? []);
 
-  const [csrfToken, setCsrfToken] = useState<string>('');  // IMPORTANT: do NOT put into localStorage
+  const [api, setApi] = useState<ReturnType<typeof protectedApi>>(protectedApi(''));
 
   const [auth_id, setAuthId] = useState<string>(getItem('auth_id') ?? '');
   const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') ?? '');
@@ -173,9 +173,9 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
       setItem('my_chatgroups', my_chatgroups);
     }, []),
 
-    csrfToken,
-    setCsrfToken: useCallback((csrfToken: string) => {
-      setCsrfToken(csrfToken);
+    api,
+    setApi: useCallback((api: ReturnType<typeof protectedApi>) => {
+      setApi(api);
     }, []),
 
     auth_id: getItem('auth_id') ?? auth_id,
@@ -379,10 +379,10 @@ export function useSearchState() {
   }));
 }
 
-export function useCsrf() {
+export function useApi() {
   return useContextSelector(StoreContext, (s) => ({
-    csrfToken:    s!.csrfToken,
-    setCsrfToken: s!.setCsrfToken
+    api:    s!.api,
+    setApi: s!.setApi
   }));
 }
 
@@ -457,7 +457,10 @@ export function useChat() {
 }
 
 // refetches
+
 function createDataFetcher(path: string, key: keyof Data) {
+  const { api } = useApi();
+
   return async function () {
     try {
       const res = await api.get(path, false);
@@ -476,6 +479,8 @@ export const getMethods = createDataFetcher("/methods", "methods");
 export const getRecipeTypes = createDataFetcher("/recipe-types", "recipe_types");
 
 function createUserDataFetcher(path: string, key: keyof UserData) {
+  const { api } = useApi();
+
   return async function () {
     try {
       const res = await api.get(path);
@@ -782,8 +787,8 @@ type StoreValue = {
   my_chatgroups: ChatgroupView[];
   setMyChatgroups: (my_chatgroups: ChatgroupView[]) => void;
 
-  csrfToken: string;
-  setCsrfToken: (csrfToken: string) => void;
+  api: ReturnType<typeof protectedApi>;
+  setApi: (setApi: ReturnType<typeof protectedApi>) => void;
 
   auth_id: string;
   auth_email: string;

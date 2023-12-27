@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api, axiosInstance, endpoint } from '../../../config/api';
-import { useAuth, useCsrf } from '../../../store';
+import { axiosInstance, endpoint, protectedApi } from '../../../config/api';
+import { useAuth, useApi } from '../../../store';
 
 export default function Login() {
   const router = useRouter();
 
   const { login } = useAuth();
-  const { setCsrfToken } = useCsrf();
+  const { api, setApi } = useApi();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,8 +25,8 @@ export default function Login() {
     setFeedback('');
     try {
       const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
-      setCsrfToken(csrfToken);
-      const res = await api.post('/login', {email, password}, csrfToken);
+      setApi(protectedApi(csrfToken));
+      const res = await api.post('/login', {email, password});
       if (res.status === 201) {
         login(res.data);
         router.push('/dashboard');

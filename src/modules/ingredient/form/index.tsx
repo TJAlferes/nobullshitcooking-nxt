@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { api } from '../../../config/api';
-import { useAuth, useData, useUserData } from '../../../store';
+import { useApi, useAuth, useData, useUserData } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { getCroppedImage } from '../../shared/getCroppedImage';
@@ -18,6 +17,7 @@ export default function IngredientForm({ ownership }: Props) {
   const params = useSearchParams();
   const ingredient_id = params.get('ingredient_id');
 
+  const { api } = useApi();
   const { auth_id, authname } = useAuth();
   const { ingredient_types } = useData();
   const { setMyPrivateIngredients } = useUserData();

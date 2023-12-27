@@ -7,8 +7,8 @@ import ReactCrop, { Crop } from 'react-image-crop';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { api } from '../../../config/api';
-import { EquipmentView, IngredientView, useAuth, useData, useUserData } from '../../../store';
+import { useApi, useAuth, useData, useUserData } from '../../../store';
+import type { EquipmentView, IngredientView } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
 import { getCroppedImage } from '../../shared/getCroppedImage';
@@ -21,6 +21,7 @@ export default function RecipeForm({ ownership }: Props) {
   const params = useParams();
   const recipe_id = params['recipe_id'] as string | null;
 
+  const { api } = useApi();
   const { auth_id, authname } = useAuth();
   const { units, ingredient_types, recipe_types, cuisines, methods } = useData();
   const { setMyPublicRecipes, setMyPrivateRecipes } = useUserData();
@@ -1107,7 +1108,7 @@ type Props = {
 
 function useAllowedContent(ownership: Ownership, recipe_id: string | null) {
   const { equipment, setEquipment, ingredients, setIngredients } = useData();
-
+  const { api } = useApi();
   const {
     my_private_equipment,
     my_private_ingredients,

@@ -5,8 +5,7 @@ import AriaModal from 'react-aria-modal';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { api } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useApi, useAuth, useUserData } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
@@ -14,6 +13,7 @@ import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
 export default function Dashboard() {
   const router = useRouter();
 
+  const { api } = useApi();
   const auth = useAuth();
   const userData = useUserData();
 

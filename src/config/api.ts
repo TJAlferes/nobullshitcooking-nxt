@@ -13,59 +13,60 @@ export const axiosInstance = axios.create({
   xsrfHeaderName: 'X-CSRF-TOKEN'
 });
 
-export const api = {
-  async get(path: string, withCredentials = true) {
-    const res = await axiosInstance.get(
-      `${endpoint}${path}`,
-      {
-        withCredentials
-      }
-    );
+export function protectedApi(csrfToken: string) {
+  return {
+    csrfToken,
+    
+    async get(path: string, withCredentials = true) {
+      const res = await axiosInstance.get(
+        `${endpoint}${path}`,
+        {
+          withCredentials
+        }
+      );
+  
+      return res;
+    },
+  
+    async post(path: string, body: any = {}) {
+      const res = await axiosInstance.post(
+        `${endpoint}${path}`,
+        body,
+        {
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        }
+      );
+  
+      return res;
+    },
 
-    return res;
-  },
+    async patch(path: string, body: any = {}) {
+      const res = await axiosInstance.patch(
+        `${endpoint}${path}`,
+        body,
+        {
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        }
+      );
+  
+      return res;
+    },
 
-  async post(path: string, body: any = {}, csrfToken: string) {
-    const res = await axiosInstance.post(
-      `${endpoint}${path}`,
-      body,
-      {
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        },
-        withCredentials: true
-      }
-    );
-
-    return res;
-  },
-
-  async patch(path: string, body: any = {}, csrfToken: string) {
-    const res = await axiosInstance.patch(
-      `${endpoint}${path}`,
-      body,
-      {
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        },
-        withCredentials: true
-      }
-    );
-
-    return res;
-  },
-
-  async delete(path: string, csrfToken: string) {
-    const res = await axiosInstance.delete(
-      `${endpoint}${path}`,
-      {
-        headers: {
-          'X-CSRF-TOKEN': csrfToken
-        },
-        withCredentials: true
-      }
-    );
-
-    return res;
-  }
-};
+    async delete(path: string) {
+      const res = await axiosInstance.delete(
+        `${endpoint}${path}`,
+        {
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        }
+      );
+  
+      return res;
+    }
+  };
+}

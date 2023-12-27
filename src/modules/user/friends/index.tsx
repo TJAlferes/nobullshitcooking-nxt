@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useApi, useAuth, useUserData } from '../../../store';
 
 export default function Friends() {
+  const { api } = useApi();
   const { authname } = useAuth();
   const { my_friendships, setMyFriendships } = useUserData();
 

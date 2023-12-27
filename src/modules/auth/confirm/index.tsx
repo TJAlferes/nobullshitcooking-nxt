@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
+import { useApi } from '../../../store';
 
 export default function Confirm() {
   const router = useRouter();
+
+  const { api } = useApi();
 
   const [ feedback, setFeedback ] = useState("");
   const [ loading,  setLoading ]  = useState(false);

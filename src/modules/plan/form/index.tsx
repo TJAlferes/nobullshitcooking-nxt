@@ -9,8 +9,7 @@ import { DndProvider } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { v4 as uuidv4 } from 'uuid';
 
-import { api } from '../../../config/api';
-import { useAuth, useCsrf, useUserData, useData } from '../../../store';
+import { useApi, useAuth, useUserData, useData } from '../../../store';
 import type { RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { capitalizeFirstLetter } from '../../shared/capitalizeFirstLetter';
@@ -26,8 +25,8 @@ export default function PlanForm({ ownership }: Props) {
   const params  = useSearchParams();
   const plan_id = params.get('plan_id');  // but public uses plan_name ???
 
+  const { api } = useApi();
   const { authname } = useAuth();
-  const { csrfToken } = useCsrf();
   const {
     my_public_plans, setMyPublicPlans,
     my_private_plans, setMyPrivatePlans
@@ -99,7 +98,7 @@ export default function PlanForm({ ownership }: Props) {
 
   const getMyPlans = async () => {
     if (ownership === 'public') {
-      const res = await api.get(`/users/${authname}/public-plans`);
+      const res = await api.get(`/users/${authname}/public-plans`, false);
       setMyPublicPlans(res.data);
     } else if (ownership === 'private') {
       const res = await api.get(`/users/${authname}/private-plans`);
@@ -168,8 +167,7 @@ export default function PlanForm({ ownership }: Props) {
       if (plan_id) {
         const res = await api.patch(
           `/users/${authname}/${ownership}-plans`,
-          {plan_id, ...plan_upload},
-          csrfToken
+          {plan_id, ...plan_upload}
         );
 
         if (res.status === 204) {
@@ -182,8 +180,7 @@ export default function PlanForm({ ownership }: Props) {
       } else {
         const res = await api.post(
           `/users/${authname}/${ownership}-plans`,
-          plan_upload,
-          csrfToken
+          plan_upload
         );
 
         if (res.status === 201) {
@@ -325,7 +322,7 @@ type Props = {
 
 function useAllowedContent(ownership: Ownership) {
   const { official_recipes, setOfficialRecipes } = useData();
-
+  const { api } = useApi();
   const {
     my_private_recipes,
     my_public_recipes,

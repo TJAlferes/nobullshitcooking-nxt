@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
-import { useAuth, useUserData } from '../../../store';
+import { useApi, useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { RecipeOverview } from '../../../store';
 
@@ -16,6 +15,7 @@ export default function Profile({ profile }: Props) {
     return <LoaderSpinner />;
   }
 
+  const { api } = useApi();
   const { authname } = useAuth();
   const { my_friendships } = useUserData();
 
