@@ -40,7 +40,7 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [my_saved_recipes, setMySavedRecipes] = useState<RecipeOverview[]>(getItem('my_saved_recipes') ?? []);
   const [my_chatgroups, setMyChatgroups] = useState<ChatgroupView[]>(getItem('my_chatgroups') ?? []);
 
-  const [api, setApi] = useState<ReturnType<typeof protectedApi>>(protectedApi(''));
+  const [api, setApi] = useState(protectedApi(''));
 
   const [auth_id, setAuthId] = useState<string>(getItem('auth_id') ?? '');
   const [auth_email, setAuthEmail] = useState<string>(getItem('auth_email') ?? '');
@@ -458,6 +458,8 @@ export function useChat() {
 
 // refetches
 
+// TO DO: just move into the api and protectedApi
+
 function createDataFetcher(path: string, key: keyof Data) {
   const { api } = useApi();
 
@@ -469,14 +471,14 @@ function createDataFetcher(path: string, key: keyof Data) {
   }
 }
 
-export const getCuisines = createDataFetcher("/cuisines", "cuisines");
-export const getEquipments = createDataFetcher("/equipment", "equipment");
-export const getEquipmentTypes = createDataFetcher("/equipment-types", "equipment_types");
-export const getIngredients = createDataFetcher("/ingredients", "ingredients");
-export const getIngredientTypes = createDataFetcher("/ingredient-types", "ingredient_types");
-export const getUnits = createDataFetcher("/units", "units");
-export const getMethods = createDataFetcher("/methods", "methods");
-export const getRecipeTypes = createDataFetcher("/recipe-types", "recipe_types");
+export const getCuisines = () => useContextSelector(StoreContext, (s) => createDataFetcher("/cuisines", "cuisines"));
+export const getEquipments = () => useContextSelector(StoreContext, (s) => createDataFetcher("/equipment", "equipment"));
+export const getEquipmentTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/equipment-types", "equipment_types"));
+export const getIngredients = () => useContextSelector(StoreContext, (s) => createDataFetcher("/ingredients", "ingredients"));
+export const getIngredientTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/ingredient-types", "ingredient_types"));
+export const getUnits = () => useContextSelector(StoreContext, (s) => createDataFetcher("/units", "units"));
+export const getMethods = () => useContextSelector(StoreContext, (s) => createDataFetcher("/methods", "methods"));
+export const getRecipeTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/recipe-types", "recipe_types"));
 
 function createUserDataFetcher(path: string, key: keyof UserData) {
   const { api } = useApi();

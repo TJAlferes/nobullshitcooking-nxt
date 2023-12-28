@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { axiosInstance, endpoint, protectedApi } from '../../../config/api';
 import { useAuth, useApi } from '../../../store';
@@ -17,6 +17,14 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    async function getCsrfToken() {
+      const res = await axiosInstance.get(`${endpoint}/csrf-token`);
+      setApi(protectedApi(res.data.csrfToken));
+    }
+    getCsrfToken();
+  }, []);
+
   const loginHandler = async () => {
     window.scrollTo(0, 0);
     if (!email) return setFeedback('Email required.');
@@ -24,8 +32,6 @@ export default function Login() {
     setLoading(true);
     setFeedback('');
     try {
-      const { data: { csrfToken } } = await axiosInstance.get(`${endpoint}/csrf-token`);
-      setApi(protectedApi(csrfToken));
       const res = await api.post('/login', {email, password});
       if (res.status === 201) {
         login(res.data);
@@ -67,10 +73,11 @@ export default function Login() {
           autoFocus
           disabled={loading}
           id="email"
-          maxLength={50}
+          minLength={5}
+          maxLength={60}
           name="email"
           onChange={e => setEmail(e.target.value)}
-          size={20}
+          size={60}
           type="text"
           value={email}
         />
@@ -80,10 +87,11 @@ export default function Login() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
-          maxLength={20}
+          minLength={8}
+          maxLength={64}
           name="password"
           onChange={e => setPassword(e.target.value)}
-          size={20}
+          size={64}
           type="password"
           value={password}
         />
@@ -92,8 +100,8 @@ export default function Login() {
           disabled={loading
             || email.length < 5
             || email.length > 60
-            || password.length < 6
-            || password.length > 60
+            || password.length < 8
+            || password.length > 64
           }
           onClick={loginClick}
         >{loading ? 'Logging In...' : 'Login'}</button>

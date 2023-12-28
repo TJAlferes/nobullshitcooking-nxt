@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
+import { useApi } from '../../../store';
 
 export default function Register() {
   const router = useRouter();
+
+  const { api } = useApi();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ export default function Register() {
     try {
       const res = await api.post('/users', {email, password, username});
       if (res.status === 201) {
-        setFeedback('User account created.');
+        setFeedback('User account created.');  // remove?
         setTimeout(() => router.push('/confirm'), 4000);
       } else {
         setFeedback(res.data.message);
@@ -108,11 +110,11 @@ export default function Register() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
-          minLength={6}
-          maxLength={60}
+          minLength={8}
+          maxLength={64}
           name="password"
           onChange={e => setPassword(e.target.value)}
-          size={60}
+          size={64}
           type="password"
           value={password}
         />
@@ -122,11 +124,11 @@ export default function Register() {
           autoComplete="current-password"
           disabled={loading}
           id="passwordAgain"
-          minLength={6}
-          maxLength={60}
+          minLength={8}
+          maxLength={64}
           name="passwordAgain"
           onChange={e => setPasswordAgain(e.target.value)}
-          size={60}
+          size={64}
           type="password"
           value={passwordAgain}
         />
@@ -134,8 +136,8 @@ export default function Register() {
         <button
           disabled={email.length < 5
             || email.length > 60
-            || password.length < 6
-            || password.length > 60
+            || password.length < 8
+            || password.length > 64
             || password !== passwordAgain
           }
           onClick={registerClick}

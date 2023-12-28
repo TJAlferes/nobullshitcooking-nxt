@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
+import { useApi } from '../../../store';
 
 export default function ResetPassword() {
   const router = useRouter();
+
+  const { api } = useApi();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -74,10 +76,11 @@ export default function ResetPassword() {
           autoFocus
           disabled={loading}
           id="email"
-          maxLength={50}
+          minLength={5}
+          maxLength={60}
           name="email"
           onChange={e => setEmail(e.target.value)}
-          size={20}
+          size={60}
           type="text"
           value={email}
         />
@@ -87,10 +90,11 @@ export default function ResetPassword() {
           autoComplete="temporary-password"
           disabled={loading}
           id="temporary-password"
-          maxLength={20}
+          minLength={8}
+          maxLength={64}
           name="temporary-password"
           onChange={e => setTemporaryPassword(e.target.value)}
-          size={20}
+          size={64}
           type="password"
           value={temporary_password}
         />
@@ -100,10 +104,11 @@ export default function ResetPassword() {
           autoComplete="new-password"
           disabled={loading}
           id="new-password"
-          maxLength={20}
+          minLength={8}
+          maxLength={64}
           name="new-password"
           onChange={e => setNewPassword(e.target.value)}
-          size={20}
+          size={64}
           type="password"
           value={new_password}
         />
@@ -111,10 +116,10 @@ export default function ResetPassword() {
         <button
           disabled={email.length < 5
             || email.length > 60
-            || temporary_password.length < 6
-            || temporary_password.length > 60
-            || new_password.length < 6
-            || new_password.length > 60
+            || temporary_password.length < 8
+            || temporary_password.length > 64
+            || new_password.length < 8
+            || new_password.length > 64
           }
           onClick={resetPasswordClick}
         >{loading ? 'Resetting...' : 'Reset'}</button>

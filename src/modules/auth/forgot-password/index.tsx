@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
+import { useApi } from '../../../store';
 
 export default function ForgotPassword() {
   const router = useRouter();
+
+  const { api } = useApi();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -68,10 +70,11 @@ export default function ForgotPassword() {
           autoFocus
           disabled={loading}
           id="email"
-          maxLength={50}
+          minLength={5}
+          maxLength={60}
           name="email"
           onChange={e => setEmail(e.target.value)}
-          size={20}
+          size={60}
           type="text"
           value={email}
         />

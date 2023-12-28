@@ -1,3 +1,5 @@
+/* TO DO: change px font-sizes to rem */
+
 .auth {
   display: block;
   font-size: 13px;  /* TO DO: move??? */
@@ -63,7 +65,6 @@
   color: black;
   cursor: pointer;
   cursor: hand;
-  /*font-family: 'Play', sans-serif;*/
   font-size: 14px;
   height: 31px;
   margin: 18px auto 24px auto;

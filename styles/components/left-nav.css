@@ -26,8 +26,6 @@
 
 .left-nav .menu {
   width: 100%;
-  /*overflow-x: visible;
-  cursor: pointer;*/
 }
 
 .left-nav .menu-item,
@@ -68,6 +66,19 @@
 .left-nav hr {
   height: 1px;
   border: 0 none;
+}
+
+@media (max-width: 899px) {
+  .shadow {
+    display: none;
+  }
+
+  .left-nav {
+    top: 48px;
+    margin: 0;
+    width: 100vw;
+    min-width: 100vw;
+  }
 }
 
 /*
@@ -121,17 +132,4 @@ Dark/Night/Moon Theme
 
 .dark .left-nav hr {
   background-color: #444;
-}
-
-@media (max-width: 899px) {
-  .shadow {
-    display: none;
-  }
-
-  .left-nav {
-    top: 48px;
-    margin: 0;
-    width: 100vw;
-    min-width: 100vw;
-  }
 }

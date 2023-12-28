@@ -28,8 +28,7 @@ body {
 
 img,
 picture,
-svg,
-video {
+svg {
   display: block;
   max-width: 100%;
 }
@@ -126,37 +125,6 @@ select:focus {
   background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
 }
 
-.crop-tool-tip {
-  display: block;
-}
-
-.crops {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.crop-full-outer,
-.crop-thumb-outer,
-.crop-tiny-outer {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  order: 1;
-  padding: 10px;
-}
-
-.crop-full,
-.crop-thumb,
-.crop-tiny {
-  margin-left: 5px;
-}
-
-.image-cancel-button {
-  height: 21px;
-  padding: 0 6px;
-}
-
 .img-280-280 {
   min-height: 280px;
   min-width: 280px;
@@ -198,18 +166,22 @@ Dark Theme
 
 @media (max-width: 899px) {
   h1 {
+    padding: 10px 0;
     font-size: 2rem;
   }
 
   h2 {
+    padding: 7px 0;
     font-size: 1.7rem;
   }
 
   h3 {
+    padding: 5px 0;
     font-size: 1.5rem;
   }
 
   h4 {
+    padding: 4px 0;
     font-size: 1.4rem;
   }
 
@@ -230,6 +202,7 @@ Dark Theme
 @import './components/main.css';
 @import './components/pagination.css';
 @import './components/results-per-page.css';
+@import './components/search.css';
 
 @import './layouts/one-col.css';
 

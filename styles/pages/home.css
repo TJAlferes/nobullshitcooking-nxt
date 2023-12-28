@@ -38,9 +38,7 @@
   border: 1px solid;
   border-color: #fff #888 #888 #fff;
   border-radius: 1px;
-
   background-image: linear-gradient(to bottom, #eee, #bbb);
-
   cursor: pointer;
 }
 

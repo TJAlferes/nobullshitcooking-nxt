@@ -1,9 +1,12 @@
+/* TO DO: test responsive design on actual smart phones */
+
 .dashboard .cols {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  height: 100vh;
-  min-height: 100vh;
+  /*height: 100vh;
+  min-height: 100vh;*/
+  height: 100%;
 }
 
 .dashboard .left-col {
@@ -21,8 +24,9 @@
   flex-direction: column;
   flex-wrap: nowrap;
   width: 240px;
-  height: 100vh;
-  min-height: 100vh;
+  /*height: 100vh;
+  min-height: 100vh;*/
+  height: 100%;
 }
 
 .dashboard-nav .menu-item,
@@ -45,44 +49,13 @@
 }
 
 .dashboard-nav .menu-item,
-.dashboard-nav .expand-collapse .menu-item span,
-.dashboard-nav--mobile .expand-collapse .menu-item span {
+.dashboard-nav .expand-collapse .menu-item span {
   font-size: 1.4rem;
   text-indent: 18px;
 }
 
 .dashboard-nav .submenu-item {
   text-indent: 36px;
-}
-
-.dashboard-nav--mobile {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 48px;
-  margin: 0;
-  width: 100vw;
-  min-width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  /*z-index: 2;*/
-}
-
-.dashboard-nav--mobile .menu-item,
-.dashboard-nav--mobile .submenu-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 10px;
-
-  width: 100%;
-  height: 32px;
-
-  padding-right: 18px;
-
-  font-size: 1.4rem;
-  text-indent: 18px;
 }
 
 /*-------------------------------------------------*/
@@ -306,20 +279,50 @@
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
 }
 
+@media (max-width: 899px) {
+  .dashboard .cols {
+    flex-direction: column;
+    width: 100%;
+    min-width: 100%;
+  }
+  
+  .dashboard .left-col {
+    height: 46px;
+    width: 100%;
+  }
+  
+  .dashboard .right-col {
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid #bfddfa;
+    border-left: none;
+  }
+  
+  .dashboard-nav {
+    flex-direction: row;
+    width: 100%;
+    height: 46px;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+  }
+
+  .dashboard-nav .menu-item,
+  .dashboard-nav .submenu-item {
+    width: 150px;
+  }
+}
+
 /*
 
 Light/Day/Sun Theme
 
 */
 
-.light .dashboard-nav,
-.light .dashboard-nav--mobile,
-.light .dashboard-nav--mobile .submenu-item {
+.light .dashboard-nav {
   background-color: #fff;
 }
 
-.light .dashboard-nav .expand-collapse .menu-item,
-.light .dashboard-nav--mobile .expand-collapse .menu-item {
+.light .dashboard-nav .expand-collapse .menu-item {
   background-color: #ccc;
 }
 
@@ -355,16 +358,6 @@ Dark/Night/Moon Theme
 
 .dark .dashboard-item a:hover {
   color: #690004;
-}
-
-@media (max-width: 899px) {
-  .dashboard-nav {
-    display: none;
-  }
-
-  .dashboard-nav--mobile {
-    display: block;
-  }
 }
 
 /* TO DO: flex */

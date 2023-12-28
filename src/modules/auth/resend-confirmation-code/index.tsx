@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { api } from '../../../config/api';
+import { useApi } from '../../../store';
 
 export default function ResendConfirmationCode() {
   const router = useRouter();
+
+  const { api } = useApi();
 
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
@@ -84,11 +86,11 @@ export default function ResendConfirmationCode() {
           autoComplete="current-password"
           disabled={loading}
           id="password"
-          maxLength={60}
-          minLength={6}
+          maxLength={64}
+          minLength={8}
           name="password"
           onChange={e => setPassword(e.target.value)}
-          size={60}
+          size={64}
           type="password"
           value={password}
         />
@@ -96,8 +98,8 @@ export default function ResendConfirmationCode() {
         <button
           disabled={email.length < 5
             || email.length > 60
-            || password.length < 6
-            || password.length > 60
+            || password.length < 8
+            || password.length > 64
           }
           onClick={requestResendClick}
         >{loading ? 'Resending...' : 'Resend'}</button>

@@ -505,7 +505,6 @@ export default function Dashboard() {
               onClick={() => setTab('settings')}
             >Account Settings</div>
           </nav>
-          <nav className="dashboard-nav--mobile"></nav>
         </div>
 
         <div className="right-col">
