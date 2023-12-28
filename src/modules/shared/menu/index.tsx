@@ -7,17 +7,17 @@ import { ExpandCollapse } from '../ExpandCollapse';
 import { useSearch } from '../search/hook';
 import type { SearchIndex } from '../search/types';
 
-export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
-  isLeftNavOpen: boolean;
-  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+export function AppNav({ isAppNavOpen, setIsAppNavOpen }: {
+  isAppNavOpen: boolean;
+  setIsAppNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { setPreFilters } = useSearch();
 
-  return !isLeftNavOpen ? null : (
+  return !isAppNavOpen ? null : (
     <>
       <div className="shadow"></div>
 
-      <nav className="left-nav">
+      <nav className="app-nav">
         <div className="menu">
           {menuItems.map(item => (
             <>
@@ -44,7 +44,7 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
                         href={{hash: null}}
                         onClick={(e) => {
                           e.preventDefault();
-                          setIsLeftNavOpen(false);
+                          setIsAppNavOpen(false);
                           setPreFilters(
                             subitem.searchIndex as SearchIndex,
                             subitem.filterName,
@@ -62,47 +62,47 @@ export function LeftNav({ isLeftNavOpen, setIsLeftNavOpen }: {
           ))}
         </div>
 
-        <NavLinks setIsLeftNavOpen={setIsLeftNavOpen} />
+        <NavLinks setIsAppNavOpen={setIsAppNavOpen} />
       </nav>
     </>
   );
 }
 
-function NavLinks({ setIsLeftNavOpen }: {
-  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+function NavLinks({ setIsAppNavOpen }: {
+  setIsAppNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { authname } = useAuth();
 
   return (
     <>
-      <NavLink text="Home" to="/" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Home" to="/" setIsAppNavOpen={setIsAppNavOpen} />
       <hr />
 
       {authname !== '' ? (
         <>
-          <NavLink text={authname} to="/dashboard" setIsLeftNavOpen={setIsLeftNavOpen} />
-          <NavLink text="Chat"     to="/chat" setIsLeftNavOpen={setIsLeftNavOpen} />
-          <NavLink text="Friends"  to="/friends" setIsLeftNavOpen={setIsLeftNavOpen} />
+          <NavLink text={authname} to="/dashboard" setIsAppNavOpen={setIsAppNavOpen} />
+          <NavLink text="Chat"     to="/chat" setIsAppNavOpen={setIsAppNavOpen} />
+          <NavLink text="Friends"  to="/friends" setIsAppNavOpen={setIsAppNavOpen} />
           <hr />
         </>
       ) : false}
 
-      <NavLink text="Water"  to="/water" setIsLeftNavOpen={setIsLeftNavOpen} />
-      <NavLink text="Tea"    to="/tea" setIsLeftNavOpen={setIsLeftNavOpen} />
-      <NavLink text="Coffee" to="/coffee" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Water"  to="/water" setIsAppNavOpen={setIsAppNavOpen} />
+      <NavLink text="Tea"    to="/tea" setIsAppNavOpen={setIsAppNavOpen} />
+      <NavLink text="Coffee" to="/coffee" setIsAppNavOpen={setIsAppNavOpen} />
       <hr />
-      <NavLink text="Outdoors" to="/outdoors" setIsLeftNavOpen={setIsLeftNavOpen} />
-      <NavLink text="Garden"   to="/garden" setIsLeftNavOpen={setIsLeftNavOpen} />
-      <NavLink text="Tools"    to="/tools" setIsLeftNavOpen={setIsLeftNavOpen} />
+      <NavLink text="Outdoors" to="/outdoors" setIsAppNavOpen={setIsAppNavOpen} />
+      <NavLink text="Garden"   to="/garden" setIsAppNavOpen={setIsAppNavOpen} />
+      <NavLink text="Tools"    to="/tools" setIsAppNavOpen={setIsAppNavOpen} />
     </>
   );
 }
 
 // shallow={true} ???
-function NavLink({ text, to, setIsLeftNavOpen }: {
+function NavLink({ text, to, setIsAppNavOpen }: {
   text: string;
   to: string;
-  setIsLeftNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAppNavOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
   const { theme } = useTheme();
@@ -114,11 +114,11 @@ function NavLink({ text, to, setIsLeftNavOpen }: {
 
   return (
     <div
-      className="left-nav-item"
+      className="app-nav-item"
       style={style}
       onClick={(e) => {
         e.preventDefault();
-        setIsLeftNavOpen(false);
+        setIsAppNavOpen(false);
       }}
     >
       <Link href={to} style={style}>{`${text}`}</Link>

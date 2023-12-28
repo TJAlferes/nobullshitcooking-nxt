@@ -19,6 +19,7 @@ export default function Dashboard() {
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ isPageNavOpen, setIsPageNavOpen ] = useState(false);
   const [tab, setTab] = useState('avatar');
   const [subTab, setSubTab] = useState('private');
   const [deleteId, setDeleteId] = useState('');
@@ -400,613 +401,608 @@ export default function Dashboard() {
 
   return (
     <div className="one-col dashboard">
-      <h1>{auth.authname}</h1>
+      <div className="page-nav">
+        <svg className="page-nav-toggle" onClick={() => setIsPageNavOpen(prev => !prev)}>
+          <g>
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path>
+          </g>
+        </svg>
+
+        <h1>{auth.authname}</h1>
+      </div>
 
       <p className="feedback">{feedback}</p>
 
-      <div className="cols">
-        <div className="left-col">
-          <nav className="dashboard-nav">
-            <div
-              className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
-              onClick={() => setTab('avatar')}
-            >Profile Settings</div>
+      {isPageNavOpen ? (
+        <nav className="dashboard-nav">
+          <div
+            className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
+            onClick={() => setTab('avatar')}
+          >Profile Settings</div>
   
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className="menu-item">
-                  <span>Plans</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              headingWhileExpanded={(
-                <div className="menu-item">
-                  <span>Plans</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-            >
-              <div className="submenu-items">
-                <div
-                  className={`submenu-item ${tab === 'plans' && subTab === 'public' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('plans');
-                    setSubTab('public');
-                  }}
-                >Public</div>
-                <div
-                  className={`submenu-item ${tab === 'plans' && subTab === 'private' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('plans');
-                    setSubTab('private');
-                  }}
-                >Private</div>
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className="menu-item">
+                <span>Plans</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
-            </ExpandCollapse>
-  
-            <ExpandCollapse
-              headingWhileCollapsed={(
-                <div className="menu-item">
-                  <span>Recipes</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-              headingWhileExpanded={(
-                <div className="menu-item">
-                  <span>Recipes</span>
-                  <img src="/images/header/down-arrow.png" width="8" height="6" />
-                </div>
-              )}
-            >
-              <div className="submenu-items">
-                <div
-                  className={`submenu-item ${tab === 'recipes' && subTab === 'public' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('recipes');
-                    setSubTab('public');
-                  }}
-                >Public</div>
-                <div
-                  className={`submenu-item ${tab === 'recipes' && subTab === 'private' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('recipes');
-                    setSubTab('private');
-                  }}
-                >Private</div>
-                <div
-                  className={`submenu-item ${tab === 'recipes' && subTab === 'favorite' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('recipes');
-                    setSubTab('favorite');
-                  }}
-                >Favorite</div>
-                <div
-                  className={`submenu-item ${tab === 'recipes' && subTab === 'saved' ? '--active' : ''}`}
-                  onClick={() => {
-                    setTab('recipes');
-                    setSubTab('saved');
-                  }}
-                >Saved</div>
+            )}
+            headingWhileExpanded={(
+              <div className="menu-item">
+                <span>Plans</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
               </div>
-            </ExpandCollapse>
-  
-            <div
-              className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
-              onClick={() => setTab('ingredients')}
-            >Ingredients</div>
-  
-            <div
-              className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
-              onClick={() => setTab('equipment')}
-            >Equipment</div>
-  
-            <div
-              className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
-              onClick={() => setTab('settings')}
-            >Account Settings</div>
-          </nav>
-          <nav className="dashboard-nav--mobile"></nav>
-        </div>
-
-        <div className="right-col">
-          {
-            tab === "settings" && (
-            <div className='dashboard-content account-settings'>
-              <h2>Account Settings</h2>
-
-              <h3>Username</h3>
-              <p>{auth.authname}</p>
-              <label htmlFor='new-username'>New Username</label>
-              <input
-                name='new-username'
-                onChange={e => setNewUsername(e.target.value)}
-                value={new_username}
-                minLength={6}
-                maxLength={20}
-              />
-              <button
-                className='new-entity'
-                onClick={updateUsername}
-              >Update Username</button>
-    
-              <h3>Email</h3>
-              <p>{auth.auth_email}</p>
-              <label htmlFor='new-email'>New Email</label>
-              <input
-                name='new-email'
-                onChange={e => setNewEmail(e.target.value)}
-                value={new_email}
-                minLength={5}
-                maxLength={60}
-              />
-              <button
-                className='new-entity'
-                onClick={updateEmail}
-              >Update Email</button>
-    
-              <h3>Password</h3>
-              <label htmlFor='password'>Current Password</label>
-              <input
-                name='password'
-                onChange={e => setPassword(e.target.value)}
-                value={password}
-                minLength={6}
-                maxLength={60}
-                type='password'
-              />
-              <label htmlFor='new-password'>New Password</label>
-              <input
-                name='new-password'
-                onChange={e => setNewPassword(e.target.value)}
-                value={new_password}
-                minLength={6}
-                maxLength={60}
-                type='password'
-              />
-              <label htmlFor='new-password-again'>New Password Again</label>
-              <input
-                name='new-password-again'
-                onChange={e => setNewPasswordAgain(e.target.value)}
-                value={new_password_again}
-                minLength={6}
-                maxLength={60}
-                type='password'
-              />
-              <button
-                className='new-entity'
-                onClick={updatePassword}
-              >Update Password</button>
+            )}
+          >
+            <div className="submenu-items">
+              <div
+                className={`submenu-item ${tab === 'plans' && subTab === 'public' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('plans');
+                  setSubTab('public');
+                }}
+              >Public</div>
+              <div
+                className={`submenu-item ${tab === 'plans' && subTab === 'private' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('plans');
+                  setSubTab('private');
+                }}
+              >Private</div>
             </div>
+          </ExpandCollapse>
+  
+          <ExpandCollapse
+            headingWhileCollapsed={(
+              <div className="menu-item">
+                <span>Recipes</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+            headingWhileExpanded={(
+              <div className="menu-item">
+                <span>Recipes</span>
+                <img src="/images/header/down-arrow.png" width="8" height="6" />
+              </div>
+            )}
+          >
+            <div className="submenu-items">
+              <div
+                className={`submenu-item ${tab === 'recipes' && subTab === 'public' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('recipes');
+                  setSubTab('public');
+                }}
+              >Public</div>
+              <div
+                className={`submenu-item ${tab === 'recipes' && subTab === 'private' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('recipes');
+                  setSubTab('private');
+                }}
+              >Private</div>
+              <div
+                className={`submenu-item ${tab === 'recipes' && subTab === 'favorite' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('recipes');
+                  setSubTab('favorite');
+                }}
+              >Favorite</div>
+              <div
+                className={`submenu-item ${tab === 'recipes' && subTab === 'saved' ? '--active' : ''}`}
+                onClick={() => {
+                  setTab('recipes');
+                  setSubTab('saved');
+                }}
+              >Saved</div>
+            </div>
+          </ExpandCollapse>
+  
+          <div
+            className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
+            onClick={() => setTab('ingredients')}
+          >Ingredients</div>
+
+          <div
+            className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
+            onClick={() => setTab('equipment')}
+          >Equipment</div>
+
+          <div
+            className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
+            onClick={() => setTab('settings')}
+          >Account Settings</div>
+        </nav>
+      ) : false}
+
+      {tab === "settings" ? (
+        <div className='dashboard-content account-settings'>
+          <h2>Account Settings</h2>
+
+          <h3>Username</h3>
+          <p>{auth.authname}</p>
+          <label htmlFor='new-username'>New Username</label>
+          <input
+            name='new-username'
+            onChange={e => setNewUsername(e.target.value)}
+            value={new_username}
+            minLength={6}
+            maxLength={20}
+          />
+          <button
+            className='new-entity'
+            onClick={updateUsername}
+          >Update Username</button>
+    
+          <h3>Email</h3>
+          <p>{auth.auth_email}</p>
+          <label htmlFor='new-email'>New Email</label>
+          <input
+            name='new-email'
+            onChange={e => setNewEmail(e.target.value)}
+            value={new_email}
+            minLength={5}
+            maxLength={60}
+          />
+          <button
+            className='new-entity'
+            onClick={updateEmail}
+          >Update Email</button>
+    
+          <h3>Password</h3>
+          <label htmlFor='password'>Current Password</label>
+          <input
+            name='password'
+            onChange={e => setPassword(e.target.value)}
+            value={password}
+            minLength={6}
+            maxLength={60}
+            type='password'
+          />
+          <label htmlFor='new-password'>New Password</label>
+          <input
+            name='new-password'
+            onChange={e => setNewPassword(e.target.value)}
+            value={new_password}
+            minLength={6}
+            maxLength={60}
+            type='password'
+          />
+          <label htmlFor='new-password-again'>New Password Again</label>
+          <input
+            name='new-password-again'
+            onChange={e => setNewPasswordAgain(e.target.value)}
+            value={new_password_again}
+            minLength={6}
+            maxLength={60}
+            type='password'
+          />
+          <button
+            className='new-entity'
+            onClick={updatePassword}
+          >Update Password</button>
+        </div>
+      ) : false}
+
+      {tab === "avatar"
+        ? avatar ? (
+          <div className="dashboard-content dashboard-avatar-edit">
+            <ReactCrop
+              aspect={1}
+              className="avatar-edit-tool"
+              crop={crop}
+              onChange={crop => setCrop(crop)}
+              onComplete={crop => makeCrops(crop)}
+              style={{minHeight: "300px"}}
+            >
+              <img
+                onLoad={e => imageRef.current = e.currentTarget}
+                src={avatar as string}
+              />
+            </ReactCrop>
+        
+            <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
+        
+            <div className="avatar-crops">
+              <div className="--full">
+                <span>Full Size: </span>
+                <img src={smallCrop} />
+              </div>
+              <div className="--tiny">
+                <span>Tiny Size: </span>
+                <img src={tinyCrop} />
+              </div>
+            </div>
+        
+            <button
+              className="--cancel"
+              disabled={loading}
+              name="cancel-avatar"
+              onClick={cancelAvatar}
+            >Cancel</button>
+  
+            <button
+              className="--submit"
+              disabled={loading}
+              name="submit-avatar"
+              onClick={uploadAvatar}
+            >Complete</button>
+          </div>
+        ) : (
+          <div className="dashboard-content dashboard-avatar">
+            <h2>Profile Settings</h2>
+            <Link href={`/${auth.authname}/profile`}>View Profile</Link>
+        
+            <h3>Avatar</h3>
+        
+            <div className="avatar-crops">
+              <div className="--full">
+                <span>Full Size: </span>
+                <img src={`${avatarUrl}.jpg`} />
+              </div>
+              <div className="--tiny">
+                <span>Tiny Size: </span>
+                <img src={`${avatarUrl}-tiny.jpg`} />
+              </div>
+            </div>
+        
+            <label>Change</label>
+  
+            <input
+              accept="image/*"
+              name="set-avatar"
+              onChange={onSelectFile}
+              type="file"
+            />
+          </div>
+        )
+        : false
+      }
+
+      {tab === "plans" && subTab === "public" ? (
+        <div className="dashboard-content">
+          <h2>Public Plans</h2>
+  
+          <Link href={`/${auth.authname}/plan/form`} className="new-entity">
+            Create Public Plan
+          </Link>
+  
+          {modalActive
+            ? (
+              <AriaModal {...commonAriaModalProps}>
+                <p>{'Unattribute Public Plan: '}{deleteName}{' ?'}</p>
+
+                <button className="--cancel" onClick={deactivateModal}>
+                  Cancel
+                </button>
+
+                <button className="--action" onClick={() => unattributePublicPlan(deleteId)}>
+                  Yes, Unattribute Plan
+                </button>
+              </AriaModal>
             )
+            : false
+          }
+  
+          {userData.my_public_plans.length
+            ? userData.my_public_plans.map(p => (
+              <div className="dashboard-item" key={p.plan_id}>
+                <span className="name">
+                  <Link href={`/${auth.authname}/plan/detail/${p.plan_name}`}>
+                    {p.plan_name}
+                  </Link>
+                </span>
+
+                <span className="action">
+                  <Link href={`/${auth.authname}/plan/form/edit/${p.plan_id}`}>Edit</Link>
+                </span>
+
+                <span
+                  className="delete"
+                  onClick={() => activateModal(p.plan_id, p.plan_name)}
+                >Delete</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any public plans yet.</div>
+          }
+        </div>
+      ): false}
+
+      {tab === "plans" && subTab === "private" ? (
+        <div className="dashboard-content">
+          <h2>Private Plans</h2>
+  
+          <Link href={`/${auth.authname}/private/plan/form`} className="new-entity">
+            Create Private Plan
+          </Link>
+  
+          {modalActive
+            ? (
+              <AriaModal {...commonAriaModalProps}>
+                <p>{'Delete Private Plan: '}{deleteName}{' ?'}</p>
+
+                <button className="--cancel" onClick={deactivateModal}>
+                  Cancel
+                </button>
+
+                <button className="--action" onClick={() => deletePrivatePlan(deleteId)}>
+                  Yes, Delete Plan
+                </button>
+              </AriaModal>
+            )
+            : false
+          }
+  
+          {userData.my_private_plans.length
+            ? userData.my_private_plans.map(p => (
+              <div className="dashboard-item" key={p.plan_id}>
+                <span className="name">
+                  <Link href={`/${auth.authname}/private/plan/detail/${p.plan_id}`}>{p.plan_name}</Link>
+                </span>
+
+                <span className="action">
+                  <Link href={`/${auth.authname}/private/plan/form/edit/${p.plan_id}`}>Edit</Link>
+                </span>
+
+                <span
+                  className="delete"
+                  onClick={() => activateModal(p.plan_id, p.plan_name)}
+                >Delete</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any private plans yet.</div>
+          }
+        </div>
+      ) : false}
+
+      {tab === "recipes" && subTab === "public" ? (
+        <div className="dashboard-content">
+          <h2>Public Recipes</h2>
+
+          <Link href={`/${auth.authname}/recipe/form`} className="new-entity">
+            Create Public Recipe
+          </Link>
+
+          {modalActive
+            ? (
+              <AriaModal {...commonAriaModalProps}>
+                <p>{'Unattribute Recipe: '}{deleteName}{' ?'}</p>
+                <p>Author will be renamed to "Unknown" and you will no longer control this recipe.</p>
+
+                <button className="--cancel" onClick={deactivateModal}>
+                  Cancel
+                </button>
+
+                <button className="--action" onClick={() => unattributePublicRecipe(deleteId)}>
+                  Yes, Unattribute Recipe
+                </button>
+              </AriaModal>
+            )
+            : false
           }
 
-          {tab === "avatar" && (
-            <>
-              {!avatar && (
-                <div className="dashboard-content dashboard-avatar">
-                  <h2>Profile Settings</h2>
+          {userData.my_public_recipes.length
+            ? userData.my_public_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
+                <span className="tiny">
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
+                    : <div className="img-28-28"></div>
+                  }
+                </span>
 
-                  <Link href={`/${auth.authname}/profile`}>View Profile</Link>
-          
-                  <h3>Avatar</h3>
-          
-                  <div className="avatar-crops">
-                    <div className="--full">
-                      <span>Full Size: </span>
-                      <img src={`${avatarUrl}.jpg`} />
-                    </div>
-    
-                    <div className="--tiny">
-                      <span>Tiny Size: </span>
-                      <img src={`${avatarUrl}-tiny.jpg`} />
-                    </div>
-                  </div>
-          
-                  <label>Change</label>
-    
-                  <input
-                    accept="image/*"
-                    name="set-avatar"
-                    onChange={onSelectFile}
-                    type="file"
-                  />
-                </div>
-              )}
-          
-              {avatar && (
-                <div className="dashboard-content dashboard-avatar-edit">
-                  <ReactCrop
-                    aspect={1}
-                    className="avatar-edit-tool"
-                    crop={crop}
-                    onChange={crop => setCrop(crop)}
-                    onComplete={crop => makeCrops(crop)}
-                    style={{minHeight: "300px"}}
-                  >
-                    <img
-                      onLoad={e => imageRef.current = e.currentTarget}
-                      src={avatar as string}
-                    />
-                  </ReactCrop>
-          
-                  <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
-          
-                  <div className="avatar-crops">
-                    <div className="--full">
-                      <span>Full Size: </span>
-                      <img src={smallCrop} />
-                    </div>
-    
-                    <div className="--tiny">
-                      <span>Tiny Size: </span>
-                      <img src={tinyCrop} />
-                    </div>
-                  </div>
-          
-                  <button
-                    className="--cancel"
-                    disabled={loading}
-                    name="cancel-avatar"
-                    onClick={cancelAvatar}
-                  >Cancel</button>
-    
-                  <button
-                    className="--submit"
-                    disabled={loading}
-                    name="submit-avatar"
-                    onClick={uploadAvatar}
-                  >Complete</button>
-                </div>
-              )}
-            </>
-          )}
+                <span className="name">
+                  <Link href={`/${auth.authname}/recipe/detail/${r.title}`}>{r.title}</Link>
+                </span>
 
-          {tab === "plans" && subTab === "public" ? (
-            <div className="dashboard-content">
-              <h2>Public Plans</h2>
-      
-              <Link href={`/${auth.authname}/plan/form`} className="new-entity">
-                Create Public Plan
-              </Link>
-      
-              {modalActive
-                ? (
-                  <AriaModal {...commonAriaModalProps}>
-                    <p>{'Unattribute Public Plan: '}{deleteName}{' ?'}</p>
-    
-                    <button className="--cancel" onClick={deactivateModal}>
-                      Cancel
-                    </button>
-    
-                    <button className="--action" onClick={() => unattributePublicPlan(deleteId)}>
-                      Yes, Unattribute Plan
-                    </button>
-                  </AriaModal>
-                )
-                : false
-              }
-      
-              {userData.my_public_plans.length
-                ? userData.my_public_plans.map(p => (
-                  <div className="dashboard-item" key={p.plan_id}>
-                    <span className="name">
-                      <Link href={`/${auth.authname}/plan/detail/${p.plan_name}`}>
-                        {p.plan_name}
-                      </Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/plan/form/edit/${p.plan_id}`}>Edit</Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => activateModal(p.plan_id, p.plan_name)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any public plans yet.</div>
-              }
-            </div>
-          ): false}
+                <span className="action">
+                  <Link href={`/${auth.authname}/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
+                </span>
 
-          {tab === "plans" && subTab === "private" ? (
-            <div className="dashboard-content">
-              <h2>Private Plans</h2>
-      
-              <Link href={`/${auth.authname}/private/plan/form`} className="new-entity">
-                Create Private Plan
-              </Link>
-      
-              {modalActive
-                ? (
-                  <AriaModal {...commonAriaModalProps}>
-                    <p>{'Delete Private Plan: '}{deleteName}{' ?'}</p>
-    
-                    <button className="--cancel" onClick={deactivateModal}>
-                      Cancel
-                    </button>
-    
-                    <button className="--action" onClick={() => deletePrivatePlan(deleteId)}>
-                      Yes, Delete Plan
-                    </button>
-                  </AriaModal>
-                )
-                : false
-              }
-      
-              {userData.my_private_plans.length
-                ? userData.my_private_plans.map(p => (
-                  <div className="dashboard-item" key={p.plan_id}>
-                    <span className="name">
-                      <Link href={`/${auth.authname}/private/plan/detail/${p.plan_id}`}>{p.plan_name}</Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/private/plan/form/edit/${p.plan_id}`}>Edit</Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => activateModal(p.plan_id, p.plan_name)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any private plans yet.</div>
-              }
-            </div>
-          ) : false}
-
-          {tab === "recipes" && subTab === "public" ? (
-            <div className="dashboard-content">
-              <h2>Public Recipes</h2>
-    
-              <Link href={`/${auth.authname}/recipe/form`} className="new-entity">
-                Create Public Recipe
-              </Link>
-    
-              {modalActive
-                ? (
-                  <AriaModal {...commonAriaModalProps}>
-                    <p>{'Unattribute Recipe: '}{deleteName}{' ?'}</p>
-                    <p>Author will be renamed to "Unknown" and you will no longer control this recipe.</p>
-    
-                    <button className="--cancel" onClick={deactivateModal}>
-                      Cancel
-                    </button>
-    
-                    <button className="--action" onClick={() => unattributePublicRecipe(deleteId)}>
-                      Yes, Unattribute Recipe
-                    </button>
-                  </AriaModal>
-                )
-                : false
-              }
-    
-              {userData.my_public_recipes.length
-                ? userData.my_public_recipes.map(r => (
-                  <div className="dashboard-item" key={r.recipe_id}>
-                    <span className="tiny">
-                      {r.image_filename !== "default"
-                        ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-28"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${auth.authname}/recipe/detail/${r.title}`}>{r.title}</Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => activateModal(r.recipe_id, r.title)}
-                    >Unattribute</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any public recipes yet.</div>
-              }
-            </div>
-          ) : false}
-
-          {tab === "recipes" && subTab === "private" ? (
-            <div className="dashboard-content">
-              <h2>Private Recipes</h2>
-    
-              <Link href={`/${auth.authname}/private/recipe/form`} className="new-entity">
-                Create Private Recipe
-              </Link>
-    
-              {modalActive
-                ? (
-                  <AriaModal {...commonAriaModalProps}>
-                    <p>{'Delete Private Recipe: '}{deleteName}{' ?'}</p>
-    
-                    <button className="--cancel" onClick={deactivateModal}>
-                      Cancel
-                    </button>
-    
-                    <button className="--action" onClick={() => deletePrivateRecipe(deleteId)}>
-                      Yes, Delete Recipe
-                    </button>
-                  </AriaModal>
-                )
-                : false
-              }
-    
-              {userData.my_private_recipes.length
-                ? userData.my_private_recipes.map(r => (
-                  <div className="dashboard-item" key={r.recipe_id}>
-                    <span className="tiny">
-                      {r.image_filename !== "default"
-                        ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-28"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${auth.authname}/private/recipe/detail/${r.recipe_id}`}>{r.title}</Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/private/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => activateModal(r.recipe_id, r.title)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any private recipes yet.</div>
-              }
-            </div>
-          ) : false}
-
-          {tab === "recipes" && subTab === "favorite" ? (
-            <div className="dashboard-content">
-              <h2 className="--tall">Favorite Recipes</h2>
-    
-              {userData.my_favorite_recipes.length
-                ? userData.my_favorite_recipes.map(r => (
-                  <div className="dashboard-item" key={r.recipe_id}>
-                    <span className="tiny">
-                      {r.image_filename !== "default"
-                        ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
-                        : <div className="img--28-18"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
-                    </span>
-    
-                    <span
-                      className="unfavorite"
-                      onClick={() => unfavorite(r.recipe_id)}
-                    >Unfavorite</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't favorited any recipes yet.</div>
-              }
-            </div>
-          ): false}
-
-          {tab === "recipes" && subTab === "saved" ? (
-            <div className="dashboard-content">
-              <h2 className="--tall">Saved Recipes</h2>
-    
-              {userData.my_saved_recipes.length
-                ? userData.my_saved_recipes.map(r => (
-                  <div className="dashboard-item" key={r.recipe_id}>
-                    <span className="tiny">
-                      {r.image_filename !== "default"
-                        ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
-                        : <div className="img-28-28"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
-                    </span>
-    
-                    <span
-                      className="unsave"
-                      onClick={() => unsave(r.recipe_id)}
-                    >Unsave</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't saved any recipes yet.</div>
-              }
-            </div>
-          ) : false}
-
-          {tab === "ingredients" ? (
-            <div className="dashboard-content">
-              <h2>Private Ingredients</h2>
-    
-              <Link href={`/${auth.authname}/private/ingredient/form`} className="new-entity">
-                Create Private Ingredient
-              </Link>
-    
-              {userData.my_private_ingredients.length
-                ? userData.my_private_ingredients.map(i => (
-                  <div className="dashboard-item" key={i.ingredient_id}>
-                    <span className="tiny">
-                      {i.image_filename !== "default"
-                        ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny`} />
-                        : <div className="img-28-28"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${auth.authname}/private/ingredient/detail/${i.ingredient_id}`}>
-                        {i.ingredient_name}
-                      </Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/private/ingredient/form/edit/${i.ingredient_id}`}>
-                        Edit
-                      </Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => deletePrivateIngredient(i.ingredient_id)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any private ingredients yet.</div>
-              }
-            </div>
-          ) : false}
-
-          {tab === "equipment" ? (
-            <div className="dashboard-content">
-              <h2>Private Equipment</h2>
-    
-              <Link href={`/${auth.authname}/private/equipment/form`} className="new-entity">
-                Create Private Equipment
-              </Link>
-    
-              {userData.my_private_equipment.length
-                ? userData.my_private_equipment.map(e => (
-                  <div className="dashboard-item" key={e.equipment_id}>
-                    <span className="tiny">
-                      {e.image_filename !== "default"
-                        ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny`} />
-                        : <div className="img-28-28"></div>
-                      }
-                    </span>
-    
-                    <span className="name">
-                      <Link href={`/${auth.authname}/private/equipment/detail/${e.equipment_id}`}>
-                        {e.equipment_name}
-                      </Link>
-                    </span>
-    
-                    <span className="action">
-                      <Link href={`/${auth.authname}/private/equipment/form/edit/${e.equipment_id}`}>
-                        Edit
-                      </Link>
-                    </span>
-    
-                    <span
-                      className="delete"
-                      onClick={() => deletePrivateEquipment(e.equipment_id)}
-                    >Delete</span>
-                  </div>
-                ))
-                : <div className="no-content">You haven't created any private equipment yet.</div>
-              }
-            </div>
-          ) : false}
+                <span
+                  className="delete"
+                  onClick={() => activateModal(r.recipe_id, r.title)}
+                >Unattribute</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any public recipes yet.</div>
+          }
         </div>
-      </div>
+      ) : false}
+
+      {tab === "recipes" && subTab === "private" ? (
+        <div className="dashboard-content">
+          <h2>Private Recipes</h2>
+
+          <Link href={`/${auth.authname}/private/recipe/form`} className="new-entity">
+            Create Private Recipe
+          </Link>
+
+          {modalActive
+            ? (
+              <AriaModal {...commonAriaModalProps}>
+                <p>{'Delete Private Recipe: '}{deleteName}{' ?'}</p>
+
+                <button className="--cancel" onClick={deactivateModal}>
+                  Cancel
+                </button>
+
+                <button className="--action" onClick={() => deletePrivateRecipe(deleteId)}>
+                  Yes, Delete Recipe
+                </button>
+              </AriaModal>
+            )
+            : false
+          }
+
+          {userData.my_private_recipes.length
+            ? userData.my_private_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
+                <span className="tiny">
+                  {r.image_filename !== "default"
+                    ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
+                    : <div className="img-28-28"></div>
+                  }
+                </span>
+
+                <span className="name">
+                  <Link href={`/${auth.authname}/private/recipe/detail/${r.recipe_id}`}>{r.title}</Link>
+                </span>
+
+                <span className="action">
+                  <Link href={`/${auth.authname}/private/recipe/form/edit/${r.recipe_id}`}>Edit</Link>
+                </span>
+
+                <span
+                  className="delete"
+                  onClick={() => activateModal(r.recipe_id, r.title)}
+                >Delete</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any private recipes yet.</div>
+          }
+        </div>
+      ) : false}
+
+      {tab === "recipes" && subTab === "favorite" ? (
+        <div className="dashboard-content">
+          <h2 className="--tall">Favorite Recipes</h2>
+
+          {userData.my_favorite_recipes.length
+            ? userData.my_favorite_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
+                <span className="tiny">
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
+                    : <div className="img--28-18"></div>
+                  }
+                </span>
+
+                <span className="name">
+                  <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
+                </span>
+
+                <span
+                  className="unfavorite"
+                  onClick={() => unfavorite(r.recipe_id)}
+                >Unfavorite</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't favorited any recipes yet.</div>
+          }
+        </div>
+      ): false}
+
+      {tab === "recipes" && subTab === "saved" ? (
+        <div className="dashboard-content">
+          <h2 className="--tall">Saved Recipes</h2>
+
+          {userData.my_saved_recipes.length
+            ? userData.my_saved_recipes.map(r => (
+              <div className="dashboard-item" key={r.recipe_id}>
+                <span className="tiny">
+                  {r.image_filename !== "default"
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
+                    : <div className="img-28-28"></div>
+                  }
+                </span>
+
+                <span className="name">
+                  <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
+                </span>
+
+                <span
+                  className="unsave"
+                  onClick={() => unsave(r.recipe_id)}
+                >Unsave</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't saved any recipes yet.</div>
+          }
+        </div>
+      ) : false}
+
+      {tab === "ingredients" ? (
+        <div className="dashboard-content">
+          <h2>Private Ingredients</h2>
+
+          <Link href={`/${auth.authname}/private/ingredient/form`} className="new-entity">
+            Create Private Ingredient
+          </Link>
+
+          {userData.my_private_ingredients.length
+            ? userData.my_private_ingredients.map(i => (
+              <div className="dashboard-item" key={i.ingredient_id}>
+                <span className="tiny">
+                  {i.image_filename !== "default"
+                    ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny`} />
+                    : <div className="img-28-28"></div>
+                  }
+                </span>
+
+                <span className="name">
+                  <Link href={`/${auth.authname}/private/ingredient/detail/${i.ingredient_id}`}>
+                    {i.ingredient_name}
+                  </Link>
+                </span>
+
+                <span className="action">
+                  <Link href={`/${auth.authname}/private/ingredient/form/edit/${i.ingredient_id}`}>
+                    Edit
+                  </Link>
+                </span>
+
+                <span
+                  className="delete"
+                  onClick={() => deletePrivateIngredient(i.ingredient_id)}
+                >Delete</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any private ingredients yet.</div>
+          }
+        </div>
+      ) : false}
+
+      {tab === "equipment" ? (
+        <div className="dashboard-content">
+          <h2>Private Equipment</h2>
+
+          <Link href={`/${auth.authname}/private/equipment/form`} className="new-entity">
+            Create Private Equipment
+          </Link>
+
+          {userData.my_private_equipment.length
+            ? userData.my_private_equipment.map(e => (
+              <div className="dashboard-item" key={e.equipment_id}>
+                <span className="tiny">
+                  {e.image_filename !== "default"
+                    ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny`} />
+                    : <div className="img-28-28"></div>
+                  }
+                </span>
+
+                <span className="name">
+                  <Link href={`/${auth.authname}/private/equipment/detail/${e.equipment_id}`}>
+                    {e.equipment_name}
+                  </Link>
+                </span>
+
+                <span className="action">
+                  <Link href={`/${auth.authname}/private/equipment/form/edit/${e.equipment_id}`}>
+                    Edit
+                  </Link>
+                </span>
+
+                <span
+                  className="delete"
+                  onClick={() => deletePrivateEquipment(e.equipment_id)}
+                >Delete</span>
+              </div>
+            ))
+            : <div className="no-content">You haven't created any private equipment yet.</div>
+          }
+        </div>
+      ) : false}
     </div>
   );
 }

@@ -191,15 +191,16 @@ Dark Theme
   }
 }
 
+@import './components/app-nav.css';
 @import './components/breadcrumbs.css';
 @import './components/crop-preview.css';
 @import './components/expand-collapse.css';
 @import './components/footer.css';
 @import './components/header.css';
 @import './components/layout.css';
-@import './components/left-nav.css';
 @import './components/loader-spinner.css';
 @import './components/main.css';
+@import './components/page-nav.css';
 @import './components/pagination.css';
 @import './components/results-per-page.css';
 @import './components/search.css';

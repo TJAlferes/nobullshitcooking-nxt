@@ -1,23 +1,5 @@
 /* TO DO: test responsive design on actual smart phones */
 
-.dashboard .cols {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  height: 100vh;
-  min-height: 100vh;
-}
-
-.dashboard .left-col {
-  width: 240px;
-}
-
-.dashboard .right-col {
-  width: 100%;
-  height: 100%;
-  border-left: 2px solid #bfddfa;
-}
-
 .dashboard-nav {
   display: flex;
   flex-direction: column;
@@ -362,10 +344,6 @@ Dark/Night/Moon Theme
 @media (max-width: 899px) {
   .dashboard-nav {
     display: none;
-  }
-
-  .dashboard-nav--mobile {
-    display: block;
   }
 }
 

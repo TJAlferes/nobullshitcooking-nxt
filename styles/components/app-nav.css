@@ -12,7 +12,7 @@
   z-index: 2;
 }
 
-.left-nav {
+.app-nav {
   position: absolute;
   left: 0;
   top: 56px;
@@ -24,12 +24,12 @@
   z-index: 3;
 }
 
-.left-nav .menu {
+.app-nav .menu {
   width: 100%;
 }
 
-.left-nav .menu-item,
-.left-nav .left-nav-item {
+.app-nav .menu-item,
+.app-nav .app-nav-item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -40,9 +40,9 @@
   padding-right: 18px;
 }
 
-.left-nav .menu-item span,
-.left-nav .submenu-item a,
-.left-nav .left-nav-item a {
+.app-nav .menu-item span,
+.app-nav .submenu-item a,
+.app-nav .app-nav-item a {
   display: flex;
   align-items: center;
   height: 32px;
@@ -50,20 +50,20 @@
   text-decoration: none;
 }
 
-.left-nav .menu-item span,
-.left-nav .left-nav-item a {
+.app-nav .menu-item span,
+.app-nav .app-nav-item a {
   text-indent: 18px;
 }
 
-.left-nav .submenu-item a {
+.app-nav .submenu-item a {
   text-indent: 36px;
 }
 
-.left-nav .left-nav-item a {
+.app-nav .app-nav-item a {
   width: 100%;
 }
 
-.left-nav hr {
+.app-nav hr {
   height: 1px;
   border: 0 none;
 }
@@ -73,7 +73,7 @@
     display: none;
   }
 
-  .left-nav {
+  .app-nav {
     top: 48px;
     margin: 0;
     width: 100vw;
@@ -87,22 +87,22 @@ Light/Day/Sun Theme
 
 */
 
-.light .left-nav,
-.light .left-nav .submenu-item {
+.light .app-nav,
+.light .app-nav .submenu-item {
   background-color: #fff;
 }
 
-.light .left-nav .menu-item {
+.light .app-nav .menu-item {
   background-color: #ccc;
 }
 
-.light .left-nav .menu-item span,
-.light .left-nav .submenu-item a,
-.light .left-nav .left-nav-item a {
+.light .app-nav .menu-item span,
+.light .app-nav .submenu-item a,
+.light .app-nav .app-nav-item a {
   color: #000;
 }
 
-.light .left-nav hr {
+.light .app-nav hr {
   background-color: #bfbfbf;
 }
 
@@ -112,24 +112,24 @@ Dark/Night/Moon Theme
 
 */
 
-.dark .left-nav,
-.dark .left-nav .submenu-item {
+.dark .app-nav,
+.dark .app-nav .submenu-item {
   background-color: #222;
 }
 
-.dark .left-nav .menu-item {
+.dark .app-nav .menu-item {
   background-color: #ccc;
 }
 
-.dark .left-nav .menu-item span {
+.dark .app-nav .menu-item span {
   color: #000;
 }
 
-.dark .left-nav .submenu-item a,
-.dark .left-nav .left-nav-item a {
+.dark .app-nav .submenu-item a,
+.dark .app-nav .app-nav-item a {
   color: #aaa;
 }
 
-.dark .left-nav hr {
+.dark .app-nav hr {
   background-color: #444;
 }

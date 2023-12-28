@@ -1,27 +1,24 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import { endpoint } from '../../../../config/api';
-import { useAuth, useTheme } from '../../../../store';
-import { LeftNav } from '../../../shared/menu';
+import { useApi, useAuth, useTheme } from '../../../../store';
+import { AppNav } from '../../../shared/menu';
 import { Search } from '../../../shared/search';
 
 export function Header() {
   const router = useRouter();
 
+  const { api } = useApi();
   const { authname, logout } = useAuth();
   const { theme, setTheme }  = useTheme();
 
-  const [ isLeftNavOpen, setIsLeftNavOpen ] = useState(false);
-
-  const click = () => setIsLeftNavOpen(prev => !prev);
+  const [ isAppNavOpen, setIsAppNavOpen ] = useState(false);
 
   const logoutHandler = async () => {
     if (!authname) return;
     try {
-      await axios.post(`${endpoint}/logout`, {}, {withCredentials: true});
+      await api.post('/logout');
     } catch(err) {
       console.log(err);
     } finally {
@@ -33,7 +30,7 @@ export function Header() {
   return (
     <header className="header">
       <div className="site-nav">
-        <svg className="left-nav-toggle" onClick={click}>
+        <svg className="app-nav-toggle" onClick={() => setIsAppNavOpen(prev => !prev)}>
           <g>
             <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path>
           </g>
@@ -43,7 +40,7 @@ export function Header() {
           <img src={`/images/header/logo-${theme}.png`} />
         </Link>
 
-        <LeftNav isLeftNavOpen={isLeftNavOpen} setIsLeftNavOpen={setIsLeftNavOpen} />
+        <AppNav isAppNavOpen={isAppNavOpen} setIsAppNavOpen={setIsAppNavOpen} />
       </div>
 
       <Search />
