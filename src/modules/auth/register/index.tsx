@@ -142,7 +142,6 @@ export default function Register() {
             || email.length > 60
             || password.length < 8
             || password.length > 64
-            || password !== passwordAgain
           }
           onClick={(e) => registerClick(e)}
           type="button"

@@ -35,7 +35,7 @@ export default function ResendConfirmationCode() {
           router.push('/confirm');
         }, 4000);
       } else {
-        setFeedback(res.data.error);
+        setFeedback(res.data.message);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');

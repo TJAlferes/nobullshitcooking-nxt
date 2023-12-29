@@ -28,7 +28,7 @@ export default function ForgotPassword() {
       if (res.status === 201) {
         router.push('/reset-password');
       } else {
-        setFeedback(res.data.error);
+        setFeedback(res.data.message);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
@@ -82,6 +82,7 @@ export default function ForgotPassword() {
         <button
           disabled={email.length < 5 || email.length > 60}
           onClick={handleClick}
+          type="button"
         >{loading ? 'Requesting...' : 'Request Temporary Password'}</button>
       </form>
     </div>

@@ -15,6 +15,7 @@ export default function ResetPassword() {
   const [email, setEmail] = useState('');
   const [temporary_password, setTemporaryPassword] = useState('');
   const [new_password, setNewPassword] = useState('');
+  const [new_password_again, setNewPasswordAgain] = useState('');
 
   const resetPasswordHandler = async () => {
     if (!email) {
@@ -25,6 +26,12 @@ export default function ResetPassword() {
     }
     if (!new_password) {
       return setFeedback('New Password required.');
+    }
+    if (!new_password_again) {
+      return setFeedback('New Password Again required.');
+    }
+    if (new_password !== new_password_again) {
+      return setFeedback('Same new password required.');
     }
 
     setLoading(true);
@@ -39,7 +46,7 @@ export default function ResetPassword() {
       if (res.status === 204) {
         router.push('/login');
       } else {
-        setFeedback(res.data.error);
+        setFeedback(res.data.message);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
@@ -48,18 +55,20 @@ export default function ResetPassword() {
     setLoading(false);
   };
 
-  const resetPasswordClick = async () => {
+  const resetPasswordClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!loading) await resetPasswordHandler();
   };
 
-  const resetPasswordKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await resetPasswordHandler();
+  const resetPasswordKeyUp = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!loading && e.key === "Enter") await resetPasswordHandler();
   };
 
   const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
 
   return (
-    <div className="auth reset-password" onKeyUp={e => resetPasswordKeyUp(e.key)}>
+    <div className="auth reset-password" onKeyUp={e => resetPasswordKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}/logo-large-white.png`} />
         <img className="--mobile" src={`${url}/logo-small-white.png`} />
@@ -99,7 +108,7 @@ export default function ResetPassword() {
           value={temporary_password}
         />
 
-        <label>Set New Password</label>
+        <label>New Password</label>
         <input
           autoComplete="new-password"
           disabled={loading}
@@ -113,6 +122,20 @@ export default function ResetPassword() {
           value={new_password}
         />
 
+        <label>New Password Again</label>
+        <input
+          autoComplete="new-password-again"
+          disabled={loading}
+          id="new-password-again"
+          minLength={8}
+          maxLength={64}
+          name="new-password-again"
+          onChange={e => setNewPasswordAgain(e.target.value)}
+          size={64}
+          type="password"
+          value={new_password_again}
+        />
+
         <button
           disabled={email.length < 5
             || email.length > 60
@@ -121,7 +144,8 @@ export default function ResetPassword() {
             || new_password.length < 8
             || new_password.length > 64
           }
-          onClick={resetPasswordClick}
+          onClick={(e) => resetPasswordClick(e)}
+          type="button"
         >{loading ? 'Resetting...' : 'Reset'}</button>
       </form>
     </div>

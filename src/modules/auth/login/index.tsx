@@ -28,7 +28,7 @@ export default function Login() {
         login(res.data);
         router.push('/dashboard');
       } else {
-        setFeedback(res.data.error);
+        setFeedback(res.data.message);
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
