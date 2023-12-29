@@ -8,7 +8,7 @@
   left: 0;
   top: 137px;
   margin: 0;
-  border: 2px solid #bfddfa;
+  /*border: 2px solid #bfddfa;*/
   width: 450px;
   min-width: 450px;
   height: 100vh;
@@ -360,7 +360,10 @@ Dark/Night/Moon Theme
 
 @media (max-width: 899px) {
   .dashboard-nav {
-    display: none;
+    top: 181px;
+    margin: 0;
+    width: 100vw;
+    min-width: 100vw;
   }
 }
 

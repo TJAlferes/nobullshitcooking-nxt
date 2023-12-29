@@ -29,7 +29,7 @@ export function Header() {
 
   return (
     <header className="header">
-      <div className="site-nav">
+      <div className="app-nav-container">
         <svg className="app-nav-toggle" onClick={() => setIsAppNavOpen(prev => !prev)}>
           <g>
             <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path>

@@ -12,13 +12,18 @@
   z-index: 2;
 }
 
-.page-nav {
+.page-nav-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
   column-gap: 16px;
   min-width: max-content;
+}
+
+.page-nav-container img,
+.page-nav-container h1 {
+  user-select: none;
 }
 
 .page-nav-toggle {
@@ -28,13 +33,9 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+  user-select: none;
 }
 
-.page-nav-toggle g {
-  display: block;
-
-}
- 
 @media (max-width: 899px) {
   .page-nav-shadow {
     display: none;

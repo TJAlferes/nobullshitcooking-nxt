@@ -1,4 +1,4 @@
-.shadow {
+.app-nav-shadow {
   display: block;
   position: absolute;
   bottom: 1;
@@ -10,6 +10,23 @@
   min-height: 100vh;
   background: rgba(0, 0, 0, .5);
   z-index: 2;
+}
+
+.app-nav-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 16px;
+  min-width: max-content;
+}
+
+.app-nav-toggle {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .app-nav {
@@ -69,7 +86,7 @@
 }
 
 @media (max-width: 899px) {
-  .shadow {
+  .app-nav-shadow {
     display: none;
   }
 

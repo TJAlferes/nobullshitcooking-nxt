@@ -9,25 +9,10 @@
   padding: 12px 16px;
 }
 
-.site-nav {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-start;
-  column-gap: 16px;
-  min-width: max-content;
-}
-
-.app-nav-toggle {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
 .logo {
   width: 68px;
   height: 20px;
+  user-select: none;
 }
 
 .user-nav {
@@ -77,12 +62,12 @@
   }
 }
 
-@media (max-width: 359px) {
+/*@media (max-width: 359px) {
   .user-nav {
     flex-direction: column;
     row-gap: 20px;
   }
-}
+}*/
 
 /*
 

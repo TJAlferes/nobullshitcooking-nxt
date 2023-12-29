@@ -410,7 +410,7 @@ export default function Dashboard() {
 
   return (
     <div className="one-col dashboard">
-      <div className="page-nav">
+      <div className="page-nav-container">
         <svg
           className="page-nav-toggle"
           onClick={() => setIsPageNavOpen(prev => !prev)}
@@ -423,6 +423,8 @@ export default function Dashboard() {
             ></path>
           </g>
         </svg>
+
+        <img src={`${avatarUrl}-tiny.jpg`} />
 
         <h1>{auth.authname}</h1>
       </div>
@@ -705,12 +707,7 @@ export default function Dashboard() {
         
             <div className="avatar-crops">
               <div className="--full">
-                <span>Full Size: </span>
                 <img src={`${avatarUrl}.jpg`} />
-              </div>
-              <div className="--tiny">
-                <span>Tiny Size: </span>
-                <img src={`${avatarUrl}-tiny.jpg`} />
               </div>
             </div>
         

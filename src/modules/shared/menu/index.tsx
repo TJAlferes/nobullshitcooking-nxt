@@ -15,7 +15,7 @@ export function AppNav({ isAppNavOpen, setIsAppNavOpen }: {
 
   return !isAppNavOpen ? null : (
     <>
-      <div className="shadow"></div>
+      <div className="app-nav-shadow"></div>
 
       <nav className="app-nav">
         <div className="menu">
