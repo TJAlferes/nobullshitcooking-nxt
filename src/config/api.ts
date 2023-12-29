@@ -5,6 +5,7 @@ export const endpoint = process.env.NODE_ENV === 'production'
   : 'http://localhost:3003/v1';
 
 export const axiosInstance = axios.create({
+  validateStatus: (status) => status >= 200 && status < 500,
   withCredentials: true,
   //withXSRFToken: true,  // TO DO: read axios source code
   xsrfCookieName: process.env.NODE_ENV === 'production'

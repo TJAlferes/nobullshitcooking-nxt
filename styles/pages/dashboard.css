@@ -82,6 +82,11 @@
   font-weight: 700;
 }
 
+.dashboard .account-settings hr {
+  border: 0 none;
+  height: 1px;
+}
+
 .dashboard-avatar a,
 .dashboard-avatar a:visited {
   color: #68abe6;
@@ -311,6 +316,10 @@ Light/Day/Sun Theme
   background-color: #ccc;
 }
 
+.light .dashboard .account-settings hr {
+  background-color: #bfbfbf;
+}
+
 .light .dashboard-item {
   background-color: #fff;
   border-color: #ddd;
@@ -330,6 +339,10 @@ Light/Day/Sun Theme
 Dark/Night/Moon Theme
 
 */
+
+.dark .dashboard .account-settings hr {
+  background-color: #444;
+}
 
 .dark .dashboard-item {
   background-color: #222;

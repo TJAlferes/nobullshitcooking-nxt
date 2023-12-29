@@ -20,7 +20,7 @@ export default function Dashboard() {
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
-  const [ isPageNavOpen, setIsPageNavOpen ] = useState(false);
+  const [isPageNavOpen, setIsPageNavOpen] = useState(false);
   const [tab, setTab] = useState('avatar');
   const [subTab, setSubTab] = useState('private');
   const [deleteId, setDeleteId] = useState('');
@@ -28,10 +28,15 @@ export default function Dashboard() {
   const [modalActive, setModalActive] = useState(false);
 
   const [new_username, setNewUsername] = useState('');
+
   const [new_email, setNewEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [new_password, setNewPassword] = useState('');
   const [new_password_again, setNewPasswordAgain] = useState('');
+  const [current_password, setCurrentPassword] = useState('');
+
+  const [del_password, setDelPassword] = useState('');
 
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(null);
   const [small_avatar, setSmallAvatar] = useState<File | null>(null);
@@ -65,10 +70,10 @@ export default function Dashboard() {
     try {
       const res = await api.patch(
         `/users/${auth.authname}/update-email`,
-        {new_email}
+        {new_email, password}
       );
       if (res.status === 204) {
-        setFeedback("Email updated.")
+        setFeedback('Email updated.')
         auth.setAuthEmail(new_email);
         setTimeout(() => router.push('/dashboard'), 3000);
       } else {
@@ -87,10 +92,10 @@ export default function Dashboard() {
     try {
       const res = await api.patch(
         `/users/${auth.authname}/update-password`,
-        {new_password}
+        {new_password, current_password}
       );
       if (res.status === 204) {
-        setFeedback("Password updated.")
+        setFeedback('Password updated.')
         setTimeout(() => router.push('/dashboard'), 3000);
       } else {
         setFeedback(res.data.message);
@@ -128,11 +133,14 @@ export default function Dashboard() {
     setFeedback('');
     window.scrollTo(0, 0);
     try {
-      const res = await api.delete(`/users/${auth.authname}`);
+      const res = await api.post(
+        `/users/${auth.authname}/delete`,
+        {password: del_password}
+      );
       if (res.status === 204) {
         setFeedback('User account deleted.');
         auth.logout();
-        router.push('/home');
+        setTimeout(() => router.push('/'), 3000);
       } else {
         setFeedback(res.data.message);
       }
@@ -563,6 +571,8 @@ export default function Dashboard() {
             className='new-entity'
             onClick={updateUsername}
           >Update Username</button>
+
+          <hr/>
     
           <h3>Email</h3>
           <p>{auth.auth_email}</p>
@@ -574,19 +584,30 @@ export default function Dashboard() {
             minLength={5}
             maxLength={60}
           />
-          <button
-            className='new-entity'
-            onClick={updateEmail}
-          >Update Email</button>
-    
-          <h3>Password</h3>
-          <label htmlFor='password'>Current Password</label>
+          <label htmlFor='password'>Password</label>
           <input
             name='password'
             onChange={e => setPassword(e.target.value)}
             value={password}
-            minLength={6}
-            maxLength={60}
+            minLength={8}
+            maxLength={64}
+            type='password'
+          />
+          <button
+            className='new-entity'
+            onClick={updateEmail}
+          >Update Email</button>
+
+          <hr/>
+    
+          <h3>Password</h3>
+          <label htmlFor='current-password'>Current Password</label>
+          <input
+            name='current-password'
+            onChange={e => setCurrentPassword(e.target.value)}
+            value={current_password}
+            minLength={8}
+            maxLength={64}
             type='password'
           />
           <label htmlFor='new-password'>New Password</label>
@@ -594,8 +615,8 @@ export default function Dashboard() {
             name='new-password'
             onChange={e => setNewPassword(e.target.value)}
             value={new_password}
-            minLength={6}
-            maxLength={60}
+            minLength={8}
+            maxLength={64}
             type='password'
           />
           <label htmlFor='new-password-again'>New Password Again</label>
@@ -603,14 +624,31 @@ export default function Dashboard() {
             name='new-password-again'
             onChange={e => setNewPasswordAgain(e.target.value)}
             value={new_password_again}
-            minLength={6}
-            maxLength={60}
+            minLength={8}
+            maxLength={64}
             type='password'
           />
           <button
             className='new-entity'
             onClick={updatePassword}
           >Update Password</button>
+
+          <hr/>
+
+          <h3 style={{color: '#c10006'}}>Delete Account</h3>
+          <label htmlFor='del-password'>Password</label>
+          <input
+            name='del-password'
+            onChange={e => setDelPassword(e.target.value)}
+            value={del_password}
+            minLength={8}
+            maxLength={64}
+            type='password'
+          />
+          <button
+            className='new-entity'
+            onClick={deleteAccount}
+          >Delete Account</button>
         </div>
       ) : false}
 
