@@ -1,29 +1,20 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { axiosInstance, endpoint, protectedApi } from '../../../config/api';
 import { useAuth, useApi } from '../../../store';
 
 export default function Login() {
   const router = useRouter();
 
   const { login } = useAuth();
-  const { api, setApi } = useApi();
+  const { api } = useApi();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    async function getCsrfToken() {
-      const res = await axiosInstance.get(`${endpoint}/csrf-token`);
-      setApi(protectedApi(res.data.csrfToken));
-    }
-    getCsrfToken();
-  }, []);
 
   const loginHandler = async () => {
     window.scrollTo(0, 0);
@@ -45,18 +36,20 @@ export default function Login() {
     setLoading(false);
   };
 
-  const loginClick = async () => {
+  const loginClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!loading) await loginHandler();
   };
 
-  const loginKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await loginHandler();
+  const loginKeyUp = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!loading && e.key === "Enter") await loginHandler();
   };
 
   const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
 
   return (
-    <div className="auth login" onKeyUp={e => loginKeyUp(e.key)}>
+    <div className="auth login" onKeyUp={e => loginKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}/logo-large-white.png`} />
         <img className="--mobile" src={`${url}/logo-small-white.png`} />
@@ -103,7 +96,8 @@ export default function Login() {
             || password.length < 8
             || password.length > 64
           }
-          onClick={loginClick}
+          onClick={(e) => loginClick(e)}
+          type="button"
         >{loading ? 'Logging In...' : 'Login'}</button>
 
         <Link className='troubleshoot' href='/forgot-password'>Forgot password?</Link>

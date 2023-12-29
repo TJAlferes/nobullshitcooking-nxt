@@ -42,8 +42,10 @@ export default function Register() {
     try {
       const res = await api.post('/users', {email, password, username});
       if (res.status === 201) {
-        setFeedback('User account created.');  // remove?
-        setTimeout(() => router.push('/confirm'), 4000);
+        setFeedback('A confirmation code was sent to your email.');  // remove?
+        setTimeout(() => {
+          router.push('/confirm');
+        }, 4000);
       } else {
         setFeedback(res.data.message);
       }
@@ -54,18 +56,20 @@ export default function Register() {
     setLoading(false);
   };
 
-  const registerClick = async () => {
+  const registerClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!loading) await register();
   };
 
-  const registerKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await register();
+  const registerKeyUp = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!loading && e.key === "Enter") await register();
   };
 
   const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="auth register" onKeyUp={e => registerKeyUp(e.key)}>
+    <div className="auth register" onKeyUp={e => registerKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}/logo-large-white.png`} />
         <img className="--mobile" src={`${url}/logo-small-white.png`} />
@@ -140,7 +144,8 @@ export default function Register() {
             || password.length > 64
             || password !== passwordAgain
           }
-          onClick={registerClick}
+          onClick={(e) => registerClick(e)}
+          type="button"
         >{loading ? 'Creating Account...' : 'Create Account'}</button>
       </form>
 

@@ -28,10 +28,12 @@ export default function ResendConfirmationCode() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await api.patch('/resend-confirmation-code', {email, password});
+      const res = await api.post('/resend-confirmation-code', {email, password});
       if (res.status === 204) {
-        setFeedback("Confirmation code re-sent.");
-        setTimeout(() => router.push('/confirm'), 4000);
+        setFeedback('Confirmation code re-sent.');
+        setTimeout(() => {
+          router.push('/confirm');
+        }, 4000);
       } else {
         setFeedback(res.data.error);
       }
@@ -42,18 +44,20 @@ export default function ResendConfirmationCode() {
     setLoading(false);
   };
 
-  const requestResendClick = async () => {
+  const requestResendClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!loading) await requestResend();
   };
 
-  const requestResendKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await requestResend();
+  const requestResendKeyUp = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!loading && e.key === "Enter") await requestResend();
   };
 
   const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="auth resend-confirmation-code" onKeyUp={e => requestResendKeyUp(e.key)}>
+    <div className="auth resend-confirmation-code" onKeyUp={e => requestResendKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}/logo-large-white.png`} />
         <img className="--mobile" src={`${url}/logo-small-white.png`} />
@@ -101,7 +105,8 @@ export default function ResendConfirmationCode() {
             || password.length < 8
             || password.length > 64
           }
-          onClick={requestResendClick}
+          onClick={(e) => requestResendClick(e)}
+          type="button"
         >{loading ? 'Resending...' : 'Resend'}</button>
       </form>
 

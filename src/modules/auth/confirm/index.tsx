@@ -9,10 +9,10 @@ export default function Confirm() {
 
   const { api } = useApi();
 
-  const [ feedback, setFeedback ] = useState("");
+  const [ feedback, setFeedback ] = useState('');
   const [ loading,  setLoading ]  = useState(false);
 
-  const [ confirmation_code, setConfirmationCode ] = useState("");
+  const [ confirmation_code, setConfirmationCode ] = useState('');
   
   const confirm = async () => {
     if (!confirmation_code) {
@@ -24,10 +24,14 @@ export default function Confirm() {
     window.scrollTo(0, 0);
 
     try {
-      const res = await api.patch('/confirm', {confirmation_code});
+      const res = await api.post('/confirm', {confirmation_code});
       if (res.status === 204) {
-        setFeedback("User account confirmed.");
-        setTimeout(() => router.push('/login'), 4000);
+        setFeedback('User account confirmed.');
+        setTimeout(() => {
+          router.push('/login');
+        }, 4000);
+      } else {
+        setFeedback(res.data.message);
       }
     } catch (err) {
       setFeedback('An error occurred. Please try again.');
@@ -36,18 +40,20 @@ export default function Confirm() {
     setLoading(false);
   };
 
-  const confirmClick = async () => {
+  const confirmClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!loading) await confirm();
   };
 
-  const confirmKeyUp = async (key: string) => {
-    if (!loading && key === "Enter") await confirm();
+  const confirmKeyUp = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!loading && e.key === "Enter") await confirm();
   };
 
   const url = 'https://s3.amazonaws.com/nobsc-images-01/auth';
   
   return (
-    <div className="auth confirm" onKeyUp={e => confirmKeyUp(e.key)}>
+    <div className="auth confirm" onKeyUp={e => confirmKeyUp(e)}>
       <Link href="/" className="home-links">
         <img className="--desktop" src={`${url}/logo-large-white.png`} />
         <img className="--mobile" src={`${url}/logo-small-white.png`} />
@@ -77,7 +83,8 @@ export default function Confirm() {
 
         <button
           disabled={confirmation_code.length !== 36}
-          onClick={confirmClick}
+          onClick={e => confirmClick(e)}
+          type="button"
         >{loading ? 'Confirming...' : 'Confirm'}</button>
         
         <Link className='troubleshoot' href='/resend-confirmation-code'>

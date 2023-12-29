@@ -1,10 +1,10 @@
 import { useRouter as useNextjsRouter } from 'next/router';
 import type { NextRouter } from 'next/router';
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 
-import { protectedApi } from '../config/api';
+import { axiosInstance, endpoint, protectedApi } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { SearchResponse } from '../modules/shared/search/types';
 import type { Ownership } from '../modules/shared/types';
@@ -61,6 +61,14 @@ export function StoreProvider({ children }: StoreContextProviderProps) {
   const [chatrooms, setChatrooms] = useState<ChatroomView[]>(getItem('chatrooms') ?? []);
   const [chatroom_users, setChatroomUsers] = useState<ChatroomUserView[]>(getItem('chatroom_users') ?? []);
   const [chatmessages, setChatmessages] = useState<ChatMessageView[]>(getItem('chatmessages') ?? []);
+
+  useEffect(() => {
+    async function getCsrfToken() {
+      const res = await axiosInstance.get(`${endpoint}/csrf-token`);
+      setApi(protectedApi(res.data.csrfToken));
+    }
+    getCsrfToken();
+  }, []);
 
   const storeValue = {
     router,
