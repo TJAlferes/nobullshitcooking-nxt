@@ -1,5 +1,48 @@
+.page-nav-shadow {
+  display: block;
+  position: absolute;
+  bottom: 1;
+  left: -42px;
+  top: 137px;
+  width: 3000px;
+  min-width: 3000px;
+  height: 100vh;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, .5);
+  z-index: 2;
+}
+
+.page-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 16px;
+  min-width: max-content;
+}
+
 .page-nav-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+
+.page-nav-toggle g {
+  display: block;
+
+}
+ 
+@media (max-width: 899px) {
+  .page-nav-shadow {
+    display: none;
+  }
+
+  .page-nav {
+    margin: 0;
+    width: 100vw;
+    min-width: 100vw;
+  }
 }

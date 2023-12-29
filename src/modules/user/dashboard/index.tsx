@@ -5,7 +5,7 @@ import AriaModal from 'react-aria-modal';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { useApi, useAuth, useUserData } from '../../../store';
+import { useApi, useAuth, useUserData, useTheme } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
@@ -16,6 +16,7 @@ export default function Dashboard() {
   const { api } = useApi();
   const auth = useAuth();
   const userData = useUserData();
+  const { theme } = useTheme();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -402,9 +403,16 @@ export default function Dashboard() {
   return (
     <div className="one-col dashboard">
       <div className="page-nav">
-        <svg className="page-nav-toggle" onClick={() => setIsPageNavOpen(prev => !prev)}>
+        <svg
+          className="page-nav-toggle"
+          onClick={() => setIsPageNavOpen(prev => !prev)}
+          style={{outline: isPageNavOpen ? '2px solid #bfddfa' : 'none'}}
+        >
           <g>
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="white"></path>
+            <path
+              d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+              fill={theme === 'light' ? '#000' : '#aaa'}
+            ></path>
           </g>
         </svg>
 
@@ -414,105 +422,127 @@ export default function Dashboard() {
       <p className="feedback">{feedback}</p>
 
       {isPageNavOpen ? (
-        <nav className="dashboard-nav">
-          <div
-            className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
-            onClick={() => setTab('avatar')}
-          >Profile Settings</div>
-  
-          <ExpandCollapse
-            headingWhileCollapsed={(
-              <div className="menu-item">
-                <span>Plans</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
-              </div>
-            )}
-            headingWhileExpanded={(
-              <div className="menu-item">
-                <span>Plans</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
-              </div>
-            )}
-          >
-            <div className="submenu-items">
-              <div
-                className={`submenu-item ${tab === 'plans' && subTab === 'public' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('plans');
-                  setSubTab('public');
-                }}
-              >Public</div>
-              <div
-                className={`submenu-item ${tab === 'plans' && subTab === 'private' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('plans');
-                  setSubTab('private');
-                }}
-              >Private</div>
-            </div>
-          </ExpandCollapse>
-  
-          <ExpandCollapse
-            headingWhileCollapsed={(
-              <div className="menu-item">
-                <span>Recipes</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
-              </div>
-            )}
-            headingWhileExpanded={(
-              <div className="menu-item">
-                <span>Recipes</span>
-                <img src="/images/header/down-arrow.png" width="8" height="6" />
-              </div>
-            )}
-          >
-            <div className="submenu-items">
-              <div
-                className={`submenu-item ${tab === 'recipes' && subTab === 'public' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('recipes');
-                  setSubTab('public');
-                }}
-              >Public</div>
-              <div
-                className={`submenu-item ${tab === 'recipes' && subTab === 'private' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('recipes');
-                  setSubTab('private');
-                }}
-              >Private</div>
-              <div
-                className={`submenu-item ${tab === 'recipes' && subTab === 'favorite' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('recipes');
-                  setSubTab('favorite');
-                }}
-              >Favorite</div>
-              <div
-                className={`submenu-item ${tab === 'recipes' && subTab === 'saved' ? '--active' : ''}`}
-                onClick={() => {
-                  setTab('recipes');
-                  setSubTab('saved');
-                }}
-              >Saved</div>
-            </div>
-          </ExpandCollapse>
-  
-          <div
-            className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
-            onClick={() => setTab('ingredients')}
-          >Ingredients</div>
+        <>
+          <div className="page-nav-shadow"></div>
 
-          <div
-            className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
-            onClick={() => setTab('equipment')}
-          >Equipment</div>
-
-          <div
-            className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
-            onClick={() => setTab('settings')}
-          >Account Settings</div>
-        </nav>
+          <nav className="dashboard-nav">
+            <div
+              className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
+              onClick={() => {
+                setTab('avatar');
+                setIsPageNavOpen(false);
+              }}
+            >Profile Settings</div>
+    
+            <ExpandCollapse
+              headingWhileCollapsed={(
+                <div className="menu-item">
+                  <span>Plans</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+              headingWhileExpanded={(
+                <div className="menu-item">
+                  <span>Plans</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+            >
+              <div className="submenu-items">
+                <div
+                  className={`submenu-item ${tab === 'plans' && subTab === 'public' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('plans');
+                    setSubTab('public');
+                    setIsPageNavOpen(false);
+                  }}
+                >Public</div>
+                <div
+                  className={`submenu-item ${tab === 'plans' && subTab === 'private' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('plans');
+                    setSubTab('private');
+                    setIsPageNavOpen(false);
+                  }}
+                >Private</div>
+              </div>
+            </ExpandCollapse>
+    
+            <ExpandCollapse
+              headingWhileCollapsed={(
+                <div className="menu-item">
+                  <span>Recipes</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+              headingWhileExpanded={(
+                <div className="menu-item">
+                  <span>Recipes</span>
+                  <img src="/images/header/down-arrow.png" width="8" height="6" />
+                </div>
+              )}
+            >
+              <div className="submenu-items">
+                <div
+                  className={`submenu-item ${tab === 'recipes' && subTab === 'public' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('recipes');
+                    setSubTab('public');
+                    setIsPageNavOpen(false);
+                  }}
+                >Public</div>
+                <div
+                  className={`submenu-item ${tab === 'recipes' && subTab === 'private' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('recipes');
+                    setSubTab('private');
+                    setIsPageNavOpen(false);
+                  }}
+                >Private</div>
+                <div
+                  className={`submenu-item ${tab === 'recipes' && subTab === 'favorite' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('recipes');
+                    setSubTab('favorite');
+                    setIsPageNavOpen(false);
+                  }}
+                >Favorite</div>
+                <div
+                  className={`submenu-item ${tab === 'recipes' && subTab === 'saved' ? '--active' : ''}`}
+                  onClick={() => {
+                    setTab('recipes');
+                    setSubTab('saved');
+                    setIsPageNavOpen(false);
+                  }}
+                >Saved</div>
+              </div>
+            </ExpandCollapse>
+  
+            <div
+              className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
+              onClick={() => {
+                setTab('ingredients');
+                setIsPageNavOpen(false);
+              }}
+            >Ingredients</div>
+  
+            <div
+              className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
+              onClick={() => {
+                setTab('equipment');
+                setIsPageNavOpen(false);
+              }}
+            >Equipment</div>
+  
+            <div
+              className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
+              onClick={() => {
+                setTab('settings');
+                setIsPageNavOpen(false);
+              }}
+            >Account Settings</div>
+          </nav>
+        </>
       ) : false}
 
       {tab === "settings" ? (

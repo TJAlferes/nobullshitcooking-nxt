@@ -4,9 +4,16 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  width: 240px;
+  position: absolute;
+  left: 0;
+  top: 137px;
+  margin: 0;
+  border: 2px solid #bfddfa;
+  width: 450px;
+  min-width: 450px;
   height: 100vh;
   min-height: 100vh;
+  z-index: 3;
 }
 
 .dashboard-nav .menu-item,
@@ -59,12 +66,9 @@
   justify-content: space-between;
   align-items: center;
   column-gap: 10px;
-
   width: 100%;
   height: 32px;
-
   padding-right: 18px;
-
   font-size: 1.4rem;
   text-indent: 18px;
 }
