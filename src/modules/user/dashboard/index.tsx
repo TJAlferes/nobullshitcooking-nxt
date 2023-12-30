@@ -678,9 +678,7 @@ export default function Dashboard() {
                 src={avatar as string}
               />
             </ReactCrop>
-        
             <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
-        
             <div className="avatar-crops">
               <div className="--full">
                 <span>Full Size: </span>
@@ -691,14 +689,12 @@ export default function Dashboard() {
                 <img src={tinyCrop} />
               </div>
             </div>
-        
             <button
               className="--cancel"
               disabled={loading}
               name="cancel-avatar"
               onClick={cancelAvatar}
             >Cancel</button>
-  
             <button
               className="--submit"
               disabled={loading}
@@ -707,20 +703,16 @@ export default function Dashboard() {
             >Complete</button>
           </div>
         ) : (
-          <div className="dashboard-content dashboard-avatar">
+          <div className="dashboard-content profile-settings dashboard-avatar">
             <h2>Profile Settings</h2>
-            <Link href={`/${auth.authname}/profile`}>View Profile</Link>
-        
-            <h3>Avatar</h3>
-        
-            <div className="avatar-crops">
-              <div className="--full">
-                <img src={`${avatarUrl}.jpg`} />
-              </div>
-            </div>
-        
-            <label>Change</label>
-  
+            <a
+              href={`/${auth.authname}/profile`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >View Profile</a>
+            <h3>Current Avatar</h3>
+            <img src={`${avatarUrl}.jpg`} />
+            <label>Change Avatar</label>
             <input
               accept="image/*"
               name="set-avatar"
