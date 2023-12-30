@@ -32,10 +32,17 @@
 
 .avatar-crops div.--full,
 .avatar-crops div.--tiny {
-  align-items: center;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
   padding: 10px;
+}
+
+.avatar-crops div.--full span,
+.avatar-crops div.--tiny span {
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .avatar-crops img.--full {
@@ -64,13 +71,19 @@
 
 .dashboard-avatar-edit button.--cancel,
 .dashboard-avatar-edit button.--submit {
-  display: inline-block;
-  margin-right: 30px;
+  display: block;
+  margin: 0 30px 10px 0;
   border: 1px solid #aaa;
   border-radius: 2px;
   padding: 1px 5px;
+  color: #000;
   height: 30px;
   width: 235px;
+  line-height: 26px;
+  font-size: 1.3rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .dashboard-avatar-edit button.--cancel {
@@ -217,6 +230,13 @@
   .avatar-crops div.--tiny {
     flex-direction: column;
   }
+
+  .avatar-crops div.--full span,
+  .avatar-crops div.--tiny span {
+    margin-bottom: 4px;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
   
   .avatar-crops img.--full,
   .avatar-crops img.--tiny {
@@ -226,9 +246,7 @@
 
   .dashboard-avatar-edit button.--cancel,
   .dashboard-avatar-edit button.--submit {
-    display: block;
-    margin: 0 auto;
-    width: 235px;
+    margin: 30px auto 10px auto;
   }
 
   .dashboard-tabs button,

@@ -681,26 +681,26 @@ export default function Dashboard() {
             <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
             <div className="avatar-crops">
               <div className="--full">
-                <span>Full Size: </span>
+                <span>Full Size</span>
                 <img src={smallCrop} />
               </div>
               <div className="--tiny">
-                <span>Tiny Size: </span>
+                <span>Tiny Size</span>
                 <img src={tinyCrop} />
               </div>
             </div>
-            <button
-              className="--cancel"
-              disabled={loading}
-              name="cancel-avatar"
-              onClick={cancelAvatar}
-            >Cancel</button>
             <button
               className="--submit"
               disabled={loading}
               name="submit-avatar"
               onClick={uploadAvatar}
             >Complete</button>
+            <button
+              className="--cancel"
+              disabled={loading}
+              name="cancel-avatar"
+              onClick={cancelAvatar}
+            >Cancel</button>
           </div>
         ) : (
           <div className="dashboard-content profile-settings dashboard-avatar">
