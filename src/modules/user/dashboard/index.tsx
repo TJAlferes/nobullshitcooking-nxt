@@ -414,7 +414,11 @@ export default function Dashboard() {
         <svg
           className="page-nav-toggle"
           onClick={() => setIsPageNavOpen(prev => !prev)}
-          style={{outline: isPageNavOpen ? '2px solid #bfddfa' : 'none'}}
+          style={{
+            outline: isPageNavOpen
+              ? `2px solid ${theme === 'light' ? '#bfddfa' : '#507ea7'}`
+              : 'none'
+          }}
         >
           <g>
             <path
@@ -435,7 +439,7 @@ export default function Dashboard() {
         <>
           <div className="page-nav-shadow"></div>
 
-          <nav className="dashboard-nav">
+          <nav className="page-nav dashboard-nav">
             <div
               className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
               onClick={() => {
@@ -457,6 +461,7 @@ export default function Dashboard() {
                   <img src="/images/header/down-arrow.png" width="8" height="6" />
                 </div>
               )}
+              isExpandedByDefault={true}
             >
               <div className="submenu-items">
                 <div
@@ -477,6 +482,8 @@ export default function Dashboard() {
                 >Private</div>
               </div>
             </ExpandCollapse>
+
+            <hr />
     
             <ExpandCollapse
               headingWhileCollapsed={(
@@ -491,6 +498,7 @@ export default function Dashboard() {
                   <img src="/images/header/down-arrow.png" width="8" height="6" />
                 </div>
               )}
+              isExpandedByDefault={true}
             >
               <div className="submenu-items">
                 <div

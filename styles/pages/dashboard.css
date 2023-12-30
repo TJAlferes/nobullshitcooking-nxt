@@ -1,80 +1,5 @@
 /* TO DO: test responsive design on actual smart phones */
 
-.dashboard-nav {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  position: absolute;
-  left: 0;
-  top: 137px;
-  margin: 0;
-  /*border: 2px solid #bfddfa;*/
-  width: 450px;
-  min-width: 450px;
-  height: 100vh;
-  min-height: 100vh;
-  z-index: 3;
-}
-
-.dashboard-nav .menu-item,
-.dashboard-nav .submenu-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 10px;
-  width: 100%;
-  height: 32px;
-  padding-right: 18px;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.dashboard-nav .menu-item.--active,
-.dashboard-nav .submenu-item.--active {
-  background-color: #bfddfa;
-}
-
-.dashboard-nav .menu-item,
-.dashboard-nav .expand-collapse .menu-item span,
-.dashboard-nav--mobile .expand-collapse .menu-item span {
-  font-size: 1.4rem;
-  text-indent: 18px;
-}
-
-.dashboard-nav .submenu-item {
-  text-indent: 36px;
-}
-
-.dashboard-nav--mobile {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: 48px;
-  margin: 0;
-  width: 100vw;
-  min-width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  /*z-index: 2;*/
-}
-
-.dashboard-nav--mobile .menu-item,
-.dashboard-nav--mobile .submenu-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  column-gap: 10px;
-  width: 100%;
-  height: 32px;
-  padding-right: 18px;
-  font-size: 1.4rem;
-  text-indent: 18px;
-}
-
-/*-------------------------------------------------*/
-
 .dashboard .account-settings label {
   display: block;
   margin: 14px 0 4px 0;
@@ -305,17 +230,6 @@ Light/Day/Sun Theme
 
 */
 
-.light .dashboard-nav,
-.light .dashboard-nav--mobile,
-.light .dashboard-nav--mobile .submenu-item {
-  background-color: #fff;
-}
-
-.light .dashboard-nav .expand-collapse .menu-item,
-.light .dashboard-nav--mobile .expand-collapse .menu-item {
-  background-color: #ccc;
-}
-
 .light .dashboard .account-settings hr {
   background-color: #bfbfbf;
 }
@@ -356,15 +270,6 @@ Dark/Night/Moon Theme
 
 .dark .dashboard-item a:hover {
   color: #690004;
-}
-
-@media (max-width: 899px) {
-  .dashboard-nav {
-    top: 181px;
-    margin: 0;
-    width: 100vw;
-    min-width: 100vw;
-  }
 }
 
 /* TO DO: flex */

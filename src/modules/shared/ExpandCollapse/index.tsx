@@ -5,17 +5,18 @@ const noop = () => {};
 export function ExpandCollapse({
   children,
   headingWhileCollapsed = "More info (Click here to expand)",
-  headingWhileExpanded =  "(Click here to collapse)",
-  isDisabled =            false,
-  handler =               noop
+  headingWhileExpanded = "(Click here to collapse)",
+  isDisabled = false,
+  handler = noop,
+  isExpandedByDefault = false
 }: Props) {
-  const [ expanded, setExpanded ] = useState(false);
+  const [expanded, setExpanded] = useState(isExpandedByDefault);
 
   const toggle = () => {
     if (isDisabled) return;
     setExpanded(prevState => !prevState);
     if (handler) handler();
-  }
+  };
 
   if (!expanded) {
     return (
@@ -41,4 +42,5 @@ type Props = {
   headingWhileExpanded?:  ReactNode;
   isDisabled?:            boolean;
   handler?:               Function;
+  isExpandedByDefault?:   boolean;
 };

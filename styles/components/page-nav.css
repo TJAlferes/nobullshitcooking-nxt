@@ -36,14 +36,108 @@
   user-select: none;
 }
 
+.page-nav {
+  position: absolute;
+  left: 0;
+  top: 137px;
+  margin: 0;
+  width: 450px;
+  min-width: 450px;
+  height: 100vh;
+  min-height: 100vh;
+  z-index: 3;
+}
+
+.page-nav .menu-item,
+.page-nav .submenu-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+  height: 32px;
+  padding-right: 18px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.page-nav .menu-item,
+.page-nav .expand-collapse .menu-item span {
+  font-size: 1.4rem;
+  text-indent: 18px;
+}
+
+.page-nav .submenu-item {
+  text-indent: 36px;
+}
+
+.page-nav hr {
+  height: 1px;
+  border: 0 none;
+}
+
 @media (max-width: 899px) {
   .page-nav-shadow {
     display: none;
   }
 
   .page-nav {
+    top: 181px;
     margin: 0;
     width: 100vw;
     min-width: 100vw;
   }
+}
+
+/*
+
+Light/Day/Sun Theme
+
+*/
+
+.light .page-nav,
+.light .page-nav .submenu-item {
+  background-color: #fff;
+}
+
+.light .page-nav .menu-item.--active,
+.light .page-nav .submenu-item.--active {
+  background-color: #bfddfa;
+}
+
+.light .page-nav .expand-collapse .menu-item {
+  background-color: #ccc;
+}
+
+.light .page-nav hr {
+  background-color: #bfbfbf;
+}
+
+/*
+
+Dark/Night/Moon Theme
+
+*/
+
+.dark .page-nav,
+.dark .page-nav .submenu-item {
+  background-color: #222;
+}
+
+.dark .page-nav .menu-item.--active,
+.dark .page-nav .submenu-item.--active {
+  background-color: #507ea7;
+}
+
+.dark .page-nav .expand-collapse .menu-item {
+  background-color: #ccc;
+}
+
+.dark .page-nav .menu-item span {
+  color: #000;
+}
+
+.dark .page-nav hr {
+  background-color: #444;
 }
