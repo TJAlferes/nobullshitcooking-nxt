@@ -487,7 +487,7 @@ export default function RecipeForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h3>Title</h3>
+      <label htmlFor='recipe_title'>Title</label>
       <input
         className="title"
         id="recipe_title"
@@ -499,7 +499,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={title}
       />
 
-      <h3>Description / Author Note</h3>
+      <label htmlFor=''>Description / Author Note</label>
       <input
         className="description"
         id="recipe_description"
@@ -510,25 +510,27 @@ export default function RecipeForm({ ownership }: Props) {
         value={description}
       />
 
-      <h3>Active Time</h3>
+      <label htmlFor='active_time'>Active Time</label>
       <input
         className="time"
+        id="active_time"
         name="active_time"
         onChange={e => setActiveTime(e.target.value)}
         type="time"
         value={active_time}
       />
 
-      <h3>Total Time</h3>
+      <label htmlFor='total_time'>Total Time</label>
       <input
         className="time"
+        id="total_time"
         name="total_time"
         onChange={e => setTotalTime(e.target.value)}
         type="time"
         value={total_time}
       />
 
-      <h3>Directions</h3>
+      <label htmlFor='recipe_directions'>Directions</label>
       <textarea
         className="directions"
         id="recipe_directions"
@@ -537,7 +539,7 @@ export default function RecipeForm({ ownership }: Props) {
         value={directions}
       />
 
-      <h3>Recipe Type</h3>
+      <label htmlFor='recipe_type_id'>Recipe Type</label>
       <select
         id="recipe_type_id"
         name="recipeType"
@@ -553,7 +555,7 @@ export default function RecipeForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h3>Cuisine</h3>
+      <label htmlFor='cuisine_id'>Cuisine</label>
       <select
         id="cuisine_id"
         name="cuisine"
@@ -567,7 +569,7 @@ export default function RecipeForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h3>Methods</h3>
+      <label>Methods</label>
       <div className="methods">
         {methods.map(({ method_id, method_name }) => (
           <span className="method" key={method_id}>
@@ -827,277 +829,269 @@ export default function RecipeForm({ ownership }: Props) {
         >Add Subrecipe</button>
       </div>
 
-      <div className="recipe-form-images">
-        <h2>Images</h2>
+      <h2>Images</h2>
 
-        <div>
-          <span>If possible, upload all four images. See an example </span>
-          <Link href='/recipe/detail/Dark%20Chocolate%Banana'>here</Link>.
-        </div>
-
-        <div className="recipe-image">
-          <h3>Finished Recipe</h3>
-          {
-            !recipeImageState.image
-            ? (
-              <>
-                {!recipe_id
-                  ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
-                <label>Change</label>
-                <input
-                  accept="image/*"
-                  name="image-input"
-                  onChange={(e) => onSelectFile(e, "recipe")}
-                  type="file"
-                />
-                {recipe_id
-                  ? <button onClick={deleteRecipeImageFromAWSS3}>Delete / Reset To Default</button>
-                  : false}
-              </>
-            )
-            : (
-              <>
-                <ReactCrop
-                  crop={recipeImageState.crop}
-                  onChange={(crop) => setRecipeImageState({...recipeImageState, crop})}
-                  onComplete={onRecipeCropComplete}
-                  {...commonReactCropProps}
-                >
-                  <img
-                    onLoad={e => recipeImageRef.current = e.currentTarget}
-                    src={recipeImageState.image as string}
-                  />
-                </ReactCrop>
-                <ToolTip />
-                <div className="crops">
-                  <div className="crop-full-outer">
-                    <span>Full Size: </span>
-                    <img className="crop-full" src={recipeImageState.mediumPreview} />
-                  </div>
-                  <div className="crop-thumb-outer">
-                    <span>Thumb Size: </span>
-                    <img className="crop-thumb" src={recipeImageState.thumbPreview} />
-                  </div>
-                  <div className="crop-tiny-outer">
-                    <span>Tiny Size: </span>
-                    <img className="crop-tiny" src={recipeImageState.tinyPreview} />
-                  </div>
-                </div>
-                <h4>Caption:</h4>
-                <input
-                  className="caption"
-                  max={150}
-                  min={2}
-                  name="caption"
-                  onChange={e => setRecipeImage({...recipe_image, caption: e.target.value})}
-                  type="text"
-                  value={recipe_image!.caption}
-                />
-                <button
-                  className="image-cancel-button"
-                  disabled={loading}
-                  onClick={cancelRecipeImage}
-                >Cancel</button>
-              </>
-            )
-          }
-        </div>
-
-        <div className="equipment-image">
-          <h3>Equipment</h3>
-          {
-            !equipmentImageState.image
-            ? (
-              <>
-                {!recipe_id
-                  ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
-                <label>Change</label>
-                <input
-                  accept="image/*"
-                  name="equipment-image-input"
-                  onChange={(e) => onSelectFile(e, "equipment")}
-                  type="file"
-                />
-                {recipe_id
-                  ? <button onClick={deleteEquipmentImageFromAWSS3}>Delete / Reset To Default</button>
-                  : false}
-              </>
-            )
-            : (
-              <>
-                <ReactCrop
-                  crop={equipmentImageState.crop}
-                  onChange={(crop) => setEquipmentImageState({...equipmentImageState, crop})}
-                  onComplete={onEquipmentCropComplete}
-                  {...commonReactCropProps}
-                >
-                  <img
-                    onLoad={e => equipmentImageRef.current = e.currentTarget}
-                    src={equipmentImageState.image as string}
-                  />
-                </ReactCrop>
-                <ToolTip />
-                <div className="crops">
-                  <div className="crop-full-outer">
-                    <span>Full Size: </span>
-                    <img className="crop-full" src={equipmentImageState.mediumPreview} />
-                  </div>
-                </div>
-                <h4>Caption:</h4>
-                <input
-                  className="caption"
-                  max={150}
-                  min={2}
-                  name="caption"
-                  onChange={e => setEquipmentImage({...equipment_image, caption: e.target.value})}
-                  type="text"
-                  value={equipment_image!.caption}
-                />
-                <button
-                  className="image-cancel-button"
-                  disabled={loading}
-                  onClick={cancelEquipmentImage}
-                >Cancel</button>
-              </>
-            )
-          }
-        </div>
-
-        <div className="ingredients-image">
-          <h3>Ingredients</h3>
-          {
-            !ingredientsImageState.image
-            ? (
-              <>
-                {!recipe_id
-                  ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
-                }
-                <label>Change</label>
-                <input
-                  accept="image/*"
-                  name="ingredients-image-input"
-                  onChange={(e) => onSelectFile(e, "ingredients")}
-                  type="file"
-                />
-                {recipe_id
-                  ? <button onClick={deleteIngredientsImageFromAWSS3}>Delete / Reset To Default</button>
-                  : false}
-              </>
-            )
-            : (
-              <>
-                <ReactCrop
-                  crop={ingredientsImageState.crop}
-                  onChange={(crop) => setIngredientsImageState({...ingredientsImageState, crop})}
-                  onComplete={onIngredientsCropComplete}
-                  {...commonReactCropProps}
-                >
-                  <img
-                    onLoad={e => ingredientsImageRef.current = e.currentTarget}
-                    src={ingredientsImageState.image as string}
-                  />
-                </ReactCrop>
-                <ToolTip />
-                <div className="crops">
-                  <div className="crop-full-outer">
-                    <span>Full Size: </span>
-                    <img className="crop-full" src={ingredientsImageState.mediumPreview} />
-                  </div>
-                </div>
-                <h4>Caption:</h4>
-                <input
-                  className="caption"
-                  max={150}
-                  min={2}
-                  name="caption"
-                  onChange={e => setIngredientsImage({...ingredients_image, caption: e.target.value})}
-                  type="text"
-                  value={ingredients_image!.caption}
-                />
-                <button
-                  className="image-cancel-button"
-                  disabled={loading}
-                  onClick={cancelIngredientsImage}
-                >Cancel</button>
-              </>
-            )
-          }
-        </div>
-
-        <div className="cooking-image">
-          <h3>Cooking In Action</h3>
-          {
-            !cookingImageState.image
-            ? (
-              <>
-                {!recipe_id
-                  ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
-                  : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
-                <label>Change</label>
-                <input
-                  accept="image/*"
-                  name="cooking-image-input"
-                  onChange={(e) => onSelectFile(e, "cooking")}
-                  type="file"
-                />
-                {recipe_id
-                  ? <button onClick={deleteCookingImageFromAWSS3}>Delete / Reset To Default</button>
-                  : false}
-              </>
-            )
-            : (
-              <>
-                <ReactCrop
-                  crop={cookingImageState.crop}
-                  onChange={(crop) => setCookingImageState({...cookingImageState, crop})}
-                  onComplete={onCookingCropComplete}
-                  {...commonReactCropProps}
-                >
-                  <img
-                    onLoad={e => cookingImageRef.current = e.currentTarget}
-                    src={cookingImageState.image as string}
-                  />
-                </ReactCrop>
-                <ToolTip />
-                <div className="crops">
-                  <div className="crop-full-outer">
-                    <span>Full Size: </span>
-                    <img className="crop-full" src={cookingImageState.mediumPreview} />
-                  </div>
-                </div>
-                <h4>Caption:</h4>
-                <input
-                  className="caption"
-                  max={150}
-                  min={2}
-                  name="caption"
-                  onChange={e => setCookingImage({...cooking_image, caption: e.target.value})}
-                  type="text"
-                  value={cooking_image!.caption}
-                />
-                <button
-                  className="image-cancel-button"
-                  disabled={loading}
-                  onClick={cancelCookingImage}
-                >Cancel</button>
-              </>
-            )
-          }
-        </div>
+      <div>
+        <span>If possible, upload all four images. See an example </span>
+        <Link href='/recipe/detail/Dark%20Chocolate%Banana'>here</Link>.
       </div>
 
-      <div className="finish">
-        <Link className="cancel-button" href='/dashboard'>Cancel</Link>
-
-        <button
-          className='submit-button'
-          disabled={loading}
-          onClick={submit}
-        >{loading ? 'Creating...' : 'Create'}</button>
+      <div className="recipe-image">
+        <h3>Finished Recipe</h3>
+        {!recipeImageState.image
+          ? (
+            <>
+              {!recipe_id
+                ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
+                : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
+              <label>Change</label>
+              <input
+                accept="image/*"
+                name="image-input"
+                onChange={(e) => onSelectFile(e, 'recipe')}
+                type="file"
+              />
+              {recipe_id
+                ? <button onClick={deleteRecipeImageFromAWSS3}>Delete / Reset To Default</button>
+                : false}
+            </>
+          )
+          : (
+            <>
+              <ReactCrop
+                crop={recipeImageState.crop}
+                onChange={(crop) => setRecipeImageState({...recipeImageState, crop})}
+                onComplete={onRecipeCropComplete}
+                {...commonReactCropProps}
+              >
+                <img
+                  onLoad={e => recipeImageRef.current = e.currentTarget}
+                  src={recipeImageState.image as string}
+                />
+              </ReactCrop>
+              <ToolTip />
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={recipeImageState.mediumPreview} />
+                </div>
+                <div className="crop-thumb-outer">
+                  <span>Thumb Size: </span>
+                  <img className="crop-thumb" src={recipeImageState.thumbPreview} />
+                </div>
+                <div className="crop-tiny-outer">
+                  <span>Tiny Size: </span>
+                  <img className="crop-tiny" src={recipeImageState.tinyPreview} />
+                </div>
+              </div>
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={e => setRecipeImage({...recipe_image, caption: e.target.value})}
+                type="text"
+                value={recipe_image!.caption}
+              />
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelRecipeImage}
+              >Cancel</button>
+            </>
+          )
+        }
       </div>
+
+      <div className="equipment-image">
+        <h3>Equipment</h3>
+        {!equipmentImageState.image
+          ? (
+            <>
+              {!recipe_id
+                ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
+                : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
+              <label>Change</label>
+              <input
+                accept="image/*"
+                name="equipment-image-input"
+                onChange={(e) => onSelectFile(e, "equipment")}
+                type="file"
+              />
+              {recipe_id
+                ? <button onClick={deleteEquipmentImageFromAWSS3}>Delete / Reset To Default</button>
+                : false}
+            </>
+          )
+          : (
+            <>
+              <ReactCrop
+                crop={equipmentImageState.crop}
+                onChange={(crop) => setEquipmentImageState({...equipmentImageState, crop})}
+                onComplete={onEquipmentCropComplete}
+                {...commonReactCropProps}
+              >
+                <img
+                  onLoad={e => equipmentImageRef.current = e.currentTarget}
+                  src={equipmentImageState.image as string}
+                />
+              </ReactCrop>
+              <ToolTip />
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={equipmentImageState.mediumPreview} />
+                </div>
+              </div>
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={e => setEquipmentImage({...equipment_image, caption: e.target.value})}
+                type="text"
+                value={equipment_image!.caption}
+              />
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelEquipmentImage}
+              >Cancel</button>
+            </>
+          )
+        }
+      </div>
+
+      <div className="ingredients-image">
+        <h3>Ingredients</h3>
+        {!ingredientsImageState.image
+          ? (
+            <>
+              {!recipe_id
+                ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
+                : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
+              }
+              <label>Change</label>
+              <input
+                accept="image/*"
+                name="ingredients-image-input"
+                onChange={(e) => onSelectFile(e, "ingredients")}
+                type="file"
+              />
+              {recipe_id
+                ? <button onClick={deleteIngredientsImageFromAWSS3}>Delete / Reset To Default</button>
+                : false}
+            </>
+          )
+          : (
+            <>
+              <ReactCrop
+                crop={ingredientsImageState.crop}
+                onChange={(crop) => setIngredientsImageState({...ingredientsImageState, crop})}
+                onComplete={onIngredientsCropComplete}
+                {...commonReactCropProps}
+              >
+                <img
+                  onLoad={e => ingredientsImageRef.current = e.currentTarget}
+                  src={ingredientsImageState.image as string}
+                />
+              </ReactCrop>
+              <ToolTip />
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={ingredientsImageState.mediumPreview} />
+                </div>
+              </div>
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={e => setIngredientsImage({...ingredients_image, caption: e.target.value})}
+                type="text"
+                value={ingredients_image!.caption}
+              />
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelIngredientsImage}
+              >Cancel</button>
+            </>
+          )
+        }
+      </div>
+
+      <div className="cooking-image">
+        <h3>Cooking In Action</h3>
+        {!cookingImageState.image
+          ? (
+            <>
+              {!recipe_id
+                ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
+                : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
+              <label>Change</label>
+              <input
+                accept="image/*"
+                name="cooking-image-input"
+                onChange={(e) => onSelectFile(e, "cooking")}
+                type="file"
+              />
+              {recipe_id
+                ? <button onClick={deleteCookingImageFromAWSS3}>Delete / Reset To Default</button>
+                : false}
+            </>
+          )
+          : (
+            <>
+              <ReactCrop
+                crop={cookingImageState.crop}
+                onChange={(crop) => setCookingImageState({...cookingImageState, crop})}
+                onComplete={onCookingCropComplete}
+                {...commonReactCropProps}
+              >
+                <img
+                  onLoad={e => cookingImageRef.current = e.currentTarget}
+                  src={cookingImageState.image as string}
+                />
+              </ReactCrop>
+              <ToolTip />
+              <div className="crops">
+                <div className="crop-full-outer">
+                  <span>Full Size: </span>
+                  <img className="crop-full" src={cookingImageState.mediumPreview} />
+                </div>
+              </div>
+              <h4>Caption:</h4>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                name="caption"
+                onChange={e => setCookingImage({...cooking_image, caption: e.target.value})}
+                type="text"
+                value={cooking_image!.caption}
+              />
+              <button
+                className="image-cancel-button"
+                disabled={loading}
+                onClick={cancelCookingImage}
+              >Cancel</button>
+            </>
+          )
+        }
+      </div>
+
+      <button
+        className='submit-button'
+        disabled={loading}
+        onClick={submit}
+      >{loading ? 'Creating...' : 'Create'}</button>
+
+      <Link className="cancel-button" href='/dashboard'>Cancel</Link>
     </div>
   );
 }

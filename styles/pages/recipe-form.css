@@ -133,12 +133,6 @@
   width: 100%;
 }
 
-.recipe-form .finish {
-  display: flex;
-  flex-direction: row;
-  padding: 10px 0;
-}
-
 @media (max-width: 1000px) {
   .recipe-row {
     flex-direction: column;
@@ -152,11 +146,5 @@
 
   .recipe-form button.--add-row {
     margin-top: 12px;
-  }
-}
-
-@media (max-width: 899px) {
-  .recipe-form .finish {
-    flex-direction: column;
   }
 }
