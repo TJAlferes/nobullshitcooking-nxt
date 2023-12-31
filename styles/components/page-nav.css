@@ -127,6 +127,7 @@ Dark/Night/Moon Theme
 
 .dark .page-nav .menu-item.--active,
 .dark .page-nav .submenu-item.--active {
+  color: #ccc;
   background-color: #507ea7;
 }
 

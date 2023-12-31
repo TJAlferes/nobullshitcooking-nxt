@@ -265,7 +265,7 @@ export default function PlanForm({ ownership }: Props) {
         </div>
 
         <div className="name">
-          <h3>Plan Name</h3>
+          <label htmlFor='plan_name'>Plan Name</label>
           <input
             onChange={e => setPlanName(e.target.value)}
             name="plan_name"
@@ -277,6 +277,12 @@ export default function PlanForm({ ownership }: Props) {
         <div><ExpandCollapse><ToolTip /></ExpandCollapse></div>
 
         <div className="finish">
+          <button
+            className='submit-button'
+            disabled={loading}
+            onClick={submit}
+          >{loading ? 'Creating...' : 'Create'}</button>
+
           <button className="cancel-button" onClick={() => setModalActive(true)}>
             Cancel
           </button>
@@ -304,12 +310,6 @@ export default function PlanForm({ ownership }: Props) {
             )
             : false
           }
-
-          <button
-            className='submit-button'
-            disabled={loading}
-            onClick={submit}
-          >{loading ? 'Creating...' : 'Create'}</button>
         </div>
       </div>
     </DndProvider>
