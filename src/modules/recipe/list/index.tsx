@@ -118,8 +118,6 @@ export default function RecipeList() {
               {total_results} total results and {total_pages} total pages
             </p>
 
-            <ResultsPerPage />
-
             <div className="filters">
               <span className="filter-by">Filter by:</span>
 
@@ -243,8 +241,6 @@ export default function RecipeList() {
         )
         : false
       }
-        
-      <Pagination key={1} />
 
       <div className="search-results-list">
         {!results
@@ -267,7 +263,15 @@ export default function RecipeList() {
         }
       </div>
 
-      <Pagination key={2} />
+      {results.length > 0
+        ? (
+          <div className="page-settings">
+            <ResultsPerPage />
+            <Pagination />
+          </div>
+        )
+        : false
+      }
     </div>
   );
 }

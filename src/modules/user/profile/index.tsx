@@ -20,9 +20,9 @@ export default function Profile({ profile }: Props) {
   const { my_friendships } = useUserData();
 
   const [clicked, setClicked] = useState(false);
-  const [tab, setTab] = useState("public");
+  const [tab, setTab] = useState('favorite');
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
 
   const requestFriendship = async () => {
@@ -87,14 +87,13 @@ export default function Profile({ profile }: Props) {
       
       <div className="tabs">
         <button
-          className={tab === "public" ? "--active" : ""}
-          onClick={() => setTab("public")}
-        >Public</button>
-
-        <button
           className={tab === "favorite" ? "--active" : ""}
           onClick={() => setTab("favorite")}
         >Favorite</button>
+        <button
+          className={tab === "public" ? "--active" : ""}
+          onClick={() => setTab("public")}
+        >Public</button>
       </div>
 
       {tab === "favorite" && (

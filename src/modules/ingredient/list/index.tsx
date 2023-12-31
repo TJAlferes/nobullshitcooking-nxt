@@ -75,8 +75,6 @@ export default function IngredientList() {
               {total_results} total results and {total_pages} total pages
             </p>
 
-            <ResultsPerPage />
-
             <div className="filters">
               <span className="filter-by">Filter by:</span>
 
@@ -120,8 +118,6 @@ export default function IngredientList() {
         )
         : false
       }
-        
-      <Pagination key={1} />
 
       <div className="search-results-list">
         {!results
@@ -131,7 +127,7 @@ export default function IngredientList() {
             : results.map(i => (
               <Link
                 className="search-results-list-item"
-                href={`/ingredient/detail/${i.fullname}`}
+                href={`/ingredient/detail/${encodeURIComponent(i.fullname!)}`}
                 key={i.ingredient_id}
               >
                 <img src={`${url}/${i.image_filename}.jpg`} />
@@ -142,7 +138,15 @@ export default function IngredientList() {
         }
       </div>
 
-      <Pagination key={2} />
+      {results.length > 0
+        ? (
+          <div className="page-settings">
+            <ResultsPerPage />
+            <Pagination />
+          </div>
+        )
+        : false
+      }
     </div>
   );
 }

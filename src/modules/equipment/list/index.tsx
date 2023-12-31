@@ -131,7 +131,7 @@ export default function EquipmentList() {
             : results.map(e => (
               <Link
                 className="search-results-list-item"
-                href={`/equipment/detail/${e.equipment_name}`}
+                href={`/equipment/detail/${encodeURIComponent(e.equipment_name!)}`}
                 key={e.equipment_id}
               >
                 <img src={`${url}/${e.image_filename}.jpg`} />
