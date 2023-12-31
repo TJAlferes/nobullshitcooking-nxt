@@ -2,6 +2,18 @@
 
 /*.recipe-form {}*/
 
+.recipe-form label {
+  display: block;
+  margin: 14px 0 4px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.recipe-form .directions {
+  height: 106px;
+  width: 235px;
+}
+
 .recipe-form .required-equipment,
 .recipe-form .required-ingredients,
 .recipe-form .required-subrecipes,
@@ -60,23 +72,19 @@
   width: fit-content;
 }
 
-.recipe-form .title,
-.recipe-form .description {
-  border: 1px solid;
-  border-radius: 1px;
-  display: block;
-  height: 31px;
-  margin: 0 auto 0 auto;
-  padding: 3px 7px 3px 7px;
-  width: 100%;
-}
-
 .recipe-row {
   display: flex;
-  flex-direction: row;
   flex-wrap: nowrap;
   justify-content: flex-start;
+  align-items: center;
   margin-bottom: 6px;
+  border: 1px solid #bbb;
+  padding: 6px;
+}
+
+.recipe-row .pair {
+  display: flex;
+  column-gap: 4px;
 }
 
 .recipe-row label {
@@ -128,14 +136,12 @@
   padding: 1px 2px;
 }
 
-.recipe-form .directions {
-  height: 102px;
-  width: 100%;
-}
-
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .recipe-row {
     flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    row-gap: 10px;
     width: fit-content;
   }
 

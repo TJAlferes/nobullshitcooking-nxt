@@ -595,53 +595,54 @@ export default function RecipeForm({ ownership }: Props) {
         <div className="equipment-rows">
           {equipmentRows.map(({ key, amount, equipment_type_id, equipment_id }) => (
             <div className="recipe-row" key={key}>
-              <label>Amount:</label>
-              <select
-                name="amount"
-                onChange={e => changeEquipmentRow(e, key)}
-                required
-                value={amount ?? ""}
-              >
-                <option value={0}>Select amount (optional)</option>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-              </select>
-
-              <label>Type:</label>
-              <select
-                name="equipment_type_id"
-                onChange={e => changeEquipmentRow(e, key)}
-                required
-                value={equipment_type_id}
-              >
-                <option value={0}>Select type</option>
-                <option value={2}>Preparing</option>
-                <option value={3}>Cooking</option>
-              </select>
-
-              <label>Equipment:</label>
-              <select
-                name="equipment_id"
-                onChange={e => changeEquipmentRow(e, key)}
-                required
-                disabled={equipment_type_id === 0}
-                value={equipment_type_id === 0 ? "" : equipment_id}
-              >
-                <option value="">Select equipment</option>
-                {
-                  allowedEquipment
+              <div className="pair">
+                <label>Amount:</label>
+                <select
+                  name="amount"
+                  onChange={e => changeEquipmentRow(e, key)}
+                  required
+                  value={amount ?? ""}
+                >
+                  <option value={0}>Select amount (optional)</option>
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                </select>
+              </div>
+              <div className="pair">
+                <label>Type:</label>
+                <select
+                  name="equipment_type_id"
+                  onChange={e => changeEquipmentRow(e, key)}
+                  required
+                  value={equipment_type_id}
+                >
+                  <option value={0}>Select type</option>
+                  <option value={2}>Preparing</option>
+                  <option value={3}>Cooking</option>
+                </select>
+              </div>
+              <div className="pair">
+                <label>Equipment:</label>
+                <select
+                  name="equipment_id"
+                  onChange={e => changeEquipmentRow(e, key)}
+                  required
+                  disabled={equipment_type_id === 0}
+                  value={equipment_type_id === 0 ? "" : equipment_id}
+                >
+                  <option value="">Select equipment</option>
+                  {allowedEquipment
                     .filter(e => e.equipment_type_id == equipment_type_id)
                     .map((e, index) => (
                       <option key={index} value={e.equipment_id}>
                         {e.equipment_name}
                       </option>
-                    ))
-                }
-              </select>
-
+                    ))}
+                </select>
+              </div>
               <button
                 className="--remove"
                 onClick={() => setEquipmentRows(equipmentRows.filter(row => row.key !== key))}
@@ -662,65 +663,67 @@ export default function RecipeForm({ ownership }: Props) {
         <div className="ingredient-rows">
           {ingredientRows.map(({ key, amount, unit_id, ingredient_type_id, ingredient_id }) => (
             <div className="recipe-row" key={key}>
-              <label>Amount:</label>
-              <input
-                max="9999"
-                min="0.125"
-                name="amount"
-                onChange={e => changeIngredientRow(e, key)}
-                step="any"
-                type="number"
-                value={amount ?? ""}
-                placeholder='Enter amount (optional)'
-              />
-
-              <label>Unit:</label>
-              <select
-                name="unit_id"
-                onChange={e => changeIngredientRow(e, key)}
-                value={unit_id ?? ""}
-              >
-                <option value={0}>Select unit (optional)</option>
-                {units.map((u, index) => (
-                  <option key={index} value={u.unit_id}>{u.unit_name}</option>
-                ))}
-              </select>
-
-              <label>Type:</label>
-              <select
-                name="ingredient_type_id"
-                onChange={e => changeIngredientRow(e, key)}
-                required
-                value={ingredient_type_id}
-              >
-                <option value={0}>Select type</option>
-                {ingredient_types.map((i, index) => (
-                  <option key={index} value={i.ingredient_type_id}>
-                    {i.ingredient_type_name}
-                  </option>
-                ))}
-              </select>
-
-              <label>Ingredient:</label>
-              <select
-                name="ingredient_id"
-                onChange={e => changeIngredientRow(e, key)}
-                required
-                disabled={ingredient_type_id === 0}
-                value={ingredient_type_id === 0 ? "" : ingredient_id}
-              >
-                <option value="">Select ingredient</option>
-                {
-                  allowedIngredients
+              <div className="pair">
+                <label>Amount:</label>
+                <input
+                  max="9999"
+                  min="0.125"
+                  name="amount"
+                  onChange={e => changeIngredientRow(e, key)}
+                  step="any"
+                  type="number"
+                  value={amount ?? ""}
+                  placeholder='Enter amount (optional)'
+                />
+              </div>
+              <div className="pair">
+                <label>Unit:</label>
+                <select
+                  name="unit_id"
+                  onChange={e => changeIngredientRow(e, key)}
+                  value={unit_id ?? ""}
+                >
+                  <option value={0}>Select unit (optional)</option>
+                  {units.map((u, index) => (
+                    <option key={index} value={u.unit_id}>{u.unit_name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="pair">
+                <label>Type:</label>
+                <select
+                  name="ingredient_type_id"
+                  onChange={e => changeIngredientRow(e, key)}
+                  required
+                  value={ingredient_type_id}
+                >
+                  <option value={0}>Select type</option>
+                  {ingredient_types.map((i, index) => (
+                    <option key={index} value={i.ingredient_type_id}>
+                      {i.ingredient_type_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="pair">
+                <label>Ingredient:</label>
+                <select
+                  name="ingredient_id"
+                  onChange={e => changeIngredientRow(e, key)}
+                  required
+                  disabled={ingredient_type_id === 0}
+                  value={ingredient_type_id === 0 ? "" : ingredient_id}
+                >
+                  <option value="">Select ingredient</option>
+                  {allowedIngredients
                     .filter(i => i.ingredient_type_id == ingredient_type_id)
                     .map((i, index) => (
                       <option key={index} value={i.ingredient_id}>
                         {i.fullname}
                       </option>
-                    ))
-                }
-              </select>
-
+                    ))}
+                </select>
+              </div>
               <button
                 className="--remove"
                 onClick={() => setIngredientRows(ingredientRows.filter(row => row.key !== key))}
@@ -741,80 +744,83 @@ export default function RecipeForm({ ownership }: Props) {
         <div className="subrecipe-rows">
           {subrecipeRows.map(s => (
             <div className="recipe-row" key={s.key}>
-              <label>Amount:</label>
-              <input
-                max="9999"
-                min="0.125"
-                name="amount"
-                onChange={e => changeSubrecipeRow(e, s.key)}
-                step="any"
-                type="number"
-                value={s.amount ?? ""}
-                placeholder='Enter amount (optional)'
-              />
-              
-              <label>Unit:</label>
-              <select
-                name="unit_id"
-                onChange={e => changeSubrecipeRow(e, s.key)}
-                value={s.unit_id ?? ""}
-              >
-                <option value={0}>Select unit (optional)</option>
-                {units.map((u, index) => (
-                  <option key={index} value={u.unit_id}>{u.unit_name}</option>
-                ))}
-              </select>
-              
-              <label>Type:</label>
-              <select
-                name="recipe_type_id"
-                onChange={e => changeSubrecipeRow(e, s.key)}
-                required
-                value={s.recipe_type_id}
-              >
-                <option value={0}>Select type</option>
-                {recipe_types.map((r, index) => (
-                  <option key={index} value={r.recipe_type_id}>
-                    {r.recipe_type_name}
-                  </option>
-                ))}
-              </select>
-              
-              <label>Cuisine:</label>
-              <select
-                name="cuisine_id"
-                onChange={(e) => changeSubrecipeRow(e, s.key)}
-                required
-                value={s.cuisine_id}
-              >
-                <option value={0}>Select cuisine</option>
-                {cuisines.map((c, index) => (
-                  <option key={index} value={c.cuisine_id}>
-                    {c.cuisine_name}
-                  </option>
-                ))}
-              </select>
-              
-              <label>Subrecipe:</label>
-              <select
-                className="--subrecipe"
-                name="subrecipe_id"
-                onChange={e => changeSubrecipeRow(e, s.key)}
-                required
-                disabled={s.recipe_type_id === 0 || s.cuisine_id === 0}
-                value={(s.recipe_type_id === 0 || s.cuisine_id === 0) ? "" : s.subrecipe_id}
-              >
-                <option value="">Select subrecipe</option>
-                {
-                  allowedRecipes
+              <div className="pair">
+                <label>Amount:</label>
+                <input
+                  max="9999"
+                  min="0.125"
+                  name="amount"
+                  onChange={e => changeSubrecipeRow(e, s.key)}
+                  step="any"
+                  type="number"
+                  value={s.amount ?? ""}
+                  placeholder='Enter amount (optional)'
+                />
+              </div>
+              <div className="pair">
+                <label>Unit:</label>
+                <select
+                  name="unit_id"
+                  onChange={e => changeSubrecipeRow(e, s.key)}
+                  value={s.unit_id ?? ""}
+                >
+                  <option value={0}>Select unit (optional)</option>
+                  {units.map((u, index) => (
+                    <option key={index} value={u.unit_id}>{u.unit_name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="pair">
+                <label>Type:</label>
+                <select
+                  name="recipe_type_id"
+                  onChange={e => changeSubrecipeRow(e, s.key)}
+                  required
+                  value={s.recipe_type_id}
+                >
+                  <option value={0}>Select type</option>
+                  {recipe_types.map((r, index) => (
+                    <option key={index} value={r.recipe_type_id}>
+                      {r.recipe_type_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="pair">
+                <label>Cuisine:</label>
+                <select
+                  name="cuisine_id"
+                  onChange={(e) => changeSubrecipeRow(e, s.key)}
+                  required
+                  value={s.cuisine_id}
+                >
+                  <option value={0}>Select cuisine</option>
+                  {cuisines.map((c, index) => (
+                    <option key={index} value={c.cuisine_id}>
+                      {c.cuisine_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="pair">
+                <label>Subrecipe:</label>
+                <select
+                  className="--subrecipe"
+                  name="subrecipe_id"
+                  onChange={e => changeSubrecipeRow(e, s.key)}
+                  required
+                  disabled={s.recipe_type_id === 0 || s.cuisine_id === 0}
+                  value={(s.recipe_type_id === 0 || s.cuisine_id === 0) ? "" : s.subrecipe_id}
+                >
+                  <option value="">Select subrecipe</option>
+                  {allowedRecipes
                     .filter(r => r.recipe_type_id == s.recipe_type_id)
                     .filter(r => r.cuisine_id == s.cuisine_id)
                     .map((r, index) => (
                       <option key={index} value={r.recipe_id}>{r.title}</option>
-                    ))
-                }
-              </select>
-              
+                    ))}
+                </select>
+              </div>
               <button
                 className="--remove"
                 onClick={() => setSubrecipeRows(subrecipeRows.filter(row => row.key !== s.key))}
@@ -829,7 +835,7 @@ export default function RecipeForm({ ownership }: Props) {
         >Add Subrecipe</button>
       </div>
 
-      <h2>Images</h2>
+      <h3>Images</h3>
 
       <div>
         <span>If possible, upload all four images. See an example </span>
@@ -837,14 +843,14 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="recipe-image">
-        <h3>Finished Recipe</h3>
+        <h4>Finished Recipe</h4>
         {!recipeImageState.image
           ? (
             <>
               {!recipe_id
                 ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
                 : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
-              <label>Change</label>
+              <label>Change Image</label>
               <input
                 accept="image/*"
                 name="image-input"
@@ -905,14 +911,14 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="equipment-image">
-        <h3>Equipment</h3>
+        <h4>Equipment</h4>
         {!equipmentImageState.image
           ? (
             <>
               {!recipe_id
                 ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
                 : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
-              <label>Change</label>
+              <label>Change Image</label>
               <input
                 accept="image/*"
                 name="equipment-image-input"
@@ -965,7 +971,7 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="ingredients-image">
-        <h3>Ingredients</h3>
+        <h4>Ingredients</h4>
         {!ingredientsImageState.image
           ? (
             <>
@@ -973,7 +979,7 @@ export default function RecipeForm({ ownership }: Props) {
                 ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
                 : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
               }
-              <label>Change</label>
+              <label>Change Image</label>
               <input
                 accept="image/*"
                 name="ingredients-image-input"
@@ -1026,14 +1032,14 @@ export default function RecipeForm({ ownership }: Props) {
       </div>
 
       <div className="cooking-image">
-        <h3>Cooking In Action</h3>
+        <h4>Cooking In Action</h4>
         {!cookingImageState.image
           ? (
             <>
               {!recipe_id
                 ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
                 : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
-              <label>Change</label>
+              <label>Change Image</label>
               <input
                 accept="image/*"
                 name="cooking-image-input"
