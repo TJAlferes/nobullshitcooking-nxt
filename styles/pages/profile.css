@@ -1,5 +1,7 @@
 /* TO DO: test responsive design on actual smart phones */
 
+/* TO DO: clean and finish */
+
 .profile .avatar {
   height: 280px;
   width: 280px;
@@ -10,9 +12,6 @@
 }
 
 .profile .tabs button {
-  /*border: 1px solid;
-  border-color: #ddd #666 #666 #ddd;
-  border-radius: 1px;*/
   border: none;
   padding: 0 8px;
   height: 30px;
@@ -84,3 +83,19 @@
     width: 100%;
   }
 }
+
+/*
+
+Light/Day/Sun Theme
+
+*/
+
+
+
+/*
+
+Dark/Night/Moon Theme
+
+*/
+
+

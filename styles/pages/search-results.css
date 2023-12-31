@@ -70,7 +70,6 @@
   max-width: 1180px;
   min-width: 300px;
   overflow-y: scroll;
-  background-color: #fff;
   white-space: wrap;
   z-index: 1;
 }
@@ -120,11 +119,6 @@
   background-color: #ddd;
 }
 
-.search-results-list-item:hover h3,
-.search-results-list-item:active h3 {
-  color: #c10006;
-}
-
 .search-results-list-item img {
   display: block;
   width: 280px;
@@ -166,4 +160,45 @@
     row-gap: 10px;
     height: 74px;
   }
+}
+
+/*
+
+Light/Day/Sun Theme
+
+*/
+
+.light .search-results .filter-group {
+  background-color: #fff;
+}
+
+.light .search-results-list-item:hover h3,
+.light .search-results-list-item:active h3 {
+  color: #c10006;
+}
+
+/*
+
+Dark/Night/Moon Theme
+
+*/
+
+.dark .search-results .filter-group {
+  background-color: #333;
+  color: #aaa;
+}
+
+.dark .search-results-list-item:hover,
+.dark .search-results-list-item:active {
+  outline: 2px solid #666;
+  background-color: #666;
+}
+
+.dark .search-results-list-item:hover h3,
+.dark .search-results-list-item:active h3 {
+  color: #690004;
+}
+
+.dark .search-results-list-item div {
+  color: #aaa;
 }
