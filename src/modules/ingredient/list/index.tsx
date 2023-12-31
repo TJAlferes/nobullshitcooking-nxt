@@ -70,7 +70,7 @@ export default function IngredientList() {
 
       {results.length > 0
         ? (
-          <div className="settings">
+          <div className="top-settings">
             <p className="info">
               {total_results} total results and {total_pages} total pages
             </p>
@@ -140,7 +140,7 @@ export default function IngredientList() {
 
       {results.length > 0
         ? (
-          <div className="page-settings">
+          <div className="bottom-settings">
             <ResultsPerPage />
             <Pagination />
           </div>

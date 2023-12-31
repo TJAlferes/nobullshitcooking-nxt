@@ -1,9 +1,10 @@
 /* TO DO: test responsive design on actual smart phones */
 
-.search-results .settings {
+.search-results .top-settings {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: no-wrap;
   column-gap: 10px;
+  row-gap: 0;
   position: relative;
   margin-bottom: 10px;
   width: 100%;
@@ -137,10 +138,32 @@
   text-align: center;
 }
 
-.search-results .page-settings {
+.search-results .bottom-settings {
   display: flex;
   flex-wrap: nowrap;
+  column-gap: 10px;
+  row-gap: 0;
   justify-content: space-between;
   margin-top: 10px;
   height: 32px;
+}
+
+@media (max-width: 899px) {
+  .search-results .top-settings {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .search-results .filter-group {
+    top: 55px;
+  }
+
+  .search-results .bottom-settings {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 10px;
+    height: 74px;
+  }
 }
