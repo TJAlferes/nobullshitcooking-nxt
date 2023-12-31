@@ -77,22 +77,27 @@
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
+  column-gap: 10px;
   margin-bottom: 6px;
-  border: 1px solid #bbb;
+  border: 1px solid;
   padding: 6px;
+  width: fit-content;
 }
 
 .recipe-row .pair {
   display: flex;
+  align-items: center;
   column-gap: 4px;
 }
 
-.recipe-row label {
+.recipe-row .pair label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  height: 23px;
   font-size: 1.3rem;
   font-weight: 700;
-  height: 23px;
-  margin: 0 4px 0 18px;
-  padding-top: 3px;
 }
 
 .recipe-row select {
@@ -100,8 +105,10 @@
 }
 
 .recipe-row input {
+  margin: 0;
   border: 1px solid;
   border-radius: 1px;
+  padding: 0;
   height: 25px;
   max-width: 70px;
   min-width: 70px;
@@ -124,8 +131,8 @@
   border-radius: 2px;
   font-size: 12px;
   height: 19px;
-  margin-left: 18px;
   padding: 1px 2px;
+  cursor: pointer;
 }
 
 .recipe-form button.--add-row {
@@ -134,6 +141,12 @@
   border-radius: 2px;
   font-size: 12px;
   padding: 1px 2px;
+  cursor: pointer;
+}
+
+.recipe-form .current-image {
+  height: 560px;
+  width: 560px;
 }
 
 @media (max-width: 1200px) {
@@ -149,8 +162,12 @@
     margin-top: 6px;
     width: fit-content;
   }
+}
 
-  .recipe-form button.--add-row {
-    margin-top: 12px;
-  }
+.light .recipe-row {
+  border-color: #bbb;
+}
+
+.dark .recipe-row {
+  border-color: #666;
 }

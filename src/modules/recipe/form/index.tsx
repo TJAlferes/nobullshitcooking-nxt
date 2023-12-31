@@ -835,7 +835,7 @@ export default function RecipeForm({ ownership }: Props) {
         >Add Subrecipe</button>
       </div>
 
-      <h3>Images</h3>
+      <h3 style={{paddingTop: '18px'}}>Images</h3>
 
       <div>
         <span>If possible, upload all four images. See an example </span>
@@ -848,8 +848,8 @@ export default function RecipeForm({ ownership }: Props) {
           ? (
             <>
               {!recipe_id
-                ? <img src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
-                : <img src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
+                ? <img className="current-image" src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
+                : <img className="current-image" src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
@@ -916,8 +916,8 @@ export default function RecipeForm({ ownership }: Props) {
           ? (
             <>
               {!recipe_id
-                ? <img src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
-                : <img src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
+                ? <img className="current-image" src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
+                : <img className="current-image" src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
@@ -976,8 +976,8 @@ export default function RecipeForm({ ownership }: Props) {
           ? (
             <>
               {!recipe_id
-                ? <img src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
-                : <img src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
+                ? <img className="current-image" src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
+                : <img className="current-image" src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
               }
               <label>Change Image</label>
               <input
@@ -1037,8 +1037,8 @@ export default function RecipeForm({ ownership }: Props) {
           ? (
             <>
               {!recipe_id
-                ? <img src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
-                : <img src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
+                ? <img className="current-image" src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
+                : <img className="current-image" src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
