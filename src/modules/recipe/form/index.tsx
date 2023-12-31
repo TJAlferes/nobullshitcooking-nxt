@@ -1225,12 +1225,12 @@ export const commonReactCropProps = {
   className: "crop-tool",
   disabled:  true,
   locked:    true,
-  maxHeight: 346,
+  maxHeight: 560,
   maxWidth:  560,
-  minHeight: 346,
+  minHeight: 560,
   minWidth:  560,
   style: {
-    minHeight: "346px"
+    minHeight: "560px"
   }
 };
 

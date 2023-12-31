@@ -49,104 +49,78 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
 
   // TO DO: move logic out of return
   return (
-    <div className="two-col recipe-detail">
-      <div className="two-col-left recipe">
-        <h1>{title}</h1>
-
-        <SaveArea recipe_id={recipe_id} author_id={author_id} ownership={ownership} />
-
-        <div className="image">
-          {
-            recipe_image.image_filename !== "default"
-            ? <img src={`${url1}/${url2}/${recipe_image.image_filename}`} />
-            : <div className="img-560-346"></div>
-          }
-        </div>
-
-        <div className="author">
-          <b>Author:</b>
-          {' '}
-          {
-            author === "Unknown"
-            ? "Unknown"
-            : <Link href={`/${author}/profile`}>{author}</Link>
-          }
-        </div>
-
-        {/* active_time total_time */}
-
-        <div className="description">
-          <b>Author's note:</b>{' '}<em>{description}</em>
-        </div>
-
-        <div className="cuisine">
-          <b>Cuisine:</b>{' '}<span>{cuisine_name}</span>
-        </div>
-
-        <div className="type">
-          <b>Recipe type:</b>{' '}<span>{recipe_type_name}</span>
-        </div>
-
-        <h2>Required Methods</h2>
-        <div className="methods">
-          {required_methods?.map(m => (
-            <div className="method" key={m.method_name}>{m.method_name}</div>
-          ))}
-        </div>
-
-        <h2>Required Equipment</h2>
-        <div className="equipment-image">
-          {
-            equipment_image.image_filename !== "default"
-            ? <img src={`${url1}-equipment/${url2}/${equipment_image.image_filename}`} />
-            : <div className="img-560-346"></div>
-          }
-        </div>
-        <div className="equipments">
-          {required_equipment?.map(e => (
-            <div className="equipment" key={e.equipment_name}>
-              {e.amount}{' '}{e.equipment_name}
-            </div>
-          ))}
-        </div>
-
-        <h2>Required Ingredients</h2>
-        <div className="ingredients-image">
-          {
-            ingredients_image.image_filename !== "default"
-            ? <img src={`${url1}-ingredients/${url2}/${ingredients_image.image_filename}`} />
-            : <div className="img-560-346"></div>
-          }
-        </div>
-        <div className="ingredients">
-          {required_ingredients?.map(i => (
-            <div className="ingredient" key={i.ingredient_fullname}>
-              {i.amount}{' '}{i.unit_name}{' '}{i.ingredient_fullname}
-            </div>
-          ))}
-        </div>
-
-        <h2>Required Subrecipes</h2>
-        <div className="subrecipes">
-          {required_subrecipes?.map(s => (
-            <div className="subrecipe" key={s.subrecipe_title}>
-              {s.amount}{' '}{s.unit_name}{' '}{s.subrecipe_title}
-            </div>
-          ))}
-        </div>
-
-        <h2>Directions</h2>
-        <div className="cooking-image">
-          {
-            cooking_image.image_filename !== "default"
-            ? <img src={`${url1}-cooking/${url2}/${cooking_image.image_filename}`} />
-            : <div className="img-560-346"></div>
-          }
-        </div>
-        <div className="recipe-directions">{directions}</div>
+    <div className="one-col recipe-detail">
+      <h1>{title}</h1>
+      <div className="image">
+        {recipe_image.image_filename !== "default"
+          ? <img src={`${url1}${url2}/${recipe_image.image_filename}.jpg`} />
+          : <div className="img-560-346"></div>}
       </div>
-
-      <div className="two-col-right"></div>
+      <div className="author">
+        <b>Author:</b>
+        {' '}
+        {author === "Unknown"
+          ? "Unknown"
+          : <Link href={`/${author}/profile`}>{author}</Link>}
+      </div>
+      {/* active_time total_time */}
+      <div className="description">
+        <b>Author's note:</b>{' '}<em>{description}</em>
+      </div>
+      <div className="cuisine">
+        <b>Cuisine:</b>{' '}<span>{cuisine_name}</span>
+      </div>
+      <div className="type">
+        <b>Recipe type:</b>{' '}<span>{recipe_type_name}</span>
+      </div>
+      <SaveArea recipe_id={recipe_id} author_id={author_id} ownership={ownership} />
+      <h2>Required Methods</h2>
+      <div className="methods">
+        {required_methods?.map(m => (
+          <div className="method" key={m.method_name}>{m.method_name}</div>
+        ))}
+      </div>
+      <h2>Required Equipment</h2>
+      <div className="equipment-image">
+        {equipment_image.image_filename !== "default"
+          ? <img src={`${url1}-equipment${url2}/${equipment_image.image_filename}.jpg`} />
+          : <div className="img-560-346"></div>}
+      </div>
+      <div className="equipments">
+        {required_equipment?.map(e => (
+          <div className="equipment" key={e.equipment_name}>
+            {e.amount}{' '}{e.equipment_name}
+          </div>
+        ))}
+      </div>
+      <h2>Required Ingredients</h2>
+      <div className="ingredients-image">
+        {ingredients_image.image_filename !== "default"
+          ? <img src={`${url1}-ingredients${url2}/${ingredients_image.image_filename}.jpg`} />
+          : <div className="img-560-346"></div>}
+      </div>
+      <div className="ingredients">
+        {required_ingredients?.map(i => (
+          <div className="ingredient" key={i.ingredient_fullname}>
+            {i.amount}{' '}{i.unit_name}{' '}{i.ingredient_fullname}
+          </div>
+        ))}
+      </div>
+      <h2>Required Subrecipes</h2>
+      <div className="subrecipes">
+        {required_subrecipes?.map(s => (
+          <div className="subrecipe" key={s.subrecipe_title}>
+            {s.amount}{' '}{s.unit_name}{' '}{s.subrecipe_title}
+          </div>
+        ))}
+      </div>
+      <h2>Directions</h2>
+      <div className="cooking-image">
+        {cooking_image.image_filename !== "default"
+          ? <img src={`${url1}-cooking${url2}/${cooking_image.image_filename}.jpg`} />
+          : <div className="img-560-346"></div>}
+      </div>
+      <div className="recipe-directions">{directions}</div>
     </div>
   );
 }
