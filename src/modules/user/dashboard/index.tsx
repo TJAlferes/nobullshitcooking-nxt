@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
 import ReactCrop, { Crop } from 'react-image-crop';
@@ -334,14 +334,15 @@ export default function Dashboard() {
           await uploadImageToAwsS3(res.data.smallSignature, small_avatar);
           await uploadImageToAwsS3(res.data.tinySignature, tiny_avatar);
           new_avatar = res.data.filename;
+          console.log(new_avatar);
         } else {
           setFeedback(res.data.message);
           return;
         }
       }
 
-      const res = await api.patch(
-        `/users/${auth.authname}/avatar`,
+      const res = await api.post(
+        `/users/${auth.authname}/avatars`,
         {new_avatar}
       );
       if (res.status === 204) {
