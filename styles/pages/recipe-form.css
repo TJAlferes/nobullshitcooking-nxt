@@ -14,21 +14,6 @@
   width: 235px;
 }
 
-.recipe-form .required-equipment,
-.recipe-form .required-ingredients,
-.recipe-form .required-subrecipes,
-.recipe-form .recipe-image,
-.recipe-form .equipment-image,
-.recipe-form .ingredients-image,
-.recipe-form .cooking-image {
-  padding-top: 18px;
-}
-
-/* ??? */
-.recipe-form select:required {
-  box-shadow: none;
-}
-
 .recipe-form .methods {
   display: flex;
   flex-direction: row;
@@ -70,6 +55,30 @@
   min-height: 13px;
   order: 2;
   width: fit-content;
+}
+
+.recipe-form .required-equipment,
+.recipe-form .required-ingredients,
+.recipe-form .required-subrecipes,
+.recipe-form .recipe-image,
+.recipe-form .equipment-image,
+.recipe-form .ingredients-image,
+.recipe-form .cooking-image {
+  margin-top: 18px;
+}
+
+.recipe-form .recipe-image,
+.recipe-form .equipment-image,
+.recipe-form .ingredients-image,
+.recipe-form .cooking-image {
+  border: 1px solid;
+  padding: 6px;
+  width: fit-content;
+}
+
+/* ??? */
+.recipe-form select:required {
+  box-shadow: none;
 }
 
 .recipe-row {
@@ -126,7 +135,7 @@
 }
 
 .recipe-row button.--remove {
-  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+  background-color: #ffd6d6;
   border: 1px solid #aaa;
   border-radius: 2px;
   font-size: 12px;
@@ -136,7 +145,7 @@
 }
 
 .recipe-form button.--add-row {
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+  background-color: #d5fdd5;
   border: 1px solid #aaa;
   border-radius: 2px;
   font-size: 12px;
@@ -147,6 +156,23 @@
 .recipe-form .current-image {
   height: 560px;
   width: 560px;
+}
+
+.recipe-form .image-cancel {
+  display: block;
+  margin: 0 30px 10px 0;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  padding: 1px 5px;
+  height: 30px;
+  width: 235px;
+  line-height: 26px;
+  font-size: 1.3rem;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+  cursor: pointer;
 }
 
 @media (max-width: 1200px) {
@@ -164,10 +190,18 @@
   }
 }
 
-.light .recipe-row {
+.light .recipe-form .recipe-row,
+.light .recipe-form .recipe-image,
+.light .recipe-form .equipment-image,
+.light .recipe-form .ingredients-image,
+.light .recipe-form .cooking-image {
   border-color: #bbb;
 }
 
-.dark .recipe-row {
+.dark .recipe-form .recipe-row,
+.dark .recipe-form .recipe-image,
+.dark .recipe-form .equipment-image,
+.dark .recipe-form .ingredients-image,
+.dark .recipe-form .cooking-image {
   border-color: #666;
 }

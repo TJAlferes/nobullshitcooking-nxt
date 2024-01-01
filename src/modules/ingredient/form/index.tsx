@@ -205,8 +205,9 @@ export default function IngredientForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h3>Ingredient Type</h3>
+      <label htmlFor='ingredient-type'>Ingredient Type</label>
       <select
+        id='ingredient-type'
         name="ingredientType"
         onChange={e => setIngredientTypeId(Number(e.target.value))}
         required
@@ -220,32 +221,35 @@ export default function IngredientForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h3>Ingredient Brand</h3>
+      <label htmlFor='ingredient-brand'>Ingredient Brand</label>
       <input
+        id='ingredient-brand'
         className="name"
         onChange={e => setIngredientBrand(e.target.value)}
         type="text"
         value={ingredient_brand}
       />
 
-      <h3>Ingredient Variety</h3>
+      <label htmlFor='ingredient-variety'>Ingredient Variety</label>
       <input
+        id='ingredient-variety'
         className="name"
         onChange={e => setIngredientVariety(e.target.value)}
         type="text"
         value={ingredient_variety}
       />
 
-      <h3>Ingredient Name</h3>
+      <label htmlFor='ingredient-name'>Ingredient Name</label>
       <input
+        id='ingredient-name'
         className="name"
         onChange={e => setIngredientName(e.target.value)}
         type="text"
         value={ingredient_name}
       />
 
-      <h3>Notes</h3>
-      <textarea className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
+      <label htmlFor='notes'>Notes</label>
+      <textarea id='notes' className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='ingredient-image'>
         <h3>Image of Ingredient</h3>
@@ -258,7 +262,7 @@ export default function IngredientForm({ ownership }: Props) {
               : <img src={`${url}/ingredient/${auth_id}/${image.image_filename}`} />
             }
             
-            <h4>Change</h4>
+            <label>Change Image</label>
             <input
               accept="image/*"
               name="image-input"
@@ -289,9 +293,9 @@ export default function IngredientForm({ ownership }: Props) {
             </span>
   
             <div className="crops">
-              <div className="crop-full-outer">
+              <div className="crop-small-outer">
                 <span>Small Size: </span>
-                <img className="crop-full" src={imageState.smallPreview} />
+                <img className="crop-small" src={imageState.smallPreview} />
               </div>
 
               <div className="crop-tiny-outer">
@@ -300,7 +304,7 @@ export default function IngredientForm({ ownership }: Props) {
               </div>
             </div>
 
-            <h4>Caption:</h4>
+            <label>{'Caption (optional)'}</label>
             <input
               className="caption"
               max={150}
@@ -311,7 +315,7 @@ export default function IngredientForm({ ownership }: Props) {
             />
 
             <button
-              className="image-cancel-button"
+              className="image-cancel"
               disabled={loading}
               onClick={cancelImage}
             >Cancel</button>
@@ -319,15 +323,13 @@ export default function IngredientForm({ ownership }: Props) {
         )}
       </div>
 
-      <div className="finish">
-        <Link className="cancel-button" href="/dashboard">Cancel</Link>
+      <button
+        className='submit-button'
+        disabled={loading}
+        onClick={submit}
+      >{loading ? 'Creating...' : 'Create'}</button>
 
-        <button
-          className='submit-button'
-          disabled={loading}
-          onClick={submit}
-        >{loading ? 'Creating...' : 'Create'}</button>
-      </div>
+      <Link className="cancel-button" href="/dashboard">Cancel</Link>
     </div>
   );
 }

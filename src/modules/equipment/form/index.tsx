@@ -197,8 +197,9 @@ export default function EquipmentForm({ ownership }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <h3>Equipment Type</h3>
+      <label htmlFor='equipment-type'>Equipment Type</label>
       <select
+        id='equipment-type'
         name="equipmentType"
         onChange={e => setEquipmentTypeId(Number(e.target.value))}
         required
@@ -212,16 +213,17 @@ export default function EquipmentForm({ ownership }: Props) {
         ))}
       </select>
 
-      <h3>Equipment Name</h3>
+      <label htmlFor='equipment-name'>Equipment Name</label>
       <input
+        id='equipment-name'
         className="name"
         onChange={e => setEquipmentName(e.target.value)}
         type="text"
         value={equipment_name}
       />
-
-      <h3>Notes</h3>
-      <textarea className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
+      
+      <label htmlFor='notes'>Notes</label>
+      <textarea id='notes' className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='equipment-image'>
         <h3>Image of Equipment</h3>
@@ -234,7 +236,7 @@ export default function EquipmentForm({ ownership }: Props) {
               : <img src={`${url}/equipment/${auth_id}/${image.image_filename}`} />
             }
             
-            <h4>Change</h4>
+            <label>Change Image</label>
             <input
               accept="image/*"
               name="image-input"
@@ -265,9 +267,9 @@ export default function EquipmentForm({ ownership }: Props) {
             </span>
   
             <div className="crops">
-              <div className="crop-full-outer">
+              <div className="crop-small-outer">
                 <span>Small Size: </span>
-                <img className="crop-full" src={imageState.smallPreview} />
+                <img className="crop-small" src={imageState.smallPreview} />
               </div>
 
               <div className="crop-tiny-outer">
@@ -276,7 +278,7 @@ export default function EquipmentForm({ ownership }: Props) {
               </div>
             </div>
 
-            <h4>Caption:</h4>
+            <label>{'Caption (optional)'}</label>
             <input
               className="caption"
               max={150}
@@ -295,15 +297,13 @@ export default function EquipmentForm({ ownership }: Props) {
         )}
       </div>
 
-      <div className="finish">
-        <Link className="cancel-button" href='/dashboard'>Cancel</Link>
-
-        <button
-          className='submit-button'
-          disabled={loading}
-          onClick={submit}
-        >{loading ? 'Creating...' : 'Create'}</button>
-      </div>
+      <button
+        className='submit-button'
+        disabled={loading}
+        onClick={submit}
+      >{loading ? 'Creating...' : 'Create'}</button>
+      
+      <Link className="cancel-button" href='/dashboard'>Cancel</Link>
     </div>
   );
 }

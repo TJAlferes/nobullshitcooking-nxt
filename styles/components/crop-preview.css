@@ -1,30 +1,52 @@
 .crop-tool-tip {
   display: block;
+  padding: 10px 0;
 }
 
 .crops {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  row-gap: 10px;
 }
 
-.crop-full-outer,
+.crop-large-outer,
+.crop-medium-outer,
+.crop-small-outer,
 .crop-thumb-outer,
 .crop-tiny-outer {
-  align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  order: 1;
-  padding: 10px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  row-gap: 4px;
 }
 
-.crop-full,
-.crop-thumb,
+.crop-large-outer span,
+.crop-medium-outer span,
+.crop-small-outer span,
+.crop-thumb-outer span,
+.crop-tiny-outer span {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.crop-medium {
+  height: 560px;
+  width: 560px;
+}
+
+.crop-small {
+  height: 280px;
+  width: 280px;
+}
+
+.crop-thumb {
+  height: 100px;
+  width: 100px;
+}
+
 .crop-tiny {
-  margin-left: 5px;
-}
-
-.image-cancel-button {
-  height: 21px;
-  padding: 0 6px;
+  height: 28px;
+  width: 28px;
 }

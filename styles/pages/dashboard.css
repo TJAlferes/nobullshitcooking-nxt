@@ -24,51 +24,12 @@
   margin-bottom: 10px;
 }
 
-.avatar-crops {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  column-gap: 10px;
-  margin: 10px 0;
-}
-
-.avatar-crops div.--full,
-.avatar-crops div.--tiny {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 10px;
-  /*padding: 10px;*/
-}
-
-.avatar-crops div.--full span,
-.avatar-crops div.--tiny span {
-  font-size: 1.3rem;
-  font-weight: 700;
-}
-
-.avatar-crops img.--full {
-  margin-left: 5px;
-  max-height: 280px;
-  min-height: 280px;
-}
-
-.avatar-crops img.--tiny {
-  margin-left: 5px;
-  max-height: 28px;
-  min-height: 28px;
-}
-
 .avatar-edit-tool {
   display: block;
   max-height: 100%;
   min-height: 100%;
   max-width: 100%;
   min-width: 100%;
-}
-
-.dashboard-avatar-edit p {
-  display: block;
 }
 
 .dashboard-avatar-edit button.--cancel,
@@ -89,11 +50,12 @@
 }
 
 .dashboard-avatar-edit button.--cancel {
-  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+  background-color: #ffd6d6;
 }
 
 .dashboard-avatar-edit button.--submit {
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+  margin-top: 10px;
+  background-color: #d5fdd5;
 }
 
 /* ---------- ---------- ---------- ---------- ---------- */
@@ -215,7 +177,7 @@
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
 }
 
-@media (max-width: 1209px) {
+@media (max-width: 899px) {
   .avatar-crops,
   .avatar-crops div.--full,
   .avatar-crops div.--tiny {
@@ -231,8 +193,6 @@
   .avatar-crops div.--full span,
   .avatar-crops div.--tiny span {
     margin-bottom: 4px;
-    font-size: 1.3rem;
-    font-weight: 700;
   }
   
   .avatar-crops img.--full,
@@ -240,11 +200,6 @@
     margin-left: 0;
     padding-top: 5px;
   }
-
-  /*.dashboard-avatar-edit button.--cancel,
-  .dashboard-avatar-edit button.--submit {
-    margin: 30px auto 10px auto;
-  }*/
 
   /*.new-entity {
     margin: 0 auto 10px auto;

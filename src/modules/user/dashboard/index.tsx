@@ -588,6 +588,7 @@ export default function Dashboard() {
           <p>{auth.auth_email}</p>
           <label htmlFor='new-email'>New Email</label>
           <input
+            id='new-email'
             name='new-email'
             onChange={e => setNewEmail(e.target.value)}
             value={new_email}
@@ -596,6 +597,7 @@ export default function Dashboard() {
           />
           <label htmlFor='password'>Password</label>
           <input
+            id='password'
             name='password'
             onChange={e => setPassword(e.target.value)}
             value={password}
@@ -613,6 +615,7 @@ export default function Dashboard() {
           <h3>Password</h3>
           <label htmlFor='current-password'>Current Password</label>
           <input
+            id='current-password'
             name='current-password'
             onChange={e => setCurrentPassword(e.target.value)}
             value={current_password}
@@ -622,6 +625,7 @@ export default function Dashboard() {
           />
           <label htmlFor='new-password'>New Password</label>
           <input
+            id='new-password'
             name='new-password'
             onChange={e => setNewPassword(e.target.value)}
             value={new_password}
@@ -631,6 +635,7 @@ export default function Dashboard() {
           />
           <label htmlFor='new-password-again'>New Password Again</label>
           <input
+            id='new-password-again'
             name='new-password-again'
             onChange={e => setNewPasswordAgain(e.target.value)}
             value={new_password_again}
@@ -678,15 +683,17 @@ export default function Dashboard() {
                 src={avatar as string}
               />
             </ReactCrop>
-            <p>Move the crop to your desired position, then click "Complete". These two images will be saved for you:</p>
-            <div className="avatar-crops">
-              <div className="--full">
+            <span className="crop-tool-tip">
+                {'Resize and move the crop above. The images below will be saved for you.'}
+              </span>
+            <div className="crops">
+              <div className="crop-small-outer">
                 <span>Full Size</span>
-                <img src={smallCrop} />
+                <img className="crop-small" src={smallCrop} />
               </div>
-              <div className="--tiny">
+              <div className="crop-tiny-outer">
                 <span>Tiny Size</span>
-                <img src={tinyCrop} />
+                <img className="crop-tiny" src={tinyCrop} />
               </div>
             </div>
             <button

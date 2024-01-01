@@ -1,29 +1,13 @@
 /* TO DO: test responsive design on actual smart phones */
 
-/*.new-ingredient {}*/
-
-.new-ingredient .name {
-  border: 1px solid;
-  border-radius: 1px;
+.ingredient-form label {
   display: block;
-  height: 31px;
-  margin: 0 auto;
-  padding: 3px 7px;
-  width: 100%;
+  margin: 14px 0 4px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-.new-ingredient .description {
-  width: 100%;
-}
-
-.new-ingredient .finish {
-  display: flex;
-  flex-direction: row;
-  padding: 10px 0;
-}
-
-@media (max-width: 899px) {
-  .new-ingredient .finish {
-    flex-direction: column;
-  }
+.ingredient-form .notes {
+  height: 106px;
+  width: 235px;
 }

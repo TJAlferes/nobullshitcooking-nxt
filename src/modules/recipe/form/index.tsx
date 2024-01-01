@@ -56,17 +56,17 @@ export default function RecipeForm({ ownership }: Props) {
   const [recipeImageState, setRecipeImageState] = useState<ImageState>({
     image: null,
     crop: initialCrop,
-    mediumPreview: "",
-    thumbPreview: "",
-    tinyPreview: ""
+    mediumPreview: '',
+    thumbPreview: '',
+    tinyPreview: ''
   });
   const [recipeMediumImage, setRecipeMediumImage] = useState<File | null>(null);
   const [recipeThumbImage, setRecipeThumbImage] = useState<File | null>(null);
   const [recipeTinyImage, setRecipeTinyImage] = useState<File | null>(null);
-  const [recipe_image, setRecipeImage] = useState({
-    image_id: "",
-    image_filename: "default",
-    caption: "",
+  const [recipe_image, setRecipeImage] = useState<ImageUpdateInfo>({
+    image_id: '',
+    image_filename: 'default',
+    caption: '',
     type: 1
   });
 
@@ -835,7 +835,7 @@ export default function RecipeForm({ ownership }: Props) {
         >Add Subrecipe</button>
       </div>
 
-      <h3 style={{paddingTop: '18px'}}>Images</h3>
+      <h3 style={{paddingTop: '24px'}}>Images</h3>
 
       <div>
         <span>If possible, upload all four images. See an example </span>
@@ -875,33 +875,36 @@ export default function RecipeForm({ ownership }: Props) {
                   src={recipeImageState.image as string}
                 />
               </ReactCrop>
-              <ToolTip />
+              <span className="crop-tool-tip">
+                {'Resize and move the crop above. The images below will be saved for you.'}
+              </span>
               <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={recipeImageState.mediumPreview} />
+                <div className="crop-medium-outer">
+                  <span>Medium</span>
+                  <img className="crop-medium" src={recipeImageState.mediumPreview} />
                 </div>
-                <div className="crop-thumb-outer">
-                  <span>Thumb Size: </span>
-                  <img className="crop-thumb" src={recipeImageState.thumbPreview} />
+                <div className="crop-small-outer">
+                  <span>Small</span>
+                  <img className="crop-small" src={recipeImageState.thumbPreview} />
                 </div>
                 <div className="crop-tiny-outer">
-                  <span>Tiny Size: </span>
+                  <span>Tiny</span>
                   <img className="crop-tiny" src={recipeImageState.tinyPreview} />
                 </div>
               </div>
-              <h4>Caption:</h4>
+              <label>{'Caption (optional)'}</label>
               <input
                 className="caption"
                 max={150}
                 min={2}
-                name="caption"
+                name="recipe-image-caption"
+                id="recipe-image-caption"
                 onChange={e => setRecipeImage({...recipe_image, caption: e.target.value})}
                 type="text"
                 value={recipe_image!.caption}
               />
               <button
-                className="image-cancel-button"
+                className="image-cancel"
                 disabled={loading}
                 onClick={cancelRecipeImage}
               >Cancel</button>
@@ -943,25 +946,28 @@ export default function RecipeForm({ ownership }: Props) {
                   src={equipmentImageState.image as string}
                 />
               </ReactCrop>
-              <ToolTip />
+              <span className="crop-tool-tip">
+                {'Resize and move the crop above. The image below will be saved for you.'}
+              </span>
               <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={equipmentImageState.mediumPreview} />
+                <div className="crop-medium-outer">
+                  <span>Full Size</span>
+                  <img className="crop-medium" src={equipmentImageState.mediumPreview} />
                 </div>
               </div>
-              <h4>Caption:</h4>
+              <label>Caption (Optional)</label>
               <input
                 className="caption"
                 max={150}
                 min={2}
-                name="caption"
+                id='equipment-image-caption'
+                name="equipment-image-caption"
                 onChange={e => setEquipmentImage({...equipment_image, caption: e.target.value})}
                 type="text"
                 value={equipment_image!.caption}
               />
               <button
-                className="image-cancel-button"
+                className="image-cancel"
                 disabled={loading}
                 onClick={cancelEquipmentImage}
               >Cancel</button>
@@ -1004,25 +1010,28 @@ export default function RecipeForm({ ownership }: Props) {
                   src={ingredientsImageState.image as string}
                 />
               </ReactCrop>
-              <ToolTip />
+              <span className="crop-tool-tip">
+                {'Resize and move the crop above. The image below will be saved for you.'}
+              </span>
               <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={ingredientsImageState.mediumPreview} />
+                <div className="crop-medium-outer">
+                  <span>Full Size</span>
+                  <img className="crop-medium" src={ingredientsImageState.mediumPreview} />
                 </div>
               </div>
-              <h4>Caption:</h4>
+              <label>Caption (Optional)</label>
               <input
                 className="caption"
                 max={150}
                 min={2}
-                name="caption"
+                id='ingredients-image-caption'
+                name="ingredients-image-caption"
                 onChange={e => setIngredientsImage({...ingredients_image, caption: e.target.value})}
                 type="text"
                 value={ingredients_image!.caption}
               />
               <button
-                className="image-cancel-button"
+                className="image-cancel"
                 disabled={loading}
                 onClick={cancelIngredientsImage}
               >Cancel</button>
@@ -1064,25 +1073,28 @@ export default function RecipeForm({ ownership }: Props) {
                   src={cookingImageState.image as string}
                 />
               </ReactCrop>
-              <ToolTip />
+              <span className="crop-tool-tip">
+                {'Resize and move the crop above. The image below will be saved for you.'}
+              </span>
               <div className="crops">
-                <div className="crop-full-outer">
-                  <span>Full Size: </span>
-                  <img className="crop-full" src={cookingImageState.mediumPreview} />
+                <div className="crop-medium-outer">
+                  <span>Full Size</span>
+                  <img className="crop-medium" src={cookingImageState.mediumPreview} />
                 </div>
               </div>
-              <h4>Caption:</h4>
+              <label>Caption (Optional)</label>
               <input
                 className="caption"
                 max={150}
                 min={2}
-                name="caption"
+                id='cooking-image-caption'
+                name="cooking-image-caption"
                 onChange={e => setCookingImage({...cooking_image, caption: e.target.value})}
                 type="text"
                 value={cooking_image!.caption}
               />
               <button
-                className="image-cancel-button"
+                className="image-cancel"
                 disabled={loading}
                 onClick={cancelCookingImage}
               >Cancel</button>
@@ -1180,14 +1192,6 @@ type ImageState = {
   tinyPreview?:  string;
 };
 
-export function ToolTip() {
-  return (
-    <span className="crop-tool-tip">
-      Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
-    </span>
-  );
-}
-
 export const pristineEquipmentRow = () => ({
   key:               uuidv4(),
   amount:            0,
@@ -1223,14 +1227,15 @@ export const initialCrop: Crop = {
 export const commonReactCropProps = {
   aspect:    1,
   className: "crop-tool",
-  disabled:  true,
-  locked:    true,
+  disabled:  false,
+  locked:    false,
   maxHeight: 560,
   maxWidth:  560,
-  minHeight: 560,
-  minWidth:  560,
+  minHeight: 56,
+  minWidth:  56,
   style: {
-    minHeight: "560px"
+    minHeight: "560px",
+    minWidth: "560px"
   }
 };
 
