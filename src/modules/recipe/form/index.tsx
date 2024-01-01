@@ -57,11 +57,11 @@ export default function RecipeForm({ ownership }: Props) {
     image: null,
     crop: initialCrop,
     mediumPreview: '',
-    thumbPreview: '',
+    smallPreview: '',
     tinyPreview: ''
   });
   const [recipeMediumImage, setRecipeMediumImage] = useState<File | null>(null);
-  const [recipeThumbImage, setRecipeThumbImage] = useState<File | null>(null);
+  const [recipeSmallImage, setRecipeSmallImage] = useState<File | null>(null);
   const [recipeTinyImage, setRecipeTinyImage] = useState<File | null>(null);
   const [recipe_image, setRecipeImage] = useState<ImageUpdateInfo>({
     image_id: '',
@@ -235,17 +235,17 @@ export default function RecipeForm({ ownership }: Props) {
   const onRecipeCropComplete = async (crop: Crop) => {
     if (!recipeImageRef.current) return;
     const medium =  await getCroppedImage(560, 560, recipeImageRef.current, crop);
-    const thumb = await getCroppedImage(100, 100, recipeImageRef.current, crop);
+    const small = await getCroppedImage(280, 280, recipeImageRef.current, crop);
     const tiny =  await getCroppedImage(28, 28, recipeImageRef.current, crop);
-    if (!medium || !thumb || !tiny) return;
+    if (!medium || !small || !tiny) return;
     setRecipeImageState({
       ...recipeImageState,
       mediumPreview: medium.preview,
-      thumbPreview: thumb.preview,
+      smallPreview: small.preview,
       tinyPreview: tiny.preview
     });
     setRecipeMediumImage(medium.final);
-    setRecipeThumbImage(thumb.final);
+    setRecipeSmallImage(small.final);
     setRecipeTinyImage(tiny.final);
   };
 
@@ -279,11 +279,11 @@ export default function RecipeForm({ ownership }: Props) {
       image: null,
       //crop
       mediumPreview: "",
-      thumbPreview: "",
+      smallPreview: "",
       tinyPreview: ""
     });
     setRecipeMediumImage(null);
-    setRecipeThumbImage(null);
+    setRecipeSmallImage(null);
     setRecipeTinyImage(null);
   };
 
@@ -406,13 +406,13 @@ export default function RecipeForm({ ownership }: Props) {
 
     // upload any newly made images to AWS S3, then insert info into MySQL
     try {
-      if (recipeMediumImage && recipeThumbImage && recipeTinyImage) {
+      if (recipeMediumImage && recipeSmallImage && recipeTinyImage) {
         const res = await api.post(
           `/aws-s3-${ownership}-uploads`,
           {subfolder: 'recipe'}
         );
         await uploadImageToAwsS3(res.data.mediumSignature, recipeMediumImage);
-        await uploadImageToAwsS3(res.data.thumbSignature, recipeThumbImage);
+        await uploadImageToAwsS3(res.data.smallSignature, recipeSmallImage);
         await uploadImageToAwsS3(res.data.tinySignature, recipeTinyImage);
         recipe_upload.recipe_image.image_filename = res.data.filename;
       }
@@ -885,7 +885,7 @@ export default function RecipeForm({ ownership }: Props) {
                 </div>
                 <div className="crop-small-outer">
                   <span>Small</span>
-                  <img className="crop-small" src={recipeImageState.thumbPreview} />
+                  <img className="crop-small" src={recipeImageState.smallPreview} />
                 </div>
                 <div className="crop-tiny-outer">
                   <span>Tiny</span>
@@ -1188,7 +1188,7 @@ type ImageState = {
   image:         string | ArrayBuffer | null;
   crop:          Crop;
   mediumPreview: string;
-  thumbPreview?: string;
+  smallPreview?: string;
   tinyPreview?:  string;
 };
 

@@ -323,23 +323,27 @@ export default function Dashboard() {
     window.scrollTo(0, 0);
 
     try {
-      let new_avatar = "";
+      let new_avatar = '';
 
       if (small_avatar && tiny_avatar) {
         const res = await api.post(
           `/aws-s3-public-uploads`,
           {subfolder: 'avatar'}
         );
-        await uploadImageToAwsS3(res.data.smallSignature, small_avatar);
-        await uploadImageToAwsS3(res.data.tinySignature, tiny_avatar);
-        new_avatar = res.data.filename;
+        if (res.status === 201) {
+          await uploadImageToAwsS3(res.data.smallSignature, small_avatar);
+          await uploadImageToAwsS3(res.data.tinySignature, tiny_avatar);
+          new_avatar = res.data.filename;
+        } else {
+          setFeedback(res.data.message);
+          return;
+        }
       }
 
       const res = await api.patch(
         `/users/${auth.authname}/avatar`,
         {new_avatar}
       );
-
       if (res.status === 204) {
         setFeedback('Avatar updated.');
         auth.setAuthAvatar(new_avatar);

@@ -61,7 +61,6 @@
 /* ---------- ---------- ---------- ---------- ---------- */
 
 .dashboard-content {
-  padding: 10px;
   width: 100%;
 }
 
@@ -178,33 +177,6 @@
 }
 
 @media (max-width: 899px) {
-  .avatar-crops,
-  .avatar-crops div.--full,
-  .avatar-crops div.--tiny {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .avatar-crops {
-    column-gap: 0;
-    row-gap: 10px;
-  }
-
-  .avatar-crops div.--full span,
-  .avatar-crops div.--tiny span {
-    margin-bottom: 4px;
-  }
-  
-  .avatar-crops img.--full,
-  .avatar-crops img.--tiny {
-    margin-left: 0;
-    padding-top: 5px;
-  }
-
-  /*.new-entity {
-    margin: 0 auto 10px auto;
-  }*/
-
   .dashboard-item .name {
     width: 100%;
   }
