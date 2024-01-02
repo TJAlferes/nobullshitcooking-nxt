@@ -98,7 +98,7 @@ export default function PlanForm({ ownership }: Props) {
 
   const getMyPlans = async () => {
     if (ownership === 'public') {
-      const res = await api.get(`/users/${authname}/public-plans`, false);
+      const res = await api.get(`/users/${authname}/public-plans`);
       setMyPublicPlans(res.data);
     } else if (ownership === 'private') {
       const res = await api.get(`/users/${authname}/private-plans`);

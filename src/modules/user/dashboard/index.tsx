@@ -61,7 +61,7 @@ export default function Dashboard() {
   const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads';
   const avatarUrl = auth.auth_avatar === 'default'
     ? `${officialUrl}/avatar/default`
-    : `${publicUrl}/avatar/user_id/${avatar}`;
+    : `${publicUrl}/avatar/${auth.auth_id}/${auth.auth_avatar}`;
 
   const updateEmail = async () => {
     setLoading(true);
@@ -348,7 +348,9 @@ export default function Dashboard() {
       if (res.status === 204) {
         setFeedback('Avatar updated.');
         auth.setAuthAvatar(new_avatar);
-        setTimeout(() => router.push(`/dashboard`), 3000);
+        setTimeout(() => {
+          router.push(`/dashboard`);
+        }, 3000);
       } else {
         setFeedback(res.data.message);
       }
@@ -863,7 +865,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.image_filename !== "default"
-                    ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
+                    ? <img src={`${publicUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny.jpg`} />
                     : <div className="img-28-28"></div>
                   }
                 </span>
@@ -917,7 +919,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.image_filename !== "default"
-                    ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny`} />
+                    ? <img src={`${privateUrl}/recipe/${auth.auth_id}/${r.image_filename}-tiny.jpg`} />
                     : <div className="img-28-28"></div>
                   }
                 </span>
@@ -950,7 +952,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.image_filename !== "default"
-                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`} />
                     : <div className="img--28-18"></div>
                   }
                 </span>
@@ -979,7 +981,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
                   {r.image_filename !== "default"
-                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny`} />
+                    ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`} />
                     : <div className="img-28-28"></div>
                   }
                 </span>
@@ -1012,7 +1014,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={i.ingredient_id}>
                 <span className="tiny">
                   {i.image_filename !== "default"
-                    ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny`} />
+                    ? <img src={`${privateUrl}/ingredient/${auth.auth_id}/${i.image_filename}-tiny.jpg`} />
                     : <div className="img-28-28"></div>
                   }
                 </span>
@@ -1053,7 +1055,7 @@ export default function Dashboard() {
               <div className="dashboard-item" key={e.equipment_id}>
                 <span className="tiny">
                   {e.image_filename !== "default"
-                    ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny`} />
+                    ? <img src={`${privateUrl}/equipment/${auth.auth_id}/${e.image_filename}-tiny.jpg`} />
                     : <div className="img-28-28"></div>
                   }
                 </span>

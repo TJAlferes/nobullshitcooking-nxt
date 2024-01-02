@@ -165,7 +165,7 @@ export default function EquipmentForm({ ownership }: Props) {
           await getMyPrivateEquipment();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       } else {
         const res = await api.post(
@@ -177,7 +177,7 @@ export default function EquipmentForm({ ownership }: Props) {
           await getMyPrivateEquipment();
           setTimeout(() => router.push(`/dashboard`), 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       }
     } catch(err) {
@@ -232,8 +232,8 @@ export default function EquipmentForm({ ownership }: Props) {
           <div>
             {
               !equipment_id
-              ? <img src={`${url}/equipment/${NOBSC_USER_ID}/default`} />
-              : <img src={`${url}/equipment/${auth_id}/${image.image_filename}`} />
+              ? <img src={`${url}/equipment/${NOBSC_USER_ID}/default.jpg`} />
+              : <img src={`${url}/equipment/${auth_id}/${image.image_filename}.jpg`} />
             }
             
             <label>Change Image</label>

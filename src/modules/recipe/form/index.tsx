@@ -170,7 +170,7 @@ export default function RecipeForm({ ownership }: Props) {
 
   const getMyRecipes = async () => {
     if (ownership === "public") {
-      const res = await api.get(`/users/${authname}/public-recipes`, false);
+      const res = await api.get(`/users/${authname}/public-recipes`);
       setMyPublicRecipes(res.data);
     } else if (ownership === "private") {
       const res = await api.get(`/users/${authname}/private-recipes`);
@@ -332,7 +332,7 @@ export default function RecipeForm({ ownership }: Props) {
 
   const getCheckedMethods = () => Object.keys(usedMethods)
     .filter(key => usedMethods[parseInt(key)] === true)
-    .map(key => ({method_id: parseInt(key)}));
+    .map(key => ({method_id: Number(key)}));
 
   // TO DO: map "" to null here?
 
@@ -403,6 +403,7 @@ export default function RecipeForm({ ownership }: Props) {
       ingredients_image,
       cooking_image
     };
+    console.log(recipe_upload.required_methods);
 
     // upload any newly made images to AWS S3, then insert info into MySQL
     try {
@@ -450,11 +451,13 @@ export default function RecipeForm({ ownership }: Props) {
           {recipe_id, ...recipe_upload}
         );
         if (res.status === 204) {
-          setFeedback("Recipe updated.");
+          setFeedback('Recipe updated.');
           await getMyRecipes();
-          setTimeout(() => router.push(`/dashboard`), 4000);
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       } else {
         const res = await api.post(
@@ -462,18 +465,20 @@ export default function RecipeForm({ ownership }: Props) {
           recipe_upload
         );
         if (res.status === 201) {
-          setFeedback("Recipe created.");
+          setFeedback('Recipe created.');
           await getMyRecipes();
-          setTimeout(() => router.push(`/dashboard`), 4000);
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       }
     } catch(err) {
       setFeedback('An error occurred. Please try again.');
     } finally {
       setTimeout(() => {
-        setFeedback("");
+        setFeedback('');
         setLoading(false);
       }, 4000);
     }
@@ -509,14 +514,18 @@ export default function RecipeForm({ ownership }: Props) {
         onChange={e => setDescription(e.target.value)}
         value={description}
       />
-
+      
       <label htmlFor='active_time'>Active Time</label>
       <input
         className="time"
         id="active_time"
         name="active_time"
-        onChange={e => setActiveTime(e.target.value)}
-        type="time"
+        onChange={e => {
+          setActiveTime(e.target.value);
+        }}
+        maxLength={5}
+        minLength={5}
+        placeholder="hh:mm"
         value={active_time}
       />
 
@@ -525,8 +534,12 @@ export default function RecipeForm({ ownership }: Props) {
         className="time"
         id="total_time"
         name="total_time"
-        onChange={e => setTotalTime(e.target.value)}
-        type="time"
+        onChange={e => {
+          setTotalTime(e.target.value);
+        }}
+        maxLength={5}
+        minLength={5}
+        placeholder="hh:mm"
         value={total_time}
       />
 
@@ -838,7 +851,7 @@ export default function RecipeForm({ ownership }: Props) {
       <h3 style={{paddingTop: '24px'}}>Images</h3>
 
       <div>
-        <span>If possible, upload all four images. See an example </span>
+        <span>All four images are required. See an example </span>
         <Link href='/recipe/detail/Dark%20Chocolate%Banana'>here</Link>.
       </div>
 
@@ -1245,7 +1258,7 @@ function validateAndFormatTime(time: string) {
   const parsedHours = hours ? parseInt(hours): 0;
   const parsedMinutes = minutes ? parseInt(minutes) : 0;
   if (isNaN(parsedHours) || isNaN(parsedMinutes)) return false;
-  if (parsedHours < 0 || parsedHours > 23 || parsedMinutes < 0 || parsedMinutes > 59) return false;
+  if (parsedHours < 0 || parsedHours > 99 || parsedMinutes < 0 || parsedMinutes > 59) return false;
 
   // format
   // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)

@@ -32,9 +32,10 @@ export function protectedApi(csrfToken: string) {
     async post(path: string, body: any = {}) {
       const res = await axiosInstance.post(
         `${endpoint}${path}`,
-        body,
+        JSON.stringify(body),
         {
           headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
           }
         }
@@ -46,9 +47,10 @@ export function protectedApi(csrfToken: string) {
     async patch(path: string, body: any = {}) {
       const res = await axiosInstance.patch(
         `${endpoint}${path}`,
-        body,
+        JSON.stringify(body),
         {
           headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
           }
         }
@@ -62,6 +64,7 @@ export function protectedApi(csrfToken: string) {
         `${endpoint}${path}`,
         {
           headers: {
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
           }
         }

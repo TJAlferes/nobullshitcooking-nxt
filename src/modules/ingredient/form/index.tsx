@@ -169,11 +169,13 @@ export default function IngredientForm({ ownership }: Props) {
           {ingredient_id, image_id: image.image_id, ...ingredient_upload}
         );
         if (res.status === 204) {
-          setFeedback("Ingredient updated.");
+          setFeedback('Ingredient updated.');
           await getMyPrivateIngredients();
-          setTimeout(() => router.push(`/dashboard`), 4000);
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       } else {
         const res = await api.post(
@@ -181,11 +183,13 @@ export default function IngredientForm({ ownership }: Props) {
           ingredient_upload
         );
         if (res.status === 201) {
-          setFeedback("Ingredient created.");
+          setFeedback('Ingredient created.');
           await getMyPrivateIngredients();
-          setTimeout(() => router.push(`/dashboard`), 4000);
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 4000);
         } else {
-          setFeedback(res.data.error);
+          setFeedback(res.data.message);
         }
       }
     } catch(err) {
@@ -258,8 +262,8 @@ export default function IngredientForm({ ownership }: Props) {
           <div>
             {
               !ingredient_id
-              ? <img src={`${url}/ingredient/${NOBSC_USER_ID}/default`} />
-              : <img src={`${url}/ingredient/${auth_id}/${image.image_filename}`} />
+              ? <img src={`${url}/ingredient/${NOBSC_USER_ID}/default.jpg`} />
+              : <img src={`${url}/ingredient/${auth_id}/${image.image_filename}.jpg`} />
             }
             
             <label>Change Image</label>
