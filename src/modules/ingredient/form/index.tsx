@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
+import { v4 as uuidv4 } from 'uuid';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { useApi, useAuth, useData, useUserData } from '../../../store';
@@ -31,6 +32,7 @@ export default function IngredientForm({ ownership }: Props) {
   const [ingredient_brand, setIngredientBrand] = useState('');
   const [ingredient_variety, setIngredientVariety] = useState('');
   const [ingredient_name, setIngredientName] = useState('');
+  const [alt_names, setAltNames] = useState<AltNameRow[]>([]);
   const [notes, setNotes] = useState('');
 
   const imageRef = useRef<HTMLImageElement>();
@@ -66,6 +68,7 @@ export default function IngredientForm({ ownership }: Props) {
       setIngredientBrand(ingredient.ingredient_brand ?? '');
       setIngredientVariety(ingredient.ingredient_variety ?? '')
       setIngredientName(ingredient.ingredient_name);
+      setAltNames(ingredient.alt_names.map(alt_name => ({alt_name, key: uuidv4()})));
       setNotes(ingredient.notes);
       setImage({
         ...image,
@@ -93,6 +96,14 @@ export default function IngredientForm({ ownership }: Props) {
   const getMyPrivateIngredients = async () => {
     const res = await api.get(`/users/${authname}/private-ingredients`);
     setMyPrivateIngredients(res.data);
+  };
+
+  const changeAltName = (e: React.ChangeEvent<HTMLInputElement>, rowKey: string) => {
+    setAltNames(prev =>
+      prev.map(obj =>
+        obj.key === rowKey ? {...obj, alt_name: e.target.value} : obj
+      )
+    );
   };
 
   const onSelectFile = (target: HTMLInputElement) => {
@@ -134,19 +145,20 @@ export default function IngredientForm({ ownership }: Props) {
     setLoading(false);
   };
 
+  const getAltNames = () => alt_names.map(({ alt_name }) => alt_name);
+
   const submit = async () => {
     window.scrollTo(0, 0);
     setFeedback('');
     setLoading(true);
     if (ingredient_type_id === 0) return invalid('Ingredient Type required.');
     if (ingredient_name.trim() === "") return invalid('Ingredient Name required.');
-    //if (alt_names
     const ingredient_upload = {
       ingredient_type_id,
       ingredient_brand,
       ingredient_variety,
       ingredient_name,
-      //alt_names,
+      alt_names: getAltNames(),
       notes,
       image_filename: image.image_filename,
       caption: image.caption
@@ -252,6 +264,8 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_name}
       />
 
+
+
       <label htmlFor='notes'>Notes</label>
       <textarea id='notes' className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
@@ -351,6 +365,15 @@ function useAllowedIngredients(ownership: Ownership) {
   return [];
 }
 
+type ExistingAltName = {
+  alt_name: string;
+};
+
+type AltNameRow = ExistingAltName & {
+  [index: string]: number|string|null;
+  key: string;
+};
+
 type ImageState = {
   image:        string | ArrayBuffer | null;
   crop:         Crop;
@@ -371,9 +394,8 @@ export type IngredientUpload = {
   ingredient_brand:   string;  // | null
   ingredient_variety: string;  // | null
   ingredient_name:    string;
-  //alt_names:          string[];
+  alt_names:          string[];
   notes:              string;
-  //image_id:           string;
   image_filename:     string;
   caption:            string;
 };

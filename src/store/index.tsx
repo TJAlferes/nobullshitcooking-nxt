@@ -598,6 +598,7 @@ export type IngredientView = {
   ingredient_brand:     string | null;
   ingredient_variety:   string | null;
   ingredient_name:      string;
+  alt_names:            string[];
   fullname:             string;
   notes:                string;
   image_id:             string;

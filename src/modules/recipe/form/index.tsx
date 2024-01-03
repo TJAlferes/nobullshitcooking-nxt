@@ -179,36 +179,33 @@ export default function RecipeForm({ ownership }: Props) {
   };
 
   const changeEquipmentRow = (e: React.ChangeEvent<HTMLSelectElement>, rowKey: string) => {
-    const rows = [...equipmentRows];
-    const elToUpdate = rows.findIndex(el => el.key === rowKey);
-    const obj = rows[elToUpdate];
-    if (!obj) return;
-    obj[e.target.name] = e.target.value;
-    setEquipmentRows(rows);
+    setEquipmentRows(prev =>
+      prev.map(obj =>
+        obj.key === rowKey ? {...obj, [e.target.name]: e.target.value} : obj
+      )
+    );
   };
 
   const changeIngredientRow = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     rowKey: string
   ) => {
-    const rows = [...ingredientRows];
-    const elToUpdate = rows.findIndex(el => el.key === rowKey);
-    const obj = rows[elToUpdate];
-    if (!obj) return;
-    obj[e.target.name] = e.target.value;
-    setIngredientRows(rows);
+    setIngredientRows(prev =>
+      prev.map(obj =>
+        obj.key === rowKey ? {...obj, [e.target.name]: e.target.value} : obj
+      )
+    );
   };
 
   const changeSubrecipeRow = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     rowKey: string
   ) => {
-    const rows = [...subrecipeRows];
-    const elToUpdate = rows.findIndex(el => el.key === rowKey);
-    const obj = rows[elToUpdate];
-    if (!obj) return;
-    obj[e.target.name] = e.target.value;
-    setSubrecipeRows(rows);
+    setSubrecipeRows(prev =>
+      prev.map(obj =>
+        obj.key === rowKey ? {...obj, [e.target.name]: e.target.value} : obj
+      )
+    );
   };
   
   const onSelectFile = (e: ChangeEvent, type: string) => {
