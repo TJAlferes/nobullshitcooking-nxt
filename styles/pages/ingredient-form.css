@@ -7,6 +7,68 @@
   font-weight: 700;
 }
 
+.ingredient-form .alt-names {
+  margin-top: 18px;
+}
+
+.ingredient-form .alt-name-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 10px;
+  margin-bottom: 6px;
+  border: 1px solid;
+  padding: 6px;
+  width: fit-content;
+}
+
+.ingredient-form .alt-name-row .pair {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.ingredient-form .alt-name-row .pair label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  height: 23px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.ingredient-form .alt-name-row .pair input {
+  margin: 0;
+  border: 1px solid;
+  border-radius: 1px;
+  padding: 0;
+  height: 25px;
+  max-width: 70px;
+  min-width: 70px;
+  width: 70px;
+}
+
+.ingredient-form .alt-name-row button.--remove {
+  background-color: #ffd6d6;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  font-size: 12px;
+  height: 19px;
+  padding: 1px 2px;
+  cursor: pointer;
+}
+
+.ingredient-form button.--add-row {
+  background-color: #d5fdd5;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  font-size: 12px;
+  padding: 1px 2px;
+  cursor: pointer;
+}
+
 .ingredient-form .notes {
   height: 106px;
   width: 235px;

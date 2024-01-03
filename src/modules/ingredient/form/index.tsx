@@ -237,7 +237,7 @@ export default function IngredientForm({ ownership }: Props) {
         ))}
       </select>
 
-      <label htmlFor='ingredient-brand'>Ingredient Brand</label>
+      <label htmlFor='ingredient-brand'>Ingredient Brand (optional)</label>
       <input
         id='ingredient-brand'
         className="name"
@@ -246,7 +246,7 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_brand}
       />
 
-      <label htmlFor='ingredient-variety'>Ingredient Variety</label>
+      <label htmlFor='ingredient-variety'>Ingredient Variety (optional)</label>
       <input
         id='ingredient-variety'
         className="name"
@@ -264,7 +264,36 @@ export default function IngredientForm({ ownership }: Props) {
         value={ingredient_name}
       />
 
+      <div className='alt-names'>
+        <h3>Alternative Names (optional)</h3>
 
+        <div className='alt-name-rows'>
+          {alt_names.map(({ key, alt_name }) => (
+            <div className='alt-name-row' key={key}>
+              <div className="pair">
+                <label htmlFor={key}>Alt Name</label>
+                <input
+                  id={key}
+                  className="alt-name"
+                  onChange={e => changeAltName(e, key)}
+                  type="text"
+                  value={alt_name}
+                />
+              </div>
+
+              <button
+                className="--remove"
+                onClick={() => setAltNames(alt_names.filter(row => row.key !== key))}
+              >Remove</button>
+            </div>
+          ))}
+        </div>
+
+        <button
+          className="--add-row"
+          onClick={() => setAltNames([...alt_names, pristineAltNameRow()])}
+        >Add Equipment</button>
+      </div>
 
       <label htmlFor='notes'>Notes</label>
       <textarea id='notes' className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
@@ -364,6 +393,11 @@ function useAllowedIngredients(ownership: Ownership) {
   if (ownership === "official") return ingredients;
   return [];
 }
+
+const pristineAltNameRow = () => ({
+  key: uuidv4(),
+  alt_name: ''
+});
 
 type ExistingAltName = {
   alt_name: string;
