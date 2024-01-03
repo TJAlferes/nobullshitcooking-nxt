@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useApi, useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { RecipeOverview } from '../../../store';
+import { NOBSC_USER_ID } from '../../shared/constants';
 
 export default function Profile({ profile }: Props) {
   const router = useRouter();
@@ -50,13 +51,13 @@ export default function Profile({ profile }: Props) {
     }, 4000);
   };
 
-  const { avatar, favorite_recipes, public_recipes } = profile;
+  const { user_id, avatar, favorite_recipes, public_recipes } = profile;
 
   const officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads';
   const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads';
   const avatarUrl = avatar === 'default'
     ? `${officialUrl}/avatar/default`
-    : `${publicUrl}/avatar/user_id/${avatar}`;
+    : `${publicUrl}/avatar/${user_id}/${avatar}`;
 
   return (
     <div className="one-col profile">
@@ -102,7 +103,15 @@ export default function Profile({ profile }: Props) {
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
-                  ? <img src={`${publicUrl}/recipe/${r.image_filename}-tiny.jpg`} />
+                  ? (
+                    <img 
+                      src={
+                        r.author_id !== NOBSC_USER_ID
+                        ? `${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`
+                        : `${officialUrl}/recipe/${r.image_filename}-tiny.jpg`
+                      }
+                    />
+                  )
                   : <div className="image-default-28-18"></div>
                 }
               </span>
@@ -121,7 +130,7 @@ export default function Profile({ profile }: Props) {
             <div className="item" key={r.recipe_id}>
               <span className="image">
                 {r.image_filename !== "default"
-                  ? <img src={`${publicUrl}/recipe/${r.image_filename}-tiny.jpg`} />
+                  ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`} />
                   : <div className="image-default-28-18"></div>
                 }
               </span>
@@ -143,6 +152,7 @@ type Props = {
 };
 
 export type ProfileView = {
+  user_id:          string;
   avatar:           string;
   favorite_recipes: RecipeOverview[];
   public_recipes:   RecipeOverview[];

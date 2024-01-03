@@ -77,7 +77,7 @@
   font-size: 1.3rem;
   text-align: center;
   text-decoration: none;
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
+  background-color: #d5fdd5;
   cursor: pointer;
 }
 
@@ -86,60 +86,76 @@
 }
 
 .dashboard-item {
-  align-items: center;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
-  border-right: 1px solid;
   display: flex;
-  flex-direction: row;
   flex-wrap: nowrap;
-  height: 28px;
-  line-height: 24px;
+  align-items: center;
+  column-gap: 16px;
+  padding-right: 10px;
+  padding-left: 5px;
+  height: 40px;
   width: 100%;
 }
 
-.dashboard-item:first-of-type {
-  border-top: 1px solid;
-}
-
 .dashboard-item .tiny {
-  height: 18px;
-  padding-left: 1px;
+  height: 28px;
+  min-height: 28px;
   width: 28px;
+  min-width: 28px;
 }
 
 .dashboard-item .name {
-  padding: 0 10px;
-  width: 760px;
+  width: 100%;
 }
 
-.dashboard-item a,
-.dashboard-item a:visited {
+.dashboard-item .name a,
+.dashboard-item .name a:visited {
   color: #68abe6;
 }
 
 .dashboard-item .action,
-.dashboard-item .delete {
-  text-align: center;
-  width: 75px;
-}
-
+.dashboard-item .delete,
 .dashboard-item .unfavorite {
-  text-align: center;
-  width: 95px;
-}
-
-.dashboard-item-delete,
-.dashboard-item .unfavorite {
-  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #aaa;
   border-radius: 2px;
+  height: 19px;
+  width: 95px;
+  text-align: center;
+  text-decoration: none;
   color: #000;
   cursor: pointer;
-  height: 19px;
-  line-height: 18px;
-  margin-right: 1px;
 }
+
+.dashboard-item .action {
+  background-color: #d5fdd5;
+}
+
+.dashboard-item .action a {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.dashboard-content .dashboard-item .action a,
+.dashboard-content .dashboard-item .action a:hover,
+.dashboard-content .dashboard-item .action a:active,
+.dashboard-content .dashboard-item .action a:visited {
+  color: #000;
+  text-decoration: none;
+}
+
+.dashboard-item .delete,
+.dashboard-item .unfavorite {
+  background-color: #ffd6d6;
+}
+
+/* ---------- ---------- ---------- ---------- ---------- */
 
 .dashboard-modal {
   background-color: #fff;
@@ -174,26 +190,6 @@
 
 .dashboard-modal button.--action {
   background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
-}
-
-@media (max-width: 899px) {
-  .dashboard-item .name {
-    width: 100%;
-  }
-
-  .dashboard-item .action,
-  .dashboard-item .delete {
-    padding: 0 2px;
-    width: 54px;
-  }
-
-  /*.dashboard-item-disown,
-  .dashboard-item-unsave {}*/
-
-  .dashboard-item .unfavorite {
-    padding: 0 2px;
-    width: 74px;
-  }
 }
 
 /*

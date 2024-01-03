@@ -33,54 +33,39 @@
 
 .profile .item {
   display: flex;
-  flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
-  border-right: 1px solid;
-  height: 28px;
+  column-gap: 16px;
+  padding-right: 10px;
+  padding-left: 5px;
+  height: 40px;
   width: 100%;
-  line-height: 24px;
-}
-
-.profile .item:first-of-type {
-  border-top: 1px solid;
 }
 
 .profile .item .image {
-  height: 18px;
-  padding-left: 1px;
+  height: 28px;
+  min-height: 28px;
   width: 28px;
+  min-width: 28px;
 }
 
 .profile .item .name {
-  padding: 0 10px;
-  width: 760px;
+  width: 100%;
 }
 
 .profile .item .name a,
 .profile .item .name a:visited {
+  font-size: 1.4rem;
   color: #68abe6;
 }
 
-@media (max-width: 1209px) {
-  .profile {
-    width: 100%;
-  }
-}
-
-@media (max-width: 509px) {
+@media (max-width: 599px) {
   .profile .tabs {
     width: 100%;
   }
 
   .profile .tabs button {
     width: 50%;
-  }
-
-  .profile .item .name {
-    width: 100%;
   }
 }
 
@@ -90,7 +75,13 @@ Light/Day/Sun Theme
 
 */
 
+.light .profile .item:nth-child(even) {
+  background-color: #eee;
+}
 
+.light .profile .item a:hover {
+  color: #c10006;
+}
 
 /*
 
@@ -98,4 +89,10 @@ Dark/Night/Moon Theme
 
 */
 
+.dark .profile .item:nth-child(even) {
+  background-color: #2d2d2d;
+}
 
+.dark .profile .item a:hover {
+  color: #690004;
+}
