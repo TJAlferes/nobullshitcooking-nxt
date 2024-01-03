@@ -67,15 +67,6 @@
   margin-top: 18px;
 }
 
-.recipe-form .recipe-image,
-.recipe-form .equipment-image,
-.recipe-form .ingredients-image,
-.recipe-form .cooking-image {
-  border: 1px solid;
-  padding: 6px;
-  width: fit-content;
-}
-
 /* ??? */
 .recipe-form select:required {
   box-shadow: none;
@@ -153,6 +144,15 @@
 
 /* ---------- ---------- ---------- ---------- ---------- */
 
+.recipe-form .recipe-image,
+.recipe-form .equipment-image,
+.recipe-form .ingredients-image,
+.recipe-form .cooking-image {
+  border: 1px solid;
+  padding: 6px;
+  width: fit-content;
+}
+
 .recipe-form .current-image {
   height: 560px;
   width: 560px;
@@ -171,7 +171,7 @@
   text-align: center;
   text-decoration: none;
   color: #000;
-  background-image: linear-gradient(to bottom, #ffd6d6, #ffb7b7);
+  background-color: #ffd6d6;
   cursor: pointer;
 }
 

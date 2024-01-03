@@ -265,7 +265,7 @@ export default function IngredientForm({ ownership }: Props) {
       />
 
       <div className='alt-names'>
-        <h3>Alternative Names (optional)</h3>
+        <label>Alternative Names (optional)</label>
 
         <div className='alt-name-rows'>
           {alt_names.map(({ key, alt_name }) => (
@@ -292,82 +292,78 @@ export default function IngredientForm({ ownership }: Props) {
         <button
           className="--add-row"
           onClick={() => setAltNames([...alt_names, pristineAltNameRow()])}
-        >Add Equipment</button>
+        >Add Alt Name</button>
       </div>
 
       <label htmlFor='notes'>Notes</label>
       <textarea id='notes' className="notes" onChange={e => setNotes(e.target.value)} value={notes} />
 
       <div className='ingredient-image'>
-        <h3>Image of Ingredient</h3>
-
-        {!imageState.image && (
-          <div>
-            {
-              !ingredient_id
-              ? <img src={`${url}/ingredient/${NOBSC_USER_ID}/default.jpg`} />
-              : <img src={`${url}/ingredient/${auth_id}/${image.image_filename}.jpg`} />
-            }
-            
-            <label>Change Image</label>
-            <input
-              accept="image/*"
-              name="image-input"
-              onChange={e => onSelectFile(e.target)}
-              type="file"
-            />
-          </div>
-        )}
-
-        {imageState.image && (
-          <div>
-            <ReactCrop
-              aspect={1}
-              className="crop-tool"
-              crop={imageState.crop}
-              onChange={crop => setImageState({...imageState, crop})}
-              onComplete={crop => makeCrops(crop)}
-              style={{minHeight: "300px"}}
-            >
-              <img
-                onLoad={e => imageRef.current = e.currentTarget}
-                src={imageState.image as string}
+        <h4>Image of Ingredient</h4>
+        {!imageState.image
+          ? (
+            <>
+              {!ingredient_id
+                ? <img className='current-image' src={`${url}/ingredient/${NOBSC_USER_ID}/default.jpg`} />
+                : <img className='current-image' src={`${url}/ingredient/${auth_id}/${image.image_filename}.jpg`} />
+              }
+              <label>Change Image</label>
+              <input
+                accept="image/*"
+                name="image-input"
+                onChange={e => onSelectFile(e.target)}
+                type="file"
               />
-            </ReactCrop>
-
-            <span className="crop-tool-tip">
-              Move the crop to your desired position. The image&#40;s&#41; will be saved for you:
-            </span>
-  
-            <div className="crops">
-              <div className="crop-small-outer">
-                <span>Small Size: </span>
-                <img className="crop-small" src={imageState.smallPreview} />
+              {/*ingredient_id
+                ? <button onClick={deleteIngredientImageFromAwsS3}>Delete / Reset To Default</button>
+                : false*/}
+            </>
+          )
+          : (
+            <>
+              <ReactCrop
+                crop={imageState.crop}
+                onChange={crop => setImageState({...imageState, crop})}
+                onComplete={crop => makeCrops(crop)}
+                aspect={1}
+                className="crop-tool"
+                style={{minHeight: "300px"}}
+              >
+                <img
+                  onLoad={e => imageRef.current = e.currentTarget}
+                  src={imageState.image as string}
+                />
+              </ReactCrop>
+              <span className="crop-tool-tip">
+                {'Resize and move the crop above. The images below will be saved for you.'}
+              </span>
+              <div className="crops">
+                <div className="crop-small-outer">
+                  <span>Small</span>
+                  <img className="crop-small" src={imageState.smallPreview} />
+                </div>
+                <div className="crop-tiny-outer">
+                  <span>Tiny</span>
+                  <img className="crop-tiny" src={imageState.tinyPreview} />
+                </div>
               </div>
-
-              <div className="crop-tiny-outer">
-                <span>Tiny Size: </span>
-                <img className="crop-tiny" src={imageState.tinyPreview} />
-              </div>
-            </div>
-
-            <label>{'Caption (optional)'}</label>
-            <input
-              className="caption"
-              max={150}
-              min={2}
-              onChange={e => setImage({...image, caption: e.target.value})}
-              type="text"
-              value={image.caption}
-            />
-
-            <button
-              className="image-cancel"
-              disabled={loading}
-              onClick={cancelImage}
-            >Cancel</button>
-          </div>
-        )}
+              <label>{'Caption (optional)'}</label>
+              <input
+                className="caption"
+                max={150}
+                min={2}
+                onChange={e => setImage({...image, caption: e.target.value})}
+                type="text"
+                value={image.caption}
+              />
+              <button
+                className="image-cancel"
+                disabled={loading}
+                onClick={cancelImage}
+              >Cancel</button>
+            </>
+          )
+        }
       </div>
 
       <button

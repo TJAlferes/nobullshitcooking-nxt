@@ -11,3 +11,42 @@
   height: 106px;
   width: 235px;
 }
+
+.equipment-form .equipment-image {
+  margin-top: 18px;
+  border: 1px solid;
+  padding: 6px;
+  width: fit-content;
+}
+
+.equipment-form .current-image {
+  height: 280px;
+  width: 280px;
+}
+
+.equipment-form .image-cancel {
+  display: block;
+  margin: 0 30px 10px 0;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  padding: 1px 5px;
+  height: 30px;
+  width: 235px;
+  line-height: 26px;
+  font-size: 1.3rem;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+  background-color: #ffd6d6;
+  cursor: pointer;
+}
+
+.light .equipment-form .equipment-image,
+.light .equipment-form .alt-name-row {
+  border-color: #bbb;
+}
+
+.dark .equipment-form .equipment-image,
+.dark .equipment-form .alt-name-row {
+  border-color: #666;
+}
