@@ -225,9 +225,9 @@ export default function PlanForm({ ownership }: Props) {
             <div className={`tab ${tab === 'official' ? '--active' : ''}`} onClick={() => setTab('official')}>Official</div>
             <div className={`tab ${tab === 'public' ? '--active' : ''}`} onClick={() => setTab('public')}>Public</div>
             <div className={`tab ${tab === 'my-public' ? '--active' : ''}`} onClick={() => setTab('my-public')}>My Public</div>
-            <div className={`tab ${tab === 'my-private' ? '--active' : ''}`} onClick={() => setTab('my-private')}>My Private</div>
+            {ownership === 'private' ? (<div className={`tab ${tab === 'my-private' ? '--active' : ''}`} onClick={() => setTab('my-private')}>My Private</div>) : false}
             <div className={`tab ${tab === 'my-favorite' ? '--active' : ''}`} onClick={() => setTab('my-favorite')}>My Favorite</div>
-            <div className={`tab ${tab === 'my-saved' ? '--active' : ''}`} onClick={() => setTab('my-saved')}>My Saved</div>
+            {ownership === 'private' ? (<div className={`tab ${tab === 'my-saved' ? '--active' : ''}`} onClick={() => setTab('my-saved')}>My Saved</div>) : false}
           </div>
 
           <Recipes
@@ -471,6 +471,8 @@ function Recipe({
     hover(item: DragItem, monitor: DropTargetMonitor<DragItem>) {
       //if (!item) return;  // ?
       if (!ref.current) return;
+      if (item.day === 0) return;
+      if (item.day !== day) return;
 
       const dragIndex  = item.index;
       const hoverIndex = index;

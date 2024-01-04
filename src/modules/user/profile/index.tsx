@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useApi, useAuth, useUserData } from '../../../store';
 import { LoaderSpinner } from '../../shared/LoaderSpinner';
-import type { RecipeOverview } from '../../../store';
+import type { PlanView, RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 
 export default function Profile({ profile }: Props) {
@@ -51,7 +51,7 @@ export default function Profile({ profile }: Props) {
     }, 4000);
   };
 
-  const { user_id, avatar, favorite_recipes, public_recipes } = profile;
+  const { user_id, avatar, favorite_recipes, public_recipes, public_plans } = profile;
 
   const officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads';
   const publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads';
@@ -83,21 +83,23 @@ export default function Profile({ profile }: Props) {
           : false
         }
       </div>
-
-      <h2>Recipes</h2>
       
       <div className="tabs">
         <button
-          className={tab === "favorite" ? "--active" : ""}
-          onClick={() => setTab("favorite")}
-        >Favorite</button>
+          className={tab === 'favorite-recipes' ? '--active' : ''}
+          onClick={() => setTab('favorite-recipes')}
+        >Favorite Recipes</button>
         <button
-          className={tab === "public" ? "--active" : ""}
-          onClick={() => setTab("public")}
-        >Public</button>
+          className={tab === 'public-recipes' ? '--active' : ''}
+          onClick={() => setTab('public-recipes')}
+        >Public Recipes</button>
+        <button
+          className={tab === 'public-plans' ? '--active' : ''}
+          onClick={() => setTab('public-plans')}
+        >Public Plans</button>
       </div>
 
-      {tab === "favorite" && (
+      {tab === 'favorite-recipes' ? (
         favorite_recipes && favorite_recipes.length > 0
           ? (favorite_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
@@ -116,15 +118,15 @@ export default function Profile({ profile }: Props) {
                 }
               </span>
               <span className="name">
-                <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
+                <Link href={`/${r.author_id}/recipe/${r.title}`}>{r.title}</Link>
               </span>
             </div>
           )))
           : <div className="none">{username} hasn't favorited any recipes yet.</div>
-        )
+        ) : false
       }
 
-      {tab === "public" && (
+      {tab === 'public-recipes' ? (
         public_recipes && public_recipes.length > 0
           ? (public_recipes.map(r => (
             <div className="item" key={r.recipe_id}>
@@ -135,14 +137,26 @@ export default function Profile({ profile }: Props) {
                 }
               </span>
               <span className="name">
-                <Link href={`/recipe/${r.recipe_id}`}>{r.title}</Link>
+                <Link href={`/${r.author_id}/recipe/${r.title}`}>{r.title}</Link>
               </span>
               </div>
           )))
           : <div className="none">{username} hasn't published any recipes yet.</div>
-        )
+        ) : false
       }
 
+      {tab === 'public-plans' ? (
+        public_plans && public_plans.length > 0
+          ? (public_plans.map(p => (
+            <div className="item" key={p.plan_id}>
+              <span className="name">
+                <Link href={`/${p.author_id}/recipe/${p.plan_name}`}>{p.plan_name}</Link>
+              </span>
+              </div>
+          )))
+          : <div className="none">{username} hasn't published any plans yet.</div>
+        ) : false
+      }
     </div>
   );
 }
@@ -156,4 +170,5 @@ export type ProfileView = {
   avatar:           string;
   favorite_recipes: RecipeOverview[];
   public_recipes:   RecipeOverview[];
+  public_plans:     PlanView[];
 };
