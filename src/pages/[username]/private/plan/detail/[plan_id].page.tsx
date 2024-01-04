@@ -10,7 +10,7 @@ export default function UserPrivatePlanDetailPage({ plan }: Props) {
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-plans/${params.plan_id}`,
+    `${endpoint}/users/${encodeURIComponent(params.username)}/private-plans/${params.plan_id}`,
     {withCredentials: true}
   );
 

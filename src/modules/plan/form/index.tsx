@@ -1,6 +1,6 @@
 import type { XYCoord } from 'dnd-core';
 import update from 'immutability-helper';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
@@ -22,8 +22,8 @@ export default function PlanForm({ ownership }: Props) {
 
   const router = useRouter();
 
-  const params  = useSearchParams();
-  const plan_id = params.get('plan_id');  // but public uses plan_name ???
+  const params  = useParams();
+  const plan_id = params['plan_id'];  // but public uses plan_name ???
 
   const { api } = useApi();
   const { authname } = useAuth();
@@ -88,6 +88,7 @@ export default function PlanForm({ ownership }: Props) {
         router.push(`/404`);
         return;
       }
+      console.log('PLAN_ID', plan_id);
       if (plan_id) getExistingPlanToEdit();
     }
 
@@ -281,7 +282,16 @@ export default function PlanForm({ ownership }: Props) {
             className='submit-button'
             disabled={loading}
             onClick={submit}
-          >{loading ? 'Creating...' : 'Create'}</button>
+          >
+            {loading
+              ? plan_id
+                ? 'Updating...'
+                : 'Creating...'
+              : plan_id
+                ? 'Update'
+                : 'Create'
+            }
+          </button>
 
           <button className="cancel-button" onClick={() => setModalActive(true)}>
             Cancel
@@ -291,7 +301,6 @@ export default function PlanForm({ ownership }: Props) {
             modalActive
             ? (
               <AriaModal
-                dialogClass="cancel"
                 focusDialog={true}
                 focusTrapOptions={{returnFocusOnDeactivate: false}}
                 getApplicationNode={() => document.getElementById('root') as Element | Node}
@@ -299,13 +308,15 @@ export default function PlanForm({ ownership }: Props) {
                 titleText="Cancel?"
                 underlayClickExits={false}
               >
-                <p>Cancel? Changes will not be saved.</p>
-                <button className="cancel-cancel" onClick={() => setModalActive(false)}>
-                  No, Keep Working
-                </button>
-                <button className="cancel-button" onClick={discardChanges}>
-                  Yes, Discard Changes
-                </button>
+                <div className="aria-modal-dialog">
+                  <p>Cancel? Changes will not be saved.</p>
+                  <button className="cancel-cancel" onClick={() => setModalActive(false)}>
+                    No, Keep Working
+                  </button>
+                  <button className="cancel-button" onClick={discardChanges}>
+                    Yes, Discard Changes
+                  </button>
+                </div>
               </AriaModal>
             )
             : false

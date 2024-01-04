@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from "react-image-crop";
 import { v4 as uuidv4 } from 'uuid';
@@ -15,8 +16,8 @@ import type { Ownership } from '../../shared/types';
 export default function IngredientForm({ ownership }: Props) {
   const router = useRouter();
 
-  const params = useSearchParams();
-  const ingredient_id = params.get('ingredient_id');
+  const params = useParams();
+  const ingredient_id = params['ingredient_id'];
 
   const { api } = useApi();
   const { auth_id, authname } = useAuth();
@@ -370,7 +371,16 @@ export default function IngredientForm({ ownership }: Props) {
         className='submit-button'
         disabled={loading}
         onClick={submit}
-      >{loading ? 'Creating...' : 'Create'}</button>
+      >
+        {loading
+          ? ingredient_id
+            ? 'Updating...'
+            : 'Creating...'
+          : ingredient_id
+            ? 'Update'
+            : 'Create'
+        }
+      </button>
 
       <Link className="cancel-button" href="/dashboard">Cancel</Link>
     </div>

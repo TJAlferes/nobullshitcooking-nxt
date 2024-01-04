@@ -129,30 +129,6 @@
   font-weight: 700;
 }
 
-.plan-form .finish {
-
-}
-
-.plan-form .cancel {
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 10px;
-  width: 280px;
-}
-
-.plan-form .cancel .cancel-cancel,
-.plan-form .cancel .cancel-button {
-  margin: 0 auto;
-}
-
-.plan-form .cancel p {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
 @media (max-width: 1209px) {
   .plan-form .finish {
     padding: 10px 0;

@@ -21,7 +21,7 @@ export default function Profile({ profile }: Props) {
   const { my_friendships } = useUserData();
 
   const [clicked, setClicked] = useState(false);
-  const [tab, setTab] = useState('favorite');
+  const [tab, setTab] = useState('favorite-recipes');
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -118,7 +118,13 @@ export default function Profile({ profile }: Props) {
                 }
               </span>
               <span className="name">
-                <Link href={`/${r.author_id}/recipe/${r.title}`}>{r.title}</Link>
+                <Link
+                  href={
+                    r.author_id !== NOBSC_USER_ID
+                    ? `/${r.author}/recipe/detail/${r.title}`
+                    : `/recipe/detail/${r.title}`
+                  }
+                >{r.title}</Link>
               </span>
             </div>
           )))
@@ -137,7 +143,7 @@ export default function Profile({ profile }: Props) {
                 }
               </span>
               <span className="name">
-                <Link href={`/${r.author_id}/recipe/${r.title}`}>{r.title}</Link>
+                <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
               </span>
               </div>
           )))
@@ -150,7 +156,7 @@ export default function Profile({ profile }: Props) {
           ? (public_plans.map(p => (
             <div className="item" key={p.plan_id}>
               <span className="name">
-                <Link href={`/${p.author_id}/recipe/${p.plan_name}`}>{p.plan_name}</Link>
+                <Link href={`/${p.author}/plan/detail/${p.plan_name}`}>{p.plan_name}</Link>
               </span>
               </div>
           )))

@@ -10,7 +10,7 @@ export default function UserPublicRecipeDetailPage({ recipe }: Props) {
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/public-recipes/${params.title}`
+    `${endpoint}/users/${encodeURIComponent(params.username)}/public-recipes/${encodeURIComponent(params.title)}`
   );
 
   return {

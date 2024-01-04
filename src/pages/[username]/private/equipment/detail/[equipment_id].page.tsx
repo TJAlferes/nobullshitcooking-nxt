@@ -10,7 +10,7 @@ export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
 
 export async function getServerSideProps({ params }: ServerSideProps) {
   const res = await axios.get(
-    `${endpoint}/users/${params.username}/private-equipment/${params.equipment_id}`,
+    `${endpoint}/users/${encodeURIComponent(params.username)}/private-equipment/${params.equipment_id}`,
     {withCredentials: true}
   );
 

@@ -1117,7 +1117,16 @@ export default function RecipeForm({ ownership }: Props) {
         className='submit-button'
         disabled={loading}
         onClick={submit}
-      >{loading ? 'Creating...' : 'Create'}</button>
+      >
+        {loading
+            ? recipe_id
+              ? 'Updating...'
+              : 'Creating...'
+            : recipe_id
+              ? 'Update'
+              : 'Create'
+          }
+      </button>
 
       <Link className="cancel-button" href='/dashboard'>Cancel</Link>
     </div>

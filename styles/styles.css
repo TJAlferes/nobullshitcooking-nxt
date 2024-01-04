@@ -101,6 +101,7 @@ select:focus {
   outline: solid 2px #b4d8fa;
 }
 
+.cancel-cancel,
 .cancel-button,
 .submit-button {
   display: block;
@@ -124,6 +125,27 @@ select:focus {
 
 .submit-button {
   background-color: #d5fdd5;
+}
+
+.aria-modal-dialog {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 16px;
+  padding: 10px;
+  width: 280px;
+  background-color: #fff;
+}
+
+.aria-modal-dialog .cancel-cancel,
+.aria-modal-dialog .cancel-button {
+  margin: 0;
+}
+
+.aria-modal-dialog p {
+  text-align: center;
 }
 
 .img-280-280 {

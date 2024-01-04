@@ -3,7 +3,7 @@ import Image from 'next/image';
 export function Landing() {
   return (
     <div className="landing">
-      <h1>Get cooking!</h1>
+      <h1>Let's get cooking!</h1>
       <Image
         loading="lazy"
         src="/images/dev/home3.png"

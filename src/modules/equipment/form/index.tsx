@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -14,8 +15,8 @@ import type { Ownership } from '../../shared/types';
 export default function EquipmentForm({ ownership }: Props) {
   const router = useRouter();
 
-  const params = useSearchParams();
-  const equipment_id = params.get('equipment_id');
+  const params = useParams();
+  const equipment_id = params['equipment_id'];
 
   const { api } = useApi();
   const { auth_id, authname } = useAuth();
@@ -294,7 +295,16 @@ export default function EquipmentForm({ ownership }: Props) {
         className='submit-button'
         disabled={loading}
         onClick={submit}
-      >{loading ? 'Creating...' : 'Create'}</button>
+      >
+        {loading
+          ? equipment_id
+            ? 'Updating...'
+            : 'Creating...'
+          : equipment_id
+            ? 'Update'
+            : 'Create'
+        }
+      </button>
       
       <Link className="cancel-button" href='/dashboard'>Cancel</Link>
     </div>

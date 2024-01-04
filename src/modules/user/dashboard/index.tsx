@@ -190,8 +190,9 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
-  };
+  }; 
 
   const unattributePublicRecipe = async (recipe_id: string) => {
     setLoading(true);
@@ -211,6 +212,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
   };
 
@@ -232,6 +234,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
   };
 
@@ -253,6 +256,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
   };
 
@@ -274,6 +278,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
   };
 
@@ -295,6 +300,7 @@ export default function Dashboard() {
     } catch (err) {
       setFeedback(error);
     }
+    deactivateModal();
     setLoading(false);
   };
 
