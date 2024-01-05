@@ -1,15 +1,14 @@
 import Link from 'next/link';
 //import { useRouter } from 'next/router';
+import { v4 as uuidv4 } from 'uuid';
 
 //import { useAuth } from '../../../store';
 import type { PlanView, RecipeOverview } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
-import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import { Ownership } from '../../shared/types';
+import type { CurrentRecipes, DraggableRecipe } from '../form';
 
 export default function PlanDetail({ ownership, plan }: Props) {
-  if (!plan) return <LoaderSpinner />;  // or return router.push('/404'); ???
-
   const {
     plan_id,
     author_id,
@@ -20,20 +19,34 @@ export default function PlanDetail({ ownership, plan }: Props) {
     included_recipes
   } = plan;
 
+  const curr_recipes: CurrentRecipes = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []};
+
+  for (const [ key, value ] of Object.entries(plan.included_recipes)) {
+    curr_recipes[parseInt(key)] = value.map(recipe => {
+      const k = uuidv4();
+
+      return {
+        key: k,
+        stableKey: k,
+        ...recipe
+      };
+    });
+  }
+
   return (
     <div className="one-col plan-detail">
-      <div className="heading">
-        <h1>Plan</h1>
+      <h1>{plan_name}</h1>
 
-        <div className="name">
-          <label>Plan Name:</label><span>{plan_name}</span>
-        </div>
+      <div className="author">
+        <b>Author:</b>
+        {' '}
+        {author === "Unknown"
+          ? "Unknown"
+          : <Link href={`/${encodeURIComponent(author)}/profile`}>{author}</Link>}
       </div>
 
       <div className="calendar">
-        <div className="plan__monthly-plan">
-          <div className="monthly-plan">
-            <div className="header">
+            <div className="weekdays">
               <span>Sunday</span>
               <span>Monday</span>
               <span>Tuesday</span>
@@ -42,21 +55,12 @@ export default function PlanDetail({ ownership, plan }: Props) {
               <span>Friday</span>
               <span>Saturday</span>
             </div>
-
-            <div className="body">
-              {included_recipes.map((recipeList, i) => (
-                <div className="monthly-plan__body-day" key={i}>
-                  <div className="body-day__content">
-                    <div className="day">
-                      {recipeList.map(recipe => <Recipe recipe={recipe} />)}
-                    </div>
-                  </div>
-                </div>
+            <div className="weekly-plan">
+              {Object.entries(curr_recipes).map(([key, value]) => (
+                <Day recipes={value} key={parseInt(key)} />
               ))}
             </div>
           </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -67,53 +71,64 @@ type Props = {
 };
 
 function Recipe({
-  recipe: {
+  recipe
+}: {
+  recipe: DraggableRecipe;
+}) {
+  const {
+    key,
     recipe_id,
     author_id,
     author,
     owner_id,
     title,
     image_filename
-  }
-}: {
-  recipe: RecipeOverview;
-}) {
-  //let url = "https://s3.amazonaws.com";
-  //if (ownership === "private") {
-  //  if (auth_id !== owner_id) {
-  //    router.push('/404');
-  //    return false;
-  //  }
-  //  url += "/nobsc-private-uploads";
-  //} else if (ownership === "public") {
-  //  url += "/nobsc-public-uploads";
-  //}
+  } = recipe;  // TO DO: BUG: sometimes recipe is undefined
 
-  let url = "https://s3.amazonaws.com/nobsc/image/";
-  let path = "";
+  let officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads/recipe';
+  let publicUrl = `https://s3.amazonaws.com/nobsc-public-uploads/recipe/${author_id}`;
+  let privateUrl = `https://s3.amazonaws.com/nobsc-private-uploads/recipe/${author_id}`;
+  let url = '';
 
-  if (author_id !== NOBSC_USER_ID) {
-    url += "user/";
-    path += `${author}/`;
+  let officialPath = `/recipe/detail/${title}`;
+  let publicPath = `/${author}/recipe/detail/${title}`;
+  let privatePath = `/${author}/private/recipe/detail/${recipe_id}`;
+  let path = '';
 
-    if (author_id === owner_id) {
-      url += "private/";
-      path += "private-";
-    } else {
-      url += "public/";
-      path += "public-";
-    }
+  if (author_id === NOBSC_USER_ID && owner_id === NOBSC_USER_ID) {
+    url = officialUrl;
+    path = officialPath;
+  } else if (author_id !== NOBSC_USER_ID && owner_id === NOBSC_USER_ID) {
+    url = publicUrl;
+    path = publicPath;
+  } else {
+    url = privateUrl;
+    path = privatePath;
   }
 
   return (
-    <div className="plan-recipe">
+    <div className="recipe" key={key}>
       <div className="image">
-        <img src={`${url}recipe/${author_id}/${image_filename}-tiny`} />
+        <img src={`${url}/${image_filename}-tiny.jpg`} />
       </div>
 
       <div className="text">
-        <Link href={`/${path}recipes/${recipe_id}`}>{title}</Link>
+        <Link href={path}>{title}</Link>
       </div>
+    </div>
+  );
+}
+
+function Day({
+  recipes
+}: {
+  recipes: DraggableRecipe[];
+}) {
+  return (
+    <div className='day'>
+      {recipes && recipes.map(recipe => (
+        <Recipe key={recipe.key} recipe={recipe} />
+      ))}
     </div>
   );
 }

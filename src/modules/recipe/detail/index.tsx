@@ -5,15 +5,12 @@ import { useState } from 'react';
 
 import { endpoint } from '../../../config/api';
 import { useAuth, useUserData, getMyFavoriteRecipes, getMySavedRecipes } from '../../../store';
-import { LoaderSpinner } from '../../shared/LoaderSpinner';
 import type { Ownership } from '../../shared/types';
 
 export default function RecipeDetail({ ownership, recipe }: Props) {
   const router = useRouter();
 
   const { auth_id } = useAuth();
-
-  if (!recipe) return <LoaderSpinner />;  // or return router.push('/404'); ???
   
   const {
     recipe_id,

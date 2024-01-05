@@ -522,18 +522,16 @@ function Recipe({
   } = recipe;  // TO DO: BUG: sometimes recipe is undefined
 
   let officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads/recipe';
-  let publicUrl = 'https://s3.amazonaws.com/nobsc-public-uploads/recipe';
-  let privateUrl = 'https://s3.amazonaws.com/nobsc-private-uploads/recipe';
+  let publicUrl = `https://s3.amazonaws.com/nobsc-public-uploads/recipe/${author_id}`;
+  let privateUrl = `https://s3.amazonaws.com/nobsc-private-uploads/recipe/${author_id}`;
   let url = '';
 
-  if (author_id === NOBSC_USER_ID) {
+  if (author_id === NOBSC_USER_ID && owner_id === NOBSC_USER_ID) {
     url = officialUrl;
+  } else if (author_id !== NOBSC_USER_ID && owner_id === NOBSC_USER_ID) {
+    url = publicUrl;
   } else {
-    if (author_id === owner_id) {
-      url = `${privateUrl}/${author_id}`;
-    } else {
-      url = `${publicUrl}/${author_id}`;
-    }
+    url = privateUrl;
   }
 
   return (
@@ -598,7 +596,7 @@ function Day({
   );
 }
 
-type CurrentRecipes = {
+export type CurrentRecipes = {
   [index: number]: DraggableRecipe[];
   1: DraggableRecipe[];
   2: DraggableRecipe[];
@@ -609,7 +607,7 @@ type CurrentRecipes = {
   7: DraggableRecipe[];
 };
 
-type DraggableRecipe = RecipeOverview & {
+export type DraggableRecipe = RecipeOverview & {
   key: string;
   stableKey: string;
 };

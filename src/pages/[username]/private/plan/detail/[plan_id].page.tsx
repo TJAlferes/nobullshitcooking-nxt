@@ -9,6 +9,7 @@ export default function UserPrivatePlanDetailPage({ plan }: Props) {
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
+  // TO DO: use protectedApi to get CSRF token???
   const res = await axios.get(
     `${endpoint}/users/${encodeURIComponent(params.username)}/private-plans/${params.plan_id}`,
     {withCredentials: true}

@@ -9,6 +9,7 @@ export default function UserPublicPlanDetailPage({ plan }: Props) {
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {
+  console.log(params.username);
   const res = await axios.get(
     `${endpoint}/users/${encodeURIComponent(params.username)}/public-plans/${encodeURIComponent(params.name)}`
   );
