@@ -23,6 +23,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
     author_id,
     owner_id,
     author,
+    author_avatar,
     title,
     description,
     cuisine_name,
@@ -87,15 +88,15 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
   };
 
   const url1 = `https://s3.amazonaws.com/nobsc-${ownership}-uploads/recipe`;
-  let url2 = '';
+  let url2 = '/';
   if (ownership === 'private') {
     if (auth_id !== owner_id) {
       router.push('/404');
       return false;
     }
-    url2 += `/${auth_id}`;
+    url2 = `/${auth_id}`;
   } else if (ownership === 'public') {
-    url2 += `/${author_id}`;
+    url2 = `/${author_id}`;
   }
 
   return (
@@ -106,12 +107,18 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
 
       <div className="image">
         {recipe_image.image_filename !== "default"
-          ? <img src={`${url1}${url2}/${recipe_image.image_filename}.jpg`} />
+          ? <img src={`${url1}${url2}/${recipe_image.image_filename}-medium.jpg`} />
           : <div className="img-280-280"></div>}
       </div>
 
       <div className="pair author">
         <span className="bold">Author:</span>
+        <img
+          src={author_avatar.image_filename === 'default'
+            ? `https://s3.amazonaws.com/nobsc-official-uploads/avatar/default-tiny.jpg`
+            : `https://s3.amazonaws.com/nobsc-public-uploads/avatar/${author_id}/${author_avatar.image_filename}-tiny.jpg`
+          }
+        />
         <span>
           {author === 'Unknown' ? 'Unknown' : <Link href={`/${author}/profile`}>{author}</Link>}
         </span>
@@ -192,7 +199,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
         </div>
         <div className="equipment-image">
           {equipment_image.image_filename !== "default"
-            ? <img src={`${url1}-equipment${url2}/${equipment_image.image_filename}.jpg`} />
+            ? <img src={`${url1}-equipment${url2}/${equipment_image.image_filename}-medium.jpg`} />
             : <div className="img-560-346"></div>}
         </div>
       </div>
@@ -208,7 +215,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
         </div>
         <div className="ingredients-image">
           {ingredients_image.image_filename !== "default"
-            ? <img src={`${url1}-ingredients${url2}/${ingredients_image.image_filename}.jpg`} />
+            ? <img src={`${url1}-ingredients${url2}/${ingredients_image.image_filename}-medium.jpg`} />
             : <div className="img-560-346"></div>}
         </div>
       </div>
@@ -230,7 +237,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       <div className="recipe-directions">{directions}</div>
       <div className="cooking-image">
         {cooking_image.image_filename !== "default"
-          ? <img src={`${url1}-cooking${url2}/${cooking_image.image_filename}.jpg`} />
+          ? <img src={`${url1}-cooking${url2}/${cooking_image.image_filename}-medium.jpg`} />
           : <div className="img-560-346"></div>}
       </div>
     </div>

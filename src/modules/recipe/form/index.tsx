@@ -334,19 +334,19 @@ export default function RecipeForm({ ownership }: Props) {
   // TO DO: map "" to null here?
 
   const getRequiredEquipment = () => equipmentRows.map(e => ({
-    amount:       e.amount,
+    amount:       Number(e.amount),
     equipment_id: e.equipment_id
   }));
 
   const getRequiredIngredients = () => ingredientRows.map(i => ({
-    amount:        i.amount,
-    unit_id:       i.unit_id,
+    amount:        Number(i.amount),
+    unit_id:       Number(i.unit_id),
     ingredient_id: i.ingredient_id
   }));
 
   const getRequiredSubrecipes = () => subrecipeRows.map(s => ({
-    amount:       s.amount,
-    unit_id:      s.unit_id,
+    amount:       Number(s.amount),
+    unit_id:      Number(s.unit_id),
     subrecipe_id: s.subrecipe_id
   }));
 
