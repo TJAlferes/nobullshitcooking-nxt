@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: StaticProps) {
   const res = await axios.get(
-    `${endpoint}/equipment/${encodeURIComponent(params.name)}`
+    `${endpoint}/equipment/${encodeURIComponent(params.equipment_name)}`
   );
 
   return {
@@ -41,6 +41,6 @@ export async function getStaticProps({ params }: StaticProps) {
 
 type StaticProps = {
   params: {
-    name: string;
+    equipment_name: string;
   };
 };

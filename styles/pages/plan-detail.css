@@ -1,37 +1,67 @@
 /* TO DO: test responsive design on actual smart phones */
 
-.plan-detail .name {
+.plan-detail .author {
+  display: flex;
+  flex-wrap: nowrap;
+  column-gap: 10px;
+}
+
+.plan-detail .author span {
+  font-weight: 700;
+}
+
+.plan-detail .author a {
+  font-size: 1.4rem;
+
+}
+
+.plan-detail .recipe {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  margin-bottom: 10px;
-  width: 100%;
+  align-items: center;
+  column-gap: 1px;
+  border: 1px solid;
+  padding: 1px;
+  height: 32px;
+  overflow: hidden;
 }
 
-.plan-detail .name label,
-.plan-detail .name span {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 900;
-  line-height: 30px;
+.plan-detail .recipe .image {
+  height: 28px;
+  width: 28px;
 }
 
-.plan-detail .name label {
-  margin-right: 5px;
+.plan-detail .recipe .text {
+  font-size: 1.4rem;
+  text-indent: 4px;
+}
+
+.plan-detail .recipe .text a {
+  color: #000;
+}
+
+.plan-detail .recipe .text a:hover,
+.plan-detail .recipe .text a:active {
+  
 }
 
 .plan-detail .calendar {
-  height: 632px;
-  margin: 0 auto;
+  height: 332px;
   width: 100%;
 }
 
-.plan-detail .monthly-plan .header {
+.plan-detail .calendar .weekdays {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  column-gap: 2px;
   padding: 0;
   height: 32px;
+  background-color: #f1f1f1;
 }
 
-.plan-detail .monthly-plan .header span {
+.plan-detail .calendar .weekdays span {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,124 +70,24 @@
   font-size: 1.4rem;
   text-align: center;
   user-select: none;
+  background-color: #f1f1f1;
 }
 
-.monthly-plan .body {
+.plan-detail .calendar .weekly-plan {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-gap: 1px;
+  grid-gap: 2px;
   width: 100%;
-  height: 600px;
-  max-height: 600px;
-  min-height: 600px;
+  height: 300px;
+  background-color: #f1f1f1;
 }
 
-.monthly-plan__body-day {
-  overflow: hidden;
-  position: relative;
+.plan-detail .calendar .weekly-plan .day {
   width: 100%;
-}
-
-/* is this really needed? */
-/* :after? */
-.monthly-plan__body-day:before {
-  content: "";
-  display: inline-block;
-  height: 0;
-  padding-top: 100%;
-  position: relative;
-  width: 1px;
-}
-
-.body-day__content {
-  align-items: end;
-  bottom: 0;
-  display: grid;
-  justify-items: start;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-
-.expanded-day-container {
-  border-style: solid;
-  border-width: 1px;
-  height: 319px;
-  margin: 1px 0 0 10px;
-  order: 2;
-  width: 150px;
-}
-
-/*
-is absolute really needed? change span to div?
-copy to .new-plan .date
-*/
-.plan .date {
-  color: #afafaf;
-  height: content;
-  padding: 1px 3px 0 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  user-select: none;
-  width: content;
-}
-
-.plan .day,
-.plan .expanded-day {
-  border-style: solid;
-  border-width: 1px;
-  cursor: hand;
-  cursor: pointer;
-  max-height: 100%;
-  max-width: 100%;
-  min-height: 100%;
   min-width: 100%;
-  overflow: hidden;
-  padding-top: 18px;
-  position: relative;
-  transform: none;
-}
-
-.plan .day {
-  padding-left: 3px;
-  transform: none;
-}
-
-.plan .expanded-day {
-  border-style: solid;
-  border-width: 1px;
-  padding-left: 6px;
-}
-
-.plan-recipe {
-  align-content: center;
-  background-color: #FFF3CC;
-  border: 1px solid #FFDEC3;
-  box-shadow: 1px 1px 1px #999;
-  cursor: move;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  font-size: 1.1rem;
-  height: 27px;
-  margin: 6px 1px;
-  max-width: 200px;
-  min-width: 100px;
-  overflow: hidden;
-  text-align: center;
-  width: 90%;
-}
-
-.plan-recipe .image {
-  margin: 1px 0 0 1px;
-}
-
-.plan-recipe .text {
-  font-size: 1.1rem;
-  text-align: center;
-  width: 100%;
+  height: 100%;
+  overflow: hidden;  /* TO DO: set max recipes per day = 7 */
+  background-color: #fff;
 }
 
 /*
@@ -166,28 +96,21 @@ Light/Day/Sun Theme
 
 */
 
-.light .monthly-plan .header,
-.light .monthly-plan .header span {
-  background-color: #bfddfa;
+.light .plan-detail .name input {
+  background-color: #fff;
+  border-color: #bbb;
   color: #000;
 }
 
-.light .monthly-plan .body {
-  background-color: #bfddfa;
-}
-
-.light .expanded-day-container {
-  border-color: #fff;
-}
-
-.light .plan .date {
-  color: #afafaf;
-}
-
-.light .plan .expanded-day {
+.light .plan-detail .weekly-plan .day {
   background-color: #fff;
-  border-color: #bfbfbf;
-  box-shadow: 1px 1px 1px #555;
+}
+
+.light .plan-detail .weekly-plan .day .recipe {
+  background-color: #fff3cc;
+  border-color: #ffdec3;
+  box-shadow: 1px 1px 1px #999;
+  color: #000;
 }
 
 /*
@@ -196,26 +119,23 @@ Dark/Night/Moon Theme
 
 */
 
-.dark .monthly-plan .header,
-.dark .monthly-plan .header span {
-  background-color: #507ea7;
+.dark .plan-detail .name label {
+  color: #999;
+}
+
+.dark .plan-detail .name input {
+  background-color: #1e1e1e;
+  border-color: #666;
   color: #bbb;
 }
 
-.dark .monthly-plan .body {
-  background-color: #507ea7;
-}
-
-.dark .expanded-day-container {
-  border-color: #222;
-}
-
-.dark .plan .date {
-  color: #666;
-}
-
-.dark .plan .expanded-day {
+.dark .plan-detail .weekly-plan .day {
   background-color: #222;
-  border-color: #5a5a5a;
+}
+
+.dark .plan-detail .weekly-plan .day .recipe {
+  background-color: #afae8f;
+  border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
+  color: #000;
 }

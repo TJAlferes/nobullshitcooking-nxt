@@ -38,7 +38,7 @@ export default function PlanDetail({ ownership, plan }: Props) {
       <h1>{plan_name}</h1>
 
       <div className="author">
-        <b>Author:</b>
+        <span>Author:</span>
         {' '}
         {author === "Unknown"
           ? "Unknown"

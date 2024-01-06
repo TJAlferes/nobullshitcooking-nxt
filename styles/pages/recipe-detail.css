@@ -4,20 +4,76 @@
   font-size: 1.3rem;
 }
 
+.recipe-detail .image {
+  margin-bottom: 10px;
+}
+
+.recipe-detail .pair {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 5px;
+  height: 34px;
+}
+
+.recipe-detail .bold {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.recipe-detail .author span a {
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #c10006;
+}
+
+.recipe-detail .authors-note .description {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-style: italic;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.recipe-detail .author,
+.recipe-detail .authors-note,
+.recipe-detail .times,
+.recipe-detail .cuisine,
+.recipe-detail .recipe-type,
+.recipe-detail .required-methods {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.recipe-detail .time,
+.recipe-detail .cuisine-name,
+.recipe-detail .recipe-type-name,
+.recipe-detail .method {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  height: 22px;
+  max-width: fit-content;
+  font-size: 1.4rem;
+}
+
+.recipe-detail .time {
+  color: #91ff00;
+  background-color: #000;
+}
+
+/* ---------- ---------- ---------- ---------- ---------- */
+
 .recipe-detail .save-area {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 5px;
-}
-
-.recipe-detail .save-area button.--save {
-  background-image: linear-gradient(to bottom, #d5fdd5, #acfbac);
-  border: 1px solid #aaa;
-  border-radius: 2px;
-  font-size: 1.2rem;
-  margin-right: 17px;
-  padding: 1px 2px;
 }
 
 .recipe-detail .save-area span {
@@ -27,25 +83,28 @@
   padding: 2px 3px;
 }
 
-.recipe-detail h2 {
-  font-size: 1.7rem;
-  padding-top: 18px;
+/* ---------- ---------- ---------- ---------- ---------- */
+
+.recipe-detail .required {
+  border: 1px solid;
 }
 
-.recipe-detail .author a {
-  color: #68abe6;
-  font-weight: 900;
-  text-decoration: none;
+.light .recipe-detail .required {
+  border-color: #bbb;
 }
 
-.recipe-detail .methods {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+.light .recipe-detail .cuisine-name,
+.light .recipe-detail .recipe-type-name,
+.light .recipe-detail .method {
+  background-color: #ddd;
 }
 
-.recipe-detail .method {
-  margin: 0 4px 4px 0;
-  max-width: fit-content;
-  padding: 1px 3px;
+.dark .recipe-detail .required {
+  border-color: #666;
+}
+
+.dark .recipe-detail .cuisine-name,
+.dark .recipe-detail .recipe-type-name,
+.dark .recipe-detail .method {
+  background-color: #333;
 }
