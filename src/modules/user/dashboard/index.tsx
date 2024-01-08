@@ -9,6 +9,7 @@ import { useApi, useAuth, useUserData, useTheme } from '../../../store';
 import { ExpandCollapse } from '../../shared/ExpandCollapse';
 import { getCroppedImage } from '../../shared/getCroppedImage';
 import { uploadImageToAwsS3 } from '../../shared/uploadImageToAwsS3';
+import { NOBSC_USER_ID } from '../../shared/constants';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -102,8 +103,12 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-    setLoading(false);
   };
 
   const updateUsername = async () => {
@@ -124,8 +129,12 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-    setLoading(false);
   };
 
   const deleteAccount = async () => {
@@ -146,8 +155,12 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-    setLoading(false);
   };
 
   const getApplicationNode = () => document.getElementById('root') as Element | Node;
@@ -189,9 +202,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   }; 
 
   const unattributePublicRecipe = async (recipe_id: string) => {
@@ -211,9 +228,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   };
 
   const deletePrivateEquipment = async (equipment_id: string) => {
@@ -233,9 +254,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   };
 
   const deletePrivateIngredient = async (ingredient_id: string) => {
@@ -255,9 +280,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   };
 
   const deletePrivatePlan = async (plan_id: string) => {
@@ -277,9 +306,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   };
 
   const deletePrivateRecipe = async (recipe_id: string) => {
@@ -299,9 +332,13 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
     deactivateModal();
-    setLoading(false);
   };
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -340,7 +377,6 @@ export default function Dashboard() {
           await uploadImageToAwsS3(res.data.smallSignature, small_avatar);
           await uploadImageToAwsS3(res.data.tinySignature, tiny_avatar);
           new_avatar = res.data.filename;
-          console.log(new_avatar);
         } else {
           setFeedback(res.data.message);
           return;
@@ -362,9 +398,12 @@ export default function Dashboard() {
       }
     } catch (err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-
-    setLoading(false);
   };
 
   const unfavorite = async (recipe_id: string) => {
@@ -378,14 +417,20 @@ export default function Dashboard() {
         setFeedback("Recipe unfavorited.");
         const res2 = await api.get(url);
         userData.setMyFavoriteRecipes(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 3000);  // necessary???
       } else {
         setFeedback(res1.data.message);
       }
     } catch(err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-    setLoading(false);
   };
 
   const unsave = async (recipe_id: string) => {
@@ -405,8 +450,12 @@ export default function Dashboard() {
       }
     } catch(err) {
       setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 3000);
     }
-    setLoading(false);
   };
 
   const commonAriaModalProps = {
@@ -957,9 +1006,9 @@ export default function Dashboard() {
             ? userData.my_favorite_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "default"
+                  {r.author_id !== NOBSC_USER_ID
                     ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`} />
-                    : <div className="img--28-18"></div>
+                    : <img src={`${officialUrl}/recipe/${r.image_filename}-tiny.jpg`} />
                   }
                 </span>
 
@@ -986,9 +1035,9 @@ export default function Dashboard() {
             ? userData.my_saved_recipes.map(r => (
               <div className="dashboard-item" key={r.recipe_id}>
                 <span className="tiny">
-                  {r.image_filename !== "default"
+                  {r.author_id !== NOBSC_USER_ID
                     ? <img src={`${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`} />
-                    : <div className="img-28-28"></div>
+                    : <img src={`${officialUrl}/recipe/${r.image_filename}-tiny.jpg`} />
                   }
                 </span>
 

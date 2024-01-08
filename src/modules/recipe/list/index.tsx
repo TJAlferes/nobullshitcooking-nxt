@@ -253,7 +253,7 @@ export default function RecipeList() {
                 href={`/recipe/detail/${encodeURIComponent(r.title!)}`}
                 key={r.recipe_id}
               >
-                <img src={`${url}/${r.image_filename}.jpg`} />
+                <img src={`${url}/${r.image_filename}-small.jpg`} />
                 <h3>{r.title}</h3>
                 <div className="author">{r.author}</div>
                 <div className="cuisine">{r.cuisine_name}</div>

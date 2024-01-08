@@ -88,7 +88,6 @@ export default function PlanForm({ ownership }: Props) {
         router.push(`/404`);
         return;
       }
-      console.log('PLAN_ID', plan_id);
       if (plan_id) getExistingPlanToEdit();
     }
 

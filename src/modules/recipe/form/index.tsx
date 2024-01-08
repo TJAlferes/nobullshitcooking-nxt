@@ -407,8 +407,6 @@ export default function RecipeForm({ ownership }: Props) {
       ingredients_image,
       cooking_image
     };
-    console.log(recipe_upload.active_time);
-    console.log(recipe_upload.total_time);
 
     // upload any newly made images to AWS S3, then insert info into MySQL
     try {

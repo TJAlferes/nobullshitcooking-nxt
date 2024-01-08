@@ -101,33 +101,32 @@ export default function Profile({ profile }: Props) {
 
       {tab === 'favorite-recipes' ? (
         favorite_recipes && favorite_recipes.length > 0
-          ? (favorite_recipes.map(r => (
-            <div className="item" key={r.recipe_id}>
-              <span className="image">
-                {r.image_filename !== "default"
-                  ? (
-                    <img 
-                      src={
-                        r.author_id !== NOBSC_USER_ID
-                        ? `${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`
-                        : `${officialUrl}/recipe/${r.image_filename}-tiny.jpg`
-                      }
-                    />
-                  )
-                  : <div className="image-default-28-18"></div>
-                }
-              </span>
-              <span className="name">
-                <Link
-                  href={
-                    r.author_id !== NOBSC_USER_ID
-                    ? `/${r.author}/recipe/detail/${r.title}`
-                    : `/recipe/detail/${r.title}`
+          ? favorite_recipes.map(r => {
+            console.log(favorite_recipes.length);
+            console.log(r.author_id);
+            const imgSrc = r.author_id !== NOBSC_USER_ID
+              ? `${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`
+              : `${officialUrl}/recipe/${r.image_filename}-tiny.jpg`;
+            return (
+              <div className="item" key={r.recipe_id}>
+                <span className="image">
+                  {r.image_filename !== "default"
+                    ? <img src={imgSrc} />
+                    : <div className="image-default-28-18"></div>
                   }
-                >{r.title}</Link>
-              </span>
-            </div>
-          )))
+                </span>
+                <span className="name">
+                  <Link
+                    href={
+                      r.author_id !== NOBSC_USER_ID
+                      ? `/${r.author}/recipe/detail/${r.title}`
+                      : `/recipe/detail/${r.title}`
+                    }
+                  >{r.title}</Link>
+                </span>
+              </div>
+            );
+          })
           : <div className="none">{username} hasn't favorited any recipes yet.</div>
         ) : false
       }

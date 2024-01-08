@@ -479,14 +479,18 @@ function createDataFetcher(path: string, key: keyof Data) {
   }
 }
 
-export const getCuisines = () => useContextSelector(StoreContext, (s) => createDataFetcher("/cuisines", "cuisines"));
-export const getEquipments = () => useContextSelector(StoreContext, (s) => createDataFetcher("/equipment", "equipment"));
-export const getEquipmentTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/equipment-types", "equipment_types"));
-export const getIngredients = () => useContextSelector(StoreContext, (s) => createDataFetcher("/ingredients", "ingredients"));
-export const getIngredientTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/ingredient-types", "ingredient_types"));
-export const getUnits = () => useContextSelector(StoreContext, (s) => createDataFetcher("/units", "units"));
-export const getMethods = () => useContextSelector(StoreContext, (s) => createDataFetcher("/methods", "methods"));
-export const getRecipeTypes = () => useContextSelector(StoreContext, (s) => createDataFetcher("/recipe-types", "recipe_types"));
+export function useDataFetcher() {
+  return {
+    getCuisines: createDataFetcher("/cuisines", "cuisines"),
+    getEquipments: createDataFetcher("/equipment", "equipment"),
+    getEquipmentTypes: createDataFetcher("/equipment-types", "equipment_types"),
+    getIngredients: createDataFetcher("/ingredients", "ingredients"),
+    getIngredientTypes: createDataFetcher("/ingredient-types", "ingredient_types"),
+    getUnits: createDataFetcher("/units", "units"),
+    getMethods: createDataFetcher("/methods", "methods"),
+    getRecipeTypes: createDataFetcher("/recipe-types", "recipe_types")
+  };
+}
 
 function createUserDataFetcher(path: string, key: keyof UserData) {
   const { api } = useApi();
@@ -499,67 +503,47 @@ function createUserDataFetcher(path: string, key: keyof UserData) {
   }
 }
 
-export const getMyFriendships = () => useContextSelector(
-  StoreContext,
-  (s) => createUserDataFetcher(
-    `/users/${s!.authname}/friendships`,
-    'my_friendships'
-  )
-);
+export function useUserDataFetcher() {
+  return useContextSelector(StoreContext, (s) => ({
+    getMyFriendships: createUserDataFetcher(
+      `/users/${s!.authname}/friendships`,
+      'my_friendships'
+    ),
+    getMyPrivateEquipment: createUserDataFetcher(
+      `/users/${s!.authname}/private-equipment`,
+      'my_private_equipment'
+    ),
+    getMyPrivateIngredients: createUserDataFetcher(
+      `/users/${s!.authname}/private-ingredients`,
+      'my_private_ingredients'
+    ),
+    getMyFavoriteRecipes: createUserDataFetcher(
+      `/users/${s!.authname}/favorite-recipes`,
+      'my_favorite_recipes'
+    ),
+    getMySavedRecipes: createUserDataFetcher(
+      `/users/${s!.authname}/saved-recipes`,
+      'my_saved_recipes'
+    ),
+    getMyPublicRecipes: createUserDataFetcher(
+      `/users/${s!.authname}/public-recipes`,
+      `my_public_recipes`
+    ),
+    getMyPrivateRecipes: createUserDataFetcher(
+      `/users/${s!.authname}/private-recipes`,
+      `my_private_recipes`
+    ),
+    getMyPublicPlans: createUserDataFetcher(
+      `/users/${s!.authname}/public-plans`,
+      `my_public_plans`
+    ),
+    getMyPrivatePlans: createUserDataFetcher(
+      `/users/${s!.authname}/private-plans`,
+      `my_private_plans`
+    ),
 
-export const getMyPrivateEquipment = () => useContextSelector(
-  StoreContext,
-  (s) => createUserDataFetcher(
-    `/users/${s!.authname}/private-equipment`,
-    'my_private_equipment'
-  )
-);
-
-export const getMyPrivateIngredients = () => useContextSelector(
-  StoreContext,
-  (s) => createUserDataFetcher(
-    `/users/${s!.authname}/private-ingredients`,
-    'my_private_ingredients'
-  )
-);
-
-export const getMyFavoriteRecipes = () => useContextSelector(
-  StoreContext,
-  (s) => createUserDataFetcher(
-    `/users/${s!.authname}/favorite-recipes`,
-    'my_favorite_recipes'
-  )
-);
-
-export const getMySavedRecipes = () => useContextSelector(
-  StoreContext,
-  (s) => createUserDataFetcher(
-    `/users/${s!.authname}/saved-recipes`,
-    'my_saved_recipes'
-  )
-);
-
-export const getMyPlans = (ownership: Ownership) => {
-  if (ownership == 'official') return;
-  return useContextSelector(
-    StoreContext,
-    (s) => createUserDataFetcher(
-      `/users/${s!.authname}/${ownership}-plans`,
-      `my_${ownership}_plans`
-    )
-  );
-};
-
-export const getMyRecipes = (ownership: Ownership) => {
-  if (ownership == 'official') return;
-  return useContextSelector(
-    StoreContext,
-    (s) => createUserDataFetcher(
-      `/users/${s!.authname}/${ownership}-recipes`,
-      `my_${ownership}_recipes`
-    )
-  );
-};
+  }));
+}
 
 type StoreContextProviderProps = {
   children: ReactNode;

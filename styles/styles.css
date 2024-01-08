@@ -103,7 +103,8 @@ select:focus {
 
 .cancel-cancel,
 .cancel-button,
-.submit-button {
+.submit-button,
+.disabled-button {
   display: block;
   margin: 15px 30px 0 0;
   border: 1px solid #aaa;
@@ -116,6 +117,7 @@ select:focus {
   font-size: 1.4rem;
   text-align: center;
   text-decoration: none;
+  user-select: none;
   cursor: pointer;
 }
 
@@ -125,6 +127,10 @@ select:focus {
 
 .submit-button {
   background-color: #d5fdd5;
+}
+
+.disabled-button {
+  cursor: initial;
 }
 
 .aria-modal-dialog {
@@ -197,6 +203,10 @@ Light Theme
   background-color: #c10006;
 }
 
+.light .disabled-button {
+  background-color: #ddd;
+}
+
 /*
 
 Dark Theme
@@ -207,6 +217,11 @@ Dark Theme
 .dark .img-100-100,
 .dark .img-28-28 {
   background-color: #690004;
+}
+
+.dark .disabled-button {
+  color: #aaa;
+  background-color: #333;
 }
 
 @import './components/app-nav.css';

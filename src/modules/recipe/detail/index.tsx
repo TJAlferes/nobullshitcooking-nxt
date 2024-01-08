@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { useApi, useAuth, useUserData, getMyFavoriteRecipes, getMySavedRecipes } from '../../../store';
+import { useApi, useAuth, useUserData, useUserDataFetcher } from '../../../store';
 import type { Ownership } from '../../shared/types';
 
 export default function RecipeDetail({ ownership, recipe }: Props) {
@@ -11,6 +11,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
   const { api } = useApi();
   const { auth_id, authname } = useAuth();
   const { my_favorite_recipes, my_saved_recipes } = useUserData();
+  const { getMyFavoriteRecipes, getMySavedRecipes } = useUserDataFetcher();
 
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
@@ -107,7 +108,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
 
       <div className="image">
         {recipe_image.image_filename !== "default"
-          ? <img src={`${url1}${url2}/${recipe_image.image_filename}-medium.jpg`} />
+          ? <img src={`${url1}${url2}${recipe_image.image_filename}-medium.jpg`} />
           : <div className="img-280-280"></div>}
       </div>
 
@@ -155,7 +156,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       {( !authname || (authname === author) || (ownership === 'private') ) ? false : (
         <div className="save-area">
           {my_favorite_recipes.find(r => r.recipe_id === recipe_id)
-            ? <span>Favorited</span>
+            ? <span className="disabled-button">Favorited</span>
             : (
               !favorited
               ? (
@@ -166,12 +167,12 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
                   onClick={favorite}
                 >Favorite</button>
               )
-              : <span>Favorited</span>
+              : <span className="disabled-button">Favorited</span>
             )
           }
   
           {my_saved_recipes.find(r => r.recipe_id === recipe_id)
-            ? <span>Saved</span>
+            ? <span className="disabled-button">Saved</span>
             : (
               !saved
               ? (
@@ -182,7 +183,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
                   onClick={save}
                 >Save</button>
               )
-              : <span>Saved</span>
+              : <span className="disabled-button">Saved</span>
             )
           }
         </div>
@@ -199,7 +200,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
         </div>
         <div className="equipment-image">
           {equipment_image.image_filename !== "default"
-            ? <img src={`${url1}-equipment${url2}/${equipment_image.image_filename}-medium.jpg`} />
+            ? <img src={`${url1}-equipment${url2}${equipment_image.image_filename}-medium.jpg`} />
             : <div className="img-560-346"></div>}
         </div>
       </div>
@@ -215,7 +216,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
         </div>
         <div className="ingredients-image">
           {ingredients_image.image_filename !== "default"
-            ? <img src={`${url1}-ingredients${url2}/${ingredients_image.image_filename}-medium.jpg`} />
+            ? <img src={`${url1}-ingredients${url2}${ingredients_image.image_filename}-medium.jpg`} />
             : <div className="img-560-346"></div>}
         </div>
       </div>
@@ -237,7 +238,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       <div className="recipe-directions">{directions}</div>
       <div className="cooking-image">
         {cooking_image.image_filename !== "default"
-          ? <img src={`${url1}-cooking${url2}/${cooking_image.image_filename}-medium.jpg`} />
+          ? <img src={`${url1}-cooking${url2}${cooking_image.image_filename}-medium.jpg`} />
           : <div className="img-560-346"></div>}
       </div>
     </div>

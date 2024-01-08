@@ -22,6 +22,9 @@ export default function Register() {
     if (!username) {
       return setFeedback('Username required.');
     }
+    if (username.length !== username.slice().trim().replace(/\s/g, '').length) {
+      return setFeedback('Username may not have spaces.');
+    }
     if (!email) {
       return setFeedback('Email required.');
     }
