@@ -129,11 +129,11 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       </div>
       <div className="pair times">
         <span className="bold">Active Time:</span>
-        <span className="time">{active_time}</span>
+        <span className="time">{active_time.slice(0, -3)}</span>
       </div>
       <div className="pair times">
         <span className="bold">Total Time:</span>
-        <span className="time">{total_time}</span>
+        <span className="time">{total_time.slice(0, -3)}</span>
       </div>
       <div className="pair cuisine">
         <span className="bold">Cuisine:</span>

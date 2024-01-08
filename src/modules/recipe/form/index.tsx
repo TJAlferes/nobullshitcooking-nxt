@@ -48,8 +48,8 @@ export default function RecipeForm({ ownership }: Props) {
       return acc;
     }, {})
   );
-  const [equipmentRows, setEquipmentRows] = useState<EquipmentRow[]>([pristineEquipmentRow()]);
-  const [ingredientRows, setIngredientRows] = useState<IngredientRow[]>([pristineIngredientRow()]);
+  const [equipmentRows, setEquipmentRows] = useState<EquipmentRow[]>([]);
+  const [ingredientRows, setIngredientRows] = useState<IngredientRow[]>([]);
   const [subrecipeRows, setSubrecipeRows] = useState<SubrecipeRow[]>([]);
 
   const recipeImageRef = useRef<HTMLImageElement>();
@@ -74,13 +74,13 @@ export default function RecipeForm({ ownership }: Props) {
   const [equipmentImageState, setEquipmentImageState] = useState<ImageState>({
     image: null,
     crop: initialCrop,
-    mediumPreview: ""
+    mediumPreview: ''
   });
   const [equipmentMediumImage, setEquipmentMediumImage] = useState<File | null>(null);
   const [equipment_image, setEquipmentImage] = useState({
-    image_id: "",
-    image_filename: "default",
-    caption: "",
+    image_id: '',
+    image_filename: 'default',
+    caption: '',
     type: 2
   });
 
@@ -92,9 +92,9 @@ export default function RecipeForm({ ownership }: Props) {
   });
   const [ingredientsMediumImage, setIngredientsMediumImage] = useState<File | null>(null);
   const [ingredients_image, setIngredientsImage] = useState({
-    image_id: "",
-    image_filename: "default",
-    caption: "",
+    image_id: '',
+    image_filename: 'default',
+    caption: '',
     type: 3
   });
 
@@ -102,13 +102,13 @@ export default function RecipeForm({ ownership }: Props) {
   const [cookingImageState, setCookingImageState] = useState<ImageState>({
     image: null,
     crop: initialCrop,
-    mediumPreview: ""
+    mediumPreview: ''
   });
   const [cookingMediumImage, setCookingMediumImage] = useState<File | null>(null);
   const [cooking_image, setCookingImage] = useState({
-    image_id: "",
-    image_filename: "default",
-    caption: "",
+    image_id: '',
+    image_filename: 'default',
+    caption: '',
     type: 4
   });
 
@@ -133,20 +133,27 @@ export default function RecipeForm({ ownership }: Props) {
       setCuisineId(recipe.cuisine_id);
       setTitle(recipe.title);
       setDescription(recipe.description);
-      setActiveTime(recipe.active_time);
-      setTotalTime(recipe.total_time);
+      setActiveTime(recipe.active_time.slice(0, -3));
+      setTotalTime(recipe.total_time.slice(0, -3));
       setDirections(recipe.directions);
-      setUsedMethods(prev => {
-        const next = {...prev};
-        recipe.required_methods?.map(({ method_id }) => {
-          next[method_id] = true;
+      if (recipe.required_methods) {
+        setUsedMethods(prev => {
+          const next = {...prev};
+          recipe.required_methods?.map(({ method_id }) => {
+            next[method_id] = true;
+          });
+          return next;
         });
-        return next;
-      });
-      setEquipmentRows(recipe.required_equipment.map(r => ({...r, key: uuidv4()})));
-      setIngredientRows(recipe.required_ingredients.map(r => ({...r, key: uuidv4()})));
-      setSubrecipeRows(recipe.required_subrecipes.map(r => ({...r, key: uuidv4()})));
-      //setRecipeImage(prev => ({...prev, ...recipe.recipe_image}));
+      }
+      if (recipe.required_equipment) {
+        setEquipmentRows(recipe.required_equipment.map(r => ({...r, key: uuidv4()})));
+      }
+      if (recipe.required_ingredients) {
+        setIngredientRows(recipe.required_ingredients.map(r => ({...r, key: uuidv4()})));
+      }
+      if (recipe.required_subrecipes) {
+        setSubrecipeRows(recipe.required_subrecipes.map(r => ({...r, key: uuidv4()})));
+      }
       setRecipeImage({...recipe_image, ...recipe.recipe_image});
       setEquipmentImage({...equipment_image, ...recipe.equipment_image});
       setIngredientsImage({...ingredients_image, ...recipe.ingredients_image});
@@ -275,9 +282,9 @@ export default function RecipeForm({ ownership }: Props) {
       ...recipeImageState,
       image: null,
       //crop
-      mediumPreview: "",
-      smallPreview: "",
-      tinyPreview: ""
+      mediumPreview: '',
+      smallPreview: '',
+      tinyPreview: ''
     });
     setRecipeMediumImage(null);
     setRecipeSmallImage(null);
@@ -289,7 +296,7 @@ export default function RecipeForm({ ownership }: Props) {
       ...equipmentImageState,
       image: null,
       //crop
-      mediumPreview: ""
+      mediumPreview: ''
     });
     setEquipmentMediumImage(null);
   };
@@ -299,7 +306,7 @@ export default function RecipeForm({ ownership }: Props) {
       ...ingredientsImageState,
       image: null,
       //crop
-      mediumPreview: ""
+      mediumPreview: ''
     });
     setIngredientsMediumImage(null);
   };
@@ -309,13 +316,13 @@ export default function RecipeForm({ ownership }: Props) {
       ...cookingImageState,
       image: null,
       //crop
-      mediumPreview: ""
+      mediumPreview: ''
     });
     setCookingMediumImage(null);
   };
 
   // TO DO: confirmation modal
-  const deleteRecipeImageFromAWSS3 = () =>
+  /*const deleteRecipeImageFromAWSS3 = () =>
     setRecipeImage({...recipe_image, image_filename: "default"});
 
   const deleteEquipmentImageFromAWSS3 = () =>
@@ -325,7 +332,7 @@ export default function RecipeForm({ ownership }: Props) {
     setIngredientsImage({...ingredients_image, image_filename: "default"});
 
   const deleteCookingImageFromAWSS3 = () =>
-    setCookingImage({...cooking_image, image_filename: "default"});
+    setCookingImage({...cooking_image, image_filename: "default"});*/
 
   const getCheckedMethods = () => Object.keys(usedMethods)
     .filter(key => usedMethods[parseInt(key)] === true)
@@ -364,8 +371,8 @@ export default function RecipeForm({ ownership }: Props) {
     if (cuisine_id === 0) return invalid('Cuisine required.');
     if (title.trim() === '') return invalid('Title required.');
     if (description.trim() === '') return invalid('Description required.');
-    if (!validateAndFormatTime(active_time)) return invalid('Invalid time.');
-    if (!validateAndFormatTime(total_time)) return invalid('Invalid time.');
+    if (!validTime(active_time)) return invalid('Invalid time.');
+    if (!validTime(total_time)) return invalid('Invalid time.');
     if (directions.trim() === '') return invalid('Directions required.');
     if (getCheckedMethods().length < 1) return invalid('Select required method(s).');
     for (const { equipment_id } of getRequiredEquipment()) {
@@ -388,8 +395,8 @@ export default function RecipeForm({ ownership }: Props) {
       cuisine_id,
       title,
       description,
-      active_time,
-      total_time,
+      active_time: formatTime(active_time),
+      total_time: formatTime(total_time),
       directions,
       required_methods: getCheckedMethods(),
       required_equipment: getRequiredEquipment(),
@@ -400,7 +407,8 @@ export default function RecipeForm({ ownership }: Props) {
       ingredients_image,
       cooking_image
     };
-    console.log(recipe_upload.required_methods);
+    console.log(recipe_upload.active_time);
+    console.log(recipe_upload.total_time);
 
     // upload any newly made images to AWS S3, then insert info into MySQL
     try {
@@ -859,7 +867,7 @@ export default function RecipeForm({ ownership }: Props) {
             <>
               {!recipe_id
                 ? <img className="current-image" src={`${url}/recipe/${NOBSC_USER_ID}/default`} />
-                : <img className="current-image" src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}`} />}
+                : <img className="current-image" src={`${url}/recipe/${auth_id}/${recipe_image!.image_filename}-medium.jpg`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
@@ -867,9 +875,9 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => onSelectFile(e, 'recipe')}
                 type="file"
               />
-              {recipe_id
+              {/*recipe_id
                 ? <button onClick={deleteRecipeImageFromAWSS3}>Delete / Reset To Default</button>
-                : false}
+              : false*/}
             </>
           )
           : (
@@ -930,7 +938,7 @@ export default function RecipeForm({ ownership }: Props) {
             <>
               {!recipe_id
                 ? <img className="current-image" src={`${url}/recipe-equipment/${NOBSC_USER_ID}/default`} />
-                : <img className="current-image" src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}`} />}
+                : <img className="current-image" src={`${url}/recipe-equipment/${auth_id}/${equipment_image!.image_filename}-medium.jpg`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
@@ -938,9 +946,9 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => onSelectFile(e, "equipment")}
                 type="file"
               />
-              {recipe_id
+              {/*recipe_id
                 ? <button onClick={deleteEquipmentImageFromAWSS3}>Delete / Reset To Default</button>
-                : false}
+                : false*/}
             </>
           )
           : (
@@ -993,7 +1001,7 @@ export default function RecipeForm({ ownership }: Props) {
             <>
               {!recipe_id
                 ? <img className="current-image" src={`${url}/recipe-ingredients/${NOBSC_USER_ID}/default`} />
-                : <img className="current-image" src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}`} />
+                : <img className="current-image" src={`${url}/recipe-ingredients/${auth_id}/${ingredients_image!.image_filename}-medium.jpg`} />
               }
               <label>Change Image</label>
               <input
@@ -1002,9 +1010,9 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => onSelectFile(e, "ingredients")}
                 type="file"
               />
-              {recipe_id
+              {/*recipe_id
                 ? <button onClick={deleteIngredientsImageFromAWSS3}>Delete / Reset To Default</button>
-                : false}
+                : false*/}
             </>
           )
           : (
@@ -1056,8 +1064,8 @@ export default function RecipeForm({ ownership }: Props) {
           ? (
             <>
               {!recipe_id
-                ? <img className="current-image" src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default`} />
-                : <img className="current-image" src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}`} />}
+                ? <img className="current-image" src={`${url}/recipe-cooking/${NOBSC_USER_ID}/default.jpg`} />
+                : <img className="current-image" src={`${url}/recipe-cooking/${auth_id}/${cooking_image!.image_filename}-medium.jpg`} />}
               <label>Change Image</label>
               <input
                 accept="image/*"
@@ -1065,9 +1073,9 @@ export default function RecipeForm({ ownership }: Props) {
                 onChange={(e) => onSelectFile(e, "cooking")}
                 type="file"
               />
-              {recipe_id
+              {/*recipe_id
                 ? <button onClick={deleteCookingImageFromAWSS3}>Delete / Reset To Default</button>
-                : false}
+              : false*/}
             </>
           )
           : (
@@ -1258,21 +1266,29 @@ export const commonReactCropProps = {
   }
 };
 
-function validateAndFormatTime(time: string) {
-  // validate
-  const [ hours, minutes ] = time.split(':');
+function validTime(time: string) {
+  let [ hours, minutes ] = time.slice().split(':');
+  if (hours?.charAt(0) === '0') hours = hours.charAt(1);
+  if (minutes?.charAt(0) === '0') minutes = minutes.charAt(1);
   const parsedHours = hours ? parseInt(hours): 0;
   const parsedMinutes = minutes ? parseInt(minutes) : 0;
   if (isNaN(parsedHours) || isNaN(parsedMinutes)) return false;
-  if (parsedHours < 0 || parsedHours > 99 || parsedMinutes < 0 || parsedMinutes > 59) return false;
-
-  // format
-  // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)
-  const formattedHours   = parsedHours.toString().padStart(2, '0');
-  const formattedMinutes = parsedMinutes.toString().padStart(2, '0');
-  time = `${formattedHours}:${formattedMinutes}`;
-
+  if (parsedHours < 0 || parsedHours > 99 || parsedMinutes < 0 || parsedMinutes > 59) {
+    return false;
+  }
   return true;
+}
+
+function formatTime(time: string) {
+  let [ hours, minutes ] = time.slice().split(':');
+  if (hours?.charAt(0) === '0') hours = hours.charAt(1);
+  if (minutes?.charAt(0) === '0') minutes = minutes.charAt(1);
+  const parsedHours = hours ? parseInt(hours): 0;
+  const parsedMinutes = minutes ? parseInt(minutes) : 0;
+  // We add leading zeroes if needed (0 becomes 00, 4 becomes 04)
+  const formattedHours = parsedHours.toString().padStart(2, '0');
+  const formattedMinutes = parsedMinutes.toString().padStart(2, '0');
+  return `${formattedHours}:${formattedMinutes}`;
 }
 
 export type RequiredMethod = {
