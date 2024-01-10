@@ -65,7 +65,7 @@ export default function Profile({ profile }: Props) {
 
       <p className="feedback">{feedback}</p>
 
-      <img className="avatar" src={`${avatarUrl}.jpg`} />
+      <img className="avatar" src={`${avatarUrl}${avatar !== 'default' && '-small'}.jpg`} />
       
       <div className="friend-request-outer">
         {authname && username !== authname

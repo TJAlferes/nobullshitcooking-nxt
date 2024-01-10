@@ -7,7 +7,6 @@ import { createContext, useContextSelector } from 'use-context-selector';
 import { axiosInstance, endpoint, protectedApi } from '../config/api';
 import { getItem, setItem } from '../modules/general/localStorage';
 import type { SearchResponse } from '../modules/shared/search/types';
-import type { Ownership } from '../modules/shared/types';
 
 const StoreContext = createContext<StoreValue | null>(null);
 

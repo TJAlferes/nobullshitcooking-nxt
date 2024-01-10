@@ -61,7 +61,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 4000);
+      }, 2500);
     }
   };
 
@@ -84,7 +84,7 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 4000);
+      }, 2500);
     }
   };
 

@@ -390,9 +390,10 @@ export default function Dashboard() {
       if (res.status === 204) {
         setFeedback('Avatar updated.');
         auth.setAuthAvatar(new_avatar);
+        cancelAvatar();
         setTimeout(() => {
           router.push(`/dashboard`);
-        }, 3000);
+        }, 2500);
       } else {
         setFeedback(res.data.message);
       }
@@ -780,7 +781,7 @@ export default function Dashboard() {
               rel="noopener noreferrer"
             >View Profile</a>
             <h3>Current Avatar</h3>
-            <img src={`${avatarUrl}.jpg`} />
+            <img src={`${avatarUrl}${auth.auth_avatar !== 'default' && '-small'}.jpg`} />
             <label>Change Avatar</label>
             <input
               accept="image/*"
@@ -1013,7 +1014,12 @@ export default function Dashboard() {
                 </span>
 
                 <span className="name">
-                  <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
+                  <Link
+                    href={r.author_id === NOBSC_USER_ID
+                      ? `/recipe/detail/${encodeURIComponent(r.title)}`
+                      : `/${r.author}/recipe/detail/${encodeURIComponent(r.title)}`
+                    }
+                  >{r.title}</Link>
                 </span>
 
                 <span
@@ -1042,7 +1048,12 @@ export default function Dashboard() {
                 </span>
 
                 <span className="name">
-                  <Link href={`/${r.author}/recipe/detail/${r.title}`}>{r.title}</Link>
+                  <Link
+                    href={r.author_id === NOBSC_USER_ID
+                      ? `/recipe/detail/${encodeURIComponent(r.title)}`
+                      : `/${r.author}/recipe/detail/${encodeURIComponent(r.title)}`
+                    }
+                  >{r.title}</Link>
                 </span>
 
                 <span

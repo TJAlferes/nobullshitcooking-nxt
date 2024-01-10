@@ -109,12 +109,14 @@
 
 .dashboard-item .name a,
 .dashboard-item .name a:visited {
+  font-size: 1.4rem;
   color: #68abe6;
 }
 
 .dashboard-item .action,
 .dashboard-item .delete,
-.dashboard-item .unfavorite {
+.dashboard-item .unfavorite,
+.dashboard-item .unsave {
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
@@ -151,7 +153,8 @@
 }
 
 .dashboard-item .delete,
-.dashboard-item .unfavorite {
+.dashboard-item .unfavorite,
+.dashboard-item .unsave {
   background-color: #ffd6d6;
 }
 
