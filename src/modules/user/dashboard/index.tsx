@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import qs from 'qs';
+import { useEffect, useRef, useState } from 'react';
 import AriaModal from 'react-aria-modal';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -14,6 +16,10 @@ import { NOBSC_USER_ID } from '../../shared/constants';
 export default function Dashboard() {
   const router = useRouter();
 
+  const searchParams = useSearchParams();
+  const params = qs.parse(searchParams.toString());
+  const { t, st } = params;
+
   const { api } = useApi();
   const auth = useAuth();
   const userData = useUserData();
@@ -22,7 +28,7 @@ export default function Dashboard() {
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
   const [isPageNavOpen, setIsPageNavOpen] = useState(false);
-  const [tab, setTab] = useState('avatar');
+  const [tab, setTab] = useState('profile-settings');
   const [subTab, setSubTab] = useState('private');
   const [deleteId, setDeleteId] = useState('');
   const [deleteName, setDeleteName] = useState('');
@@ -55,6 +61,18 @@ export default function Dashboard() {
 
   const imageRef = useRef<HTMLImageElement | null>();
 
+  useEffect(() => {
+    if (router.isReady) {
+      if (!t) setTab('profile-settings');
+      else if (JSON.stringify(tab) !== JSON.stringify(t)) setTab(t as string);
+      if (!st) setSubTab('private');
+      else if (JSON.stringify(subTab) !== JSON.stringify(st)) setSubTab(st as string);
+    }
+  }, [
+    t,
+    st
+  ]);
+
   const error = 'An error occurred. Please try again.';
 
   const officialUrl = 'https://s3.amazonaws.com/nobsc-official-uploads';
@@ -70,34 +88,15 @@ export default function Dashboard() {
     window.scrollTo(0, 0);
     try {
       const res = await api.patch(
-        `/users/${auth.authname}/update-email`,
+        `/users/${auth.authname}/email`,
         {new_email, password}
       );
       if (res.status === 204) {
-        setFeedback('Email updated.')
+        setFeedback('Email updated.');
         auth.setAuthEmail(new_email);
-        setTimeout(() => router.push('/dashboard'), 3000);
-      } else {
-        setFeedback(res.data.message);
-      }
-    } catch (err) {
-      setFeedback(error);
-    }
-    setLoading(false);
-  };
-
-  const updatePassword = async () => {
-    setLoading(true);
-    setFeedback('');
-    window.scrollTo(0, 0);
-    try {
-      const res = await api.patch(
-        `/users/${auth.authname}/update-password`,
-        {new_password, current_password}
-      );
-      if (res.status === 204) {
-        setFeedback('Password updated.')
-        setTimeout(() => router.push('/dashboard'), 3000);
+        setNewEmail('');
+        setPassword('');
+        setTimeout(() => router.push('/dashboard?t=account-settings'), 2500);
       } else {
         setFeedback(res.data.message);
       }
@@ -107,7 +106,35 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
+    }
+  };
+
+  const updatePassword = async () => {
+    setLoading(true);
+    setFeedback('');
+    window.scrollTo(0, 0);
+    try {
+      const res = await api.patch(
+        `/users/${auth.authname}/password`,
+        {new_password, current_password}
+      );
+      if (res.status === 204) {
+        setFeedback('Password updated.');
+        setCurrentPassword('');
+        setNewPassword('');
+        setNewPasswordAgain('');
+        setTimeout(() => router.push('/dashboard?t=account-settings'), 2500);
+      } else {
+        setFeedback(res.data.message);
+      }
+    } catch (err) {
+      setFeedback(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setFeedback('');
+      }, 2500);
     }
   };
 
@@ -117,13 +144,14 @@ export default function Dashboard() {
     window.scrollTo(0, 0);
     try {
       const res = await api.patch(
-        `/users/${auth.authname}/update-username`,
+        `/users/${auth.authname}/username`,
         {new_username}
       );
       if (res.status === 204) {
         setFeedback("Username updated.")
         auth.setAuthname(new_username);
-        setTimeout(() => router.push('/dashboard'), 3000);
+        setNewUsername('');
+        setTimeout(() => router.push('/dashboard?t=account-settings'), 2500);
       } else {
         setFeedback(res.data.message);
       }
@@ -133,7 +161,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
   };
 
@@ -148,8 +176,9 @@ export default function Dashboard() {
       );
       if (res.status === 204) {
         setFeedback('User account deleted.');
+        setDelPassword('');
         auth.logout();
-        setTimeout(() => router.push('/'), 3000);
+        setTimeout(() => router.push('/'), 2500);
       } else {
         setFeedback(res.data.message);
       }
@@ -159,7 +188,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
   };
 
@@ -196,7 +225,7 @@ export default function Dashboard() {
         setFeedback("Public plan unattributed.");
         const res2 = await api.get(url);
         userData.setMyPublicPlans(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);
+        //setTimeout(() => router.push('/dashboard'), 2500);
       } else {
         setFeedback(res1.data.message);
       }
@@ -206,7 +235,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   }; 
@@ -222,7 +251,7 @@ export default function Dashboard() {
         setFeedback("Public recipe unattributed.");
         const res2 = await api.get(url);
         userData.setMyPublicRecipes(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);
+        //setTimeout(() => router.push('/dashboard'), 2500);
       } else {
         setFeedback(res1.data.message);
       }
@@ -232,7 +261,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   };
@@ -248,7 +277,7 @@ export default function Dashboard() {
         setFeedback("Private equipment deleted.");
         const res2 = await api.get(url);
         userData.setMyPrivateEquipment(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        //setTimeout(() => router.push('/dashboard'), 2500);  // necessary???
       } else {
         setFeedback(res1.data.message);
       }
@@ -258,7 +287,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   };
@@ -274,7 +303,7 @@ export default function Dashboard() {
         setFeedback("Private ingredient deleted.");
         const res2 = await api.get(url);
         userData.setMyPrivateIngredients(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        //setTimeout(() => router.push('/dashboard'), 2500);  // necessary???
       } else {
         setFeedback(res1.data.message);
       }
@@ -284,7 +313,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   };
@@ -300,7 +329,7 @@ export default function Dashboard() {
         setFeedback("Private plan deleted.");
         const res2 = await api.get(url);
         userData.setMyPrivatePlans(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        //setTimeout(() => router.push('/dashboard'), 2500);  // necessary???
       } else {
         setFeedback(res1.data.message);
       }
@@ -310,7 +339,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   };
@@ -326,7 +355,7 @@ export default function Dashboard() {
         setFeedback("Private recipe deleted.");
         const res2 = await api.get(url);
         userData.setMyPrivateRecipes(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        /*setTimeout(() => router.push('/dashboard'), 2500);  // necessary???*/
       } else {
         setFeedback(res1.data.message);
       }
@@ -336,7 +365,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
     deactivateModal();
   };
@@ -347,7 +376,7 @@ export default function Dashboard() {
     const reader = new FileReader();
     reader.addEventListener("load", () => setAvatar(reader.result));
     reader.readAsDataURL(target.files[0] as Blob);
-  };
+  };  // TO DO: double check security of these
 
   const makeCrops = async (crop: Crop) => {
     if (!imageRef.current) return;
@@ -358,6 +387,8 @@ export default function Dashboard() {
     setTinyCrop(tiny.preview);
     setSmallAvatar(small.final);
     setTinyAvatar(tiny.final);
+    window.URL.revokeObjectURL(small.preview);
+    window.URL.revokeObjectURL(tiny.preview);
   };
 
   const uploadAvatar = async () => {
@@ -391,9 +422,9 @@ export default function Dashboard() {
         setFeedback('Avatar updated.');
         auth.setAuthAvatar(new_avatar);
         cancelAvatar();
-        setTimeout(() => {
+        /*setTimeout(() => {
           router.push(`/dashboard`);
-        }, 2500);
+        }, 2500);*/
       } else {
         setFeedback(res.data.message);
       }
@@ -403,7 +434,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
   };
 
@@ -418,9 +449,9 @@ export default function Dashboard() {
         setFeedback("Recipe unfavorited.");
         const res2 = await api.get(url);
         userData.setMyFavoriteRecipes(res2.data);
-        setTimeout(() => {
+        /*setTimeout(() => {
           router.push('/dashboard');
-        }, 3000);  // necessary???
+        }, 2500);  // necessary???*/
       } else {
         setFeedback(res1.data.message);
       }
@@ -430,7 +461,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
   };
 
@@ -445,7 +476,7 @@ export default function Dashboard() {
         setFeedback("Recipe unsaved.");
         const res2 = await api.get(url);
         userData.setMySavedRecipes(res2.data);
-        setTimeout(() => router.push('/dashboard'), 3000);  // necessary???
+        /*setTimeout(() => router.push('/dashboard'), 2500);  // necessary???*/
       } else {
         setFeedback(res1.data.message);
       }
@@ -455,7 +486,7 @@ export default function Dashboard() {
       setTimeout(() => {
         setLoading(false);
         setFeedback('');
-      }, 3000);
+      }, 2500);
     }
   };
 
@@ -504,10 +535,10 @@ export default function Dashboard() {
 
           <nav className="page-nav dashboard-nav">
             <div
-              className={`menu-item ${tab === 'avatar' ? '--active' : ''}`}
+              className={`menu-item ${tab === 'profile-settings' ? '--active' : ''}`}
               onClick={() => {
-                setTab('avatar');
                 setIsPageNavOpen(false);
+                router.push('/dashboard?t=profile-settings');
               }}
             >Profile Settings</div>
     
@@ -530,17 +561,15 @@ export default function Dashboard() {
                 <div
                   className={`submenu-item ${tab === 'plans' && subTab === 'public' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('plans');
-                    setSubTab('public');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=plans&st=public');
                   }}
                 >Public</div>
                 <div
                   className={`submenu-item ${tab === 'plans' && subTab === 'private' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('plans');
-                    setSubTab('private');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=plans&st=private');
                   }}
                 >Private</div>
               </div>
@@ -567,33 +596,29 @@ export default function Dashboard() {
                 <div
                   className={`submenu-item ${tab === 'recipes' && subTab === 'public' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('recipes');
-                    setSubTab('public');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=recipes&st=public');
                   }}
                 >Public</div>
                 <div
                   className={`submenu-item ${tab === 'recipes' && subTab === 'private' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('recipes');
-                    setSubTab('private');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=recipes&st=private');
                   }}
                 >Private</div>
                 <div
                   className={`submenu-item ${tab === 'recipes' && subTab === 'favorite' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('recipes');
-                    setSubTab('favorite');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=recipes&st=favorite');
                   }}
                 >Favorite</div>
                 <div
                   className={`submenu-item ${tab === 'recipes' && subTab === 'saved' ? '--active' : ''}`}
                   onClick={() => {
-                    setTab('recipes');
-                    setSubTab('saved');
                     setIsPageNavOpen(false);
+                    router.push('/dashboard?t=recipes&st=saved');
                   }}
                 >Saved</div>
               </div>
@@ -602,31 +627,31 @@ export default function Dashboard() {
             <div
               className={`menu-item ${tab === 'ingredients' ? '--active' : ''}`}
               onClick={() => {
-                setTab('ingredients');
                 setIsPageNavOpen(false);
+                router.push('/dashboard?t=ingredients');
               }}
             >Ingredients</div>
   
             <div
               className={`menu-item ${tab === 'equipment' ? '--active' : ''}`}
               onClick={() => {
-                setTab('equipment');
                 setIsPageNavOpen(false);
+                router.push('/dashboard?t=equipment');
               }}
             >Equipment</div>
   
             <div
-              className={`menu-item ${tab === 'settings' ? '--active' : ''}`}
+              className={`menu-item ${tab === 'account-settings' ? '--active' : ''}`}
               onClick={() => {
-                setTab('settings');
                 setIsPageNavOpen(false);
+                router.push('/dashboard?t=account-settings');
               }}
             >Account Settings</div>
           </nav>
         </>
       ) : false}
 
-      {tab === "settings" ? (
+      {tab === "account-settings" ? (
         <div className='dashboard-content account-settings'>
           <h2>Account Settings</h2>
 
@@ -730,7 +755,7 @@ export default function Dashboard() {
         </div>
       ) : false}
 
-      {tab === "avatar"
+      {tab === "profile-settings"
         ? avatar ? (
           <div className="dashboard-content dashboard-avatar-edit">
             <ReactCrop
