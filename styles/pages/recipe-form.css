@@ -190,6 +190,13 @@
   }
 }
 
+@media (max-width: 899px) {
+  .recipe-form .current-image {
+    height: 280px;
+    width: 280px;
+  }
+}
+
 .light .recipe-form .recipe-row,
 .light .recipe-form .recipe-image,
 .light .recipe-form .equipment-image,

@@ -887,6 +887,7 @@ export default function RecipeForm({ ownership }: Props) {
                 {...commonReactCropProps}
               >
                 <img
+                  className="crop-source"
                   onLoad={e => recipeImageRef.current = e.currentTarget}
                   src={recipeImageState.image as string}
                 />
@@ -1249,9 +1250,9 @@ export const initialCrop: Crop = {
   height: 50
 };  // TO DO: change to NOBSC images ratio
 
+//if (window.matchMedia('(max-device-width: 960px)').matches) {}
 export const commonReactCropProps = {
   aspect:    1,
-  className: "crop-tool",
   disabled:  false,
   locked:    false,
   maxHeight: 560,
@@ -1259,8 +1260,10 @@ export const commonReactCropProps = {
   minHeight: 56,
   minWidth:  56,
   style: {
-    minHeight: "560px",
-    minWidth: "560px"
+    maxHeight: '560px',
+    maxWidth: '560px',
+    minHeight: "280px",
+    minWidth: "280px"
   }
 };
 

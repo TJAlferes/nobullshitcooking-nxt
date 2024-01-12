@@ -806,7 +806,7 @@ export default function Dashboard() {
               rel="noopener noreferrer"
             >View Profile</a>
             <h3>Current Avatar</h3>
-            <img src={`${avatarUrl}${auth.auth_avatar !== 'default' && '-small'}.jpg`} />
+            <img src={`${avatarUrl}-small.jpg`} />
             <label>Change Avatar</label>
             <input
               accept="image/*"

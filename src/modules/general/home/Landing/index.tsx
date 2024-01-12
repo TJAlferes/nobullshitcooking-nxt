@@ -44,12 +44,16 @@ export function Landing() {
         loading="lazy"
         src={`${url}/recipe-form-desktop-${theme}.jpg`}
         alt="create"
+        width={560}
+        height={560}
       />
       <Image
         className="landing-mobile"
         loading="lazy"
         src={`${url}/recipe-form-mobile-${theme}.jpg`}
         alt="create"
+        width={280}
+        height={280}
       />
     </div>
   );
