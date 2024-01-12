@@ -29,13 +29,14 @@ export function Landing() {
         height={238}
       />*/}
 
-      <h1>Organize recipes into weekly or monthly plans:</h1>
+      <h1 className="landing-desktop">Organize recipes into weekly or monthly plans:</h1>
       <Image
+        className="landing-desktop"
         loading="lazy"
-        src={`${url}/landing-sample-03.jpg`}
+        src={`${url}/plan-form-desktop-${theme}.jpg`}
         alt="organize"
-        width={821}
-        height={281}
+        width={640}
+        height={130}
       />
 
       <h1>Create your own private or public recipes:</h1>

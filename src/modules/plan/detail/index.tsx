@@ -13,7 +13,7 @@ export default function PlanDetail({ ownership, plan }: Props) {
     plan_id,
     author_id,
     author,
-    //avatar ???
+    author_avatar,
     owner_id,
     plan_name,
     included_recipes
@@ -37,30 +37,39 @@ export default function PlanDetail({ ownership, plan }: Props) {
     <div className="one-col plan-detail">
       <h1>{plan_name}</h1>
 
-      <div className="author">
-        <span>Author:</span>
-        {' '}
-        {author === "Unknown"
-          ? "Unknown"
-          : <Link href={`/${encodeURIComponent(author)}/profile`}>{author}</Link>}
+      <div className="pair author">
+        <span className="bold">Author:</span>
+        <img
+          src={author_avatar.image_filename === 'default'
+            ? `https://s3.amazonaws.com/nobsc-official-uploads/avatar/default-tiny.jpg`
+            : `https://s3.amazonaws.com/nobsc-public-uploads/avatar/${author_id}/${author_avatar.image_filename}-tiny.jpg`
+          }
+        />
+        <span>
+          {author === 'Unknown'
+            ? 'Unknown'
+            : author === 'NOBSC'
+              ? 'NOBSC'
+              : <Link href={`/${encodeURIComponent(author)}/profile`}>{author}</Link>}
+        </span>
       </div>
 
       <div className="calendar">
-            <div className="weekdays">
-              <span>Sunday</span>
-              <span>Monday</span>
-              <span>Tuesday</span>
-              <span>Wednesday</span>
-              <span>Thursday</span>
-              <span>Friday</span>
-              <span>Saturday</span>
-            </div>
-            <div className="weekly-plan">
-              {Object.entries(curr_recipes).map(([key, value]) => (
-                <Day recipes={value} key={parseInt(key)} />
-              ))}
-            </div>
-          </div>
+        <div className="weekdays">
+          <span>Sunday</span>
+          <span>Monday</span>
+          <span>Tuesday</span>
+          <span>Wednesday</span>
+          <span>Thursday</span>
+          <span>Friday</span>
+          <span>Saturday</span>
+        </div>
+        <div className="weekly-plan">
+          {Object.entries(curr_recipes).map(([key, value]) => (
+            <Day recipes={value} key={parseInt(key)} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

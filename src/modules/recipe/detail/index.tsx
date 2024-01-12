@@ -121,7 +121,11 @@ export default function RecipeDetail({ ownership, recipe }: Props) {
           }
         />
         <span>
-          {author === 'Unknown' ? 'Unknown' : <Link href={`/${author}/profile`}>{author}</Link>}
+          {author === 'Unknown'
+            ? 'Unknown'
+            : author === 'NOBSC'
+              ? 'NOBSC'
+              : <Link href={`/${encodeURIComponent(author)}/profile`}>{author}</Link>}
         </span>
       </div>
       <div className="pair authors-note">

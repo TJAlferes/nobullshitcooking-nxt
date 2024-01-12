@@ -644,7 +644,9 @@ export type PlanView = {
   plan_id:          string;
   author_id:        string;
   author:           string;
-  //avatar ???
+  author_avatar: {
+    image_filename: string;
+  };
   owner_id:         string;
   plan_name:        string;
   included_recipes: IncludedRecipes;

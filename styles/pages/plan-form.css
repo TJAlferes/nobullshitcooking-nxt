@@ -1,7 +1,3 @@
-/* TO DO: test responsive design on actual smart phones */
-
-/*.plan-form {}*/
-
 .plan-form .cols {
   display: flex;
   flex-direction: row;
@@ -88,7 +84,6 @@
   column-gap: 2px;
   padding: 0;
   height: 32px;
-  background-color: #f1f1f1;
 }
 
 .plan-form .calendar .weekdays span {
@@ -100,7 +95,6 @@
   font-size: 1.4rem;
   text-align: center;
   user-select: none;
-  background-color: #f1f1f1;
 }
 
 .plan-form .calendar .weekly-plan {
@@ -109,7 +103,6 @@
   grid-gap: 2px;
   width: 100%;
   height: 300px;
-  background-color: #f1f1f1;
 }
 
 .plan-form .calendar .weekly-plan .day {
@@ -147,6 +140,12 @@ Light/Day/Sun Theme
   color: #000;
 }
 
+.light .plan-form .calendar .weekdays,
+.light .plan-form .calendar .weekdays span,
+.light .plan-form .calendar .weekly-plan {
+  background-color: #f1f1f1;
+}
+
 .light .plan-form .day.--white {
   background-color: #fff;
 }
@@ -172,6 +171,10 @@ Dark/Night/Moon Theme
 
 */
 
+.dark .plan-form .tab.--active {
+  color: #000;
+}
+
 .dark .plan-form .name label {
   color: #999;
 }
@@ -180,6 +183,12 @@ Dark/Night/Moon Theme
   background-color: #1e1e1e;
   border-color: #666;
   color: #bbb;
+}
+
+.dark .plan-form .calendar .weekdays,
+.dark .plan-form .calendar .weekdays span,
+.dark .plan-form .calendar .weekly-plan {
+  background-color: #333;
 }
 
 .dark .plan-form .day.--white {
@@ -191,11 +200,12 @@ Dark/Night/Moon Theme
 }
 
 .dark .plan-form .recipes {
-  border-color: #5a5a5a;
+  border-color: #bfddfa;
+  /*border-color: #333;  #5a5a5a;*/
 }
 
 .dark .plan-form .recipe {
-  background-color: #afae8f;
+  background-color: #d7c9a2;  /*#ffe0ab;*/
   border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
   color: #000;

@@ -1,5 +1,3 @@
-/* TO DO: test responsive design on actual smart phones */
-
 .plan-detail .author {
   display: flex;
   flex-wrap: nowrap;
@@ -58,7 +56,6 @@
   column-gap: 2px;
   padding: 0;
   height: 32px;
-  background-color: #f1f1f1;
 }
 
 .plan-detail .calendar .weekdays span {
@@ -70,7 +67,6 @@
   font-size: 1.4rem;
   text-align: center;
   user-select: none;
-  background-color: #f1f1f1;
 }
 
 .plan-detail .calendar .weekly-plan {
@@ -79,7 +75,6 @@
   grid-gap: 2px;
   width: 100%;
   height: 300px;
-  background-color: #f1f1f1;
 }
 
 .plan-detail .calendar .weekly-plan .day {
@@ -100,6 +95,12 @@ Light/Day/Sun Theme
   background-color: #fff;
   border-color: #bbb;
   color: #000;
+}
+
+.light .plan-detail .calendar .weekdays,
+.light .plan-detail .calendar .weekdays span,
+.light .plan-detail .calendar .weekly-plan {
+  background-color: #f1f1f1;
 }
 
 .light .plan-detail .weekly-plan .day {
@@ -129,12 +130,18 @@ Dark/Night/Moon Theme
   color: #bbb;
 }
 
+.dark .plan-detail .calendar .weekdays,
+.dark .plan-detail .calendar .weekdays span,
+.dark .plan-detail .calendar .weekly-plan {
+  background-color: #333;
+}
+
 .dark .plan-detail .weekly-plan .day {
   background-color: #222;
 }
 
 .dark .plan-detail .weekly-plan .day .recipe {
-  background-color: #afae8f;
+  background-color: #d7c9a2; /*#ffe0ab;*/
   border-color: #826e52;
   box-shadow: 1px 1px 1px #131313;
   color: #000;
