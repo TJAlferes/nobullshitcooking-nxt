@@ -1,6 +1,12 @@
 import Image from 'next/image';
 
+import { useTheme } from '../../../../store';
+
 export function Landing() {
+  const { theme } = useTheme();
+
+  const url = 'https://s3.amazonaws.com/nobsc-official-uploads/page';
+
   return (
     <div className="landing">
       <h1>Let's get cooking!</h1>
@@ -26,7 +32,7 @@ export function Landing() {
       <h1>Organize recipes into weekly or monthly plans:</h1>
       <Image
         loading="lazy"
-        src="https://s3.amazonaws.com/nobsc-official-uploads/page/landing-sample-03.jpg"
+        src={`${url}/landing-sample-03.jpg`}
         alt="organize"
         width={821}
         height={281}
@@ -34,11 +40,16 @@ export function Landing() {
 
       <h1>Create your own private or public recipes:</h1>
       <Image
+        className="landing-desktop"
         loading="lazy"
-        src="https://s3.amazonaws.com/nobsc-official-uploads/page/landing-sample-02.jpg"
+        src={`${url}/recipe-form-desktop-${theme}.jpg`}
         alt="create"
-        width={560}
-        height={560}
+      />
+      <Image
+        className="landing-mobile"
+        loading="lazy"
+        src={`${url}/recipe-form-mobile-${theme}.jpg`}
+        alt="create"
       />
     </div>
   );

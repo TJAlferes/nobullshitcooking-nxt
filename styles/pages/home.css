@@ -13,6 +13,14 @@
   font-size: 1.4rem;
 }
 
+.landing .landing-desktop {
+  display: block;
+}
+
+.landing .landing-mobile {
+  display: none;
+}
+
 /*.feed {}*/
 
 .feed-item {
@@ -74,6 +82,14 @@
   .feed,
   .suggestions {
     max-width: calc(90% - 10px);
+  }
+
+  .landing .landing-desktop {
+    display: none;
+  }
+
+  .landing .landing-mobile {
+    display: block;
   }
 }
 

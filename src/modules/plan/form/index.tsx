@@ -23,7 +23,7 @@ export default function PlanForm({ ownership }: Props) {
   const router = useRouter();
 
   const params  = useParams();
-  const plan_id = params['plan_id'];  // but public uses plan_name ???
+  const plan_id = params['plan_id'];  // TO DO: but public uses plan_name ???
 
   const { api } = useApi();
   const { authname } = useAuth();
