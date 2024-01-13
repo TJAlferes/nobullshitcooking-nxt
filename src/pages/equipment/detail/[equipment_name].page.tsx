@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 
   const paths = res.data.map((equipment: {name: string}) => ({
     params: {
-      name: equipment.name
+      equipment_name: equipment.name
     }
   }));
 

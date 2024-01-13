@@ -111,8 +111,8 @@ export default function ResendConfirmationCode() {
       </form>
 
       <div className="links">
-        <Link href="/terms">Terms of Use</Link>
-        <Link href="/privacy">Privacy Policy</Link>
+        <Link href="/terms-of-service">Terms of Service</Link>
+        <Link href="/privacy-policy">Privacy Policy</Link>
         <Link href="/help">Help</Link>
       </div>
 

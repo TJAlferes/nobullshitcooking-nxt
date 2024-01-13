@@ -4,10 +4,8 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="footer-links">
-        <Link href="/sitemap">Sitemap</Link>
-        <Link href="/disclaimer">Disclaimer</Link>
-        <Link href="/terms">Terms of Use</Link>
-        <Link href="/privacy">Privacy Policy</Link>
+        <Link href="/terms-of-service">Terms of Service</Link>
+        <Link href="/privacy-policy">Privacy Policy</Link>
         <Link href="/help">Help</Link>
       </div>
 

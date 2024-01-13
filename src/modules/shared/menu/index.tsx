@@ -81,19 +81,19 @@ function NavLinks({ setIsAppNavOpen }: {
       {authname !== '' ? (
         <>
           <NavLink text={authname} to="/dashboard" setIsAppNavOpen={setIsAppNavOpen} />
-          <NavLink text="Chat"     to="/chat" setIsAppNavOpen={setIsAppNavOpen} />
+          {/*<NavLink text="Chat"     to="/chat" setIsAppNavOpen={setIsAppNavOpen} />*/}
           <NavLink text="Friends"  to="/friends" setIsAppNavOpen={setIsAppNavOpen} />
           <hr />
         </>
       ) : false}
 
-      <NavLink text="Water"  to="/water" setIsAppNavOpen={setIsAppNavOpen} />
+      {/*<NavLink text="Water"  to="/water" setIsAppNavOpen={setIsAppNavOpen} />
       <NavLink text="Tea"    to="/tea" setIsAppNavOpen={setIsAppNavOpen} />
       <NavLink text="Coffee" to="/coffee" setIsAppNavOpen={setIsAppNavOpen} />
       <hr />
       <NavLink text="Outdoors" to="/outdoors" setIsAppNavOpen={setIsAppNavOpen} />
       <NavLink text="Garden"   to="/garden" setIsAppNavOpen={setIsAppNavOpen} />
-      <NavLink text="Tools"    to="/tools" setIsAppNavOpen={setIsAppNavOpen} />
+      <NavLink text="Tools"    to="/tools" setIsAppNavOpen={setIsAppNavOpen} />*/}
     </>
   );
 }

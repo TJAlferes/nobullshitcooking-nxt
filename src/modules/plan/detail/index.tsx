@@ -21,7 +21,7 @@ export default function PlanDetail({ ownership, plan }: Props) {
 
   const curr_recipes: CurrentRecipes = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []};
 
-  for (const [ key, value ] of Object.entries(plan.included_recipes)) {
+  for (const [ key, value ] of Object.entries(included_recipes)) {
     curr_recipes[parseInt(key)] = value.map(recipe => {
       const k = uuidv4();
 

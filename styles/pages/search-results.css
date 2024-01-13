@@ -188,6 +188,10 @@ Dark/Night/Moon Theme
   color: #aaa;
 }
 
+.dark .search-results-list-item h3 {
+  color: #aaa;
+}
+
 .dark .search-results-list-item:hover,
 .dark .search-results-list-item:active {
   outline: 2px solid #666;

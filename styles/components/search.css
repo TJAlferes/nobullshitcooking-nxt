@@ -126,6 +126,7 @@
   width: calc(100% - 29px);
   border: 1px solid #aaa;
   border-top: none;
+  z-index: 3;
 }
 
 .autosuggestions ul {

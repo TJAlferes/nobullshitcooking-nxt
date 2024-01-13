@@ -246,13 +246,16 @@ Dark Theme
 @import './pages/equipment-detail.css';
 @import './pages/equipment-form.css';
 @import './pages/friends.css';
+@import './pages/help.css';
 @import './pages/home.css';
 @import './pages/ingredient-detail.css';
 @import './pages/ingredient-form.css';
 @import './pages/not-found.css';
 @import './pages/plan-detail.css';
 @import './pages/plan-form.css';
+@import './pages/privacy-policy.css';
 @import './pages/profile.css';
 @import './pages/recipe-detail.css';
 @import './pages/recipe-form.css';
 @import './pages/search-results.css';
+@import './pages/terms-of-service.css';
