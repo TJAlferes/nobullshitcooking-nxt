@@ -1,20 +1,16 @@
 import Link from 'next/link';
-//import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 
-//import { useAuth } from '../../../store';
-import type { PlanView, RecipeOverview } from '../../../store';
+import type { PlanView } from '../../../store';
 import { NOBSC_USER_ID } from '../../shared/constants';
 import { Ownership } from '../../shared/types';
 import type { CurrentRecipes, DraggableRecipe } from '../form';
 
-export default function PlanDetail({ ownership, plan }: Props) {
+export default function PlanDetail({ plan }: Props) {
   const {
-    plan_id,
     author_id,
     author,
     author_avatar,
-    owner_id,
     plan_name,
     included_recipes
   } = plan;

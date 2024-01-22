@@ -15,6 +15,8 @@ type Props = {
 export async function getStaticPaths() {
   const res = await axios.get(`${endpoint}/ingredients/fullnames`);
 
+  setTimeout
+
   const paths = res.data.map((ingredient: {fullname: string}) => ({
     params: {
       fullname: ingredient.fullname
@@ -23,7 +25,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false
+    fallback: true
   };
 }
 

@@ -513,7 +513,6 @@ function Recipe({
 
   const {
     key,
-    recipe_id,
     author_id,
     owner_id,
     title,
@@ -569,7 +568,7 @@ function Day({
     }),
 
     drop(item: DragItem, monitor: DropTargetMonitor<DragItem>) {
-      if (day !== item.day) addRecipeToDay(day, item.recipe);
+      if (monitor.canDrop() && day !== item.day) addRecipeToDay(day, item.recipe);
       return {day, index: item.index};
     }
   }));

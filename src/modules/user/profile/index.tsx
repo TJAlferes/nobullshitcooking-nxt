@@ -102,8 +102,6 @@ export default function Profile({ profile }: Props) {
       {tab === 'favorite-recipes' ? (
         favorite_recipes && favorite_recipes.length > 0
           ? favorite_recipes.map(r => {
-            console.log(favorite_recipes.length);
-            console.log(r.author_id);
             const imgSrc = r.author_id !== NOBSC_USER_ID
               ? `${publicUrl}/recipe/${r.author_id}/${r.image_filename}-tiny.jpg`
               : `${officialUrl}/recipe/${r.image_filename}-tiny.jpg`;
