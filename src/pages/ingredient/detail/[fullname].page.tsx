@@ -12,10 +12,32 @@ type Props = {
   ingredient: IngredientView;
 };
 
+export async function getServerSideProps({ params }: ServerSideProps) {
+  const res = await axios.get(
+    `${endpoint}/ingredients/${encodeURIComponent(params.fullname)}`
+  );
+
+  return {
+    props: {
+      ingredient: res.data
+    }
+  };
+}
+
+type ServerSideProps = {
+  params: {
+    fullname: string;
+  };
+};
+
+/*
+DOES NOT WORK AT SCALE.
+WE GET HTTP RESPONSE CODE 429 ERRORS DUE TO EXCEEDING RATE LIMIT.
+FOR NOW, WE JUST USE getServerSideProps INSTEAD.
+TO DO: FIX
+
 export async function getStaticPaths() {
   const res = await axios.get(`${endpoint}/ingredients/fullnames`);
-
-  setTimeout
 
   const paths = res.data.map((ingredient: {fullname: string}) => ({
     params: {
@@ -46,3 +68,4 @@ type StaticProps = {
     fullname: string;
   };
 };
+*/
