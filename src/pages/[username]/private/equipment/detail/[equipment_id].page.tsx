@@ -5,7 +5,7 @@ import EquipmentDetail from '../../../../../modules/equipment/detail';
 import type { EquipmentView } from '../../../../../store';
 
 export default function UserPrivateEquipmentDetailPage({ equipment }: Props) {
-  return <EquipmentDetail ownership='private' equipment={equipment} />
+  return <EquipmentDetail ownership='private' equipment={equipment} />;
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {

@@ -5,7 +5,7 @@ import RecipeDetail from '../../../../modules/recipe/detail';
 import type { RecipeDetailView } from '../../../../modules/recipe/detail';
 
 export default function UserPublicRecipeDetailPage({ recipe }: Props) {
-  return <RecipeDetail ownership='public' recipe={recipe} />
+  return <RecipeDetail ownership='public' recipe={recipe} />;
 }
 
 export async function getServerSideProps({ params }: ServerSideProps) {

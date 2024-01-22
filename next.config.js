@@ -2,10 +2,6 @@ module.exports = {
   devIndicators: {
     buildActivity: false,
   },
-  /*experimental: {
-    workerThreads: false,
-    cpus: 1
-  },*/
   images: {
     remotePatterns: [
       {

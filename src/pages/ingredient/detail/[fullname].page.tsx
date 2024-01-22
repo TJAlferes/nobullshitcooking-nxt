@@ -8,14 +8,8 @@ export default function IngredientDetailPage({ ingredient }: Props) {
   return <IngredientDetail ownership="official" ingredient={ingredient} />;
 }
 
-type Props = {
-  ingredient: IngredientView;
-};
-
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const res = await axios.get(
-    `${endpoint}/ingredients/${encodeURIComponent(params.fullname)}`
-  );
+  const res = await axios.get(`${endpoint}/ingredients/${encodeURIComponent(params.fullname)}`);
 
   return {
     props: {
@@ -23,6 +17,10 @@ export async function getServerSideProps({ params }: ServerSideProps) {
     }
   };
 }
+
+type Props = {
+  ingredient: IngredientView;
+};
 
 type ServerSideProps = {
   params: {

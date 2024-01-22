@@ -8,14 +8,8 @@ export default function EquipmentDetailPage({ equipment }: Props) {
   return <EquipmentDetail ownership="official" equipment={equipment} />;
 }
 
-type Props = {
-  equipment: EquipmentView;
-};
-
 export async function getServerSideProps({ params }: ServerSideProps) {
-  const res = await axios.get(
-    `${endpoint}/equipment/${encodeURIComponent(params.equipment_name)}`
-  );
+  const res = await axios.get(`${endpoint}/equipment/${encodeURIComponent(params.equipment_name)}`);
 
   return {
     props: {
@@ -23,6 +17,10 @@ export async function getServerSideProps({ params }: ServerSideProps) {
     }
   };
 }
+
+type Props = {
+  equipment: EquipmentView;
+};
 
 type ServerSideProps = {
   params: {
