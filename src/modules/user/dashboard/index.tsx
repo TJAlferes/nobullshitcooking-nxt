@@ -387,8 +387,8 @@ export default function Dashboard() {
     setTinyCrop(tiny.preview);
     setSmallAvatar(small.final);
     setTinyAvatar(tiny.final);
-    window.URL.revokeObjectURL(small.preview);
-    window.URL.revokeObjectURL(tiny.preview);
+    //window.URL.revokeObjectURL(small.preview);
+    //window.URL.revokeObjectURL(tiny.preview);
   };
 
   const uploadAvatar = async () => {
